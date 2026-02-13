@@ -1,0 +1,159 @@
+{
+  "label": "CORE_MEMORY_REREAD_ALL_SESSIONS",
+  "git": "ebd5736",
+  "branch": "feature/history-ingest",
+  "timestamp": "2026-02-13T17-29-12Z",
+  "session_type": "Cowork Agent Teams — full chat reread & synthesis",
+  "sessions_analyzed": {
+    "cowork_sessions": [
+      {
+        "id": "local_00496afa",
+        "title": "Test Azure Rhea endpoint models",
+        "user_msgs": 4,
+        "tool_calls": 34,
+        "key_insights": [
+          "Azure AI Foundry tested (swedencentral region)",
+          "rhea_bridge.py uploaded and validated",
+          "Multi-provider routing confirmed working",
+          "Cost awareness: user flagged need for <$0.05 test budget"
+        ]
+      },
+      {
+        "id": "local_6e4fccd9",
+        "title": "Design automated research article reviewer dashboard",
+        "user_msgs": 12,
+        "tool_calls": 62,
+        "key_insights": [
+          "ResearchHub article reviewer automation designed",
+          "Legal framework: group of scientists doing legitimate job automation",
+          "Routine parts automated: article selection, basic drafts, monitoring channel",
+          "Collaboration workflow between real human reviewers and AI"
+        ]
+      },
+      {
+        "id": "local_799a6e01",
+        "title": "Initialize Rhea self-upgrade with Agent Teams",
+        "user_msgs": 11,
+        "tool_calls": 91,
+        "key_insights": [
+          "Chronos Protocol activated as operational framework",
+          "Agent Teams formally initialized (Rhea, Chronos, Hephaestus, Gaia/Hypnos, Apollo)",
+          "ADR-008: tiered model routing (cheap-first default) established",
+          "Git lock file issues on FUSE mount identified (workaround: /tmp clone)",
+          "rhea_autosave.sh created for automatic snapshots",
+          "post-commit hook wired to Entire.IO snapshots"
+        ]
+      },
+      {
+        "id": "local_a12dd60e",
+        "title": "Find specific tasks in data (LARGEST — 30 msgs)",
+        "user_msgs": 30,
+        "tool_calls": 645,
+        "key_insights": [
+          "AI model catalog built: models_catalog.md + models_catalog.json (6 providers, 40+ models)",
+          "Article: GPT Pro vs Cowork comparison written (docs/article_gpt_pro_vs_cowork.md)",
+          "Chronos Protocol v3 designed: 8-agent delegation format [CHRONOS:A{sender}→A{receiver}]",
+          "Origin chats eb53e82c and db9feb88 analyzed via Chrome extension",
+          "core_context.md synthesized from ALL origin conversations (215 lines)",
+          "First message traced: 'Давай обсудим преимущества и недостатки григорианского календаря'",
+          "42 calendar systems catalogued, 8-level symbolic power framework extracted",
+          "Hunter-gatherer calibration zero formalized as core philosophical principle",
+          "Polyvagal-interoception bridge documented (ADHD + vagal tone connection)",
+          "state_agents_core.md created: 9 agents with mythic roles, scientific domains, model tiers",
+          "Composio API key and Gemini Tier 1 key added to .env",
+          "Rhea bridge confirmed live via OpenRouter (Claude Sonnet 4 responses)",
+          "User directive: Gemini free tier as default if no other allowed; zero costs without human accept",
+          "ChatGPT chat 698f04c3 referenced for additional context",
+          "API key security audit: erase traces from Entire.IO, store sensitive data properly"
+        ]
+      },
+      {
+        "id": "local_e4598cac",
+        "title": "Set up cloud code agent teams (current session)",
+        "user_msgs": 8,
+        "tool_calls": 147,
+        "key_insights": [
+          "Cloud code agent teams initiated for full chat reread",
+          "ChatGPT .data files found encrypted (Core Data blobs, unreadable)",
+          "Claude Cowork audit.jsonl structure decoded: type/message/content",
+          "5 Cowork sessions and 1 Claude Code session discovered and indexed",
+          "SSH key created for GitHub push (not yet added to account)",
+          "Full system access confirmed: MCP osascript + Desktop Commander",
+          "Entire.IO auto-snapshot infrastructure operational"
+        ]
+      }
+    ],
+    "chatgpt_sessions_referenced": [
+      "eb53e82c: Calendar systems → symbolic power → health (ORIGIN)",
+      "db9feb88: Polyvagal → ADHD → agent teams → iOS app (CONTINUATION)",
+      "72177dd4: Peer review structure for scientific papers",
+      "7b54c9f5: Multi-agent chemistry/bioinformatics test",
+      "698f04c3: Additional context (referenced in session a12dd60e)"
+    ],
+    "chatgpt_data_status": "Encrypted Core Data blobs — not directly readable from filesystem"
+  },
+  "new_insights_since_last_snapshot": [
+    "ResearchHub reviewer automation is a parallel workstream (not in core_context.md yet)",
+    "Composio API integrated as additional capability",
+    "Azure AI Foundry tested as enterprise model provider (swedencentral)",
+    "Git FUSE mount lock file issue requires /tmp clone workaround for commits",
+    "User strongly prefers zero-cost defaults: Gemini free tier as fallback",
+    "Rhea bridge confirmed operational: OpenRouter → Claude Sonnet 4",
+    "auto-snapshot + post-commit hook infrastructure now in place",
+    "5 Cowork sessions represent ~60+ user messages and ~1000+ tool calls of accumulated project work",
+    "state_agents_core.md now defines 9 agents (added Athena, Hermes, Hestia beyond original 8)"
+  ],
+  "architecture_state": {
+    "agents": 9,
+    "agents_list": [
+      "Rhea",
+      "Chronos",
+      "Gaia",
+      "Hypnos",
+      "Athena",
+      "Hermes",
+      "Hephaestus",
+      "Hestia",
+      "Apollo"
+    ],
+    "providers": 7,
+    "providers_list": [
+      "OpenAI",
+      "Google Gemini",
+      "Anthropic",
+      "OpenRouter",
+      "DeepSeek",
+      "HuggingFace",
+      "Azure AI Foundry"
+    ],
+    "default_model_tier": "cheap (Claude Sonnet 4 via OpenRouter)",
+    "cost_policy": "zero costs without human accept; Gemini free tier as fallback",
+    "bridge_status": "LIVE via OpenRouter",
+    "docs_count": 12,
+    "key_docs": [
+      "core_context.md (215 lines — full intellectual genesis)",
+      "state_agents_core.md (192 lines — 9 agent definitions)",
+      "soul.md (62 lines — base human configuration)",
+      "state.md (28 lines — compact state)",
+      "models_catalog.md + .json (40+ models, 7 providers)",
+      "prism_paper_outline.md (8 sections)",
+      "architecture.md, decisions.md, state_full.md"
+    ]
+  },
+  "next_actions": [
+    "Add SSH key to GitHub to enable push from Cowork sessions",
+    "Wire .env keys to live tribunal (first multi-model call)",
+    "iOS MVP scaffold (Stage 1: SwiftUI + HealthKit)",
+    "Feed prism_paper_outline.md to OpenAI Prism for paper generation",
+    "Connect entire.io cloud API for remote snapshot sync",
+    "ResearchHub reviewer dashboard: separate workstream, needs its own repo"
+  ],
+  "meta": {
+    "snapshot_created_by": "Claude Cowork Agent Teams (session e4598cac, continuation 3)",
+    "method": "Parsed 5 audit.jsonl files + existing docs, cross-referenced with core_context.md",
+    "total_user_messages_analyzed": 65,
+    "total_tool_calls_across_sessions": 979,
+    "chatgpt_chats_referenced": 5,
+    "cowork_sessions_parsed": 5
+  }
+}
