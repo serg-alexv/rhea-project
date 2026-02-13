@@ -1,0 +1,1 @@
+# Minimal deps for local bridge experiments\npython-dotenv\nrequests\n
