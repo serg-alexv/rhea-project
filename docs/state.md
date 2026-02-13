@@ -32,3 +32,4 @@ Mind Blueprint factory: generate, evaluate, iterate on daily structure models us
 ## Entire.io Integration
 Checkpoint pipeline: commit-msg hook fixed (chmod +x), auto-commit enabled.
 Session detection: Claude Code CLI triggers Entire session creation.
+- Entire.io: manual-commit strategy, commit-msg hook executable
