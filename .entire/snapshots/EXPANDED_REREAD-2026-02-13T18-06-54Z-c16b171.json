@@ -1,0 +1,140 @@
+{
+  "label": "EXPANDED_REREAD_ALL_SOURCES",
+  "git": "c16b171",
+  "branch": "feature/history-ingest",
+  "timestamp": "2026-02-13T21:15:00Z",
+  "session_type": "Cowork Agent Teams — expanded reread: 12 docs + ChatGPT + entire.io cloud check",
+  "continuation_of": "CORE_MEMORY_REREAD-2026-02-13T17-29-12Z-ebd5736.json",
+  "sources_analyzed": {
+    "cowork_sessions_parsed": 5,
+    "docs_fully_read": 12,
+    "chatgpt_conversations_extracted": 1,
+    "entire_io_cloud_checked": true,
+    "total_chats_covered": 6
+  },
+  "docs_analysis": {
+    "architecture.md": {
+      "lines": 58,
+      "summary": "iOS app architecture: polyvagal theory foundation, 8-agent Chronos Protocol v3 delegation format, multi-model bridge (6 providers), Azure Cosmos DB + Bayesian/Fourier data arch. 5 design principles: ADHD-first, passive>active, body before mind, minimum effective dose, cultural roots."
+    },
+    "decisions.md": {
+      "lines": 49,
+      "summary": "ADR-001 through ADR-009. Key: ADR-001 reduced 10→8 agents, ADR-003 multi-model bridge, ADR-004 ADHD-first, ADR-005 passive profiling, ADR-006 hunter-gatherer calibration, ADR-007 three-tier memory, ADR-008 tiered routing cheap-first, ADR-009 cost-aware agent teams."
+    },
+    "state_full.md": {
+      "lines": 110,
+      "summary": "Full project status. Completed: Chronos v3, bridge, paper outline, three-tier memory, PR#2. In-progress: wire bridge to .env, iOS MVP. Next: live tribunal, iOS scaffold, OpenAI Prism, entire.io cloud, biometrics, monetization."
+    },
+    "models_catalog.md": {
+      "lines": 148,
+      "summary": "6 providers (OpenAI, Gemini, DeepSeek, OpenRouter, HuggingFace, Azure AI Foundry), 25+ models, pricing $0-$14/M tokens, benchmarks (AIME, MATH-500, SWE-bench), agent-to-tier mapping table."
+    },
+    "prism_paper_outline.md": {
+      "lines": 102,
+      "summary": "Mathematics of Rhea — 8-section academic paper: Introduction, Biological Foundation (polyvagal+interoception), Mathematical Framework (state space, Fourier, Bayesian, MPC, Thompson sampling), Multi-Model Tribunal, Cross-Cultural Validation, System Architecture, Evaluation Plan, Discussion."
+    },
+    "article_gpt_pro_vs_cowork.md": {
+      "lines": 126,
+      "summary": "ChatGPT Pro ($200) vs Claude Cowork ($20-200) comparison. Pro wins deep math reasoning. Cowork wins workflows/tool orchestration/file management."
+    },
+    "MVP_LOOP.md": {
+      "lines": 21,
+      "summary": "Closed-loop scheduler spec: state x_t=(sleep_proxy, energy, time_budget, friction), action set, reward/utility, safety constraints, online Bayesian updates."
+    },
+    "ROADMAP.md": {
+      "lines": 20,
+      "summary": "4 stages: Stage 0 (specs — DONE), Stage 1 (iOS MVP), Stage 2 (passive signals), Stage 3 (MPC optimization)."
+    },
+    "state.md": {
+      "lines": 28,
+      "summary": "Compact ≤2KB state: mission, deliverables, current status, immediate next steps."
+    },
+    "core_context.md": {
+      "lines": 215,
+      "summary": "Intellectual genesis: 11-step origin chain from Gregorian calendar critique → Rhea app. 8-level symbolic power framework. Polyvagal-interoception bridge. Anankastic+ADHD paradox. 42 calendar systems catalogued."
+    },
+    "state_agents_core.md": {
+      "lines": 193,
+      "summary": "9 agents: Rhea(Root,cheap→balanced), Chronos(Time,cheap), Gaia(Body,cheap→balanced), Hypnos(Sleep,cheap), Athena(Strategy,balanced→expensive), Hermes(Communication,cheap), Hephaestus(Build,balanced→expensive), Hestia(Safety,cheap), Apollo(Insight,cheap→reasoning). Each has mythic role, scientific domain, cost tier policy, escalation rules."
+    },
+    "soul.md": {
+      "lines": 62,
+      "summary": "Base human config: ADHD identity, 7 core principles, communication style, hard constraints, state vector x_t=[E_t, M_t, C_t, S_t, O_t, R_t] (Energy, Mood, Cognitive, Sleep, Social, Routine)."
+    }
+  },
+  "chatgpt_extraction": {
+    "conversation_title": "Критическая оценка файлов (Critical File Assessment)",
+    "source": "ChatGPT Pro (browser extraction via Claude in Chrome)",
+    "content_type": "Complete Rhea ops CLI implementation",
+    "artifacts_found": [
+      "ops-setup.sh — full Rhea CLI setup script",
+      "scripts/rhea/lib_entire.sh — entire.io logging helpers (log_event, snapshot_repo_state, iso_now, json_escape)",
+      "scripts/rhea/bootstrap.sh — repo normalization, nested content import",
+      "scripts/rhea/check.sh — repo invariant checks (.venv tracking, state size guard, README existence)",
+      "scripts/rhea/import_nested.sh — safe file move with collision handling",
+      "scripts/rhea/memory.sh — snapshot and log commands",
+      "./rhea — CLI entrypoint (case-based dispatch)",
+      ".githooks/pre-commit and .githooks/pre-push",
+      "Taskfile.yml (go-task runner)",
+      ".rhea/cli/bashly.yml — CLI scaffold definition"
+    ],
+    "agent_modifiers_found": ["Hestia prompt modifier", "Apollo prompt modifier"],
+    "key_insight": "GPT Pro generated a complete operational CLI framework for Rhea that wraps entire.io logging, git hooks, and repo health checks into a unified ./rhea command"
+  },
+  "entire_io_cloud_status": {
+    "url": "entire.io/serg-alexv/rhea-project",
+    "feature_history_ingest": {
+      "status": "No checkpoints found",
+      "reason": "Entire.io requires Claude Code sessions linked to commits — .entire/ directory alone is insufficient"
+    },
+    "feature_mvp_loop": {
+      "status": "Checked via browser — page loaded",
+      "note": "Needs further investigation for checkpoint linking"
+    },
+    "action_needed": "Link Claude Code sessions to commits via entire.io session API or CLI"
+  },
+  "accumulated_project_metrics": {
+    "total_cowork_sessions_parsed": 5,
+    "total_chatgpt_conversations": 6,
+    "chatgpt_conversations_detail": [
+      "eb53e82c: Calendar systems → symbolic power → health (ORIGIN)",
+      "db9feb88: Polyvagal → ADHD → agent teams → iOS app (CONTINUATION)",
+      "72177dd4: Peer review structure for scientific papers",
+      "7b54c9f5: Multi-agent chemistry/bioinformatics test",
+      "698f04c3: Additional context (referenced in session a12dd60e)",
+      "Критическая оценка файлов: Rhea ops CLI implementation (EXTRACTED this session)"
+    ],
+    "total_user_messages_analyzed": "65+ (Cowork) + ChatGPT conversation",
+    "total_tool_calls_across_sessions": "979+ (Cowork sessions)",
+    "docs_fully_read_and_analyzed": 12,
+    "total_doc_lines": 1132,
+    "git_commits_on_branch": 3,
+    "entire_io_snapshots": 20
+  },
+  "architecture_state": {
+    "agents": 9,
+    "agents_list": ["Rhea", "Chronos", "Gaia", "Hypnos", "Athena", "Hermes", "Hephaestus", "Hestia", "Apollo"],
+    "providers": 7,
+    "providers_list": ["OpenAI", "Google Gemini", "Anthropic", "OpenRouter", "DeepSeek", "HuggingFace", "Azure AI Foundry"],
+    "default_model_tier": "cheap (Gemini free tier as fallback)",
+    "cost_policy": "80% cheap tier, escalation requires logged rationale, zero costs without human accept",
+    "bridge_status": "LIVE via OpenRouter (Claude Sonnet 4)",
+    "ops_cli_status": "Designed in ChatGPT, not yet integrated into repo",
+    "ios_mvp_status": "Stage 1 — scaffold pending"
+  },
+  "next_actions": [
+    "Integrate ChatGPT ops CLI artifacts into repo (ops-setup.sh, scripts/rhea/*, ./rhea entrypoint)",
+    "Link Claude Code sessions to entire.io commits for cloud checkpoint sync",
+    "Wire .env keys to live tribunal (first multi-model call)",
+    "iOS MVP scaffold (Stage 1: SwiftUI + HealthKit)",
+    "Feed prism_paper_outline.md to OpenAI Prism for paper generation",
+    "Parse remaining ChatGPT conversations (4 more: 72177dd4, 7b54c9f5, 698f04c3, and others from sidebar)",
+    "ResearchHub reviewer dashboard — separate workstream"
+  ],
+  "meta": {
+    "snapshot_created_by": "Claude Cowork Agent Teams (session 5 — expanded reread)",
+    "method": "12 docs read via Task subagent + ChatGPT content extracted via Chrome browser + entire.io cloud checked",
+    "previous_snapshot": "CORE_MEMORY_REREAD-2026-02-13T17-29-12Z-ebd5736.json",
+    "expansion_delta": "+12 full doc analyses, +1 ChatGPT conversation extraction (ops CLI), +entire.io cloud sync status"
+  }
+}
