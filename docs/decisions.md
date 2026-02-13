@@ -40,3 +40,9 @@
 **Decision:** Introduce 4-tier routing in rhea_bridge.py: cheap (Sonnet/Flash/mini), balanced (GPT-4o/Gemini-2.5-Flash), expensive (Gemini-2.5-Pro/GPT-4.5/o3), reasoning (o4-mini/DeepSeek-R1). Default tier = cheap. Expensive/reasoning tiers require explicit justification. New methods: `ask_default()` (always cheap), `ask_tier()` (explicit tier), `tribunal()` now tier-aware.
 **Rationale:** Enforces cost discipline at the API layer. Cheap tier covers ~80% of agent work. Expensive models reserved for deep research, critique, and novel synthesis. Extends ADR-004 by making tier selection explicit rather than role-based.
 **Supersedes:** Partially extends ADR-004 (model assignment is now tier-first, role-second).
+
+## ADR-009: Agent team tier integration — cost-aware agents (2026-02-13)
+**Context:** ADR-008 added tiers to rhea_bridge.py, but agent definitions in state_agents_core.md had no connection to the tier system. Agents couldn't self-regulate cost.
+**Decision:** Each agent now has a declared default tier and escalation tier. 5 agents (Chronos, Hypnos, Hermes, Hestia, + Rhea default) are cheap-only — they never escalate. 2 agents (Athena, Hephaestus) default to balanced, escalate to expensive. Apollo defaults cheap, escalates to reasoning. Escalation requires logged rationale. Agent prompt modifiers now include explicit cost discipline instructions.
+**Rationale:** Pushes cost discipline from the API layer (ADR-008) into agent behaviour. Estimated ~80% of all agent calls stay on cheap tier. Only Athena and Hephaestus routinely use balanced. Expensive/reasoning reserved for genuine novel reasoning.
+**Depends on:** ADR-008 (tier routing infrastructure).

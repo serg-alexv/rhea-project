@@ -89,9 +89,25 @@
 
 ---
 
-## Agent ↔ Model Mapping (Rhea Recommendation)
+## Agent ↔ Tier Mapping (ADR-008 + ADR-009)
 
-| Agent | Role | Primary Models | Secondary | Rationale |
+Model selection is now **tier-first, role-second**. Each agent uses `ask_default()` or `ask_tier()` from rhea_bridge.py.
+
+| Agent | Mythic Name | Default Tier | Escalation Tier | Escalation Trigger |
+|------:|------------|-------------|----------------|-------------------|
+| — | Rhea | cheap | balanced | Genuine inter-agent conflict resolution |
+| — | Chronos | cheap | — | Never (deterministic scheduling) |
+| — | Gaia | cheap | balanced | Multi-signal correlation (HRV + sleep + circadian) |
+| — | Hypnos | cheap | — | Never (algorithmic sleep logic) |
+| — | Athena | balanced | expensive | Novel life-architecture / multi-domain tradeoff |
+| — | Hermes | cheap | — | Never (templated communication) |
+| — | Hephaestus | balanced | expensive | Architecture decisions / novel system design |
+| — | Hestia | cheap | — | Never (rule-based safety routines) |
+| — | Apollo | cheap | reasoning | Novel cross-domain insight extraction |
+
+**Legacy A1–A8 mapping (for reference):**
+
+| Legacy | Role | Primary Models | Secondary | Rationale |
 |------:|------|---------------|-----------|-----------|
 | A1 | Quant Scientist | o3, DeepSeek-R1 | GPT-5.2, Kimi K2 Think | AIME 96.7%, MATH-500 97.3% |
 | A2 | Life Sciences | Gemini 3 Pro, 2.5 Pro | GPT-5.2 | Multimodal + long context |
