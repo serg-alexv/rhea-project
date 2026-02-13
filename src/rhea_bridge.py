@@ -2,11 +2,15 @@
 """
 rhea_bridge.py — Multi-model API bridge for Rhea
 Supports 6 providers, 40+ models, tribunal mode.
+Enforces cost-aware tiered routing (cheap → balanced → expensive).
 
 Usage:
     python3 src/rhea_bridge.py status
     python3 src/rhea_bridge.py ask "provider/model" "prompt"
+    python3 src/rhea_bridge.py ask-default "prompt"              # uses cheap tier
+    python3 src/rhea_bridge.py ask-tier "balanced" "prompt"      # explicit tier
     python3 src/rhea_bridge.py tribunal "prompt" [--k 5]
+    python3 src/rhea_bridge.py tiers                             # show tier config
 """
 
 import json
@@ -35,6 +39,7 @@ class ModelResponse:
     latency_s: float
     tokens_used: int = 0
     error: Optional[str] = None
+    tier: str = ""  # which cost tier was used
 
 
 @dataclass
@@ -54,6 +59,61 @@ class ProviderConfig:
     api_key_env: str
     models: list = field(default_factory=list)
     call_method: str = "openai_compatible"
+
+
+# ---------------------------------------------------------------------------
+# Tiered model config — COST DISCIPLINE (ADR-008)
+# ---------------------------------------------------------------------------
+# Sonnet is the default working brain. Expensive models require justification.
+# Each tier is an ordered list of fallback candidates (first available wins).
+# Format: "provider/model"
+
+MODEL_TIERS = {
+    "cheap": {
+        "description": "Default tier. Fast, cost-effective. Use for all routine work.",
+        "candidates": [
+            "openrouter/anthropic/claude-sonnet-4",
+            "gemini/gemini-2.0-flash",
+            "openai/gpt-4o-mini",
+            "deepseek/deepseek-chat",
+            "azure/gpt-4o-mini",
+            "gemini/gemini-2.0-flash-lite",
+            "openai/gpt-4.1-nano",
+        ],
+    },
+    "balanced": {
+        "description": "Mid-tier. For complex reasoning that cheap tier struggles with.",
+        "candidates": [
+            "openai/gpt-4o",
+            "gemini/gemini-2.5-flash",
+            "openai/gpt-4.1",
+            "openrouter/mistralai/mistral-large-latest",
+            "azure/gpt-4o",
+        ],
+    },
+    "expensive": {
+        "description": "Use ONLY when explicitly justified. Deep reasoning, critique, research.",
+        "candidates": [
+            "gemini/gemini-2.5-pro",
+            "openai/gpt-4.5-preview",
+            "openai/o3",
+            "openrouter/google/gemini-2.5-pro-preview",
+            "openrouter/qwen/qwen3-235b-a22b",
+        ],
+    },
+    "reasoning": {
+        "description": "Specialized reasoning models. For chain-of-thought / math / logic.",
+        "candidates": [
+            "openai/o4-mini",
+            "openai/o3-mini",
+            "deepseek/deepseek-reasoner",
+            "openrouter/deepseek/deepseek-r1",
+            "azure/DeepSeek-R1",
+        ],
+    },
+}
+
+DEFAULT_TIER = "cheap"  # HARD RULE: Sonnet / cheap models by default
 
 
 # ---------------------------------------------------------------------------
@@ -142,12 +202,66 @@ PROVIDERS = {
 # ---------------------------------------------------------------------------
 
 class RheaBridge:
-    """Multi-provider LLM bridge with tribunal support."""
+    """Multi-provider LLM bridge with tiered cost-aware routing and tribunal support."""
 
     def __init__(self):
         self.providers = PROVIDERS
+        self.tiers = MODEL_TIERS
+        self.default_tier = DEFAULT_TIER
 
-    # --- public API ---
+    # --- public API: tiered (preferred) ---
+
+    def ask_default(
+        self,
+        prompt: str,
+        system: str = "",
+        temperature: float = 0.7,
+        max_tokens: int = 2048,
+    ) -> ModelResponse:
+        """Send a prompt using the default (cheap) tier. This is the preferred entry point."""
+        return self.ask_tier(self.default_tier, prompt, system, temperature, max_tokens)
+
+    def ask_tier(
+        self,
+        tier: str,
+        prompt: str,
+        system: str = "",
+        temperature: float = 0.7,
+        max_tokens: int = 2048,
+    ) -> ModelResponse:
+        """Send a prompt using a specific cost tier. Falls through candidates until one works."""
+        tier_cfg = self.tiers.get(tier)
+        if not tier_cfg:
+            return ModelResponse(
+                provider="", model="", text="", latency_s=0, tier=tier,
+                error=f"Unknown tier: {tier}. Valid: {list(self.tiers.keys())}",
+            )
+
+        # Try candidates in order; first available provider wins
+        last_error = None
+        for candidate in tier_cfg["candidates"]:
+            provider_name, model_id = self._resolve_model(candidate)
+            cfg = self.providers.get(provider_name)
+            if not cfg:
+                continue
+            api_key = os.environ.get(cfg.api_key_env, "")
+            if not api_key and cfg.name == "gemini":
+                api_key = os.environ.get("GEMINI_T1_API_KEY", "")
+            if not api_key:
+                continue  # skip providers without keys
+            resp = self.ask(prompt, candidate, system, temperature, max_tokens)
+            resp.tier = tier
+            if not resp.error:
+                return resp
+            last_error = resp.error
+
+        # All candidates failed
+        return ModelResponse(
+            provider="", model="", text="", latency_s=0, tier=tier,
+            error=f"All {tier} tier candidates failed. Last error: {last_error}",
+        )
+
+    # --- public API: direct model (use when you know exactly what you need) ---
 
     def ask(
         self,
@@ -225,12 +339,18 @@ class RheaBridge:
         k: int = 5,
         system: str = "",
         models: list = None,
+        tier: str = "cheap",
         temperature: float = 0.7,
         max_tokens: int = 2048,
     ) -> TribunalResult:
-        """Query k diverse models in parallel, return all responses."""
+        """Query k diverse models in parallel, return all responses.
+
+        By default uses cheap-tier models for cost discipline.
+        Pass tier="balanced" or tier="expensive" for harder problems.
+        Pass models=[...] to override tier selection entirely.
+        """
         if models is None:
-            models = self._select_diverse_models(k)
+            models = self._select_diverse_models(k, tier=tier)
         else:
             models = models[:k]
 
@@ -291,8 +411,30 @@ class RheaBridge:
             "total_providers": len(self.providers),
             "available_providers": available,
             "total_models": total_models,
+            "default_tier": self.default_tier,
         }
         return status
+
+    def tiers_info(self) -> dict:
+        """Return tier configuration with availability status."""
+        info = {}
+        for tier_name, tier_cfg in self.tiers.items():
+            candidates_status = []
+            for candidate in tier_cfg["candidates"]:
+                provider_name, model_id = self._resolve_model(candidate)
+                cfg = self.providers.get(provider_name)
+                has_key = bool(cfg and os.environ.get(cfg.api_key_env, ""))
+                candidates_status.append({
+                    "model": candidate,
+                    "available": has_key,
+                })
+            info[tier_name] = {
+                "description": tier_cfg["description"],
+                "is_default": tier_name == self.default_tier,
+                "candidates": candidates_status,
+                "available_count": sum(1 for c in candidates_status if c["available"]),
+            }
+        return info
 
     # --- private: provider-specific call methods ---
 
@@ -396,38 +538,51 @@ class RheaBridge:
         # Default to openai
         return "openai", model_str
 
-    def _select_diverse_models(self, k: int) -> list:
-        """Pick k models across different providers for tribunal diversity."""
-        available = []
-        for name, cfg in self.providers.items():
-            if os.environ.get(cfg.api_key_env):
-                for m in cfg.models:
-                    available.append(f"{name}/{m}")
+    def _select_diverse_models(self, k: int, tier: str = "cheap") -> list:
+        """Pick k models across different providers for tribunal diversity.
 
-        if not available:
-            # Return defaults even without keys (will fail gracefully)
+        Prefers models from the specified tier, then fills remaining slots
+        from other available models to ensure provider diversity.
+        """
+        # Start with tier candidates that have available keys
+        tier_cfg = self.tiers.get(tier, self.tiers[self.default_tier])
+        tier_candidates = []
+        seen_providers = set()
+        for candidate in tier_cfg["candidates"]:
+            provider_name, model_id = self._resolve_model(candidate)
+            cfg = self.providers.get(provider_name)
+            if not cfg:
+                continue
+            api_key = os.environ.get(cfg.api_key_env, "")
+            if not api_key and cfg.name == "gemini":
+                api_key = os.environ.get("GEMINI_T1_API_KEY", "")
+            if api_key and provider_name not in seen_providers:
+                tier_candidates.append(candidate)
+                seen_providers.add(provider_name)
+
+        selected = tier_candidates[:k]
+
+        # If we need more, fill from other providers not yet represented
+        if len(selected) < k:
+            for name, cfg in self.providers.items():
+                if name in seen_providers:
+                    continue
+                if os.environ.get(cfg.api_key_env) and cfg.models:
+                    selected.append(f"{name}/{cfg.models[0]}")
+                    seen_providers.add(name)
+                    if len(selected) >= k:
+                        break
+
+        if not selected:
+            # Fallback defaults (will fail gracefully if no keys)
             defaults = [
-                "openai/gpt-4o",
-                "gemini/gemini-2.5-pro",
+                "openai/gpt-4o-mini",
+                "gemini/gemini-2.0-flash",
                 "deepseek/deepseek-chat",
-                "openrouter/qwen/qwen3-235b-a22b",
+                "openrouter/anthropic/claude-sonnet-4",
                 "azure/gpt-4o-mini",
             ]
             return defaults[:k]
-
-        # Pick one model per provider, round-robin
-        selected = []
-        providers_with_models = [
-            (name, cfg) for name, cfg in self.providers.items()
-            if os.environ.get(cfg.api_key_env) and cfg.models
-        ]
-        idx = 0
-        while len(selected) < k and idx < 100:
-            for name, cfg in providers_with_models:
-                model_idx = idx // len(providers_with_models)
-                if model_idx < len(cfg.models) and len(selected) < k:
-                    selected.append(f"{name}/{cfg.models[model_idx]}")
-            idx += 1
 
         return selected[:k]
 
@@ -441,13 +596,16 @@ def main():
     bridge = RheaBridge()
 
     if len(sys.argv) < 2:
-        print("Usage: rhea_bridge.py {status|ask|tribunal}")
+        print("Usage: rhea_bridge.py {status|tiers|ask|ask-default|ask-tier|tribunal}")
         sys.exit(1)
 
     cmd = sys.argv[1]
 
     if cmd == "status":
         print(json.dumps(bridge.models_status(), indent=2))
+
+    elif cmd == "tiers":
+        print(json.dumps(bridge.tiers_info(), indent=2))
 
     elif cmd == "ask":
         if len(sys.argv) < 4:
@@ -458,20 +616,44 @@ def main():
         resp = bridge.ask(prompt, model)
         print(json.dumps(asdict(resp), indent=2))
 
+    elif cmd == "ask-default":
+        if len(sys.argv) < 3:
+            print("Usage: rhea_bridge.py ask-default <prompt>")
+            sys.exit(1)
+        prompt = sys.argv[2]
+        resp = bridge.ask_default(prompt)
+        print(json.dumps(asdict(resp), indent=2))
+
+    elif cmd == "ask-tier":
+        if len(sys.argv) < 4:
+            print("Usage: rhea_bridge.py ask-tier <tier> <prompt>")
+            print(f"  Available tiers: {list(MODEL_TIERS.keys())}")
+            sys.exit(1)
+        tier = sys.argv[2]
+        prompt = sys.argv[3]
+        resp = bridge.ask_tier(tier, prompt)
+        print(json.dumps(asdict(resp), indent=2))
+
     elif cmd == "tribunal":
         if len(sys.argv) < 3:
-            print("Usage: rhea_bridge.py tribunal <prompt> [--k N]")
+            print("Usage: rhea_bridge.py tribunal <prompt> [--k N] [--tier TIER]")
             sys.exit(1)
         prompt = sys.argv[2]
         k = 5
+        tier = "cheap"
         if "--k" in sys.argv:
             idx = sys.argv.index("--k")
             if idx + 1 < len(sys.argv):
                 k = int(sys.argv[idx + 1])
-        result = bridge.tribunal(prompt, k=k)
+        if "--tier" in sys.argv:
+            idx = sys.argv.index("--tier")
+            if idx + 1 < len(sys.argv):
+                tier = sys.argv[idx + 1]
+        result = bridge.tribunal(prompt, k=k, tier=tier)
         output = {
             "prompt": result.prompt,
             "k": result.k,
+            "tier": tier,
             "elapsed_s": result.elapsed_s,
             "consensus": result.consensus,
             "responses": [asdict(r) for r in result.responses],
