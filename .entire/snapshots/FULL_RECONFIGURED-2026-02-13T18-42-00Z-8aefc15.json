@@ -1,0 +1,307 @@
+{
+  "label": "FULL_RECONFIGURED",
+  "git": "8aefc15",
+  "branch": "main",
+  "timestamp": "2026-02-13T18:42:00Z",
+  "session": "Cowork Opus 4.6 — Session 8 — Definitive Core Memory Reconfiguration",
+  "purpose": "Comprehensive episodic memory node synthesizing ALL available data: 27+ ChatGPT chats, 5 Cowork sessions (979+ tool calls), 12 docs, 25+ snapshots, 9 ADRs, ops CLI artifacts. This is the AUTHORITATIVE entry all future sessions should reference.",
+  "supersedes": ["GENESIS_INIT", "GENESIS_FLOW", "CORE_MEMORY_REREAD", "EXPANDED_REREAD", "CHECKPOINT_MAIN"],
+  "think_line": [
+    "BOOT (initial session setup)",
+    "SONNET_INIT (agent teams activated)",
+    "OPUS_SESSION_1 (first deep state read)",
+    "GENESIS_INIT (27-chat foundational synthesis)",
+    "GENESIS_FLOW (8-agent consultation)",
+    "CORE_MEMORY_REREAD (5 Cowork sessions parsed)",
+    "EXPANDED_REREAD (12 docs + ChatGPT CLI extraction)",
+    "CHECKPOINT_MAIN (consolidation to main)",
+    "PHASE1_RECONFIG (all data ingested)",
+    "→ FULL_RECONFIGURED (this — definitive node)"
+  ],
+
+  "origin": {
+    "first_utterance": "Давай обсудим преимущества и недостатки григорианского календаря.",
+    "conversation_id": "eb53e82c",
+    "platform": "ChatGPT Pro",
+    "genesis_chain": "Gregorian calendar critique → naive realism → 42 calendar systems → symbolic power levels (8 tiers) → health/longevity → daily defaults as managed environment → polyvagal theory + ADHD + interoception → 8-agent system → iOS app + scientific paper",
+    "key_insight": "They define not behavior but categories of thought — cultural mechanisms control what you can think, not what you do",
+    "total_chats_distilled": 27
+  },
+
+  "philosophical_framework": {
+    "hunter_gatherer_calibration_zero": "Every expensive wellness practice reconstructs what foragers received as environmental default. If you have to pay for it, buy a device, or schedule it — it was probably free in the ancestral environment.",
+    "symbolic_power_levels": [
+      "1: Time naming (Gregorian months, era names)",
+      "2: Cosmic legitimacy (Mandate of Heaven, divine right)",
+      "3: Linguistic control (Rectification of Names, Sapir-Whorf)",
+      "4: Category formation (what counts as food, work, rest)",
+      "5: Habitual infrastructure (when meals happen, when sleep should occur)",
+      "6: Hegemonic consent (Gramsci — internalized common sense)",
+      "7: Preference shaping (Lukes — you don't even want what you're missing)",
+      "8: Doxa (Bourdieu — unquestionable, invisible assumptions)"
+    ],
+    "adhd_first_principle": "If it works for ADHD — it works for everyone. Executive dysfunction is the default under stress, not a minority condition.",
+    "anankastic_paradox": "Rigid structures coexist with ADHD spontaneity needs — compensatory architecture, not contradiction",
+    "invisible_mechanisms": [
+      "Meal timing architecture — shapes circadian gene expression",
+      "Posture ecology — chairs create chronic flexion vs ancestral squat",
+      "Light spectrum — artificial light suppresses melatonin 50-80% vs firelight",
+      "Social synchronization — modern schedules desync co-regulation",
+      "Temperature variability — thermoneutral zones eliminate thermogenesis",
+      "Sound environment — constant low-freq noise activates sympathetic"
+    ]
+  },
+
+  "scientific_foundation": {
+    "polyvagal_hierarchy": "Ventral vagal (social engagement) → sympathetic (fight/flight) → dorsal vagal (freeze/shutdown). Environment determines autonomic mode.",
+    "interoception_adhd_loop": "Diminished body-signal reading in ADHD → poor decisions → worse interoception. Passive profiling as workaround.",
+    "polyvagal_interoception_bridge": "Vagal tone directly modulates interoceptive accuracy via vagus afferents to insular cortex. Higher HRV = better interoceptive sensitivity. Critical for ADHD self-regulation given baseline interoceptive deficits.",
+    "multi_scale_rhythms": {
+      "ultradian": "~90-120min BRAC cycles, attention oscillation",
+      "circadian": "~24h sleep-wake, cortisol, melatonin, body temperature",
+      "circabidian": "~48h alternating high/low days — may explain ADHD good/bad day alternation (plausible, requires qualification)",
+      "infradian": ">24h menstrual, seasonal, lunar"
+    },
+    "key_references": [
+      "Porges S.W. — Polyvagal Theory",
+      "Yetish G. et al. 2015 — Natural sleep in pre-industrial societies",
+      "Wiessner P. 2014 PNAS — Firelight talk among Ju/'hoansi",
+      "Bruton A. et al. 2025 — Interoception and ADHD",
+      "Längle G. et al. 2025 — HRV and cognitive control",
+      "Takeda R. et al. 2025 — HRV severity markers in ADHD"
+    ]
+  },
+
+  "mathematical_framework": {
+    "state_vector": "x_t = [E_t (energy), M_t (mood), C_t (cognitive load), S_t (sleep debt), O_t (obligations), R_t (recovery)]",
+    "missing_dimensions_identified_by_A3": [
+      "Attention residue from task-switching",
+      "Hyperfocus/flow state detection",
+      "Rejection sensitivity markers"
+    ],
+    "missing_dimensions_identified_by_A8": [
+      "Social interactions representation",
+      "Environmental context",
+      "Feedback mechanisms for historical adjustment"
+    ],
+    "methods": {
+      "fourier_decomposition": "Individual rhythm fingerprint from biorhythm data",
+      "bayesian_duration_model": "Personalized time estimates with uncertainty",
+      "model_predictive_control": "Maximize agency subject to safety constraints",
+      "thompson_sampling_bandits": "Multi-armed bandit for micro-intervention selection"
+    },
+    "mvp_loop_spec": {
+      "state": "x_t = (sleep_proxy, energy, time_budget, friction)",
+      "actions": "Set of schedulable interventions",
+      "reward": "Utility function over outcomes",
+      "safety_constraints": "Hard bounds on health/ethical limits",
+      "updates": "Online Bayesian posterior updates"
+    }
+  },
+
+  "soul": {
+    "identity": "ADHD-first × hunter-gatherer-zero × polyvagal × passive-profiling × structure-as-freedom",
+    "core_principles": [
+      "1. Structure = freedom (scaffold enables spontaneity)",
+      "2. Passive > active (measure without asking)",
+      "3. Body before mind (physiology gates cognition)",
+      "4. Minimum effective dose (least intervention for stability)",
+      "5. Cultural roots matter (calendar/language shape perception)",
+      "6. Cost-aware by default (cheap tier unless justified)",
+      "7. Zero-questionnaire philosophy (infer, don't interrogate)"
+    ],
+    "hard_constraints": "Health, legal, ethical boundaries never violated",
+    "languages": {"primary": "EN", "native_dialogue": "RU", "future": "FR"}
+  },
+
+  "architecture": {
+    "chronos_protocol_v3": {
+      "agents": [
+        {"id": "A1", "name": "Quantitative Scientist", "tier": "Opus 4", "domain": "Fourier, Bayesian, MPC, math models"},
+        {"id": "A2", "name": "Life Sciences Integrator", "tier": "Opus 4", "domain": "Polyvagal, HRV, chronobiology, sleep"},
+        {"id": "A3", "name": "Psychologist / Profile Whisperer", "tier": "Sonnet 4", "domain": "Passive profiling, ADHD-first UX"},
+        {"id": "A4", "name": "Linguist-Culturologist", "tier": "Opus 4", "domain": "42 calendars, 16+ civilizations, symbolic power"},
+        {"id": "A5", "name": "Product Architect", "tier": "Sonnet 4", "domain": "SwiftUI, HealthKit, Apple Watch"},
+        {"id": "A6", "name": "Tech Lead", "tier": "Sonnet 4 + Claude Code", "domain": "Bridge, API, infrastructure"},
+        {"id": "A7", "name": "Growth Strategist", "tier": "Sonnet 4", "domain": "TestFlight, monetization, free tiers"},
+        {"id": "A8", "name": "Critical Reviewer & Conductor", "tier": "Opus 4", "domain": "Tribunal consensus, gap analysis"}
+      ],
+      "delegation_format": "[CHRONOS:A{sender}→A{receiver}]",
+      "tribunal_threshold": "≥60% consensus from 5 independent models"
+    },
+    "mythic_agents": [
+      {"name": "Rhea", "role": "Root Manager", "domain": "meta-controller, MPC, multi-agent arbitration", "default_tier": "cheap", "escalation_tier": "balanced"},
+      {"name": "Chronos", "role": "Time & Load", "domain": "time allocation, task queue, deadlines", "default_tier": "cheap", "escalation_tier": "cheap"},
+      {"name": "Gaia", "role": "Body & Environment", "domain": "energy, HRV, light, circadian", "default_tier": "cheap", "escalation_tier": "balanced"},
+      {"name": "Hypnos", "role": "Sleep", "domain": "sleep timing, debt, circadian phase", "default_tier": "cheap", "escalation_tier": "cheap"},
+      {"name": "Athena", "role": "Strategy & Learning", "domain": "goals, skill trees, learning", "default_tier": "balanced", "escalation_tier": "expensive"},
+      {"name": "Hermes", "role": "Communication", "domain": "messages, social, interruption cost", "default_tier": "cheap", "escalation_tier": "cheap"},
+      {"name": "Hephaestus", "role": "Build & Deep Work", "domain": "focused work, code, design", "default_tier": "balanced", "escalation_tier": "expensive"},
+      {"name": "Hestia", "role": "Safety & Home", "domain": "routines, rituals, recovery", "default_tier": "cheap", "escalation_tier": "cheap"},
+      {"name": "Apollo", "role": "Insight & Patterns", "domain": "pattern recognition, meta-reflection", "default_tier": "cheap", "escalation_tier": "reasoning"}
+    ],
+    "bridge": {
+      "file": "src/rhea_bridge.py",
+      "providers": ["OpenAI", "Google Gemini", "Anthropic", "OpenRouter", "DeepSeek", "HuggingFace", "Azure AI Foundry"],
+      "model_count": "400+",
+      "tiers": ["cheap", "balanced", "expensive", "reasoning"],
+      "methods": ["ask()", "ask_default()", "ask_tier()", "tribunal()", "models_status()", "tiers()"],
+      "status": "LIVE via OpenRouter (Claude Sonnet 4)"
+    },
+    "memory_system": {
+      "tier1_github_state": "state.md ≤2KB — long-term structural memory",
+      "tier2_entire_io": ".entire/ snapshots — episodic memory with reasoning traces",
+      "tier3_session_context": "Cowork/ChatGPT conversation context — working memory",
+      "compact_protocol": "[RHEA:resume] state.md loaded — session handoff"
+    },
+    "ops_cli": {
+      "source": "ChatGPT Pro (Критическая оценка файлов conversation)",
+      "status": "Designed, not yet integrated into repo",
+      "artifacts": [
+        "ops-setup.sh — full Rhea CLI setup script",
+        "scripts/rhea/lib_entire.sh — entire.io logging helpers",
+        "scripts/rhea/bootstrap.sh — repo normalization",
+        "scripts/rhea/check.sh — repo invariant checks",
+        "scripts/rhea/import_nested.sh — safe file move",
+        "scripts/rhea/memory.sh — snapshot and log commands",
+        "./rhea — CLI entrypoint (case-based dispatch)",
+        ".githooks/pre-commit + pre-push",
+        "Taskfile.yml (go-task runner)",
+        ".rhea/cli/bashly.yml — CLI scaffold"
+      ]
+    }
+  },
+
+  "decisions": {
+    "ADR-001": "Agent consolidation 10→8 (focused expertise over breadth)",
+    "ADR-002": "Multi-model bridge over single provider (resilience, cost optimization)",
+    "ADR-003": "ADHD-first design (universal benefit from executive dysfunction solutions)",
+    "ADR-004": "Opus for research, Sonnet for execution (cost-performance split)",
+    "ADR-005": "Passive profiling methodology (zero-questionnaire, infer from signals)",
+    "ADR-006": "Hunter-gatherer calibration zero (ancestral defaults as benchmark)",
+    "ADR-007": "Three-tier external memory (GitHub state + entire.io snapshots + session context)",
+    "ADR-008": "Tiered model routing: cheap-first default, escalation requires logged rationale",
+    "ADR-009": "State agents core + models catalog (9 mythic agents with cost tiers)"
+  },
+
+  "deliverables": {
+    "paper": {
+      "title": "Mathematics of Rhea: A Formal Framework for Reconstructing Daily Defaults from Biological Rhythms and Cultural Universals",
+      "sections": ["Introduction", "Biological Foundation", "Mathematical Framework", "Multi-Model Tribunal", "Cross-Cultural Validation", "System Architecture", "Evaluation Plan", "Discussion"],
+      "status": "Outline ready (docs/prism_paper_outline.md)",
+      "target": "OpenAI Prism generation → tribunal peer review"
+    },
+    "ios_app": {
+      "name": "Rhea",
+      "meaning": "Titan goddess, mother of Olympians, flow of time and natural cycles",
+      "stack": "SwiftUI + HealthKit + Apple Watch + CloudKit",
+      "backend": "Azure Cosmos DB",
+      "core_loop": "Passive profiling → rhythm detection → personalized daily structure → feedback",
+      "status": "Stage 1 — scaffold pending",
+      "timeline_estimate": "8-12 weeks to TestFlight (per A7)"
+    }
+  },
+
+  "cultural_research": {
+    "civilizations_analyzed": "16+",
+    "calendar_systems": 42,
+    "underrepresented_for_phase2": ["Andean civilizations", "Polynesian navigation cultures", "Arctic peoples (Inuit/Sami)", "Australian Aboriginal", "Sub-Saharan Africa", "Oceania", "Central Asia", "Indigenous Americas"],
+    "key_finding": "All elite rituals across civilizations independently converge on biology the forager got free"
+  },
+
+  "genesis_flow_agent_highlights": {
+    "A1_quant_scientist": "State vector x_t confirmed. MPC objective: max agency s.t. safety constraints. Gaps: spectral analysis implementation, bandit reward tuning data needed.",
+    "A2_life_sciences": "Polyvagal-interoception bridge neurophysiologically sound. Circabidian hypothesis plausible but requires qualification.",
+    "A3_psychologist": "Zero-questionnaire approach viable. Missing: attention residue, hyperfocus detection, rejection sensitivity markers.",
+    "A4_culturologist": "Phase 2 must include Andean, Polynesian, Arctic, Aboriginal cultures for chronobiology validation.",
+    "A5_product_architect": "2-week iOS MVP scaffold: HealthKit reader, state store, main dashboard, manual input, Core Data persistence.",
+    "A6_tech_lead": ".env key wiring is critical blocker. Async implementation half-done. No retry logic. Fix path: 2-4 hours.",
+    "A7_growth_strategist": "8-12 week TestFlight timeline. Free tier: 1 active bridge, 7-day tracking, basic viz, read-only community.",
+    "A8_critical_reviewer": "State vector lacks social interactions and environmental context. No feedback mechanisms for historical adjustment."
+  },
+
+  "cowork_sessions_synthesis": {
+    "session_00496afa": {
+      "title": "Test Azure AI Foundry Provider",
+      "key_outcomes": ["Azure AI Foundry integration validated", "7th provider added to bridge"]
+    },
+    "session_6e4fccd9": {
+      "title": "Research Article Reviewer Dashboard",
+      "key_outcomes": ["ResearchHub reviewer dashboard spec created", "Separate workstream from core Rhea"]
+    },
+    "session_799a6e01": {
+      "title": "Rhea Self-Upgrade with Agent Teams",
+      "key_outcomes": ["SSH key pair generated (id_ed25519_rhea)", "Secrets sanitized from git history", "Agent teams mode activated", "ADR-008 and ADR-009 committed"]
+    },
+    "session_a12dd60e": {
+      "title": "Find Tasks in Data (largest)",
+      "key_outcomes": ["Full repo audit", "5 Cowork chats parsed into chat_extracts.json", "GENESIS_INIT created (27-chat synthesis)", "GENESIS_FLOW created (8-agent consultation)", "History-ingest branch created and merged"]
+    },
+    "session_e4598cac": {
+      "title": "Cloud Code Agent Teams",
+      "key_outcomes": ["CORE_MEMORY_REREAD snapshot", "EXPANDED_REREAD (12 docs + ChatGPT extraction)", "Entire.io cloud status checked", "Feature/history-ingest merged to main"]
+    }
+  },
+
+  "technical_debt": [
+    "Bridge uses synchronous requests — needs httpx async",
+    "Tribunal consensus is count-based — needs semantic similarity",
+    "No retry logic or rate limiting",
+    "HuggingFace method doesn't use chat completions API",
+    ".env keys not wired — no live tribunal yet (critical blocker per A6)",
+    "Ops CLI designed in ChatGPT but not integrated into repo",
+    "Entire.io checkpoint trailers not created from Cowork (need Claude Code sessions)"
+  ],
+
+  "research_gaps": [
+    "Breathing protocols (coherent, box, Buteyko)",
+    "Movement modules (variability for vagal tone, not exercise)",
+    "Vocal/prosodic analysis (voice as interoceptive signal)",
+    "Thermal protocols (cold/heat timing)",
+    "Narrative identity (self-story vs circadian compliance)",
+    "Pharmacological awareness (caffeine half-life, med timing)",
+    "Lifecycle adaptation (developmental stages)",
+    "Trauma-informed design (hypervigilance from optimization)"
+  ],
+
+  "roadmap": {
+    "stage_0_specs": "DONE — all specs, ADRs, paper outline, agent system, bridge",
+    "stage_1_ios_mvp": "PENDING — SwiftUI + HealthKit + Apple Watch scaffold",
+    "stage_2_passive_signals": "PLANNED — biometric integration, rhythm detection",
+    "stage_3_mpc_optimization": "PLANNED — full MPC loop, Thompson sampling"
+  },
+
+  "next_priorities": [
+    "1. Wire bridge to .env keys → first live tribunal",
+    "2. Integrate ChatGPT ops CLI artifacts into repo",
+    "3. iOS MVP scaffold (Stage 1: SwiftUI + HealthKit + Apple Watch)",
+    "4. Feed prism_paper_outline.md to OpenAI Prism for paper generation",
+    "5. Connect entire.io cloud — link Claude Code sessions to commits",
+    "6. Biometric protocols — HRV, sleep, light, circabidian/ultradian/infradian",
+    "7. Monetization & deploy — TestFlight ASAP, free tiers",
+    "8. Parse remaining ChatGPT conversations (72177dd4, 7b54c9f5, 698f04c3)"
+  ],
+
+  "metrics": {
+    "total_chats_distilled": 27,
+    "cowork_sessions_parsed": 5,
+    "chatgpt_conversations_extracted": 1,
+    "chatgpt_conversations_referenced": 6,
+    "docs_fully_analyzed": 12,
+    "total_doc_lines": 1132,
+    "snapshots_in_system": 28,
+    "git_commits_on_main": 9,
+    "agents_defined": 9,
+    "providers_integrated": 7,
+    "adrs_active": 9,
+    "cowork_tool_calls_total": 979
+  },
+
+  "meta": {
+    "created_by": "Claude Opus 4.6 (Cowork Session 8 — continuation of 7)",
+    "method": "Full reconfiguration from all available sources: 5 Cowork chat_extracts, 6 snapshots, 12 docs, ChatGPT ops CLI extraction, genesis chain, agent consultation results",
+    "this_is_authoritative": true,
+    "previous_definitive": "GENESIS_INIT-2026-02-13T16-53-46Z-29d980e.json",
+    "soul_hash": "ADHD-first × hunter-gatherer-zero × polyvagal × passive-profiling × structure-as-freedom"
+  }
+}
