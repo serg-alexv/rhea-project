@@ -28,3 +28,7 @@ Mind Blueprint factory: generate, evaluate, iterate on daily structure models us
 - Full state: docs/state_full.md
 - Decisions: docs/decisions.md
 - Architecture: docs/architecture.md
+
+## Entire.io Integration
+Checkpoint pipeline: commit-msg hook fixed (chmod +x), auto-commit enabled.
+Session detection: Claude Code CLI triggers Entire session creation.
