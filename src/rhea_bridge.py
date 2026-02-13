@@ -112,8 +112,8 @@ PROVIDERS = {
     "huggingface": ProviderConfig(
         name="huggingface",
         display_name="HuggingFace",
-        base_url="https://api-inference.huggingface.co/models",
-        api_key_env="HF_API_KEY",
+        base_url="https://router.huggingface.co/models",
+        api_key_env="HF_TOKEN",
         models=[
             "core42/jais-adaptive-7b-chat",
             "mistralai/Mistral-7B-Instruct-v0.3",
@@ -125,7 +125,7 @@ PROVIDERS = {
         name="azure",
         display_name="Azure AI Foundry",
         base_url="https://models.inference.ai.azure.com",
-        api_key_env="AZURE_AI_KEY",
+        api_key_env="AZURE_API_KEY",
         models=[
             "gpt-4o", "gpt-4o-mini",
             "Llama-4-Maverick-17B-128E-Instruct-FP8",
@@ -167,6 +167,9 @@ class RheaBridge:
             )
 
         api_key = os.environ.get(cfg.api_key_env, "")
+        # Gemini fallback: try T1 key if main key unavailable or rate-limited
+        if not api_key and cfg.name == "gemini":
+            api_key = os.environ.get("GEMINI_T1_API_KEY", "")
         if not api_key:
             return ModelResponse(
                 provider=provider_name, model=model_id,
@@ -181,9 +184,19 @@ class RheaBridge:
                     cfg, api_key, model_id, prompt, system, temperature, max_tokens
                 )
             elif cfg.call_method == "gemini":
-                text, tokens = self._call_gemini(
-                    cfg, api_key, model_id, prompt, system, temperature, max_tokens
-                )
+                try:
+                    text, tokens = self._call_gemini(
+                        cfg, api_key, model_id, prompt, system, temperature, max_tokens
+                    )
+                except Exception as gemini_err:
+                    # Retry with T1 key on rate limit
+                    t1_key = os.environ.get("GEMINI_T1_API_KEY", "")
+                    if t1_key and t1_key != api_key and "429" in str(gemini_err):
+                        text, tokens = self._call_gemini(
+                            cfg, t1_key, model_id, prompt, system, temperature, max_tokens
+                        )
+                    else:
+                        raise
             elif cfg.call_method == "huggingface":
                 text, tokens = self._call_huggingface(
                     cfg, api_key, model_id, prompt, system, temperature, max_tokens

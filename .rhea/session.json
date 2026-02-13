@@ -1,0 +1,30 @@
+{
+  "mode": "agent_teams",
+  "root_agent": "rhea",
+  "soul": "docs/soul.md",
+  "agents_config": "docs/state_agents_core.md",
+  "active_agents": [
+    "rhea",
+    "chronos",
+    "gaia",
+    "hypnos",
+    "athena",
+    "hermes",
+    "hephaestus",
+    "hestia",
+    "apollo"
+  ],
+  "session_start": "2026-02-13T15:00:00Z",
+  "entire_io": {
+    "save_interval_sec": 60,
+    "watch_pid": "scripts/rhea_watch.sh",
+    "snapshots_dir": ".entire/snapshots",
+    "logs_dir": ".entire/logs"
+  },
+  "env_file": ".env",
+  "working_languages": ["en", "ru"],
+  "tribunal": {
+    "quorum": 3,
+    "consensus_mode": "count_then_semantic"
+  }
+}
