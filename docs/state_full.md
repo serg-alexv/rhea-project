@@ -70,6 +70,33 @@ Agent 7: Growth Strategist (Sonnet 4)
 Agent 8: Critical Reviewer & Conductor (Opus 4)
 ```
 
+## Moment of Discomfort — Rhea Memory & Self-Upgrade Phase
+
+**Date:** 2026-02-13 | **Trigger:** Manual (human directive + ChatGPT system prompt)
+
+Rhea's memory has accumulated 28 snapshots, 124KB of core docs, 510KB of chat extracts,
+and 9 sessions of thinking history. The discomfort function D = 91.96 (comfort zone, T1=150).
+
+**What was done:**
+1. Established `metrics/memory_metrics.json` — formalized discomfort function D with weights, thresholds T1/T2
+2. Created `data/challenging_tasks.yaml` — 7 deep-reasoning tasks requiring expensive models
+3. Designed `docs/langgraph_architecture.md` — state graph with 9 agent nodes + 6 meta nodes
+4. Created `docs/ui_pwa_vision.md` — PWA deferred until core stable
+5. Created `archive/` directory — for future doc compaction
+6. ADR-010: Memory Budget, Discomfort Metric, and Self-Improvement Loops
+
+**Memory economy principles (user's 5 conditions):**
+1. Boundaries — core docs must stay under 200KB (T1), archive if exceeding
+2. Scalable canvas — adapt structure as repo grows via Reflexive Sprints
+3. Functional zones — core (docs/), episodic (.entire/), metrics (metrics/), tasks (data/), archive (archive/)
+4. Size-adaptive design — different structures at different scales
+5. Entire.io traces everything — every action logged, every file content captured in commits
+
+**Self-improvement loop:**
+- D < T1 → normal operation
+- T1 ≤ D < T2 → warning, schedule cleanup
+- D ≥ T2 → Reflexive Sprint: summarize, archive, compact, create ADR
+
 ## Session Log
 
 ### Session: 2026-02-13 — Opus bridge + docs (Cowork)

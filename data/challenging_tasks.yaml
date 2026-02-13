@@ -1,0 +1,93 @@
+# Rhea — Challenging Tasks Registry
+# Tasks that require deep reasoning, expensive models, or external oracle consultation.
+# Priority: critical > high > medium > low
+# Status: open | in_progress | attempted | resolved
+
+tasks:
+
+  - id: CT-001
+    title: "Fourier decomposition of real circadian data"
+    description: |
+      The paper outline claims Fourier analysis of circadian/ultradian/infradian rhythms
+      but we have no actual data or worked example. Need real-world HRV or actigraphy dataset,
+      apply FFT, extract dominant frequencies, validate against known biological oscillators.
+    why_challenging: "Requires domain expertise (chronobiology + signal processing) and real data."
+    priority: critical
+    status: open
+    files: ["docs/prism_paper_outline.md"]
+    suggested_model: "Claude Opus 4.6 or GPT-o4-mini (reasoning tier)"
+    created: "2026-02-13"
+
+  - id: CT-002
+    title: "Bayesian prior calibration for passive profiling"
+    description: |
+      ADR-005 specifies passive profiling (no questionnaires), but the mathematical framework
+      references Bayesian state estimation. Need to define actual priors for the state vector
+      x_t = [E, M, C, S, O, R] — what distributions? What sensor data maps to what variable?
+    why_challenging: "Ambiguity in mapping behavioral signals to psychological state."
+    priority: critical
+    status: open
+    files: ["docs/prism_paper_outline.md", "docs/state_agents_core.md"]
+    suggested_model: "Claude Opus 4.6"
+    created: "2026-02-13"
+
+  - id: CT-003
+    title: "LangGraph state machine — formal graph definition"
+    description: |
+      Design the actual state graph: nodes (agents), edges (transitions), memory flow.
+      Must handle: normal operation, reflexive sprint, error recovery, oracle consultation.
+    why_challenging: "Architecture design with many interacting agents and states."
+    priority: high
+    status: open
+    files: ["docs/langgraph_architecture.md"]
+    suggested_model: "Claude Opus 4.6 + Atlas (ChatGPT) consultation"
+    created: "2026-02-13"
+
+  - id: CT-004
+    title: "Cross-cultural calendar convergence proof"
+    description: |
+      42 calendar systems from 16+ civilizations — prove mathematically that they converge
+      on the same biological rhythms. This is the core thesis of the paper.
+    why_challenging: "Requires deep cultural knowledge + mathematical formalization."
+    priority: high
+    status: open
+    files: ["docs/prism_paper_outline.md", "docs/core_context.md"]
+    suggested_model: "Claude Opus 4.6 (Agent 4: Linguist-Culturologist)"
+    created: "2026-02-13"
+
+  - id: CT-005
+    title: "MPC controller for daily schedule optimization"
+    description: |
+      Model Predictive Control for generating optimal daily schedules from state vector.
+      Needs: cost function, horizon, constraints from real-world obligations.
+    why_challenging: "Control theory applied to human behavior — novel formulation needed."
+    priority: medium
+    status: open
+    files: ["docs/prism_paper_outline.md"]
+    suggested_model: "Claude Opus 4.6 or DeepSeek-R1"
+    created: "2026-02-13"
+
+  - id: CT-006
+    title: "Tribunal consensus — semantic similarity vs count-based"
+    description: |
+      Current tribunal in rhea_bridge.py uses simple majority voting.
+      Need semantic embedding similarity to detect when models agree in meaning
+      but differ in wording.
+    why_challenging: "Requires embedding infrastructure + threshold calibration."
+    priority: medium
+    status: open
+    files: ["src/rhea_bridge.py"]
+    suggested_model: "balanced tier"
+    created: "2026-02-13"
+
+  - id: CT-007
+    title: "Entire.io ↔ LangGraph checkpoint integration"
+    description: |
+      Design how Entire.io episodic memory integrates with LangGraph's built-in
+      checkpointing. Avoid duplication, ensure both systems see same state.
+    why_challenging: "Two checkpoint systems that must coexist without conflicts."
+    priority: medium
+    status: open
+    files: ["docs/langgraph_architecture.md", ".entire/settings.json"]
+    suggested_model: "balanced tier + human review"
+    created: "2026-02-13"
