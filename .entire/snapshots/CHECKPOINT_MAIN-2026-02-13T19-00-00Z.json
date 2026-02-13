@@ -1,0 +1,38 @@
+{
+  "type": "CHECKPOINT_MAIN",
+  "created": "2026-02-13T19:00:00Z",
+  "branch": "main",
+  "purpose": "Consolidate all history-ingest work on main with Entire.io checkpoint linkage",
+  "summary": {
+    "total_chats_parsed": 6,
+    "cowork_sessions": 5,
+    "chatgpt_sessions": 1,
+    "documents_analyzed": 12,
+    "snapshots_created": 9,
+    "commits_on_main": 8
+  },
+  "key_artifacts": [
+    ".entire/chat_extracts.json",
+    ".entire/snapshots/CORE_MEMORY_REREAD-*.json",
+    ".entire/snapshots/EXPANDED_REREAD-*.json",
+    "scripts/rhea_orchestrate.py",
+    "scripts/rhea_autosave.sh"
+  ],
+  "architecture_state": {
+    "active_adrs": ["ADR-001", "ADR-002", "ADR-003", "ADR-005", "ADR-006", "ADR-007", "ADR-008", "ADR-009"],
+    "model_tiers": {
+      "tier1_free": ["gemini-2.0-flash", "llama-3.3-70b"],
+      "tier2_cheap": ["claude-3.5-haiku", "gpt-4o-mini"],
+      "tier3_power": ["claude-sonnet-4", "gpt-4o"],
+      "tier4_premium": ["claude-opus-4", "o1-pro"]
+    },
+    "bridge_status": "operational",
+    "state_agents": "designed_not_deployed"
+  },
+  "next_steps": [
+    "Parse remaining ChatGPT conversations (72177dd4, 7b54c9f5, 698f04c3)",
+    "Deploy state agents (planner, memory, tools, critic)",
+    "Integrate ops CLI artifacts from ChatGPT extraction",
+    "Run first multi-model orchestration via rhea_orchestrate.py"
+  ]
+}
