@@ -1,11 +1,13 @@
-# Rhea — Project State
-> Last updated: 2026-02-13 | Session: context audit (chats eb53e82c + db9feb88)
+# Rhea — Project State (Full)
+> Last updated: 2026-02-13 | Session: Opus bridge + docs restoration
 
-## Mission (from chats)
+## Mission
+Mind Blueprint factory: generate, evaluate, iterate on daily structure models using scientific rhythms, multi-model tribunal, and closed-loop planner.
+
 Reconstructing Daily/Circabidian/Ultradian/Infradian Defaults Using the Evidence-Based Cumulative Knowledge of Human Civilizations.
 
 **Two key deliverables:**
-1. Scientific paper — "Mathematics of Rhea" (via OpenAI Prism)
+1. Scientific paper — "Mathematics of Rhea" (via OpenAI Prism) → outline ready (docs/prism_paper_outline.md)
 2. iOS App "Rhea" in AppStore (TestFlight → production)
 
 ## Genesis
@@ -14,7 +16,7 @@ Calendar systems critique (eb53e82c) → cultural power mechanisms → daily def
 ## Status
 
 ### ✅ Completed
-- Chronos Protocol v3 — EN prompt + 5 delegation runs (prompts/chronos-protocol-v3-en.md, delegation-run-v3.md)
+- Chronos Protocol v3 — EN prompt + 5 delegation runs
 - Scientific foundation — polyvagal theory, HRV, interoception, ADHD-first
 - Cultural research — 16+ civilizations, hunter-gatherer calibration zero, 40+ calendar systems
 - Passive profiling methodology — no questionnaires
@@ -24,28 +26,36 @@ Calendar systems critique (eb53e82c) → cultural power mechanisms → daily def
 - Article: GPT Pro vs Cowork (docs/article_gpt_pro_vs_cowork.md)
 - API keys configured — OpenAI, Gemini ×2 (+ Composio), OpenRouter, DeepSeek, HuggingFace, Azure AI Foundry
 - Context audit — both origin chats fully analyzed, task list reconciled
+- **rhea_bridge.py** — multi-model bridge implemented (6 providers, 40+ models, tribunal mode, CLI)
+- **prism_paper_outline.md** — 8-section scientific paper outline (Fourier, Bayesian, MPC, cross-cultural)
+- **README.md** — full rewrite with repo structure, quick start, ops CLI, tech stack
+- **docs/state.md** — compact state (≤2KB) with current status
+- **Three-tier memory** — GitHub (state.md) + entire.io (episodic) + compact protocol — operational
+- **PR#2 merged** — flat repo structure (rhea-project/ → root)
+- **Ops CLI** — ./rhea bootstrap, check, memory snapshot/log all working
+- **.entire/ snapshots** — BOOT-1, OPUS_SESSION_1 created
 
 ### 🔄 In Progress
-- Three-tier memory architecture (GitHub + entire.io + compact protocol)
-- rhea_bridge.py — actual code implementation (API keys ready, code scaffold pending)
+- Wire bridge to .env keys → first live tribunal
+- iOS MVP scaffold (Stage 1)
 
 ### 📋 Next — Priority Order
-1. **rhea_bridge.py implementation** — `ask()`, `tribunal()`, `models_status()` with 6 providers
-2. **Chronos Protocol v3 — RU version** (referenced in README but does not exist yet)
-3. **Scientific paper** — "Mathematics of Rhea" via OpenAI Prism (Fourier, Bayesian, control theory)
-4. **iOS MVP scaffold** — SwiftUI + HealthKit + Apple Watch
+1. **First live tribunal** — set .env keys, run `python3 src/rhea_bridge.py tribunal "test"`
+2. **iOS MVP scaffold** — SwiftUI + HealthKit + Apple Watch (Stage 1)
+3. **Feed prism_paper_outline.md to OpenAI Prism** — generate draft paper
+4. **Connect entire.io cloud** — episodic memory integration
 5. **Biometric protocols** — HRV, sleep, light exposure, circabidian/ultradian/infradian cycles
-6. **Monetization & deploy strategy** — TestFlight ASAP, free tiers (Azure, Firebase, DeepSeek)
-7. **Higgsfield.ai integration** — image/graphics generation for app + content
-8. **IBM/RedHat free tier exploration** — additional model providers
+6. **Monetization & deploy strategy** — TestFlight ASAP, free tiers
+7. **Chronos Protocol v3 — RU version** (referenced in README)
 
-## Key Decisions
+## Key Decisions (ADR Summary)
 - **8 agents, not 10** — merged overlapping roles (v1→v3)
 - **Claude Opus 4 for reasoning agents (1,2,4,8), Sonnet 4 for execution (3,5,6,7)**
 - **ADHD-first design** — all UX assumes executive dysfunction as default
 - **Hunter-gatherer baseline** — every elite ritual reconstructs what foragers get free
 - **Multi-model bridge over single-provider lock-in** — cost 10-100x lower
 - **Passive profiling** — behavioral signals, not self-report questionnaires
+- **Flat repo structure** — no rhea-project/ nesting (ADR-007)
 
 ## Architecture Quick Ref
 ```
@@ -60,5 +70,40 @@ Agent 7: Growth Strategist (Sonnet 4)
 Agent 8: Critical Reviewer & Conductor (Opus 4)
 ```
 
+## Session Log
+
+### Session: 2026-02-13 — Opus bridge + docs (Cowork)
+**What changed:**
+- Created `src/rhea_bridge.py` — full multi-model bridge (6 providers, tribunal, CLI)
+- Created `src/__init__.py` — package init
+- Created `docs/prism_paper_outline.md` — 8-section paper outline
+- Rewrote `README.md` — Mind Blueprint Factory branding, full structure
+- Updated `docs/state.md` — compact state with bridge ✅
+- Updated `docs/state_full.md` — added session log, updated status
+- Fixed `requirements.txt` — proper formatting
+- Created snapshot OPUS_SESSION_1
+
+**What's still open:**
+- .env keys not wired → no live tribunal yet
+- iOS MVP not started
+- Prism paper not submitted
+- entire.io cloud not connected
+- `.nested-` backup files in docs/ (sandbox can't delete — user should `rm docs/*.nested-*` from macOS)
+
+**Technical debt:**
+- Bridge uses `requests` library (synchronous) — consider `httpx` async for production
+- Tribunal consensus is count-based — needs semantic similarity analysis
+- No retry logic or rate limiting in bridge calls
+- HuggingFace call method doesn't use chat completions API
+
 ## Working Languages
 EN (primary docs) · RU (protocol, dialogue) · FR (future localization)
+
+## Refs
+- Compact state: docs/state.md
+- Architecture: docs/architecture.md
+- Decisions: docs/decisions.md (7 ADRs)
+- Roadmap: docs/ROADMAP.md
+- MVP loop: docs/MVP_LOOP.md
+- Paper outline: docs/prism_paper_outline.md
+- Model catalog: docs/models_catalog.md | .json
