@@ -1,0 +1,61 @@
+{
+  "type": "manual",
+  "label": "session_v2_checkpoint",
+  "ts": "2026-02-13T14:58:54.825057Z",
+  "git_rev": "b0a382c",
+  "dirty_files": 1,
+  "untracked": 11,
+  "docs": [
+    "docs/MVP_LOOP.md",
+    "docs/ROADMAP.md",
+    "docs/architecture.md",
+    "docs/article_gpt_pro_vs_cowork.md",
+    "docs/core_context.md",
+    "docs/decisions.md",
+    "docs/models_catalog.md",
+    "docs/prism_paper_outline.md",
+    "docs/soul.md",
+    "docs/state.md",
+    "docs/state_agents_core.md",
+    "docs/state_full.md"
+  ],
+  "src": [
+    "src/__init__.py",
+    "src/rhea_bridge.py"
+  ],
+  "scripts": [
+    "scripts/rhea_watch.sh"
+  ],
+  "config": [
+    ".rhea/session.json"
+  ],
+  "entire_logs": [
+    ".entire/logs/entire.log",
+    ".entire/logs/ops.jsonl",
+    ".entire/logs/self_upgrade_test.json",
+    ".entire/logs/self_upgrade_tribunal.json",
+    ".entire/logs/watch.log"
+  ],
+  "entire_snapshots": [
+    ".entire/snapshots/AUTO-2026-02-13T14-30-04Z-b0a382c.json",
+    ".entire/snapshots/AUTO-2026-02-13T14-30-10Z-b0a382c.json",
+    ".entire/snapshots/BOOT-2026-02-13T12-06-03Z-0ae9a9e.json",
+    ".entire/snapshots/BOOT-2026-02-13T12-33-36Z-0ae9a9e.json",
+    ".entire/snapshots/OPUS_SESSION_1-2026-02-13T13-22-01Z-fe32995.json"
+  ],
+  "provider_status": {
+    "openai": "active",
+    "gemini_t1": "active",
+    "openrouter_free": "active",
+    "gemini_main": "quota_exceeded",
+    "deepseek": "no_balance",
+    "azure": "bad_creds",
+    "huggingface": "url_migrated"
+  },
+  "session_state": {
+    "tribunal_complete": true,
+    "watch_daemon": "restarted",
+    "git_locked": true,
+    "agents_configured": 9
+  }
+}
