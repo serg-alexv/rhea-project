@@ -34,3 +34,9 @@
 **Context:** Claude's context window = RAM. 27 transcripts, 70% context spent on "remembering."
 **Decision:** GitHub (state.md ≤2KB) as long-term memory, entire.io as episodic memory, compact protocol for session handoff.
 **Rationale:** Reduces context overhead from 70% to ~5%. Git provides continuity; entire.io provides searchable reasoning archive.
+
+## ADR-008: Tiered model routing with cheap-first default (2026-02-13)
+**Context:** ADR-004 assigned models per agent role, but lacked cost discipline. Most routine operations (summarisation, formatting, simple Q&A) don't need Opus-class models. Sessions were burning expensive tokens on trivial work.
+**Decision:** Introduce 4-tier routing in rhea_bridge.py: cheap (Sonnet/Flash/mini), balanced (GPT-4o/Gemini-2.5-Flash), expensive (Gemini-2.5-Pro/GPT-4.5/o3), reasoning (o4-mini/DeepSeek-R1). Default tier = cheap. Expensive/reasoning tiers require explicit justification. New methods: `ask_default()` (always cheap), `ask_tier()` (explicit tier), `tribunal()` now tier-aware.
+**Rationale:** Enforces cost discipline at the API layer. Cheap tier covers ~80% of agent work. Expensive models reserved for deep research, critique, and novel synthesis. Extends ADR-004 by making tier selection explicit rather than role-based.
+**Supersedes:** Partially extends ADR-004 (model assignment is now tier-first, role-second).

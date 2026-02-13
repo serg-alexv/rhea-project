@@ -104,14 +104,21 @@
 
 ---
 
-## Cost Optimization Tiers
+## Cost Optimization Tiers (rhea_bridge.py — ADR-008)
 
-| Strategy | Models | Cost/M out | When |
-|----------|--------|--------:|------|
-| **Free** | Llama 4 Scout, Jais-2, OpenRouter free | $0.00 | Drafts, high-volume, A7 |
-| **Budget** | Gemini 2.0 Flash, GPT-4o-mini, DeepSeek-V3 | $0.10–0.60 | Routine tasks, A3/A7 |
-| **Standard** | Gemini 2.5 Flash, Mistral Med 3, Kimi K2.5 | $2.00–3.00 | Daily work, A3–A7 |
-| **Premium** | GPT-5.2, Gemini 3 Pro, o3 | $8.00–18.00 | Critical reasoning, A1/A2/A8 |
+Default tier = **cheap**. Expensive/reasoning require explicit justification.
+
+| Tier | rhea_bridge key | Candidates (ordered) | Cost/M out | When |
+|------|----------------|---------------------|--------:|------|
+| **cheap** | `"cheap"` | Claude Sonnet 4, Gemini 2.0 Flash, GPT-4o-mini, DeepSeek Chat, Azure GPT-4o-mini, Gemini 2.0 Flash Lite, GPT-4.1-nano | $0.00–0.60 | ~80% of all work. Summaries, formatting, Q&A, drafts, A3/A7 |
+| **balanced** | `"balanced"` | GPT-4o, Gemini 2.5 Flash, GPT-4.1, Mistral Large, Azure GPT-4o | $2.00–8.00 | Complex reasoning cheap tier can't handle. A5/A6 hard problems |
+| **expensive** | `"expensive"` | Gemini 2.5 Pro, GPT-4.5, o3, Qwen3-235B | $8.00–18.00 | Deep research, critique, novel synthesis. Requires justification. A1/A2/A8 |
+| **reasoning** | `"reasoning"` | o4-mini, o3-mini, DeepSeek Reasoner, DeepSeek R1, Azure DeepSeek R1 | $1.10–4.40 | Chain-of-thought, math, logic, proofs. A1 specialised |
+
+**API methods:**
+- `ask_default(prompt)` → always cheap tier
+- `ask_tier("balanced", prompt)` → explicit tier with fallback
+- `tribunal(prompt, tier="cheap")` → multi-model comparison within tier
 
 ---
 
