@@ -1,0 +1,1 @@
+Run exactly this command: git commit -m "fix(entire): switch to manual-commit strategy"
