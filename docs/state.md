@@ -1,24 +1,27 @@
-# Rhea — Project State (compact)
+# Rhea — compact state
 
 ## Mission
-Reconstruct daily defaults with a multi-provider LLM bridge and an iOS closed-loop scheduler.
+Mind Blueprint factory: generate, evaluate, iterate on daily structure models using scientific rhythms, multi-model tribunal, and closed-loop planner.
 
 ## Deliverables
-- Scientific paper “Mathematics of Rhea”
-- iOS app “Rhea” (SwiftUI + HealthKit + Apple Watch)
-- Multi-provider bridge rhea_bridge.py (ask/tribunal/models_status)
+- Scientific paper "Mathematics of Rhea" → outline ready (docs/prism_paper_outline.md)
+- iOS app "Rhea" (SwiftUI + HealthKit + Apple Watch)
+- Multi-provider bridge rhea_bridge.py → ✅ implemented (src/rhea_bridge.py)
 
-## Status (high level)
-- Architecture: v3 fixed (roles merged, 8→≈5 effective agents)
-- Docs: imported & normalized into docs/
-- Ops: ./rhea CLI + .entire snapshots/logs working locally
+## Status
+- Architecture: v3 fixed, 8 agents, Chronos Protocol
+- Bridge: implemented (6 providers, ask/tribunal/models_status)
+- Docs: normalized, prism paper outline created
+- Ops: ./rhea CLI + .entire snapshots/logs working
+- Git: PR#2 merged, main up to date
 
-## Next 30 days (focus)
-1. Implement rhea_bridge.ask / tribunal / models_status in src/rhea_bridge.py.
-2. Build minimal iOS MVP that calls the bridge for next-best-action.
-3. Connect .entire/snapshots + ops.jsonl as long-memory source into entire.io.
+## Next
+1. Wire bridge to .env keys → first live tribunal
+2. iOS MVP scaffold (Stage 1)
+3. Feed prism_paper_outline.md to OpenAI Prism
+4. Connect entire.io cloud
 
-## Notes
-- Full verbose state: docs/state_full.md
-- Decisions & ADRs: docs/decisions.md
-- Architecture details: docs/architecture.md
+## Refs
+- Full state: docs/state_full.md
+- Decisions: docs/decisions.md
+- Architecture: docs/architecture.md
