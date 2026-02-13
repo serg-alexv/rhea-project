@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+cmd="${1:-}"; shift || true
+
+case "$cmd" in
+  bootstrap)
+    exec scripts/rhea/bootstrap.sh "$@"
+    ;;
+  import-nested)
+    exec scripts/rhea/import_nested.sh "$@"
+    ;;
+  check)
+    exec scripts/rhea/check.sh "$@"
+    ;;
+  memory)
+    exec scripts/rhea/memory.sh "$@"
+    ;;
+  help|--help|-h|"")
+    cat <<'H'
+Rhea CLI
+
+Commands:
+  ./rhea bootstrap [--dry-run] [--no-import] [--keep-nested]
+  ./rhea import-nested [--dry-run] [--keep-nested]
+  ./rhea check
+  ./rhea memory snapshot [LABEL]
+  ./rhea memory log "message"
+
+Env:
+  RHEA_EXPERIMENTAL=1   stricter checks + snapshots on bootstrap
+H
+    ;;
+  *)
+    echo "Unknown command: $cmd" >&2
+    echo "Run: ./rhea help" >&2
+    exit 1
+    ;;
+esac
