@@ -1,0 +1,43 @@
+{
+  "label": "ENTIRE_PIPELINE_FIX",
+  "git": "58721f4",
+  "branch": "main",
+  "timestamp": "2026-02-13T22:00:00Z",
+  "session": "Cowork Sessions 10-12 — Entire.io Pipeline Fix",
+  "purpose": "Fix Entire.io checkpoint pipeline so checkpoints appear on web dashboard",
+
+  "root_causes_found": [
+    "commit-msg hook missing execute permission (chmod +x required)",
+    "auto-commit strategy does not add Entire-Checkpoint trailers to user commits — must use manual-commit"
+  ],
+
+  "fixes_applied": [
+    "chmod +x .git/hooks/commit-msg",
+    ".entire/settings.local.json changed from auto-commit to manual-commit",
+    "Manually condensed checkpoint b0010aef23e3 to entire/checkpoints/v1 branch"
+  ],
+
+  "files_modified": [
+    ".git/hooks/commit-msg — permissions fixed (rw → rwx)",
+    ".entire/settings.local.json — strategy: manual-commit",
+    "docs/state.md — updated Entire.io integration section",
+    "docs/state_full.md — added session log for pipeline fix",
+    "scripts/entire_commit.sh — staged and committed"
+  ],
+
+  "checkpoints_on_github": [
+    "9f2cf70d71cb (original, from interactive Claude Code session)",
+    "b0010aef23e3 (new, from manual-commit pipeline test)"
+  ],
+
+  "remaining_action": "Install Entire GitHub App at github.com/apps/entire → grant access to serg-alexv/rhea-project",
+
+  "think_line_position": "MEMORY_ECONOMY → ENTIRE_PIPELINE_FIX",
+
+  "meta": {
+    "source": "Cowork (Claude Opus 4.6) — debugging Entire.io integration",
+    "model": "Claude Opus 4.6",
+    "session_type": "Cowork",
+    "sessions_spanned": "10, 11, 12 (context continuations)"
+  }
+}
