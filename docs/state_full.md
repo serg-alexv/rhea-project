@@ -123,6 +123,31 @@ and 9 sessions of thinking history. The discomfort function D = 91.96 (comfort z
 - No retry logic or rate limiting in bridge calls
 - HuggingFace call method doesn't use chat completions API
 
+### Session: 2026-02-13 — Entire.io checkpoint pipeline fix (Cowork Sessions 10-12)
+**Root causes found & fixed:**
+1. `.git/hooks/commit-msg` missing execute permission → `chmod +x` fixed
+2. `auto-commit` strategy doesn't add `Entire-Checkpoint` trailers to user commits → switched to `manual-commit`
+
+**What changed:**
+- Fixed commit-msg hook permissions (was `-rw-------`, now `-rwx------`)
+- Changed `.entire/settings.local.json` from `auto-commit` to `manual-commit`
+- Created `scripts/entire_commit.sh` — helper for Claude Code CLI commits
+- Commit `58721f4` now has `Entire-Checkpoint: b0010aef23e3` trailer
+- Manually condensed checkpoint to `entire/checkpoints/v1` branch
+- Pushed both `main` and `entire/checkpoints/v1` to GitHub remote
+- Two checkpoints now on GitHub: `9f2cf70d71cb` and `b0010aef23e3`
+
+**Discovery: Entire GitHub App required**
+- Checkpoints are correctly on GitHub but entire.io dashboard requires GitHub App installation
+- App at: github.com/apps/entire — needs read-only access to repository
+- Once installed, checkpoints should appear at entire.io/serg-alexv/rhea-project/checkpoints/main
+
+**What's still open:**
+- Install Entire GitHub App → grant access to rhea-project
+- Clean up git worktree: `git worktree remove /tmp/entire-wt` (from macOS)
+- `.env` keys not wired → no live tribunal yet
+- iOS MVP not started
+
 ## Working Languages
 EN (primary docs) · RU (protocol, dialogue) · FR (future localization)
 
