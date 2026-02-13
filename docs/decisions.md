@@ -46,3 +46,15 @@
 **Decision:** Each agent now has a declared default tier and escalation tier. 5 agents (Chronos, Hypnos, Hermes, Hestia, + Rhea default) are cheap-only — they never escalate. 2 agents (Athena, Hephaestus) default to balanced, escalate to expensive. Apollo defaults cheap, escalates to reasoning. Escalation requires logged rationale. Agent prompt modifiers now include explicit cost discipline instructions.
 **Rationale:** Pushes cost discipline from the API layer (ADR-008) into agent behaviour. Estimated ~80% of all agent calls stay on cheap tier. Only Athena and Hephaestus routinely use balanced. Expensive/reasoning reserved for genuine novel reasoning.
 **Depends on:** ADR-008 (tier routing infrastructure).
+
+## ADR-010: Memory Budget, Discomfort Metric, and Self-Improvement Loops (2026-02-13)
+**Context:** Rhea's memory accumulates snapshots, docs, and reasoning traces across sessions. Without active management, context windows fill with "remembering" instead of "thinking." Previous sessions burned 70%+ context on memory retrieval (ADR-007). Need a formal mechanism to detect bloat and trigger compaction.
+**Decision:** Introduce:
+1. **Discomfort function D** — weighted sum of core_docs_kb, repo_size_mb, open_todo_count, 1/insights_per_request, avg_context_tokens. Tracked in `metrics/memory_metrics.json`.
+2. **Thresholds** — T1 (warning: D≥150), T2 (overload: D≥300). Current D=91.96 (comfort).
+3. **Reflexive Sprint** — triggered at D≥T2 or manual request. Archivist agent proposes: summarize bloated docs, move details to `archive/`, create ADRs, compact while preserving meaning.
+4. **Memory zones** — core (`docs/`), episodic (`.entire/`), metrics (`metrics/`), tasks (`data/`), archive (`archive/`).
+5. **Snapshot retention** — named snapshots persist; AUTO-*/POST_COMMIT-* older than 30 days archivable.
+6. **Challenging tasks registry** — `data/challenging_tasks.yaml` for investing free capacity into deep reasoning.
+**Rationale:** Formalizes the "self-improving memory" concept from the ChatGPT system prompt. Ensures Rhea can grow without losing coherence. D function provides quantitative signal for when compaction is needed.
+**Depends on:** ADR-007 (three-tier memory), ADR-008 (cheap-first routing for archivist agent).

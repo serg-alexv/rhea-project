@@ -1,0 +1,65 @@
+{
+  "version": "1.0.0",
+  "last_updated": "2026-02-13T19:15:00Z",
+  "last_updated_by": "Cowork Session 9 — Root Orchestrator",
+
+  "measurements": {
+    "core_docs_kb": 124,
+    "repo_size_mb": 35,
+    "snapshots_count": 28,
+    "snapshots_kb": 220,
+    "open_todo_count": 8,
+    "adrs_active": 9,
+    "git_commits_main": 10,
+    "avg_context_tokens_estimate": 45000,
+    "insights_per_request": {
+      "value": 2.1,
+      "note": "Rough estimate: ~21 major insights across 10 sessions",
+      "window": "last_10_sessions"
+    }
+  },
+
+  "thresholds": {
+    "T1_warning": {
+      "core_docs_kb": 200,
+      "repo_size_mb": 100,
+      "open_todo_count": 20,
+      "avg_context_tokens_estimate": 80000,
+      "description": "Approaching bloat — schedule cleanup"
+    },
+    "T2_overload": {
+      "core_docs_kb": 500,
+      "repo_size_mb": 300,
+      "open_todo_count": 50,
+      "avg_context_tokens_estimate": 150000,
+      "description": "MOMENT OF DISCOMFORT — trigger Reflexive Sprint"
+    }
+  },
+
+  "discomfort_function": {
+    "formula": "D = w1*core_docs_kb + w2*repo_size_mb + w3*open_todo_count + w4*(1/insights_per_request) + w5*avg_context_tokens_estimate",
+    "weights": {
+      "w1": 0.3,
+      "w2": 0.1,
+      "w3": 0.5,
+      "w4": 10.0,
+      "w5": 0.001
+    },
+    "current_D": 91.96,
+    "D_calculation": "0.3*124 + 0.1*35 + 0.5*8 + 10*(1/2.1) + 0.001*45000 = 37.2 + 3.5 + 4.0 + 4.76 + 45.0 = 91.96",
+    "T1_threshold": 150,
+    "T2_threshold": 300
+  },
+
+  "qualitative_level": "comfort",
+  "level_reason": "D=91.96 < T1=150: repo is compact, core docs under 200KB, 8 open TODOs manageable",
+
+  "reflexive_sprint_history": [],
+
+  "memory_budget": {
+    "core_docs_target_kb": 150,
+    "snapshots_retention_policy": "Keep named snapshots indefinitely. AUTO-* and POST_COMMIT-* older than 30 days → archive or delete.",
+    "archive_policy": "When core doc exceeds 10KB, summarize older sections → archive/",
+    "max_context_load_per_session_tokens": 80000
+  }
+}
