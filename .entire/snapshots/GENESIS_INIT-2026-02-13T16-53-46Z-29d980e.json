@@ -1,0 +1,188 @@
+{
+  "label": "GENESIS_INIT",
+  "git": "29d980e",
+  "branch": "main",
+  "timestamp": "2026-02-13T16:53:46Z",
+  "session": "Cowork Opus 4.6 — Agent Teams Genesis Init",
+  "agent": "A1 Quantitative Scientist (root manager, Sonnet mode)",
+  "purpose": "Comprehensive init entry synthesizing 27+ chat transcripts into a single structured episodic memory node for Entire.IO. This is the foundational entry that all future sessions reference.",
+
+  "genesis_chain": {
+    "origin": "Gregorian calendar critique (eb53e82c) → naive realism → 42 calendar systems → symbolic power → health/longevity → daily defaults as managed environment → polyvagal+ADHD+interoception → 8-agent system → iOS app + scientific paper",
+    "source_chats": [
+      {"id": "eb53e82c", "title": "История и сравнение календарных систем", "role": "ORIGIN: calendar critique → 42 systems → symbolic power → health"},
+      {"id": "db9feb88", "title": "Продолжение чата или новый контекст", "role": "CONTINUATION: polyvagal → ADHD → agent teams → iOS → bridge"},
+      {"id": "72177dd4", "title": "Structuring a human-style peer review", "role": "METHODOLOGY: peer review for papers"},
+      {"id": "7b54c9f5", "title": "Интеркоммуникация с агентами", "role": "DEMO: multi-agent chemistry/bioinformatics"},
+      {"id": "2a6e8861", "title": "Agent teams setup", "role": "SETUP: agent teams feature enable"}
+    ],
+    "total_chats_distilled": 27,
+    "key_insight": "They define not behavior but categories of thought — cultural mechanisms control what you can think, not what you do"
+  },
+
+  "philosophical_framework": {
+    "hunter_gatherer_calibration_zero": "Every expensive wellness practice reconstructs what foragers received as environmental default. If you have to pay for it, buy a device, or schedule it — it was probably free in the ancestral environment.",
+    "symbolic_power_levels": [
+      "1: Time naming (Gregorian months, era names)",
+      "2: Cosmic legitimacy (Mandate of Heaven, divine right)",
+      "3: Linguistic control (Rectification of Names, Sapir-Whorf)",
+      "4: Category formation (what counts as food, work, rest)",
+      "5: Habitual infrastructure (when meals happen, when sleep should occur)",
+      "6: Hegemonic consent (Gramsci — internalized common sense)",
+      "7: Preference shaping (Lukes — you don't even want what you're missing)",
+      "8: Doxa (Bourdieu — unquestionable, invisible assumptions)"
+    ],
+    "adhd_first_principle": "If it works for ADHD — it works for everyone. Executive dysfunction is the default under stress, not a minority condition.",
+    "anankastic_paradox": "Rigid structures coexist with ADHD spontaneity needs — compensatory architecture, not contradiction"
+  },
+
+  "scientific_foundation": {
+    "polyvagal_hierarchy": "Ventral vagal (social engagement) → sympathetic (fight/flight) → dorsal vagal (freeze/shutdown). Environment determines autonomic mode.",
+    "interoception_adhd_loop": "Diminished body-signal reading in ADHD → poor decisions → worse interoception. Passive profiling as workaround.",
+    "multi_scale_rhythms": {
+      "ultradian": "~90-120min BRAC cycles, attention oscillation",
+      "circadian": "~24h sleep-wake, cortisol, melatonin, body temperature",
+      "circabidian": "~48h alternating high/low days — may explain ADHD good/bad day alternation",
+      "infradian": ">24h menstrual, seasonal, lunar"
+    },
+    "key_references": [
+      "Porges S.W. — Polyvagal Theory",
+      "Yetish G. et al. 2015 — Natural sleep in pre-industrial societies",
+      "Wiessner P. 2014 PNAS — Firelight talk among Ju/'hoansi",
+      "Bruton A. et al. 2025 — Interoception and ADHD",
+      "Längle G. et al. 2025 — HRV and cognitive control",
+      "Takeda R. et al. 2025 — HRV severity markers in ADHD"
+    ]
+  },
+
+  "mathematical_framework": {
+    "state_vector": "x_t = [E_t (energy), M_t (mood), C_t (cognitive load), S_t (sleep debt), O_t (obligations), R_t (recovery)]",
+    "methods": [
+      "Fourier decomposition of biorhythms — individual rhythm fingerprint",
+      "Bayesian duration model — personalized time estimates with uncertainty",
+      "Model Predictive Control — maximize agency subject to safety constraints",
+      "Multi-armed bandit — Thompson sampling for micro-interventions"
+    ],
+    "paper_status": "Outline ready at docs/prism_paper_outline.md, 8 sections, target OpenAI Prism"
+  },
+
+  "architecture": {
+    "chronos_protocol_v3": {
+      "agents": [
+        {"id": "A1", "name": "Quantitative Scientist", "tier": "Opus 4", "domain": "Fourier, Bayesian, MPC, math models"},
+        {"id": "A2", "name": "Life Sciences Integrator", "tier": "Opus 4", "domain": "Polyvagal, HRV, chronobiology, sleep"},
+        {"id": "A3", "name": "Psychologist / Profile Whisperer", "tier": "Sonnet 4", "domain": "Passive profiling, ADHD-first UX"},
+        {"id": "A4", "name": "Linguist-Culturologist", "tier": "Opus 4", "domain": "42 calendars, 16+ civilizations, symbolic power"},
+        {"id": "A5", "name": "Product Architect", "tier": "Sonnet 4", "domain": "SwiftUI, HealthKit, Apple Watch"},
+        {"id": "A6", "name": "Tech Lead", "tier": "Sonnet 4 + Claude Code", "domain": "Bridge, API, infrastructure"},
+        {"id": "A7", "name": "Growth Strategist", "tier": "Sonnet 4", "domain": "TestFlight, monetization, free tiers"},
+        {"id": "A8", "name": "Critical Reviewer & Conductor", "tier": "Opus 4", "domain": "Tribunal consensus, gap analysis, quality gate"}
+      ],
+      "delegation_format": "[CHRONOS:A{sender}→A{receiver}]",
+      "tribunal_threshold": "≥60% consensus from 5 independent models"
+    },
+    "mythic_agents": {
+      "agents": [
+        {"name": "Rhea", "role": "Root Manager", "domain": "meta-controller, MPC, multi-agent arbitration", "default_tier": "cheap", "escalation_tier": "balanced"},
+        {"name": "Chronos", "role": "Time & Load", "domain": "time allocation, task queue, deadlines", "default_tier": "cheap", "escalation_tier": "cheap"},
+        {"name": "Gaia", "role": "Body & Environment", "domain": "energy, HRV, light, circadian", "default_tier": "cheap", "escalation_tier": "balanced"},
+        {"name": "Hypnos", "role": "Sleep", "domain": "sleep timing, debt, circadian phase", "default_tier": "cheap", "escalation_tier": "cheap"},
+        {"name": "Athena", "role": "Strategy & Learning", "domain": "goals, skill trees, learning", "default_tier": "balanced", "escalation_tier": "expensive"},
+        {"name": "Hermes", "role": "Communication", "domain": "messages, social, interruption cost", "default_tier": "cheap", "escalation_tier": "cheap"},
+        {"name": "Hephaestus", "role": "Build & Deep Work", "domain": "focused work, code, design", "default_tier": "balanced", "escalation_tier": "expensive"},
+        {"name": "Hestia", "role": "Safety & Home", "domain": "routines, rituals, recovery", "default_tier": "cheap", "escalation_tier": "cheap"},
+        {"name": "Apollo", "role": "Insight & Patterns", "domain": "pattern recognition, meta-reflection", "default_tier": "cheap", "escalation_tier": "reasoning"}
+      ]
+    },
+    "bridge": {
+      "file": "src/rhea_bridge.py",
+      "providers": ["OpenAI", "Google Gemini", "Anthropic", "OpenRouter", "DeepSeek", "HuggingFace", "Azure AI Foundry"],
+      "model_count": "400+",
+      "tiers": ["cheap", "balanced", "expensive", "reasoning"],
+      "methods": ["ask()", "ask_default()", "ask_tier()", "tribunal()", "models_status()", "tiers()"]
+    },
+    "memory": {
+      "github": "state.md ≤2KB — long-term structural memory",
+      "entire_io": ".entire/ snapshots — episodic memory with reasoning traces",
+      "compact_protocol": "[RHEA:resume] state.md loaded — session handoff"
+    }
+  },
+
+  "decisions_adrs": [
+    "ADR-001: Agent consolidation 10→8",
+    "ADR-002: Multi-model bridge over single provider",
+    "ADR-003: ADHD-first design",
+    "ADR-004: Opus for research, Sonnet for execution",
+    "ADR-005: Passive profiling methodology",
+    "ADR-006: Hunter-gatherer calibration zero",
+    "ADR-007: Three-tier external memory",
+    "ADR-008: Tiered model routing (cheap-first default)",
+    "ADR-009: State agents core + models catalog"
+  ],
+
+  "deliverables": {
+    "paper": {
+      "title": "Mathematics of Rhea: A Formal Framework for Reconstructing Daily Defaults from Biological Rhythms and Cultural Universals",
+      "status": "Outline ready (docs/prism_paper_outline.md)",
+      "sections": 8,
+      "target": "OpenAI Prism generation → tribunal peer review"
+    },
+    "ios_app": {
+      "name": "Rhea",
+      "meaning": "Titan goddess, mother of Olympians, flow of time and natural cycles",
+      "stack": "SwiftUI + HealthKit + Apple Watch + CloudKit",
+      "backend": "Azure Cosmos DB",
+      "path": "TestFlight → AppStore",
+      "core_loop": "Passive profiling → rhythm detection → personalized daily structure → feedback",
+      "status": "MVP scaffold not started"
+    }
+  },
+
+  "cultural_research": {
+    "civilizations_analyzed": "16+",
+    "calendar_systems": "42 (civil, religious, historical, technical)",
+    "key_finding": "All elite rituals across civilizations independently converge on biology the forager got free",
+    "invisible_mechanisms": [
+      "Meal timing architecture — shapes circadian gene expression",
+      "Posture ecology — chairs create chronic flexion vs ancestral squat",
+      "Light spectrum — artificial light suppresses melatonin 50-80% vs firelight",
+      "Social synchronization — modern schedules desync co-regulation",
+      "Temperature variability — thermoneutral zones eliminate thermogenesis",
+      "Sound environment — constant low-freq noise activates sympathetic"
+    ]
+  },
+
+  "research_gaps": [
+    "Breathing protocols (coherent, box, Buteyko)",
+    "Movement modules (variability for vagal tone, not exercise)",
+    "Vocal/prosodic analysis (voice as interoceptive signal)",
+    "Thermal protocols (cold/heat timing)",
+    "Narrative identity (self-story vs circadian compliance)",
+    "Pharmacological awareness (caffeine half-life, med timing)",
+    "Lifecycle adaptation (developmental stages)",
+    "Trauma-informed design (hypervigilance from optimization)",
+    "Sub-Saharan Africa, Oceania, Central Asia, Indigenous Americas underrepresented"
+  ],
+
+  "technical_debt": [
+    "Bridge uses synchronous requests — needs httpx async",
+    "Tribunal consensus is count-based — needs semantic similarity",
+    "No retry logic or rate limiting",
+    "HuggingFace method doesn't use chat completions API",
+    ".env keys not wired — no live tribunal yet"
+  ],
+
+  "next_priorities": [
+    "1. Wire bridge to .env keys → first live tribunal",
+    "2. iOS MVP scaffold (SwiftUI + HealthKit + Apple Watch)",
+    "3. Feed prism_paper_outline.md to OpenAI Prism",
+    "4. Connect entire.io cloud — episodic memory integration",
+    "5. Biometric protocols — HRV, sleep, light, circabidian/ultradian/infradian",
+    "6. Monetization & deploy — TestFlight ASAP, free tiers",
+    "7. Chronos Protocol v3 — RU version"
+  ],
+
+  "languages": {"primary": "EN", "native_dialogue": "RU", "future": "FR"},
+
+  "soul_hash": "ADHD-first × hunter-gatherer-zero × polyvagal × passive-profiling × structure-as-freedom"
+}
