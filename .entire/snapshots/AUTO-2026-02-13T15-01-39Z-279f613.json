@@ -1,0 +1,30 @@
+{
+  "type": "auto",
+  "ts": "2026-02-13T15:01:39.311897Z",
+  "git_rev": "279f613",
+  "dirty_files": 1,
+  "docs": [
+    "docs/MVP_LOOP.md",
+    "docs/ROADMAP.md",
+    "docs/architecture.md",
+    "docs/article_gpt_pro_vs_cowork.md",
+    "docs/core_context.md",
+    "docs/decisions.md",
+    "docs/models_catalog.md",
+    "docs/prism_paper_outline.md",
+    "docs/soul.md",
+    "docs/state.md",
+    "docs/state_agents_core.md",
+    "docs/state_full.md"
+  ],
+  "src": [
+    "src/__init__.py",
+    "src/rhea_bridge.py"
+  ],
+  "scripts": [
+    "scripts/rhea_watch.sh"
+  ],
+  "config": [
+    ".rhea/session.json"
+  ]
+}

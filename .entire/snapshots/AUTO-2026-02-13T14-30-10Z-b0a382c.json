@@ -1,0 +1,31 @@
+{
+  "type": "auto",
+  "ts": "2026:02:13T14:30:10Z",
+  "git_rev": "b0a382c",
+  "dirty_files": 0,
+  "docs": [
+    "docs/MVP_LOOP.md",
+    "docs/ROADMAP.md",
+    "docs/architecture.md",
+    "docs/article_gpt_pro_vs_cowork.md",
+    "docs/core_context.md",
+    "docs/decisions.md",
+    "docs/models_catalog.md",
+    "docs/prism_paper_outline.md",
+    "docs/soul.md",
+    "docs/state.md",
+    "docs/state_agents_core.md",
+    "docs/state_full.md"
+  ],
+  "src": [
+    "src/__init__.py",
+    "src/rhea_bridge.py"
+  ],
+  "scripts": [
+    "scripts/rhea/bootstrap.sh",
+    "scripts/rhea/check.sh",
+    "scripts/rhea/import_nested.sh",
+    "scripts/rhea/lib_entire.sh",
+    "scripts/rhea/memory.sh"
+  ]
+}
