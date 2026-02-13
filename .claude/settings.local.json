@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__Read_and_Send_iMessages__search_contacts"
+    ]
+  }
+}
