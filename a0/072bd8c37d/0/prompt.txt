@@ -1,0 +1,1 @@
+Find a way to maximize using Entire.io and local md to minifying tokens spendings. USe https://app.trybons.ai/ and mintlify.com; You do have a google chrome with claude extension installed as a default web browser in the system -- uae all your access, use "timelabs" profile in the chrome
