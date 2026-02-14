@@ -1,0 +1,24 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "f9048be58ace",
+  "session_id": "5e8ca6db-c55e-4d6d-aa15-4bc9fb29a388",
+  "strategy": "auto-commit",
+  "created_at": "2026-02-14T21:47:01.324117Z",
+  "branch": "main",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "docs-min",
+    "docs/architecture.md.nested-20260213-150534",
+    "docs/decisions.md.nested-20260213-150534",
+    "docs/models_catalog.md",
+    "docs/state.md.nested-20260213-150534"
+  ],
+  "agent": "Claude Code",
+  "token_usage": {
+    "input_tokens": 3,
+    "cache_creation_tokens": 20033,
+    "cache_read_tokens": 10491,
+    "output_tokens": 11,
+    "api_call_count": 1
+  }
+}
