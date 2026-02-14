@@ -4,8 +4,8 @@
 
 ## Summary
 
-- **Total integrations: 92**
-- Passing: 83 | Failing: 2 | Untested: 7
+- **Total integrations: 93**
+- Passing: 86 | Failing: 0 | Untested: 7
 
 ---
 
@@ -125,7 +125,7 @@ All 6 providers have API keys configured. Tested via `python3 src/rhea_bridge.py
 | Name | Capability | Scope | Approval | Audit Log | Failure Modes | Test Command | Status |
 |------|-----------|-------|----------|-----------|---------------|-------------|--------|
 | `scripts/rhea/bootstrap.sh` | Normalize repo structure (dirs, README, import nested) | Filesystem write (docs, prompts, src, scripts) | none | `.entire/logs/ops.jsonl` | Missing dirs, git index conflict | `bash scripts/rhea/bootstrap.sh --dry-run` | PASS |
-| `scripts/rhea/check.sh` | Verify repo invariants (.venv, .env, state.md size) | Read-only analysis | none | `.entire/logs/ops.jsonl` | state.md > 2KB, .venv tracked | `bash scripts/rhea/check.sh` | FAIL |
+| `scripts/rhea/check.sh` | Verify repo invariants (.venv, .env, state.md size) | Read-only analysis | none | `.entire/logs/ops.jsonl` | state.md > 2KB, .venv tracked | `bash scripts/rhea/check.sh` | PASS |
 | `scripts/rhea/memory.sh` | Create snapshots and log events | `.entire/snapshots/`, `.entire/logs/` | none | `.entire/logs/ops.jsonl` | Missing lib_entire.sh | `bash scripts/rhea/memory.sh` (shows usage) | PASS |
 | `scripts/rhea/lib_entire.sh` | Shared library (log_event, snapshot_repo_state, timestamps) | `.entire/` directory | none | `.entire/logs/ops.jsonl` | Sourced by other scripts | N/A (library, not standalone) | PASS |
 | `scripts/rhea/import_nested.sh` | Import nested docs/prompts from subdirs | docs/, prompts/ directories | none | `.entire/logs/ops.jsonl` | Source dirs not found | `bash scripts/rhea/import_nested.sh --dry-run` | PASS |
@@ -136,7 +136,7 @@ All 6 providers have API keys configured. Tested via `python3 src/rhea_bridge.py
 | `scripts/memory_benchmark.sh` | Self-stress-test across 5 memory layers (73 checks) | Read-only analysis | none | stdout | Missing docs, missing snapshots | `bash scripts/memory_benchmark.sh` | PASS |
 | `scripts/rhea_query_persist.sh` | Per-query micro-snapshot and auto-commit | Git + `.entire/logs/queries.jsonl` | none | `.entire/logs/queries.jsonl` | Git lock, no changes to commit | `bash scripts/rhea_query_persist.sh "test"` | PASS |
 | `scripts/rhea_orchestrate.py` | Multi-agent orchestration (8 agents, genesis/status/flow/delegate) | rhea_bridge.py + `.entire/` | none | `.entire/logs/ops.jsonl` | Bridge unavailable, API keys missing | `python3 scripts/rhea_orchestrate.py status` | PASS |
-| `rhea` CLI (alias/binary) | Intended CLI entry point (bootstrap, check, memory) | Delegates to scripts/rhea/*.sh | none | `.entire/logs/ops.jsonl` | Not installed in PATH | `which rhea` | FAIL |
+| `scripts/rhea.sh` | CLI dispatcher for rhea commands (bootstrap, check, memory) | Delegates to scripts/rhea/*.sh | none | `.entire/logs/ops.jsonl` | Subcommand script missing | `bash scripts/rhea.sh help` | PASS |
 
 ---
 
@@ -158,13 +158,11 @@ All hooks route through `entire hooks claude-code <event>`. The `entire` CLI is 
 
 ## Known Issues & Gaps
 
-### Failures
+### Resolved (2026-02-15)
 
-1. **`scripts/rhea/check.sh` — FAIL**: `docs/state.md` is 2,270 bytes, exceeding the 2,048-byte limit. Script exits with `FAIL: docs/state.md too large (2270B > 2048B)`. Fix: trim state.md or raise threshold.
-
-2. **`rhea` CLI — FAIL**: Not installed in PATH (`which rhea` returns "not found"). The scripts exist under `scripts/rhea/` but there's no global `rhea` command. Fix: create a wrapper script or alias.
-
-3. **`memory_benchmark.sh` — 3 failures**: The benchmark reports 67/73 (91%) pass rate. 3 checks failed (specific failures not captured in tail output). Investigate with full run.
+1. **`scripts/rhea/check.sh`** — Fixed: `docs/state.md` trimmed from 2,270B to 1,249B (under 2,048B limit).
+2. **`rhea` CLI** — Fixed: Created `scripts/rhea.sh` dispatcher.
+3. **`memory_benchmark.sh`** — Fixed: Updated to expect `auto-commit` (ADR-014). Now 75/78 pass, 0 failures.
 
 ### Untested MCP Servers
 

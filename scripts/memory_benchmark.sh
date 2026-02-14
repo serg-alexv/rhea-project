@@ -167,8 +167,8 @@ check_file_contains "docs/state.md" "8 agents" "state.md references 8-agent syst
 check_file_contains "docs/state_full.md" "8 agents" "state_full.md references 8-agent system"
 check_file_contains "docs/architecture.md" "8-Agent System" "architecture.md has 8-Agent section"
 
-check_file_contains "docs/state.md" "manual-commit" "state.md has manual-commit strategy"
-check_file_contains "docs/state_full.md" "manual-commit" "state_full.md has manual-commit"
+check_file_contains "docs/state.md" "auto-commit" "state.md has auto-commit strategy (ADR-014)"
+check_file_contains "docs/state_full.md" "auto-commit" "state_full.md has auto-commit (ADR-014)"
 
 check_file_contains "docs/state.md" "rhea_bridge.py" "state.md references bridge"
 check_file_contains "docs/architecture.md" "rhea_bridge.py" "architecture.md references bridge"
@@ -217,10 +217,10 @@ if [ -f ".entire/settings.local.json" ]; then
   else
     fail "Entire.io DISABLED in settings.local.json"
   fi
-  if [ "$STRATEGY" = "manual-commit" ]; then
-    pass "Strategy is manual-commit (correct for trailer injection)"
+  if [ "$STRATEGY" = "auto-commit" ]; then
+    pass "Strategy is auto-commit (ADR-014)"
   else
-    fail "Strategy is '$STRATEGY' — should be 'manual-commit'"
+    fail "Strategy is '$STRATEGY' — should be 'auto-commit' (ADR-014)"
   fi
 else
   fail ".entire/settings.local.json MISSING"
