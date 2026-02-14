@@ -10,7 +10,14 @@
 - `docs/state_full.md` — append-only narrative log
 - `src/rhea_bridge.py` — multi-provider LLM bridge (6 providers, 31 models, 4 tiers)
 - `scripts/rhea_orchestrate.py` — 8-agent orchestration (Chronos Protocol v3)
-- `docs/INTEGRATIONS_AUDIT.md` — tool registry (92 integrations)
+- `docs/INTEGRATIONS_AUDIT.md` — full tool/integration registry with liveness status
+
+## Claude Code Config
+- `.claude/settings.json` — hooks, permissions, enabled plugins
+- `.claude/settings.local.json` — local permissions and MCP tool allowlist
+- `.claude/agents/` — project-level custom subagent definitions (create as needed)
+- Hooks: SessionStart, SessionEnd, UserPromptSubmit, Stop, PreToolUse(Task), PostToolUse(Task), PostToolUse(TodoWrite)
+- Use `Task` tool with `subagent_type` for parallel work; prefer project-level agents in `.claude/agents/` for recurring patterns
 
 ## Scripts
 - No `rhea` CLI in PATH — call scripts directly: `bash scripts/rhea/check.sh`
@@ -21,7 +28,7 @@
 ## Constraints
 - `docs/state.md` <= 2048 bytes (check.sh enforces, FAIL if exceeded)
 - Entire.io strategy: `auto-commit` (ADR-014) via `.entire/settings.local.json`
-- All hooks route through `entire hooks claude-code <event>`
+- All hooks route through `entire hooks claude-code <event>` (`entire` at `/opt/homebrew/bin/entire`)
 - Budget-aware: cheap tier default, escalate only when justified (ADR-008)
 - Tribunal required for: memory policy, checkpoint policy, permission changes, build mods
 
