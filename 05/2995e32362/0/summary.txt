@@ -1,0 +1,1 @@
+Created `CLAUDE.md` at project root. Future Claude sessions will automatically load this context.
