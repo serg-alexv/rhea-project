@@ -1,0 +1,39 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "a0072bd8c37d",
+  "session_id": "2f2152e4-6e52-4c96-9711-cd782a611c9b",
+  "strategy": "auto-commit",
+  "created_at": "2026-02-14T23:46:25.347684Z",
+  "branch": "main",
+  "checkpoints_count": 1,
+  "files_touched": [
+    ".claude/settings.local.json",
+    ".playwright-mcp/console-2026-02-14T23-36-36-418Z.log",
+    ".playwright-mcp/console-2026-02-14T23-40-14-689Z.log",
+    ".playwright-mcp/console-2026-02-14T23-40-34-566Z.log",
+    ".playwright-mcp/console-2026-02-14T23-40-55-184Z.log",
+    ".playwright-mcp/console-2026-02-14T23-41-01-765Z.log",
+    ".playwright-mcp/console-2026-02-14T23-41-09-121Z.log",
+    ".playwright-mcp/console-2026-02-14T23-41-15-855Z.log",
+    "docs-min",
+    "docs/TOKEN_OPTIMIZATION.md"
+  ],
+  "agent": "Claude Code",
+  "transcript_identifier_at_start": "faa9bad2-517e-4b1a-a597-d97bcbdbf3a8",
+  "checkpoint_transcript_start": 673,
+  "transcript_lines_at_start": 673,
+  "token_usage": {
+    "input_tokens": 25,
+    "cache_creation_tokens": 54873,
+    "cache_read_tokens": 1999134,
+    "output_tokens": 400,
+    "api_call_count": 20,
+    "subagent_tokens": {
+      "input_tokens": 15,
+      "cache_creation_tokens": 215675,
+      "cache_read_tokens": 666122,
+      "output_tokens": 20,
+      "api_call_count": 5
+    }
+  }
+}
