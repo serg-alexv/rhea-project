@@ -1,21 +1,21 @@
 {
   "version": "1.0.0",
-  "last_updated": "2026-02-13T19:15:00Z",
-  "last_updated_by": "Cowork Session 9 — Root Orchestrator",
+  "last_updated": "2026-02-14T06:55:00Z",
+  "last_updated_by": "Cowork Session 13 — Memory Benchmark",
 
   "measurements": {
-    "core_docs_kb": 124,
+    "core_docs_kb": 24,
     "repo_size_mb": 35,
-    "snapshots_count": 28,
-    "snapshots_kb": 220,
-    "open_todo_count": 8,
-    "adrs_active": 9,
-    "git_commits_main": 10,
+    "snapshots_count": 35,
+    "snapshots_kb": 280,
+    "open_todo_count": 6,
+    "adrs_active": 10,
+    "git_commits_main": 23,
     "avg_context_tokens_estimate": 45000,
     "insights_per_request": {
-      "value": 2.1,
-      "note": "Rough estimate: ~21 major insights across 10 sessions",
-      "window": "last_10_sessions"
+      "value": 2.5,
+      "note": "~30 major insights across 12 sessions (bridge, pipeline fix, benchmark)",
+      "window": "last_12_sessions"
     }
   },
 
@@ -45,14 +45,14 @@
       "w4": 10.0,
       "w5": 0.001
     },
-    "current_D": 91.96,
-    "D_calculation": "0.3*124 + 0.1*35 + 0.5*8 + 10*(1/2.1) + 0.001*45000 = 37.2 + 3.5 + 4.0 + 4.76 + 45.0 = 91.96",
+    "current_D": 62.7,
+    "D_calculation": "0.3*24 + 0.1*35 + 0.5*6 + 10*(1/2.5) + 0.001*45000 = 7.2 + 3.5 + 3.0 + 4.0 + 45.0 = 62.7",
     "T1_threshold": 150,
     "T2_threshold": 300
   },
 
   "qualitative_level": "comfort",
-  "level_reason": "D=91.96 < T1=150: repo is compact, core docs under 200KB, 8 open TODOs manageable",
+  "level_reason": "D=62.7 < T1=150: core docs only 24KB (well under 200KB budget), 10 ADRs, 35 snapshots, 23 commits — deeply healthy",
 
   "reflexive_sprint_history": [],
 
