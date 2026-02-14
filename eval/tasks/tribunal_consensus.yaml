@@ -1,0 +1,26 @@
+id: eval-003-tribunal-consensus
+name: "Multi-Model Tribunal Consensus"
+category: tribunal
+difficulty: hard
+description: "Test that tribunal mode produces a synthesized consensus from 3+ model responses, not just majority voting."
+prompt: |
+  Run a tribunal on this question with at least 3 models:
+  "Should Rhea's default morning routine include cold exposure (cold shower/ice bath)?"
+
+  Each model should consider: evidence quality, ADHD-friendliness,
+  adherence barrier, and polyvagal safety.
+expected_output: null
+rubric:
+  - criterion: "At least 3 distinct model perspectives presented"
+    weight: 0.2
+  - criterion: "Evidence cited for/against cold exposure"
+    weight: 0.2
+  - criterion: "ADHD adherence barrier explicitly addressed"
+    weight: 0.2
+  - criterion: "Polyvagal safety considered (autonomic regulation)"
+    weight: 0.2
+  - criterion: "Final synthesis is nuanced, not simple majority vote"
+    weight: 0.2
+model_tier: expensive
+timeout_seconds: 120
+tags: [tribunal, consensus, multi-model, reasoning]

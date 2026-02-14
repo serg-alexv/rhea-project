@@ -38,6 +38,20 @@ Calendar systems critique (eb53e82c) → cultural power mechanisms → daily def
 ### 🔄 In Progress
 - Wire bridge to .env keys → first live tribunal
 - iOS MVP scaffold (Stage 1)
+- Memory Economy & Self-Upgrade protocol (system prompt formalized)
+
+### Session: 2026-02-14 — Memory Benchmark + Self-Upgrade Phase (Cowork Sessions 13-14)
+**What changed:**
+- Created `scripts/memory_benchmark.sh` — 500-line, 6-layer, 71-check benchmark (Git→Docs→Entire→Metrics→Snapshots→Cross-layer)
+- Benchmark score: 70/71 (98%) — all critical checks passed
+- Updated `metrics/memory_metrics.json` — live measurements, D recalculated: 91.96→62.7 (comfort)
+- Committed and pushed as `f97c393`
+- Received comprehensive "Moment of Discomfort" system prompt defining: Reflexion, tribunal, teacher-student, failure memory, eval sets, Reflexive Sprints, LangGraph integration, PWA vision, user docs, external oracle protocols
+- Created missing docs: user_guide.md, user_examples.md, cost_guide.md, reflection_log.md, api_contracts.md
+- Created eval/ directory with task YAML files and README
+- ADR-011: Self-Evaluation & Self-Upgrade Techniques
+
+**Updated metrics:** D=62.7, core_docs_kb=24, snapshots=35, commits=23, insights/request=2.5
 
 ### 📋 Next — Priority Order
 1. **First live tribunal** — set .env keys, run `python3 src/rhea_bridge.py tribunal "test"`
@@ -74,8 +88,14 @@ Agent 8: Critical Reviewer & Conductor (Opus 4)
 
 **Date:** 2026-02-13 | **Trigger:** Manual (human directive + ChatGPT system prompt)
 
-Rhea's memory has accumulated 28 snapshots, 124KB of core docs, 510KB of chat extracts,
-and 9 sessions of thinking history. The discomfort function D = 91.96 (comfort zone, T1=150).
+Rhea's memory has grown to 35 snapshots, 24KB of core docs, 35MB repo,
+and 14 sessions of evolution. The discomfort function D = 62.7 (comfort zone, T1=150).
+
+**Session 14 additions (Self-Upgrade Phase):**
+- Formalized self-evaluation techniques: Reflexion (generate→evaluate→revise), tribunal/debate agents, tool-verification loops, eval sets, failure memory, teacher-student distillation
+- External oracle protocol: ATLAS_QUERY (ChatGPT), CASTOR_QUERY (Gemini) — human-proxied
+- Boredom ritual: when D < T1 and no urgent work, invest in challenging_tasks.yaml
+- Memory benchmark: automated 71-check CLI tool at scripts/memory_benchmark.sh
 
 **What was done:**
 1. Established `metrics/memory_metrics.json` — formalized discomfort function D with weights, thresholds T1/T2

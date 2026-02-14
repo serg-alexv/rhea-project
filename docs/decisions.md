@@ -58,3 +58,15 @@
 6. **Challenging tasks registry** — `data/challenging_tasks.yaml` for investing free capacity into deep reasoning.
 **Rationale:** Formalizes the "self-improving memory" concept from the ChatGPT system prompt. Ensures Rhea can grow without losing coherence. D function provides quantitative signal for when compaction is needed.
 **Depends on:** ADR-007 (three-tier memory), ADR-008 (cheap-first routing for archivist agent).
+
+## ADR-011: Self-Evaluation & Self-Upgrade Techniques (2026-02-14)
+**Context:** Rhea needs mechanisms to improve its own outputs without human micro-management. The system prompt formalized 6 techniques for self-improvement, but they needed anchoring in the decision log.
+**Decision:** Adopt 6 self-improvement patterns:
+1. **Reflexion** — generate → self-evaluate → revise (3 cycles max). Cheap models draft, then self-critique.
+2. **Tribunal/Debate** — 3+ models argue a question; synthesize into weighted consensus. Used for high-stakes decisions.
+3. **Tool-Verification Loops** — after code generation, immediately run/test; iterate until passing.
+4. **Eval Sets** — maintain `eval/tasks/*.yaml` with known-answer tasks; run periodically to detect regression.
+5. **Failure Memory** — log failures in `docs/reflection_log.md` with root cause and fix; consult before similar tasks.
+6. **Teacher-Student** — expensive models (Opus, GPT-5.1) as teachers for hard problems; distill patterns to cheap models.
+**Rationale:** These patterns are proven in AI research (Shinn et al. 2023 Reflexion paper, debate/constitutional AI from Anthropic). They turn Rhea from a passive tool into an actively self-correcting system.
+**Depends on:** ADR-008 (tier routing for teacher-student), ADR-010 (metrics for eval sets).

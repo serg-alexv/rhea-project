@@ -1,0 +1,25 @@
+{
+  "label": "POST_COMMIT",
+  "git": "f97c393",
+  "branch": "main",
+  "timestamp": "2026-02-14T06-57-00Z",
+  "state_md": "# Rhea — compact state\n\n## Mission\nMind Blueprint factory: generate, evaluate, iterate on daily structure models using scientific rhythms, multi-model tribunal, and closed-loop planner.\n\n## Deliverables\n- Scientific paper \"Mathematics of Rhea\" → outline ready (docs/prism_paper_outline.md)\n- iOS app \"Rhea\" (SwiftUI + HealthKit + Apple Watch)\n- Multi-provider bridge rhea_bridge.py → ✅ implemented (src/rhea_bridge.py)\n\n## Status\n- Architecture: v3 fixed, 8 agents, Chronos Protocol\n- Bridge: implemented (6 providers, ask/tribunal/models_status)\n- Docs: normalized, prism paper outline created\n- Ops: ./rhea CLI + .entire snapshots/logs working\n- Memory economy: D=91.96 (comfort), T1=150, T2=300 — ADR-010\n- LangGraph: design phase (docs/langgraph_architecture.md)\n- Git: PR#2 merged, main up to date\n- Entire.io: manual-commit strategy, checkpoint pipeline working (2 checkpoints on GitHub)\n\n## Entire.io Integration\n- Strategy: manual-commit (trailers added to user commits)\n- Hooks: commit-msg (chmod +x fixed), post-commit, pre-push — all working\n- Checkpoints on GitHub: 9f2cf70d71cb, b0010aef23e3 (entire/checkpoints/v1 branch)\n- **ACTION REQUIRED**: Install Entire GitHub App at github.com/apps/entire → grant access to rhea-project\n- SSH key for push: ~/.ssh/id_ed25519_rhea\n- Worktree cleanup needed: `git worktree remove /tmp/entire-wt` (run from macOS terminal)\n\n## Next\n1. **Install Entire GitHub App** → checkpoints visible at entire.io dashboard\n2. Wire bridge to .env keys → first live tribunal\n3. iOS MVP scaffold (Stage 1)\n4. Feed prism_paper_outline.md to OpenAI Prism\n\n## Refs\n- Full state: docs/state_full.md\n- Decisions: docs/decisions.md\n- Architecture: docs/architecture.md",
+  "git_status": "M .claude/settings.json\n M .claude/settings.local.json",
+  "snapshot_count": 35,
+  "docs": {
+    "MVP_LOOP.md": 1086,
+    "ROADMAP.md": 429,
+    "architecture.md": 3166,
+    "article_gpt_pro_vs_cowork.md": 8901,
+    "core_context.md": 13534,
+    "decisions.md": 6362,
+    "langgraph_architecture.md": 6069,
+    "models_catalog.md": 7728,
+    "prism_paper_outline.md": 4739,
+    "soul.md": 2731,
+    "state.md": 1717,
+    "state_agents_core.md": 8199,
+    "state_full.md": 8279,
+    "ui_pwa_vision.md": 1888
+  }
+}

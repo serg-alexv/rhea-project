@@ -141,3 +141,27 @@ At each `checkpoint` node:
 - **Human-in-the-loop for oracles** (Section 8 of system prompt): No direct ChatGPT/Gemini calls
 - **Reflexive Sprint as graph subflow**: Not a separate system — it's a path through the same graph
 - **No PWA coupling**: Graph operates independently; PWA is a future view layer (see ui_pwa_vision.md)
+
+## 9. Self-Evaluation Nodes (ADR-011)
+
+The graph includes self-improvement capabilities as subflows:
+
+### Reflexion Subflow
+```
+agent_output → self_evaluate → {pass: checkpoint, fail: revise → agent (retry, max 3)}
+```
+
+### Tribunal Subflow
+```
+router → [model_1, model_2, model_3] → synthesize → checkpoint
+```
+
+### Eval Runner Node
+```
+eval_trigger → load_task(eval/tasks/*.yaml) → run_against_model → score → log(eval/results/)
+```
+
+### Failure Memory Lookup
+```
+any_agent(before_action) → check(docs/reflection_log.md) → {match: inject_lesson, no_match: proceed}
+```
