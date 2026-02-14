@@ -1,0 +1,1 @@
+CLAUDE.md improvements: move "92 integrations" move to docs/INTEGRATIONS_AUDIT.md; use project-level subagents; use .claude/settings.json; use  .claude/agents/; final - are you able to read the "Autonomy with Audit" chat from the chatgpt app logs for more ideas?
