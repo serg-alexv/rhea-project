@@ -1,0 +1,22 @@
+All green. Here's the summary of what was done:
+
+## Tier 0 Complete — All Failures Resolved
+
+| Fix | Before | After |
+|-----|--------|-------|
+| **0.1** state.md trim | 2,270B (FAIL) | 1,249B (PASS) |
+| **0.2** memory_benchmark | 67/73, 3 failures | 75/78, 0 failures |
+| **0.3** rhea CLI wrapper | Not found (FAIL) | `scripts/rhea.sh` (PASS) |
+
+**Files modified:**
+- `docs/state.md` — compressed from 42 lines to 27 lines
+- `scripts/memory_benchmark.sh` — `manual-commit` → `auto-commit` (3 lines)
+- `scripts/rhea.sh` — new CLI dispatcher (created)
+- `docs/INTEGRATIONS_AUDIT.md` — updated: 0 failures, 86 passing, 7 untested
+
+**Verification gates all pass:**
+- `bash scripts/rhea/check.sh` → `OK: checks passed`
+- `bash scripts/rhea.sh check` → `OK: checks passed`
+- `bash scripts/memory_benchmark.sh` → 75/78 (96%), 0 failures
+
+Note: The `rhea` symlink to `/usr/local/bin/rhea` requires your manual action: `ln -sf "$(pwd)/scripts/rhea.sh" /usr/local/bin/rhea`
