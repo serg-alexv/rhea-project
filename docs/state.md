@@ -10,25 +10,26 @@ Mind Blueprint factory: generate, evaluate, iterate on daily structure models us
 
 ## Status
 - Architecture: v3 fixed, 8 agents, Chronos Protocol
-- Bridge: implemented (6 providers, ask/tribunal/models_status)
-- Docs: normalized, prism paper outline created
+- Bridge: ✅ live (6 providers, all keys verified, first real tribunal completed)
+- Docs: normalized, user guide updated with memory/bridge/evolution capabilities
 - Ops: ./rhea CLI + .entire snapshots/logs working
-- Memory economy: D=91.96 (comfort), T1=150, T2=300 — ADR-010
+- Memory economy: D=63.4 (comfort), T1=150, T2=300 — ADR-010
 - LangGraph: design phase (docs/langgraph_architecture.md)
 - Git: PR#2 merged, main up to date
-- Entire.io: manual-commit strategy, checkpoint pipeline working (2 checkpoints on GitHub)
+- Entire.io: manual-commit + rhea_commit.sh wrapper (ADR-013) — fixes Cowork checkpoint gap
+- Decisions: 13 ADRs, 2 Tribunals completed
 
 ## Entire.io Integration
-- Strategy: manual-commit (trailers added to user commits)
-- Hooks: commit-msg (chmod +x fixed), post-commit, pre-push — all working
+- Strategy: manual-commit (trailers added via session hooks)
+- **ALWAYS use `scripts/rhea_commit.sh` instead of raw `git commit`** (ADR-013)
+- Hooks: commit-msg, post-commit, pre-push — all working
 - Checkpoints on GitHub: 9f2cf70d71cb, b0010aef23e3 (entire/checkpoints/v1 branch)
 - **ACTION REQUIRED**: Install Entire GitHub App at github.com/apps/entire → grant access to rhea-project
 - SSH key for push: ~/.ssh/id_ed25519_rhea
-- Worktree cleanup needed: `git worktree remove /tmp/entire-wt` (run from macOS terminal)
 
 ## Next
 1. **Install Entire GitHub App** → checkpoints visible at entire.io dashboard
-2. Wire bridge to .env keys → first live tribunal
+2. Test rhea_commit.sh → verify new checkpoint appears on dashboard
 3. iOS MVP scaffold (Stage 1)
 4. Feed prism_paper_outline.md to OpenAI Prism
 

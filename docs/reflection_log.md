@@ -57,4 +57,18 @@ This log is part of the self-improvement loop (ADR-011, technique #5: Failure Me
 
 ---
 
+## Entry 005: Cowork commits bypass Entire.io session lifecycle (2026-02-14)
+
+**What happened:** After switching to Cowork for commits (Sessions 14-16), zero Entire.io checkpoints appeared on the dashboard despite 4 successful git commits. The last checkpoint was from a Claude Code session 17+ hours prior.
+
+**Root cause:** Entire.io's `manual-commit` strategy requires an active agent session to inject `Entire-Checkpoint` trailers. The lifecycle is: `session-start → prepare-commit-msg (trailer injection) → git commit → post-commit (condense) → session-stop`. Cowork commits via `osascript do shell script "git commit..."` bypass this lifecycle entirely — no `session-start` fires, so `prepare-commit-msg` has no session context.
+
+**Evidence:** `.entire/logs/entire.log` showed last session with checkpoint was `da10a451` at `2026-02-13T23:58`. After that: 4 commits with zero log entries, zero trailers. All 4 were Cowork commits.
+
+**Fix:** Created `scripts/rhea_commit.sh` wrapper (ADR-013, Tribunal-002) that explicitly triggers `entire hooks git session-start` before and `session-stop` after every commit. Use this wrapper instead of raw `git commit` from Cowork.
+
+**Lesson:** When tools depend on a specific lifecycle (session hooks, daemon events), verify that ALL execution contexts trigger that lifecycle. Cowork and Claude Code have different execution models — what works in one may silently fail in the other. Always check the log trail when expected side-effects don't appear.
+
+---
+
 *Add new entries below. Keep chronological. Consult before similar tasks.*
