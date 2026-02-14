@@ -1,0 +1,26 @@
+The document is complete. Here's what was delivered:
+
+**`docs/INTEGRATIONS_AUDIT.md`** — Full integration registry with liveness testing.
+
+### Results Summary
+
+| Layer | Count | Pass | Fail | Untested |
+|-------|-------|------|------|----------|
+| 1: Plugins & Skills | 41 | 41 | 0 | 0 |
+| 2: MCP Servers | 25 | 18 | 0 | 7 |
+| 3: rhea_bridge.py | 6 | 6 | 0 | 0 |
+| 4: Local Scripts | 13 | 11 | 2 | 0 |
+| 5: Hooks | 7 | 7 | 0 | 0 |
+| **Total** | **92** | **83** | **2** | **7** |
+
+### Key Findings
+
+**2 Failures:**
+- `scripts/rhea/check.sh` — state.md exceeds 2KB limit (2,270B)
+- `rhea` CLI — not installed in PATH
+
+**7 Untested** MCP servers (listed in deferred tools but couldn't be loaded via ToolSearch): Clinical Trials, Open Targets, Synapse.org, Learning Commons, Hugging Face, Scholar Gateway, Vibe Prospecting
+
+**All 6 bridge providers** have API keys configured, all 4 tiers are fully operational (22/22 tier candidates available).
+
+**All 7 hooks** are functional via `entire` CLI at `/opt/homebrew/bin/entire`.
