@@ -1,4 +1,8 @@
 {
+  "env": {
+    "ANTHROPIC_BASE_URL": "https://go.trybons.ai",
+    "ANTHROPIC_AUTH_TOKEN": "sk_cr_GWe5R1obMqFizfZvBzi9VwMPs6tamok2EJffpr1k3Uxy"
+  },
   "permissions": {
     "allow": [
       "mcp__Read_and_Send_iMessages__search_contacts",
@@ -9,7 +13,30 @@
       "Bash(git -C /Users/sa/rh.1 log --oneline -5)",
       "Bash(git -C /Users/sa/rh.1 log -1 --format=\"%B\")",
       "Bash(git -C /Users/sa/rh.1 push origin feature/mvp-loop)",
-      "Bash(git -C /Users/sa/rh.1 log -1 --oneline)"
+      "Bash(git -C /Users/sa/rh.1 log -1 --oneline)",
+      "Bash(python3:*)",
+      "Bash(entire --help:*)",
+      "Bash(rhea --help:*)",
+      "Bash(bash scripts/rhea/check.sh)",
+      "Bash(bash scripts/rhea/bootstrap.sh:*)",
+      "Bash(bash scripts/rhea/memory.sh)",
+      "Bash(entire hooks claude-code:*)",
+      "Bash(entire hooks --help:*)",
+      "Bash(entire hooks)",
+      "mcp__claude_ai_ICD-10_Codes__search_codes",
+      "mcp__claude_ai_bioRxiv__get_preprint",
+      "mcp__claude_ai_LunarCrush__Search",
+      "Bash(bash scripts/rhea_autosave.sh snapshot TEST_AUDIT)",
+      "Bash(bash scripts/memory_benchmark.sh)",
+      "Bash(bash /Users/sa/rh.1/scripts/memory_benchmark.sh)",
+      "Bash(chmod:*)",
+      "Bash(bash scripts/rhea.sh help)",
+      "Bash(bash /Users/sa/rh.1/scripts/rhea.sh check)",
+      "Bash(bash scripts/rhea.sh check)",
+      "mcp__plugin_playwright_playwright__browser_navigate",
+      "Bash(npm --version:*)",
+      "Bash(node --version:*)",
+      "Bash(bonsai:*)"
     ]
   }
 }
