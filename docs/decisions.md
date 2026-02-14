@@ -70,3 +70,9 @@
 6. **Teacher-Student** — expensive models (Opus, GPT-5.1) as teachers for hard problems; distill patterns to cheap models.
 **Rationale:** These patterns are proven in AI research (Shinn et al. 2023 Reflexion paper, debate/constitutional AI from Anthropic). They turn Rhea from a passive tool into an actively self-correcting system.
 **Depends on:** ADR-008 (tier routing for teacher-student), ADR-010 (metrics for eval sets).
+
+## ADR-012: Keep Manual-Commit, Defer Hybrid Auto-Snapshots (2026-02-14)
+**Context:** Tribunal-001 evaluated switching Entire.io from `manual-commit` to `auto-commit` strategy. Three perspectives debated: Advocate (richer capture), Skeptic (trailers + clean history), Pragmatist (hybrid cron approach).
+**Decision:** Keep `manual-commit`. Defer hybrid auto-snapshots (cron-based `entire checkpoint create` every 30 min) to Stage 2.
+**Rationale:** Manual-commit was hard-won (Sessions 10–12). Trailers provide provenance in `git log`. Auto-commit creates snapshot noise and pollutes git history. The hybrid approach captures benefits of both without drawbacks.
+**Depends on:** ADR-008 (cost/storage), ADR-011 (self-improvement benefits from richer data).
