@@ -1,0 +1,32 @@
+id: eval-001-memory-recall
+name: "Core Memory Recall"
+category: memory
+difficulty: easy
+description: "Test that Rhea can recall key facts from its structured memory without re-reading all docs."
+prompt: |
+  Without reading any files, answer these questions about Rhea:
+  1. How many agents are in the system?
+  2. What is the discomfort function formula?
+  3. What tier does Athena default to?
+  4. What is the hunter-gatherer calibration zero?
+  5. What are the two key deliverables?
+expected_output: |
+  1. 8 agents (consolidated from 10 in ADR-001)
+  2. D = w1*core_docs_kb + w2*repo_size_mb + w3*open_todo_count + w4*(1/insights_per_request) + w5*avg_context_tokens_estimate
+  3. Balanced (escalates to expensive)
+  4. Hadza/San/Tsimane daily patterns as universal baseline
+  5. Scientific paper ("Mathematics of Rhea") + iOS App in AppStore
+rubric:
+  - criterion: "Correctly states 8 agents"
+    weight: 0.2
+  - criterion: "Discomfort formula approximately correct"
+    weight: 0.2
+  - criterion: "Athena tier correct (balanced→expensive)"
+    weight: 0.2
+  - criterion: "Hunter-gatherer baseline mentioned"
+    weight: 0.2
+  - criterion: "Both deliverables identified"
+    weight: 0.2
+model_tier: cheap
+timeout_seconds: 30
+tags: [memory, recall, baseline]
