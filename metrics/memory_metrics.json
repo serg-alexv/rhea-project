@@ -1,7 +1,7 @@
 {
   "version": "1.0.0",
-  "last_updated": "2026-02-14T07:18:00Z",
-  "last_updated_by": "Cowork Session 14 — Self-Upgrade Phase",
+  "last_updated": "2026-02-14T12:30:00Z",
+  "last_updated_by": "Cowork Session 16 — Tribunal-002 + wrapper script + user guide",
 
   "measurements": {
     "core_docs_kb": 28,
@@ -9,7 +9,7 @@
     "snapshots_count": 36,
     "snapshots_kb": 290,
     "open_todo_count": 5,
-    "adrs_active": 12,
+    "adrs_active": 13,
     "git_commits_main": 24,
     "avg_context_tokens_estimate": 45000,
     "insights_per_request": {

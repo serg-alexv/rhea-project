@@ -76,3 +76,9 @@
 **Decision:** Keep `manual-commit`. Defer hybrid auto-snapshots (cron-based `entire checkpoint create` every 30 min) to Stage 2.
 **Rationale:** Manual-commit was hard-won (Sessions 10–12). Trailers provide provenance in `git log`. Auto-commit creates snapshot noise and pollutes git history. The hybrid approach captures benefits of both without drawbacks.
 **Depends on:** ADR-008 (cost/storage), ADR-011 (self-improvement benefits from richer data).
+
+## ADR-013: Wrapper Script for Cross-Mode Entire.io Checkpoints (2026-02-14)
+**Context:** Tribunal-002 diagnosed that Cowork commits (via `osascript do shell script "git commit..."`) bypass Entire.io's session lifecycle. No `session-start` fires → `prepare-commit-msg` has no session context → no `Entire-Checkpoint` trailer → zero checkpoints for 4+ commits. Only commits from Claude Code (which runs its own session lifecycle) produced checkpoints.
+**Decision:** Create `scripts/rhea_commit.sh` wrapper that explicitly calls `entire hooks git session-start` before and `session-stop` after every commit. All Cowork sessions must use this wrapper instead of raw `git commit`.
+**Rationale:** 3/3 free-tier models in Tribunal-002 unanimously recommended wrapper script (agreement score 0.95). Preserves manual-commit benefits (trailers, clean history) while fixing the cross-mode gap. Zero cost, minimal implementation.
+**Depends on:** ADR-012 (manual-commit strategy), ADR-007 (three-tier memory).
