@@ -1,0 +1,60 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "ab88c82cdf25",
+  "strategy": "auto-commit",
+  "branch": "main",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "docs-min",
+    "docs-min/.mintignore",
+    "docs-min/AGENTS.md",
+    "docs-min/CONTRIBUTING.md",
+    "docs-min/LICENSE",
+    "docs-min/README.md",
+    "docs-min/ai-tools/claude-code.mdx",
+    "docs-min/ai-tools/cursor.mdx",
+    "docs-min/ai-tools/windsurf.mdx",
+    "docs-min/api-reference/endpoint/create.mdx",
+    "docs-min/api-reference/endpoint/delete.mdx",
+    "docs-min/api-reference/endpoint/get.mdx",
+    "docs-min/api-reference/endpoint/webhook.mdx",
+    "docs-min/api-reference/introduction.mdx",
+    "docs-min/api-reference/openapi.json",
+    "docs-min/development.mdx",
+    "docs-min/docs.json",
+    "docs-min/essentials/code.mdx",
+    "docs-min/essentials/images.mdx",
+    "docs-min/essentials/markdown.mdx",
+    "docs-min/essentials/navigation.mdx",
+    "docs-min/essentials/reusable-snippets.mdx",
+    "docs-min/essentials/settings.mdx",
+    "docs-min/favicon.svg",
+    "docs-min/images/checks-passed.png",
+    "docs-min/images/hero-dark.png",
+    "docs-min/images/hero-light.png",
+    "docs-min/index.mdx",
+    "docs-min/logo/dark.svg",
+    "docs-min/logo/light.svg",
+    "docs-min/quickstart.mdx",
+    "docs-min/snippets/snippet-intro.mdx",
+    "docs/INTEGRATIONS_AUDIT.md",
+    "docs/Mintlify Starter Kit.md",
+    "prompts/AUTONOMY_WITH_AUDIT_ROOT.md"
+  ],
+  "sessions": [
+    {
+      "metadata": "/ab/88c82cdf25/0/metadata.json",
+      "transcript": "/ab/88c82cdf25/0/full.jsonl",
+      "context": "",
+      "content_hash": "/ab/88c82cdf25/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 30,
+    "cache_creation_tokens": 96423,
+    "cache_read_tokens": 1822323,
+    "output_tokens": 4986,
+    "api_call_count": 22
+  }
+}
