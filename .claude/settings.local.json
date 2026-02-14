@@ -1,7 +1,15 @@
 {
   "permissions": {
     "allow": [
-      "mcp__Read_and_Send_iMessages__search_contacts"
+      "mcp__Read_and_Send_iMessages__search_contacts",
+      "Bash(git fetch:*)",
+      "Bash(entire hooks git commit-msg --help)",
+      "Bash(echo:*)",
+      "Bash(git -C /Users/sa/rh.1 diff --cached --stat)",
+      "Bash(git -C /Users/sa/rh.1 log --oneline -5)",
+      "Bash(git -C /Users/sa/rh.1 log -1 --format=\"%B\")",
+      "Bash(git -C /Users/sa/rh.1 push origin feature/mvp-loop)",
+      "Bash(git -C /Users/sa/rh.1 log -1 --oneline)"
     ]
   }
 }

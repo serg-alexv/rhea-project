@@ -60,7 +60,7 @@ AGENT_REGISTRY = {
         "name": "Psychologist / Profile Whisperer",
         "role": "profiler",
         "tier": "cheap",
-        "domain": "Passive profiling, ADHD-first UX, behavioral signals",
+        "domain": "Passive profiling, ADHD-optimized UX, behavioral signals",
         "prompt_prefix": "[CHRONOS:A1→A3] "
     },
     "A4": {
@@ -105,7 +105,7 @@ SOUL_CONTEXT = """You are part of Rhea — a multi-agent advisory system built o
 chronobiology, and the hunter-gatherer calibration zero.
 The human has: ADHD (executive dysfunction as baseline), anankastic compensatory architecture,
 bilingual fluency (RU/EN), deep intellectual curiosity, builder identity.
-Principles: ADHD-first, hunter-gatherer calibration zero, structure that feels like freedom,
+Principles: ADHD-optimized, hunter-gatherer calibration zero, structure that feels like freedom,
 depth from removing excess, no micromanagement, polyvagal awareness, multi-temporal awareness.
 State vector: x_t = [E_t (energy), M_t (mood), C_t (cognitive load), S_t (sleep debt), O_t (obligations), R_t (recovery)]"""
 
@@ -291,11 +291,11 @@ def flow_genesis():
         use_bridge=BRIDGE_AVAILABLE
     )
 
-    # A3 — ADHD-first UX validation
-    print("\n  🧠 A3: Validating ADHD-first design...")
+    # A3 — ADHD-optimized UX validation
+    print("\n  🧠 A3: Validating ADHD-optimized design...")
     results["A3"] = delegate("A3",
         "Review passive profiling methodology in ADR-005. "
-        "Confirm that zero-questionnaire approach is maintained. "
+        "Confirm that passive profiling approach is maintained. "
         "Assess: does the state vector capture enough for ADHD executive dysfunction modeling?",
         use_bridge=BRIDGE_AVAILABLE
     )

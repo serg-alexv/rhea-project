@@ -17,7 +17,7 @@ Calendar systems critique (eb53e82c) → cultural power mechanisms → daily def
 
 ### ✅ Completed
 - Chronos Protocol v3 — EN prompt + 5 delegation runs
-- Scientific foundation — polyvagal theory, HRV, interoception, ADHD-first
+- Scientific foundation — polyvagal theory, HRV, interoception, ADHD-optimized
 - Cultural research — 16+ civilizations, hunter-gatherer calibration zero, 40+ calendar systems
 - Passive profiling methodology — no questionnaires
 - Gap analysis v2 — agent competency coverage
@@ -65,7 +65,7 @@ Calendar systems critique (eb53e82c) → cultural power mechanisms → daily def
 ## Key Decisions (ADR Summary)
 - **8 agents, not 10** — merged overlapping roles (v1→v3)
 - **Claude Opus 4 for reasoning agents (1,2,4,8), Sonnet 4 for execution (3,5,6,7)**
-- **ADHD-first design** — all UX assumes executive dysfunction as default
+- **ADHD-optimized design** — all UX assumes executive dysfunction as default
 - **Hunter-gatherer baseline** — every elite ritual reconstructs what foragers get free
 - **Multi-model bridge over single-provider lock-in** — cost 10-100x lower
 - **Passive profiling** — behavioral signals, not self-report questionnaires

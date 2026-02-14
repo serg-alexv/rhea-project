@@ -10,7 +10,7 @@
 **Decision:** Build rhea_bridge.py with 6 providers, 400+ models, tribunal mode.
 **Rationale:** 10-100x cost reduction via free tiers (Azure, DeepSeek, OpenRouter free models). Geographic diversity (US/CN/EU) reduces bias.
 
-## ADR-003: ADHD-first design (2026-02)
+## ADR-003: ADHD-optimized design (2026-02)
 **Context:** Neurotypical UX fails for executive dysfunction. ADHD users are canary in the coal mine — if it works for them, it works for everyone.
 **Decision:** All UX assumes ADHD as default: minimal decision load, passive profiling, body-first morning, no questionnaires.
 **Rationale:** Bruton et al. 2025 (diminished interoception in ADHD), Längle et al. 2025 (HRV/cognitive control).
@@ -82,3 +82,13 @@
 **Decision:** Create `scripts/rhea_commit.sh` wrapper that explicitly calls `entire hooks git session-start` before and `session-stop` after every commit. All Cowork sessions must use this wrapper instead of raw `git commit`.
 **Rationale:** 3/3 free-tier models in Tribunal-002 unanimously recommended wrapper script (agreement score 0.95). Preserves manual-commit benefits (trailers, clean history) while fixing the cross-mode gap. Zero cost, minimal implementation.
 **Depends on:** ADR-012 (manual-commit strategy), ADR-007 (three-tier memory).
+
+## ADR-014: Per-Query Memory Persistence + Auto-Commit (2026-02-14)
+**Context:** User directive: "Make every query within Rhea cause a memory update with new/updated files and actual query made." Additionally, reversed ADR-012 to switch Entire.io strategy from `manual-commit` to `auto-commit`.
+**Decision:**
+1. Switch `.entire/settings.local.json` strategy to `auto-commit` (reverses ADR-012).
+2. Create `scripts/rhea_query_persist.sh` — called at end of each Rhea interaction to: (a) log query + changed files to `.entire/logs/queries.jsonl`, (b) create micro-snapshot `QUERY-*.json`, (c) auto-commit if strategy=auto-commit and there are staged changes.
+3. Every session/agent interacting with Rhea must call `rhea_query_persist.sh "query summary"` before closing.
+**Rationale:** User wants full episodic memory — every interaction leaves a trace. Auto-commit ensures Entire.io captures the delta immediately. Micro-snapshots are lightweight (query text + changed file list, no full state dump). Pruning keeps last 100 QUERY snapshots.
+**Supersedes:** ADR-012 (manual-commit → auto-commit).
+**Depends on:** ADR-007 (three-tier memory), ADR-013 (wrapper script for commit lifecycle).

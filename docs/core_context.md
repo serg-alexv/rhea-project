@@ -57,12 +57,12 @@ Every expensive wellness practice reconstructs what foragers received as environ
 | 7 | Preference shaping | Lukes — you don't even want what you're missing |
 | 8 | Doxa | Bourdieu — unquestionable, invisible assumptions |
 
-### ADHD-First Design Principle
+### ADHD-Optimized Design Principle
 "If it works for ADHD — it works for everyone. Not the other way around."
 
 Rationale (validated via "curb cut effect"):
 - Executive dysfunction is the *default under stress*, not a minority condition
-- Passive profiling (behavioral signals, not questionnaires) assumes executive dysfunction as baseline
+- Passive profiling (behavioral signals) assumes executive dysfunction as baseline
 - All UX must work without requiring sustained voluntary attention
 - Gamification that helps ADHD may feel patronizing to others → adaptive, not one-size-fits-all
 
@@ -111,7 +111,7 @@ Agent 2: Life Sciences Integrator (Claude Opus 4)
   → Bridges biology and behavior
 
 Agent 3: Psychologist / Profile Whisperer (Claude Sonnet 4)
-  → Passive profiling, ADHD-first UX, behavioral signals
+  → Passive profiling, ADHD-optimized UX, behavioral signals
   → No questionnaires — reads patterns from usage
 
 Agent 4: Linguist-Culturologist (Claude Opus 4)
@@ -186,7 +186,7 @@ From gap analysis (db9feb88):
 - **Backend:** Firebase free tier → Azure Cosmos DB
 - **Path:** TestFlight → AppStore
 - **Core loop:** Passive profiling → rhythm detection → personalized daily structure → feedback loop
-- **ADHD-first:** All interactions assume executive dysfunction as default
+- **ADHD-optimized:** All interactions assume executive dysfunction as default
 
 ## 8. Working Languages
 - **EN** — primary docs, code, README, scientific paper
