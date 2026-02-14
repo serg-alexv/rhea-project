@@ -2,7 +2,7 @@
 
 **Reconstructing daily defaults using the cumulative knowledge of human civilizations.**
 
-An iOS app that replaces unchosen cultural automatisms with a consciously designed environment, personalized to each user's neuroprofile. ADHD-first. Science-backed. Culturally grounded.
+An iOS app that replaces unchosen cultural automatisms with a consciously designed environment, personalized to each user's neuroprofile. ADHD-optimized. Science-backed. Culturally grounded.
 
 ## Repository Structure
 
