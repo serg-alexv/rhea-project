@@ -1,0 +1,27 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "27ecd34be5f7",
+  "strategy": "auto-commit",
+  "branch": "main",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "docs-min",
+    "docs/NOW.md"
+  ],
+  "sessions": [
+    {
+      "metadata": "/27/ecd34be5f7/0/metadata.json",
+      "transcript": "/27/ecd34be5f7/0/full.jsonl",
+      "context": "",
+      "content_hash": "/27/ecd34be5f7/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 9,
+    "cache_creation_tokens": 24717,
+    "cache_read_tokens": 1064952,
+    "output_tokens": 2475,
+    "api_call_count": 7
+  }
+}
