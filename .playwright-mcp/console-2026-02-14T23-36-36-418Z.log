@@ -1,0 +1,11 @@
+[    1519ms] [WARNING] No `HydrateFallback` element provided to render during initial hydration @ https://app.trybons.ai/assets/index-CP13ljYM.js:58
+[    1705ms] Unexpected token '<'
+[    2363ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://api.trybons.ai/auth/user:0
+[    5206ms] [ERROR] The Content Security Policy directive 'upgrade-insecure-requests' is ignored when delivered in a report-only policy. @ https://auth.trybons.ai/?client_id=client_01K2ZG07ZTYR0FQNERK3PS2CB0&redirect_uri=https%3A%2F%2Fapi.trybons.ai%2Fauth%2Fcallback&state=%2F%3Flogin%3D1&authorization_session_id=01KHF86XJAMQ3XAF91E7CQ30EE:0
+[    5298ms] [ERROR] The Content Security Policy directive 'upgrade-insecure-requests' is ignored when delivered in a report-only policy. @ https://auth.trybons.ai/_next/static/chunks/1218-e38f49c8897a1ed0.js:1
+[    5298ms] [ERROR] The Content Security Policy directive 'upgrade-insecure-requests' is ignored when delivered in a report-only policy. @ https://auth.trybons.ai/_next/static/chunks/1218-e38f49c8897a1ed0.js:1
+[    5309ms] [ERROR] The Content Security Policy directive 'upgrade-insecure-requests' is ignored when delivered in a report-only policy. @ https://auth.trybons.ai/_next/static/chunks/9569-4f0f28c626ab33e4.js:18
+[    5309ms] [ERROR] The Content Security Policy directive 'upgrade-insecure-requests' is ignored when delivered in a report-only policy. @ https://auth.trybons.ai/_next/static/chunks/9569-4f0f28c626ab33e4.js:18
+[    5397ms] [ERROR] The Content Security Policy directive 'upgrade-insecure-requests' is ignored when delivered in a report-only policy. @ https://auth.trybons.ai/_next/static/chunks/4238.b6151670d92d5c53.js:609
+[    5398ms] [ERROR] The Content Security Policy directive 'upgrade-insecure-requests' is ignored when delivered in a report-only policy. @ https://auth.trybons.ai/_next/static/chunks/4238.b6151670d92d5c53.js:609
+[    5632ms] [WARNING] Canvas2D: Multiple readback operations using getImageData are faster with the willReadFrequently attribute set to true. See: https://html.spec.whatwg.org/multipage/canvas.html#concept-canvas-will-read-frequently @ https://auth.trybons.ai/_next/static/chunks/4238.b6151670d92d5c53.js:159
