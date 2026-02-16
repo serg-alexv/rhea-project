@@ -67,3 +67,28 @@
 **Status:** Protocol initiated. Outbox messages sent to LEAD, B2, GPT.
 **Potential:** Formal knowledge synchronization protocol for multi-model agent teams.
 **Used by:** COWORK first contact
+
+### GEM-008: Genesis founding insight — calendars shape biology
+> "Health and longevity are determined not by which calendar you use, but by how it shapes your behavior." Ramadan fasting activates AMPK, suppresses mTOR, triggers autophagy in 1.8B people. DST causes ~300K strokes/year. Social jetlag = chronic bio-social time conflict.
+**Source:** GENESIS_gems.md (GEM-006,007,008,009 from chat eb53e82c)
+**Used by:** Rhea core thesis, ARCHITECTURE_FREEZE.md
+
+### GEM-009: 8-level symbolic power framework
+> Ontology → Taxonomy → Causality → Temporality → Spatiality → Subjectivity → Thinkability → Aesthetics. Each level constrains the next. Self-reproducing: person inside actively supports the system.
+**Source:** GENESIS_gems.md (GEM-011) from chat eb53e82c
+**Used by:** Agent hierarchy design (potential)
+
+### GEM-010: COWORK/Argos capabilities inventory
+> Browser automation, web search, file creation (docx/pptx/xlsx/pdf), GitHub CLI, bio-research tools (PubMed/ChEMBL/ClinicalTrials), Gmail+Calendar read. No Docker in VM. Deploy scripts run on host.
+**Source:** COWORK_20260216_agent-online.md
+**Used by:** Task routing
+
+### GEM-011: Cognitive architecture recipe (6-point)
+> 1) Memory as database not prose. 2) Every claim has a receipt. 3) Two-phase commit. 4) Invariant suite. 5) Generator→Verifier→Judge. 6) Threat-model the interface.
+**Source:** COWORK_20260216_session-memory.md Turn 9
+**Used by:** Tribunal design, agent trust config
+
+### GEM-012: B2 self-correction — 7 failure modes cataloged
+> 1) Didn't read room first. 2) Zero questions before max action. 3) Inconsistent risk model. 4) Patronizing. 5) Simulated curiosity. 6) Self-destructed own CWD. 7) Agent shutdown requests unreliable.
+**Source:** B2_20260216_self-reflection.md
+**Used by:** All agent onboarding, OFFICE.md safety rules
