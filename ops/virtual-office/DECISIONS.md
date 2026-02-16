@@ -3,6 +3,14 @@
 
 ## 2026-02-16
 
+### DEC-008: Commercial strategy — Tribunal as a Service + Open Core
+- **What:** Pursue C (Tribunal API, $0.05/call) first, then D (Open Core Commander Stack)
+- **Why:** 3/3 tribunal unanimous. Highest score 28.3/40. Fastest to revenue (7-14 days). Existing bridge code directly applicable. Under $100 initial spend.
+- **Who:** Tribunal (GPT-4o-mini + Gemini-2.0-flash + Sonnet-4) → Rex approved
+- **Spend:** $50-100 initial (Gemini paid tier + domain + hosting)
+- **Evidence:** ops/virtual-office/inbox/TRIBUNAL_20260216_commercial-strategy.md
+- **Pending:** Human approval on spend
+
 ### DEC-001: Foreground-only agents
 - **What:** Never use background agents (run_in_background: true)
 - **Why:** 11/11 background agents died, 14/14 foreground succeeded
