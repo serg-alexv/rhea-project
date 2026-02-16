@@ -1,36 +1,21 @@
-# ═══════════════════════════════════════════════════════════════
-# Rhea Commander Shell — LiteLLM Proxy Configuration
-# Routes all 6 Rhea providers through one OpenAI-compatible gateway
-# Endpoint: http://localhost:4000/v1
-# ═══════════════════════════════════════════════════════════════
-
 model_list:
-
-  # ─── Anthropic (Primary: Agents 1,2,4,8 = Opus; 3,5,6,7 = Sonnet) ───
-  - model_name: claude-opus
-    litellm_params:
-      model: claude-opus-4-20250514
-      api_key: os.environ/ANTHROPIC_API_KEY
-      max_tokens: 16384
-
+  # === Anthropic (Core agents 1-8) ===
   - model_name: claude-sonnet
     litellm_params:
-      model: claude-sonnet-4-5-20250929
+      model: anthropic/claude-sonnet-4-5-20250929
       api_key: os.environ/ANTHROPIC_API_KEY
-      max_tokens: 16384
 
-  # ─── OpenAI (Paper generation via Prism) ───
-  - model_name: gpt-4o
+  - model_name: claude-opus
     litellm_params:
-      model: gpt-4o
-      api_key: os.environ/OPENAI_API_KEY
+      model: anthropic/claude-opus-4-5-20251101
+      api_key: os.environ/ANTHROPIC_API_KEY
 
-  - model_name: o3-mini
+  - model_name: claude-haiku
     litellm_params:
-      model: o3-mini
-      api_key: os.environ/OPENAI_API_KEY
+      model: anthropic/claude-haiku-4-5-20251001
+      api_key: os.environ/ANTHROPIC_API_KEY
 
-  # ─── Google Gemini (Fast delegation, free tier) ───
+  # === Google Gemini (Fast delegation) ===
   - model_name: gemini-flash
     litellm_params:
       model: gemini/gemini-2.0-flash
@@ -38,72 +23,62 @@ model_list:
 
   - model_name: gemini-pro
     litellm_params:
-      model: gemini/gemini-2.0-pro
+      model: gemini/gemini-2.5-pro-preview-06-05
       api_key: os.environ/GEMINI_API_KEY
 
-  # ─── DeepSeek (Chinese perspective, low cost) ───
-  - model_name: deepseek-v3
+  # === OpenAI (Paper generation) ===
+  - model_name: gpt-4o
+    litellm_params:
+      model: openai/gpt-4o
+      api_key: os.environ/OPENAI_API_KEY
+
+  - model_name: o3-mini
+    litellm_params:
+      model: openai/o3-mini
+      api_key: os.environ/OPENAI_API_KEY
+
+  # === DeepSeek (Cultural perspective) ===
+  - model_name: deepseek-chat
     litellm_params:
       model: deepseek/deepseek-chat
       api_key: os.environ/DEEPSEEK_API_KEY
 
-  - model_name: deepseek-r1
+  - model_name: deepseek-reasoner
     litellm_params:
       model: deepseek/deepseek-reasoner
       api_key: os.environ/DEEPSEEK_API_KEY
 
-  # ─── OpenRouter (200+ models, cost arbitrage) ───
+  # === OpenRouter (Cost arbitrage, 200+ models) ===
   - model_name: openrouter-auto
     litellm_params:
       model: openrouter/auto
       api_key: os.environ/OPENROUTER_API_KEY
 
-  # ─── HuggingFace (Specialized tasks) ───
+  # === Azure (Jais — when deployed) ===
+  # - model_name: jais-30b
+  #   litellm_params:
+  #     model: azure/jais-30b-chat
+  #     api_key: os.environ/AZURE_API_KEY
+  #     api_base: os.environ/AZURE_API_BASE
+
+  # === HuggingFace (Specialized tasks) ===
   - model_name: hf-inference
     litellm_params:
-      model: huggingface/meta-llama/Llama-3.3-70B-Instruct
-      api_key: os.environ/HF_API_KEY
-
-  # ─── Azure AI Foundry (Enterprise, region: swedencentral) ───
-  - model_name: azure-gpt4
-    litellm_params:
-      model: azure/gpt-4
-      api_key: os.environ/AZURE_API_KEY
-      api_base: os.environ/AZURE_API_BASE
-
-# ─── Router Settings ───
-router_settings:
-  routing_strategy: least-busy
-  num_retries: 3
-  timeout: 120
-  retry_after: 5
-  fallbacks:
-    - claude-sonnet:
-        - gemini-flash
-        - deepseek-v3
-    - claude-opus:
-        - gpt-4o
-        - gemini-pro
-    - gpt-4o:
-        - claude-sonnet
-        - deepseek-v3
-
-# ─── General Settings ───
-general_settings:
-  master_key: os.environ/LITELLM_MASTER_KEY
-  database_url: null
-  store_model_in_db: false
+      model: huggingface/meta-llama/Llama-3.1-8B-Instruct
+      api_key: os.environ/HF_TOKEN
 
 litellm_settings:
   drop_params: true
   set_verbose: false
-  max_budget: 50.0
-  budget_duration: monthly
+  cache: true
   num_retries: 3
   request_timeout: 120
-  success_callback: ["langfuse"]
-  failure_callback: ["langfuse"]
-  cache: true
-  cache_params:
-    type: local
-    ttl: 3600
+
+router_settings:
+  routing_strategy: least-busy
+  num_retries: 2
+  timeout: 60
+  allowed_fails: 3
+
+general_settings:
+  master_key: os.environ/LITELLM_MASTER_KEY
