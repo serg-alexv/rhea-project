@@ -1,0 +1,10 @@
+<task-notification>
+<task-id>af5751f</task-id>
+<status>completed</status>
+<summary>Agent "Parse chat_extracts conversation map" completed</summary>
+<result>API Error: 400 Bad Request</result>
+<usage>total_tokens: 0
+tool_uses: 0
+duration_ms: 952</usage>
+</task-notification>
+Full transcript available at: /private/tmp/claude-501/-Users-sa-rh-1/tasks/af5751f.output
