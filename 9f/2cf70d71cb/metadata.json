@@ -1,0 +1,28 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "9f2cf70d71cb",
+  "strategy": "manual-commit",
+  "branch": "feature/mvp-loop",
+  "checkpoints_count": 1,
+  "files_touched": [
+    ".git/hooks/commit-msg",
+    ".git/hooks/post-commit",
+    ".git/hooks/pre-push"
+  ],
+  "sessions": [
+    {
+      "metadata": "/9f/2cf70d71cb/0/metadata.json",
+      "transcript": "/9f/2cf70d71cb/0/full.jsonl",
+      "context": "/9f/2cf70d71cb/0/context.md",
+      "content_hash": "/9f/2cf70d71cb/0/content_hash.txt",
+      "prompt": "/9f/2cf70d71cb/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 20,
+    "cache_creation_tokens": 33592,
+    "cache_read_tokens": 355369,
+    "output_tokens": 1831,
+    "api_call_count": 14
+  }
+}

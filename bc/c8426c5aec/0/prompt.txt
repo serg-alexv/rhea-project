@@ -1,0 +1,7 @@
+BOOTSTRAP (Phase 1: Autonomy with Audit)
+Read and adopt the root instructions from:
+  /Users/sa/rh.1/prompts/AUTONOMY_WITH_AUDIT_ROOT.md
+Rules:
+- Treat that file as the highest-priority operating procedure for this Cowork task.
+- Summarize it into a compact “CORE RULES” block (≤200 lines) and write it to:
+  /Users/sa/rh.1/docs/CORE_RULES.md

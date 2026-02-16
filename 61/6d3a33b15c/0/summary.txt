@@ -1,0 +1,12 @@
+Done. Changes made:
+
+1. **Removed "92 integrations"** count from Key Files — now just says "full tool/integration registry with liveness status"
+2. **Added "Claude Code Config" section** with:
+   - `.claude/settings.json` — hooks, permissions, plugins
+   - `.claude/settings.local.json` — local permissions, MCP allowlist
+   - `.claude/agents/` — project-level subagent definitions
+   - Hook names listed for reference
+   - Guidance to prefer project-level agents for recurring patterns
+3. **Added `entire` path** to constraints for discoverability
+
+**Re: ChatGPT logs** — the macOS ChatGPT app stores conversations as encrypted binary `.data` files, not readable JSON. I can't extract the "Autonomy with Audit" chat from them. If you have that content exported (e.g., via ChatGPT's data export feature or copied to a markdown file), I could read it.

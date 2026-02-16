@@ -1,0 +1,16 @@
+{
+  "session_id": "da10a451-4df9-4ef9-8a48-57dc7699a81b",
+  "agent": "Claude Code",
+  "transcript_path": "/b0/010aef23e3/0/full.jsonl",
+  "token_usage": {
+    "input_tokens": 6,
+    "cache_creation_tokens": 13555,
+    "cache_read_tokens": 27096,
+    "output_tokens": 4,
+    "api_call_count": 2
+  },
+  "initial_attribution": {
+    "type": "git_branch",
+    "branch": "main"
+  }
+}
