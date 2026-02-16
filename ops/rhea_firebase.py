@@ -41,10 +41,18 @@ def cmd_heartbeat(desk, status):
     print(f"[heartbeat] {desk} → {status}")
 
 def cmd_send(from_desk, to_desk, message):
+    # Support structured JSON messages: if message parses as JSON, store fields directly
+    try:
+        payload = json.loads(message)
+        payload["_raw"] = message
+    except (json.JSONDecodeError, TypeError):
+        payload = {"text": message}
+
     ref = db.collection("inbox").add({
         "from": from_desk,
         "to": to_desk,
         "message": message,
+        "payload": payload,
         "timestamp": now_iso(),
         "read": False,
     })
