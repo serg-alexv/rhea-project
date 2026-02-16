@@ -48,3 +48,20 @@ Every agent drops results here:
 5. Every decision → DECISIONS.md with "why" and "who decided"
 6. Git push ≥ every 30 minutes
 7. Every agent logs API calls to logs/bridge_calls.jsonl
+
+## Canonical Truth
+- BACKLOG.md (ops/BACKLOG.md) is the single source for all work items
+- TODAY_CAPSULE.md is the single source for "what matters now"
+- DECISIONS.md is the single source for "why we did X"
+- Git is the audit trail. If it's not committed, it didn't happen.
+
+## Inbox/Outbox SLA
+- Inbox items processed by LEAD within 1 hour of discovery
+- Outbox tasks acknowledged by target desk within 2 hours
+- Stale items (>4h unprocessed) auto-escalate to INCIDENTS
+
+## Promotion Rules
+- Chat insight repeated 2x → becomes a GEM (with ID)
+- GEM referenced 3x → becomes a PROCEDURE (docs/procedures/)
+- PROCEDURE failing 2x → becomes an INCIDENT
+- INCIDENT resolved + verified → becomes a DECISION (what we learned)

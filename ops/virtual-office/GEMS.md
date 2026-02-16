@@ -1,6 +1,10 @@
 # GEMS — Ideas Worth Keeping
 > Captured from all agents, all sources. Date-stamped.
 
+## Promotion Rule
+- GEM referenced 3x in capsules/decisions → promote to PROCEDURE
+- Format: GEM-NNN: [1-2 line description] | source: [who] | used_by: [where referenced]
+
 ## 2026-02-16
 
 ### GEM-001: Context Tax Collector (from ChatGPT 5.2)
@@ -10,6 +14,7 @@
 
 **Status:** Captured. Not implemented.
 **Potential:** Auto-detect repeated patterns across sessions → promote to procedure or memory entry.
+**Used by:**
 
 ### GEM-002: Trinity Memory Architecture (from Opus session)
 > Three files that restore full context in 30 seconds: context-core (focus), context-state (status), context-bridge (handoff).
@@ -17,6 +22,7 @@
 
 **Status:** Implemented and proven.
 **Potential:** Publishable concept for AI agent persistence.
+**Used by:**
 
 ### GEM-003: "Workspace-first, Sessions Disposable" (from memory_managing2025-2026.md)
 > "'Infinite chat history' is fragile. The most robust pattern is: WORKSPACE/STATE FIRST + bounded reasoning context."
@@ -24,6 +30,7 @@
 
 **Status:** Implemented as trinity + git + MEMORY.md.
 **Potential:** Core thesis of a technical blog post or paper section.
+**Used by:**
 
 ### GEM-004: B-2nd Self-Reflection (from B-2nd terminal)
 > Section "WHAT I DID WRONG" — agent performing honest post-mortem on its own failures.
@@ -31,9 +38,11 @@
 
 **Status:** Captured from screenshot. Full text needed from B-2nd inbox.
 **Potential:** First example of genuine AI self-criticism in the Rhea system.
+**Used by:**
 
 ### GEM-005: "17 Sessions of Thinking, Zero Shipped Code"
 > From upgrade_plan_suggestions.md warning W1.
 > The most useful single sentence in the entire project — instant priority calibration.
 
 **Status:** Acknowledged. Article published as first counter-move.
+**Used by:**
