@@ -58,7 +58,10 @@
       "Bash(# Read ChatGPT tempchat history cat /Users/sa/Downloads/rhea-tempchat-history-chatgpt.txt)",
       "Bash(/tmp/extract_sessions_v2.py:*)",
       "Bash(# Mine Chrome browsing data — bookmarks, history echo \"\"=== CHROME BOOKMARKS ===\"\" python3 -c \"\" import json bk = json.load\\(open\\(''/Users/sa/Library/Application Support/Google/Chrome/Default/Bookmarks''\\)\\) def walk\\(node, depth=0\\): if node.get\\(''type''\\) == ''url'': print\\(f\\\\\"\"{'' ''*depth}{node.get\\(''name'',''''\\)} | {node.get\\(''url'',''''\\)}\\\\\"\"\\) for child in node.get\\(''children'', []\\): if child.get\\(''type''\\) == ''folder'': print\\(f\\\\\"\"{'' ''*depth}[{child.get\\(''name'',''''\\)}]\\\\\"\"\\) walk\\(child, depth+1\\) for root in bk.get\\(''roots'', {}\\).values\\(\\): if isinstance\\(root, dict\\): walk\\(root\\) \"\")",
-      "Bash(# Check for existing tokens cat ~/.gitconfig)"
+      "Bash(# Check for existing tokens cat ~/.gitconfig)",
+      "Bash(osascript:*)",
+      "Bash(log show:*)",
+      "Bash(# Check if any of our Chrome JS calls somehow referenced iCloud paths # Also check if there''s a launch agent or background process doing this launchctl list)"
     ]
   },
   "outputStyle": "Explanatory"
