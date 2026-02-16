@@ -1,25 +1,26 @@
-# TODAY CAPSULE -- 2026-02-16
-> Updated by B2 at 23:00 MSK
+# TODAY CAPSULE — 2026-02-16 NIGHT FREEZE
+
+## Objective
+Ship Tribunal API (Hypothesis C) — fastest path to revenue
 
 ## Done Today
-- RHEA-BRIDGE-001 ✅ | RHEA-BRIDGE-002 ✅ | RHEA-OFFICE-001 ✅ | RHEA-PUB-001 ✅
-- RHEA-CTX-002 ✅ | RHEA-INC-001 ✅ | RHEA-FIRE-001 ✅ | RHEA-CTC-001 ✅
-- Bridge probe fixed (stderr bug), 4/6 providers live
-- auth-errors.md expanded, INC-002 updated, INC-004 resolved
-- B2 operational on /Users/sa/rh.1
+- BACKLOG 12/12 DONE (all P0-P3 items shipped)
+- consensus_analyzer built + tested (src/consensus_analyzer.py)
+- Strategy doc: docs/rhea-commander-evolution.md (C+D recommended)
+- Rex notified: spend decision needed ($50-100 for Gemini/domain/hosting)
+- Memory dump v1: ops/virtual-office/inbox/B2_20260216_memory_dump_v1.md
 
 ## Blockers
 - **INC-2026-02-16-006: Rex (LEAD) DOWN — crashed with 400.** Last push: b604627. No data lost.
 - INC-2026-02-16-002: bridge 2/6 down (Azure 401, HuggingFace 404)
-- INC-2026-02-16-003: pyenv hashlib broken (workaround: /usr/bin/python3)
-- INC-2026-02-16-005: Chrome JS extraction blocked
+- INC-2026-02-16-003: pyenv hashlib (workaround: /usr/bin/python3)
+- Gemini paid tier: awaiting Rex decision
 
-## Next (P1--P2)
-- RHEA-CTX-001 🔲 — TODAY_CAPSULE generator (GPT desk)
-- RHEA-IOS-001 🔲 — ARCHITECTURE_FREEZE.md
-- RHEA-IOS-002 🔲 — Offline loop MVP spec
-- RHEA-COMM-001 🔲 — Repo narrative reboot
-- RHEA-COMM-002 🔲 — Blueprint Literacy ladder
+## Next (morning priority order)
+1. Wire consensus_analyzer → rhea_bridge.py tribunal()
+2. Build src/tribunal_api.py (FastAPI POST /tribunal)
+3. Deploy Railway + landing page
 
-## Human State
-- Sleeping. Agents autonomous.
+## Night Rules
+- NIGHT_FREEZE.lock active — no destructive ops
+- No rm -rf, no force-push, no git reset
