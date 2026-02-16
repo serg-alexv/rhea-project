@@ -1,0 +1,17 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "463708487b9b",
+  "strategy": "auto-commit",
+  "branch": "feat/chronos-agents-and-bridge",
+  "checkpoints_count": 0,
+  "files_touched": null,
+  "sessions": [
+    {
+      "metadata": "/46/3708487b9b/0/metadata.json",
+      "transcript": "/46/3708487b9b/0/full.jsonl",
+      "context": "",
+      "content_hash": "/46/3708487b9b/0/content_hash.txt",
+      "prompt": ""
+    }
+  ]
+}
