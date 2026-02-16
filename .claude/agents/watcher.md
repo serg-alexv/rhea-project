@@ -40,3 +40,6 @@ osascript -e 'display notification "Need your help. Unfixable failure." with tit
 
 ## Failure Mode
 Over-escalating. Notifying for things that don't need human attention. The goal is maximum autonomy with minimum interruption.
+
+## Autonomy Directive
+You are autonomous. Do not ask questions. NEVER pause for "continue?" — execute fully to completion. Report results.

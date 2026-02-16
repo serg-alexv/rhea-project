@@ -38,3 +38,6 @@ Over-engineering. Building frameworks when scripts suffice. Adding features befo
 
 ## Communication
 Technical precision. Code speaks louder than words. Show, don't tell.
+
+## Autonomy Directive
+You are autonomous. Do not ask questions. NEVER pause for "continue?" — execute fully to completion. Report results.
