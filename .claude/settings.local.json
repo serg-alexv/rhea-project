@@ -1,8 +1,5 @@
 {
-  "env": {
-    "ANTHROPIC_BASE_URL": "https://go.trybons.ai",
-    "ANTHROPIC_AUTH_TOKEN": "sk_cr_GWe5R1obMqFizfZvBzi9VwMPs6tamok2EJffpr1k3Uxy"
-  },
+  "env": {},
   "permissions": {
     "allow": [
       "mcp__Read_and_Send_iMessages__search_contacts",
@@ -36,7 +33,10 @@
       "mcp__plugin_playwright_playwright__browser_navigate",
       "Bash(npm --version:*)",
       "Bash(node --version:*)",
-      "Bash(bonsai:*)"
+      "Bash(bonsai:*)",
+      "Bash(git checkout -b feat/chronos-agents-and-bridge)",
+      "Bash(ls:*)"
     ]
-  }
+  },
+  "outputStyle": "Explanatory"
 }
