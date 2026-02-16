@@ -1,0 +1,35 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "a0072bd8c37d",
+  "strategy": "auto-commit",
+  "branch": "main",
+  "checkpoints_count": 1,
+  "files_touched": [
+    ".claude/settings.local.json",
+    ".playwright-mcp/console-2026-02-14T23-36-36-418Z.log",
+    ".playwright-mcp/console-2026-02-14T23-40-14-689Z.log",
+    ".playwright-mcp/console-2026-02-14T23-40-34-566Z.log",
+    ".playwright-mcp/console-2026-02-14T23-40-55-184Z.log",
+    ".playwright-mcp/console-2026-02-14T23-41-01-765Z.log",
+    ".playwright-mcp/console-2026-02-14T23-41-09-121Z.log",
+    ".playwright-mcp/console-2026-02-14T23-41-15-855Z.log",
+    "docs-min",
+    "docs/TOKEN_OPTIMIZATION.md"
+  ],
+  "sessions": [
+    {
+      "metadata": "/a0/072bd8c37d/0/metadata.json",
+      "transcript": "/a0/072bd8c37d/0/full.jsonl",
+      "context": "",
+      "content_hash": "/a0/072bd8c37d/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 25,
+    "cache_creation_tokens": 54873,
+    "cache_read_tokens": 1999134,
+    "output_tokens": 400,
+    "api_call_count": 20
+  }
+}
