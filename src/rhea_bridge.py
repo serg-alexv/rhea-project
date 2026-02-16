@@ -181,7 +181,7 @@ def _compute_cost(model: str, prompt_tokens: int, completion_tokens: int) -> flo
     return round(cost, 8)
 
 
-def _classify_status(error: str | None) -> str:
+def _classify_status(error) -> str:
     """Map error string to a short status code."""
     if error is None:
         return "ok"
@@ -201,7 +201,7 @@ def _log_call(
     completion_tokens: int,
     total_tokens: int,
     latency_ms: float,
-    error: str | None,
+    error,
 ) -> None:
     """Append a single JSONL record to the call log."""
     CALL_LOG_PATH.parent.mkdir(parents=True, exist_ok=True)
@@ -732,7 +732,7 @@ class RheaBridge:
 # Daily summary (reads JSONL log)
 # ---------------------------------------------------------------------------
 
-def daily_summary(log_path: Path = CALL_LOG_PATH, date_filter: str | None = None) -> str:
+def daily_summary(log_path: Path = CALL_LOG_PATH, date_filter=None) -> str:
     """Read bridge_calls.jsonl and produce a human-readable daily summary.
 
     Args:
