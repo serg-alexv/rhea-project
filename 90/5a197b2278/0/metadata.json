@@ -1,0 +1,24 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "905a197b2278",
+  "session_id": "2a84a5a3-0636-4047-aa95-342b1ebe7d83",
+  "strategy": "auto-commit",
+  "created_at": "2026-02-16T08:34:48.465781Z",
+  "branch": "feat/chronos-agents-and-bridge",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "rhea-elementary/dumps/session-context-dump-post-compact.md",
+    "rhea-elementary/memory-core/context-bridge.md"
+  ],
+  "agent": "Claude Code",
+  "transcript_identifier_at_start": "686bba0d-58ac-4b9a-96d8-8507772b9748",
+  "checkpoint_transcript_start": 1929,
+  "transcript_lines_at_start": 1929,
+  "token_usage": {
+    "input_tokens": 10191,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 325128,
+    "output_tokens": 2864,
+    "api_call_count": 5
+  }
+}
