@@ -65,7 +65,19 @@
       "WebSearch",
       "WebFetch(domain:docs.anthropic.com)",
       "WebFetch(domain:arxiv.org)",
-      "WebFetch(domain:github.com)"
+      "WebFetch(domain:github.com)",
+      "Bash(for i in 0 8000 16000 24000 32000 40000 48000 56000)",
+      "Bash(do)",
+      "Bash(firebase projects:list:*)",
+      "Bash(brew list:*)",
+      "Bash(brew install:*)",
+      "Bash(firebase --version:*)",
+      "Bash(firebase projects:create:*)",
+      "Bash(firebase use:*)",
+      "Bash(firebase firestore:databases:create:*)",
+      "Bash(gcloud firestore databases create:*)",
+      "Bash(firebase deploy:*)",
+      "Bash(/usr/bin/pip3 install:*)"
     ]
   },
   "outputStyle": "Explanatory"

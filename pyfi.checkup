@@ -1,0 +1,13 @@
+
+Rhea Firebase Office — Inter-agent communication layer.
+Uses Firestore as real-time shared memory between all agents.
+
+Usage:
+  python3 ops/rhea_firebase.py heartbeat <desk> <status>
+  python3 ops/rhea_firebase.py send <from_desk> <to_desk> <message>
+  python3 ops/rhea_firebase.py inbox <desk>
+  python3 ops/rhea_firebase.py gem <id> <text> <source> <topic>
+  python3 ops/rhea_firebase.py incident <id> <symptom> <status>
+  python3 ops/rhea_firebase.py capsule <json_string>
+  python3 ops/rhea_firebase.py status
+

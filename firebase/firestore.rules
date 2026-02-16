@@ -1,0 +1,33 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Office inbox — any authenticated agent can write
+    match /inbox/{messageId} {
+      allow read, write: if true;
+    }
+    // Office outbox — any authenticated agent can read their desk
+    match /outbox/{taskId} {
+      allow read, write: if true;
+    }
+    // Gems
+    match /gems/{gemId} {
+      allow read, write: if true;
+    }
+    // Incidents
+    match /incidents/{incId} {
+      allow read, write: if true;
+    }
+    // Decisions
+    match /decisions/{decId} {
+      allow read, write: if true;
+    }
+    // Today capsule (singleton)
+    match /capsule/{docId} {
+      allow read, write: if true;
+    }
+    // Agent heartbeats
+    match /agents/{agentId} {
+      allow read, write: if true;
+    }
+  }
+}
