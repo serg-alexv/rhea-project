@@ -1,0 +1,23 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "f6e3a280d897",
+  "session_id": "15ffa5d1-c7f7-44fe-a777-0648f3b4c3ed",
+  "strategy": "auto-commit",
+  "created_at": "2026-02-16T00:08:18.461129Z",
+  "branch": "feat/chronos-agents-and-bridge",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "docs-min"
+  ],
+  "agent": "Claude Code",
+  "transcript_identifier_at_start": "8999571b-3216-4865-a7ba-59c74f43a387",
+  "checkpoint_transcript_start": 631,
+  "transcript_lines_at_start": 631,
+  "token_usage": {
+    "input_tokens": 0,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 0,
+    "output_tokens": 0,
+    "api_call_count": 1
+  }
+}
