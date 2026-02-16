@@ -57,3 +57,19 @@
 - **Verify:** Attempt osascript command; confirm permission prompt or allow list works
 - **Rollback:** Use manual export or API-based extraction; avoid osascript entirely
 - **Next test:** Check Chrome automation policies; try CDPv11 protocol or browser extension instead
+
+### INC-2026-02-16-006: ComfyUI Docker image broken
+- **Symptom:** `ai-dock/comfyui:pytorch-2.4.1-cpu` removed from ghcr.io
+- **Root cause:** Image deleted from registry (upstream)
+- **Workaround:** Use `--lite` flag with deploy.sh (skips ComfyUI)
+- **Status:** WORKAROUND ACTIVE
+- **Source:** COWORK_20260216_agent-online.md
+- **Verify:** `docker pull ai-dock/comfyui:pytorch-2.4.1-cpu` — expect 404
+- **Next test:** Find replacement image or build from ComfyUI repo
+
+### INC-2026-02-16-007: Azure Foundry catalog broken for Jais
+- **Symptom:** Jais 30B Chat not found in Azure catalog search (382 models only)
+- **Root cause:** Microsoft rebranded Azure AI Foundry → Microsoft Foundry (~Nov 2025). Old catalog had 11K+ models, new has 382 curated.
+- **Workaround:** Marketplace listing alive: core42.core42-jais30b-v3-chat-offer
+- **Status:** DEFERRED
+- **Source:** COWORK_20260216_session-memory.md Turn 12

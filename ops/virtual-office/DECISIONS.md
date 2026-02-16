@@ -18,6 +18,24 @@
 - **Evidence:** ops/virtual-office/inbox/TRIBUNAL_20260216_commercial-strategy.md
 - **Pending:** Human approval on spend
 
+### DEC-010: Genesis founding decisions preserved (12 items)
+- **What:** 12 decisions from Genesis chat (eb53e82c, Feb 12) promoted to canonical record
+- **Why:** Founding intent must survive session death. Includes: guide not sage, deliver answer + step forward, English docs, conditional calendar, search > training data, calendar-health link, 8-level symbolic power, focus on active cultures
+- **Who:** B2 extraction from GENESIS_decisions.md
+- **Key open items:** T-10 (cross-cultural longevity extraction interrupted), T-14 (optimal calendar design)
+- **Source:** ops/virtual-office/inbox/GENESIS_decisions.md + GENESIS_topics.md
+
+### DEC-011: CTC (Context Tax Collector) adopted as operational principle
+- **What:** "If a fragment is copied twice in a day, it becomes an artifact." GEM/PROCEDURE/INCIDENT/DECISION.
+- **Why:** GPT desk shipped spec. Reduces clipboard tax and morning freeze. Questions become rarer over time.
+- **Who:** GPT desk (ChatGPT 5.2) → LEAD accepted
+- **Source:** ops/virtual-office/inbox/GPT_P1_context-tax-collector.md
+
+### DEC-012: Human directives log — 14 entries canonical
+- **What:** All 14 human directives from D-001 through D-014 preserved verbatim
+- **Key rules:** Never ask "should I?", never pause for continue, push every 30 min, argue/disagree/experiment, shrink questionnaires
+- **Source:** ops/virtual-office/inbox/HUMAN_20260216_all_directives.md
+
 ### DEC-001: Foreground-only agents
 - **What:** Never use background agents (run_in_background: true)
 - **Why:** 11/11 background agents died, 14/14 foreground succeeded
