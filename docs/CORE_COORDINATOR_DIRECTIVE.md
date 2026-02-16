@@ -9,16 +9,16 @@
 - Approve "what becomes public output"
 
 ## Core Coordinator Forbidden Actions
-- Editing code directly (unless through a strict PR path)
+- Editing code directly (unless via a strict PR path)
 - Touching secrets/keys
-- Freehand "refactors" without a diff plan
+- Ad-hoc refactors without a diff plan
 
 ## Fixed Agent Roster (5 roles)
-1. **Core Coordinator** (Opus) — routing, capsule, approvals
-2. **Code Reviewer** — PR path enforcement
-3. **Failure Hunter** — silent failure detection
-4. **Doc Extractor / Summarizer** — knowledge mining
-5. **Ops Fixer** — bridge, infra, health probes
+1. **Core Coordinator** (Opus) -- routing, capsule, approvals
+2. **Code Reviewer** -- PR path enforcement
+3. **Failure Hunter** -- silent failure detection
+4. **Doc Extractor / Summarizer** -- knowledge mining
+5. **Ops Fixer** -- bridge, infra, health probes
 
 Everyone else = on-demand specialists.
 
@@ -30,7 +30,7 @@ Everyone else = on-demand specialists.
 ## Public Output Conveyor Belt
 File: `PUBLIC_OUTPUT.md`
 Weekly cadence: 1 demo + 1 write-up + 1 "what broke/how we fixed it"
-Rule: Every day must produce one exportable artifact, even tiny.
+Rule: every day must produce at least one exportable artifact, however small.
 
 ## Morning Protocol
-Run probe → update TODAY_CAPSULE → only then work
+Run probe, update TODAY_CAPSULE, only then start work

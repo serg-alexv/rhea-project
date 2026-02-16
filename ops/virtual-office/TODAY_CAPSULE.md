@@ -1,4 +1,4 @@
-# TODAY CAPSULE — 2026-02-16
+# TODAY CAPSULE -- 2026-02-16
 > Updated by B2 at 23:00 MSK
 
 ## Done Today
@@ -13,7 +13,7 @@
 - INC-2026-02-16-003: pyenv hashlib broken (workaround: /usr/bin/python3)
 - INC-2026-02-16-005: Chrome JS extraction blocked
 
-## Next (P1–P2)
+## Next (P1--P2)
 - RHEA-CTX-001 🔲 — TODAY_CAPSULE generator (GPT desk)
 - RHEA-IOS-001 🔲 — ARCHITECTURE_FREEZE.md
 - RHEA-IOS-002 🔲 — Offline loop MVP spec
