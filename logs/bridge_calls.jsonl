@@ -1,0 +1,1 @@
+{"timestamp": "2026-02-16T17:42:00.680483+00:00", "provider": "openai", "model": "gpt-4o-mini", "request_id": "fe255c70-ef03-45f8-9a12-4e9fa380b5fe", "prompt_tokens": 8, "completion_tokens": 10, "total_tokens": 18, "cost_usd": 7.2e-06, "latency_ms": 2684.3, "status": "ok", "error_short": ""}
