@@ -1,0 +1,30 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "57bf2d74f3e9",
+  "strategy": "auto-commit",
+  "branch": "feat/chronos-agents-and-bridge",
+  "checkpoints_count": 1,
+  "files_touched": [
+    ".watcher/watcher.log",
+    ".watcher/watcher.pid",
+    "scripts/watcher-reanimator.sh",
+    "scripts/watcher-start.sh",
+    "scripts/watcher-stop.sh"
+  ],
+  "sessions": [
+    {
+      "metadata": "/57/bf2d74f3e9/0/metadata.json",
+      "transcript": "/57/bf2d74f3e9/0/full.jsonl",
+      "context": "",
+      "content_hash": "/57/bf2d74f3e9/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 611691,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 1000256,
+    "output_tokens": 8233,
+    "api_call_count": 12
+  }
+}

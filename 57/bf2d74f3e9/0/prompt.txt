@@ -1,0 +1,10 @@
+<task-notification>
+<task-id>ad54709</task-id>
+<status>completed</status>
+<summary>Agent "Scan all snapshots + sessions timeline" completed</summary>
+<result>API Error: 400 Bad Request</result>
+<usage>total_tokens: 0
+tool_uses: 0
+duration_ms: 1015</usage>
+</task-notification>
+Full transcript available at: /private/tmp/claude-501/-Users-sa-rh-1/tasks/ad54709.output
