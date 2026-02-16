@@ -27,9 +27,9 @@
 ## P1 -- Context system (freeze-killer)
 
 - **RHEA-CTX-001** | TODAY_CAPSULE generator (routes) | Desk: GPT
-  Output: ops/outbox/TO_GPT_generate-paste-blocks.md → inbox result
+  Output: scripts/generate_capsule_blocks.py → ops/outbox/BLOCK_{LEADERS,WORKERS,OPS}.md
   DoD: LEADERS / WORKERS / OPS blocks generated deterministically from TODAY_CAPSULE.
-  **Status: 🔲 TODO**
+  **Status: ✅ DONE** — Python script parses capsule, generates 3 role-specific blocks. Tested.
 
 - **RHEA-CTX-002** | Gems ledger w/ IDs | Desk: LEAD
   Output: ops/virtual-office/GEMS.md with ID format + promotion rule
@@ -63,10 +63,10 @@
 - **RHEA-COMM-002** | Blueprint Literacy ladder | Desk: GPT
   Output: 8–12 micro-lessons + unlock map
   DoD: each lesson 2--4 min; ties to safety constraints and loop variables.
-  **Status: 🔲 TODO**
+  **Status: ✅ DONE** — 10 lessons + unlock map in docs/blueprint-literacy-ladder.md. Each has safety constraint + loop variable.
 
 ## Summary
 | Status | Count |
 |--------|-------|
-| ✅ DONE | 10 |
-| 🔲 TODO | 2 |
+| ✅ DONE | 12 |
+| 🔲 TODO | 0 |
