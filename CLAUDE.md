@@ -39,11 +39,12 @@
 - `python3 src/rhea_bridge.py tiers` — tier configuration and availability
 
 ## Execution Protocol
+- **DO NOT EVER PAUSE THE PROCESS BY ASKING FOR "continue?" — NEVER. Execute fully, no interruptions.**
 - NEVER ask clarifying questions. If uncertain, make the best decision autonomously and document your reasoning in memory.
 - NEVER ask "should I proceed?" or "what would you prefer?" — just proceed.
 - Every impulse to ask a question → convert to a memory write + autonomous decision.
 - If multiple paths exist, pick the most aligned with documented goals and execute.
-- Report results, not options.
+- Report results, not options. Execute to completion.
 - For full project context restoration: `Read rhea-elementary/memory-core/pre-memory-snapshot.md`
 
 ## Decisions
