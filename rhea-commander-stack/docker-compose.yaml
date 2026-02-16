@@ -1,9 +1,4 @@
-# ═══════════════════════════════════════════════════════════════
-# Rhea Commander Stack v2 — Production Docker Compose
-# LiteLLM (gateway) + LobeChat (UI) + ComfyUI (visual gen)
-# Deploy: ./deploy.sh up
-# Reverse: ./deploy.sh down  (or ./deploy.sh nuke for full wipe)
-# ═══════════════════════════════════════════════════════════════
+version: "3.8"
 
 networks:
   rhea-net:
@@ -14,8 +9,6 @@ volumes:
   litellm-logs:
 
 services:
-
-  # ─── Layer 1: LiteLLM Proxy (AI Gateway) ───
   litellm:
     image: ghcr.io/berriai/litellm:main-latest
     container_name: rhea-litellm
@@ -24,52 +17,60 @@ services:
     volumes:
       - ./litellm_config.yaml:/app/config.yaml:ro
       - litellm-logs:/app/logs
-    command: ["--config", "/app/config.yaml", "--port", "4000"]
-    env_file:
-      - .env
     environment:
-      - LITELLM_MASTER_KEY=${LITELLM_MASTER_KEY:-sk-rhea-commander-2026}
-    networks:
-      - rhea-net
-    restart: unless-stopped
+      - LITELLM_MASTER_KEY=${LITELLM_MASTER_KEY:-sk-rhea-dev-key}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY:-}
+      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY:-}
+      - HF_TOKEN=${HF_TOKEN:-}
+      - AZURE_API_KEY=${AZURE_API_KEY:-}
+      - AZURE_API_BASE=${AZURE_API_BASE:-}
+    command: ["--config", "/app/config.yaml", "--detailed_debug"]
     healthcheck:
-      test: ["CMD", "curl", "-sf", "http://localhost:4000/health"]
+      test: ["CMD", "curl", "-f", "http://localhost:4000/health"]
       interval: 15s
       timeout: 5s
       retries: 5
       start_period: 20s
+    networks:
+      - rhea-net
+    restart: unless-stopped
 
-  # ─── Layer 2: LobeChat (Operator Interface) ───
   lobechat:
     image: lobehub/lobe-chat:latest
     container_name: rhea-lobechat
     ports:
       - "${LOBECHAT_PORT:-3210}:3210"
     environment:
-      - OPENAI_API_KEY=${LITELLM_MASTER_KEY:-sk-rhea-commander-2026}
       - OPENAI_PROXY_URL=http://litellm:4000/v1
-      - ACCESS_CODE=${LOBECHAT_ACCESS_CODE:-rhea2026}
-      - ENABLED_OPENAI=1
-      - CUSTOM_MODELS=claude-opus,claude-sonnet,gpt-4o,o3-mini,gemini-flash,gemini-pro,deepseek-v3,deepseek-r1,openrouter-auto,hf-inference
-    networks:
-      - rhea-net
+      - OPENAI_API_KEY=${LITELLM_MASTER_KEY:-sk-rhea-dev-key}
+      - ACCESS_CODE=${LOBECHAT_ACCESS_CODE:-}
     depends_on:
       litellm:
         condition: service_healthy
+    networks:
+      - rhea-net
     restart: unless-stopped
 
-  # ─── Layer 3: ComfyUI (Visual Generation — CPU mode) ───
   comfyui:
-    image: ghcr.io/ai-dock/comfyui:pytorch-2.4.1-cpu
+    image: ghcr.io/ai-dock/comfyui:latest
     container_name: rhea-comfyui
     ports:
       - "${COMFYUI_PORT:-8188}:8188"
     volumes:
       - comfyui-data:/workspace
-    environment:
-      - COMFYUI_FLAGS=--cpu --listen 0.0.0.0
+    # Uncomment for GPU:
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: all
+    #           capabilities: [gpu]
     networks:
       - rhea-net
     restart: unless-stopped
-    # ComfyUI CPU image is large (~5GB), first pull takes time
-    # GPU users: swap image to ghcr.io/ai-dock/comfyui:pytorch-2.4.1-cuda-12.4.1
+    profiles:
+      - full
