@@ -12,5 +12,5 @@
 - "Why tribunal mode exists" explainer
 
 ### What Broke / How We Fixed It
-- 28 session deaths in 4 days → Built trinity memory structure + watcher daemon
-- All background agents dying → Bonsai proxy removed, foreground-only pattern established
+- 28 session deaths in 4 days -- built trinity memory structure + watcher daemon
+- All background agents dying -- removed Bonsai proxy, established foreground-only pattern
