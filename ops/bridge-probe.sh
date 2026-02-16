@@ -41,7 +41,7 @@ TOTAL=${#PROBES[@]}
 # ── Helper: parse bridge JSON output ─────────────────────────────────────────
 # Reads $TMPJSON, prints: status_icon|latency_ms|error_msg  (pipe-delimited)
 parse_bridge_json() {
-    python3 -c "
+    /usr/bin/python3 -c "
 import json, re, sys
 try:
     with open(sys.argv[1]) as f:
@@ -76,7 +76,7 @@ for entry in "${PROBES[@]}"; do
 
     # Run the bridge ask command; capture stdout+stderr into temp file
     set +e
-    python3 "$BRIDGE" ask "$bridge_spec" "ping" > "$TMPJSON" 2>&1
+    /usr/bin/python3 "$BRIDGE" ask "$bridge_spec" "ping" > "$TMPJSON" 2>&1
     exit_code=$?
     set -e
 
