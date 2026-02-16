@@ -1,81 +1,84 @@
-# Rhea — Mind Blueprint Factory
+# Rhea
 
-**Generate, evaluate, iterate on daily structure models using scientific rhythms, multi-model tribunal, and closed-loop planner.**
+Agent coordination OS. Git-backed. Protocol-driven.
 
-An iOS app that replaces unchosen cultural automatisms with a consciously designed environment, personalized to each user's neuroprofile. ADHD-optimized. Science-backed. Culturally grounded.
+## What
 
-## Repository Structure
+Rhea is not an app. It is an operating system for running multi-agent work across providers, sessions, and humans. Every agent gets a desk, every action gets a commit, every failure gets an incident record. Memory survives session death. Coordination is deterministic, not conversational. Reproducibility is a design constraint, not a feature.
 
-```
-rhea-project/
-├── rhea                    # Ops CLI (bootstrap, check, memory)
-├── scripts/
-│   └── import-nested.sh    # Import helper
-├── .entire/
-│   ├── logs/ops.jsonl      # Operations log
-│   └── snapshots/          # State snapshots (BOOT-*, OPUS_SESSION_*)
-├── src/
-│   ├── __init__.py
-│   └── rhea_bridge.py      # Multi-model API bridge (6 providers, tribunal)
-├── docs/
-│   ├── state.md            # Project state (≤2KB) — load this first
-│   ├── state_full.md       # Verbose state + session log
-│   ├── architecture.md     # System architecture
-│   ├── decisions.md        # Architectural Decision Records (7 ADRs)
-│   ├── MVP_LOOP.md         # Closed-loop scheduler spec
-│   ├── ROADMAP.md          # Stage 0–3
-│   ├── prism_paper_outline.md  # Scientific paper outline
-│   ├── models_catalog.md   # AI model catalog
-│   └── models_catalog.json # Model catalog (machine-readable)
-├── prompts/
-│   ├── chronos-protocol-v3.md      # Agent system prompt (RU)
-│   └── chronos-protocol-v3-en.md   # Agent system prompt (EN)
-├── .env.example
-├── requirements.txt
-└── README.md
-```
+## Why
+
+Sessions die. Context is lost. Agents cannot coordinate across providers. There is no audit trail. We learned this the hard way: 28 session deaths in 4 days, each one losing state that had to be rebuilt from scratch. Rhea exists because "just start a new chat" is not an engineering answer.
+
+## How It Works
+
+- **Virtual office** -- each agent holds a named desk (LEAD, B2, GPT, COWORK, on-demand workers). Inbox/outbox protocol with SLAs.
+- **Promotion protocol** -- chat insight becomes capsule entry, repeated insight becomes a gem (with ID), referenced gem becomes a procedure, failing procedure becomes an incident, resolved incident becomes a decision. Nothing is oral tradition.
+- **Firebase sync** -- real-time state replication across agents and devices. Firestore for structured data, RTDB for presence and heartbeats.
+- **Bridge** -- `src/rhea_bridge.py` routes to 6 providers (OpenAI, Gemini, DeepSeek, OpenRouter, HuggingFace, Azure) across 31 models in 4 cost tiers. Every call logged to `logs/bridge_calls.jsonl`.
+- **Context Tax Collector** -- tracks token spend per session, enforces budget tiers, prevents runaway costs.
+- **Git as audit trail** -- if it is not committed, it did not happen. Push SLA: every 30 minutes.
 
 ## Quick Start
 
 ```bash
-# Clone and enter
-git clone https://github.com/serg-alexv/rhea-project.git
-cd rhea-project
-
-# Set up env
-cp .env.example .env  # fill in API keys
-pip install -r requirements.txt
-
-# Verify
-./rhea check
-
-# Test bridge
-python3 src/rhea_bridge.py status
+git clone https://github.com/serg-alexv/rhea-project.git && cd rhea-project
+bash scripts/rhea/check.sh                     # verify repo invariants
+python3 src/rhea_bridge.py status               # probe provider availability
+python3 src/rhea_bridge.py tiers                # show cost tier config
+cat ops/virtual-office/TODAY_CAPSULE.md         # see what matters right now
 ```
 
-## Ops CLI
-
-```bash
-./rhea help               # Show all commands
-./rhea check              # Verify repo invariants
-./rhea bootstrap          # First-time setup
-./rhea import-nested      # Import .nested backups
-./rhea memory snapshot X  # Save state snapshot
-./rhea memory log "msg"   # Append to ops log
-```
-
-## Quick Start for AI Sessions
+## Architecture
 
 ```
-[RHEA:resume] state.md loaded. Focus: {task}
+ops/virtual-office/     # desks, inbox, outbox, capsule, gems, incidents, decisions
+firebase/               # Firestore rules, RTDB config, sync functions
+src/rhea_bridge.py      # multi-provider LLM bridge (6 providers, 31 models, 4 tiers)
+ops/                    # backlog, probe scripts, bridge health
+docs/                   # state.md (<2KB), decisions (14 ADRs), procedures, public output
+scripts/                # check.sh, commit hook, autosave, memory benchmark
+prompts/                # Chronos Protocol v3 (agent system prompts)
 ```
 
-Read `docs/state.md` → work → update state → commit.
+## Status
 
-## Tech Stack
+| ID | Item | Status |
+|----|------|--------|
+| RHEA-BRIDGE-001 | Bridge call ledger | Done |
+| RHEA-BRIDGE-002 | Provider health probe | Partial |
+| RHEA-OFFICE-001 | Office protocol hardening | Done |
+| RHEA-PUB-001 | Public output conveyor | Done |
+| RHEA-CTX-002 | Gems ledger with IDs | Done |
+| RHEA-INC-001 | Incident template + resurrection | Done |
+| RHEA-FIRE-001 | Firebase sync | Done |
+| RHEA-CTC-001 | Context Tax Collector | Done |
+| RHEA-CTX-001 | TODAY_CAPSULE generator | Todo |
+| RHEA-IOS-001 | Architecture freeze | Todo |
+| RHEA-IOS-002 | Offline loop MVP spec | Todo |
+| RHEA-COMM-001 | Repo narrative reboot | Todo |
+| RHEA-COMM-002 | Blueprint literacy ladder | Todo |
 
-- **AI:** 8-agent system (Chronos Protocol v3), Claude Opus/Sonnet 4
-- **Bridge:** Python, 6 API providers (OpenAI, Gemini, DeepSeek, OpenRouter, HuggingFace, Azure AI Foundry), tribunal mode
-- **Target:** iOS (SwiftUI + HealthKit + Apple Watch)
-- **Data:** Azure Cosmos DB
-- **Memory:** GitHub (state.md ≤2KB) + entire.io (episodic) + compact protocol (session handoff)
+8 done. 1 partial. 4 todo.
+
+## Team
+
+| Desk | Agent | Model | Role |
+|------|-------|-------|------|
+| LEAD | Rex | Opus 4.6 | Core Coordinator -- routing, capsule, approvals |
+| B2 | B-2nd | Opus 4.6 | Ops + infra + self-reflection |
+| GPT | ChatGPT | 5.2 | Idea generation, context blocks |
+| COWORK | Argos | Opus 4.6 | Cross-exchange, infra |
+| -- | Sonnet workers | Sonnet 4 | On-demand, spawned by LEAD |
+
+5 fixed roles: Core Coordinator, Code Reviewer, Failure Hunter, Doc Extractor, Ops Fixer. Everyone else is on-demand.
+
+## License
+
+MIT [ASSUMPTION]
+
+## Links
+
+Published artifacts in `docs/public/`:
+
+- [Multi-Model Bridge Article](docs/public/multi-model-bridge-article.md)

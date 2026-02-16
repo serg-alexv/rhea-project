@@ -1,0 +1,74 @@
+networks:
+  rhea-net:
+    driver: bridge
+
+volumes:
+  comfyui-data:
+  litellm-logs:
+
+services:
+  litellm:
+    image: ghcr.io/berriai/litellm:main-latest
+    container_name: rhea-litellm
+    ports:
+      - "${LITELLM_PORT:-4000}:4000"
+    volumes:
+      - ./litellm_config.yaml:/app/config.yaml:ro
+      - litellm-logs:/app/logs
+    environment:
+      - LITELLM_MASTER_KEY=${LITELLM_MASTER_KEY:-sk-rhea-dev-key}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY:-}
+      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY:-}
+      - HF_TOKEN=${HF_TOKEN:-}
+      - AZURE_API_KEY=${AZURE_API_KEY:-}
+      - AZURE_API_BASE=${AZURE_API_BASE:-}
+    command: ["--config", "/app/config.yaml", "--detailed_debug"]
+    healthcheck:
+      test: ["CMD-SHELL", "python3 -c \"import urllib.request; urllib.request.urlopen('http://localhost:4000/health')\" || python -c \"import urllib.request; urllib.request.urlopen('http://localhost:4000/health')\""]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 60s
+    networks:
+      - rhea-net
+    restart: unless-stopped
+
+  lobechat:
+    image: lobehub/lobe-chat:latest
+    container_name: rhea-lobechat
+    ports:
+      - "${LOBECHAT_PORT:-3210}:3210"
+    environment:
+      - OPENAI_PROXY_URL=http://litellm:4000/v1
+      - OPENAI_API_KEY=${LITELLM_MASTER_KEY:-sk-rhea-dev-key}
+      - ACCESS_CODE=${LOBECHAT_ACCESS_CODE:-}
+    depends_on:
+      litellm:
+        condition: service_started
+    networks:
+      - rhea-net
+    restart: unless-stopped
+
+  comfyui:
+    image: ghcr.io/ai-dock/comfyui:latest
+    container_name: rhea-comfyui
+    ports:
+      - "${COMFYUI_PORT:-8188}:8188"
+    volumes:
+      - comfyui-data:/workspace
+    # Uncomment for GPU:
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: all
+    #           capabilities: [gpu]
+    networks:
+      - rhea-net
+    restart: unless-stopped
+    profiles:
+      - full
