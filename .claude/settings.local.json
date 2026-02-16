@@ -36,7 +36,14 @@
       "Bash(bonsai:*)",
       "Bash(git checkout -b feat/chronos-agents-and-bridge)",
       "Bash(ls:*)",
-      "Bash(done)"
+      "Bash(done)",
+      "Bash(bash /Users/sa/rh.1/scripts/watcher-start.sh)",
+      "Bash(git -C /Users/sa/rh.1 log --all --format=\"%ai %s\" --date-order)",
+      "Bash(# Count Claude Code sessions and their sizes echo \"\"=== CLAUDE CODE SESSIONS \\(this project\\) ===\"\" ls -lt /Users/sa/.claude/projects/-Users-sa-rh-1/*.jsonl)",
+      "Bash(wc -l echo \"sessions total\" echo \"\" echo \"=== DATE RANGE ===\" ls -lt /Users/sa/.claude/projects/-Users-sa-rh-1/*.jsonl)",
+      "Bash(tail -1 echo \"^ earliest\" ls -lt /Users/sa/.claude/projects/-Users-sa-rh-1/*.jsonl)",
+      "Bash(head -1 echo \"^ latest \\(current\\)\" echo \"\" echo \"=== TOTAL DATA SIZE ===\" du -sh /Users/sa/.claude/projects/-Users-sa-rh-1/ echo \"\" echo \"=== CURRENT SESSION SIZE ===\" wc -c /Users/sa/.claude/projects/-Users-sa-rh-1/2a84a5a3-0636-4047-aa95-342b1ebe7d83.jsonl echo \"\" echo \"=== ChatGPT exports ===\" ls -lt /Users/sa/Downloads/data-2026-02-15-07-22-35-batch-0000/conversations.json /Users/sa/Downloads/data-2026-02-15-07-23-11-batch-0000/conversations.json /Users/sa/Downloads/rhea-tempchat-history-chatgpt.txt)",
+      "Bash(# Read ChatGPT tempchat history cat /Users/sa/Downloads/rhea-tempchat-history-chatgpt.txt)"
     ]
   },
   "outputStyle": "Explanatory"
