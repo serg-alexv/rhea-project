@@ -1,0 +1,27 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "88aa81e4fe9e",
+  "strategy": "auto-commit",
+  "branch": "feat/chronos-agents-and-bridge",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "rhea-elementary/memory-core/conversations.md",
+    "rhea-elementary/memory-core/timeline.md"
+  ],
+  "sessions": [
+    {
+      "metadata": "/88/aa81e4fe9e/0/metadata.json",
+      "transcript": "/88/aa81e4fe9e/0/full.jsonl",
+      "context": "",
+      "content_hash": "/88/aa81e4fe9e/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 296583,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 563148,
+    "output_tokens": 4069,
+    "api_call_count": 7
+  }
+}
