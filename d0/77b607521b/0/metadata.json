@@ -1,0 +1,27 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "d077b607521b",
+  "session_id": "2f2152e4-6e52-4c96-9711-cd782a611c9b",
+  "strategy": "auto-commit",
+  "created_at": "2026-02-14T23:31:42.493245Z",
+  "branch": "main",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "docs-min",
+    "docs/INTEGRATIONS_AUDIT.md",
+    "docs/state.md",
+    "scripts/memory_benchmark.sh",
+    "scripts/rhea.sh"
+  ],
+  "agent": "Claude Code",
+  "transcript_identifier_at_start": "fa14e5a1-0e26-4eaf-afd5-f00e144d29f1",
+  "checkpoint_transcript_start": 526,
+  "transcript_lines_at_start": 526,
+  "token_usage": {
+    "input_tokens": 18,
+    "cache_creation_tokens": 35489,
+    "cache_read_tokens": 937352,
+    "output_tokens": 3435,
+    "api_call_count": 16
+  }
+}
