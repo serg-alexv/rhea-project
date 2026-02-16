@@ -65,3 +65,28 @@ Every agent drops results here:
 - GEM referenced 3x → becomes a PROCEDURE (docs/procedures/)
 - PROCEDURE failing 2x → becomes an INCIDENT
 - INCIDENT resolved + verified → becomes a DECISION (what we learned)
+
+## Questions Gate (MANDATORY)
+- **No questions during execution.** Period.
+- Before any question, agent MUST have completed:
+  1. Extracted assumptions (labeled [ASSUMPTION])
+  2. Proposed plan
+  3. Produced draft outputs
+- All remaining questions (max 3) go in a single "Questions Gate" block at END of output
+- **Every question costs 1 artifact.** 1 question = 1 new file in inbox. No artifact = no question.
+
+## Defaults (eliminates need to ask)
+- Format not specified → markdown, files in ops/virtual-office/inbox/
+- Priority not specified → P0 stability → P1 context → P2 iOS → P3 community
+- Addressee not specified → LEAD
+- Ambiguous → produce A/B variants, deliver both to inbox
+- Info missing → best-effort + [ASSUMPTION] tag
+
+## Output SLA
+- **No-output is failure.**
+- Every session MUST end with ≥1 artifact in inbox:
+  - BACKLOG.md updated, OR
+  - new PROCEDURE.md, OR
+  - new INCIDENT.md, OR
+  - updated TODAY_CAPSULE.md
+- Want to ask? Deliver artifact first, then ask.
