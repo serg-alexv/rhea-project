@@ -3,6 +3,13 @@
 
 ## 2026-02-16
 
+### DEC-009: Tribunal composition updated
+- **What:** Tribunal = Rex (Opus) + GPT-highest + Gemini-highest + DeepSeek-highest
+- **Why:** Human directive. More diverse perspectives. All 4 now live.
+- **Who:** Human mandate
+- **Budget rule:** CASHFLOW topics may use up to 50% of current provider balances
+- **Provider balances:** OpenAI=active, OpenRouter=$0.09 spent, DeepSeek=$1.99, Gemini T1=free
+
 ### DEC-008: Commercial strategy — Tribunal as a Service + Open Core
 - **What:** Pursue C (Tribunal API, $0.05/call) first, then D (Open Core Commander Stack)
 - **Why:** 3/3 tribunal unanimous. Highest score 28.3/40. Fastest to revenue (7-14 days). Existing bridge code directly applicable. Under $100 initial spend.
