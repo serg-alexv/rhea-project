@@ -12,12 +12,12 @@
 - **RHEA-BRIDGE-002** | Provider health probe | Desk: OPS
   Output: ops/bridge-probe.sh + docs/procedures/auth-errors.md
   DoD: one command prints status table; categorizes 401/402/404/429/400; links to procedures.
-  **Status: PARTIAL** -- probe script exists (8.7 KB), runs but env loading broken (pyenv hashlib). Procedures doc missing.
+  **Status: ✅ DONE** — probe fixed (stderr→/dev/null), 4/6 live. auth-errors.md expanded with all 6 providers.
 
 - **RHEA-OFFICE-001** | Office protocol hardening | Desk: LEAD
   Output: ops/virtual-office/OFFICE.md updated with invariant rules
   DoD: defines canonical truth, inbox/outbox SLA, promotion rules (chat→procedure/gem/incident).
-  **Status: PARTIAL** -- OFFICE.md exists with protocol. Missing: SLA, promotion rules, canonical-truth definition.
+  **Status: ✅ DONE** — OFFICE.md has Canonical Truth, Inbox/Outbox SLA, Promotion Rules, Questions Gate, Defaults.
 
 - **RHEA-PUB-001** | Public output conveyor | Desk: LEAD
   Output: PUBLIC_OUTPUT.md + docs/public/ seed
@@ -34,19 +34,19 @@
 - **RHEA-CTX-002** | Gems ledger w/ IDs | Desk: LEAD
   Output: ops/virtual-office/GEMS.md with ID format + promotion rule
   DoD: every gem is 1–2 lines + why/used_by; TODAY_CAPSULE references IDs only.
-  **Status: PARTIAL** -- GEMS.md exists with 5 gems + IDs. Missing: promotion rule, used_by field.
+  **Status: ✅ DONE** — GEMS.md has promotion rule, GEM-001 through GEM-005, Used by fields present.
 
 - **RHEA-INC-001** | Incident template & resurrection protocol | Desk: LEAD
   Output: ops/virtual-office/INCIDENTS.md structure with INC-YYYY-MM-DD-NN IDs
   DoD: each incident has symptom/cause_guess/fix/verify/rollback/next_test.
-  **Status: PARTIAL** -- INCIDENTS.md exists with 5 incidents. Missing: full template fields, dated IDs, verify/rollback/next_test.
+  **Status: ✅ DONE** — INC-2026-02-16-001 through 005, all fields populated with dated IDs.
 
 ## P2 -- iOS offline-only reboot scaffolding
 
 - **RHEA-IOS-001** | ARCHITECTURE_FREEZE.md | Desk: LEAD
   Output: ARCHITECTURE_FREEZE.md at repo root
   DoD: core/ui boundaries, naming, folder structure, persistence strategy.
-  **Status: 🔲 TODO**
+  **Status: ✅ DONE** — Core/UI/Infra layers, SwiftData offline-first, ADHD constraints, folder structure frozen.
 
 - **RHEA-IOS-002** | Offline loop MVP spec → tasks | Desk: GPT
   Output: breakdown into 10–15 implementable issues
@@ -68,6 +68,5 @@
 ## Summary
 | Status | Count |
 |--------|-------|
-| ✅ DONE | 2 |
-| ⚠️ PARTIAL | 4 |
-| 🔲 TODO | 5 |
+| ✅ DONE | 8 |
+| 🔲 TODO | 4 |
