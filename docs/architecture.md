@@ -50,7 +50,7 @@ An iOS app that **reconstructs daily defaults** using cumulative knowledge of hu
 - **Personalization:** Bayesian, Fourier analysis of biorhythms, topological sorting
 
 ## Design Principles
-1. ADHD-first: assume executive dysfunction as default
+1. ADHD-optimized: assume executive dysfunction as default
 2. Passive over active: observe, don't interrogate
 3. Body before mind: morning = sensory contact, not decisions
 4. Minimum effective dose: optimal control theory

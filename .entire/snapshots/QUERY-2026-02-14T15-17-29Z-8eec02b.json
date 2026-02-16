@@ -1,0 +1,37 @@
+{
+  "type": "query",
+  "ts": "2026-02-14T15:17:29Z",
+  "git_rev": "8eec02b",
+  "query_summary": "Session 17: auto-commit switch + per-query memory + 3-product strategic analysis",
+  "changed_files": [
+    ".claude/settings.json",
+    ".claude/settings.local.json",
+    ".entire/snapshots/POST_COMMIT-2026-02-14T14-33-50Z-8eec02b.json",
+    ".entire/snapshots/RHEA_COMMIT-2026-02-14T14-33-50Z-8eec02b.json",
+    "docs/decisions.md",
+    "scripts/rhea_query_persist.sh"
+  ],
+  "docs_sizes": {
+    "user_guide.md": 8891,
+    "prism_paper_outline.md": 4739,
+    "architecture.md": 3166,
+    "api_contracts.md": 2293,
+    "ui_pwa_vision.md": 1888,
+    "core_context.md": 13534,
+    "tribunal_002_memory_architecture.md": 4339,
+    "state.md": 1808,
+    "state_agents_core.md": 8199,
+    "article_gpt_pro_vs_cowork.md": 8901,
+    "MVP_LOOP.md": 1086,
+    "langgraph_architecture.md": 6665,
+    "ROADMAP.md": 429,
+    "tribunal_001_autocommit.md": 6700,
+    "user_examples.md": 2705,
+    "soul.md": 2731,
+    "state_full.md": 9802,
+    "reflection_log.md": 4255,
+    "cost_guide.md": 3035,
+    "models_catalog.md": 7728,
+    "decisions.md": 10644
+  }
+}

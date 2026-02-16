@@ -1,6 +1,6 @@
 # Rhea — User Guide
 
-> Your AI-powered daily rhythm optimizer. ADHD-first, science-backed, zero-questionnaire.
+> Your AI-powered daily rhythm optimizer. ADHD-optimized, science-backed, passive profiling.
 
 ## What is Rhea?
 

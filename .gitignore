@@ -12,3 +12,5 @@ __pycache__/
 .env
 
 .claude/settings.local.json
+
+.entire/snapshots/
