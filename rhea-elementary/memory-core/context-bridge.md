@@ -30,7 +30,7 @@
 4. Check bridge: `export $(grep -v '^#' .env | xargs) && python3 src/rhea_bridge.py status`
 5. Continue from docs/NOW.md priorities
 6. Push main to origin (12 unpushed commits!)
-7. DO NOT ASK QUESTIONS — read CLAUDE.md Execution Protocol
+7. DO NOT ASK QUESTIONS — DO NOT PAUSE FOR "continue?" — execute to completion — read CLAUDE.md Execution Protocol
 
 ## Unfinished Work
 - Azure API key needs refresh (manual Microsoft login required)
