@@ -70,7 +70,7 @@ model_list:
 litellm_settings:
   drop_params: true
   set_verbose: false
-  cache: true
+  cache: false
   num_retries: 3
   request_timeout: 120
 
