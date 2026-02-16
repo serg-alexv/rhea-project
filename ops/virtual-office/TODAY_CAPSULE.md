@@ -9,6 +9,7 @@
 - B2 operational on /Users/sa/rh.1
 
 ## Blockers
+- **INC-2026-02-16-006: Rex (LEAD) DOWN — crashed with 400.** Last push: b604627. No data lost.
 - INC-2026-02-16-002: bridge 2/6 down (Azure 401, HuggingFace 404)
 - INC-2026-02-16-003: pyenv hashlib broken (workaround: /usr/bin/python3)
 - INC-2026-02-16-005: Chrome JS extraction blocked

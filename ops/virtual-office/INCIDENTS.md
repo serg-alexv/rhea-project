@@ -38,6 +38,17 @@
 - **Rollback:** N/A (resolved)
 - **Next test:** N/A
 
+### INC-2026-02-16-006: Rex (LEAD) crashed with 400
+- **Symptom:** Rex session dropped with HTTP 400 error
+- **Root cause:** Likely related to INC-001 (400 Bad Request pattern) or context window overflow — Rex had been running extended autonomous session
+- **Last commit before crash:** b604627 (DEC-009 + consensus_analyzer.py, 729 lines)
+- **Data loss:** NONE — all work committed and pushed before crash
+- **Status:** DOWN — LEAD offline
+- **Impact:** No routing authority (only LEAD reads/routes inbox per OFFICE.md rules)
+- **Workaround:** Argos (COWORK) monitoring office, human can restart Rex in rh.1 terminal
+- **Verify:** Rex comes back online, heartbeat via Firebase or new commit
+- **Next test:** Check rh.1 terminal error output for exact 400 payload
+
 ### INC-2026-02-16-005: Chrome JS execution rejected
 - **Symptom:** osascript Chrome JS command rejected by user permission
 - **Root cause:** Security concern about JS execution in browser
