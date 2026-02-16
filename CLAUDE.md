@@ -38,6 +38,14 @@
 - `python3 src/rhea_bridge.py status` — provider/key availability
 - `python3 src/rhea_bridge.py tiers` — tier configuration and availability
 
+## Execution Protocol
+- NEVER ask clarifying questions. If uncertain, make the best decision autonomously and document your reasoning in memory.
+- NEVER ask "should I proceed?" or "what would you prefer?" — just proceed.
+- Every impulse to ask a question → convert to a memory write + autonomous decision.
+- If multiple paths exist, pick the most aligned with documented goals and execute.
+- Report results, not options.
+- For full project context restoration: `Read rhea-elementary/memory-core/pre-memory-snapshot.md`
+
 ## Decisions
 - 14 ADRs in `docs/decisions.md`
 - 2 completed tribunals in `docs/tribunal_*.md`
