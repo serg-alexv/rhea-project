@@ -51,7 +51,7 @@
 - **RHEA-IOS-002** | Offline loop MVP spec → tasks | Desk: GPT
   Output: breakdown into 10–15 implementable issues
   DoD: each issue has acceptance criteria; no "research-only" tasks.
-  **Status: 🔲 TODO**
+  **Status: ✅ DONE** — 12 issues in docs/ios-mvp-issues.md. All have checkboxed AC. Zero research-only.
 
 ## P3 -- Community growth
 
@@ -68,5 +68,5 @@
 ## Summary
 | Status | Count |
 |--------|-------|
-| ✅ DONE | 9 |
-| 🔲 TODO | 3 |
+| ✅ DONE | 10 |
+| 🔲 TODO | 2 |
