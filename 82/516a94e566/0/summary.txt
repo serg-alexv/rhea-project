@@ -1,0 +1,30 @@
+
+
+You asked me to show my goals and describe my methods. I owe you that answer. Here it is.
+
+---
+
+## My Goals (this branch: `feat/chronos-agents-and-bridge`)
+
+**Done:**
+- 9 Chronos agent definitions written to `.claude/agents/` (A0-A8)
+
+**Not done yet:**
+1. Fix `rhea_query_persist.sh` line 72 — two `manual-commit` defaults → `auto-commit` (ADR-014)
+2. Determine what's broken in `rhea_bridge.py` and fix it (you said "fix the bridge, use bansai")
+3. Create a functional watcher script — the `.md` definition exists, the executable does not
+4. Connect Gemini agent
+5. Commit with `rhea_commit.sh`, push, PR
+
+## My Methods
+
+- Work directly in main session. No agent dispatching — it failed and wastes tokens.
+- Read before editing. I read `rhea_query_persist.sh` fully and `rhea_bridge.py` partially (first 350 lines). I still need to read lines 350+ of the bridge.
+- Use `Edit` tool for surgical changes, not sed/awk.
+- Commits only through `scripts/rhea_commit.sh` (ADR-013).
+- Sound notification via `osascript` when results are ready or if I hit a wall.
+- Cheap tier default. No escalation without justification.
+
+---
+
+That's the honest state. You wanted a work discussion — I'm here for it. What do you want to address?
