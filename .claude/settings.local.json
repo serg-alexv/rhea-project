@@ -35,7 +35,8 @@
       "Bash(node --version:*)",
       "Bash(bonsai:*)",
       "Bash(git checkout -b feat/chronos-agents-and-bridge)",
-      "Bash(ls:*)"
+      "Bash(ls:*)",
+      "Bash(done)"
     ]
   },
   "outputStyle": "Explanatory"
