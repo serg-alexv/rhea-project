@@ -1,0 +1,33 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "9f2cf70d71cb",
+  "session_id": "909713a1-e305-4848-97bf-28c9ad8a9cce",
+  "strategy": "manual-commit",
+  "created_at": "2026-02-13T16:05:04.385556Z",
+  "branch": "feature/mvp-loop",
+  "checkpoints_count": 1,
+  "files_touched": [
+    ".git/hooks/commit-msg",
+    ".git/hooks/post-commit",
+    ".git/hooks/pre-push"
+  ],
+  "agent": "Claude Code",
+  "transcript_identifier_at_start": "be075e85-d186-458a-8829-1c8731e78e98",
+  "token_usage": {
+    "input_tokens": 20,
+    "cache_creation_tokens": 33592,
+    "cache_read_tokens": 355369,
+    "output_tokens": 1831,
+    "api_call_count": 14
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-02-13T16:05:04.357074Z",
+    "agent_lines": 0,
+    "human_added": 60,
+    "human_modified": 15,
+    "human_removed": 0,
+    "total_committed": 60,
+    "agent_percentage": 0
+  },
+  "transcript_path": ".claude/projects/-Users-sa-rh-1/909713a1-e305-4848-97bf-28c9ad8a9cce.jsonl"
+}

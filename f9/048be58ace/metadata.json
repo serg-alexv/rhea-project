@@ -1,0 +1,30 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "f9048be58ace",
+  "strategy": "auto-commit",
+  "branch": "main",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "docs-min",
+    "docs/architecture.md.nested-20260213-150534",
+    "docs/decisions.md.nested-20260213-150534",
+    "docs/models_catalog.md",
+    "docs/state.md.nested-20260213-150534"
+  ],
+  "sessions": [
+    {
+      "metadata": "/f9/048be58ace/0/metadata.json",
+      "transcript": "/f9/048be58ace/0/full.jsonl",
+      "context": "",
+      "content_hash": "/f9/048be58ace/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 3,
+    "cache_creation_tokens": 20033,
+    "cache_read_tokens": 10491,
+    "output_tokens": 11,
+    "api_call_count": 1
+  }
+}
