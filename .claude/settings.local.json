@@ -61,7 +61,10 @@
       "Bash(# Check for existing tokens cat ~/.gitconfig)",
       "Bash(osascript:*)",
       "Bash(log show:*)",
-      "Bash(# Check if any of our Chrome JS calls somehow referenced iCloud paths # Also check if there''s a launch agent or background process doing this launchctl list)"
+      "Bash(# Check if any of our Chrome JS calls somehow referenced iCloud paths # Also check if there''s a launch agent or background process doing this launchctl list)",
+      "WebSearch",
+      "WebFetch(domain:docs.anthropic.com)",
+      "WebFetch(domain:arxiv.org)"
     ]
   },
   "outputStyle": "Explanatory"
