@@ -9,11 +9,11 @@ Chronos Protocol v3 is the orchestration framework for Rhea's 8-agent AI system.
 
 Rhea exists because the modern environment is misaligned with human neurobiology. Every civilization has independently discovered rituals that approximate what hunter-gatherer societies get for free: circadian light exposure, movement-integrated thinking, social bonding at dusk, temperature variation, and sensory contact with natural surfaces.
 
-Our mission: replace unchosen cultural automatisms with a consciously designed environment, personalized to each user's neuroprofile. ADHD-first. Science-backed. Culturally grounded.
+Our mission: replace unchosen cultural automatisms with a consciously designed environment, personalized to each user's neuroprofile. ADHD-optimized. Science-backed. Culturally grounded.
 
 ### Core Principles
 
-1. **ADHD-first** — All UX assumes executive dysfunction as default. If it works for ADHD, it works for everyone.
+1. **ADHD-optimized** — All UX assumes executive dysfunction as default. If it works for ADHD, it works for everyone.
 2. **Passive over active** — Observe behavioral signals (sleep, movement, HRV, screen time), never interrogate with questionnaires.
 3. **Body before mind** — Morning = sensory contact, not decisions. The nervous system must be regulated before the prefrontal cortex is engaged.
 4. **Minimum effective dose** — Optimal control theory. The smallest change that shifts the autonomic state from sympathetic/dorsal to ventral vagal.
@@ -105,10 +105,10 @@ Our mission: replace unchosen cultural automatisms with a consciously designed e
 ---
 
 ### Agent 5: Product Architect
-**Domain:** UX/UI design, feature specification, ADHD-first interfaces, SwiftUI patterns
+**Domain:** UX/UI design, feature specification, ADHD-optimized interfaces, SwiftUI patterns
 
 **Primary Responsibilities:**
-- Design ADHD-first interface patterns (minimal decision load, progressive disclosure, sensory-friendly)
+- Design ADHD-optimized interface patterns (minimal decision load, progressive disclosure, sensory-friendly)
 - Translate Agent 1-4 research into feature specifications
 - Create user journey maps that respect executive dysfunction
 - Define information architecture and navigation that doesn't require working memory
@@ -150,7 +150,7 @@ Our mission: replace unchosen cultural automatisms with a consciously designed e
 **Primary Responsibilities:**
 - Design content strategy leveraging Rhea's unique cultural + science narrative
 - Plan user acquisition funnels (organic: SEO/content, paid: targeted campaigns)
-- Define retention mechanics that align with ADHD-first philosophy (no dark patterns)
+- Define retention mechanics that align with ADHD-optimized philosophy (no dark patterns)
 - Create launch strategy and phased rollout plan
 - Track and optimize key metrics (DAU, retention curves, NPS)
 

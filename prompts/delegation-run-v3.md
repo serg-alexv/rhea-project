@@ -76,7 +76,7 @@ This document defines 5 sample delegation runs that exercise all 8 agents, testi
 - [x] Cultural provenance — A4 cited 7 civilizations + 2 hunter-gatherer societies
 - [x] ADHD compatibility — A3 confirmed zero-decision first 15min
 - [x] Technical feasibility — A6 confirmed lux + HRV implementation
-- [x] Principle alignment — Body before mind ✓, Passive ✓, ADHD-first ✓, Cultural roots ✓
+- [x] Principle alignment — Body before mind ✓, Passive ✓, ADHD-optimized ✓, Cultural roots ✓
 
 **Result:** ✅ Morning Routine Sequence approved for implementation
 
@@ -192,7 +192,7 @@ A4 delivers: Top stories include Japanese ikigai + Okinawan daily structure, Had
 ```
 
 **Step 4 — A8 reviews:**
-- [x] Aligns with ADHD-first (no guilt-based motivation) ✓
+- [x] Aligns with ADHD-optimized (no guilt-based motivation) ✓
 - [x] Cultural provenance in every content piece ✓
 - [x] Science backing for every claim ✓
 - [x] Accessible to all 3 personas ✓

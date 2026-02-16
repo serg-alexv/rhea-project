@@ -1,0 +1,33 @@
+{
+  "label": "POST_COMMIT",
+  "git": "c0d0082",
+  "branch": "main",
+  "timestamp": "2026-02-14T19-41-25Z",
+  "state_md": "# Rhea — compact state\n\n## Mission\nMind Blueprint factory: generate, evaluate, iterate on daily structure models using scientific rhythms, multi-model tribunal, and closed-loop planner.\n\n## 3-Product Architecture (Session 17)\n- **Rhea Core** — toolset, memory, self-evolution engine (foundation layer)\n- **Rhea iOS App** — personal advisor (consumer surface, SwiftUI + HealthKit)\n- **Rhea Commander** — React UI / TUI CLI (power-user surface, deferred to post-MVP)\n\n## Status\n- Architecture: v3 fixed, 8 agents, Chronos Protocol, 3-product layered design\n- Bridge: ✅ live (6 providers, all keys verified, first real tribunal completed)\n- Docs: normalized, user guide updated, upgrade_plan_suggestions.md created\n- Ops: ./rhea CLI + .entire snapshots/logs + per-query persistence (ADR-014)\n- Memory economy: D=63.4 (comfort), T1=150, T2=300 — ADR-010\n- Git: PR#2 merged, main up to date, 14 ADRs, 2 Tribunals completed\n- Entire.io: auto-commit (ADR-014, reversed ADR-012) + rhea_commit.sh wrapper (ADR-013)\n- **Session 17 tribunal:** 7 warnings identified, solutions documented in upgrade_plan_suggestions.md\n\n## Entire.io Integration\n- Strategy: **auto-commit** (ADR-014) — separate `[entire]`-prefixed commits after each agent response\n- Per-query persistence: `scripts/rhea_query_persist.sh` logs every interaction\n- **ALWAYS use `scripts/rhea_commit.sh` instead of raw `git commit`** (ADR-013)\n- Checkpoints on GitHub: entire/checkpoints/v1 branch (JSON metadata)\n- **ACTION REQUIRED**: Install Entire GitHub App at github.com/apps/entire → grant access to rhea-project\n- SSH key for push: ~/.ssh/id_ed25519_rhea\n\n## Next (post-tribunal priority)\n1. **Install Entire GitHub App** → checkpoints visible at entire.io dashboard\n2. **Define minimal user loop** → 5-min interaction design before any code\n3. **Wireframe iOS app** → days 1/7/30 UX\n4. **iOS MVP implementation** → SwiftUI + HealthKit, ONE agent, ONE intervention\n5. **Validate 3 interventions** → measure with beta testers\n6. **Paper: pivot to chronotype alignment** → polyvagal as hypothesis, not centerpiece\n\n## Refs\n- Full state: docs/state_full.md\n- Upgrade plan: docs/upgrade_plan_suggestions.md\n- Decisions: docs/decisions.md (14 ADRs)\n- Architecture: docs/architecture.md",
+  "git_status": "",
+  "snapshot_count": 41,
+  "docs": {
+    "MVP_LOOP.md": 1086,
+    "ROADMAP.md": 429,
+    "api_contracts.md": 2293,
+    "architecture.md": 3170,
+    "article_gpt_pro_vs_cowork.md": 8901,
+    "core_context.md": 13526,
+    "cost_guide.md": 3035,
+    "decisions.md": 10648,
+    "langgraph_architecture.md": 6665,
+    "models_catalog.md": 7728,
+    "prism_paper_outline.md": 4739,
+    "reflection_log.md": 4255,
+    "soul.md": 2724,
+    "state.md": 2270,
+    "state_agents_core.md": 8199,
+    "state_full.md": 9810,
+    "tribunal_001_autocommit.md": 6700,
+    "tribunal_002_memory_architecture.md": 4339,
+    "ui_pwa_vision.md": 1888,
+    "upgrade_plan_suggestions.md": 9056,
+    "user_examples.md": 2705,
+    "user_guide.md": 8894
+  }
+}

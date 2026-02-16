@@ -10,7 +10,7 @@
 **Decision:** Build rhea_bridge.py with 6 providers, 400+ models, tribunal mode.
 **Rationale:** 10-100x cost reduction via free tiers (Azure, DeepSeek, OpenRouter free models). Geographic diversity (US/CN/EU) reduces bias.
 
-## ADR-003: ADHD-first design (2026-02)
+## ADR-003: ADHD-optimized design (2026-02)
 **Context:** Neurotypical UX fails for executive dysfunction. ADHD users are canary in the coal mine — if it works for them, it works for everyone.
 **Decision:** All UX assumes ADHD as default: minimal decision load, passive profiling, body-first morning, no questionnaires.
 **Rationale:** Bruton et al. 2025 (diminished interoception in ADHD), Längle et al. 2025 (HRV/cognitive control).
