@@ -58,7 +58,7 @@
 - **RHEA-COMM-001** | Repo narrative reboot | Desk: LEAD
   Output: VISION.md, WHY_NOW.md, COMMUNITY.md, LEARNING_PATH.md
   DoD: short, 2026-credible, no overclaims, clear contribution paths.
-  **Status: 🔲 TODO**
+  **Status: ✅ DONE** — all 4 files created. Science-grounded, no overclaims, contribution loops defined.
 
 - **RHEA-COMM-002** | Blueprint Literacy ladder | Desk: GPT
   Output: 8–12 micro-lessons + unlock map
@@ -68,5 +68,5 @@
 ## Summary
 | Status | Count |
 |--------|-------|
-| ✅ DONE | 8 |
-| 🔲 TODO | 4 |
+| ✅ DONE | 9 |
+| 🔲 TODO | 3 |
