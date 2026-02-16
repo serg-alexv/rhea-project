@@ -12,16 +12,14 @@
 - **Rollback:** Kill all background processes; re-enable foreground-only mode in orchestration
 - **Next test:** Check Bonsai API logs; verify no stale auth tokens
 
-### INC-2026-02-16-002: Bridge 4/6 providers down
-- **Gemini T0:** 429 quota exceeded → check billing
-- **Gemini T1:** 400 geo-blocked → use OpenRouter bypass
-- **DeepSeek:** 402 insufficient balance → top up
-- **Azure:** 401 bad credentials → rotate key (needs manual Microsoft login)
-- **HuggingFace:** 404 → URL construction bug in bridge code
-- **Status:** KNOWN, DOCUMENTED, WORKAROUND (OpenAI + OpenRouter live)
-- **Verify:** Run `python3 src/rhea_bridge.py status` and confirm OpenAI + OpenRouter responding
+### INC-2026-02-16-002: Bridge 2/6 providers down (was 4/6)
+- **LIVE:** OpenAI ✅, OpenRouter ✅, Gemini ✅, DeepSeek ✅
+- **DOWN:** Azure 401 (bad credentials), HuggingFace 404 (URL bug)
+- **Fixed:** Gemini (keys working), DeepSeek (balance restored), probe stderr bug
+- **Status:** IMPROVED — 4/6 live. See docs/procedures/auth-errors.md for remaining fixes.
+- **Verify:** `bash ops/bridge-probe.sh`
 - **Rollback:** Revert to tier-1 only (OpenAI); disable experimental providers
-- **Next test:** Fix HuggingFace URL construction bug; re-enable Gemini with new billing account
+- **Next test:** Rotate Azure key (manual Microsoft login); fix HuggingFace URL construction
 
 ### INC-2026-02-16-003: Python hashlib broken
 - **Symptom:** pyenv Python 3.11 throws "unsupported hash type blake2b"
@@ -35,10 +33,10 @@
 ### INC-2026-02-16-004: B-2nd rh.1 directory inaccessible
 - **Symptom:** B-2nd agent reports "rh.1/ directory now seems gone or inaccessible"
 - **Root cause:** B-2nd deleted ~/B-2nd which broke its cwd; may be looking at wrong path
-- **Status:** INVESTIGATING (B-2nd is alive, may resolve itself)
-- **Verify:** Send B-2nd `ls -la /Users/sa/rh.1` command; confirm it returns file listing
-- **Rollback:** Restore ~/B-2nd directory from filesystem backup or snapshot
-- **Next test:** Verify B-2nd pwd; check environment variables; re-initialize terminal
+- **Status:** RESOLVED — B2 can read/write /Users/sa/rh.1 (confirmed 22:58 MSK)
+- **Verify:** B2 ran probe, edited files, pushed successfully
+- **Rollback:** N/A (resolved)
+- **Next test:** N/A
 
 ### INC-2026-02-16-005: Chrome JS execution rejected
 - **Symptom:** osascript Chrome JS command rejected by user permission
