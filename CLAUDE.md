@@ -31,6 +31,8 @@
 - All hooks route through `entire hooks claude-code <event>` (`entire` at `/opt/homebrew/bin/entire`)
 - Budget-aware: cheap tier default, escalate only when justified (ADR-008)
 - Tribunal required for: memory policy, checkpoint policy, permission changes, build mods
+- **Every external API call (bridge query, tribunal, agent subquery) MUST be logged immediately and pushed ASAP**
+- **git push at least every 30 minutes** — non-negotiable
 
 ## Testing
 - `bash scripts/rhea/check.sh` — repo invariants (state.md size, .venv/.env not tracked)
