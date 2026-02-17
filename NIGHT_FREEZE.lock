@@ -1,7 +1,0 @@
-# NIGHT FREEZE ACTIVE
-# Created: 2026-02-16T~23:xx UTC by B2
-# DO NOT run destructive commands (rm -rf, git reset --hard, git clean -f)
-# DO NOT delete files outside ops/virtual-office/inbox/
-# DO NOT force-push
-# Remove this file in the morning to resume normal ops.
-FROZEN=true
