@@ -29,5 +29,9 @@ service cloud.firestore {
     match /agents/{agentId} {
       allow read, write: if true;
     }
+    // Health probe
+    match /_health/{docId} {
+      allow read, write: if true;
+    }
   }
 }
