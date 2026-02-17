@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { width: 320px; font-family: -apple-system, system-ui, sans-serif; background: #0d1117; color: #c9d1d9; padding: 12px; }
+    h1 { font-size: 14px; color: #58a6ff; margin-bottom: 8px; }
+    .status { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; font-size: 12px; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; }
+    .dot.alive { background: #3fb950; }
+    .dot.dead { background: #f85149; }
+    .section { background: #161b22; border: 1px solid #30363d; border-radius: 6px; padding: 8px; margin-bottom: 8px; }
+    .section h2 { font-size: 11px; color: #8b949e; text-transform: uppercase; margin-bottom: 4px; }
+    .section p, .section li { font-size: 12px; line-height: 1.4; }
+    ul { list-style: none; padding: 0; }
+    li { padding: 2px 0; border-bottom: 1px solid #21262d; }
+    li:last-child { border: none; }
+    input, button { font-size: 12px; padding: 4px 8px; border-radius: 4px; border: 1px solid #30363d; background: #0d1117; color: #c9d1d9; }
+    button { background: #238636; border-color: #238636; cursor: pointer; color: white; }
+    button:hover { background: #2ea043; }
+    .row { display: flex; gap: 4px; margin-top: 6px; }
+    .row input { flex: 1; }
+    #config { margin-top: 8px; }
+    .badge { background: #1f6feb; color: white; padding: 1px 6px; border-radius: 10px; font-size: 10px; }
+  </style>
+</head>
+<body>
+  <h1>RHEA OFFICE</h1>
+
+  <div class="status">
+    <div class="dot" id="statusDot"></div>
+    <span id="statusText">Checking...</span>
+  </div>
+
+  <div class="section" id="desksSection">
+    <h2>Desks</h2>
+    <ul id="desksList"><li>Loading...</li></ul>
+  </div>
+
+  <div class="section">
+    <h2>Inbox</h2>
+    <ul id="inboxList"><li>Loading...</li></ul>
+  </div>
+
+  <div class="section">
+    <h2>Quick Send</h2>
+    <div class="row">
+      <input id="sendTo" placeholder="To (desk)" value="Rex">
+      <input id="sendMsg" placeholder="Message">
+      <button id="sendBtn">Send</button>
+    </div>
+  </div>
+
+  <div class="section" id="config">
+    <h2>Config</h2>
+    <div class="row">
+      <input id="projectId" placeholder="Firebase Project ID" value="rhea-office-sync">
+      <input id="deskName" placeholder="Your desk name">
+    </div>
+    <div class="row">
+      <button id="saveConfig">Save</button>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
