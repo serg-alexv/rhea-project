@@ -10,53 +10,129 @@ Usage:
   python3 ops/rhea_firebase.py gem <id> <text> <source> <topic>
   python3 ops/rhea_firebase.py incident <id> <symptom> <status>
   python3 ops/rhea_firebase.py status
+  python3 ops/rhea_firebase.py health
 """
 import sys
 import json
+import os
+import time
 import urllib.request
 import urllib.error
 from datetime import datetime, timezone
+from pathlib import Path
 
 PROJ = "rhea-office-sync"
 BASE = f"https://firestore.googleapis.com/v1/projects/{PROJ}/databases/(default)/documents"
+LOG_PATH = Path(__file__).parent.parent / "logs" / "firebase_calls.jsonl"
+
+# --- Error mapping ---
+ERROR_MAP = {
+    400: "BAD_REQUEST — malformed payload or invalid field type",
+    401: "UNAUTHENTICATED — Firestore rules block this or auth token expired",
+    403: "PERMISSION_DENIED — Firestore security rules reject this operation",
+    404: "NOT_FOUND — collection or document does not exist",
+    409: "CONFLICT — document already exists (use PATCH not POST)",
+    429: "RESOURCE_EXHAUSTED — Firestore rate limit hit, backoff needed",
+    500: "INTERNAL — Firestore server error, retry with backoff",
+    503: "UNAVAILABLE — Firestore temporarily down, retry with backoff",
+    504: "DEADLINE_EXCEEDED — Firestore timeout, retry with backoff",
+}
+
+RETRYABLE = {429, 500, 503, 504}
 
 def now_iso():
     return datetime.now(timezone.utc).isoformat()
 
 def sv(val):
-    """Wrap string for Firestore."""
     return {"stringValue": str(val)}
 
 def bv(val):
-    """Wrap bool for Firestore."""
     return {"booleanValue": bool(val)}
-
-def fs_get(collection):
-    url = f"{BASE}/{collection}"
-    req = urllib.request.Request(url)
-    with urllib.request.urlopen(req, timeout=10) as r:
-        return json.loads(r.read())
-
-def fs_patch(collection, doc_id, fields):
-    url = f"{BASE}/{collection}/{doc_id}"
-    data = json.dumps({"fields": fields}).encode()
-    req = urllib.request.Request(url, data=data, method="PATCH",
-                                 headers={"Content-Type": "application/json"})
-    with urllib.request.urlopen(req, timeout=10) as r:
-        return json.loads(r.read())
-
-def fs_post(collection, fields):
-    url = f"{BASE}/{collection}"
-    data = json.dumps({"fields": fields}).encode()
-    req = urllib.request.Request(url, data=data, method="POST",
-                                 headers={"Content-Type": "application/json"})
-    with urllib.request.urlopen(req, timeout=10) as r:
-        return json.loads(r.read())
 
 def extract(field):
     if not field:
         return ""
     return field.get("stringValue", field.get("integerValue", field.get("booleanValue", "")))
+
+def _log_call(method, url, status, latency_ms, error=None, root_cause=None):
+    """Append every Firestore call to JSONL ledger."""
+    LOG_PATH.parent.mkdir(exist_ok=True)
+    entry = {
+        "timestamp": now_iso(),
+        "service": "firestore",
+        "method": method,
+        "url": url.replace(BASE, ""),
+        "status": status,
+        "latency_ms": latency_ms,
+        "error": error,
+        "root_cause": root_cause,
+    }
+    with open(LOG_PATH, "a") as f:
+        f.write(json.dumps(entry) + "\n")
+
+def _classify_error(code, body):
+    """Map HTTP code to human-readable root cause."""
+    mapped = ERROR_MAP.get(code, f"UNKNOWN_{code}")
+    detail = ""
+    try:
+        data = json.loads(body)
+        detail = data.get("error", {}).get("message", "")[:150]
+    except:
+        detail = body[:150] if body else ""
+    return mapped, detail
+
+def _request(method, url, data=None, retries=3, backoff=1.0):
+    """HTTP request with retry, backoff, error mapping, and logging."""
+    headers = {"Content-Type": "application/json"} if data else {}
+    encoded = json.dumps(data).encode() if data else None
+    last_err = None
+
+    for attempt in range(retries):
+        t0 = time.time()
+        try:
+            req = urllib.request.Request(url, data=encoded, method=method, headers=headers)
+            with urllib.request.urlopen(req, timeout=15) as r:
+                body = r.read()
+                latency = int((time.time() - t0) * 1000)
+                _log_call(method, url, r.status, latency)
+                return json.loads(body)
+
+        except urllib.error.HTTPError as e:
+            latency = int((time.time() - t0) * 1000)
+            err_body = e.read().decode()[:300]
+            mapped, detail = _classify_error(e.code, err_body)
+            _log_call(method, url, e.code, latency, error=mapped, root_cause=detail)
+
+            if e.code in RETRYABLE and attempt < retries - 1:
+                wait = backoff * (2 ** attempt)
+                time.sleep(wait)
+                last_err = f"HTTP {e.code}: {mapped}"
+                continue
+            raise RuntimeError(f"HTTP {e.code}: {mapped} | {detail}") from e
+
+        except urllib.error.URLError as e:
+            latency = int((time.time() - t0) * 1000)
+            root = str(e.reason)
+            if "timed out" in root.lower():
+                _log_call(method, url, 504, latency, error="TIMEOUT", root_cause=root)
+                if attempt < retries - 1:
+                    time.sleep(backoff * (2 ** attempt))
+                    last_err = f"TIMEOUT: {root}"
+                    continue
+            else:
+                _log_call(method, url, 0, latency, error="NETWORK_ERROR", root_cause=root)
+            raise RuntimeError(f"Network error: {root}") from e
+
+    raise RuntimeError(f"All {retries} retries failed. Last: {last_err}")
+
+def fs_get(collection):
+    return _request("GET", f"{BASE}/{collection}")
+
+def fs_patch(collection, doc_id, fields):
+    return _request("PATCH", f"{BASE}/{collection}/{doc_id}", {"fields": fields})
+
+def fs_post(collection, fields):
+    return _request("POST", f"{BASE}/{collection}", {"fields": fields})
 
 # --- Commands ---
 
@@ -69,12 +145,6 @@ def cmd_heartbeat(desk, status):
     print(f"[heartbeat] {desk} → {status}")
 
 def cmd_send(from_desk, to_desk, message):
-    # Support structured JSON payloads
-    try:
-        payload = json.loads(message)
-    except (json.JSONDecodeError, TypeError):
-        payload = None
-
     fields = {
         "from": sv(from_desk),
         "to": sv(to_desk),
@@ -93,7 +163,6 @@ def cmd_inbox(desk):
         f = doc.get("fields", {})
         if extract(f.get("to")) == desk and not extract(f.get("read")):
             print(f"  [{extract(f.get('from',''))}] {extract(f.get('message',''))[:120]}")
-            # Mark read via patch
             doc_path = doc["name"].split("/documents/")[1]
             col, doc_id = doc_path.rsplit("/", 1)
             f["read"] = bv(True)
@@ -126,7 +195,6 @@ def cmd_incident(inc_id, symptom, status):
 def cmd_status():
     print("RHEA FIREBASE OFFICE STATUS")
     print("=" * 50)
-    # Agents
     try:
         data = fs_get("agents")
         docs = data.get("documents", [])
@@ -136,7 +204,6 @@ def cmd_status():
             print(f"  {extract(f.get('desk','')):10s} {extract(f.get('status','')):10s} {extract(f.get('last_seen',''))}")
     except Exception as e:
         print(f"  Error: {e}")
-    # Inbox unread
     try:
         data = fs_get("inbox")
         docs = data.get("documents", [])
@@ -144,18 +211,60 @@ def cmd_status():
         print(f"\nInbox: {len(docs)} total, {unread} unread")
     except Exception as e:
         print(f"  Inbox error: {e}")
-    # Gems
     try:
         data = fs_get("gems")
         print(f"Gems: {len(data.get('documents', []))}")
     except:
         print("Gems: 0")
-    # Incidents
     try:
         data = fs_get("incidents")
         print(f"Incidents: {len(data.get('documents', []))}")
     except:
         print("Incidents: 0")
+
+def cmd_health():
+    """Firestore health probe — tests read + write + latency."""
+    print("FIRESTORE HEALTH PROBE")
+    print("=" * 50)
+    # Read probe
+    try:
+        t0 = time.time()
+        fs_get("agents")
+        ms = int((time.time() - t0) * 1000)
+        print(f"  READ   ✅  {ms}ms")
+    except Exception as e:
+        print(f"  READ   ❌  {e}")
+
+    # Write probe
+    try:
+        t0 = time.time()
+        fs_patch("_health", "probe", {
+            "ts": sv(now_iso()),
+            "source": sv("health-check"),
+        })
+        ms = int((time.time() - t0) * 1000)
+        print(f"  WRITE  ✅  {ms}ms")
+    except Exception as e:
+        print(f"  WRITE  ❌  {e}")
+
+    # Auth check (no secrets in env — we use open rules)
+    has_creds = bool(os.environ.get("GOOGLE_APPLICATION_CREDENTIALS"))
+    print(f"  AUTH   {'⚠️  ADC set (unused — open rules)' if has_creds else '✅  No secrets needed (open rules)'}")
+
+    # Log file check
+    if LOG_PATH.exists():
+        lines = sum(1 for _ in open(LOG_PATH))
+        print(f"  LOG    ✅  {lines} entries in {LOG_PATH}")
+    else:
+        print(f"  LOG    ⚠️  No log file yet (created on first call)")
+
+    # Secrets hygiene
+    env_keys = [k for k in os.environ if "KEY" in k.upper() or "SECRET" in k.upper() or "TOKEN" in k.upper() or "PASSWORD" in k.upper()]
+    if env_keys:
+        print(f"  SECRETS ⚠️  {len(env_keys)} sensitive env vars detected: {', '.join(env_keys[:5])}")
+        print(f"          Ensure none are logged or sent to Firestore.")
+    else:
+        print(f"  SECRETS ✅  No sensitive env vars in scope")
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
@@ -178,12 +287,11 @@ if __name__ == "__main__":
             cmd_incident(args[0], args[1], args[2])
         elif cmd == "status":
             cmd_status()
+        elif cmd == "health":
+            cmd_health()
         else:
             print(__doc__)
             sys.exit(1)
-    except urllib.error.HTTPError as e:
-        print(f"[error] HTTP {e.code}: {e.read().decode()[:200]}")
-        sys.exit(1)
     except Exception as e:
         print(f"[error] {e}")
         sys.exit(1)
