@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.rhea.rex-pager-wake</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>/usr/bin/python3</string>
+        <string>/Users/sa/rh.1/ops/rex_pager.py</string>
+        <string>wake</string>
+    </array>
+    <key>StartCalendarInterval</key>
+    <dict>
+        <!-- 03:00 MSK = 00:00 UTC -->
+        <key>Hour</key>
+        <integer>3</integer>
+        <key>Minute</key>
+        <integer>0</integer>
+    </dict>
+    <key>StandardOutPath</key>
+    <string>/tmp/rex-pager-wake.log</string>
+    <key>StandardErrorPath</key>
+    <string>/tmp/rex-pager-wake.log</string>
+    <key>RunAtLoad</key>
+    <false/>
+</dict>
+</plist>

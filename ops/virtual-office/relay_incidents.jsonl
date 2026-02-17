@@ -1,0 +1,2 @@
+{"incident_id": "INC-RELAY-19c6c43578e-c", "timestamp": "2026-02-17T15:41:18.606671+00:00", "message_id": null, "seq": null, "source": null, "target": null, "type": null, "reason": "effect intent rejected: stale lease token 1 != 999"}
+{"incident_id": "INC-RELAY-19c6c43578f-2", "timestamp": "2026-02-17T15:41:18.607912+00:00", "message_id": null, "seq": null, "source": null, "target": null, "type": null, "reason": "effect intent rejected: stale lease token 1 != 999"}

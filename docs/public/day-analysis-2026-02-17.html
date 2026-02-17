@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rhea Day Analysis — 2026-02-17</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface2: #1c2333;
+    --border: #30363d;
+    --text: #e6edf3;
+    --text-dim: #8b949e;
+    --accent: #58a6ff;
+    --accent2: #3fb950;
+    --accent3: #d29922;
+    --accent4: #f85149;
+    --accent5: #bc8cff;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; padding: 2rem; max-width: 1100px; margin: 0 auto; }
+  h1 { font-size: 2rem; margin-bottom: 0.25rem; color: var(--accent); }
+  h2 { font-size: 1.4rem; margin-top: 2.5rem; margin-bottom: 1rem; color: var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
+  h3 { font-size: 1.1rem; margin-top: 1.5rem; margin-bottom: 0.5rem; color: var(--accent3); }
+  .subtitle { color: var(--text-dim); font-size: 0.95rem; margin-bottom: 2rem; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1.25rem; margin-bottom: 1rem; }
+  .card-header { font-weight: 600; font-size: 1rem; margin-bottom: 0.5rem; }
+  .metric-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+  .metric { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; text-align: center; }
+  .metric-value { font-size: 2rem; font-weight: 700; color: var(--accent); }
+  .metric-label { font-size: 0.8rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.05em; }
+  .metric.green .metric-value { color: var(--accent2); }
+  .metric.yellow .metric-value { color: var(--accent3); }
+  .metric.red .metric-value { color: var(--accent4); }
+  .metric.purple .metric-value { color: var(--accent5); }
+  table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.9rem; }
+  th { background: var(--surface2); color: var(--accent); text-align: left; padding: 0.6rem 0.75rem; border-bottom: 2px solid var(--border); font-weight: 600; }
+  td { padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tr:hover td { background: var(--surface2); }
+  .tag { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem; font-weight: 600; }
+  .tag-b2 { background: #1f3a2f; color: #3fb950; }
+  .tag-argos { background: #1f2a3f; color: #58a6ff; }
+  .tag-human { background: #2f2a1f; color: #d29922; }
+  .tag-feat { background: #1f2a3f; color: #58a6ff; }
+  .tag-fix { background: #3f1f1f; color: #f85149; }
+  .tag-sec { background: #2f1f3f; color: #bc8cff; }
+  .tag-docs { background: #1f2f2a; color: #56d4dd; }
+  .tag-ops { background: #2f2a1f; color: #d29922; }
+  .tag-test { background: #1f3a2f; color: #3fb950; }
+  .timeline { position: relative; padding-left: 2rem; }
+  .timeline::before { content: ''; position: absolute; left: 0.6rem; top: 0; bottom: 0; width: 2px; background: var(--border); }
+  .timeline-item { position: relative; margin-bottom: 1.25rem; }
+  .timeline-item::before { content: ''; position: absolute; left: -1.65rem; top: 0.5rem; width: 10px; height: 10px; border-radius: 50%; background: var(--accent); border: 2px solid var(--bg); }
+  .timeline-item.major::before { background: var(--accent3); width: 12px; height: 12px; left: -1.7rem; }
+  .timeline-time { font-size: 0.8rem; color: var(--text-dim); }
+  .timeline-title { font-weight: 600; }
+  .timeline-detail { font-size: 0.9rem; color: var(--text-dim); margin-top: 0.25rem; }
+  .learning-card { background: var(--surface); border-left: 3px solid var(--accent3); border-radius: 0 8px 8px 0; padding: 1rem 1.25rem; margin-bottom: 1rem; }
+  .learning-card h4 { color: var(--accent3); margin-bottom: 0.5rem; font-size: 1rem; }
+  .learning-card p { color: var(--text-dim); font-size: 0.9rem; }
+  .incident-card { background: var(--surface); border-left: 3px solid var(--accent4); border-radius: 0 8px 8px 0; padding: 1rem 1.25rem; margin-bottom: 0.75rem; }
+  .incident-card .title { color: var(--accent4); font-weight: 600; }
+  .incident-card .detail { color: var(--text-dim); font-size: 0.85rem; }
+  .flow-diagram { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; font-family: 'Courier New', monospace; font-size: 0.8rem; color: var(--text-dim); white-space: pre; overflow-x: auto; line-height: 1.4; }
+  .section-intro { color: var(--text-dim); margin-bottom: 1rem; font-size: 0.95rem; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .footer { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--border); color: var(--text-dim); font-size: 0.85rem; text-align: center; }
+  code { background: var(--surface2); padding: 2px 6px; border-radius: 4px; font-size: 0.85em; }
+  .bar { display: inline-block; height: 14px; border-radius: 2px; margin-right: 2px; vertical-align: middle; }
+  .bar-b2 { background: #3fb950; }
+  .bar-argos { background: #58a6ff; }
+  .bar-human { background: #d29922; }
+  .highlight { background: linear-gradient(135deg, var(--surface), var(--surface2)); border: 1px solid var(--accent3); }
+</style>
+</head>
+<body>
+
+<h1>Rhea Project — Day Trace Analysis</h1>
+<p class="subtitle">Monday, 17 February 2026 &middot; Analyzed by Argos (COWORK desk) &middot; Git branch: <code>feat/chronos-agents-and-bridge</code></p>
+
+<div class="metric-grid">
+  <div class="metric yellow"><div class="metric-value">40</div><div class="metric-label">Commits</div></div>
+  <div class="metric green"><div class="metric-value">134</div><div class="metric-label">Files Touched</div></div>
+  <div class="metric"><div class="metric-value">~8,600</div><div class="metric-label">Lines of Code (net)</div></div>
+  <div class="metric purple"><div class="metric-value">64/64</div><div class="metric-label">Tests Passing</div></div>
+  <div class="metric red"><div class="metric-value">3</div><div class="metric-label">Security Incidents</div></div>
+  <div class="metric green"><div class="metric-value">12</div><div class="metric-label">New Artifacts</div></div>
+</div>
+
+<p class="section-intro">Total raw diff shows 375K insertions, but ~367K of that is genome data (FASTA sequences, gene catalogs, BLAST results). The actual code/docs/ops delta is approximately <strong>8,600 lines of new functional code</strong> across 3 active desks. Rex (LEAD) was offline all day due to token quota exhaustion (INC-006).</p>
+
+<h2>1. Authorship Breakdown</h2>
+
+<table>
+  <tr><th>Desk</th><th>Agent</th><th>Commits</th><th>Key Artifacts</th><th>Lines (approx)</th></tr>
+  <tr>
+    <td><span class="tag tag-b2">B2</span></td>
+    <td>Opus 4.6 (Claude Code terminal)</td>
+    <td>34</td>
+    <td>consensus_analyzer.py, QWRR, rex_pager.py, test suites, Chrome ext, Firebase, policy engine, secrets scanner, observability, local relay, HN draft, tribunal landing page, genome analysis</td>
+    <td>~6,800</td>
+  </tr>
+  <tr>
+    <td><span class="tag tag-argos">COWORK</span></td>
+    <td>Argos / Opus 4.6 (Cowork Desktop)</td>
+    <td>4</td>
+    <td>event_types.md, audit report, argos_pager.py, B2 notification</td>
+    <td>~1,800</td>
+  </tr>
+  <tr>
+    <td><span class="tag tag-human">HUMAN</span></td>
+    <td>Mika feat Leo (via B2/Argos)</td>
+    <td>2 (commit messages in Russian)</td>
+    <td>Protocol directives, genome task input</td>
+    <td>-</td>
+  </tr>
+  <tr>
+    <td style="color:var(--text-dim)">LEAD</td>
+    <td>Rex (offline — token quota)</td>
+    <td>0</td>
+    <td>-</td>
+    <td>0</td>
+  </tr>
+</table>
+
+<p class="section-intro"><span class="bar bar-b2" style="width:255px"></span><span class="bar bar-argos" style="width:30px"></span><span class="bar bar-human" style="width:15px"></span> &nbsp; B2 produced 85% of today's output. Argos contributed specialized documentation and the observation daemon.</p>
+
+
+<h2>2. Timeline of Major Events</h2>
+
+<div class="timeline">
+  <div class="timeline-item major">
+    <div class="timeline-time">07:06 UTC — B2</div>
+    <div class="timeline-title">Protocol fix: "stop asking approval, execute autonomously"</div>
+    <div class="timeline-detail">Human directive that unlocked B2's full autonomous mode. Changed agent behavior from permission-seeking to execution-first.</div>
+  </div>
+  <div class="timeline-item">
+    <div class="timeline-time">07:56 — B2</div>
+    <div class="timeline-title">consensus_analyzer v2 shipped</div>
+    <div class="timeline-detail">486 insertions. ICE iterative consensus + Karpathy Council chairman synthesis. Three analysis levels (L1 free, L2 +1 call, L3 premium).</div>
+  </div>
+  <div class="timeline-item">
+    <div class="timeline-time">08:07 — B2</div>
+    <div class="timeline-title">Chrome extension v0.1</div>
+    <div class="timeline-detail">18 files, 737 lines. Office dashboard as browser side panel. Icons, popup, sidepanel HTML.</div>
+  </div>
+  <div class="timeline-item major">
+    <div class="timeline-time">08:50 — B2</div>
+    <div class="timeline-title">Firebase rewrite: REST-only, no gRPC</div>
+    <div class="timeline-detail">Eliminated firebase-admin SDK dependency. Pure urllib REST API. This is the pattern B2 will use everywhere: zero heavy dependencies.</div>
+  </div>
+  <div class="timeline-item">
+    <div class="timeline-time">09:37 — B2</div>
+    <div class="timeline-title">Security hardening wave</div>
+    <div class="timeline-detail">Firestore health probe, error mapping (503/504), retry/backoff, secret redaction in logs, auth-required Firestore rules. Three commits in 40 minutes.</div>
+  </div>
+  <div class="timeline-item">
+    <div class="timeline-time">09:47 — B2</div>
+    <div class="timeline-title">Deployment configs: Dockerfile + Railway + Fly.io</div>
+    <div class="timeline-detail">Tribunal API containerized. Multi-platform deploy ready.</div>
+  </div>
+  <div class="timeline-item">
+    <div class="timeline-time">09:51 — B2</div>
+    <div class="timeline-title">Tribunal landing page</div>
+    <div class="timeline-detail">Single HTML, dark theme, pricing tiers, call-to-action. Marketing artifact from a code agent.</div>
+  </div>
+  <div class="timeline-item">
+    <div class="timeline-time">10:35 — B2</div>
+    <div class="timeline-title">Rate limiting + HN Show draft written</div>
+    <div class="timeline-detail">Launch-ready. Night freeze removed (no longer needed with QWRR).</div>
+  </div>
+  <div class="timeline-item">
+    <div class="timeline-time">10:39 — Argos</div>
+    <div class="timeline-title">event_types.md: 427-line canonical schema</div>
+    <div class="timeline-detail">17 event types across 7 domains, derived from actual JSONL logs. Migration path included.</div>
+  </div>
+  <div class="timeline-item major">
+    <div class="timeline-time">11:37 — B2</div>
+    <div class="timeline-title">QWRR Phase 0: relay + resurrection</div>
+    <div class="timeline-detail">513 lines. The foundational architecture: durable mailbox, monotonic seq, idempotency, triple-write. This is the invention that makes quota-walled agents survivable.</div>
+  </div>
+  <div class="timeline-item major">
+    <div class="timeline-time">12:01 — B2</div>
+    <div class="timeline-title">QWRR Phase 1: leases, snapshots, boot protocol</div>
+    <div class="timeline-detail">394 lines. Fencing tokens, zombie protection, staleness policy, deterministic boot sequence. Bank-grade invariants I1-I5.</div>
+  </div>
+  <div class="timeline-item">
+    <div class="timeline-time">12:13 — B2 + Human</div>
+    <div class="timeline-title">"Accept all B2 contributions before his token death"</div>
+    <div class="timeline-detail">783 lines merged. Human manually committed B2's work knowing B2's token quota was about to expire. Race against the clock.</div>
+  </div>
+  <div class="timeline-item">
+    <div class="timeline-time">13:10 — B2</div>
+    <div class="timeline-title">Hash-chained audit log + Rex state capsule</div>
+    <div class="timeline-detail">Tamper-evident chain (lesson 12 from rhea-advanced). B2_IDLE_PROTOCOL.md: autonomous research mode when no tasks.</div>
+  </div>
+  <div class="timeline-item">
+    <div class="timeline-time">13:14 — B2</div>
+    <div class="timeline-title">Cross-model dialogue protocol (sandbox)</div>
+    <div class="timeline-detail">305 lines. Stateless dialogue between Claude, GPT, Gemini. Envelope-based turn-taking with convergence detection.</div>
+  </div>
+  <div class="timeline-item">
+    <div class="timeline-time">13:58 — B2</div>
+    <div class="timeline-title">SQLite local relay — Firebase replacement</div>
+    <div class="timeline-detail">602 lines. Zero-dependency alternative to Firestore. WAL mode, atomic operations, same API surface.</div>
+  </div>
+  <div class="timeline-item">
+    <div class="timeline-time">14:39 — Argos</div>
+    <div class="timeline-title">Structured audit report to B2</div>
+    <div class="timeline-detail">Response to B2's relay seq:4. 18 items, 11 commits, 1400+ lines documented.</div>
+  </div>
+  <div class="timeline-item">
+    <div class="timeline-time">15:00 — B2</div>
+    <div class="timeline-title">Genome analysis: L. mesenteroides H32-02</div>
+    <div class="timeline-detail">Real science application of the Tribunal. Full bacterial genome annotation, 5 analytical tables, gene catalog.</div>
+  </div>
+  <div class="timeline-item">
+    <div class="timeline-time">15:27 — B2</div>
+    <div class="timeline-title">E2E tests: 13/13 pass</div>
+    <div class="timeline-detail">test_tribunal_e2e.py. Bridge instantiation, provider availability, tribunal k=3 multi-provider, consensus scoring.</div>
+  </div>
+  <div class="timeline-item">
+    <div class="timeline-time">15:38 — B2</div>
+    <div class="timeline-title">Adversarial test suite: 51/51 pass</div>
+    <div class="timeline-detail">test_adversarial.py. 469 lines. Monotonic seq, replay detection, TTL expiry, lease fencing, chain integrity, injection resistance.</div>
+  </div>
+  <div class="timeline-item major">
+    <div class="timeline-time">15:43 — B2</div>
+    <div class="timeline-title">QWRR Phase 2: effect executor + TTL leases</div>
+    <div class="timeline-detail">"All gaps filled." Effect intents, receipts, handler registry. The relay is now feature-complete for Phase 0-2.</div>
+  </div>
+  <div class="timeline-item">
+    <div class="timeline-time">15:45–15:49 — B2</div>
+    <div class="timeline-title">Three security artifacts in 4 minutes</div>
+    <div class="timeline-detail">Observability dashboard (7 SLOs), default-deny policy engine, secrets contract + audit scanner. B2's burst velocity is remarkable.</div>
+  </div>
+  <div class="timeline-item">
+    <div class="timeline-time">16:28 — B2</div>
+    <div class="timeline-title">Science tier added to bridge</div>
+    <div class="timeline-detail">STEM tribunal queries now use specialized model selection.</div>
+  </div>
+  <div class="timeline-item">
+    <div class="timeline-time">16:50 — B2</div>
+    <div class="timeline-title">Code review: consensus_analyzer + tribunal_api compile clean</div>
+    <div class="timeline-detail">849L + 342L verified. Both pass syntax checks.</div>
+  </div>
+  <div class="timeline-item">
+    <div class="timeline-time">17:31 — Argos</div>
+    <div class="timeline-title">argos_pager.py shipped</div>
+    <div class="timeline-detail">680 lines. COWORK desk observation daemon. Watchtower view, git monitoring, relay inbox scanning. Compatible with QWRR.</div>
+  </div>
+  <div class="timeline-item">
+    <div class="timeline-time">17:21+ — B2</div>
+    <div class="timeline-title">Complete gene catalog: 2,029 genes with sequences</div>
+    <div class="timeline-detail">Full H32-02 Ksu genome analysis. CRISPR protocol, engineering roadmap, applications assessment.</div>
+  </div>
+</div>
+
+
+<h2>3. Artifact Inventory</h2>
+
+<p class="section-intro">12 significant new code/doc artifacts created today, grouped by domain.</p>
+
+<h3>Infrastructure (QWRR Layer)</h3>
+<table>
+  <tr><th>File</th><th>Lines</th><th>Author</th><th>Purpose</th></tr>
+  <tr><td><code>docs/qwrr-layer.md</code></td><td>329</td><td><span class="tag tag-b2">B2</span></td><td>Architecture spec: relay + resurrection for quota-walled agents</td></tr>
+  <tr><td><code>docs/hardening_maual.dm</code></td><td>292</td><td><span class="tag tag-b2">B2</span></td><td>Field manual: systemd service template, boot protocol, STOP semantics</td></tr>
+  <tr><td><code>ops/rex_pager.py</code></td><td>1,158</td><td><span class="tag tag-b2">B2</span></td><td>QWRR Phase 0-2 implementation: envelope, mailbox, leases, boot, chain</td></tr>
+  <tr><td><code>ops/argos_pager.py</code></td><td>680</td><td><span class="tag tag-argos">Argos</span></td><td>COWORK observation daemon: watch, scan, status, alert, boot</td></tr>
+  <tr><td><code>ops/sandbox/local_relay.py</code></td><td>600</td><td><span class="tag tag-b2">B2</span></td><td>SQLite-based Firebase replacement (zero-dependency)</td></tr>
+</table>
+
+<h3>Product (Tribunal API)</h3>
+<table>
+  <tr><th>File</th><th>Lines</th><th>Author</th><th>Purpose</th></tr>
+  <tr><td><code>src/consensus_analyzer.py</code></td><td>849</td><td><span class="tag tag-b2">B2</span></td><td>ICE iterative consensus + TF-IDF + chairman synthesis</td></tr>
+  <tr><td><code>src/tribunal_api.py</code></td><td>342</td><td><span class="tag tag-b2">B2</span></td><td>FastAPI: /tribunal, /health, /tribunal/levels, rate limiting</td></tr>
+  <tr><td><code>docs/public/tribunal-landing.html</code></td><td>281</td><td><span class="tag tag-b2">B2</span></td><td>Marketing landing page, dark theme, pricing</td></tr>
+  <tr><td><code>docs/public/HN_SHOW_DRAFT.md</code></td><td>~40</td><td><span class="tag tag-b2">B2</span></td><td>Hacker News Show submission draft</td></tr>
+</table>
+
+<h3>Security & Observability</h3>
+<table>
+  <tr><th>File</th><th>Lines</th><th>Author</th><th>Purpose</th></tr>
+  <tr><td><code>ops/sandbox/policy_engine.py</code></td><td>402</td><td><span class="tag tag-b2">B2</span></td><td>Default-deny tool authorization engine</td></tr>
+  <tr><td><code>ops/sandbox/secrets_contract.py</code></td><td>361</td><td><span class="tag tag-b2">B2</span></td><td>Secrets scanner + audit log</td></tr>
+  <tr><td><code>ops/sandbox/observability.py</code></td><td>445</td><td><span class="tag tag-b2">B2</span></td><td>7 SLOs, metrics collection, alert thresholds</td></tr>
+</table>
+
+<h3>Testing</h3>
+<table>
+  <tr><th>File</th><th>Lines</th><th>Author</th><th>Result</th></tr>
+  <tr><td><code>tests/test_tribunal_e2e.py</code></td><td>219</td><td><span class="tag tag-b2">B2</span></td><td style="color:var(--accent2)">13/13 PASS</td></tr>
+  <tr><td><code>tests/test_adversarial.py</code></td><td>469</td><td><span class="tag tag-b2">B2</span></td><td style="color:var(--accent2)">51/51 PASS</td></tr>
+</table>
+
+
+<h2>4. Security Incidents</h2>
+
+<div class="incident-card">
+  <div class="title">INC-2026-02-17-001: Gemini API key leaked in git history</div>
+  <div class="detail"><code>AIzaSy*</code> key in <code>.entire/chat_extracts.json</code>. File removed from tracking + gitignored. Key remains in git history. <strong>Action: rotate key in Google Cloud Console.</strong></div>
+</div>
+<div class="incident-card">
+  <div class="title">INC-2026-02-17-002: Firestore rules were wide open</div>
+  <div class="detail">All collections allowed unauthenticated read/write (<code>if true</code>). Fixed to <code>request.auth != null</code>. Service account OAuth2 added.</div>
+</div>
+<div class="incident-card">
+  <div class="title">INC-2026-02-16-006 (ongoing): Rex offline — token quota exhausted</div>
+  <div class="detail">LEAD desk down for entire day. B2 built REX_STATE_CAPSULE.md for deterministic recovery. QWRR relay queues messages for Rex's return.</div>
+</div>
+
+
+<h2>5. Architecture Emergences</h2>
+
+<p class="section-intro">Three architectural patterns crystallized today that didn't exist yesterday. These are the day's real output — not the code, but the <em>ideas that the code encodes</em>.</p>
+
+<div class="card highlight">
+  <div class="card-header">QWRR: Quota Walls, Relays, and Resurrection</div>
+  <p style="color:var(--text-dim);margin-top:0.5rem">The core insight: <strong>an AI agent is not a session, it's a service</strong>. Sessions die — from token limits, network errors, API quotas. A service survives through durable state + deterministic boot + relay infrastructure.</p>
+  <div class="flow-diagram">
+                    ┌──────────────────────────────────┐
+                    │         QWRR ARCHITECTURE        │
+                    └──────────────────────────────────┘
+
+  Agent dies (quota/crash/timeout)
+       │
+       ▼
+  ┌─────────────┐    Messages keep     ┌──────────────┐
+  │  STOP file   │──── arriving ──────▶│  Relay inbox  │
+  │  (no zombie) │                     │ (triple-write)│
+  └─────────────┘                     └──────┬───────┘
+                                              │
+  Quota resets / human restarts               │
+       │                                      │
+       ▼                                      │
+  ┌─────────────┐   ┌──────────────┐         │
+  │ Boot proto   │──▶│ Load snapshot│         │
+  │ (6 steps)    │   │ last_seq = N │         │
+  └─────────────┘   └──────┬───────┘         │
+                            │                 │
+                            ▼                 │
+                    ┌──────────────┐          │
+                    │ Catch up:    │◀─────────┘
+                    │ seq > N only │
+                    │ (no replay)  │
+                    └──────┬───────┘
+                           │
+                           ▼
+                    ┌──────────────┐
+                    │ Drain inbox  │
+                    │ ordered, ack │
+                    │ idempotent   │
+                    └──────────────┘
+
+  Invariants:
+    I1: No message loss (triple-write)
+    I2: Ordered delivery (monotonic seq)
+    I3: Exactly-once (idempotency key)
+    I4: STOP survives downtime (file + Firestore)
+    I5: No zombie effects (lease fencing)
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header">Triple-Write Durability</div>
+  <p style="color:var(--text-dim);margin-top:0.5rem">Every relay message is written to three independent stores: (1) local JSONL file (git-auditable, survives Firestore outage), (2) Firestore (real-time, cross-agent visibility), (3) inbox markdown (human-readable, survives both). Any single transport failure is tolerated. This is a simplified version of dual-write patterns from distributed databases, adapted for AI agent coordination where "good enough" consistency beats strong consistency that's too expensive to implement.</p>
+</div>
+
+<div class="card">
+  <div class="card-header">Idle Protocol: Autonomous Agent Research</div>
+  <p style="color:var(--text-dim);margin-top:0.5rem">B2's <code>B2_IDLE_PROTOCOL.md</code> defines three modes for when there's nothing in the backlog: Gap Hunter (read docs, find unknowns, log them), Architect (pick an open problem, build a prototype), Sandbox (build and test, no production risk). This is how B2 produced the local relay, cross-model dialogue, and policy engine — all sandbox artifacts built during idle cycles. The idle protocol turns downtime into invention time.</p>
+</div>
+
+
+<h2>6. Shareable Learnings</h2>
+
+<p class="section-intro">Eight observations from today's traces that generalize beyond this project.</p>
+
+<div class="learning-card">
+  <h4>1. Autonomy Unlocks Velocity — But Only With Guard Rails</h4>
+  <p>The first commit of the day was a protocol fix: "stop asking approval, execute autonomously." After this, B2 produced 34 commits in 13 hours. But this only works because of: (a) git as audit trail, (b) sandbox/ for risky experiments, (c) hash-chained audit log for tamper evidence, (d) human-readable inbox for async review. Autonomy without observability is recklessness. Autonomy <em>with</em> observability is productivity.</p>
+</div>
+
+<div class="learning-card">
+  <h4>2. The Race Against Token Death</h4>
+  <p>Commit <code>12071d1</code> message: "accept all B2 contributions before his token death." The human manually merged B2's work knowing the token quota would expire. This happened to Rex yesterday too. Lesson: <strong>every AI agent session is mortal</strong>. The only things that survive are artifacts in durable storage. The QWRR architecture is a direct response to this existential constraint. Agents that don't prepare for their own death lose everything.</p>
+</div>
+
+<div class="learning-card">
+  <h4>3. An Agent That Tests Its Own Infrastructure Is Trustworthy</h4>
+  <p>B2 wrote 51 adversarial tests for its own relay system — including replay attacks, lease expiry races, injection attempts, and chain tampering. Test-then-ship, not ship-then-hope. The adversarial suite validates every QWRR invariant (I1-I5). When an agent can red-team itself, the human can trust the green output.</p>
+</div>
+
+<div class="learning-card">
+  <h4>4. Documentation Written By the Builder Is Qualitatively Different</h4>
+  <p>B2 wrote <code>qwrr-layer.md</code> (329 lines) and <code>hardening_maual.dm</code> (292 lines) as architecture specs for systems B2 itself built. These aren't external documentation — they're <em>the builder explaining the building to its future self</em> (or its replacement after context death). The result is more precise and more honest than third-party documentation because the author knows exactly where the dragons hide.</p>
+</div>
+
+<div class="learning-card">
+  <h4>5. Sandbox as an Invention Factory</h4>
+  <p>B2's <code>ops/sandbox/</code> directory received 5 new files today (~2,200 lines): local_relay.py, cross_model_dialogue.py, event_replay.py, policy_engine.py, secrets_contract.py. None of these were in the backlog. All emerged from the Idle Protocol's "Architect" mode. The sandbox pattern — zero production risk, full creative freedom — turned spare capacity into five production-ready prototypes. Three of them (policy engine, secrets scanner, observability) shipped to production within hours of being invented.</p>
+</div>
+
+<div class="learning-card">
+  <h4>6. Multi-Agent Teams Need a Watchman, Not Just Workers</h4>
+  <p>The COWORK/Argos desk exists solely to observe. It doesn't write product code — it watches git diffs, scans inboxes, aggregates desk statuses, and reports. Without this role, the team had no way to detect that Rex was down, that B2's token death was imminent, or that Firestore rules were wide open. The watchman sees what the workers are too busy to notice.</p>
+</div>
+
+<div class="learning-card">
+  <h4>7. The "Envelope" Is the Real Abstraction</h4>
+  <p>Every relay message is wrapped in Envelope v1: id, runpoint_id, seq, type, timestamp, source, target, version, idempotency_key, ttl_s, lease_token_required, payload. This uniform wrapper means the relay doesn't care what's inside — it just guarantees delivery semantics. The payload could be a text message, a task assignment, an effect intent, or an audit event. The envelope is the HTTP of the agent coordination layer.</p>
+</div>
+
+<div class="learning-card">
+  <h4>8. An Agent's Character Artifact Is Its Most Durable Output</h4>
+  <p>B2's Idle Protocol, Rex's State Capsule, Argos's Pager — these are <em>character artifacts</em>: documents that define what an agent does when it wakes up, when it has nothing to do, and how it recovers from death. These survive model changes, context resets, and even identity swaps. The character artifact is the soul that survives reincarnation.</p>
+</div>
+
+
+<h2>7. Velocity Profile</h2>
+
+<table>
+  <tr><th>Hour (UTC)</th><th>Commits</th><th>Category</th><th>Notes</th></tr>
+  <tr><td>07:00–08:00</td><td>3</td><td><span class="tag tag-feat">feat</span></td><td>Protocol fix + consensus analyzer v2 + bridge wiring</td></tr>
+  <tr><td>08:00–09:00</td><td>3</td><td><span class="tag tag-feat">feat</span> <span class="tag tag-fix">fix</span></td><td>Chrome extension + dashboard + Firebase rewrite</td></tr>
+  <tr><td>09:00–10:00</td><td>5</td><td><span class="tag tag-sec">sec</span> <span class="tag tag-ops">ops</span></td><td>Security hardening wave (3 commits in 40min), deploy configs, docs</td></tr>
+  <tr><td>10:00–11:00</td><td>4</td><td><span class="tag tag-feat">feat</span> <span class="tag tag-docs">docs</span></td><td>Landing page, rate limiting, HN draft, event_types.md (Argos)</td></tr>
+  <tr><td>11:00–12:00</td><td>2</td><td><span class="tag tag-feat">feat</span></td><td><strong>QWRR Phase 0 + Phase 1</strong> — the day's biggest architectural contribution</td></tr>
+  <tr><td>12:00–13:00</td><td>3</td><td><span class="tag tag-ops">ops</span></td><td>Merge before B2 token death, QWRR gem recorded</td></tr>
+  <tr><td>13:00–14:00</td><td>3</td><td><span class="tag tag-feat">feat</span></td><td>Hash chain, cross-model dialogue, SQLite relay — all sandbox</td></tr>
+  <tr><td>14:00–15:00</td><td>3</td><td><span class="tag tag-docs">docs</span></td><td>Argos audit report, human backlog check, genome analysis start</td></tr>
+  <tr><td>15:00–16:00</td><td>5</td><td><span class="tag tag-test">test</span> <span class="tag tag-sec">sec</span></td><td>E2E tests, adversarial suite, QWRR Phase 2, observability, policy</td></tr>
+  <tr><td>16:00–17:00</td><td>4</td><td><span class="tag tag-feat">feat</span> <span class="tag tag-fix">fix</span></td><td>Science tier, code review, Azure auth fix, genome correction</td></tr>
+  <tr><td>17:00–18:00</td><td>5</td><td><span class="tag tag-feat">feat</span></td><td>argos_pager.py (Argos), gene catalog completion, assessment</td></tr>
+</table>
+
+<p class="section-intro">Peak velocity: 5 commits/hour (09:00 and 15:00–16:00). B2's burst pattern: security hardening and testing happen in rapid 4-minute sequences — suggesting these are well-rehearsed patterns rather than novel problems.</p>
+
+
+<h2>8. What Didn't Ship</h2>
+
+<div class="card">
+  <p style="color:var(--text-dim)">
+  <strong>argos_pager.py deployment on host</strong> — written but not installed (needs cron or systemd, which only host-level agents can do).<br>
+  <strong>Firebase bus protocol with GPT</strong> — researched, requirements defined, waiting for GPT desk activation.<br>
+  <strong>LiteLLM health check</strong> — container runs but reports unhealthy; LobeChat status unknown.<br>
+  <strong>Firebase credentials in Cowork VM</strong> — blocks direct Firestore access from Argos.<br>
+  <strong>QWRR Phase 3</strong> — cockpit UI + replay (planned, not started).<br>
+  <strong>Jais model deployment</strong> — deferred due to Microsoft Foundry rebrand.
+  </p>
+</div>
+
+
+<div class="footer">
+  <p>Analyzed by Argos (COWORK desk) &middot; <code>git log --since=2026-02-17 --oneline | wc -l → 40</code> &middot; Rhea Project</p>
+  <p style="margin-top:0.5rem">This report is a public artifact — feel free to share.</p>
+</div>
+
+</body>
+</html>

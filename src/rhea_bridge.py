@@ -47,9 +47,11 @@ except ImportError:
 _SECRET_PATTERNS = [
     (re.compile(r'AIzaSy[A-Za-z0-9_-]{33}'), '[REDACTED_GEMINI_KEY]'),
     (re.compile(r'sk-ant-[A-Za-z0-9_-]{20,}'), '[REDACTED_ANTHROPIC_KEY]'),
+    (re.compile(r'sk-proj-[A-Za-z0-9_-]{20,}'), '[REDACTED_OPENAI_KEY]'),
     (re.compile(r'sk-[A-Za-z0-9]{20,}'), '[REDACTED_OPENAI_KEY]'),
     (re.compile(r'hf_[A-Za-z0-9]{20,}'), '[REDACTED_HF_KEY]'),
     (re.compile(r'gsk_[A-Za-z0-9]{20,}'), '[REDACTED_GROQ_KEY]'),
+    (re.compile(r'dsk-[A-Za-z0-9]{20,}'), '[REDACTED_DEEPSEEK_KEY]'),
 ]
 
 
@@ -145,6 +147,19 @@ MODEL_TIERS = {
             "azure/DeepSeek-R1",
         ],
     },
+    "science": {
+        "description": "Science-grade models. For biology, chemistry, STEM tribunal queries.",
+        "candidates": [
+            "gemini/gemini-2.5-pro",
+            "openrouter/qwen/qwen3-235b-a22b",
+            "openrouter/deepseek/deepseek-r1",
+            "openai/o3",
+            "openrouter/google/gemini-2.5-pro-preview",
+            "openai/gpt-4.5-preview",
+            "azure/DeepSeek-R1",
+            "openrouter/meta-llama/llama-4-behemoth",
+        ],
+    },
 }
 
 DEFAULT_TIER = "cheap"  # HARD RULE: Sonnet / cheap models by default
@@ -180,6 +195,7 @@ PRICE_TABLE = {
     "qwen/qwen3-235b-a22b":             (0.30, 1.20),
     "mistralai/mistral-large-latest":    (2.00, 6.00),
     "meta-llama/llama-4-maverick":       (0.50, 1.50),
+    "meta-llama/llama-4-behemoth":       (2.00, 6.00),
     "google/gemini-2.5-pro-preview":     (1.25, 10.00),
     "anthropic/claude-sonnet-4":         (3.00, 15.00),
     # Azure
@@ -303,6 +319,7 @@ PROVIDERS = {
             "qwen/qwen3-235b-a22b",
             "mistralai/mistral-large-latest",
             "meta-llama/llama-4-maverick",
+            "meta-llama/llama-4-behemoth",
             "google/gemini-2.5-pro-preview",
             "anthropic/claude-sonnet-4",
         ],
@@ -323,7 +340,7 @@ PROVIDERS = {
     "azure": ProviderConfig(
         name="azure",
         display_name="Azure AI Foundry",
-        base_url="https://models.inference.ai.azure.com",
+        base_url=os.environ.get("AZURE_ENDPOINT", "https://models.inference.ai.azure.com"),
         api_key_env="AZURE_API_KEY",
         models=[
             "gpt-4o", "gpt-4o-mini",
@@ -619,6 +636,12 @@ class RheaBridge:
         if cfg.name == "openrouter":
             headers["HTTP-Referer"] = "https://github.com/serg-alexv/rhea-project"
             headers["X-Title"] = "Rhea"
+        if cfg.name == "azure":
+            # Azure AI Foundry uses api-key header, not Bearer token
+            headers = {
+                "api-key": api_key,
+                "Content-Type": "application/json",
+            }
 
         messages = []
         if system:
@@ -631,8 +654,15 @@ class RheaBridge:
             "temperature": temperature,
             "max_tokens": max_tokens,
         }
+
+        if cfg.name == "azure" and "AZURE_ENDPOINT" in os.environ:
+            # Azure OpenAI Service: /openai/deployments/{model}/chat/completions
+            url = f"{cfg.base_url}/openai/deployments/{model}/chat/completions?api-version=2024-10-21"
+        else:
+            url = f"{cfg.base_url}/chat/completions"
+
         resp = requests.post(
-            f"{cfg.base_url}/chat/completions",
+            url,
             headers=headers, json=body, timeout=60,
         )
         resp.raise_for_status()

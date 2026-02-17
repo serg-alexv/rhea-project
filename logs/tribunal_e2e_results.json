@@ -1,0 +1,73 @@
+{
+  "timestamp": "2026-02-17T15:26:59Z",
+  "mode": "direct",
+  "passed": 13,
+  "failed": 0,
+  "tests": [
+    {
+      "test": "Bridge instantiation",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "test": "Provider availability",
+      "status": "PASS",
+      "detail": "6/6 providers"
+    },
+    {
+      "test": "Single call (Gemini)",
+      "status": "PASS",
+      "detail": "1.3s, 19 tokens"
+    },
+    {
+      "test": "Tribunal k=3 responded",
+      "status": "PASS",
+      "detail": "3/3 models"
+    },
+    {
+      "test": "Tribunal k=3 multi-provider",
+      "status": "PASS",
+      "detail": "providers: {'gemini', 'openrouter', 'openai'}"
+    },
+    {
+      "test": "Tribunal k=3 has consensus report",
+      "status": "PASS",
+      "detail": "score=0.00"
+    },
+    {
+      "test": "Tribunal consensus text exists",
+      "status": "PASS",
+      "detail": "'Insufficient responses (0/3 valid).'"
+    },
+    {
+      "test": "Tribunal k=5 responded",
+      "status": "PASS",
+      "detail": "4/5 models"
+    },
+    {
+      "test": "Tribunal k=5 providers \u2265 3",
+      "status": "PASS",
+      "detail": "providers: {'gemini', 'openrouter', 'deepseek', 'openai'}"
+    },
+    {
+      "test": "Tribunal k=5 agreement > 0",
+      "status": "PASS",
+      "detail": "score=0.91"
+    },
+    {
+      "test": "Tribunal chairman analysis",
+      "status": "PASS",
+      "detail": "method=tfidf + chairman_council"
+    },
+    {
+      "test": "ICE analysis completed",
+      "status": "PASS",
+      "detail": "method=ice_1rounds + chairman"
+    },
+    {
+      "test": "ICE agreement > 0",
+      "status": "PASS",
+      "detail": "score=0.74"
+    }
+  ]
+}
