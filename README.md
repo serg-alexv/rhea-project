@@ -25,16 +25,19 @@ Sessions die. Context is lost. Agents cannot coordinate across providers. There 
 git clone https://github.com/serg-alexv/rhea-project.git && cd rhea-project
 bash scripts/rhea/check.sh                     # verify repo invariants
 python3 src/rhea_bridge.py status               # probe provider availability
-python3 src/rhea_bridge.py tiers                # show cost tier config
+python3 src/rhea_bridge.py tribunal "Is X true?" --k 3  # multi-model consensus
+python3 src/tribunal_api.py                     # start Tribunal API on :8400
 cat ops/virtual-office/TODAY_CAPSULE.md         # see what matters right now
 ```
 
 ## Architecture
 
 ```
-ops/virtual-office/     # desks, inbox, outbox, capsule, gems, incidents, decisions
-firebase/               # Firestore rules, RTDB config, sync functions
 src/rhea_bridge.py      # multi-provider LLM bridge (6 providers, 31 models, 4 tiers)
+src/consensus_analyzer.py  # 3-level consensus engine (TF-IDF / Chairman / ICE iterative)
+src/tribunal_api.py     # FastAPI: POST /tribunal, POST /tribunal/ice, GET /health
+ops/virtual-office/     # desks, inbox, outbox, capsule, gems, incidents, decisions
+firebase/               # Firestore rules (auth-required), service account config
 ops/                    # backlog, probe scripts, bridge health
 docs/                   # state.md (<2KB), decisions (14 ADRs), procedures, public output
 scripts/                # check.sh, commit hook, autosave, memory benchmark
@@ -45,21 +48,26 @@ prompts/                # Chronos Protocol v3 (agent system prompts)
 
 | ID | Item | Status |
 |----|------|--------|
-| RHEA-BRIDGE-001 | Bridge call ledger | Done |
-| RHEA-BRIDGE-002 | Provider health probe | Partial |
+| RHEA-BRIDGE-001 | Bridge call ledger (JSONL) | Done |
+| RHEA-BRIDGE-002 | Provider health probe | Done |
 | RHEA-OFFICE-001 | Office protocol hardening | Done |
 | RHEA-PUB-001 | Public output conveyor | Done |
+| RHEA-CTX-001 | TODAY_CAPSULE generator | Done |
 | RHEA-CTX-002 | Gems ledger with IDs | Done |
 | RHEA-INC-001 | Incident template + resurrection | Done |
-| RHEA-FIRE-001 | Firebase sync | Done |
-| RHEA-CTC-001 | Context Tax Collector | Done |
-| RHEA-CTX-001 | TODAY_CAPSULE generator | Todo |
-| RHEA-IOS-001 | Architecture freeze | Todo |
-| RHEA-IOS-002 | Offline loop MVP spec | Todo |
-| RHEA-COMM-001 | Repo narrative reboot | Todo |
-| RHEA-COMM-002 | Blueprint literacy ladder | Todo |
+| RHEA-IOS-001 | Architecture freeze | Done |
+| RHEA-IOS-002 | Offline loop MVP spec (12 issues) | Done |
+| RHEA-COMM-001 | Repo narrative reboot (4 docs) | Done |
+| RHEA-COMM-002 | Blueprint literacy ladder (10 lessons) | Done |
+| TRIBUNAL-001 | Consensus analyzer v2 (ICE + Council) | Done |
+| TRIBUNAL-002 | Wire analyzer into bridge | Done |
+| TRIBUNAL-003 | FastAPI tribunal API | Done |
+| TRIBUNAL-004 | Secret redaction + Firestore auth | Done |
+| TRIBUNAL-005 | Deploy script (Dockerfile + hosting) | Todo |
+| TRIBUNAL-006 | End-to-end test with live providers | Todo |
+| TRIBUNAL-007 | Landing page + pricing | Todo |
 
-8 done. 1 partial. 4 todo.
+16 done. 3 todo.
 
 ## Team
 
