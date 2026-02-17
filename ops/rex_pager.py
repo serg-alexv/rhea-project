@@ -183,8 +183,19 @@ def _lease_file(agent: str) -> Path:
     return LEASES_DIR / f"{agent}.json"
 
 
-def acquire_lease(agent: str) -> int:
-    """Acquire monotonic lease. Old lease holders are fenced out."""
+LEASE_TTL_S = 600  # 10 minutes — lease expires if not renewed
+
+
+def acquire_lease(agent: str, ttl_s: int = LEASE_TTL_S) -> int:
+    """Acquire monotonic lease with TTL. Old lease holders are fenced out.
+
+    Network partition safety:
+    - Lease has expires_at timestamp
+    - verify_lease() rejects expired leases
+    - Holder must call renew_lease() before expiry (heartbeat)
+    - If two agents both think they hold the lease, the one whose lease
+      expired first is automatically fenced out on next verify_lease() call
+    """
     LEASES_DIR.mkdir(parents=True, exist_ok=True)
     f = _lease_file(agent)
     prev_token = 0
@@ -195,10 +206,14 @@ def acquire_lease(agent: str) -> int:
         except (json.JSONDecodeError, ValueError):
             pass
     new_token = prev_token + 1
+    now = _now_iso()
     lease = {
         "agent": agent,
         "lease_token": new_token,
-        "acquired_at": _now_iso(),
+        "acquired_at": now,
+        "renewed_at": now,
+        "expires_at": _future_iso(ttl_s),
+        "ttl_s": ttl_s,
         "prev_token": prev_token,
     }
     f.write_text(json.dumps(lease, indent=2))
@@ -206,22 +221,71 @@ def acquire_lease(agent: str) -> int:
     # Also write to Firestore for cross-agent visibility
     _write_lease_firestore(agent, lease)
 
-    chain_append("lease.acquire", agent, {"lease_token": new_token, "prev_token": prev_token})
-    print(f"[lease] {agent} acquired lease_token={new_token} (prev={prev_token})")
+    chain_append("lease.acquire", agent, {"lease_token": new_token, "prev_token": prev_token, "ttl_s": ttl_s})
+    print(f"[lease] {agent} acquired lease_token={new_token} (prev={prev_token}, TTL={ttl_s}s)")
     return new_token
+
+
+def renew_lease(agent: str, token: int) -> bool:
+    """Renew a lease (heartbeat). Returns False if lease is stale or expired."""
+    f = _lease_file(agent)
+    if not f.exists():
+        return False
+    lease = json.loads(f.read_text())
+    if lease.get("lease_token") != token:
+        return False
+    # Check if already expired
+    if _is_expired(lease.get("expires_at")):
+        _write_incident({"id": f"lease-{agent}", "type": "lease.expired"}, f"Lease {token} expired before renewal")
+        return False
+    ttl = lease.get("ttl_s", LEASE_TTL_S)
+    now = _now_iso()
+    lease["renewed_at"] = now
+    lease["expires_at"] = _future_iso(ttl)
+    f.write_text(json.dumps(lease, indent=2))
+    return True
 
 
 def get_lease(agent: str) -> dict:
     f = _lease_file(agent)
     if not f.exists():
-        return {"agent": agent, "lease_token": 0, "acquired_at": None}
-    return json.loads(f.read_text())
+        return {"agent": agent, "lease_token": 0, "acquired_at": None, "expired": True}
+    lease = json.loads(f.read_text())
+    lease["expired"] = _is_expired(lease.get("expires_at"))
+    return lease
 
 
 def verify_lease(agent: str, token: int) -> bool:
-    """I5: reject if token doesn't match current lease."""
+    """I5: reject if token doesn't match current lease OR lease has expired.
+
+    This is the critical split-brain protection:
+    - If agent A's lease expired during a network partition, agent B can
+      acquire a new lease. When A comes back, its old token is rejected.
+    - Even if A still has the file, the expired flag prevents execution.
+    """
     current = get_lease(agent)
-    return current.get("lease_token", 0) == token
+    if current.get("lease_token", 0) != token:
+        return False
+    if current.get("expired", True):
+        return False
+    return True
+
+
+def _future_iso(seconds: int) -> str:
+    """Return ISO timestamp N seconds from now."""
+    from datetime import timedelta
+    return (datetime.now(timezone.utc) + timedelta(seconds=seconds)).isoformat()
+
+
+def _is_expired(expires_at: str | None) -> bool:
+    """Check if an ISO timestamp is in the past."""
+    if not expires_at:
+        return True
+    try:
+        exp = datetime.fromisoformat(expires_at)
+        return datetime.now(timezone.utc) > exp
+    except (ValueError, TypeError):
+        return True
 
 
 def _write_lease_firestore(agent: str, lease: dict):
@@ -361,6 +425,173 @@ def create_effect_intent(msg: dict, lease_token: int, kind: str = None) -> dict:
     with open(INTENTS_FILE, "a") as f:
         f.write(json.dumps(intent) + "\n")
     return intent
+
+
+def _read_intents() -> list[dict]:
+    """Read all effect intents."""
+    if not INTENTS_FILE.exists():
+        return []
+    intents = []
+    for line in INTENTS_FILE.read_text().strip().split("\n"):
+        if line.strip():
+            intents.append(json.loads(line))
+    return intents
+
+
+def _update_intent(intent_id: str, status: str, receipt: dict = None):
+    """Update an intent's status and receipt in-place."""
+    intents = _read_intents()
+    updated = []
+    for intent in intents:
+        if intent["intent_id"] == intent_id:
+            intent["status"] = status
+            intent["updated_at"] = _now_iso()
+            if receipt:
+                intent["receipt"] = receipt
+        updated.append(intent)
+    INTENTS_FILE.write_text("\n".join(json.dumps(i) for i in updated) + "\n")
+
+
+# Effect handlers: kind → callable(payload) → receipt_dict
+# Registered handlers return a receipt dict or raise on failure
+EFFECT_HANDLERS: dict[str, callable] = {}
+
+
+def register_effect_handler(kind: str, handler: callable):
+    """Register a handler for an effect kind (git_push, firestore_write, etc.)."""
+    EFFECT_HANDLERS[kind] = handler
+
+
+def execute_intents(agent: str, lease_token: int = 0, dry_run: bool = False) -> dict:
+    """Execute pending effect intents for an agent. QWRR Section 9 executor.
+
+    Rules:
+    - Reject intents with stale lease_token (if agent has active lease)
+    - Deduplicate on idempotency_key
+    - Write receipts on success
+    - Log failures as incidents
+    """
+    intents = _read_intents()
+    pending = [i for i in intents if i["status"] == "planned"]
+
+    if not pending:
+        print("[executor] No pending intents.")
+        return {"executed": 0, "skipped": 0, "failed": 0}
+
+    # Get current lease for validation
+    current_token = 0
+    if lease_token:
+        current_token = lease_token
+    else:
+        lease = get_lease(agent)
+        if lease:
+            current_token = lease.get("lease_token", 0)
+
+    executed = 0
+    skipped = 0
+    failed = 0
+    seen_idem = set()
+
+    for intent in pending:
+        iid = intent["intent_id"]
+        kind = intent["kind"]
+        idem = intent.get("idempotency_key", "")
+
+        # Deduplicate
+        if idem and idem in seen_idem:
+            _update_intent(iid, "skipped", {"reason": "duplicate idempotency_key"})
+            skipped += 1
+            print(f"  [skip] {iid}: duplicate idem={idem[:16]}")
+            continue
+        if idem:
+            seen_idem.add(idem)
+
+        # Lease validation
+        if current_token > 0 and intent.get("lease_token", 0) > 0:
+            if intent["lease_token"] != current_token:
+                _update_intent(iid, "rejected", {"reason": f"stale lease: intent={intent['lease_token']}, current={current_token}"})
+                skipped += 1
+                _write_incident(intent, f"effect intent rejected: stale lease token {intent['lease_token']} != {current_token}")
+                print(f"  [reject] {iid}: stale lease token")
+                continue
+
+        # Dry run
+        if dry_run:
+            print(f"  [dry-run] {iid}: {kind} — would execute")
+            continue
+
+        # Execute handler
+        handler = EFFECT_HANDLERS.get(kind)
+        if handler:
+            try:
+                receipt = handler(intent["payload"])
+                _update_intent(iid, "committed", receipt or {})
+                chain_append("effect.committed", agent, {"intent_id": iid, "kind": kind})
+                executed += 1
+                print(f"  [ok] {iid}: {kind} → committed")
+            except Exception as e:
+                _update_intent(iid, "failed", {"error": str(e)})
+                _write_incident(intent, f"effect execution failed: {e}")
+                failed += 1
+                print(f"  [fail] {iid}: {kind} → {e}")
+        else:
+            # No handler registered — mark as pending until handler exists
+            print(f"  [no-handler] {iid}: {kind} — no handler registered, stays planned")
+
+    result = {"executed": executed, "skipped": skipped, "failed": failed, "total": len(pending)}
+    print(f"\n[executor] {executed} committed, {skipped} skipped, {failed} failed (of {len(pending)})")
+    return result
+
+
+def intent_status() -> dict:
+    """Show intent counts by status."""
+    intents = _read_intents()
+    by_status: dict[str, int] = {}
+    for i in intents:
+        s = i.get("status", "unknown")
+        by_status[s] = by_status.get(s, 0) + 1
+    return {"total": len(intents), "by_status": by_status}
+
+
+# ---------------------------------------------------------------------------
+# Built-in effect handlers
+# ---------------------------------------------------------------------------
+
+def _handle_git_push(payload: dict) -> dict:
+    """Execute a git push. Returns receipt with push result."""
+    import subprocess
+    remote = payload.get("remote", "origin")
+    branch = payload.get("branch", "")
+    if not branch:
+        result = subprocess.run(["git", "rev-parse", "--abbrev-ref", "HEAD"],
+                                capture_output=True, text=True, cwd=str(PROJECT_ROOT))
+        branch = result.stdout.strip()
+    result = subprocess.run(["git", "push", remote, branch],
+                            capture_output=True, text=True, cwd=str(PROJECT_ROOT))
+    if result.returncode != 0:
+        raise RuntimeError(f"git push failed: {result.stderr.strip()}")
+    return {"remote": remote, "branch": branch, "output": result.stdout.strip() or result.stderr.strip()}
+
+
+def _handle_git_commit(payload: dict) -> dict:
+    """Execute a git commit. Returns receipt with commit SHA."""
+    import subprocess
+    msg = payload.get("message", "auto-commit")
+    files = payload.get("files", [])
+    if files:
+        subprocess.run(["git", "add"] + files, cwd=str(PROJECT_ROOT), check=True)
+    result = subprocess.run(["git", "commit", "-m", msg],
+                            capture_output=True, text=True, cwd=str(PROJECT_ROOT))
+    if result.returncode != 0:
+        raise RuntimeError(f"git commit failed: {result.stderr.strip()}")
+    sha_result = subprocess.run(["git", "rev-parse", "HEAD"],
+                                capture_output=True, text=True, cwd=str(PROJECT_ROOT))
+    return {"commit_sha": sha_result.stdout.strip(), "message": msg}
+
+
+# Register built-in handlers
+register_effect_handler("git_push", _handle_git_push)
+register_effect_handler("git_commit", _handle_git_commit)
 
 
 # ---------------------------------------------------------------------------
@@ -863,9 +1094,16 @@ def main():
         target = sys.argv[2] if len(sys.argv) > 2 else "LEAD"
         if "--acquire" in sys.argv:
             acquire_lease(target)
+        elif "--renew" in sys.argv:
+            lease = get_lease(target)
+            token = lease.get("lease_token", 0)
+            ok = renew_lease(target, token)
+            print(f"[lease] {target} renew: {'OK' if ok else 'FAILED (expired or stale)'}")
         else:
             lease = get_lease(target)
             print(json.dumps(lease, indent=2))
+            if lease.get("expired"):
+                print("  ⚠ LEASE EXPIRED — needs re-acquisition")
 
     elif cmd == "snapshot":
         target = sys.argv[2] if len(sys.argv) > 2 else "LEAD"
@@ -898,6 +1136,17 @@ def main():
                 sys.exit(0)
         print(f"Not found: {msg_id}")
         sys.exit(1)
+
+    elif cmd == "execute":
+        agent = sys.argv[2] if len(sys.argv) > 2 else "LEAD"
+        dry = "--dry-run" in sys.argv
+        execute_intents(agent, dry_run=dry)
+
+    elif cmd == "intents":
+        status = intent_status()
+        print(f"Effect intents: {status['total']} total")
+        for s, c in sorted(status["by_status"].items()):
+            print(f"  {s}: {c}")
 
     else:
         print(f"Unknown: {cmd}")

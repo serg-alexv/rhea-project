@@ -1,12 +1,12 @@
 {
-  "timestamp": "2026-02-17T15:38:32Z",
+  "timestamp": "2026-02-17T15:42:49Z",
   "passed": 51,
   "failed": 0,
   "tests": [
     {
       "test": "Monotonic seq",
       "status": "PASS",
-      "detail": "seq 28 \u2192 29"
+      "detail": "seq 39 \u2192 40"
     },
     {
       "test": "Unique idempotency keys",
@@ -26,7 +26,7 @@
     {
       "test": "Timestamp format",
       "status": "PASS",
-      "detail": "2026-02-17T15:38:32."
+      "detail": "2026-02-17T15:42:49."
     },
     {
       "test": "Valid chain verifies",
@@ -196,7 +196,7 @@
     {
       "test": "No secrets in logs",
       "status": "PASS",
-      "detail": "checked 52 files, 7 secrets"
+      "detail": "checked 55 files, 7 secrets"
     },
     {
       "test": "Redact OPENAI_API_KEY",
@@ -226,12 +226,12 @@
     {
       "test": "Stale effect.request rejected",
       "status": "PASS",
-      "detail": "TTL exceeded (193505912s > 86400s)"
+      "detail": "TTL exceeded (193506170s > 86400s)"
     },
     {
       "test": "Stale push.now rejected",
       "status": "PASS",
-      "detail": "TTL exceeded (193505912s > 86400s)"
+      "detail": "TTL exceeded (193506170s > 86400s)"
     },
     {
       "test": "Unknown type defaults safe",
@@ -241,22 +241,22 @@
     {
       "test": "Traversal blocked: ../../../etc/passwd",
       "status": "PASS",
-      "detail": "path=/var/folders/98/kzggkt892nnbmfbwtlq05jlh0000gn/T/tmp27idaary/leases/../../../etc/passwd.json"
+      "detail": "path=/var/folders/98/kzggkt892nnbmfbwtlq05jlh0000gn/T/tmp0sciqx44/leases/../../../etc/passwd.json"
     },
     {
       "test": "Traversal blocked: ..%2F..%2Fetc%2Fpasswd",
       "status": "PASS",
-      "detail": "path=/var/folders/98/kzggkt892nnbmfbwtlq05jlh0000gn/T/tmp27idaary/leases/..%2F..%2Fetc%2Fpasswd.json"
+      "detail": "path=/var/folders/98/kzggkt892nnbmfbwtlq05jlh0000gn/T/tmp0sciqx44/leases/..%2F..%2Fetc%2Fpasswd.json"
     },
     {
       "test": "Traversal blocked: LEAD/../../secrets",
       "status": "PASS",
-      "detail": "path=/var/folders/98/kzggkt892nnbmfbwtlq05jlh0000gn/T/tmp27idaary/leases/LEAD/../../secrets.json"
+      "detail": "path=/var/folders/98/kzggkt892nnbmfbwtlq05jlh0000gn/T/tmp0sciqx44/leases/LEAD/../../secrets.json"
     },
     {
       "test": "Traversal blocked: LEAD\u0000.json",
       "status": "PASS",
-      "detail": "path=/var/folders/98/kzggkt892nnbmfbwtlq05jlh0000gn/T/tmp27idaary/leases/LEAD\u0000.json.json"
+      "detail": "path=/var/folders/98/kzggkt892nnbmfbwtlq05jlh0000gn/T/tmp0sciqx44/leases/LEAD\u0000.json.json"
     }
   ]
 }
