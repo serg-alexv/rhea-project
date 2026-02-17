@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rhea Tribunal API — Multi-Model Consensus as a Service</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --border: #30363d;
+    --text: #c9d1d9;
+    --text-muted: #8b949e;
+    --accent: #58a6ff;
+    --green: #3fb950;
+    --orange: #d29922;
+    --red: #f85149;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+  }
+  .container { max-width: 800px; margin: 0 auto; padding: 0 24px; }
+
+  /* Hero */
+  .hero { padding: 80px 0 60px; text-align: center; }
+  .hero h1 { font-size: 2.5rem; margin-bottom: 16px; letter-spacing: -0.02em; }
+  .hero h1 span { color: var(--accent); }
+  .hero p { font-size: 1.2rem; color: var(--text-muted); max-width: 600px; margin: 0 auto 32px; }
+  .cta-btn {
+    display: inline-block;
+    background: var(--accent);
+    color: var(--bg);
+    padding: 12px 32px;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+  .cta-btn:hover { opacity: 0.85; }
+
+  /* Code block */
+  .code-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px;
+    margin: 40px 0;
+    overflow-x: auto;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 0.9rem;
+    line-height: 1.8;
+  }
+  .code-block .comment { color: var(--text-muted); }
+  .code-block .keyword { color: var(--accent); }
+  .code-block .string { color: var(--green); }
+  .code-block .number { color: var(--orange); }
+
+  /* Features */
+  .features { padding: 60px 0; }
+  .features h2 { font-size: 1.8rem; margin-bottom: 32px; text-align: center; }
+  .feature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .feature {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px;
+  }
+  .feature h3 { font-size: 1.1rem; margin-bottom: 8px; }
+  .feature p { color: var(--text-muted); font-size: 0.95rem; }
+
+  /* Levels */
+  .levels { padding: 60px 0; }
+  .levels h2 { font-size: 1.8rem; margin-bottom: 32px; text-align: center; }
+  .level-cards { display: flex; flex-direction: column; gap: 16px; }
+  .level-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px;
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+  }
+  .level-badge {
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.1rem;
+  }
+  .level-badge.l1 { background: #1a3a1a; color: var(--green); }
+  .level-badge.l2 { background: #3a2a0a; color: var(--orange); }
+  .level-badge.l3 { background: #3a1a1a; color: var(--red); }
+  .level-info h3 { margin-bottom: 4px; }
+  .level-info p { color: var(--text-muted); font-size: 0.9rem; }
+  .level-info .cost { font-size: 0.8rem; color: var(--accent); margin-top: 4px; }
+
+  /* Pricing */
+  .pricing { padding: 60px 0; text-align: center; }
+  .pricing h2 { font-size: 1.8rem; margin-bottom: 32px; }
+  .price-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; max-width: 600px; margin: 0 auto; }
+  .price-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 32px 24px;
+  }
+  .price-card.featured { border-color: var(--accent); }
+  .price-card h3 { margin-bottom: 8px; }
+  .price-card .price { font-size: 2rem; font-weight: 700; color: var(--accent); }
+  .price-card .unit { color: var(--text-muted); font-size: 0.9rem; }
+  .price-card ul { list-style: none; margin-top: 16px; text-align: left; }
+  .price-card li { padding: 4px 0; color: var(--text-muted); font-size: 0.9rem; }
+  .price-card li::before { content: "— "; color: var(--border); }
+
+  /* Use cases */
+  .usecases { padding: 60px 0; }
+  .usecases h2 { font-size: 1.8rem; margin-bottom: 32px; text-align: center; }
+  .usecase-list { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .usecase {
+    padding: 16px 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.95rem;
+  }
+
+  /* Footer */
+  footer {
+    padding: 40px 0;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    border-top: 1px solid var(--border);
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+
+  @media (max-width: 640px) {
+    .feature-grid, .price-cards, .usecase-list { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 1.8rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <section class="hero">
+    <h1>Rhea <span>Tribunal</span> API</h1>
+    <p>Send one prompt. Get answers from 3-7 AI models. Receive structured consensus analysis with agreement scores, stance detection, and divergence maps.</p>
+    <a href="https://github.com/serg-alexv/rhea-project" class="cta-btn">Get Started</a>
+  </section>
+
+  <div class="code-block">
+    <span class="comment"># One API call. Multiple models. Structured consensus.</span><br>
+    curl -X POST https://api.rhea-tribunal.dev/tribunal \<br>
+    &nbsp;&nbsp;-H <span class="string">"X-API-Key: your-key"</span> \<br>
+    &nbsp;&nbsp;-d <span class="string">'{"prompt": "Is intermittent fasting safe for diabetics?", "k": 5}'</span><br>
+    <br>
+    <span class="comment"># Response:</span><br>
+    {<br>
+    &nbsp;&nbsp;<span class="keyword">"agreement_score"</span>: <span class="number">0.72</span>,<br>
+    &nbsp;&nbsp;<span class="keyword">"confidence"</span>: <span class="number">0.81</span>,<br>
+    &nbsp;&nbsp;<span class="keyword">"consensus"</span>: <span class="string">"4/5 models agree: generally safe for Type 2 with monitoring..."</span>,<br>
+    &nbsp;&nbsp;<span class="keyword">"divergence_points"</span>: [<span class="string">"Gemini flags contraindication for insulin-dependent"</span>],<br>
+    &nbsp;&nbsp;<span class="keyword">"stance_summary"</span>: {<span class="string">"affirmative"</span>: <span class="number">3</span>, <span class="string">"qualified"</span>: <span class="number">2</span>}<br>
+    }
+  </div>
+
+  <section class="features">
+    <h2>Why Tribunal?</h2>
+    <div class="feature-grid">
+      <div class="feature">
+        <h3>Cross-Model Validation</h3>
+        <p>Every LLM hallucinates differently. When 5 models agree, confidence goes up. When they diverge, you know where the uncertainty lives.</p>
+      </div>
+      <div class="feature">
+        <h3>Structured Output</h3>
+        <p>Not just "5 models responded." You get agreement scores, stance analysis, pairwise similarity, and specific divergence points.</p>
+      </div>
+      <div class="feature">
+        <h3>ICE Iterative Consensus</h3>
+        <p>Models critique each other in rounds until convergence. Based on ICE (2025): +7-15% accuracy over single-model inference.</p>
+      </div>
+      <div class="feature">
+        <h3>Cost-Aware Routing</h3>
+        <p>4 cost tiers. Cheap by default. Expensive only when you need it. Every call logged for budget tracking.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="levels">
+    <h2>Three Analysis Levels</h2>
+    <div class="level-cards">
+      <div class="level-card">
+        <div class="level-badge l1">L1</div>
+        <div class="level-info">
+          <h3>Local Analysis</h3>
+          <p>TF-IDF similarity + stance detection + claim overlap. Pure math, no extra API calls. Included in every request.</p>
+          <div class="cost">Cost: $0 extra (included)</div>
+        </div>
+      </div>
+      <div class="level-card">
+        <div class="level-badge l2">L2</div>
+        <div class="level-info">
+          <h3>Chairman Council</h3>
+          <p>A chairman model reads all responses and synthesizes a definitive answer. Resolves conflicts, merges best insights. Karpathy Council pattern.</p>
+          <div class="cost">Cost: +1 API call</div>
+        </div>
+      </div>
+      <div class="level-card">
+        <div class="level-badge l3">L3</div>
+        <div class="level-info">
+          <h3>ICE Iterative</h3>
+          <p>Models see each other's answers and revise. Multiple critique rounds until convergence detected. Then chairman synthesis. Maximum accuracy.</p>
+          <div class="cost">Cost: +k x rounds + 1 API calls</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="usecases">
+    <h2>Use Cases</h2>
+    <div class="usecase-list">
+      <div class="usecase">Medical claim verification</div>
+      <div class="usecase">Code review by 5 models</div>
+      <div class="usecase">Legal document analysis</div>
+      <div class="usecase">Fact-checking pipelines</div>
+      <div class="usecase">Decision support systems</div>
+      <div class="usecase">A/B testing prompts across models</div>
+      <div class="usecase">Research hypothesis validation</div>
+      <div class="usecase">Content moderation consensus</div>
+    </div>
+  </section>
+
+  <section class="pricing">
+    <h2>Pricing</h2>
+    <div class="price-cards">
+      <div class="price-card">
+        <h3>Standard</h3>
+        <div class="price">$0.05</div>
+        <div class="unit">per tribunal (5 models, L1+L2)</div>
+        <ul>
+          <li>5 models queried in parallel</li>
+          <li>Local + Chairman analysis</li>
+          <li>Structured JSON response</li>
+          <li>1000 calls/day</li>
+        </ul>
+      </div>
+      <div class="price-card featured">
+        <h3>ICE Premium</h3>
+        <div class="price">$0.25</div>
+        <div class="unit">per tribunal (5 models, L3 ICE)</div>
+        <ul>
+          <li>Iterative critique rounds</li>
+          <li>Convergence detection</li>
+          <li>Chairman synthesis</li>
+          <li>Round-by-round history</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</div>
+
+<footer>
+  <div class="container">
+    <p>Rhea Tribunal API &mdash; Multi-model consensus as a service</p>
+    <p><a href="https://github.com/serg-alexv/rhea-project">GitHub</a> &middot; <a href="/docs">API Docs</a></p>
+  </div>
+</footer>
+
+</body>
+</html>
