@@ -9,13 +9,15 @@ Usage:
     python3 src/rhea_bridge.py ask "provider/model" "prompt"
     python3 src/rhea_bridge.py ask-default "prompt"              # uses cheap tier
     python3 src/rhea_bridge.py ask-tier "balanced" "prompt"      # explicit tier
-    python3 src/rhea_bridge.py tribunal "prompt" [--k 5]
+    python3 src/rhea_bridge.py tribunal "prompt" [--k 5] [--mode local|chairman]
+    python3 src/rhea_bridge.py tribunal-ice "prompt" [--k 5] [--rounds 3]  # ICE iterative
     python3 src/rhea_bridge.py tiers                             # show tier config
     python3 src/rhea_bridge.py daily-summary [YYYY-MM-DD]        # call log summary
 """
 
 import json
 import os
+import re
 import time
 import uuid
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -30,6 +32,32 @@ try:
     load_dotenv()
 except ImportError:
     pass  # dotenv optional — env vars can be set directly
+
+try:
+    from consensus_analyzer import ConsensusAnalyzer
+    _HAS_ANALYZER = True
+except ImportError:
+    _HAS_ANALYZER = False
+
+
+# ---------------------------------------------------------------------------
+# Secret redaction — NEVER log API keys
+# ---------------------------------------------------------------------------
+
+_SECRET_PATTERNS = [
+    (re.compile(r'AIzaSy[A-Za-z0-9_-]{33}'), '[REDACTED_GEMINI_KEY]'),
+    (re.compile(r'sk-ant-[A-Za-z0-9_-]{20,}'), '[REDACTED_ANTHROPIC_KEY]'),
+    (re.compile(r'sk-[A-Za-z0-9]{20,}'), '[REDACTED_OPENAI_KEY]'),
+    (re.compile(r'hf_[A-Za-z0-9]{20,}'), '[REDACTED_HF_KEY]'),
+    (re.compile(r'gsk_[A-Za-z0-9]{20,}'), '[REDACTED_GROQ_KEY]'),
+]
+
+
+def redact_secrets(text: str) -> str:
+    """Remove API keys from any string before logging."""
+    for pattern, replacement in _SECRET_PATTERNS:
+        text = pattern.sub(replacement, text)
+    return text
 
 
 # ---------------------------------------------------------------------------
@@ -52,6 +80,7 @@ class TribunalResult:
     prompt: str
     responses: list = field(default_factory=list)
     consensus: str = ""
+    consensus_report: dict = field(default_factory=dict)
     k: int = 5
     elapsed_s: float = 0.0
 
@@ -217,11 +246,11 @@ def _log_call(
         "cost_usd": _compute_cost(model, prompt_tokens, completion_tokens),
         "latency_ms": round(latency_ms, 1),
         "status": status,
-        "error_short": (str(error)[:100] if error else ""),
+        "error_short": redact_secrets(str(error)[:200]) if error else "",
     }
     try:
         with open(CALL_LOG_PATH, "a") as f:
-            f.write(json.dumps(record) + "\n")
+            f.write(redact_secrets(json.dumps(record)) + "\n")
     except OSError:
         pass  # logging must never break the bridge
 
@@ -472,6 +501,7 @@ class RheaBridge:
         tier: str = "cheap",
         temperature: float = 0.7,
         max_tokens: int = 2048,
+        mode: str = "local",
     ) -> TribunalResult:
         """Query k diverse models in parallel, return all responses.
 
@@ -506,14 +536,26 @@ class RheaBridge:
 
         elapsed = time.time() - t0
         successful = [r for r in responses if not r.error]
+
+        # --- Consensus analysis ---
         consensus = ""
-        if successful:
+        consensus_report = {}
+        if successful and _HAS_ANALYZER:
+            analyzer = ConsensusAnalyzer(bridge=self)
+            resp_tuples = [
+                (f"{r.provider}/{r.model}", r.text) for r in successful
+            ]
+            report = analyzer.analyze(resp_tuples, prompt=prompt, mode=mode)
+            consensus = report.consensus_text
+            consensus_report = report.to_dict()
+        elif successful:
             consensus = f"{len(successful)}/{len(responses)} models responded successfully"
 
         return TribunalResult(
             prompt=prompt,
             responses=responses,
             consensus=consensus,
+            consensus_report=consensus_report,
             k=k,
             elapsed_s=round(elapsed, 2),
         )
@@ -838,7 +880,7 @@ def main():
     bridge = RheaBridge()
 
     if len(sys.argv) < 2:
-        print("Usage: rhea_bridge.py {status|tiers|ask|ask-default|ask-tier|tribunal|daily-summary}")
+        print("Usage: rhea_bridge.py {status|tiers|ask|ask-default|ask-tier|tribunal|tribunal-ice|daily-summary}")
         sys.exit(1)
 
     cmd = sys.argv[1]
@@ -878,11 +920,12 @@ def main():
 
     elif cmd == "tribunal":
         if len(sys.argv) < 3:
-            print("Usage: rhea_bridge.py tribunal <prompt> [--k N] [--tier TIER]")
+            print("Usage: rhea_bridge.py tribunal <prompt> [--k N] [--tier TIER] [--mode local|chairman]")
             sys.exit(1)
         prompt = sys.argv[2]
         k = 5
         tier = "cheap"
+        mode = "local"
         if "--k" in sys.argv:
             idx = sys.argv.index("--k")
             if idx + 1 < len(sys.argv):
@@ -891,16 +934,49 @@ def main():
             idx = sys.argv.index("--tier")
             if idx + 1 < len(sys.argv):
                 tier = sys.argv[idx + 1]
-        result = bridge.tribunal(prompt, k=k, tier=tier)
+        if "--mode" in sys.argv:
+            idx = sys.argv.index("--mode")
+            if idx + 1 < len(sys.argv):
+                mode = sys.argv[idx + 1]
+        result = bridge.tribunal(prompt, k=k, tier=tier, mode=mode)
         output = {
             "prompt": result.prompt,
             "k": result.k,
             "tier": tier,
+            "mode": mode,
             "elapsed_s": result.elapsed_s,
             "consensus": result.consensus,
+            "consensus_report": result.consensus_report,
             "responses": [asdict(r) for r in result.responses],
         }
         print(json.dumps(output, indent=2))
+
+    elif cmd == "tribunal-ice":
+        if len(sys.argv) < 3:
+            print("Usage: rhea_bridge.py tribunal-ice <prompt> [--k N] [--rounds N] [--tier TIER]")
+            sys.exit(1)
+        if not _HAS_ANALYZER:
+            print("ERROR: consensus_analyzer.py not found. Cannot run ICE mode.")
+            sys.exit(1)
+        prompt = sys.argv[2]
+        k = 5
+        rounds = 3
+        tier = "cheap"
+        if "--k" in sys.argv:
+            idx = sys.argv.index("--k")
+            if idx + 1 < len(sys.argv):
+                k = int(sys.argv[idx + 1])
+        if "--rounds" in sys.argv:
+            idx = sys.argv.index("--rounds")
+            if idx + 1 < len(sys.argv):
+                rounds = int(sys.argv[idx + 1])
+        if "--tier" in sys.argv:
+            idx = sys.argv.index("--tier")
+            if idx + 1 < len(sys.argv):
+                tier = sys.argv[idx + 1]
+        analyzer = ConsensusAnalyzer(bridge=bridge)
+        report = analyzer.analyze_ice(prompt, k=k, rounds=rounds, tier=tier)
+        print(json.dumps(report.to_dict(), indent=2))
 
     elif cmd == "daily-summary":
         date_arg = None

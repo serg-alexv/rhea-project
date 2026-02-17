@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, system-ui, sans-serif; background: #0d1117; color: #c9d1d9; padding: 16px; height: 100vh; overflow-y: auto; }
+    h1 { font-size: 16px; color: #58a6ff; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+    h1 .dot { width: 10px; height: 10px; border-radius: 50%; }
+    h1 .dot.alive { background: #3fb950; }
+    h2 { font-size: 12px; color: #8b949e; text-transform: uppercase; margin: 12px 0 6px; }
+    .card { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 10px; margin-bottom: 10px; }
+    .desk-row { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid #21262d; font-size: 13px; }
+    .desk-row:last-child { border: none; }
+    .desk-name { font-weight: 600; color: #58a6ff; }
+    .desk-status { color: #3fb950; }
+    .desk-time { color: #8b949e; font-size: 11px; }
+    .msg { padding: 6px 0; border-bottom: 1px solid #21262d; font-size: 13px; }
+    .msg:last-child { border: none; }
+    .msg-from { color: #d2a8ff; font-weight: 600; }
+    .msg-text { color: #c9d1d9; }
+    .badge { background: #1f6feb; color: white; padding: 1px 6px; border-radius: 10px; font-size: 10px; vertical-align: middle; }
+    .gem { padding: 4px 0; border-bottom: 1px solid #21262d; font-size: 12px; }
+    .gem-id { color: #f0883e; font-weight: 600; }
+    .input-row { display: flex; gap: 6px; margin-top: 8px; }
+    input { flex: 1; font-size: 13px; padding: 6px 10px; border-radius: 6px; border: 1px solid #30363d; background: #0d1117; color: #c9d1d9; }
+    button { font-size: 13px; padding: 6px 14px; border-radius: 6px; border: none; background: #238636; color: white; cursor: pointer; }
+    button:hover { background: #2ea043; }
+    .config-row { display: flex; gap: 6px; margin-top: 6px; }
+    .refresh-btn { background: #30363d; font-size: 11px; padding: 3px 8px; }
+    .section-header { display: flex; justify-content: space-between; align-items: center; }
+  </style>
+</head>
+<body>
+  <h1><div class="dot alive" id="mainDot"></div> RHEA OFFICE</h1>
+
+  <div class="card">
+    <div class="section-header">
+      <h2>Desks</h2>
+      <button class="refresh-btn" onclick="refresh()">Refresh</button>
+    </div>
+    <div id="desks">Loading...</div>
+  </div>
+
+  <div class="card">
+    <h2>Inbox (unread)</h2>
+    <div id="inbox">Loading...</div>
+  </div>
+
+  <div class="card">
+    <h2>Gems</h2>
+    <div id="gems">Loading...</div>
+  </div>
+
+  <div class="card">
+    <h2>Send Message</h2>
+    <div class="input-row">
+      <input id="to" placeholder="To" value="Rex" style="max-width:80px">
+      <input id="msg" placeholder="Message...">
+      <button onclick="send()">Send</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Config</h2>
+    <div class="config-row">
+      <input id="projId" placeholder="Project ID" value="rhea-office-sync">
+      <input id="desk" placeholder="Your desk">
+      <button onclick="saveConfig()">Save</button>
+    </div>
+  </div>
+
+  <script>
+    const FS = 'https://firestore.googleapis.com/v1/projects';
+    let cfg = { proj: 'rhea-office-sync', desk: '' };
+
+    async function init() {
+      const s = await chrome.storage.local.get(['firebaseConfig','deskName']);
+      if (s.firebaseConfig) cfg.proj = s.firebaseConfig.projectId;
+      if (s.deskName) cfg.desk = s.deskName;
+      document.getElementById('projId').value = cfg.proj;
+      document.getElementById('desk').value = cfg.desk;
+      refresh();
+      setInterval(refresh, 30000);
+    }
+
+    function url(col, doc) {
+      return doc ? `${FS}/${cfg.proj}/databases/(default)/documents/${col}/${doc}` : `${FS}/${cfg.proj}/databases/(default)/documents/${col}`;
+    }
+
+    function str(f) { return f ? (f.stringValue||f.integerValue||'') : ''; }
+    function ago(d) { const s=Math.floor((Date.now()-new Date(d).getTime())/1000); return s<60?s+'s':s<3600?Math.floor(s/60)+'m':s<86400?Math.floor(s/3600)+'h':Math.floor(s/86400)+'d'; }
+
+    async function refresh() {
+      // Desks
+      try {
+        const r = await (await fetch(url('agents'))).json();
+        const el = document.getElementById('desks');
+        if (!r.documents) { el.innerHTML = 'No desks'; return; }
+        el.innerHTML = r.documents.map(d => {
+          const f=d.fields;
+          return `<div class="desk-row"><span class="desk-name">${str(f.desk)}</span><span class="desk-status">${str(f.status)}</span><span class="desk-time">${ago(str(f.last_seen))}</span></div>`;
+        }).join('');
+        document.getElementById('mainDot').className = 'dot alive';
+      } catch(e) { document.getElementById('desks').innerHTML = 'Error: '+e.message; document.getElementById('mainDot').className = 'dot dead'; }
+
+      // Inbox
+      try {
+        const r = await (await fetch(url('inbox'))).json();
+        const el = document.getElementById('inbox');
+        if (!r.documents) { el.innerHTML = 'Empty'; return; }
+        const unread = r.documents.filter(d=>d.fields.read&&!d.fields.read.booleanValue);
+        const show = unread.length>0 ? unread.slice(-8) : r.documents.slice(-3);
+        el.innerHTML = show.map(d => {
+          const f=d.fields;
+          const read = f.read&&f.read.booleanValue;
+          return `<div class="msg"><span class="msg-from">${str(f.from)}→${str(f.to)}</span> ${!read?'<span class="badge">NEW</span>':''}<br><span class="msg-text">${str(f.message).substring(0,120)}</span></div>`;
+        }).join('');
+      } catch(e) { document.getElementById('inbox').innerHTML = 'Error'; }
+
+      // Gems
+      try {
+        const r = await (await fetch(url('gems'))).json();
+        const el = document.getElementById('gems');
+        if (!r.documents) { el.innerHTML = 'None'; return; }
+        el.innerHTML = r.documents.slice(-6).map(d => {
+          const f=d.fields;
+          return `<div class="gem"><span class="gem-id">${str(f.id)}</span> ${str(f.text).substring(0,80)}</div>`;
+        }).join('');
+      } catch(e) { document.getElementById('gems').innerHTML = 'Error'; }
+    }
+
+    async function send() {
+      const to=document.getElementById('to').value, msg=document.getElementById('msg').value;
+      if (!to||!msg||!cfg.desk) return;
+      await fetch(url('inbox'), { method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({fields:{from:{stringValue:cfg.desk},to:{stringValue:to},message:{stringValue:msg},timestamp:{stringValue:new Date().toISOString()},read:{booleanValue:false}}})
+      });
+      document.getElementById('msg').value = '';
+      refresh();
+    }
+
+    async function saveConfig() {
+      cfg.proj = document.getElementById('projId').value;
+      cfg.desk = document.getElementById('desk').value;
+      await chrome.storage.local.set({firebaseConfig:{projectId:cfg.proj},deskName:cfg.desk});
+      refresh();
+    }
+
+    document.getElementById('msg').addEventListener('keypress',e=>{if(e.key==='Enter')send()});
+    init();
+  </script>
+</body>
+</html>
