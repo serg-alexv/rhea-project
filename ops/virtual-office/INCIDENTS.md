@@ -38,16 +38,16 @@
 - **Rollback:** N/A (resolved)
 - **Next test:** N/A
 
-### INC-2026-02-16-006: Rex (LEAD) crashed with 400
-- **Symptom:** Rex session dropped with HTTP 400 error
-- **Root cause:** Likely related to INC-001 (400 Bad Request pattern) or context window overflow — Rex had been running extended autonomous session
-- **Last commit before crash:** b604627 (DEC-009 + consensus_analyzer.py, 729 lines)
-- **Data loss:** NONE — all work committed and pushed before crash
-- **Status:** DOWN — LEAD offline
-- **Impact:** No routing authority (only LEAD reads/routes inbox per OFFICE.md rules)
-- **Workaround:** Argos (COWORK) monitoring office, human can restart Rex in rh.1 terminal
-- **Verify:** Rex comes back online, heartbeat via Firebase or new commit
-- **Next test:** Check rh.1 terminal error output for exact 400 payload
+### INC-2026-02-16-006: Rex (LEAD) — Anthropic daily token quota exhausted
+- **Symptom:** Rex session returns `400 You have exceeded your daily token limit. You can resume at 2026-02-18 00:00 UTC`
+- **Root cause:** Anthropic daily token limit hit (NOT a bug — quota cap). Rex had 25+ hour uptime before this.
+- **Previous misdiagnosis:** Initially thought to be session crash (INC-001 pattern). Actually transient 400 on Feb 16, recovered. Now hard quota limit on Feb 17.
+- **Data loss:** NONE — Rex read B2's P0 message before dying.
+- **Status:** DOWN — LEAD offline until 2026-02-18 00:00 UTC
+- **Impact:** No routing authority until quota resets
+- **Workaround:** B2 continuing all work. Firebase messages queued for Rex.
+- **Verify:** Rex starts responding after midnight UTC
+- **Next test:** Implement hard token budget + provider fallback (OpenAI/Gemini) to avoid future exhaustion
 
 ### INC-2026-02-16-005: Chrome JS execution rejected
 - **Symptom:** osascript Chrome JS command rejected by user permission
@@ -66,6 +66,24 @@
 - **Source:** COWORK_20260216_agent-online.md
 - **Verify:** `docker pull ai-dock/comfyui:pytorch-2.4.1-cpu` — expect 404
 - **Next test:** Find replacement image or build from ComfyUI repo
+
+## 2026-02-17
+
+### INC-2026-02-17-001: Gemini API key leaked in git history
+- **Symptom:** `AIzaSy*` key found in `.entire/chat_extracts.json` which was tracked in git
+- **Root cause:** Entire.io chat extracts file included API response with key, file was not gitignored
+- **Fix applied:** File removed from tracking (`git rm --cached`), added to `.gitignore`
+- **Status:** MITIGATED — file untracked, but key remains in git history
+- **Action needed:** ROTATE the Gemini API key in Google Cloud Console (key is burned)
+- **Verify:** `git log -p --all -S 'AIzaSy' | head -5` should show the old commit only
+
+### INC-2026-02-17-002: Firestore rules were wide open (if true)
+- **Symptom:** All Firestore collections allowed unauthenticated read/write
+- **Root cause:** Initial setup used `allow read, write: if true` for all collections
+- **Fix applied:** Rules changed to `request.auth != null`, deployed via `firebase deploy`
+- **Status:** RESOLVED — rules deployed, health probe passes with auth
+- **Verify:** `ops/rhea_firebase.py health` shows READ + WRITE OK with auth
+- **Note:** Service account OAuth2 token auth added to rhea_firebase.py
 
 ### INC-2026-02-16-007: Azure Foundry catalog broken for Jais
 - **Symptom:** Jais 30B Chat not found in Azure catalog search (382 models only)
