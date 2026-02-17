@@ -1,0 +1,26 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "d3fd717ba4e6",
+  "session_id": "2a84a5a3-0636-4047-aa95-342b1ebe7d83",
+  "strategy": "auto-commit",
+  "created_at": "2026-02-17T08:59:44.618696Z",
+  "branch": "feat/chronos-agents-and-bridge",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "firebase/firestore.rules",
+    "logs/firebase_calls.jsonl",
+    "logs/tribunal_api_calls.jsonl",
+    "ops/rhea_firebase.py"
+  ],
+  "agent": "Claude Code",
+  "transcript_identifier_at_start": "b230967d-85e6-41c0-8805-fe79bddd46b3",
+  "checkpoint_transcript_start": 4725,
+  "transcript_lines_at_start": 4725,
+  "token_usage": {
+    "input_tokens": 579147,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 1431860,
+    "output_tokens": 4305,
+    "api_call_count": 8
+  }
+}

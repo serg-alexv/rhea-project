@@ -1,0 +1,1 @@
+“Good fix. Next: add firestore-health + correct error mapping (503/504 not 400) + timeouts/backoff + log root_cause + ensure auth/secrets hygiene.”
