@@ -3,3 +3,10 @@
 {"timestamp": "2026-02-17T08:59:38.105141+00:00", "service": "firestore", "method": "GET", "url": "/agents", "status": 200, "latency_ms": 1334, "error": null, "root_cause": null}
 {"timestamp": "2026-02-17T08:59:39.452484+00:00", "service": "firestore", "method": "PATCH", "url": "/_health/probe", "status": 200, "latency_ms": 1346, "error": null, "root_cause": null}
 {"timestamp": "2026-02-17T09:18:28.544542+00:00", "service": "firestore", "method": "POST", "url": "/inbox", "status": 200, "latency_ms": 1509, "error": null, "root_cause": null}
+{"timestamp": "2026-02-17T09:40:24.749071+00:00", "service": "firestore", "method": "GET", "url": "/agents", "status": 403, "latency_ms": 831, "error": "PERMISSION_DENIED \u2014 Firestore security rules reject this operation", "root_cause": "Missing or insufficient permissions."}
+{"timestamp": "2026-02-17T09:40:25.382908+00:00", "service": "firestore", "method": "PATCH", "url": "/_health/probe", "status": 403, "latency_ms": 631, "error": "PERMISSION_DENIED \u2014 Firestore security rules reject this operation", "root_cause": "Missing or insufficient permissions."}
+{"timestamp": "2026-02-17T09:41:06.790425+00:00", "service": "firestore", "method": "GET", "url": "/agents", "status": 200, "latency_ms": 803, "error": null, "root_cause": null}
+{"timestamp": "2026-02-17T09:41:07.412529+00:00", "service": "firestore", "method": "PATCH", "url": "/_health/probe", "status": 200, "latency_ms": 621, "error": null, "root_cause": null}
+{"timestamp": "2026-02-17T09:41:16.679818+00:00", "service": "firestore", "method": "PATCH", "url": "/agents/B2", "status": 200, "latency_ms": 877, "error": null, "root_cause": null}
+{"timestamp": "2026-02-17T09:46:14.702333+00:00", "service": "firestore", "method": "POST", "url": "/inbox", "status": 200, "latency_ms": 678, "error": null, "root_cause": null}
+{"timestamp": "2026-02-17T09:56:33.135103+00:00", "service": "firestore", "method": "PATCH", "url": "/agents/B2", "status": 200, "latency_ms": 678, "error": null, "root_cause": null}
