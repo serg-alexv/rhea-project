@@ -65,8 +65,45 @@
   DoD: each lesson 2--4 min; ties to safety constraints and loop variables.
   **Status: ✅ DONE** — 10 lessons + unlock map in docs/blueprint-literacy-ladder.md. Each has safety constraint + loop variable.
 
+## P0.5 -- Tribunal API (revenue path, DEC-008)
+
+- **TRIBUNAL-001** | Consensus analyzer v2 (ICE + Council) | Desk: B2
+  Output: src/consensus_analyzer.py with 3 analysis levels
+  DoD: Level 1 (local), Level 2 (chairman), Level 3 (ICE iterative) all functional.
+  **Status: DONE** — 7b52bbd. Demo tested. Composite scoring calibrated.
+
+- **TRIBUNAL-002** | Wire analyzer into bridge tribunal() | Desk: B2
+  Output: rhea_bridge.py returns ConsensusReport in TribunalResult
+  DoD: `python3 src/rhea_bridge.py tribunal "prompt"` returns structured consensus.
+  **Status: DONE** — 3a1f676. --mode local|chairman flag, consensus_report field added.
+
+- **TRIBUNAL-003** | FastAPI wrapper (tribunal_api.py) | Desk: B2
+  Output: src/tribunal_api.py with POST /tribunal, POST /tribunal/ice, GET /health
+  DoD: server starts, health returns OK, /docs shows Swagger.
+  **Status: DONE** — 22347df. API key auth, CORS, call logging, Swagger.
+
+- **TRIBUNAL-004** | Security: secret redaction + Firestore rules | Desk: B2
+  Output: redact_secrets() in all log paths, Firestore rules require auth
+  DoD: no API keys in any .jsonl log, Firestore rejects unauthenticated requests.
+  **Status: DONE** — d41612d + e5956a0. Rules deployed. Health probe passes.
+
+- **TRIBUNAL-005** | Deploy script for Tribunal API | Desk: TBD
+  Output: Dockerfile + Railway/Fly.io config
+  DoD: `tribunal_api.py` deployable with one command.
+  **Status: TODO**
+
+- **TRIBUNAL-006** | End-to-end test with real providers | Desk: TBD
+  Output: test script that exercises /tribunal with live API keys
+  DoD: at least 3 providers respond, consensus report has agreement > 0.
+  **Status: TODO** (needs API keys in .env)
+
+- **TRIBUNAL-007** | Landing page | Desk: TBD
+  Output: single-page site explaining tribunal concept + API key signup
+  DoD: hosted, clear value prop, pricing shown.
+  **Status: TODO**
+
 ## Summary
 | Status | Count |
 |--------|-------|
-| ✅ DONE | 12 |
-| 🔲 TODO | 0 |
+| DONE | 16 |
+| TODO | 3 |
