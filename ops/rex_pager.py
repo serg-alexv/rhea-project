@@ -67,6 +67,7 @@ LEASES_DIR = PROJECT_ROOT / "ops" / "virtual-office" / "leases"
 SNAPSHOTS_DIR = PROJECT_ROOT / "ops" / "virtual-office" / "snapshots"
 INTENTS_FILE = PROJECT_ROOT / "ops" / "virtual-office" / "effect_intents.jsonl"
 INCIDENTS_FILE = PROJECT_ROOT / "ops" / "virtual-office" / "relay_incidents.jsonl"
+CHAIN_FILE = PROJECT_ROOT / "ops" / "virtual-office" / "relay_chain.jsonl"  # hash-chained audit
 
 # Staleness policy (section 8) — max age in seconds before action changes
 STALENESS_POLICY = {
@@ -110,6 +111,71 @@ def _uuidv7_ish() -> str:
 
 
 # ---------------------------------------------------------------------------
+# Hash-chained audit log (rhea-advanced lesson 12)
+# Tamper-evident: each entry contains hash of previous entry.
+# Threats mitigated: truncation, reordering, replay, silent edit.
+# ---------------------------------------------------------------------------
+
+def _canonical_json(obj: dict) -> str:
+    """Stable JSON encoding: sorted keys, no whitespace, ensure reproducibility."""
+    return json.dumps(obj, sort_keys=True, separators=(",", ":"))
+
+
+def _last_chain_hash() -> str:
+    """Read the hash of the last entry in the chain. Genesis = '0'*64."""
+    if not CHAIN_FILE.exists():
+        return "0" * 64
+    last_line = ""
+    for line in CHAIN_FILE.read_text().strip().split("\n"):
+        if line.strip():
+            last_line = line
+    if not last_line:
+        return "0" * 64
+    return json.loads(last_line).get("event_hash", "0" * 64)
+
+
+def chain_append(event_type: str, actor: str, payload: dict) -> dict:
+    """Append a tamper-evident entry to the audit chain."""
+    prev_hash = _last_chain_hash()
+    entry = {
+        "timestamp": _now_iso(),
+        "event_type": event_type,
+        "actor": actor,
+        "payload": payload,
+        "prev_hash": prev_hash,
+    }
+    canonical = _canonical_json(entry)
+    entry["event_hash"] = hashlib.sha256(canonical.encode()).hexdigest()
+    CHAIN_FILE.parent.mkdir(parents=True, exist_ok=True)
+    with open(CHAIN_FILE, "a") as f:
+        f.write(json.dumps(entry) + "\n")
+    return entry
+
+
+def chain_verify() -> tuple[bool, int, str]:
+    """Verify chain integrity. Returns (valid, entries_checked, error_or_ok)."""
+    if not CHAIN_FILE.exists():
+        return True, 0, "empty chain"
+    prev_hash = "0" * 64
+    count = 0
+    for line in CHAIN_FILE.read_text().strip().split("\n"):
+        if not line.strip():
+            continue
+        entry = json.loads(line)
+        count += 1
+        if entry.get("prev_hash") != prev_hash:
+            return False, count, f"entry {count}: prev_hash mismatch (truncation/reorder)"
+        check = dict(entry)
+        stored_hash = check.pop("event_hash")
+        canonical = _canonical_json(check)
+        expected = hashlib.sha256(canonical.encode()).hexdigest()
+        if stored_hash != expected:
+            return False, count, f"entry {count}: event_hash mismatch (tampered)"
+        prev_hash = stored_hash
+    return True, count, "chain valid"
+
+
+# ---------------------------------------------------------------------------
 # Leases (QWRR section 8 step 1, invariants I4 + I5)
 # ---------------------------------------------------------------------------
 
@@ -140,6 +206,7 @@ def acquire_lease(agent: str) -> int:
     # Also write to Firestore for cross-agent visibility
     _write_lease_firestore(agent, lease)
 
+    chain_append("lease.acquire", agent, {"lease_token": new_token, "prev_token": prev_token})
     print(f"[lease] {agent} acquired lease_token={new_token} (prev={prev_token})")
     return new_token
 
@@ -415,6 +482,9 @@ def enqueue(source: str, target: str, body: str, priority: str = "P1",
     _write_firestore(envelope)
     _write_inbox_backup(envelope)
 
+    # Audit chain entry
+    chain_append("relay.enqueue", source, {"msg_id": envelope["id"], "seq": envelope["seq"], "target": target})
+
     print(f"[relay] Enqueued seq={envelope['seq']} {source}→{target} ({priority})")
     print(f"  id: {envelope['id']}")
     print(f"  idem: {envelope['idempotency_key']}")
@@ -599,6 +669,8 @@ def boot(agent: str):
             print(f"  {agent} heartbeat: ALIVE (lease={token})")
     except Exception as e:
         print(f"  heartbeat failed (non-fatal): {e}")
+
+    chain_append("boot.complete", agent, {"lease_token": token, "last_seq": max_seq, "msgs": len(delivered)})
 
     print(f"\n{'=' * 60}")
     print(f"  BOOT COMPLETE — {agent}")
@@ -799,6 +871,13 @@ def main():
     elif cmd == "watch":
         target = sys.argv[2] if len(sys.argv) > 2 else "LEAD"
         watch_daemon(target)
+
+    elif cmd == "verify":
+        valid, count, detail = chain_verify()
+        print(f"Chain integrity: {'VALID' if valid else 'BROKEN'}")
+        print(f"  Entries: {count}")
+        print(f"  Detail: {detail}")
+        sys.exit(0 if valid else 1)
 
     elif cmd == "inspect":
         if len(sys.argv) < 3:

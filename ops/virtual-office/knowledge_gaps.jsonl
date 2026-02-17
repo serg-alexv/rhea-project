@@ -1,0 +1,7 @@
+{"gap": "event_sourcing_replay", "source": "rhea-advanced/lesson-11", "severity": "high", "filled": false, "note": "We log events to JSONL but have no replay/projection engine"}
+{"gap": "hash_chained_audit", "source": "rhea-advanced/lesson-12", "severity": "high", "filled": false, "note": "15-line upgrade to make audit log tamper-evident, recipe exists, not implemented"}
+{"gap": "cross_model_stateless_dialogue", "source": "human-directive-20260217", "severity": "critical", "filled": false, "note": "Claude Code instances are stateless between turns. No protocol for coherent multi-model dialogue."}
+{"gap": "firebase_single_point_of_failure", "source": "ops/rhea_firebase.py", "severity": "high", "filled": false, "note": "All inter-agent comms depend on Google Firestore. If Google is down, office is deaf."}
+{"gap": "lease_revocation_network_partition", "source": "docs/qwrr-layer.md:65", "severity": "medium", "filled": false, "note": "Current lease is file-based. No handling for network partition where two agents think they have the lease."}
+{"gap": "adversarial_testing_deny_empty", "source": "rhea-advanced/lesson-19", "severity": "high", "filled": false, "note": "deny:[] trust config has zero red team coverage. No adversarial test suite exists."}
+{"gap": "effect_intent_executor", "source": "docs/qwrr-layer.md:188-212", "severity": "medium", "filled": false, "note": "QWRR Phase 2: intents are created but no executor processes them. Receipts not implemented."}

@@ -1,6 +1,6 @@
 {
   "agent": "LEAD",
-  "lease_token": 2,
-  "acquired_at": "2026-02-17T12:01:35.798141+00:00",
-  "prev_token": 1
+  "lease_token": 3,
+  "acquired_at": "2026-02-17T13:10:21.769085+00:00",
+  "prev_token": 2
 }
