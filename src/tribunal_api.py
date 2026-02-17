@@ -157,10 +157,13 @@ class TribunalICEResponse(BaseModel):
 
 
 # ---------------------------------------------------------------------------
-# Call logging
+# Call logging (with secret redaction)
 # ---------------------------------------------------------------------------
 
 CALL_LOG = Path(__file__).parent.parent / "logs" / "tribunal_api_calls.jsonl"
+
+# Import redaction from bridge
+from rhea_bridge import redact_secrets
 
 
 def _log_api_call(endpoint: str, request_data: dict, elapsed_s: float, status: str):
@@ -174,7 +177,7 @@ def _log_api_call(endpoint: str, request_data: dict, elapsed_s: float, status: s
         "status": status,
     }
     with open(CALL_LOG, "a") as f:
-        f.write(json.dumps(entry) + "\n")
+        f.write(redact_secrets(json.dumps(entry)) + "\n")
 
 
 # ---------------------------------------------------------------------------
