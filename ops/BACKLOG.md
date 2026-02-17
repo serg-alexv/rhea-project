@@ -87,15 +87,15 @@
   DoD: no API keys in any .jsonl log, Firestore rejects unauthenticated requests.
   **Status: DONE** — d41612d + e5956a0. Rules deployed. Health probe passes.
 
-- **TRIBUNAL-005** | Deploy script for Tribunal API | Desk: TBD
+- **TRIBUNAL-005** | Deploy script for Tribunal API | Desk: B2
   Output: Dockerfile + Railway/Fly.io config
   DoD: `tribunal_api.py` deployable with one command.
-  **Status: TODO**
+  **Status: ✅ DONE** — Dockerfile.tribunal, fly.toml, railway.toml, .dockerignore, scripts/deploy_tribunal.sh (local/fly/railway). Docker build needs Docker Desktop running.
 
-- **TRIBUNAL-006** | End-to-end test with real providers | Desk: TBD
+- **TRIBUNAL-006** | End-to-end test with real providers | Desk: B2
   Output: test script that exercises /tribunal with live API keys
   DoD: at least 3 providers respond, consensus report has agreement > 0.
-  **Status: TODO** (needs API keys in .env)
+  **Status: ✅ DONE** — tests/test_tribunal_e2e.py: 13/13 passed. 6/6 providers, k=5 agreement=0.91, ICE rounds converge. Direct+API modes.
 
 - **TRIBUNAL-007** | Landing page | Desk: TBD
   Output: single-page site explaining tribunal concept + API key signup
@@ -105,5 +105,5 @@
 ## Summary
 | Status | Count |
 |--------|-------|
-| DONE | 16 |
-| TODO | 3 |
+| DONE | 18 |
+| TODO | 1 |

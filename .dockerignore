@@ -1,0 +1,32 @@
+# Secrets
+.env
+.env.*
+firebase/
+*.json
+!package.json
+
+# Dev/ops artifacts
+ops/
+docs/
+logs/
+tests/
+rhea-applied-backlog/
+.git/
+.github/
+.claude/
+__pycache__/
+*.pyc
+*.egg-info/
+node_modules/
+
+# Data files
+*.db
+*.db-wal
+*.db-shm
+*.jsonl
+
+# Build artifacts
+Dockerfile.*
+fly.toml
+railway.toml
+*.md
