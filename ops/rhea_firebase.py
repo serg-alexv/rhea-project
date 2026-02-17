@@ -96,9 +96,36 @@ def _classify_error(code, body):
         detail = _redact(body[:150]) if body else ""
     return mapped, detail
 
+_cached_token = {"token": None, "expires": 0}
+
+def _get_auth_token():
+    """Get OAuth2 bearer token from service account (cached)."""
+    if _cached_token["token"] and time.time() < _cached_token["expires"] - 60:
+        return _cached_token["token"]
+    try:
+        from google.auth.transport.requests import Request
+        from google.oauth2 import service_account
+        creds_path = os.environ.get("GOOGLE_APPLICATION_CREDENTIALS", "")
+        if not creds_path:
+            return None
+        creds = service_account.Credentials.from_service_account_file(
+            creds_path,
+            scopes=["https://www.googleapis.com/auth/datastore"],
+        )
+        creds.refresh(Request())
+        _cached_token["token"] = creds.token
+        _cached_token["expires"] = time.time() + 3500  # tokens last ~1h
+        return creds.token
+    except Exception:
+        return None
+
+
 def _request(method, url, data=None, retries=3, backoff=1.0):
     """HTTP request with retry, backoff, error mapping, and logging."""
     headers = {"Content-Type": "application/json"} if data else {}
+    token = _get_auth_token()
+    if token:
+        headers["Authorization"] = f"Bearer {token}"
     encoded = json.dumps(data).encode() if data else None
     last_err = None
 

@@ -1,37 +1,43 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Office inbox — any authenticated agent can write
+    // Default: deny all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Office collections — require authenticated service account
     match /inbox/{messageId} {
-      allow read, write: if true;
+      allow read: if request.auth != null;
+      allow write: if request.auth != null;
     }
-    // Office outbox — any authenticated agent can read their desk
     match /outbox/{taskId} {
-      allow read, write: if true;
+      allow read: if request.auth != null;
+      allow write: if request.auth != null;
     }
-    // Gems
     match /gems/{gemId} {
-      allow read, write: if true;
+      allow read: if request.auth != null;
+      allow write: if request.auth != null;
     }
-    // Incidents
     match /incidents/{incId} {
-      allow read, write: if true;
+      allow read: if request.auth != null;
+      allow write: if request.auth != null;
     }
-    // Decisions
     match /decisions/{decId} {
-      allow read, write: if true;
+      allow read: if request.auth != null;
+      allow write: if request.auth != null;
     }
-    // Today capsule (singleton)
     match /capsule/{docId} {
-      allow read, write: if true;
+      allow read: if request.auth != null;
+      allow write: if request.auth != null;
     }
-    // Agent heartbeats
     match /agents/{agentId} {
-      allow read, write: if true;
+      allow read: if request.auth != null;
+      allow write: if request.auth != null;
     }
-    // Health probe
     match /_health/{docId} {
-      allow read, write: if true;
+      allow read: if request.auth != null;
+      allow write: if request.auth != null;
     }
   }
 }
