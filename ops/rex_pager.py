@@ -538,6 +538,7 @@ def drain(target: str, lease_token: int = 0, from_seq: int = 0):
     delivered = []
     expired_list = []
     reconfirm_list = []
+    seen_idem_keys = set()  # I3: idempotency dedup within single drain
 
     for m in mailbox:
         if m.get("target") != target:
@@ -546,6 +547,13 @@ def drain(target: str, lease_token: int = 0, from_seq: int = 0):
             continue
         if m.get("seq", 0) <= from_seq:
             continue
+        # I3: deduplicate by idempotency key (blocks replay attacks)
+        idem = m.get("idempotency_key", "")
+        if idem and idem in seen_idem_keys:
+            _write_ack(m["id"], target)  # ack the duplicate
+            continue
+        if idem:
+            seen_idem_keys.add(idem)
 
         # Staleness check (section 8)
         action, reason = check_staleness(m)

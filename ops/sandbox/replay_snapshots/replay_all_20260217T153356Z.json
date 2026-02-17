@@ -1,0 +1,132 @@
+{
+  "relay_stats": {
+    "total_messages": 5,
+    "by_type": {
+      "msg.send": 5
+    },
+    "by_source": {
+      "B2": 5
+    },
+    "by_target": {
+      "LEAD": 4,
+      "COWORK": 1
+    },
+    "by_priority": {
+      "P1": 4,
+      "P0": 1
+    },
+    "by_status": {
+      "pending": 5
+    },
+    "seq_range": [
+      1,
+      5
+    ]
+  },
+  "chain_integrity": {
+    "entries": 1,
+    "valid": false,
+    "broken_at": 1,
+    "actors": [
+      "B2"
+    ],
+    "event_types": {
+      "relay.enqueue": 1
+    }
+  },
+  "bridge_cost": {
+    "total_calls": 45,
+    "total_tokens": 0,
+    "by_provider": {
+      "openai": {
+        "calls": 13,
+        "tokens": 0,
+        "errors": 0,
+        "avg_latency": 0.0
+      },
+      "openrouter": {
+        "calls": 12,
+        "tokens": 0,
+        "errors": 0,
+        "avg_latency": 0.0
+      },
+      "gemini": {
+        "calls": 13,
+        "tokens": 0,
+        "errors": 0,
+        "avg_latency": 0.0
+      },
+      "deepseek": {
+        "calls": 3,
+        "tokens": 0,
+        "errors": 0,
+        "avg_latency": 0.0
+      },
+      "azure": {
+        "calls": 3,
+        "tokens": 0,
+        "errors": 0,
+        "avg_latency": 0.0
+      },
+      "huggingface": {
+        "calls": 1,
+        "tokens": 0,
+        "errors": 0,
+        "avg_latency": 0.0
+      }
+    },
+    "by_model": {
+      "gpt-4o-mini": {
+        "calls": 14,
+        "tokens": 0
+      },
+      "anthropic/claude-sonnet-4": {
+        "calls": 12,
+        "tokens": 0
+      },
+      "gemini-2.0-flash": {
+        "calls": 11,
+        "tokens": 0
+      },
+      "deepseek-chat": {
+        "calls": 3,
+        "tokens": 0
+      },
+      "mistralai/Mistral-7B-Instruct-v0.3": {
+        "calls": 1,
+        "tokens": 0
+      },
+      "gemini-2.0-flash-lite": {
+        "calls": 2,
+        "tokens": 0
+      },
+      "gpt-4o": {
+        "calls": 2,
+        "tokens": 0
+      }
+    },
+    "errors": 0,
+    "time_range": [
+      "2026-02-16T17:44:28.751968+00:00",
+      "2026-02-17T15:26:59.911921+00:00"
+    ]
+  },
+  "dialogue_DLG-1771333921": {
+    "topic": "Should we build a local SQLite relay to replace Firebase dependency?",
+    "speakers": [
+      "B2",
+      "GPT"
+    ],
+    "rounds": 2,
+    "entries": 6,
+    "by_type": {
+      "meta": 1,
+      "propose": 2,
+      "critique": 1,
+      "agree": 2
+    },
+    "converged": true,
+    "convergence_reason": "mutual agreement: B2, GPT"
+  },
+  "timeline_count": 92
+}
