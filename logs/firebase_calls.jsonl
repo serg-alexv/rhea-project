@@ -10,3 +10,6 @@
 {"timestamp": "2026-02-17T09:41:16.679818+00:00", "service": "firestore", "method": "PATCH", "url": "/agents/B2", "status": 200, "latency_ms": 877, "error": null, "root_cause": null}
 {"timestamp": "2026-02-17T09:46:14.702333+00:00", "service": "firestore", "method": "POST", "url": "/inbox", "status": 200, "latency_ms": 678, "error": null, "root_cause": null}
 {"timestamp": "2026-02-17T09:56:33.135103+00:00", "service": "firestore", "method": "PATCH", "url": "/agents/B2", "status": 200, "latency_ms": 678, "error": null, "root_cause": null}
+{"timestamp": "2026-02-17T12:04:01.987491+00:00", "service": "firestore", "method": "GET", "url": "/inbox", "status": 200, "latency_ms": 684, "error": null, "root_cause": null}
+{"timestamp": "2026-02-17T12:12:02.197254+00:00", "service": "firestore", "method": "PATCH", "url": "/agents/B2", "status": 200, "latency_ms": 726, "error": null, "root_cause": null}
+{"timestamp": "2026-02-17T12:12:03.989349+00:00", "service": "firestore", "method": "POST", "url": "/inbox", "status": 200, "latency_ms": 605, "error": null, "root_cause": null}
