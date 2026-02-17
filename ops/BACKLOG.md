@@ -97,13 +97,13 @@
   DoD: at least 3 providers respond, consensus report has agreement > 0.
   **Status: ✅ DONE** — tests/test_tribunal_e2e.py: 13/13 passed. 6/6 providers, k=5 agreement=0.91, ICE rounds converge. Direct+API modes.
 
-- **TRIBUNAL-007** | Landing page | Desk: TBD
+- **TRIBUNAL-007** | Landing page | Desk: B2
   Output: single-page site explaining tribunal concept + API key signup
   DoD: hosted, clear value prop, pricing shown.
-  **Status: TODO**
+  **Status: ✅ DONE** — docs/public/tribunal-landing.html: hero, curl example, 4 features, L1/L2/L3 levels, 8 use cases, 2-tier pricing. Ready for GitHub Pages (`/docs/public`) or static deploy.
 
 ## Summary
 | Status | Count |
 |--------|-------|
-| DONE | 18 |
-| TODO | 1 |
+| DONE | 19 |
+| TODO | 0 |
