@@ -92,6 +92,37 @@ async def verify_api_key(x_api_key: str = Header(None, alias="X-API-Key")):
 
 
 # ---------------------------------------------------------------------------
+# Rate limiting (in-memory token bucket, per API key)
+# ---------------------------------------------------------------------------
+
+RATE_LIMIT_PER_MINUTE = int(os.environ.get("TRIBUNAL_RATE_LIMIT", "30"))
+RATE_LIMIT_DAILY = int(os.environ.get("TRIBUNAL_DAILY_LIMIT", "1000"))
+
+_rate_buckets: dict[str, list[float]] = {}
+
+
+async def check_rate_limit(x_api_key: str = Header(None, alias="X-API-Key")):
+    key = x_api_key or "anonymous"
+    now = time.time()
+    if key not in _rate_buckets:
+        _rate_buckets[key] = []
+
+    # Prune entries older than 24h
+    _rate_buckets[key] = [t for t in _rate_buckets[key] if now - t < 86400]
+
+    # Daily check
+    if len(_rate_buckets[key]) >= RATE_LIMIT_DAILY:
+        raise HTTPException(status_code=429, detail=f"Daily limit ({RATE_LIMIT_DAILY} calls) exceeded")
+
+    # Per-minute check
+    recent = sum(1 for t in _rate_buckets[key] if now - t < 60)
+    if recent >= RATE_LIMIT_PER_MINUTE:
+        raise HTTPException(status_code=429, detail=f"Rate limit ({RATE_LIMIT_PER_MINUTE}/min) exceeded")
+
+    _rate_buckets[key].append(now)
+
+
+# ---------------------------------------------------------------------------
 # Request/Response models
 # ---------------------------------------------------------------------------
 
@@ -203,7 +234,7 @@ async def models():
     return bridge.models_status()
 
 
-@app.post("/tribunal", response_model=TribunalResponse, dependencies=[Depends(verify_api_key)])
+@app.post("/tribunal", response_model=TribunalResponse, dependencies=[Depends(verify_api_key), Depends(check_rate_limit)])
 async def tribunal(req: TribunalRequest):
     t0 = time.time()
     bridge = get_bridge()
@@ -251,7 +282,7 @@ async def tribunal(req: TribunalRequest):
     )
 
 
-@app.post("/tribunal/ice", response_model=TribunalICEResponse, dependencies=[Depends(verify_api_key)])
+@app.post("/tribunal/ice", response_model=TribunalICEResponse, dependencies=[Depends(verify_api_key), Depends(check_rate_limit)])
 async def tribunal_ice(req: TribunalICERequest):
     t0 = time.time()
     analyzer = get_analyzer()
