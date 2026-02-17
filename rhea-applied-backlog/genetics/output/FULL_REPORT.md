@@ -1,0 +1,2690 @@
+# Leuconostoc mesenteroides Genome Analysis Report
+> Generated: 2026-02-17 14:59 UTC
+> Agent: B2 (Claude Opus 4.6) | Desk: B2 | Project: Rhea
+
+## 1. Organism Identification
+
+### Species
+**Leuconostoc mesenteroides subsp. mesenteroides**
+
+### Evidence
+| Parameter | This Genome | Reference (ATCC 8293) | Match |
+|-----------|-------------|----------------------|-------|
+| Genome size | 1,917,817 bp | 2,038,396 bp | 94.1% |
+| GC content | 37.66% | 37.7% | Exact |
+| Predicted CDS | 2,036 | 1,970 | ~103% |
+| Contigs | 113 | 1 (complete) | Draft vs complete |
+| BLAST identity | 100% to CP000414.1 | — | Confirmed |
+
+**Conclusion:** This is *Leuconostoc mesenteroides* subsp. *mesenteroides*, most closely related to the type strain ATCC 8293. The 113-contig assembly at ~1.92 Mb is consistent with a typical *L. mesenteroides* genome (1.8-2.1 Mb). The slightly smaller size vs reference (94.1%) is expected for a draft assembly — some small genes at contig boundaries may be fragmented or missing.
+
+### Key Characteristics of *L. mesenteroides*
+- Gram-positive, facultatively anaerobic coccus
+- Heterofermentative lactic acid bacterium (produces lactic acid + ethanol + CO₂)
+- Found in dairy, fermented vegetables (sauerkraut, kimchi), sugar-rich environments
+- Uses the phosphoketolase pathway (not glycolysis) for sugar fermentation
+- Generally Recognized As Safe (GRAS) for food applications
+- Cannot respire aerobically — lacks a functional electron transport chain
+
+## 2. Complete Gene Table
+
+Total predicted genes: **2036** (1698 high-confidence, 21 medium, 301 low, 16 novel)
+
+### Table 2.1: All Genes (truncated sequences — full sequences in supplementary JSON)
+
+| # | Gene Name | Function (≤20 words) | Contig | Start | End | Strand | Length (aa) | Confidence | Sequence (first 60 aa) |
+|---|-----------|---------------------|--------|-------|-----|--------|------------|------------|----------------------|
+| 1 | orf_0001 | Predicted membrane protein | 1 | 1 | 2637 | - | 879 | high | `KTVNETVRYVDQHGHVVAKQHTDSVNFTRTVVVDNVTGEVITSGAGTKSWTATNGDTTFD` |
+| 2 | orf_0002 | transcriptional regulator, TetR family | 1 | 2810 | 3355 | + | 182 | high | `MAYTNNQLHVIYGDGSLGLQGANFHYLFSYERGGLESLVVNDKEWLYRTPTPIFWRATTD` |
+| 3 | orf_0003 | ABC-type antimicrobial peptide transport system, ATPase component | 1 | 3402 | 4097 | - | 232 | high | `MQANIQWLDDPEVFRVNQLPAHSDHHYYHDTAEFKTGSRFIKSLNGAWRFNFAKTPAERP` |
+| 4 | orf_0004 | ABC-type antimicrobial peptide transport system, permease component | 1 | 4102 | 5148 | - | 349 | high | `MKYSWKFDSKAAKQFGKLDKPVQRRIYNWLELNISGIENPRMFGKALEGELKTLWRYRVG` |
+| 5 | orf_0005 | deoxyribodipyrimidine photo-lyase type I | 1 | 5175 | 6587 | - | 471 | high | `MSVTTVRLQDDTMAWAKEYADFKGMSVTGLIADLIEEARQDDEDYADAMKVINSENREYV` |
+| 6 | orf_0006 | adenosine deaminase | 1 | 6831 | 7847 | + | 339 | high | `EKKHAEIVIELEKTLSSGAKKANTSEVNVELEEIFAPASGQKKLLNEVDGNTITGIGFAI` |
+| 7 | orf_0007 | Uncharacterized conserved membrane protein | 1 | 7894 | 9594 | - | 567 | high | `MNLKRDWWVVITTIAITSFLSFSVS` |
+| 8 | orf_0008 | hypothetical protein | 1 | 9789 | 11462 | + | 558 | high | `VNQAIDHIHGQYRQLQVQNKALFFAQLENIHDQTIKYIRHYIEIEFIQKRIDYGFDQFNT` |
+| 9 | orf_0009 | Glutathione reductase | 1 | 11539 | 12870 | - | 444 | high | `MTSLSSQERTVIQTLLELNYSIRAIARFINRSPATVSVEIHQVTPYKADIAHALALKKRH` |
+| 10 | orf_0010 | ABC-type Mn2+/Zn2+ transport systems, permease component | 1 | 12966 | 13766 | - | 267 | high | `DGEKWTQADVNALQKENDKLREELEILKRAAVLLSKYN*` |
+| 11 | orf_0011 | ABC-type Mn/Zn transport systems, ATPase component | 1 | 13759 | 14445 | - | 229 | high | `MGHRITSVLSALNIARSTYYQWKNWHPSQQETRRNALKTAITAVYNTNRGIYGYRRIAAF` |
+| 12 | orf_0012 | ABC-type metal ion transport system, periplasmic component/surface adhesin | 1 | 14453 | 15343 | - | 297 | high | `LQIAPYVLTIIVLVFFFGKTRPPKADGVNYIKAA*` |
+| 13 | orf_0013 | Fe2+/Zn2+ uptake regulation protein | 1 | 15580 | 16029 | - | 150 | high | `MLAPAIAALTAIGVAAVVKMSAQSNKESMIARIVVSVAVLTTLLLQAYYVWSYYQIISII` |
+| 14 | orf_0014 | 3-deoxy-D-manno-octulosonic acid (KDO) 8-phosphate synthase | 1 | 16286 | 17137 | + | 284 | high | `MLTRFTTPRLGLILPAYNEQEVLPTTLSKLNTIKATLIQKNLISDDSFIMVVDDGSVDNT` |
+| 15 | orf_0015 | Sugar phosphate isomerase with CBS domains | 1 | 17121 | 18077 | + | 319 | high | `MRKYLLSEKMKYIFWGVATTIVYLIVRLISMKIFDDTMLPVLISQTLTIIFAFVVNKLFV` |
+| 16 | orf_0016 | Chloride channel protein EriC | 1 | 18142 | 19425 | - | 428 | high | `MSKTKIIIVGSSHGGHQAILELTRKYKNLDIKLFEAGDFISFMSCGMELYLENSVTDVND` |
+| 17 | orf_0017 | Inosine-uridine nucleoside N-ribohydrolase | 1 | 19548 | 20507 | - | 320 | high | `MVTLNKPVASLKEIITKSIFYGFIAGMISGMVKIGWENILPPRTLARNATNPPQHMAEQL` |
+| 18 | orf_0018 | Inosine-uridine nucleoside N-ribohydrolase | 1 | 20509 | 21441 | - | 311 | high | `MTNKLNNILSELKEFQWVDLTHTFGPDSPHFPAFAAAKFETLFTHDDGFFVKQYTFPGQY` |
+| 19 | orf_0019 | Nucleoside permease | 1 | 21472 | 22179 | - | 236 | high | `MAENKIALSRSLSTKDLVVYGIIFMIPVAPIAFYGSFLSPVHGMVALAYLIGMIAMLFTG` |
+| 20 | orf_0020 | Nucleoside permease | 1 | 22118 | 22696 | - | 193 | high | `MSKKVAIITGSGRGIGKAIAERLATENYYVAVVDIDESSAKYVSDSINAIKENQAKYYVL` |
+| 21 | orf_0021 | transcriptional regulator, LacI family | 1 | 22850 | 23860 | + | 337 | high | `MVKKKTVVIAAVVAGIVIVAGVIIHRNTAQTTDKTEVTVGSIGSDAQIWEYIAKLPETKK` |
+| 22 | orf_0022 | Sugar kinase, ribokinase family | 1 | 23974 | 24915 | + | 314 | high | `MAEIYDLIVTGTGSVGSSTGYYAAKRGLSVLEIDSATPPHTNGSHHGETRMIRHAYGEGS` |
+| 23 | orf_0023 | ribose-5-phosphate isomerase | 1 | 24924 | 25619 | + | 232 | high | `MRKIGVVGIGHVGVTVAHIIIAQGLADEIVLVDKNPEKLASEELDFRDAASLLDHHVEVH` |
+| 24 | orf_0024 | hypothetical protein | 1 | 25619 | 26536 | + | 306 | high | `MQNQKNFLTELLVTGLGGAIGGATRYLLGLVPIIGPMPVMTMLINWLGTLLLAMLGAYLA` |
+| 25 | orf_0025 | Aldo/keto reductase related enzyme | 1 | 26659 | 27492 | + | 278 | high | `MTILGVAIGSALGTMLRYIVLNTWSAKSKYFTAVFIVNMVGSFALGYLMATGATYAMHSF` |
+| 26 | orf_0026 | cyclopropane-fatty-acyl-phospholipid synthase | 1 | 27560 | 28756 | - | 399 | high | `MSKIAVIIDSSSAMPVAIRNRYHIFQVNDPIIFGDEVYKETVDIHSLGELVKMMQEKKQL` |
+| 27 | orf_0027 | 5-formyltetrahydrofolate cyclo-ligase | 1 | 28855 | 29391 | - | 179 | high | `MQRSRRFQIVYEVLNAVTHGFGFILAVIAGAMLMIHVLSKPVTALTLTAVIIYISTVGFF` |
+| 28 | orf_0028 | serine hydroxymethyltransferase | 1 | 29429 | 30661 | - | 411 | high | `MLKRKPISNNFIYFFGALGGLLFGYDTGVISGAMLFIGKELEIQTGLLKMDSLRHLYCLV` |
+| 29 | orf_0029 | L-threonine synthase | 1 | 30757 | 32214 | - | 486 | high | `MLGAILGAAIIGPMSDKLGRKKLLLSAAIIFFVGALGSGIGFNYTLLVTSRVLLGIAVGA` |
+| 30 | orf_0030 | homoserine dehydrogenase | 1 | 32338 | 33615 | + | 426 | high | `MKKSDHLTIRDHNQRLVLQALFNADETSRAQLAIDLNLNKSTISSIYRDLDEKGFIESLG` |
+| 31 | orf_0031 | homoserine kinase | 1 | 33612 | 34490 | + | 293 | high | `MAELFDFSQVTFVGTQSLQAGDGFHYYNPDEIVKGKKMSDWLKFSVTYWHTMDQRLVDPF` |
+| 32 | orf_0032 | aspartate kinase | 1 | 34522 | 35877 | + | 452 | high | `MTKVVLGIDLGTSAVKVSAVDRRGNIVAQQSFDYPVTQPQVGWSEQNPEDWVNGTTVAIV` |
+| 33 | orf_0033 | Phosphoglycerate mutase family protein | 1 | 35908 | 36459 | - | 184 | high | `MDFCTICSRSISMFDLIKAIIIGIIEGLTEFLPVSSTGHIVLAEALMKIPSGNVWTKAFS` |
+| 34 | orf_0034 | asparaginase | 1 | 36466 | 37428 | - | 321 | high | `MTKPVFSLKDVIVTVGDSIQILKSINFDIYDGDFITVLGTNGAGKSTLFNTIAGNLSVAS` |
+| 35 | orf_0035 | DNA replication and repair protein RecO | 1 | 37431 | 38210 | - | 260 | high | `MESTGKLSFTNNYNYVPASFWYHFSAASGVELDAFKNPEIIEGNILGTKKLVETTSPDFV` |
+| 36 | orf_0036 | GTPase | 1 | 38280 | 39191 | - | 304 | high | `MSNQQNVLLDSTEKIPVSFWRHFADDETVDALENPTIATINIQGHKEYVDDLRPDFVKLM` |
+| 37 | orf_0037 | diacylglycerol kinase | 1 | 39233 | 39700 | - | 156 | high | `MVNKKGIITAAVAVVIIGGGLTIRHLNADSNKAAAKKVRTINVAHTQNYVPYDYVKNGVS` |
+| 38 | orf_0038 | Predicted metal-dependent hydrolase | 1 | 39684 | 40166 | - | 161 | high | `MGLDSGKYDVGVKGAWWTKERAKKYILPKQAVGASIIGITYRKDDNYKSFAEFAKKSGKL` |
+| 39 | orf_0039 | Phosphate starvation-inducible protein PhoH, predicted ATPase | 1 | 40166 | 41158 | - | 331 | high | `MPPFSFKFFLSVFGEVLPYFPVTLLIIVTSIIFSSLLGALVASGQLSRSPIWRTLSQGYV` |
+| 40 | orf_0040 | ammonium transporter | 1 | 41262 | 42458 | - | 399 | high | `MNVPFLIQTFWSAIKAVPITLLITGASLLIGLPLGFLLAWIKIRKIRILYPLVVAYTSLM` |
+| 41 | orf_0041 | pyruvate kinase | 1 | 42622 | 44043 | - | 474 | high | `MLKVRNFRKKYHEHEVLKGIDIEVNQGDVVALLGPSGSGKTTFLRGLAFLTPGDSGVIEF` |
+| 42 | orf_0042 | DNA polymerase III catalytic subunit, DnaE type | 1 | 44139 | 47477 | - | 1113 | high | `MENFQEQLKNRRTFAIISHPDAGKTTLTEQLLLHGGVIREAGTVKGRGSNKLASSDWMAI` |
+| 43 | orf_0043 | hypothetical protein | 1 | 47671 | 47868 | + | 66 | high | `MSYYTQQLFNGQRDRILRVVDSDDATQATAGFIHIFDERRAFDFEYAKELTNGEITQEQF` |
+| 44 | orf_0044 | peptidase T, Metallo peptidase, MEROPS family M20B | 1 | 47921 | 49156 | - | 412 | high | `MENTTRTWVFPKLDTRQFVLLAMLMALHMVLSRLTVGTNVLQVSFAFVTMSLIAKWYGPL` |
+| 45 | orf_0045 | hypothetical protein | 1 | 49201 | 49986 | - | 262 | high | `MSMIVSSIGQGLLWAVLGVALFLTFRILNFPDMTVEGSFPLGASTAVAMIAHGIDPFIAT` |
+| 46 | orf_0046 | Predicted SAM-dependent methyltransferase | 1 | 49983 | 50672 | - | 230 | high | `MVNEFPQVLTIAGSDSDGSAGMQADLHTFFIRKTYGMSVLVAAVAGNSYGIHASETLPLH` |
+| 47 | orf_0047 | Predicted membrane protein | 1 | 51293 | 51874 | + | 194 | high | `MYYIDGQFYQLGYKQKISFFFISLIINSFGNGLSVASAMGSAPWTASAANLSNTTGWQIS` |
+| 48 | orf_0048 | hypothetical protein | 1 | 51871 | 52164 | + | 98 | high | `MSENKVALVTGAGQGIGQAIAERLSKDGFKVALVGRHIEKVQKVADEINENGGEAIAIKA` |
+| 49 | orf_0049 | ABC-type cobalt transport system, ATPase component | 1 | 52195 | 53568 | + | 458 | high | `MAEAIAKKPAKKVLTPEEKAELQTQAEKMTEVLIEKSQKALSEFSTFSQEQVDKIVAAMA` |
+| 50 | orf_0050 | ABC-type cobalt transport system, permease component CbiQ related transporter | 1 | 53565 | 54206 | + | 214 | high | `MNMTEQNKRPYQKSRNNNGKKPYYGKNFDPRKSGAPRGNTSEGVNVRVGQNFPLTIKRLG` |
+| 51 | orf_0051 | RNase HII | 1 | 54190 | 54951 | - | 254 | high | `MSKTPYQLTLPDEIVSELHLKHNQPLNLTLRNGQLIIQQTNNPNERQTLSLRHFLIPSMV` |
+| 52 | orf_0052 | Ras superfamily GTP-binding protein YlqF | 1 | 54944 | 55798 | - | 285 | high | `MRFDIKAYLDDNSLTIYRVAKESGYGYTTIHKSFNKTQSDATSLNMRDLDALAKVQHKQM` |
+| 53 | orf_0053 | hypothetical protein | 1 | 55821 | 56048 | - | 76 | high | `MANNDFFNDPFGSDMNDIFNNMMGNMNGMNSENRRYLINGREVTPEEFVQYRQTGKLPQG` |
+| 54 | orf_0054 | hypothetical protein | 1 | 56035 | 56649 | - | 205 | high | `MIIQHAILHILDTNTGSLIASQGEMNVDNVGVHEYIEKLVNKIYKGDIKTGNLLPDSYLD` |
+| 55 | orf_0055 | Lysophospholipase L1 related esterase | 1 | 56631 | 57542 | - | 304 | high | `MPYQDSYVAKIREKIGHDFELVMPTIDVVIANSKGELLMIYNRDFDGWAFPGGYIEPEMS` |
+| 56 | orf_0056 | hypothetical protein | 1 | 57651 | 58199 | - | 183 | high | `MNKRLLSAITIIVAFLAVAFIVTSKPNTQEKKSTYVPTVGILQLVTHPALDQIHHGIVAG` |
+| 57 | orf_0057 | Inosine-uridine nucleoside N-ribohydrolase | 1 | 58196 | 59182 | - | 329 | high | `MRTESDSLGQINVPKDVYYGAHTQRALNNFPISKETTHPEIIRAFLEIKQAAAQTNATSG` |
+| 58 | orf_0058 | hypothetical protein | 1 | 59362 | 60216 | - | 285 | high | `MSSSQDLQKIIAGRRAADFVQDGMVVGIGSGSTIAQVITALGERVANENLKIVGVPTSEK` |
+| 59 | orf_0059 | dihydrofolate reductase | 1 | 60226 | 60723 | - | 166 | high | `MEFQHENGRYFLEKNGKVIAQITYTVINEGQTYSINSTVVDPSLRGQGVAKKLLDTIVAD` |
+| 60 | orf_0060 | tRNA nucleotidyltransferase/poly(A) polymerase | 1 | 60710 | 61915 | - | 402 | high | `MTRGFKIVSKYADENITVPKRSTQQAAGYDFEAAVDITIPSVLSNNFFKGLNILSLGKLS` |
+| 61 | orf_0061 | TPR repeat protein | 1 | 61955 | 63220 | - | 422 | high | `MSLDGRNAKVEKINEITSEETPRVATKLKELNRVLGGGVVPGSMVLIGGDPGIGKSTLLL` |
+| 62 | orf_0062 | O-succinylbenzoate synthase | 1 | 63234 | 64334 | - | 367 | high | `MSFKKFIVSKGVIGALIIVLFYGLLMVGIYFSGYKVVPSKINQLPVAIVNQDKDSTTLKK` |
+| 63 | orf_0063 | Alpha/beta hydrolase superfamily enzyme | 1 | 64321 | 65121 | - | 267 | high | `MSKQPSKYDLILNAFITLLIEVGYQSATINKIAEKANVNPSTIFRKFKDKEGLLSAVIDR` |
+| 64 | orf_0064 | 2-succinyl-6-hydroxy-2, 4-cyclohexadiene-1-carboxylate synthase | 1 | 65118 | 66743 | - | 542 | high | `MTEDIRVRYAPSPTGHLHIGNARTAIFNWLFARHYNGTFVIRIEDTDSARNIADGEKSQL` |
+| 65 | orf_0065 | Isochorismate synthase | 1 | 66721 | 67923 | - | 401 | high | `MIYVYNTLSREKEVFKPITAGKINMYVCGPTVYNYIHIGNARSAIAFDTVRRYFEYRGYE` |
+| 66 | orf_0066 | Hydroxymethylpyrimidine/phosphomethylpyrimidine kinase | 1 | 67980 | 68783 | - | 268 | high | `MNDLVNTFSEVNNLGRLIRGMREARGVSVNDLVRATGLSRSMISKFERGQTDIQLSSMIK` |
+| 67 | orf_0067 | hypothetical protein | 1 | 68783 | 69283 | - | 167 | high | `MKNIVITGGTSGVGFAIAKEIAKEGHNIIIVGRHEYKAHIAQKKLGNNVKVAIGDLSDEA` |
+| 68 | orf_0068 | hypothetical protein | 1 | 69384 | 70271 | + | 296 | high | `MAEKNDLSSAYRRLKSPNAKTRDRALKLLKEIKAKKSQKSK*` |
+| 69 | orf_0069 | DNA topoisomerase I | 1 | 70297 | 72381 | - | 695 | high | `MVIPGNITSIPANPITTKDGNFYQVSAILNLRPKDYQNIHYGQTGTVSIITGKSTWISHI` |
+| 70 | orf_0070 | hypothetical protein | 1 | 72549 | 73085 | - | 179 | high | `ASIKKDGTYDKIIKKYLGAPASDFTGKKSDNNSVLGILKANNGAFMRGLWQTLLLTILGI` |
+| 71 | orf_0071 | hypothetical protein | 1 | 73250 | 73420 | - | 57 | high | `MIPNSKYKNIFFWTIELLALSLLILIVSRFDFLMKPISVFISTVFVPLIVAGFLYYVLKP` |
+| 72 | orf_0072 | DNA-entry nuclease | 1 | 74189 | 75364 | + | 392 | high | `DGKLLFEKRPDSGLLAGFWTFPLTQIESIESITGQQLNIKPVTHIFTHRRWEIWLVKQET` |
+| 73 | orf_0073 | Membrane domain of membrane-anchored glycerophosphoryl diester phosphodiesterase | 1 | 75421 | 77094 | - | 558 | high | `VNQAIDHIHGQYRKLQVQNKALFFAQLENIHDQTIKYIRHYIEIEFIQKRIDYGFDQFNT` |
+| 74 | orf_0074 | Alpha/beta superfamily hydrolase | 1 | 77244 | 78035 | - | 264 | high | `MSIRYSQYFKDSLVKLHQEGRSLKSLAEEFGRSIETRPESV` |
+| 75 | orf_0075 | dihydrolipoamide dehydrogenase | 1 | 78084 | 79493 | - | 470 | high | `SMAMAPFYFLPVLVGFTAAQQLKSDPLVVAAIGALLVKPEMIGLSAAKASGVLLGMPINA` |
+| 76 | orf_0076 | acetoin/pyruvate dehydrogenase complex, E2 component, dihydrolipoamide succinyltransferase | 1 | 79496 | 80785 | - | 430 | high | `MADKQVKYIFVTGGVVSSLGKGIVAASLGRLLKNRGLKLAIQKLDPYINIDPGTMSPYQH` |
+| 77 | orf_0077 | acetoin dehydrogenase complex, E1 component, beta subunit | 1 | 80778 | 81758 | - | 327 | high | `MLANTTQHIEQKLILLPSEPGSYQMKDQNGKIIYVGKAKNLKNRVRSYFKQDHDGKTAEL` |
+| 78 | orf_0078 | acetoin dehydrogenase complex, E1 component, alpha subunit | 1 | 81760 | 82896 | - | 379 | high | `MAFVDQAQIEVKAGKGGDGIVSFRHEKFVAMGGPFGGDGGHGGSIIFKVDEGLRTLMDFR` |
+| 79 | orf_0079 | lipoate-protein ligase | 1 | 82889 | 83587 | - | 233 | high | `MANKKYGADIVTDSLVNHGVDLVFGIPGAKIDRLFETLEHPAEGQRVPKLVVARHEQNAA` |
+| 80 | orf_0080 | lipoate-protein ligase | 1 | 83687 | 83899 | - | 71 | high | `MFNNLLDNWDGGRPRSKRLYDLFFIIFIAIIGHVDFWYFHPQSSIRFRFMIIITTLIALI` |
+| 81 | orf_0081 | UDP-N-acetylmuramyl tripeptide synthase | 1 | 84007 | 85479 | - | 491 | high | `MSLETKLNKYAELIVKKGVNVQPGQTIILYAAVDEAYFARKIVAEAYKAGAHEVVMEWSD` |
+| 82 | orf_0082 | tRNA-dihydrouridine synthase | 1 | 85536 | 86633 | - | 366 | high | `MENVFASASQYKTKKLLTFTSWLLILSGIVCSFTVWVFAKPVVTQTNTIPSGFSVQGVSI` |
+| 83 | orf_0083 | Folylpolyglutamate synthase | 1 | 86782 | 88095 | - | 438 | high | `MIKLGIIGTSWITAMFIDAAIKTKAYDLTTVYSRSQASGEKFLASLDLDTDNVDVVTTLS` |
+| 84 | orf_0084 | Uncharacterized protein of the AP superfamily | 1 | 88132 | 89421 | - | 430 | high | `MRLFEAARHVHQPNFKAIQETVAKMDQLQGATLVYQKYSSRYDAYLAGQEPNVLTREFSA` |
+| 85 | orf_0085 | hypothetical protein | 1 | 89658 | 89816 | + | 53 | high | `MKPELLEKFNASFDTPTPIQSAVWQRLTDGDSIFGLAPTGTGKTLAFVLPVLSRIDTNLK` |
+| 86 | orf_0086 | Predicted HD-superfamily hydrolase | 1 | 89841 | 90791 | - | 317 | high | `MTELGKHVVYQVYPKSFQDSNGDGVGDLPGIIQRLPYLAKLGVTMIWLNPVFPSPQNDNG` |
+| 87 | orf_0087 | DNA repair ATPase | 1 | 90819 | 93182 | - | 788 | high | `MPELPEVETVRRGLEKLIIGSKIIDVQLPYPKVITGDGQQFITGVMNTEFKQIDRRGKYL` |
+| 88 | orf_0088 | DNA repair exonuclease | 1 | 93172 | 94344 | - | 391 | high | `MNQEPISIIDVKRDAKKLMKGRLGTAIKINIIAIIVTVTTLSMMTFTVYAMIKDTNLMSS` |
+| 89 | orf_0089 | phosphoribosylaminoimidazolecarboxamide formyltransferase / IMP cyclohydrolase | 1 | 94447 | 95973 | - | 509 | high | `MLTIGLTGGIATGKSTVSALLRQAGFPIVDADIVAREVVEPGTPTLEKIKLAFGPGIIDN` |
+| 90 | orf_0090 | formyltetrahydrofolate-dependent phosphoribosylglycinamide formyltransferase | 1 | 95970 | 96560 | - | 197 | high | `MMQNDGTIEFHAKAGVFVQSNTPITLTDLDRAFDLYTPFIGATGYALYHMLVRELPYNTR` |
+| 91 | orf_0091 | phosphoribosylformylglycinamidine cyclo-ligase | 1 | 96554 | 97591 | - | 346 | high | `MQNLSEVLKQFQQQYANKANLSDIIESIGKDQDIRSFWNEHQDELNSDAFQLKMGDLYEY` |
+| 92 | orf_0092 | amidophosphoribosyltransferase | 1 | 97588 | 99198 | - | 537 | high | `MIFLKKTKNYWFVAIAVIAAWFLLRSDSFLYQEPVGQVTHVKVQSKQKTTDEHNNTDNIY` |
+| 93 | orf_0093 | phosphoribosylformylglycinamidine synthase subunit II | 1 | 99177 | 101393 | - | 739 | high | `MNAIGLLIIILFILMVFVGGVQGMKAFVGLVLNFIVIFILMILINWQFNAYIVTALMSVI` |
+| 94 | orf_0094 | phosphoribosylformylglycinamidine synthase subunit I | 1 | 101398 | 102066 | - | 223 | high | `MKETFDLIERITRNDGSSYFELGNIPHNGRAEYAAEHGFIQSVQILKVNIPRSTHVEKVE` |
+| 95 | orf_0095 | Phosphoribosylformylglycinamidine (FGAM) synthase, PurS component | 1 | 102063 | 102332 | - | 90 | high | `MITLNDNVNILPGVGPKRLDALHEIGIFTIEDLINYFPFRYEDLGERLPSETLDGEKATF` |
+| 96 | orf_0096 | phosphoribosylaminoimidazole-succinocarboxamide synthase | 1 | 102334 | 103083 | - | 250 | high | `MKIAIDAMGGDYAPMEIVKGVEIARDRYPDIEFLLFGTSEQVKPLVKDWSHITLIPTTEV` |
+| 97 | orf_0097 | 5-(carboxyamino)imidazole ribonucleotide synthase | 1 | 103067 | 104176 | - | 370 | high | `MIPLYFKIYQQIKDDIRDHTYPAGSFLPSENELVTQFQTSRDTIRKALAKLDEEGLIQKQ` |
+| 98 | orf_0098 | 5-(carboxyamino)imidazole ribonucleotide mutase | 1 | 104173 | 104658 | - | 162 | high | `MAMEKEAIYNMMADEIAERFNVKRDTITPDLNFLTDIDADSIDFVELVLEVEDMFNVEIS` |
+| 99 | orf_0099 | L-glutamine synthetase | 1 | 104926 | 106272 | - | 449 | high | `MTDNELQNLVEKISFDSFDRPFRHHATFNSHLRTTGGRYLLKTHDLEFNPKMVTLEDFNK` |
+| 100 | orf_0100 | glutamine synthetase repressor | 1 | 106285 | 106623 | - | 113 | high | `MIKLILSDLDETLLDDDGTINSQNVTAVQKFVKNGGYFVPNTGRSYKSVFGTLKDLGLNK` |
+| 101 | orf_0101 | HerA helicase | 1 | 106713 | 107942 | - | 410 | high | `MGNLITRIILSVVSFALFVLIFLLSDQQNWPLWVTITLVAVLFIVFNICFVWLYWQKKKR` |
+| 102 | orf_0102 | Sortase (surface protein transpeptidase) | 1 | 108093 | 109088 | - | 332 | high | `MLETTNEVRPKSLLLRIINVVFTLFLIVVAPIPLVLATKTDNIFLQILCAATMFIFYIGI` |
+| 103 | orf_0103 | DNA polymerase I | 1 | 109121 | 111802 | - | 894 | high | `MNAEKISALTSWLTKQELSGAIITNYHSVAYLSGFESDPIERVLALVLLENSEPFLFGPA` |
+| 104 | orf_0104 | Sucrose-6-phosphate hydrolase | 1 | 112008 | 113615 | - | 536 | high | `MQKKQTATIYDVASRVGVSLATVSRVVNGNSNVRESTKRKVLDAIEELGYHPNAVARGLA` |
+| 105 | orf_0105 | hypothetical protein | 1 | 113827 | 114222 | - | 132 | high | `MESPKRRYIKGFDGLRALAVIGVILFHLMPTKFVGGWFGVPLFFVISGYLITDQLIQEFD` |
+| 106 | orf_0106 | Integral membrane protein, interacts with FtsH | 1 | 114360 | 115079 | - | 240 | high | `MFKNIRKLTPFSLALLSIAFIMSISQSTMTTAYPILMKSFNVNASTVQWLTTGFMVAMTL` |
+| 107 | orf_0107 | UDP-N-acetylmuramate--L-alanine ligase | 1 | 115151 | 116485 | - | 445 | high | `MSFLNVVHSTHLVHVLSEIGIFILMLSSGLASDMKTMKKYVKASSLIAIMGVVIPMIAFP` |
+| 108 | orf_0108 | EMAP domain | 1 | 116683 | 117339 | - | 219 | high | `MLKEKLPKEKVLRDPIHNFIHVEDPIILDLINTPEFQRLRRVKQLGITSSVFHGAEHSRF` |
+| 109 | orf_0109 | methylthioadenosine nucleosidase | 1 | 117485 | 118159 | - | 225 | high | `MKKQGIICGVLSATLFGISGILASILFRNQNINPEWLVGVRMSLSGIILLIVLFCFSGRR` |
+| 110 | orf_0110 | Small membrane protein | 1 | 118177 | 118470 | - | 98 | high | `MTTIYQHGTLAQLVARQMSGTITVAEMLEHGDTGIGTFEGLNGEAIFLNGEAYQADSTGK` |
+| 111 | orf_0111 | NUDIX family hydrolase | 1 | 118474 | 119028 | - | 185 | high | `MANNIIAQLRAQRKQYNTTEQKLIDFIINHVSEAREANIQEMSELSGVSTATISRFVKKI` |
+| 112 | orf_0112 | cold-shock DNA-binding protein family | 1 | 119028 | 119252 | - | 75 | high | `MKFAMIGLGKMGLNLVKNAVDNGHEVVAFDLNADFVKEATDYSASVEAASDIDDMLSKLP` |
+| 113 | orf_0113 | Predicted Co/Zn/Cd cation transporter | 1 | 119428 | 119733 | + | 102 | high | `MEYMIGVDIGTTSTKAVLFDDKNVVVASANKSYALYRDLPDMAEEDLDELFEALVSALSE` |
+| 114 | orf_0114 | Predicted Co/Zn/Cd cation transporter | 1 | 119702 | 120301 | + | 200 | high | `MAIKDQIDVEIHLKTKIRQENDLEEFEFHTNGQLFLKNDTLYLRYTEVIENQKTQIMFKF` |
+| 115 | orf_0115 | Formate-tetrahydrofolate ligase | 1 | 120333 | 121997 | - | 555 | high | `MSLTTLGNHPKEEFALVEIATAILTEHKEAMPFSSLVQEIQEFLEVDAETFKSRLSQFYT` |
+| 116 | orf_0116 | phosphoribosylamine--glycine ligase | 1 | 122010 | 123254 | - | 415 | high | `MAEKQNRELSRDLSSRQMQMIALGGTIGVGLFMGSSATIKWTGVSVLLAYAIAGLVLYLV` |
+| 117 | orf_0117 | Aryl-alcohol dehydrogenase family enzyme | 1 | 123475 | 124467 | - | 331 | high | `MKTKALSASAILLAVIIVMGAIPGIPLGFIPAPIILQNMGIMLAGVILGKKYGFFTVLGF` |
+| 118 | orf_0118 | Lysophospholipase L1 related esterase | 1 | 124469 | 125359 | - | 297 | high | `MKTTDQLLKYFLKHEGEYLSGETLANRLGVSRAAIWKAVQKLNEDGHQIDSQHRKGYRYE` |
+| 119 | orf_0119 | Phosphoribosylpyrophosphate synthetase | 1 | 125356 | 126327 | - | 324 | high | `MYEINKIIKKIRDDNKLTQTEFAAFLSVSHQTVSSWERARTRPTLVMLKKISQSFNIPLS` |
+| 120 | orf_0120 | ATP-dependent DNA helicase, RecD/TraA family | 1 | 126377 | 128764 | - | 796 | high | `MDISKDLIRGHTDTIILNILSQGDSYGYQVSKSIRQLSSKQYELNEATLYTAFRRLEKVG` |
+| 121 | orf_0121 | Phosphoglycerate mutase family protein | 1 | 128764 | 129417 | - | 218 | high | `MNFIEDLKWRGALNQVTDEAGLIEAMASGEIGAYVGTDPTADSLHLGHLIPFMVLKRFQN` |
+| 122 | orf_0122 | hypothetical protein | 1 | 129462 | 129806 | - | 115 | high | `MKILMYNTVSDEMPYVEKWTEKTGHEVVTIDQPLNETTVDRAKGFDAITTQQTTAINAPV` |
+| 123 | orf_0123 | nucleoside-binding protein | 1 | 129957 | 131072 | - | 372 | high | `MNTIKSLSKFLTKYFTFFVILVALLAIFIPGPGTTLATTKVGNLSAVSILLMIALFGMGI` |
+| 124 | orf_0124 | tRNA and rRNA cytosine-C5-methylase | 1 | 131230 | 132642 | - | 471 | high | `MENKTQELQDQMLEALSQVIDPELRCDIVSLGLVYGLAMDENGHVTVKLTLTTMGCPLTA` |
+| 125 | orf_0125 | Sugar kinase, ribokinase family | 1 | 132642 | 133553 | - | 304 | high | `MTDTFSFNVNSDDLQKRSDHIKMGIHQAPARSLLYATGQVSNPEDMKKPFIAICNSYVEI` |
+| 126 | orf_0126 | Predicted membrane protein | 1 | 133683 | 134090 | - | 136 | high | `MINIEKFISTRKRLKISQMALCTDICTQATLSKFEKHQQVPAFDIMIALCERLGLTLNDV` |
+| 127 | orf_0127 | DNA polymerase III catalytic subunit, PolC type | 1 | 134164 | 138477 | - | 1438 | high | `MATLKVEDLHVSVEGKEILKGVNLVVNTGEIHAIMGPNGTGKSTLSQTIMGHPAYEVTEG` |
+| 128 | orf_0128 | Prolyl-tRNA synthetase | 1 | 138533 | 140251 | - | 573 | high | `MVDNSAIQSLPLPTFAKVRYSSWQLDEMIAAKEETTTSYFTENNVHGIEVSGLSTTYQQL` |
+| 129 | orf_0129 | site-2 protease, Metallo peptidase, MEROPS family M50B | 1 | 140302 | 141555 | - | 418 | high | `MKTIRHDFPILNQTVNGQELLYFDSAATSQKPQYVIDSLVNYYQNNNANVHRGIYELSER` |
+| 130 | orf_0130 | CDP-diglyceride synthetase | 1 | 141609 | 142403 | - | 265 | high | `MTKTVKIVLTIVGTLVLIGITMVSSLIAIKDVSGSEFNAPALPVMIGIVVGATAAVIFGA` |
+| 131 | orf_0131 | Undecaprenyl pyrophosphate synthetase | 1 | 142403 | 143182 | - | 260 | high | `MSLHNLDLLYRQTVMEYAQHPHHYKPLLGTETYHVRKYNPTCGDIIDLAFEMTDDKVTDI` |
+| 132 | orf_0132 | glutamine--fructose-6-phosphate transaminase | 1 | 143300 | 145105 | - | 602 | high | `MEIDRQEAINQTKAAISNDKASELGFQDDYQAVFSTGKGLNEDIIRQISAKKNEPQWMLD` |
+| 133 | orf_0133 | Adenine deaminase | 1 | 145314 | 146969 | + | 552 | high | `MNKKVEASIMDALTTVIDPELRVDIVNLGLINAVDINSIGDVTINMTLTTMGCPLISVLE` |
+| 134 | orf_0134 | hypothetical protein | 1 | 146974 | 147471 | + | 166 | high | `MASKVTFYDTTMRDGEQTIGVNFSIEEKIEIAKGLDDYGVAAIEAGFPAASQKDFEEVKR` |
+| 135 | orf_0135 | Transcriptional regulator with CBS domains | 1 | 147525 | 148889 | - | 455 | high | `MSKLNSLGYEVTRGDMKSIFPIFKSVAEESDLITDDQLKVIMQVVEEKEMVSYQ*` |
+| 136 | orf_0136 | Pseudouridylate synthase, 23S RNA-specific | 1 | 148893 | 149792 | - | 300 | high | `MTSVKKIVVLKGDYIGPEIMTAGLAVLDAATKDTTFAYELIDAPFGGDGIDRAGDPLPQS` |
+| 137 | orf_0137 | NAD kinase | 1 | 149947 | 150741 | - | 265 | high | `MSKTLFDKIWEKHVITGEVGEAQLIYVDLHLVHEVTSPQPFDGLRSTNRRVRRPDLTFAT` |
+| 138 | orf_0138 | Uncharacterized protein, RelA_SpoT domain | 1 | 150738 | 151313 | - | 192 | high | `MEAFVRETGRTVVIPNDNINTDIILPKQFLKNILKTGFGKDLFFDWRYNADGSLNEAFEL` |
+| 139 | orf_0139 | Dithiol-disulfide isomerase | 1 | 151455 | 152054 | + | 200 | high | `MEQAMNLQQRMDTTKETATFYRVFAMIAAGMILDGADVYLASAVNSAIVSTHFATLAQGS` |
+| 140 | orf_0140 | glucokinase | 1 | 152111 | 153076 | - | 322 | high | `MTEATTANIHWNGGVQGEAINILKEDGGMIVSPTKVGYIIMTSDDQGLERKFAAKNRKRN` |
+| 141 | orf_0141 | hypothetical protein | 1 | 153238 | 153444 | - | 69 | high | `MKRKTKIIVTVVGGIAALGILTATGVQAYHKLVKPTSTAKNKYQVYKVTGALPLTMSGKV` |
+| 142 | orf_0142 | Membrane-associated serine protease | 1 | 153441 | 154124 | - | 228 | high | `MAIQMSSELLDGCVLAILDKEDYYGYALTQRVQGTISVSESTLYPVLRRLKNNQFVTTYD` |
+| 143 | orf_0143 | Uncharacterized domain/protein associated with RNAses G and E | 1 | 154232 | 154801 | - | 190 | high | `MENYLAELEQLLHQLHHSDKEEAMNFYREYVMDADLVTYEQCISELGTPKQLSRKILADY` |
+| 144 | orf_0144 | hypothetical protein, RecX family | 1 | 154852 | 155655 | - | 268 | high | `MKRSVKIGLSLIVIGAVLALIGFGFGGGSSSISWNNGLKVIDCKTQKEKMVQQSYTYNEV` |
+| 145 | orf_0145 | dihydrodipicolinate reductase | 1 | 155745 | 156467 | - | 241 | high | `MMLNIKKQATVQSDAIRYGAIIILFLISGMLLLMTSATQYPEMIAMAYLSFTMGLRHAFD` |
+| 146 | orf_0146 | dihydrodipicolinate synthase | 1 | 156467 | 157333 | - | 289 | high | `MIKIVNVTEEDKAYWQDIYMQSFPEYERLDFMQLAQLAKTKEPVKMALVVDEQPVGILLL` |
+| 147 | orf_0147 | Metal-dependent amidase/aminoacylase/carboxypeptidase | 1 | 157336 | 158490 | - | 385 | high | `MENWLTKRARLTPNRIAVQYKNKQLTFQEVADQAHNMAQKIATVTQDNSRVALIMNNTLT` |
+| 148 | orf_0148 | 2,3,4,5-tetrahydropyridine-2,6-dicarboxylate N-succinyltransferase | 1 | 158490 | 159191 | - | 234 | high | `MTLSPKNTDVKSLFNTIAPEYDKMNNIISLGAHKKWRQKVMDKMVFPRKAQIIDLATGTA` |
+| 149 | orf_0149 | diaminopimelate decarboxylase | 1 | 159193 | 160485 | - | 431 | high | `MKKIIIALSAIVVIFIGVALFRGNSSSSSNQKITIVASTDFYAEIAKTVVGEHGTATAII` |
+| 150 | orf_0150 | Fructosamine-3-kinase | 1 | 160824 | 161666 | - | 281 | high | `MEKTDKIIQELNSFVQEYATNSELVAATAGQKINSTQAHLLMLLKILQSQTNTELAAAMN` |
+| 151 | orf_0151 | hypothetical protein | 1 | 161850 | 162395 | - | 182 | high | `MSTIIVMKKSGLLAAICIVTLSIVFPVNGQQQIQASEKEKSIKKITTTAKAAVVMNADTD` |
+| 152 | orf_0152 | Uncharacterized membrane-associated protein | 1 | 162433 | 163107 | - | 225 | high | `MINLVSVSKSYRQGNENYKALHEISLNIDAGEFVAIMGPSGSGKSTLINIIGFLDNDFDG` |
+| 153 | orf_0153 | amino acid/polyamine/organocation transporter, APC superfamily | 1 | 163230 | 164603 | - | 458 | high | `MVSEIKTLVTFFGGTGDLAKRKLYPSVFNLYKKGYLQEHFAIVGTARQQLSDDEFKQLVR` |
+| 154 | orf_0154 | threonyl-tRNA synthetase / Ser-tRNA(Thr) hydrolase | 1 | 164728 | 166686 | - | 653 | high | `MFYLIIILFLILTFTLGIGVAFEGLILMGIIYVILRLIKNKRDMRK*` |
+| 155 | orf_0155 | hypothetical protein | 1 | 167016 | 167135 | - | 40 | high | `MQIDLTDKPRPLDEKWLLFGTLLSNTGNSMIWPVTTLYMTGVLHQSFTMAGLVLMVGSLI` |
+| 156 | orf_0156 | DNA segregation ATPase FtsK/SpoIIIE related protein | 1 | 167214 | 169580 | - | 789 | high | `MKKIDAFLIIAKELNKVAITPVLMGSVGLEYLTKIDWQANDIDIHVPGNPNGWDAPDRLR` |
+| 157 | orf_0157 | Predicted rRNA methylase (SpoU class) | 1 | 169880 | 170392 | - | 171 | high | `MLQRNLGSQGLKVSSVGLGCMGMSSTYGRADDKESIASIRQAVVNGVSLFDTANVYGNGH` |
+| 158 | orf_0158 | Predicted permease | 1 | 170389 | 171543 | - | 385 | high | `MNDADLLRYLINAVQKEGQKKYAEFLAPLGITPNQSEVLQVLSKKEPLSLKELGNLLICE` |
+| 159 | orf_0159 | 6-phosphogluconolactonase | 1 | 171722 | 172750 | + | 343 | high | `MNKSRQLGQTDLHLSPLGLGTWQYSTKNSSGTSMWGNTETETVYEIIKHSLQNGMNWIDT` |
+| 160 | orf_0160 | amino acid ABC transporter membrane protein, PAAT family / amino acid ABC transporter substrate-binding protein, PAAT family | 1 | 172806 | 174278 | - | 491 | high | `EDEIIIRKVYNQVPPKVEYYLSEEGKTLREVLIAMSIWGEKRVRKLQSNMQAVNLLNNNH` |
+| 161 | orf_0161 | Cell division initiation protein | 1 | 174823 | 175221 | - | 133 | high | `MQVRELIVSSFRSLISNKRRSILTMIGIIIGIASVITILSLGDGARIEMLKNLQADSSGQ` |
+| 162 | orf_0162 | hypothetical protein | 1 | 175297 | 175863 | - | 189 | high | `MLQNSIQLTDNKLREILFAGRFGIEIEEHRVQSGSKSLSQHPHPRDLGNRQYQPYFQTDF` |
+| 163 | orf_0163 | Membrane carboxypeptidase (penicillin-binding protein) | 1 | 175922 | 178114 | - | 731 | high | `MFYNESMLFKDKTYKYVPANMPKNARVFHNLSYSVGDRNQLDLYLPKAGENCPVIVDIYG` |
+| 164 | orf_0164 | Penicillin-binding protein-related factor A, putative recombinase | 1 | 178136 | 178750 | - | 205 | high | `MTKHKKLTRSRDNRVIAGVLGGIANYFNWDATLVRIIFVVLGFLPVLPGILVYIIAWVLI` |
+| 165 | orf_0165 | hypothetical protein | 1 | 178903 | 179130 | - | 76 | high | `MMSVEMEIRTRLDVIFSKYTPNAQLTEFKEELVADLLEAYQDFSKTDRSHNEALDDAFEQ` |
+| 166 | orf_0166 | ABC-type multidrug transport system, ATPase and permease component | 1 | 179438 | 179608 | + | 57 | low | `MDNITKKLMQRSESTHKDTFGRAVSLTALALIGIVVVAIFAFVLS` |
+| 167 | orf_0167 | hypothetical protein | 1 | 180080 | 180250 | + | 57 | high | `MKKTIINHGANLVILPTTQFKTLHIAVDFSTAVEPENISARALVSYLTAVSSARYKTQQQ` |
+| 168 | orf_0168 | seryl-tRNA synthetase | 1 | 180449 | 181309 | - | 287 | low | `MLRTSFWIVILIALVINTIISFIAVFRQKREIATIWAWMLVLLLLPVVGFAIFFLAGSRI` |
+| 169 | orf_0169 | Prebacteriocin | 1 | 181324 | 182121 | - | 266 | low | `MPSMKKKIVVNSIVGILFIALVVMAALSLSNNSQKSKSTEQTVVKTDQWSRIKREKQITI` |
+| 170 | orf_0170 | Type II secretory pathway/competence component | 1 | 182186 | 183475 | - | 430 | low | `MLEIKNLTKKYDQNVIFKSLNLTVHDGEVLSIVGPSGIGKTTLIKIMAGLETADDGEIIL` |
+| 171 | orf_0171 | glutamine--fructose-6-phosphate transaminase | 1 | 183462 | 184130 | - | 223 | low | `MSYLTTILPSLLAGLKTTLGVFFLTIIGSVPLGILVSLGMKSPYFTIRWLINGYIWIMRG` |
+| 172 | orf_0172 | Na+/xyloside symporter related transporter | 1 | 185007 | 186551 | - | 515 | low | `MAFWQLTRLRVIYPVLLFLILFVDGTFMSSMGGLFTQFPWHILPTLTLGWLFLGVQFDVE` |
+| 173 | orf_0173 | IMP dehydrogenase/GMP reductase | 1 | 186555 | 187541 | - | 329 | high | `MKKIFSSRTLVSIIVAFIVIVSLIAGSNWWAKRTNTPPFLQRFGNDLAGGVSRIIAVPTT` |
+| 174 | orf_0174 | inosine-5'-monophosphate dehydrogenase | 1 | 187584 | 188726 | - | 381 | high | `MAFSFGQKNVGIDLGTANTYVYIEGRGIILREPSVVARNTQTNEVVAVGSEAKDMLGRTP` |
+| 175 | orf_0175 | hypothetical protein | 1 | 189230 | 189460 | - | 77 | high | `MDYTQALNDLRDGKIDEIEVTPAVFPEFQKAWANFAYQNTIRGIAHAQGKVTYVRSN*` |
+| 176 | orf_0176 | Cell wall-associated hydrolase | 1 | 189994 | 191448 | - | 485 | high | `MAQQDSFGFGNLDEMFRAMNEQMAQAQGQQNTQAQKNNNGNKKRRLLDEFGINLTKQARD` |
+| 177 | orf_0177 | 4-oxalocrotonate tautomerase | 1 | 191650 | 191835 | - | 62 | high | `MSKSYRGSIVFTIVAVAVAAALGTAYAMRDKSASNTSITTVGSTALQPLVEAAGEEYAKD` |
+| 178 | orf_0178 | hypothetical protein | 1 | 191863 | 192840 | - | 326 | high | `MANTSPVWVYYKNIATGDELHEPTRLDGEAGAPYEIAILDIANYQYIDTSGSLTGLFGSL` |
+| 179 | orf_0179 | Heat shock protein, Metallo peptidase, MEROPS family M48B | 1 | 192952 | 193845 | - | 298 | high | `MKRIGFRGYIAIVVGILIIAVGILYFFNVNRVTLTTSKKTSGVQLTQSTPGQYQTVIKNG` |
+| 180 | orf_0180 | hypothetical protein | 1 | 193845 | 194393 | - | 183 | high | `MLPDFTPIEKLTTQDAQQETARLQKQLVQYGTAYYEDDAPLVEDYIYDALYARLVALEEK` |
+| 181 | orf_0181 | hypothetical protein | 1 | 194430 | 195344 | - | 305 | high | `MTTLIIIRGNSGSGKTTLAHQLHRVLPDSLLISQDIVRREMLNVKDQVGNLSISLIEQLL` |
+| 182 | orf_0182 | hypothetical protein | 1 | 195346 | 196194 | - | 283 | high | `MKNGKIKEVIFTSKDIKMPIETLIQGMNDKQSEAVQTTEGPLLIMAGAGSGKTRVLTHRI` |
+| 183 | orf_0183 | Polysaccharide transport membrane protein | 1 | 196329 | 196451 | - | 41 | high | `MKLRPLEKRDLPYIYEQENSRKVMALWFEEPYTSFDELQILYDRHILDQTERRFVVEEND` |
+| 184 | orf_0184 | Lipopolysaccharide biosynthesis glycosyltransferase | 2 | 1 | 264 | + | 88 | high | `MAKKKRRRSKKGLQKQRLRMLCGLLVALVILAAITSNTAIYERPQNNQINTNSEEVKKVA` |
+| 185 | orf_0185 | UDP-galactopyranose mutase | 2 | 264 | 1454 | + | 397 | high | `MKRLKKLLSQDRWILPSLRQQKSGLFWSIFLNFMITFAAGALMFVSGFLISRSAQHPSNI` |
+| 186 | orf_0186 | Glycosyltransferase related enzyme | 2 | 1500 | 2453 | + | 318 | high | `MIDKRLFALPGIISSLVILVILTGIQAFSIIFQGVFLARAIADLWQGKSIDQTLINVLFF` |
+| 187 | orf_0187 | Glycosyltransferase related enzyme | 2 | 2463 | 3416 | + | 318 | high | `MSFLQILWFVLIAILWSGFFFLEGYDFGIGMQFIFNSRNQDDREALYESIGPHWDANEVW` |
+| 188 | orf_0188 | hypothetical protein | 2 | 3379 | 5322 | + | 648 | high | `MSHNQLYILVIIFFVVANFEVWFLNFWQNKETAELTIMKNRMIATSAGETPRGVLAEPTS` |
+| 189 | orf_0189 | hypothetical protein | 2 | 5306 | 7075 | + | 590 | high | `MVTLVGILDLARFQFAMTTIFHFFFVPMSIGLAVVVASMETMYVIKKEEVYKKMAQFWSK` |
+| 190 | orf_0190 | Phosphoglycerol transferase related protein, alkaline phosphatase superfamily | 2 | 7171 | 9078 | + | 636 | high | `MSENNAEVQKITLIDESGDEALYEVLFTFHSDEYNKDYILLVPEGIEDDEEVDIQAYIFN` |
+| 191 | orf_0191 | Fucose 4-O-acetylase related acetyltransferase | 2 | 9080 | 9952 | + | 291 | high | `MRILGLDVGSRTVGVSVSDPMGWTAQGVEIIRINEDDKEFGIDRLGEIIKEKNATGVVLG` |
+| 192 | orf_0192 | Predicted glycosyltransferase | 2 | 9963 | 10865 | + | 301 | high | `MTVGDETAIFDFGNQMPKDIHETLEIVYSSLEEKGYNPINQIVGYLMSGDPAYIPRLNDA` |
+| 193 | orf_0193 | Conserved membrane protein, GtcA family | 2 | 10909 | 11325 | + | 139 | high | `MKDLSSAEIRQMFLDFFASKGHEVVPSKNLIPQDDPTLLWINSGVATLKKYFDGTVVPNN` |
+| 194 | orf_0194 | Flavodoxin | 2 | 11337 | 11789 | - | 151 | high | `MSKNKEILEEEKIHLANATRVKYFDIVIDHGKGAIITDADGHEYIDLLASASATNTGHSH` |
+| 195 | orf_0195 | Glycerol uptake facilitator related permease (Major Intrinsic Protein Family) | 2 | 12003 | 12722 | + | 240 | high | `MSESKTRTGWLHKATPASFTTSDRHLRKTLGVKEMLALGIGTIVSTAIFTLPGIVAANHA` |
+| 196 | orf_0196 | Formate/nitrite family of transporter | 2 | 12898 | 13662 | + | 255 | high | `MLIVSILILLILIAKLKLNTFVSLIITAFILALLLGMKPMEIPSAVLGSEGVGNILGPNS` |
+| 197 | orf_0197 | Adenylosuccinate lyase | 2 | 13655 | 14950 | + | 432 | high | `GLPANTPFVYGAGDGPLSNLGVNAVKPGVAAITIGTSGAIRVVSEQPVIDPKGRTFTYAL` |
+| 198 | orf_0198 | hypoxanthine phosphoribosyltransferase | 2 | 14947 | 15510 | + | 188 | high | `MNKKIVGIIGGIVVIAAGIALYTSANDKSSDNKTSTTSSSNVSGKVLSLGSTALQPLAEQ` |
+| 199 | orf_0199 | isopentenyl-diphosphate delta-isomerase | 2 | 15527 | 16579 | - | 351 | high | `MTKILVVDDETAIATLLQYNLQQNGYEVTVASDGLSAYQKAKEQQFNAILLDLMLPEMDG` |
+| 200 | orf_0200 | Phosphomevalonate kinase | 2 | 16581 | 17600 | - | 340 | high | `MVAKKTTKKDDQAKKDGRRAALDEALKKIEKNFGKGSVMTLGDNALTQIETIPSGSVKID` |
+| 201 | orf_0201 | diphosphomevalonate decarboxylase | 2 | 17593 | 18534 | - | 314 | high | `MNSPNKLTVFRIILIPVFILLLTVPYAWSNISFLGATMPVNWLIAAVVFAIASATDFLDG` |
+| 202 | orf_0202 | mevalonate kinase | 2 | 18531 | 19463 | - | 311 | high | `MNETLTNQIGEQLKAARLEKQLSLDDIQEITKIQRRYLSAIEENNLSVLPGDFYVRAFIR` |
+| 203 | orf_0203 | Rad3-related DNA helicase | 2 | 19625 | 22018 | + | 798 | high | `MKTKHYLKLKEDVITETLDNGLSIVMVPKSNYHKTFAVLTTAYGALEQKFAIDDAQPIQI` |
+| 204 | orf_0204 | hypothetical protein | 2 | 22090 | 22617 | + | 176 | high | `MKSYESKAALNEAIKTSYKKYIDGFTNIPNSLSNKRIQDVDRTPSENISYQLGWITALLN` |
+| 205 | orf_0205 | aminotransferase | 2 | 22632 | 23825 | + | 398 | high | `MLGIEWKKIWKNKFMVVVLIAIVLIPSIYAIGFLKSMWDPYGKIKDLPVAVINEDKSVHY` |
+| 206 | orf_0206 | asparaginyl-tRNA synthetase | 2 | 23833 | 25140 | + | 436 | high | `MSILSDEINNRIQNCQRFLQEKELSAYAVTDVEDIWYLTNIDYSPEQRPFFLIIYPDKKP` |
+| 207 | orf_0207 | DNA replication protein DnaD | 2 | 25239 | 25874 | + | 212 | high | `MELGQKLKECRLALNKTQQQMATELHVTRQTVSHWENNDTYPSLDMLVTLSDYLGFSLDT` |
+| 208 | orf_0208 | hypothetical protein | 2 | 25875 | 26156 | - | 94 | high | `MAESEKVEFKTLTSILKKLDISKATYYRRAKAWNINPSQREFTHEELKNLESMPENVDNN` |
+| 209 | orf_0209 | Predicted N6-adenine-specific DNA methylase | 2 | 26179 | 27312 | + | 378 | high | `MEIQFPIQLKKLRTNLDMSQEDVAGKLYISRQAVSRWESGDATPDMSNLIKLAEIFDCSL` |
+| 210 | orf_0210 | aromatic amino acid aminotransferase apoenzyme | 2 | 27465 | 28667 | + | 401 | high | `MKNRIHNFVGSIGALIGTMVFIAYIPQIIANLSGDKGQPWQPIVAAFSCLLWVVYGLTND` |
+| 211 | orf_0211 | Acetyltransferase, GNAT family | 2 | 28726 | 29253 | + | 176 | high | `MNDNQTFEKLIKKTKTKNTLKGILISSLSTIIVFLIILVGANLFVSNTMSKQLQLQNQKL` |
+| 212 | orf_0212 | RNase HI | 2 | 29274 | 29657 | - | 128 | high | `MEINQYENIVLNIAQEVVRFLVKKGAKTQDAEDIAQDGMVKLIEANIVLEENKLRPWIYK` |
+| 213 | orf_0213 | hypothetical protein | 2 | 29842 | 30231 | + | 130 | high | `MRLLTETHFSVIIALIKQRLLIEGNFKTMQKDEKVETMLDQMSVAFSDEDVKNQPELREM` |
+| 214 | orf_0214 | ribosomal large subunit pseudouridine synthase D | 2 | 30221 | 31159 | + | 313 | high | `MIIRTATLEDLDHVTKLTYDAFHDYPLFNVSTDKPQLQQALYFLLYLNTLANIRREDCFV` |
+| 215 | orf_0215 | Pyrimidine operon attenuation protein/uracil phosphoribosyltransferase | 2 | 31149 | 31676 | + | 176 | high | `MKRVLLIGSGGAGKSTLARKMSKQLNITAFHLDKLLWKPNWQMTPKPEQAIIVNNLVRQD` |
+| 216 | orf_0216 | carbamoyl-phosphate synthase small subunit | 2 | 31802 | 32881 | + | 360 | high | `MQWAARTTNVKLLSENQSTFETTDSEKKVLTLLLSIGFVTLLFATFFDKNVTSAVMDQNS` |
+| 217 | orf_0217 | carbamoyl-phosphate synthase large subunit | 2 | 32862 | 35363 | + | 834 | high | `MNQKNIEQRSLVIGCIWLFAMGVAALTAYFSTRLEALFVDAYFTLITLTTGLLSIVISKI` |
+| 218 | orf_0218 | hypothetical protein | 2 | 35356 | 35658 | + | 101 | high | `MKPISHIFSELYDKVLLQYQQQSDSNERFPNLSSNDEYYIDLLYTLENPTVTSFADKAKI` |
+| 219 | orf_0219 | permease of the major facilitator superfamily | 2 | 35679 | 36887 | - | 403 | high | `MNDKIKQVETQYLNKTLKKMKKSLIDTEAEIKRSNRNINDVSKSWGDVRLKTDTYSGIVE` |
+| 220 | orf_0220 | Guanosine polyphosphate pyrophosphohydrolase/synthetase | 2 | 37203 | 39440 | + | 746 | high | `MIDLDNLIKSKYVAPFMVIGITGSVAVGKSTFAHDLADKLSQQNIKTTVISTDDFLMSND` |
+| 221 | orf_0221 | D-Tyr-tRNAtyr deacylase | 2 | 39601 | 40050 | + | 150 | high | `MSDTITDTHGKSVNRLAMMLVLLVGVFSVMLMQTSLGTAQPALMKAFDVNASTVQWLTTI` |
+| 222 | orf_0222 | acyl-phosphate glycerol-3-phosphate acyltransferase | 2 | 40044 | 40658 | - | 205 | high | `MIILIMAVFALLGFLANMMLENRVIRLLTALIMFIGLIISVIGIVANMHDHYGMKAVTTT` |
+| 223 | orf_0223 | DNA topoisomerase IV subunit B | 2 | 40835 | 42898 | + | 688 | high | `MEKGTVKWFNGEKGYGFITRESGEDVFAHFSAIQGDGFKTLDEGQAVTFDVETSDRGLQA` |
+| 224 | orf_0224 | DNA topoisomerase IV subunit A | 2 | 43041 | 45479 | + | 813 | high | `MAKLVLIRHGQSEWNALNLFNGWIDTKLSEKGIAQAKEAGDLLAAEGIQFDQAYTSVLTR` |
+| 225 | orf_0225 | Inorganic pyrophosphatase/exopolyphosphatase | 2 | 45526 | 46431 | + | 302 | high | `MSKNQNNAIYDLHDKPPFFTWLGLSLQHLFSMFGATVLVPLLVGLNPGVALFTSGVGTLL` |
+| 226 | orf_0226 | LSU ribosomal protein L33P | 2 | 46597 | 46746 | + | 50 | high | `MNRQDKKNLTRTKITTVFINLVHQKGFTNTTISDITQQAGLSRGTFYVYFLDKYDLLEKV` |
+| 227 | orf_0227 | SSU ribosomal protein S14P | 2 | 46746 | 47015 | + | 90 | high | `MDDPTATFKFLGLTFDWTTIISTLLAMAIVIIVSIVLTRKLSVKPNKRQNAIEYLLDFTN` |
+| 228 | orf_0228 | hypothetical protein | 2 | 47310 | 47786 | + | 159 | high | `MDLHNLGVIAAGLAAAGAAVGGGIGNGVLISQFLAGMSRQPELEGRLLSRMFLGVALVEV` |
+| 229 | orf_0229 | Transcription elongation factor | 2 | 47811 | 48908 | + | 366 | high | `MLGITTLAALPLGNMLFIIIAFLLLMLILKKVAYGPLTKVLDERADKISSDIDGAEVARQ` |
+| 230 | orf_0230 | Predicted nucleic-acid-binding protein implicated in transcription termination | 2 | 48962 | 49258 | + | 99 | high | `MAKNIKDIANQYAKAIFELAGEQDNVDEVLTDLRTIKTVLDENQNFITIASSADVAIASR` |
+| 231 | orf_0231 | LSU ribosomal protein L7AE | 2 | 49248 | 49568 | + | 107 | high | `MAIQAEEISALIKQQLEKFDTTLTVEEVGTVTYVGDGVARATGLANALAGELVEFANGTY` |
+| 232 | orf_0232 | bacterial translation initiation factor 2 (bIF-2) | 2 | 49569 | 52073 | + | 835 | high | `MASLQDIQRRISSTKKTRQITSAMQMVSTAKLSQIQKYSAGYGSYAARLEAVVEHLVSAH` |
+| 233 | orf_0233 | ribosome-binding factor A | 2 | 52146 | 52499 | + | 118 | high | `MSTGKVVQVIGPVVDIAFEAGQQVPDINNALVIDKGNGQSLTVEVSLALGDGVVRTIAMD` |
+| 234 | orf_0234 | L-aspartate aminotransferase apoenzyme | 2 | 52595 | 53770 | + | 392 | high | `MADETTTATKGITVQIVTPAGEVYNESGIDIAVVNTQGGQVGIMAKHVPILAALTIDELI` |
+| 235 | orf_0235 | PTS system IIA component, Glc family | 2 | 53773 | 54312 | + | 180 | high | `MFNIKKTLTIAAGVAGALAFGGAHASADTTDYVVQSGDTLNKISAKYNVSVDKIAAQNNI` |
+| 236 | orf_0236 | tRNA pseudouridine synthase B | 2 | 54290 | 55198 | + | 303 | high | `MQINYDFLDSYTFKNKPITVRNHVVMAPTTLKSSLEDGSVSDNELKYYQMRSNGPGMIIV` |
+| 237 | orf_0237 | riboflavin kinase / FMN adenylyltransferase | 2 | 55195 | 56145 | + | 317 | high | `MFIGKKVKLSHYHDGDGKKFAEWQWDDAFNKPLSDDMIHPHTAEDWENIFRRSSKSKENV` |
+| 238 | orf_0238 | heat-inducible transcription repressor HrcA | 2 | 56267 | 57292 | + | 342 | high | `MNYGFIGAGNMATAMIKGLIYAGIDSKNIYVSSPHSAAKLAANLHIQAADSETIAKKCDI` |
+| 239 | orf_0239 | Molecular chaperone GrpE (heat shock protein) | 2 | 57309 | 57878 | + | 190 | high | `MNITQKQKTILIILVIGTFLGFLNQTLMNVALPDIMREFHISTDLGQWMTNGYMLVNGVM` |
+| 240 | orf_0240 | Molecular chaperone | 2 | 57965 | 59812 | + | 616 | high | `MVLKKPLNSFARARKVSHSAAKKQRQAAIAKLQQWAKGKSEELPSTK*` |
+| 241 | orf_0241 | DnaJ-class molecular chaperone with C-terminal Zn finger domain | 2 | 59876 | 60775 | + | 300 | high | `METWNEQTIKEFRKTLLNWYDKEGRVHLPWRVNHDPYRVLVSEIMLQQTRVDTVIPYFDR` |
+| 242 | orf_0242 | peptide deformylase | 2 | 60825 | 61403 | - | 193 | high | `MLYLDLTVLSQFSIVKHVVKEFYCSTEWVEEESMYDV*` |
+| 243 | orf_0243 | hypothetical protein | 2 | 61459 | 61731 | + | 91 | high | `MMYNDDAVRETGSKYFLIRMMFIMLIVGGALCINSTIIHADGVPQPSLKIKNGVLYGFSD` |
+| 244 | orf_0244 | Archaeal fructose-1,6-bisphosphatase related enzyme of inositol monophosphatase family | 2 | 61728 | 62516 | + | 263 | high | `MMNKLSKSVQAIILGVIAAFFFSLTFIFNEVIANKNGFWLWSASLRYLWMLPMLALIFIP` |
+| 245 | orf_0245 | Stress response membrane GTPase | 2 | 62578 | 64419 | + | 614 | high | `MNDYELSWVPSKLPLEKPFYKSIYQSLYDDILTGVLKPHDQLPSQHELSYFLDIHFTTVT` |
+| 246 | orf_0246 | hypothetical protein | 2 | 64729 | 64941 | - | 71 | high | `MNRQEKNKLTQQRIMDAFVKLVSEKGFNNLTVSNITRTAKLSRGTFYIYYLDKYDVLEKI` |
+| 247 | orf_0247 | hypothetical protein | 2 | 65311 | 66999 | + | 563 | high | `MANRIPQAFIDNVRSKVNIVDVIGQYTQLVKKGRQWTGSCPFHDDRHPSLFVEENKQVFN` |
+| 248 | orf_0248 | Membrane transporter of cations and cationic drugs | 2 | 67042 | 67362 | + | 107 | high | `MSEKRIHIVGDLHEVAIQKFTSAGYDVSHSLNYDEKKLLSLASDAAVIIMTDMAFDKNWF` |
+| 249 | orf_0249 | hypothetical protein | 2 | 67477 | 68136 | - | 220 | high | `MTKNINKNVHNTGLSGIRLVSNFIKKPVNEVIQLTVGEIDLPTPFATKQAGIKAIEQDHT` |
+| 250 | orf_0250 | Predicted permease | 2 | 68391 | 69281 | - | 297 | high | `MAGMAFSEAMPFLALYIMQISHFNQAQVSFYAGISYAASYLVVILVSPIWGKIADQHGRK` |
+| 251 | orf_0251 | Sortase related acyltransferase | 2 | 69376 | 69909 | - | 178 | high | `MRKFIWGLLVVVFVGGLVFLGFNSSKTLMTSKVGKITEKQFYEDIKTSSAGQQEFANMVI` |
+| 252 | orf_0252 | hypothetical protein | 2 | 70088 | 70606 | - | 173 | high | `MKLFDQFKNLITNIKEITTLLKQLQLQQHELTEQLKEIQSVSEDIQSDIEKMNFKNQPHI` |
+| 253 | orf_0253 | Integrase | 2 | 70932 | 71999 | - | 356 | low | `MDIFDKIITGEIPSYKVYEDEDVLAFLDISQVTPGHTLVVPKKNVDNIFDYDDDTAKKVL` |
+| 254 | orf_0254 | PTS system sucrose-specific IIC component, Glc family / PTS system sucrose-specific IIB component, Glc family / PTS system sucrose-specific IIA | 2 | 72124 | 72375 | - | 84 | low | `MGLKINNISGGYAGNNILKNISFDVPNGEIVALIGLNGAGKSTTVNHIIGELQPQMGSIV` |
+| 255 | orf_0255 | indole-3-glycerol phosphate synthase | 2 | 72449 | 73066 | + | 206 | low | `MKASDLFWRRFRDEQRRSAKYLRLLFNDHFVIFLIIALGGIVLAYRELLSTPQSMMFWRS` |
+| 256 | orf_0256 | hypothetical protein (no reference match) | 2 | 73068 | 73190 | - | 41 | none | `MHLRSKPWASDWLAEHSDIVIDQDRATAQIGQWQSLFDQEQPIHLEIGSGKGQFILGMAL` |
+| 257 | orf_0257 | galactokinase | 2 | 73259 | 73561 | - | 101 | low | `MLNIITEILVLIMFVSGVGSFLTLRPAYEIRSKTQKIWVSIFLTAIIAAFIITLLTAVPD` |
+| 258 | orf_0258 | Heat shock protein, Metallo peptidase, MEROPS family M48B | 2 | 73563 | 73994 | - | 144 | low | `MTIISSSSKISDIKDYLDEQKIAYNSRAKKAELLALAQGKTPEQAAAAGKTSKPKSAKKS` |
+| 259 | orf_0259 | Predicted ATPase or kinase | 2 | 74003 | 74362 | - | 120 | low | `MGGLGAIIAIFVGSFYRSHDKKIQIEIKGYLYHFKKDIKRPVPQNKDHRSKENYENTYFK` |
+| 260 | orf_0260 | methionine synthase (B12-independent) | 2 | 74627 | 74851 | + | 75 | low | `MSVEEKFDNAKDKVAGKAKEVEGKVTGDKQREAEGKAQGLFGKAKDAVTESKDAVKDSID` |
+| 261 | orf_0261 | hypothetical protein | 2 | 74866 | 75060 | + | 65 | low | `MVKEKNMKSGNIPLRIDPKLHEFLAEQASKEGRSLNNYITQLLMANYHPSNFEDRQFVGQ` |
+| 262 | orf_0262 | Molecular chaperone | 2 | 75066 | 75863 | + | 266 | low | `MLFFKIVPQNNAGLVETLGKYRARREAGLHFYVPFFQTIRKVSLAMRPLRLPDYSVITAD` |
+| 263 | orf_0263 | hypothetical protein | 2 | 75874 | 76068 | + | 65 | low | `MKHLLMRQHLFSLGGKFDITDDSENTRYTVSGSTFSIPKYFDILDLNSIPIARLTYQVFT` |
+| 264 | orf_0264 | Adenine-specific DNA methylase | 2 | 76054 | 76434 | - | 127 | low | `MNDFYRNKNILVIVTGSISAYKSATLVREFVKSGAHVRVGMTAAAQKFITVQTLAVLSKH` |
+| 265 | orf_0265 | Methionine synthase II (cobalamin-independent) | 2 | 76521 | 76688 | + | 56 | low | `MAEEVEENTSGFNLGDVLLAPAYGNLEKPFTGQVEKIYENSLLVEITENAPADQPAVNEM` |
+| 266 | orf_0266 | hypothetical protein (no reference match) | 2 | 76685 | 77116 | + | 144 | none | `MVDNIQIVEALNAVLTDLTLQEISEKLEAPKSSDLGDVAFPTFTLAKTLHKAPQLIAADI` |
+| 267 | orf_0267 | Predicted membrane protein | 2 | 77118 | 77342 | + | 75 | low | `MISKQERQKLILDIIQDNIIASQEELLAQLIKHGVETTQTTVSRDIRAMNIIRQKSDSGQ` |
+| 268 | orf_0268 | ribonucleoside-triphosphate reductase class III activase subunit | 2 | 77432 | 77614 | + | 61 | low | `MKWLKAISQKVWDKLGPIWHRWQFGRLLIILFLTLFLVTSAYLAILAKTAHVKNLEATLS` |
+| 269 | orf_0269 | RecA protein | 2 | 77617 | 78018 | + | 134 | low | `MQKTVSARQSSRTRNITLTAIVAALYAAITLVITPIGFGPVQLRLSEGLNHLSAWNKRYI` |
+| 270 | orf_0270 | S4-like RNA binding protein | 2 | 78011 | 78661 | + | 217 | low | `MTVNIYDNANEMANILTETQQYIAWQNAFNAIQNDTDSKALFGEFQEIQMAVQQMMQSQQ` |
+| 271 | orf_0271 | single-strand binding protein | 2 | 78627 | 79052 | + | 142 | low | `MFMKFLKEWVFPIAIAILIVVLIRSFLFTRVKVSGPSMEPNLQDNENVFLNKVASYKRGD` |
+| 272 | orf_0272 | hypothetical protein | 2 | 79062 | 79778 | + | 239 | low | `MRNYLNINAINKNDVLHLIQRALALKSGEQPKTKSITAVNLFFENSTRTHSSFQMAENQL` |
+| 273 | orf_0273 | DNA replication protein | 2 | 79775 | 80548 | + | 258 | high | `MQLIKNAKILWNNQLVLRDILIDQGIIQKISNHLESKAATVFDAKGVFLSTGLVDVHVHF` |
+| 274 | orf_0274 | hypothetical protein | 2 | 80545 | 80694 | + | 50 | high | `MKKRYLLLENGSVYEGEAFGADVDIMAELVFNTGMSGYQESITDLSYRGEIIVFTYPLIG` |
+| 275 | orf_0275 | hypothetical protein | 2 | 80704 | 80880 | + | 59 | high | `MPKRQDISKILVIGSGPIVIGQAAEFDYSGTQAALSLKEEGYHVILVNSNPATIMTDAEI` |
+| 276 | orf_0276 | hypothetical protein | 2 | 80880 | 81581 | + | 234 | high | `MTEQPVFIALDFPDATTTYKFLKPFSDLVEKPALKVGMELFYRTGPEFITELRALGYTIF` |
+| 277 | orf_0277 | ABC-type nitrate/sulfonate/bicarbonate transport system, permease component | 2 | 81698 | 81874 | + | 59 | low | `MTDYKQQVANDLLEIGAVKFSPEEPFTWASGIKSPIYTDNRMTIGFPSVRQNIYKGLSEL` |
+| 278 | orf_0278 | phenylalanyl-tRNA synthetase beta subunit | 2 | 81875 | 82306 | + | 144 | low | `MAITQESKQIQVLRFIHEAQSENGYPPTVREIGEAVGLSSSSTIHGHIERLVKKGYLLKD` |
+| 279 | orf_0279 | hypothetical protein | 2 | 82303 | 82746 | + | 148 | low | `MISTWLAILIAVLTLIIGLVGGFFLARNSMKSYLAKNPPISEEMMKSMMMSMGQKPSQKK` |
+| 280 | orf_0280 | ABC-type antimicrobial peptide transport system, ATPase component | 2 | 82743 | 83012 | + | 90 | low | `MIEQNYTNKNVLLTGAASGIGFSQLKTYLSQGATVYALDKEKITYAHEHLHTYQIDIRQH` |
+| 281 | orf_0281 | URI-like endonuclease | 2 | 83009 | 83194 | + | 62 | low | `MKFYDFLRGIAVALIWAVTGRIKYMNRDRIPQNDNYVLVGPHRTWWDPVWYAVAAYPKHF` |
+| 282 | orf_0282 | hypothetical protein (no reference match) | 2 | 83285 | 83473 | + | 63 | none | `MTQPFLKANERIDGLLSQNINIIQNPDMFSYSLDAILLAHFADVKGKGKGLSVDLGSGTG` |
+| 283 | orf_0283 | hypothetical protein | 2 | 83528 | 83920 | + | 131 | low | `MEIKQLEYFVTAHNCGSLSKAAAKLFTTQTNVSRVIKLFEQELGSPLFERTSKGLKLTAY` |
+| 284 | orf_0284 | branched chain amino acid: 2-keto-4-methylthiobutyrate aminotransferase / fructokinase | 2 | 84043 | 84213 | + | 57 | low | `MTYKNEQNTNILYKGNKIDPNRVSDPEVMPLYLSTAHNVADLDDLQNTYDRKGYAYTRSH` |
+| 285 | orf_0285 | adenosine deaminase | 2 | 84200 | 85177 | - | 326 | low | `MVAPRQKKSHNNIVYIVLGVVIVGIVIGTTKLVGHSATTKSKSEKKISVLTYANWNPFEY` |
+| 286 | orf_0286 | hypothetical protein | 2 | 85498 | 85662 | + | 55 | low | `MSFSYEMILDYAPFFMHGLLYTLLFSLCGVVFGTIFGLIIALGRMSKNPVISGIFKTYIG` |
+| 287 | orf_0287 | transcriptional regulator, LacI family | 2 | 85668 | 86894 | + | 409 | low | `MIKVEHISKQFGTNDVLKDINLEVPENEVVVIIGPSGSGKSTLLRLINHLDVATSGYIHV` |
+| 288 | orf_0288 | Predicted hydrolase (metallo-beta-lactamase superfamily) | 2 | 86904 | 87107 | + | 68 | low | `TRTPSEEAEKRLEAIRDFTELGSGFRIAMRDLSIRGAGDLLGKQQHGFIDSVGYDMYTQM` |
+| 289 | orf_0289 | hypothetical protein | 2 | 87104 | 87202 | + | 33 | low | `MGRKWENIKMKKAQTDGAAAKVNSKYGIEIYAAAKQGGSPDPEANSTLKFVIERAKQAQV` |
+| 290 | orf_0290 | Phosphoribosylpyrophosphate synthetase | 2 | 87322 | 87651 | + | 110 | low | `MNKKGLLLVNLGTPDSPHPDDVKAYLKEFLSDTNVIQMPRLLWQPILRGKILPKRSFKSA` |
+| 291 | orf_0291 | pyrroline-5-carboxylate reductase | 2 | 87687 | 88136 | + | 150 | low | `MEKLFQLKENKTTVRREIIAGITTFVSMAYIFFLNPQILGQAGVPTQAVFLAAILVAVFG` |
+| 292 | orf_0292 | 2-isopropylmalate synthase | 2 | 88176 | 88295 | + | 40 | low | `MLNIKNLSVSYGRKVALTVPKLSINKGEIIGVMGKSGSGKSTLVNSCLGLIPFKGQVRID` |
+| 293 | orf_0293 | Integrase | 2 | 88516 | 88983 | + | 156 | low | `MIKKRKLVFEFQNLLGNIITLFFGFAFAPMMALVFGNSYANVPQALNQLYLGFFCTIPLS` |
+| 294 | orf_0294 | Phage terminase-like protein, large subunit | 2 | 88970 | 90847 | + | 626 | low | `MEININIDDKLKDVQVVISGSDIEQLADIAQYLKSRNTPSRQLAIKTADNIRVVDKEDII` |
+| 295 | orf_0295 | transcriptional regulator, AraC family | 2 | 90844 | 91041 | + | 66 | low | `MKHFKEAIVYLLVGIGLGSFISLLSFTLNHATPSMKQFGLLMTMSAIMGLLSLIFEYDKI` |
+| 296 | orf_0296 | ABC-type Mn2+/Zn2+ transport systems, permease component | 2 | 91044 | 92210 | + | 389 | low | `MPNYLILTEKPSAAANFVKALGGKTGVFSDFTYKITNLRGHVMTLKDPEEMVAEDLKKQY` |
+| 297 | orf_0297 | DNA-binding response regulator, OmpR family (Rec-wHTH domains) | 2 | 92194 | 92916 | + | 241 | low | `MPRPKKGTDYRKLYDATFKISEGNQKINVSLQKLAGTTTTNKVLNNSIIALSDGTLTLLN` |
+| 298 | orf_0298 | acetyl-CoA carboxylase carboxyltransferase subunit alpha | 2 | 92922 | 94121 | + | 400 | low | `MIKSTKRLGFIGLTIAMFMGTLDSTIVNIALPKLMTTFNTNLAGVSWVATTYTLTLAVFM` |
+| 299 | orf_0299 | Predicted signal transduction protein with a C-terminal ATPase domain | 2 | 94183 | 94521 | + | 113 | low | `MRLDKYLKISRLIKRRTVAKEIADQGRISINGKVAKSSSDVSTNDELEVRFGNKTLTVKV` |
+| 300 | orf_0300 | FAD/FMN-containing dehydrogenase | 2 | 94469 | 94846 | + | 126 | low | `MNNRMSLQTREWVRSAFLELLDEVEDIKSITISDISKRSGISRRTFYRYYASKEDILTEY` |
+| 301 | orf_0301 | Uncharacterized protein of the AP superfamily | 2 | 94839 | 95306 | + | 156 | low | `MNYNAPHRHAVIELSQSAVVHNLKVIKENTHAKEIMAVLKANAFSHGLPEMASLSITAGA` |
+| 302 | orf_0302 | 5-(carboxyamino)imidazole ribonucleotide synthase | 2 | 95303 | 95677 | + | 125 | low | `MQYATYENTVAKLAAHHITISDIARIAFNNEQSYVEGLTIEQVEDAVESILHKRVVQHQV` |
+| 303 | orf_0303 | 6-phospho-beta-galactosidase | 2 | 95681 | 96316 | + | 212 | low | `MVTSLRVRNIMAKLIKNIDLYTGYQHMEDAFMRFTDTVEEVGYMIDFKEKADDELINEAS` |
+| 304 | orf_0304 | Aryl-alcohol dehydrogenase family enzyme | 2 | 96393 | 96761 | + | 123 | low | `MVAVLHGKTMAKPRYIEIHNQILSRIEAGEWRSQERLPAERDLALEFNVSRMTLRQAVQT` |
+| 305 | orf_0305 | Endoglucanase | 2 | 96842 | 96985 | + | 48 | low | `MSQWFTNTFPNVVYQGWSGDTGWWTSIIQTLYMTFWSAIFGGILGLIFGLGLIITAPNGI` |
+| 306 | orf_0306 | SLT domain protein | 2 | 97000 | 101472 | + | 1491 | low | `MTEPIIELKNIDVTFHQKKRTIEAVKNVSINIERGDVYGIVGYSGAGKSTLVRVINLLQE` |
+| 307 | orf_0307 | hypothetical protein | 2 | 101534 | 101686 | + | 51 | medium | `MNMSSNQKYLNLLRDLVALPSVSAIHRCLPEAAQLLTTTFRELGAQVTYDDTYFAPFVLA` |
+| 308 | orf_0308 | permease of the major facilitator superfamily | 3 | 1 | 123 | + | 41 | high | `MSKKKNYIIAGVAVVVIAGAAYLSFGGQGKTESKTVTIGVMAGSKAEDEIWASTIKTAKD` |
+| 309 | orf_0309 | Beta-glucosidase-related glycosidase | 3 | 278 | 2503 | + | 742 | high | `MSKKTKWLIGGAAVIVIAGAAYASFGQHSKISSKTVTIGIMSGSKQDKAIWNTVKKTAKD` |
+| 310 | orf_0310 | Predicted flavoprotein | 3 | 2644 | 3186 | + | 181 | high | `MAGNFKRRQSNITPLNPAIAREIKKSERANSEAAKHYRKAHARREKKILLFGGLIAIIFV` |
+| 311 | orf_0311 | Uncharacterized protein/domain associated with GTPase | 3 | 3298 | 3945 | + | 216 | high | `MILKNKNPMQERLRIGLLLVMNSGFIDSYTFEYHHERFASLQTGNIIQAGFHLAQGHWKA` |
+| 312 | orf_0312 | Predicted metal-dependent membrane protease | 3 | 4088 | 4474 | + | 129 | high | `MIKLKIVVFTFLFAMMGVLTVSADGDYRITDLNEVVRIDANGDARITKKVTYHFDDEMNG` |
+| 313 | orf_0313 | 2'-5' RNA ligase | 3 | 4845 | 5366 | - | 174 | high | `MADKPLYNQDNTEVLSHLQTDASKGLSSSEANKRLEQNGANQLNEAKSTNLVQKFINQFK` |
+| 314 | orf_0314 | PTS system IIA component, Glc family | 3 | 5504 | 7360 | - | 619 | high | `MAKFNPKQAQVYVQTLQEVLTITQDTADRVAPFFTKLDDAKEANAVADIPAAEFAEIKAE` |
+| 315 | orf_0315 | transcriptional regulator, LacI family | 3 | 7599 | 8606 | + | 336 | high | `MTNFITHTIEPWMPPGALKAKADYAAIAAATGWKILPLERYNDGRFDSETRQQKIRSWLN` |
+| 316 | orf_0316 | Alpha-galactosidase | 3 | 8684 | 10906 | + | 741 | high | `MQRSAKIGIGVAAVVVIGGGIYAATQKSSTKSTGYAVALVTDGGGIDDRSFNQSAWEGLK` |
+| 317 | orf_0317 | galactokinase | 3 | 10937 | 12121 | + | 395 | high | `MKKIWIILTTLAVSFIAMASGTTVSAAKPNYIITTDATYPPFDFQDSNNQYTGIDQEILK` |
+| 318 | orf_0318 | UTP-hexose-1-phosphate uridylyltransferase | 3 | 12124 | 13629 | + | 502 | high | `MPFSYMTEKILQTIQQYNWPETVIVAVSGGVDSVVLVHALSKTKANLVIAHVNYRLREES` |
+| 319 | orf_0319 | Excinuclease ATPase subunit | 3 | 13771 | 16023 | + | 751 | high | `MDNDIQEVLYDQESIQKAAERLGKQITQDYAGSTPLFLSVLKGAYLWTADLLREVDLYAE` |
+| 320 | orf_0320 | Alpha/beta hydrolase superfamily enzyme | 3 | 16082 | 17203 | - | 374 | high | `MNNNKGGFLRSSVFYIFIFLAVVGMVYGLFGNDKTTTKTITSSEFIKALNDKELKSVTVQ` |
+| 321 | orf_0321 | Transcriptional regulator | 3 | 17344 | 17916 | + | 191 | high | `MADQFIKAITKNKYFRTFAINGTNLVHQAAQIHETSRIAAVVLGRGLLATTLTAQAVLKG` |
+| 322 | orf_0322 | transcriptional regulator, AraC family | 3 | 18041 | 19162 | - | 374 | high | `MAEEKALNDQMLARRQKLATIVSDLHLDPFGKRFERTAKAQELHNLYDASSLEELENAKH` |
+| 323 | orf_0323 | spermidine/putrescine ABC transporter permease protein | 3 | 19340 | 19594 | + | 85 | low | `MIVLFNKPYNVLTKFTDAEGRPTLADYIDIPRVYAAGRLDMDSEGLLLLTDSGKLNHELT` |
+| 324 | orf_0324 | Alpha-L-arabinofuranosidase | 3 | 19623 | 21149 | + | 509 | high | `GSWGTALANVAAENNNDVRLWTRTATQADEINSQHTNQKYLPDAKLSSELMATSNMALAV` |
+| 325 | orf_0325 | transcriptional regulator, LacI family | 3 | 21271 | 22257 | + | 329 | high | `MRQNTILENVTSAQLRTDIPAFRAGDTVKVYAKIVEGSRERVQLFEGVVIKRKGAGIQAT` |
+| 326 | orf_0326 | transcriptional regulator, LacI family | 3 | 22260 | 23213 | + | 318 | high | `MDINDYDKILQTNFQVNSFALSLLRDGLLKNLLQEDYPHILYWAGKEIARQFPTDTLSTV` |
+| 327 | orf_0327 | permease of the major facilitator superfamily | 3 | 23320 | 24672 | + | 451 | high | `MLAFFIILVIINYMIKNNPIGLVDSGIGGLTVVKESQKQLPNEQLIYIGDTARMPYGPRS` |
+| 328 | orf_0328 | maltose phosphorylase | 3 | 24717 | 26975 | + | 753 | high | `MKLIIASNNTHKITEIEALLASISIDLPVVSLQEIGDVPEIVEDGTTFEENAVKKVETIA` |
+| 329 | orf_0329 | Predicted sugar phosphatase of HAD family | 3 | 26992 | 27678 | + | 229 | high | `MVKFLIVSDIHSDRKILVDILAQWRDKVDGIFYNGDSELNADDDIFAGVSTVIGNMDDDP` |
+| 330 | orf_0330 | transcriptional regulator, LacI family | 3 | 27730 | 28737 | - | 336 | high | `MTEDNPQFNQWYEQDTEVDHLLRDAAANDEEQRSELSLRPQFLREYIGQEALKEELNVYI` |
+| 331 | orf_0331 | Trehalose-6-phosphate hydrolase | 3 | 28847 | 30517 | + | 557 | high | `MTNFIISDTHFNHEKILYFDKSRAVSLQALNIEPTIENMDRYLEDTWNETVTDEDTVHFL` |
+| 332 | orf_0332 | permease of the major facilitator superfamily | 3 | 30599 | 31963 | + | 455 | high | `MAFFFANKYVTMEIRLFLKGFDIIMAEEKKYTLSDFDYDLPEALIAQTPLKQRDASRLLA` |
+| 333 | orf_0333 | Trehalose-6-phosphate hydrolase | 3 | 31967 | 33649 | + | 561 | high | `MLEKVVLTQIENGSVGQTPHSGYVNGSYYKTAEPANGYLDDGTGKYFFKDGKRQSGLQTI` |
+| 334 | orf_0334 | 6-phospho-beta-glucosidase | 3 | 33723 | 34598 | + | 292 | high | `MYEYINGLITNITPSYIVIASRSGVGYRLYSANPYRFEENVESHVYVQQIVRENDISLYG` |
+| 335 | orf_0335 | Acetyltransferase | 3 | 34650 | 35195 | - | 182 | high | `MKPVRKAIIPAAGLGTRFLPATKALAKEMLPIVDTPTIEYIVREAIESGIEDIVIVDGKS` |
+| 336 | orf_0336 | GAF domain-containing protein | 3 | 35429 | 35884 | + | 152 | high | `MVIITAGMIGVGKTTLTSLIAKHMNTKAFYEPVGDNPVLPLYYSDPKQYGFLLQIYFLNR` |
+| 337 | orf_0337 | Polysaccharide transport membrane protein | 3 | 35959 | 37527 | - | 523 | high | `MLSEFKAFIMRGNVLDLAVGVIIGGAFTGLVKSLTTNLIGPIIAFATGGTTDLDQLQLVI` |
+| 338 | orf_0338 | fumarase | 3 | 37603 | 38589 | - | 329 | low | `MDFIKRAGLYLRQKIGRTALITLVMSAIMIFVLAGIIIQSAAIQATNSAKNSAGTTVTLS` |
+| 339 | orf_0339 | hypothetical protein | 3 | 38654 | 38893 | - | 80 | low | `MTLAIKDLTHQYNAQEKPLYEHINMSFEPKTLYSIVGQSGSGKTTLLSFLAGLDTPSEGT` |
+| 340 | orf_0340 | Na+/xyloside symporter related transporter | 3 | 38912 | 40315 | - | 468 | low | `MINQKTRYFVITTLFIAIVFLQIFVPWLGLLPLGAFIVGASVTIIQFTVAIASIILGPKY` |
+| 341 | orf_0341 | Trehalose-6-phosphate hydrolase | 3 | 40333 | 40698 | - | 122 | low | `MSNNKTKYLVITTFFMAIILLQVLIPWLGYIPLGAVIVGAQPTIIQFTVAIAAILLGARR` |
+| 342 | orf_0342 | Trehalose-6-phosphate hydrolase | 3 | 40695 | 42044 | - | 450 | low | `MQRHPFKPSHKVRNAIIIIIIFVAVVVMGFVIVGHQSDNKKATSSSKISHSSSTSSSKKK` |
+| 343 | orf_0343 | ATPase of the AAA+ class | 3 | 42354 | 43070 | + | 239 | low | `MTDLSIIPFGGVRENGKNMYAVTVNDEIFILDAGLKYPETDQLGVDVVVPDFEYLIKNTE` |
+| 344 | orf_0344 | Predicted membrane protein | 3 | 43076 | 43648 | + | 191 | low | `MDENITPENQELIDRANIETKQKNWHDAAETLATLYEKMQTFKVNYRLVTALFMDEQYQL` |
+| 345 | orf_0345 | Predicted ABC-type exoprotein transport system, permease component | 3 | 43649 | 43900 | + | 84 | low | `MAKETYVRTKPHVNIGTIGHVDHGKTTLTAAISKVLAEKQGVDATDFAEIDNAPEEKERG` |
+| 346 | orf_0346 | amino acid/polyamine/organocation transporter, APC superfamily | 3 | 43918 | 44994 | + | 359 | low | `MSEELKEYDVVVIGAGPAGMTAATYASRANLSVLMLDRGIYGGQMNNTAEVENYPGFDSI` |
+| 347 | orf_0347 | 6-pyruvoyl-tetrahydropterin synthase | 3 | 44991 | 45371 | + | 127 | high | `MAKIVNREEKVSNSFEDLISLPTSESNDETRKAALGHDKDEKKK*` |
+| 348 | orf_0348 | hypothetical protein | 3 | 45375 | 46931 | + | 519 | high | `MTELLNIKNLKKQFGEKIIFDNVNVAVQKGEVISVIGPSGAGKSTFLRAINMLDAPTSGK` |
+| 349 | orf_0349 | Short-chain dehydrogenase of various substrate specificities | 3 | 47138 | 47959 | + | 274 | high | `MNKQKKHAGEFAATLIEDGMVVGLGTGSTIAYFLDALAKRIQDEKMTIIGVTTSTKTARC` |
+| 350 | orf_0350 | ADP-ribose pyrophosphatase | 3 | 47987 | 48724 | + | 246 | high | `MAYNNILVAIDGSEVSNTLIKKVVAFAPDSHIDILTVVDTTGGGYFGSIAMNEDVVYQME` |
+| 351 | orf_0351 | permease of the major facilitator superfamily | 3 | 48790 | 49956 | + | 389 | high | `MKKFLPHIIMGIILIISIVGILLMTQQKTASTKKDPKLDKVALPQLTTKIAKNESKLIMK` |
+| 352 | orf_0352 | Threonine dehydrogenase related Zn-dependent dehydrogenase | 3 | 50116 | 51165 | + | 350 | high | `MILTSNTFTHQLIEQTVKINDIVLDGTTANGINTRFLATRVGNAGKVLSYATTKDNANAA` |
+| 353 | orf_0353 | hypothetical protein | 3 | 51324 | 52085 | + | 254 | high | `MTIQQKKQRLSTVLATILFGIMTFGVLMSPNWFRQFDIFFQQLIQHRGTFTTLFFTYITQ` |
+| 354 | orf_0354 | ABC-type cobalt transport system, ATPase component | 3 | 52102 | 52689 | + | 196 | high | `MAYDHKSIEAKWQKYWDEHETFRAPDKSEKEKYYVMDMFPYPSGQGLHVGHPEGYTATDI` |
+| 355 | orf_0355 | Uracil-DNA glycosylase | 3 | 52760 | 53335 | + | 192 | high | `MTNDQRPEKFNGNSRVDKTDVDGKTLTADEILALAGRHLQEKRNLGPKTTRKSRSHATMP` |
+| 356 | orf_0356 | Predicted membrane protein | 3 | 53401 | 53907 | + | 169 | high | `MAFADYYSGLQHVGIPSSSLEQSEVFWTKLGFKKTGDFPAGNVIFMQRENLVIETWSGDE` |
+| 357 | orf_0357 | Predicted hydrolase of the HAD superfamily | 3 | 54269 | 55039 | + | 257 | high | `MTQNETKTKSSRTISMSLSITYFTISLVINAMGNVLTLVTSDHIHPAFLGSAYWTAAEAN` |
+| 358 | orf_0358 | permease of the major facilitator superfamily | 3 | 55074 | 56252 | - | 393 | high | `MEALVLTGTKKLEVKDIDRPKVLPNEVLIHTAFAGICGTDHALYAGLPGSADAVPPIVLG` |
+| 359 | orf_0359 | 4-methyl-5(B-hydroxyethyl)-thiazole monophosphate biosynthesis enzyme, amidase family | 3 | 56384 | 56890 | - | 169 | high | `MVAKLSDVAALAGVSVTTVSRVINSYGSLSQKTIDKVHAAMRELHYQPNAMARSLQGKSS` |
+| 360 | orf_0360 | Pyridoxine 5'-phosphate oxidase V related favin-nucleotide-binding protein | 3 | 57188 | 57586 | + | 133 | high | `MFINILATMPEWITHLIGSDTEFSISTFIVMFLLIFVETAGILTGFIPGDAILITVGGLA` |
+| 361 | orf_0361 | aminotransferase | 3 | 57579 | 58805 | + | 409 | high | `MSYKEALTKWQEATLPDYLAADLEKYTPDQQEDAFYQNLSFGTAGMRGVLGAGTNRMNVF` |
+| 362 | orf_0362 | 2-deoxy-D-gluconate 3-dehydrogenase | 3 | 58881 | 59654 | + | 258 | high | `ISQPTVSVHIKQLELQLNTTLFERNGRTELVPTTNARKFYQHALHLLDDWQNATDSLDLA` |
+| 363 | orf_0363 | gluconate permease GntP | 3 | 59682 | 61016 | + | 445 | high | `MKIGIIGATHAGVYAAKQIKSEHPEAEVTVFEKNTTVSFLSCGIALWIGDHVSDPEKMFY` |
+| 364 | orf_0364 | 6-phosphogluconate dehydrogenase (decarboxylating) | 3 | 61073 | 62500 | + | 476 | high | `MFKTDKRKYLLNFLEKHPNLNREEEKLISDTTKKLNNPKVSEYRELTSMTNELRKLSLNH` |
+| 365 | orf_0365 | Microcin C7 resistance MccF related protein | 3 | 62595 | 63575 | + | 327 | high | `MLDAPVSGGDIGAKNGTLAIMVGGEQQVLDEIKPVLSVIGQQIVFAGSAGKGQHMKMSNN` |
+| 366 | orf_0366 | Predicted acetyltransferase | 3 | 64038 | 64544 | - | 169 | high | `MNIGFIGTGVMGTGIINNLLQAGYEVSVFNRTHSKANTVLNNGAIWRDTPAKVAQYSDIT` |
+| 367 | orf_0367 | 6-phospho-beta-glucosidase | 3 | 64746 | 66182 | + | 479 | high | `MTIQLIATDLDGTFLTDDKKFDQALFRNVLRELNKKHIQFTIATGVHQERINILFKDFLN` |
+| 368 | orf_0368 | cellobiose-specific PTS system IIB component | 3 | 66197 | 66514 | + | 106 | high | `MQVAIIGAGPRGLAVAERLINLADDDVQLDVQIFDPHVIGGRVWDPSIPQNKLFLMNTVI` |
+| 369 | orf_0369 | transcriptional antiterminator, BglG family | 3 | 66550 | 68541 | + | 664 | high | `MVAIGYGLASAKWFTDKSGQIIARIVTQVALPMYMVNTITHDFTKGELIRLLPEIKFPII` |
+| 370 | orf_0370 | cellobiose-specific PTS system IIA component | 3 | 68538 | 68897 | + | 120 | high | `MGEKSIFFLKKNNLTRSYVHQRFYAYFYIDGANKTSK*` |
+| 371 | orf_0371 | hypothetical protein | 3 | 68854 | 69408 | + | 185 | high | `MVHCEHIVGTFFVVALLYINTIVRNLRGTRMKHLDYREQEDWRKADDTIYQSPIDIPLTS` |
+| 372 | orf_0372 | cellobiose-specific PTS system IIC component | 3 | 69411 | 70760 | + | 450 | high | `MTKPITKEELWSKVQAEFFTKLGRVTFSTYIEPLKPLTLGDTSLTLAVPSDMAQDIIDQW` |
+| 373 | orf_0373 | Xanthine/uracil permease | 3 | 71286 | 72572 | + | 429 | high | `MKILEQRIKKDGRVLGKDVLKVDSFLNHQVDPELMQAMGEEFATIFSDEKIDKIVTVESS` |
+| 374 | orf_0374 | Acyl-CoA synthetase (AMP-forming)/AMP-acid ligse II | 3 | 72565 | 73677 | + | 371 | high | `MQFTINRSAFIKALNDVSRAISSRTTIPILTNIKLVLNDEELVLTGSNADISIETTVPQS` |
+| 375 | orf_0375 | Acyl-CoA reductase (LuxC) | 3 | 73689 | 75155 | + | 489 | high | `MTTSVRITTEYITLTQLLKEENIISSGGQAKYYLMDFPVLLNGETENRRGKKLYDHDEIV` |
+| 376 | orf_0376 | 3-oxoacyl-acyl carrier protein reductase | 3 | 75168 | 75935 | + | 256 | high | `MELESLKLDHYRNYSDLTLEFSSGVNVFLGENAQGKTNLLESIYVLALARSHRTSSDKDL` |
+| 377 | orf_0377 | Predicted membrane protein | 3 | 75996 | 76505 | + | 170 | high | `MAENNENIDQELESVDDIITDDEEIRHASTVDAKAGDYNADQIQVLEGLEAVRKRPGMYI` |
+| 378 | orf_0378 | Hydroxyethylthiazole kinase, sugar kinase family | 3 | 76495 | 77334 | + | 280 | high | `MSELNDSRIKNANLSEQMKTSFLSYAMSVIVARALPDVRDGMKPVHRRILYSMIEQGNTP` |
+| 379 | orf_0379 | cellobiose-specific PTS system IIB component | 3 | 77354 | 77659 | + | 102 | high | `MSIYDYFATLENGETYSLNKLANHPVVIVNTATKCGYAPQFGELEKLYKKYKDKGLVILG` |
+| 380 | orf_0380 | Phosphotransferase system cellobiose-specific component IIC | 3 | 77674 | 78912 | + | 413 | high | `MIYLLEDDITQQKRIKQYIQHIHTFTSPANLLSAVLKDKTPKIILLDLEIKDVIYAGLQT` |
+| 381 | orf_0381 | cellobiose-specific PTS system IIA component | 3 | 78918 | 79247 | + | 110 | high | `MNPTLNLSITIPINMFLDSIWLVELTFIFLLIIMIYPPCRYFQQLRTQHEYESRATQTYV` |
+| 382 | orf_0382 | 6-phospho-beta-galactosidase | 3 | 79240 | 80664 | + | 475 | high | `MIFFLNATMQPQKSGIEHAQLKRADLFRAHGERFKIVLREWDPLLHENIKATSLKSFEVI` |
+| 383 | orf_0383 | Predicted dinucleotide-binding enzyme | 3 | 81231 | 81797 | + | 189 | high | `MNYFISENAFEFNSGTEFSQAARTSMYNSFGNLTLFVTRNYTPVFHRTIKTLGLNDHQVL` |
+| 384 | orf_0384 | transcriptional regulator, MarR family | 3 | 81884 | 82243 | - | 120 | high | `MIEIVKNVKNFTWYHVSNLTVEEHESLVKEHHLTNEMIGYAVDHNESVRMEYDRHADETL` |
+| 385 | orf_0385 | transcriptional regulator, MarR family | 3 | 82437 | 82904 | + | 156 | high | `MRIHIMPNWSELGVEIPQFNDSIHQAQLFLEQGQEVAFILCDYLPKLRGILSNKNIDKAT` |
+| 386 | orf_0386 | Glutathione reductase | 3 | 82894 | 84234 | + | 447 | high | `MTISILQIGAENWAPYITDKLDWHHTSVLDLPTFLAMQRDPYVLEQTYVLLTDDHLESTL` |
+| 387 | orf_0387 | NADPH:quinone reductase related Zn-dependent oxidoreductase | 3 | 84251 | 85189 | + | 313 | high | `MQYQIYWTPNTELLGLQGATVDFRSLNEVYYENYFLPSGEVVARWHSTYNRMSGQPVVKA` |
+| 388 | orf_0388 | Predicted membrane protein | 3 | 85207 | 85566 | + | 120 | high | `MNIIELLELKTTILSADKTVVELAVTDKIMQPYGIVHGGINALLAETAASLGAKEALSDN` |
+| 389 | orf_0389 | Lipopolysaccharide biosynthesis glycosyltransferase | 3 | 85638 | 86462 | - | 275 | high | `MTTWSAIKKYDEILFEKNSDGKNPGKIAKITMNDVATHNAFTPGMVSEMIDAFTIARDNA` |
+| 390 | orf_0390 | ABC-type Mn/Zn transport systems, ATPase component | 3 | 86870 | 87613 | + | 248 | high | `MTLKIAIAQIDIALGKPAINEQTVIEYAQKAAAVEADILVYPEMWNTGYDLLNLETVADP` |
+| 391 | orf_0391 | ABC-type Mn2+/Zn2+ transport systems, permease component | 3 | 87606 | 88448 | + | 281 | high | `MHFEESDLLKTLPKQFFATLVAKVNAKIAAGKDVINLGQGNPDQPTPEYIVKSLQAAAEN` |
+| 392 | orf_0392 | ABC-type metal ion transport system, periplasmic component/surface adhesin | 3 | 88528 | 89469 | + | 314 | high | `YLSFFLFRKLLIVSVLFISSNKSITFVFYENKKSKLSPAYFENIGNLLIRFAASAKRSSP` |
+| 393 | orf_0393 | Alpha-acetolactate decarboxylase | 3 | 89557 | 90267 | - | 237 | high | `MTSQKNFLQTKSTKNLVLRAMQPDDSEALARIYLGARQHNFSWVKHPKLEDFARVSHGEV` |
+| 394 | orf_0394 | hypothetical protein | 3 | 90407 | 91753 | - | 449 | high | `MNFIKNWVIPIVIGLFIALIIRTFLFTLVTVDGPSMNPNLDNGELVVESKISTVKRGDVI` |
+| 395 | orf_0395 | DNA-binding response regulator, OmpR family (Rec-wHTH domains) | 3 | 91943 | 92614 | + | 224 | high | `MKRFENILKRIGPLPLIMAGVALVLIIVSGLSYDGHVTSHSFWSAIVAVFTRAILGASSW` |
+| 396 | orf_0396 | Signal transduction histidine kinase | 3 | 92615 | 93682 | + | 356 | high | `MRKTFRIKKPEEFQHVFNKHRSVANKYFIVYQMDKPEQKHFRVGLSVSKKVGKAHERVWV` |
+| 397 | orf_0397 | hypothetical protein | 3 | 93768 | 94178 | + | 137 | high | `MKRTYQPKKRHRERVHGFRKRMSTSNGRKVLARRRAKGRKVLSA*` |
+| 398 | orf_0398 | von Willebrand factor (vWF) domain containing protein | 4 | 229 | 2991 | + | 921 | high | `MRKLTHPKHNCISETVLFSQLPQDELNMISEQINYIEYAPGETIFDVEDDSDRLLLVHQG` |
+| 399 | orf_0399 | hypothetical protein | 4 | 2988 | 4112 | + | 375 | high | `MSKYKAYFIDLDGTIYQGNKKMPSGKRFIDRLKAANIPYLFVTNNSTKNPEDVADNLTKN` |
+| 400 | orf_0400 | hypothetical protein | 4 | 4102 | 5628 | + | 509 | high | `MTMNHDHMNMTNKNTSHEHHDMSSMNHDHMDMSSHEHTSHAGMDSMDMSDMKRRFWWAFF` |
+| 401 | orf_0401 | Sortase (surface protein transpeptidase) | 4 | 5767 | 6954 | + | 396 | high | `MNKLLTTSEWEIMRVIWTLGEATTNQIIHIMHNQKDWQPSTVKTLINRILKKGLLRTDGA` |
+| 402 | orf_0402 | Sortase (surface protein transpeptidase) | 4 | 6947 | 8101 | + | 385 | high | `MAQIQRSQPLYEQLMWRIKAQIASGVLHIGDKLPSVREMALIEGLNPNTVAKAYKALETQ` |
+| 403 | orf_0403 | Predicted ATPase or kinase | 4 | 8171 | 8620 | + | 150 | high | `MSLILENISKKIHHHAILNNASFELKEGEVVGLVGRNGAGKTTLFRTISGEMQADFGRIG` |
+| 404 | orf_0404 | Acetyltransferase, GNAT family | 4 | 8617 | 9105 | + | 163 | high | `MKQALRLYGRIKSNQIILIAILGVLVTCFIGGVNTYYGRAITNIGSDSELGGVLMGIMLI` |
+| 405 | orf_0405 | DNA polymerase III, epsilon subunit related 3'-5' exonuclease | 4 | 9108 | 9641 | + | 178 | high | `MALLEVKNVNKKYGNRAAMDDVSFNVEAGHIVGLIGPNGAGKSTTMRAITGLMSYSSGQI` |
+| 406 | orf_0406 | Exonuclease III | 4 | 9677 | 10534 | - | 286 | high | `MLTLMKQEYYKAFKQNRLYIWLILGFIFPIAIIGIFKSTRTAGSIINLGQSLIYVEMAGI` |
+| 407 | orf_0407 | Predicted sugar kinase | 4 | 10553 | 11374 | - | 274 | high | `MSLVDTYKLTSGIEIPIIGFGTWQSANGTEAYQSVRWALEAGYRHIDTAAVYGNEDSVGR` |
+| 408 | orf_0408 | hypothetical protein | 4 | 11497 | 12696 | + | 400 | high | `MTLFPNYQRAPLTFKKTKNATWTDRKNNEYTDLSSGIGVYNVGANNDAVESALIAQAKEI` |
+| 409 | orf_0409 | peptidase V, Metallo peptidase, MEROPS family M20A | 4 | 12824 | 14239 | + | 472 | high | `MKKIVIKIGGNAATQLTPAFFDTIKFWQKQHYKIAIVHGGGDTISALMSQLNEPVQKING` |
+| 410 | orf_0410 | hypothetical protein | 4 | 14337 | 14441 | + | 35 | high | `MPKKYRTPPFLTPSATVSLIVAISAANLAVNVATGTSEGGKVSSSASSAMSTSMITSSTT` |
+| 411 | orf_0411 | Predicted metal-dependent hydrolase | 4 | 14650 | 15384 | + | 245 | high | `MTELLNQITTLSIADIAAPIGFHADGQHVGLKHKSKDLGWIYSDVIASVAGVFTTNQVQA` |
+| 412 | orf_0412 | FKBP-type peptidyl-prolyl cis-trans isomerase (trigger factor) | 4 | 15550 | 16845 | + | 432 | high | `MTDKIIKIAIVGITGYGGLELLRLLYNHPNAKVVSIHNTQTENTDISEQFPHLKSMYNLT` |
+| 413 | orf_0413 | Superfamily I DNA and RNA helicase | 4 | 17030 | 19891 | + | 954 | low | `MKIDVTLDNGFIPDKYAKYAPANYRTNDMPTTNFPVEISNTPAGTQSLSVSLIDYDAVPV` |
+| 414 | orf_0414 | hypothetical protein | 4 | 19903 | 21339 | + | 479 | low | `MSFFNIFKKKKTTEKNIDAANEPITWKNTTNASDFFEGYNIAITDLESNGEVAAAETLRA` |
+| 415 | orf_0415 | hypothetical protein | 4 | 21452 | 22000 | + | 183 | low | `MAAHKTVFNDKQRILRLYSALISHRALSIEEIEDMFFIGRKTVQRDISEIRTFLHDLQIG` |
+| 416 | orf_0416 | cysteine desulfurase / L-selenocysteine selenide-lyase (L-alanine-forming) | 4 | 22324 | 22671 | + | 116 | low | `MRQTYAIIGLGRFGGALLETLVANGQDVLGIDISEEHVNDYRDIATQVVIADAQEDEVLR` |
+| 417 | orf_0417 | cell division protein FtsA | 4 | 22859 | 24049 | + | 397 | low | `MSRKIDLPTAAEMQKFHDKSQRHNFWSRISMPQRLSLGFLTVITVGALLLMLPLSYHGNV` |
+| 418 | orf_0418 | Beta-galactosidase | 4 | 24318 | 24821 | - | 168 | low | `MIRLMQNKDQRNNISVRIAIYLTYIVQGFALIILAQTVQQLSELWNASIAGTTAVVSAIG` |
+| 419 | orf_0419 | asparaginyl-tRNA synthetase | 4 | 24834 | 25235 | - | 134 | low | `MEIGNKIKALRKKNGLTQQQFAEKLYISFQSVSNWERHKGRPTTEMMLLIIEKFDLPLDF` |
+| 420 | orf_0420 | MutS family ATPase | 4 | 25307 | 26428 | - | 374 | low | `MIENHEFCRLSEADIATVIGGELEDIAYNLRRLRLELGYRRADLADELNISLSAIAKYET` |
+| 421 | orf_0421 | ATP-dependent protease Clp, ATPase subunit | 4 | 26658 | 27908 | + | 417 | high | `MLTVLDLINHYLGYFTTNSKTKGRIYTVAGAGGVWYLLYLAYRFFVNGRWLRGALIAAVF` |
+| 422 | orf_0422 | Predicted GTPase | 4 | 27909 | 28493 | + | 195 | high | `MEKLSEQELAKVSGGFPLLPIVGPIIAGGATYVAKDAWNHLDQIRSGWRKAGNSKW*` |
+| 423 | orf_0423 | Conserved domain frequently associated with peptide methionine sulfoxide reductase | 4 | 28597 | 29040 | + | 148 | high | `MIGVFLARIGLNFVSEESFFYGWYDAMKFTGVIFLLQILYFYSRRSKNGF*` |
+| 424 | orf_0424 | Nicotinamide mononucleotide transporter | 4 | 29143 | 29910 | + | 256 | high | `MDFKTQRNVLNSEKLMMISGGSTDDSWEGFGSGLHKTVNTVVYAGTTVARAHTRSHQRCF` |
+| 425 | orf_0425 | NMN adenyltransferase and ribosylnicotinamide kinase, NadR ortholog | 4 | 29956 | 31098 | + | 381 | high | `MIFNRAITVISKKVGQLIELVLVTVLIDIILDIPPACVFIDKSNGWFVLLSIILGGVVSY` |
+| 426 | orf_0426 | Acetyltransferase | 4 | 31140 | 31694 | + | 185 | high | `MTESTPVIEMRHIIKKFGDFAANDDINLQVQQGEIHALLGENGAGKSTLMNILTGLLQPT` |
+| 427 | orf_0427 | replication restart DNA helicase PriA | 4 | 31691 | 34102 | + | 804 | high | `MIAQKNNLSVAMFSVLFGLIVGAVIMLVFGYNPISGYVALLGSAFGSMQDIGGVLTQMTP` |
+| 428 | orf_0428 | methionyl-tRNA formyltransferase | 4 | 34210 | 35175 | + | 322 | high | `MSLMAMLSLVISSTLVYSAPLIFTSIGGTFSERSGVVNVGLEGIMGMGAFAAVVFNLTFA` |
+| 429 | orf_0429 | tRNA and rRNA cytosine-C5-methylase | 4 | 35165 | 36511 | + | 449 | high | `MKIQIKHEQGLGPIHEDALAIRKAVFIVEQGVDIKDELNDQAAEENAIHIVIYVDNKLAA` |
+| 430 | orf_0430 | Serine/threonine protein phosphatase | 4 | 36511 | 37245 | + | 245 | high | `MIVMKKYLKNIWHETLAPKNWIKQLNTRTGFFTWTVVLFTLKTILAYGADFYWLHVSDPL` |
+| 431 | orf_0431 | Serine/threonine protein kinase with beta-lactam (PASTA) domains | 4 | 37248 | 39173 | + | 642 | high | `MAKILIALENIELGGMKRATTVVGNALAASHEVTYYSFSDLPPFYGLSAPLVVASPALRL` |
+| 432 | orf_0432 | Predicted GTPase | 4 | 39213 | 40112 | + | 300 | high | `MDNRSTIHKKTAFDKLQFGIGDLARMTGVSTRQLRYWEKQGYVKALDRNDDQESRLYGFR` |
+| 433 | orf_0433 | ribulose-5-phosphate 3-epimerase | 4 | 40126 | 40782 | + | 219 | high | `MKKWQYNFIITSQNSGQTVKELLIKWYVPQRIRGALRIKKHFSVNNIIVPTNYELRTGDQ` |
+| 434 | orf_0434 | thiamine diphosphokinase | 4 | 40782 | 41441 | + | 220 | high | `MRKYIAEFLGTFMLVFFGTGSVVYSAATTQSAITVGLAFGLSLAVAIYAFGHISGGHFNP` |
+| 435 | orf_0435 | Thiol-disulfide isomerase and thioredoxin | 4 | 41431 | 41745 | + | 105 | high | `MFLIQAVIWLIIMISAVIWLPNTSQLIKEKGDTNLPSAVKSEVAQKIQDNWGRGQDNTRQ` |
+| 436 | orf_0436 | LSU ribosomal protein L28P | 4 | 41836 | 42036 | + | 67 | high | `MFNYPFMQYAFIASFFISIICAVVGVFVVARKTSFYVHTLSEISFSGASFAIFAGISPIG` |
+| 437 | orf_0437 | hypothetical protein | 4 | 42230 | 42604 | + | 125 | high | `MSERELRRNLSILPIGTVRELTLLTDRQIRYYEQQKLIAPGRGKGGQRRFSLNDVDRLLE` |
+| 438 | orf_0438 | Dihydroxyacetone kinase related enzyme | 4 | 42613 | 44319 | + | 569 | high | `MIDKQKRKDTSLIFKRQFFDVKAQEYLPISADELLSQHLLITGVTGSGKSSTALTIIEEL` |
+| 439 | orf_0439 | hypothetical protein | 4 | 44367 | 44573 | - | 69 | high | `MMIKLPSVLAVASSGDMTVWQIMQKIGIYVAVFVMIFLLVAASQLVISRLRHKKFSHHHF` |
+| 440 | orf_0440 | hypothetical protein | 4 | 44674 | 45015 | + | 114 | high | `MTNKKLLLIDGNSLAFRAFYAMYNQLDRMISHEGLHTNALVAFNNFLDKIVDPMAPDLAL` |
+| 441 | orf_0441 | hypothetical protein, MraZ | 4 | 45167 | 45598 | + | 144 | high | `MRKFKGESIFMTFTRLLRVAGAVFSLFFISTSPMLAGTVTSNEYQQYYHHNIEQGLMNDV` |
+| 442 | orf_0442 | SAM-dependent methyltransferase for cell envelope biogenesis | 4 | 45637 | 46575 | + | 313 | high | `MNLNRRKSIILVSIILVLLAIVFVQAARYYHDTYVTEVGYAKAPAHVPKKEKTTDDNGKV` |
+| 443 | orf_0443 | cell division protein FtsL | 4 | 46634 | 47002 | + | 123 | high | `MDNFNMNARRDVTGVDEGMRAFFKQTYSFMGIAVLLTAVTGFIVQNFFLEQVAKLLVGNV` |
+| 444 | orf_0444 | Cell division protein FtsI/penicillin-binding protein 2 | 4 | 47005 | 49143 | + | 713 | high | `MSKKYYFIGIKGTGMGPLAQILHDQGNEVLGSDIDTYTYTQAPLEAAGIKILTFDARNID` |
+| 445 | orf_0445 | Phospho-N-acetylmuramoyl-pentapeptide- transferase | 4 | 49153 | 50115 | + | 321 | high | `MITSYNQKSCGDILVVTLAPNAEKQIVTTVGNVTRISNAETGQATGFNIANVGAELGIIG` |
+| 446 | orf_0446 | UDP-N-acetylmuramoylalanine--D-glutamate ligase | 4 | 50159 | 51508 | + | 450 | high | `MKIGIITPMAEEKIALSAILENTETRQHGSTTITSGTYKNHEVMLTESGIGKVAAGSAAT` |
+| 447 | orf_0447 | UDP-N-acetylglucosamine--N-acetylmuramyl- (pentapeptide) pyrophosphoryl-undecaprenol N-acetylglucosamine transferase | 4 | 51519 | 52610 | + | 364 | high | `MIEKILEVKQLDVEVPGSLLIQQLSFSTYSGALLCITGDNGVGKTTLINYLLKAARDKNS` |
+| 448 | orf_0448 | cell division protein FtsQ | 4 | 52610 | 53314 | + | 235 | high | `MDKMSRKAAKKEQKAREKERIKVEKDYARKHPTQVEIVQPETREEMRLTRKGRYELGSDG` |
+| 449 | orf_0449 | cell division protein FtsA | 4 | 53406 | 54737 | + | 444 | high | `MVAYRETVTSSKIIYEGPIFSVETQDVDLYNGKKAKRDIVRHVPAIGVLAFVDDEHIILE` |
+| 450 | orf_0450 | cell division protein FtsZ | 4 | 54761 | 56068 | + | 436 | high | `MKTGTVKIWQKERGYGYITPDEGGDDVFVHFNGIDMDGFKSLIQGEKVAYVLVQGYKSYQ` |
+| 451 | orf_0451 | Cell division protein | 4 | 56078 | 56527 | + | 150 | high | `MLNKLYEQLKAAEGGAIISLTAYSLITIMKLLVGNIGHSEALIADGFNNSTDILASLTVL` |
+| 452 | orf_0452 | Cell division membrane protein | 4 | 56533 | 56796 | + | 88 | high | `MLIVALQVLFSAFRNILSGQIVTPSPLSAIVGIISAILLSFLYFHNQKLAKNVHSTALLA` |
+| 453 | orf_0453 | Cell division protein, S4-like domain | 4 | 56793 | 57590 | + | 266 | high | `MQTDIEIAQSVEIKPITEIATAAGLQANEIEPYGYDKAKINLDPSIVRKQELGKLILVTS` |
+| 454 | orf_0454 | Cell division initiation protein | 4 | 57651 | 58313 | + | 221 | high | `MTKVLIIGSGAREHALAQTFLKSPQVDEVIVTPGNDGMTDDHLRRVEIPVTNLIELRDFA` |
+| 455 | orf_0455 | Isoleucyl-tRNA synthetase | 4 | 58623 | 61415 | + | 931 | high | `MVYAADEQRYEKLPYRRVSDSGLILPAVSFGLWRNLGDQMPLENSRNVILKAFDSGIFSF` |
+| 456 | orf_0456 | hypothetical protein | 4 | 61562 | 61762 | + | 67 | high | `MKIVDLESFLSPEWGKTSNGFVTTQFGAALEFMVQGAQEVTLKFAKKYEGLSLVLSLNGE` |
+| 457 | orf_0457 | SSU ribosomal protein S16P | 4 | 61901 | 62320 | + | 140 | high | `MTPAYELFNLGSNDELAGEISTILGVPLAPIDIKTFADNEIYERIENTVRGRNVYVIQGI` |
+| 458 | orf_0458 | hypothetical protein | 4 | 62421 | 64202 | + | 594 | high | `MKQKYFFGSLIGVILTLFIFVTGNSTVRADTKNIQVVSSVDFYGEAAQKVLGQYGTVKSV` |
+| 459 | orf_0459 | Predicted esterase | 4 | 64290 | 65081 | + | 264 | high | `MAYPEKQLDKITGTLQNVIFSSTESYFKILSVHIEESTLEDWQEPEMIATGTFADVQEGS` |
+| 460 | orf_0460 | ATP-dependent nuclease, subunit B | 4 | 65081 | 68560 | + | 1160 | high | `MTKFYFVRHGQTEWNLERRFQGGHGDSELLPSSYNDMKKVGKFLSKIKFEHIYASPIRRA` |
+| 461 | orf_0461 | DNA helicase/exodeoxyribonuclease V, subunit A | 4 | 68560 | 72252 | + | 1231 | high | `MAFDKTVTIPGDKTYKLSNNIKKYTLGDLGFITNKAGVHILHRALEPEKALDNAIQLKVS` |
+| 462 | orf_0462 | Methylated DNA-protein cysteine methyltransferase | 4 | 72303 | 72785 | + | 161 | high | `MNRSTKIFTGLAAAAVIAGGIYAATSHNSSSSKNANKSATLGLVLDVGGVDDHSFNQSAW` |
+| 463 | orf_0463 | 16S rRNA processing protein RimM | 4 | 72861 | 73382 | + | 174 | high | `MLPEDFKNKYNRILGDEYEDFLLSFDEPVQKAYRVNPLKPHPVISDTEDHGNLPYGKWGH` |
+| 464 | orf_0464 | tRNA (Guanine37-N(1)-) methyltransferase | 4 | 73382 | 74113 | + | 244 | high | `MTKNIVVLGSLNVDNIMKMPRMPLVGETMALTEVTTAPGGKGANQAVAASRQGANVSFIG` |
+| 465 | orf_0465 | ketopantoate reductase | 4 | 74163 | 75176 | + | 338 | high | `MKHEWHQKVAGYYEYVLNIMMILIGIVIFGFLIREIWNLAQMLSIKNISGHFTELAEQIL` |
+| 466 | orf_0466 | Peptide methionine sulfoxide reductase | 4 | 75237 | 75752 | + | 172 | high | `MKLTQQEQLQHLLTHIQLPEEIHHYFDDGCLSQVDVSVSQKMWLFHVEIEQILPVNVYMQ` |
+| 467 | orf_0467 | RNAse Z | 4 | 75878 | 76834 | + | 319 | high | `MKQSKLLMPTLRDIPAEAEVKSHQLLLKAGYIRPIAAGMFSYLPLAKRVLNKIETIIREE` |
+| 468 | orf_0468 | exonuclease RecJ | 4 | 76821 | 78788 | + | 656 | high | `MNVTSIIAFIFVFGVLVTVHEFGHFFVAKKSGVLVREFAIGMGPKLLSWNRNHTAYTIRI` |
+| 469 | orf_0469 | adenine phosphoribosyltransferase | 4 | 78823 | 79353 | + | 177 | high | `MTDEETQYKKGLDILQNSEFRVTKQRKDLLKYLSKFESQYVSVTDVDSFMQQLYPNVSHT` |
+| 470 | orf_0470 | Predicted membrane protein | 4 | 79434 | 80270 | + | 279 | high | `MKTRVITAVVALIIFVPLLVIGGMPLLILTLAMAVVAMSEILRMKHRFFVSAEALLSFVG` |
+| 471 | orf_0471 | Predicted SAM-dependent methyltransferase | 4 | 80311 | 81015 | - | 235 | high | `MALFKTKENTVYDTTQLKIPEHIAIIMDGNGRWAKKRLMPRAAGHKAGMNTVKRIASAAS` |
+| 472 | orf_0472 | hypothetical protein | 4 | 80999 | 81319 | - | 107 | high | `MCGIVGFTSFNQVLPTLLKGLEKLEYRGYDSAGVYVNDGDQGDYLVKETGRVADLERATE` |
+| 473 | orf_0473 | Predicted membrane protein, putative toxin regulator | 4 | 81699 | 82841 | + | 381 | high | `MTKFVTWHIKNAKILDVFNLKFDDTELWINDNQILYRGKRSDLTAENTFDAGGGYIVPGL` |
+| 474 | orf_0474 | hypothetical protein | 4 | 82883 | 83422 | - | 180 | high | `MRALSISPEKLLTIIIGQPITLDISYAGQLLLASTVHQQPNLPSEMAGALAEVSDTGQVK` |
+| 475 | orf_0475 | Uracil-DNA glycosylase | 4 | 83471 | 84133 | + | 221 | high | `MEEKSEQLHQNIAHLSDLLHSGQDEAFVTSFNALHDFEMGQVYSGLPEQLRAVAWRLLDN` |
+| 476 | orf_0476 | phosphotransacetylase | 4 | 84239 | 84493 | + | 85 | high | `MKFTWKYSGNEQRKVRTFLQNHGVSHRMFSQMKHNGGAILVNEKPVYTSDYLKNGDIVTI` |
+| 477 | orf_0477 | hypothetical protein | 5 | 2 | 2488 | - | 829 | low | `MKIAIFNNHAEHSVIIAKKLILAMKKNNVDIDDRNPDIVVSVGGDGTLLGAFQKYVDQTE` |
+| 478 | orf_0478 | ABC-type uncharacterized transport system, ATPase component | 5 | 2485 | 3291 | - | 269 | low | `MDWDHFFIPYIQTVSELKVKLRGLRQQYEKSGEDSSIEFVTGRVKSQASIEEKIVRRHLD` |
+| 479 | orf_0479 | condensin subunit Smc | 5 | 3310 | 7032 | - | 1241 | low | `MLSIYHFDTPLSDNCLITEQYLQKISQQIHRSHHLFFVPLINEPILKMIKDDNSSCADEP` |
+| 480 | orf_0480 | 5-formyltetrahydrofolate cyclo-ligase | 5 | 7033 | 7365 | - | 111 | low | `MTKISEVFQEYNFSDDKLTLLAGPCAIESYETCAEVAEKLKEITDELGINFVFKSSFDKA` |
+| 481 | orf_0481 | Isoleucyl-tRNA synthetase | 5 | 7461 | 7799 | - | 113 | low | `MAKDKLIGVDLGGTTIKFAILTDQGEIQQKWSIKTNILDDGAHIVPDIVESINHHLDLYQ` |
+| 482 | orf_0482 | hypothetical protein | 5 | 7870 | 8451 | - | 194 | low | `MKTFYDVLQYLKEFGVYIHVGKRLWDIELAALEVDNLYKTDILNAKDYATIKLILSHEHT` |
+| 483 | orf_0483 | hypothetical protein | 5 | 8465 | 8860 | - | 132 | low | `MKALKEQYQTAPITTIIFLVTTFVFLIELILSRGTTENSEFLINMGAKWGPYIQLKHEYW` |
+| 484 | orf_0484 | Predicted metal-dependent membrane protease | 5 | 8857 | 9216 | - | 120 | low | `MNVDRPSRGPREGDFITIKSYKHDGSLHRTWRDTMVLKTSENSIIGLNDHTLVTEDDGRR` |
+| 485 | orf_0485 | amino acid ABC transporter ATP-binding protein, PAAT family | 5 | 9209 | 9520 | - | 104 | low | `MKKITRISIQKKAGRYNIDLDNQFAFGVAESVLIKFGLAKGRELDDELIAEIKHNDSIAK` |
+| 486 | orf_0486 | Uncharacterized phage-encoded protein | 5 | 9529 | 9867 | - | 113 | low | `MTKIILAGGFGKLGQAIQDNLNEEYEIVGIVSGHQHESKVPVWTSLSDINVAADIWLDVS` |
+| 487 | orf_0487 | bacteriocin-processing peptidase, Cysteine peptidase, MEROPS family C39 | 5 | 9955 | 10773 | - | 273 | low | `MYEGINLITAIITPFTVNDEIDYESLEKLIEHLLNHGSQGFVIAGTTGESPTLSFEEKVE` |
+| 488 | orf_0488 | Putative NADH-flavin reductase | 5 | 10778 | 11371 | - | 198 | low | `MPVSEEDLKTYRRDLHKIPELALAEFKTHRYLLEKIQSWQTNFMTIRQVEELPTAMLVKF` |
+| 489 | orf_0489 | hypothetical protein | 5 | 11540 | 12484 | - | 315 | low | `MAENEAQKLINFIANAKKITPVKVTYKGTLATEVPDTVQQFGDESFGQLIGDWSEIELLI` |
+| 490 | orf_0490 | transcription-repair coupling factor | 5 | 12459 | 13967 | - | 503 | low | `MTYPINEKQHLTVDGVDTIELAKTYGTPLAVYDVTLIRKTMRAFKRIFEQENVPYVVSYA` |
+| 491 | orf_0491 | hypothetical protein | 5 | 13978 | 15270 | - | 431 | low | `MKVYYEDAKKTFDVEIEALTRVKSSLGKSFDEAVDKILSTKGRVIFIGIGKSGIIADKIA` |
+| 492 | orf_0492 | hypothetical protein | 5 | 15260 | 16027 | - | 256 | low | `MDLGNDFVTRLGLEKPHDLEKVRGGDINEAFSIYSNNQRYFLKIQQNAQASFFDHEVAGL` |
+| 493 | orf_0493 | alanine racemase | 5 | 16029 | 16658 | - | 210 | low | `MNNLKKLQELTKISTIEIADALDVEVETVEAWQNEEKVPSVSDFEALSGIFSSQLDAQGI` |
+| 494 | orf_0494 | Zn finger protein | 5 | 16763 | 17272 | - | 170 | medium | `MSFLIDFILHIDVHIGNLVQAFGLWTYLILFAVIFIETGSVIMPFLPGDSLLFAAGAIAA` |
+| 495 | orf_0495 | replicative DNA helicase loader DnaB | 5 | 17364 | 18590 | - | 409 | low | `MSDSKGDSNLPKRGLQNRHVQLIAIGGTIGTGLFMGAGNSIHFAGPSILLVYLVIGMFMF` |
+| 496 | orf_0496 | hypothetical protein | 5 | 18590 | 18760 | - | 57 | low | `MAEISLTFPDGAIKKFDEGIKPIGVAESISKSLAKKSVSGKINGSYIGMNDVITESGDFQ` |
+| 497 | orf_0497 | 6-phosphogluconolactonase | 5 | 18860 | 19462 | - | 201 | low | `MALTKNQIAALQNVFDNGILDHDAEALEALKIVLADLKK*` |
+| 498 | orf_0498 | hypothetical protein | 5 | 20255 | 20671 | - | 139 | high | `MATRKTTQRRRTTRGKNSKKKNPLVQNLCFLGGIVLGILGIFKLGILGVFIADIFRFFFG` |
+| 499 | orf_0499 | DNA-binding response regulator, OmpR family (Rec-wHTH domains) | 5 | 20685 | 20879 | - | 65 | low | `MTNHIVLFEPLMPANTGNIARTTAGTDAVLHLIEPLGFELDDKHVKRAGLDYWDHVKLVK` |
+| 500 | orf_0500 | 3-dehydroquinate dehydratase | 5 | 20879 | 21436 | - | 186 | low | `MKKPEQQSWYSRWFSGNDLLNGLIVILLVLLIIFLAWQVRFLFEPIRALFTAVGAPIMIS` |
+| 501 | orf_0501 | DNA polymerase III catalytic subunit, PolC type | 5 | 21436 | 21738 | - | 101 | low | `MAVYKILFGTYTKRVSKGIYEAELDTEKKLLQNSTFVGGLTNPTYLAISKANKVYAVENR` |
+| 502 | orf_0502 | hypothetical protein | 5 | 21818 | 22531 | + | 238 | low | `MKNTLQKNNVKSDQSKHQLMVLIGGTVLIGIVVGLSSLFLGLLLEYVEQLFLNYEETVWQ` |
+| 503 | orf_0503 | Glutathione reductase | 5 | 22497 | 22652 | - | 52 | low | `MNSILKKISIVIMTITMLLPLLAVLPTHADAATTDPALTKIKKKGTLVIGLSADYAPFEF` |
+| 504 | orf_0504 | Type II secretory pathway/competence component, ATPase | 5 | 22649 | 22930 | - | 94 | low | `MEQVKYTQKDILERVFKQKRMGVGYDPADVDSFLDDIIKDYGAFGSRVEQLKSEVARLQV` |
+| 505 | orf_0505 | LSU ribosomal protein L21P | 5 | 22936 | 23094 | - | 53 | low | `MRLWVTGYRSYELGTFGDKDPRIKVIKYALHQTLKEQVDNGLEWVITGAQLGIEQWTIEV` |
+| 506 | orf_0506 | ribosome-binding factor A | 5 | 23099 | 23524 | - | 142 | low | `MANDKANQWSRVNRNHKMYDQYPAQEPPRPPKPNGPKGSGPRKPRKTKKKRRWILAIFLW` |
+| 507 | orf_0507 | hypothetical protein | 5 | 23631 | 24332 | - | 234 | low | `MTINYPVGTHHGKTLKNNTLRTGKTTKKVLFGKRGMGLEDEINLANDYYLANRLAVVHKK` |
+| 508 | orf_0508 | primary replicative DNA helicase | 5 | 24333 | 25652 | - | 440 | low | `MSVEDKFDNAQDKVAGKAKEVEGKVTGDKSREAQGKAQGLFGKAKDKLSDAAEAVKDSAE` |
+| 509 | orf_0509 | hypothetical protein | 5 | 25645 | 26649 | - | 335 | low | `MTIIFLYTFILFVTLCLITFLFVGIIIRSRGTIIITSFGIVIQTILFCFFRFFMFT*` |
+| 510 | orf_0510 | single-strand binding protein | 5 | 26660 | 27082 | - | 141 | low | `MKKVSVFVLMISLILMFASLISWIMSQPTFAIIASNLGLLILAISYLWENRNNFLK*` |
+| 511 | orf_0511 | Predicted transcriptional regulator | 5 | 27069 | 27650 | - | 194 | low | `MKRTFEDVTKYVELESQNKCKVLSAKPEYKFNDLGMEVCVWNVKTDNDGDWWVVEGDEVP` |
+| 512 | orf_0512 | alanyl-tRNA synthetase | 5 | 27655 | 28056 | - | 134 | low | `MREYDITKTQLLVIIETLMDYTKEPDIQIPCTKLGEGIVSGNISFTLFEYYCQTILDFYE` |
+| 513 | orf_0513 | Acetyltransferase | 5 | 28059 | 28346 | - | 96 | low | `MASTKMILDLDTGVDDALALALAVCDPRVDLIGVIASYGNTLMKTAAQNTLDLLHLLHAD` |
+| 514 | orf_0514 | Predicted transcriptional regulator | 5 | 28343 | 28540 | - | 66 | low | `MVKFDFEMLVSPTSDEFNSVSAFWTVISRNSFFYCCEDDNVFNYQVNDQLTLEFVVTQQK` |
+| 515 | orf_0515 | hypothetical protein | 5 | 28637 | 28801 | - | 55 | medium | `MNPKVQIPRLKKHLEWLLYQAIVTRQTFNATYAVGKMLYKTEVLLTYGDYFSYSQSIMIE` |
+| 516 | orf_0516 | Uncharacterized phage-encoded protein | 5 | 28815 | 29540 | - | 242 | medium | `MVDKLDKVLVLDYGSQYNQLITRRIREMGVFSELKSRNMTAEEIKSYNPKAIILSGGPKS` |
+| 517 | orf_0517 | LSU ribosomal protein L19P | 5 | 29554 | 29817 | - | 88 | low | `MPENTEFIGLGYDQVLLVPGASNVLPYSVTLRTQLSENFELNIPLVSEAFGPETDTRVVP` |
+| 518 | orf_0518 | ABC-type metal ion transport system, periplasmic component/surface antigen | 5 | 29959 | 30183 | + | 75 | low | `MQKFSSTNKFVPMGLTFEDVKLVDDLQSTVTPESVSVTTSLTPTLKLNIPLLSAAMDTVT` |
+| 519 | orf_0519 | hypothetical protein | 5 | 30180 | 30371 | - | 64 | low | `MTVEEKFDNAKDKIAGKAKEVEGKVTGDKQRELQGKTQNIFGKAKDAVTDIKDAAEEAVK` |
+| 520 | orf_0520 | DNA mismatch repair protein MutS | 5 | 30381 | 30623 | - | 81 | low | `MERLDKKVVASGLSLLGLVGVGSGIAHADDVKSTVNKAVNSVAEAAGLIDNKTVNLTQKS` |
+| 521 | orf_0521 | hypothetical protein, lipoprotein | 5 | 30776 | 31462 | + | 229 | low | `MPIVQVELLEGRTHEQLAKMVKDITNVIVEDAVASREAVHVILREMPKDHYAVGGVLKSD` |
+| 522 | orf_0522 | hypothetical protein | 5 | 31527 | 32132 | + | 202 | medium | `MKNIKINWRKVLLTVLIFFASSVVQVVGLNAFLIPNNVFSGGFNGIAQLLSLFSQNFFHV` |
+| 523 | orf_0523 | Transposase | 5 | 32203 | 32580 | + | 126 | low | `MLYQQIQSNKRRTIVLLFVFFILVALVGAAVGYLLLNSLETGVVAAIVIGAIYTIIMVSN` |
+| 524 | orf_0524 | Integrase | 5 | 32697 | 33773 | + | 359 | low | `MIPIILDMDPGIDDAVALSIALSNPSIDIKLLTSVAGNVSVDKTTNNLLKLTTFFHQTQI` |
+| 525 | orf_0525 | bacterial nucleoid protein Hbs | 5 | 33833 | 34108 | - | 92 | high | `MTILIIIAIVVIIAVAWVSIYNSLVKTRMQTKESWSQIDVQLKRRNDLIPNLVETVKGYA` |
+| 526 | orf_0526 | Predicted GTPase | 5 | 34282 | 35592 | - | 437 | high | `MNFDTYNYSQQLKKDLEVFQRWQVLIEALSEANQTAEILDITKKILAFDVHKSEIMRVAS` |
+| 527 | orf_0527 | SSU ribosomal protein S1P | 5 | 35667 | 36857 | - | 397 | high | `MTDSQTVLQPELINRLDSKIMYLGQLQSAVMNQQVPQVYELLDSKKFNEQIRQRPHADSN` |
+| 528 | orf_0528 | cytidylate kinase | 5 | 36952 | 37626 | - | 225 | high | `FSAVLIGGALLIITYLRMGLGDELLGRRMRYIPKILQPKR*` |
+| 529 | orf_0529 | LysM domain | 5 | 37645 | 38202 | - | 186 | high | `MSMSCVTSAIIGSYTQMVPGKYVLTAIPLNILGAIIIATILNPTKVTPEEDVIVSVASDN` |
+| 530 | orf_0530 | Predicted membrane protein | 5 | 38276 | 38866 | - | 197 | high | `MVGTKNNRRAQLTKKNIQDALIHLMSDKNINSISVTDICKTADINRGTFYAHFVDVADCM` |
+| 531 | orf_0531 | ribosomal large subunit pseudouridine synthase B | 5 | 39130 | 39909 | - | 260 | high | `MFLFANILGIFVFIAIAALFSRDRKNIQWKSVGIVLALEILLAWFFTQFKAGQIAVQAAA` |
+| 532 | orf_0532 | condensin subunit ScpB | 5 | 39872 | 40471 | - | 200 | high | `MRKISIKDVAKKTGVSIAAVSQILNNKGQRFSEATIEKVLQARDELGYVPNSAARNLKGR` |
+| 533 | orf_0533 | condensin subunit ScpA | 5 | 40464 | 41240 | - | 259 | high | `MKNKVVVIGSLNIDTIQMIDRLPNQGETITVNNQASTFGGKGANQAVAAARQGADVTMIG` |
+| 534 | orf_0534 | RibT protein, riboflavin biosynthesis acetyltransferase (GNAT) family | 5 | 41207 | 41581 | - | 125 | high | `MNEKNFQKKQAALAALNYIQTDMIIGLGTGSTVSYFLDALAASQYNVIGVTTSTITSQRC` |
+| 535 | orf_0535 | tyrosine recombinase XerD subunit | 5 | 41587 | 42480 | - | 298 | high | `MYMIYIALAIGAGLILAAQNAVNAQLSFLLKSPLVACFMAYIVGSFLLLILTVILGDFSK` |
+| 536 | orf_0536 | RNA-binding protein, S1-like domain | 5 | 42480 | 43343 | - | 288 | high | `MTFHELSDGQHLPEIGFGTYKLNGFAGTQSILSAVDAGYRLFDTAFNYQNEGTVGQAIQQ` |
+| 537 | orf_0537 | GatB/YqeY domain protein | 5 | 43432 | 43878 | - | 149 | high | `MLDKTIYKQIFKSSFDAPIDVEFWDGEKVSYGQGDPIATIILHEVIPIKDIMAHASLTFG` |
+| 538 | orf_0538 | SSU ribosomal protein S21P | 5 | 43961 | 44146 | - | 62 | high | `MQTKSELRIQQKAALARENLMKRKREEEQLYALLFQTPEWQSADSIAVTLSMEFELNTSP` |
+| 539 | orf_0539 | permease of the major facilitator superfamily | 5 | 44283 | 45551 | - | 423 | high | `MSYQELDPIVWSAIQQESARQNRTIELIASENFTSQAVRAAQGSVLTNKYAEGYPYKRYY` |
+| 540 | orf_0540 | transcriptional regulator, CdaR family | 5 | 45691 | 47238 | + | 516 | high | `MNYVSTRGQAPAVTSSQAIINGIAPDGGLYVPEKWPKLKLDWKNLSQQSYQEIATQVFDA` |
+| 541 | orf_0541 | amino acid/polyamine/organocation transporter, APC superfamily | 5 | 47340 | 48746 | + | 469 | high | `MSRLEFENVSKKYGTGTSEFLALDNVNFSADSQQLILVVGPSGSGKTTFLTIAGGLQSPT` |
+| 542 | orf_0542 | hypothetical protein | 5 | 48803 | 49669 | - | 289 | high | `MEIGIGLFGLGTVGSGVVKILQQNANQITQRTGSHLVVRHAVVHNLNKPRTGFTQDFPIT` |
+| 543 | orf_0543 | aspartyl-tRNA synthetase | 5 | 49771 | 51546 | - | 592 | high | `MIKITVPATSANIGPGFDSLGVALKLYLTLEVYEETSEWQVIHDYGANMPSDVNNFIVKT` |
+| 544 | orf_0544 | histidyl-tRNA synthetase | 5 | 51543 | 52844 | - | 434 | high | `MKVTKFGGSSLANGQQLQRVYDIIRADDDRKVVVVSAPGKRFKDDRKVTDLLISYAQATL` |
+| 545 | orf_0545 | aldose 1-epimerase | 5 | 53253 | 54248 | - | 332 | high | `MRRIYFVRHSIRDDKIKDDYSAPLTIEGKQLAHDLVGYFVDKNIKAIYSSPYQRALQTIE` |
+| 546 | orf_0546 | transcriptional regulator, AraC family | 5 | 54422 | 55351 | + | 310 | high | `MKKILVLHTGGTISMHEDADGDVETGDENPLVQAKVTFPNIELEVENIFNLPSEHIGPSH` |
+| 547 | orf_0547 | galactokinase | 5 | 55348 | 56520 | - | 391 | high | `MAIIRGIVLYTRQYKDNDLLVRILTETYGMRTFLARGAKKATSKLSAGTQPYTIVTFDGA` |
+| 548 | orf_0548 | Na+/xyloside symporter related transporter | 5 | 56549 | 57961 | - | 471 | high | `MTESTFKSGFVAIIGRPNVGKSTLLNRIVGEKIAIMSDKAQTTRNKIQGIYTTDDAQVVF` |
+| 549 | orf_0549 | Aryl-alcohol dehydrogenase family enzyme | 5 | 58156 | 59163 | - | 336 | high | `MASKDKKLEGAPKDYNKKVQRNSTFFRAMRNSLHGIWLILVRERNMRIHILLGFLILLVG` |
+| 550 | orf_0550 | Beta-galactosidase | 5 | 59156 | 62266 | - | 1037 | high | `MDLAIIDQTKAGVNQYHQDLVRCVLDYAGKYLELPDDTEMSVTFMNNEEIHQYNKKYRGI` |
+| 551 | orf_0551 | hypothetical protein | 5 | 62490 | 63845 | + | 452 | high | `MTAQVQQIFTFENVEQQTKLLGVNDNFLQLIEEGLIVRLHARGDQMTISGDEDKVPLAKA` |
+| 552 | orf_0552 | Phosphoglycerate dehydrogenase related enzyme | 5 | 63905 | 64849 | - | 315 | high | `MFLALREIRHEKLRYSLIVTLILFISYLVFILNGLATGLSDLNKSAITQWQASKILLDKD` |
+| 553 | orf_0553 | branched chain amino acid aminotransferase apoenzyme | 5 | 65068 | 66111 | + | 348 | high | `MNSGDLAWVLVSAALVWVMTPGLALFYGGLGERRNLLHTMFIPVMIIGIASLVWFVVGYT` |
+| 554 | orf_0554 | hypothetical protein | 5 | 66385 | 66882 | - | 166 | high | `MKKTKIVSTLGPSSSDVETIVKLIQAGANVFRFNFSHGDHEEHLGRMNAVHEAEKITGKT` |
+| 555 | orf_0555 | 5'-nucleotidase/2',3'-cyclic phosphodiesterase related esterase | 5 | 66882 | 68225 | - | 448 | high | `MYAPLQILSSYSLLKNPNTIEQIVQTAKTRGYEAIALADVNVMYGAIDWFRQTKKHGIKP` |
+| 556 | orf_0556 | hypothetical protein | 5 | 68310 | 68756 | - | 149 | high | `MKYIMVAIWSAIFGEILGYIVSQLNSGTYDFVTVAVIAVIVGEVALVAIPAISGSAAPKE` |
+| 557 | orf_0557 | aminopeptidase P | 5 | 68758 | 69852 | - | 365 | high | `MTKYPELTERFLKYIKVDTQSDENSETVPSSPKEVAFLADLAEELKAIGLENVRTMKDGY` |
+| 558 | orf_0558 | LSU ribosomal protein L27P | 5 | 69969 | 70286 | - | 106 | high | `MIAQELIDKIELFAPKQLAEEGDPTGLQIGDPKQPVHRVMTALDVRPEVVQEAIDNQVNF` |
+| 559 | orf_0559 | LSU ribosomal protein L21P | 5 | 70314 | 70613 | - | 100 | high | `MDSIHLSPRLAAVASFVPKGARLADIGSDHAYLPANLLINNKISFAIAGEVAKGPYENAQ` |
+| 560 | orf_0560 | Transcriptional regulator | 5 | 70798 | 71379 | - | 194 | high | `MSANKWSLRDVIFIALIGVFFGFIFWAWAFGYNVIAAFLTPFGLSAYANDATLGPWLMAG` |
+| 561 | orf_0561 | Small conserved membrane protein | 5 | 71915 | 72175 | + | 87 | high | `MISSIAVQVLPMTANTEEVIRIVDQVIAYIDKSGVNYQVGAFESTLEGDYDQLMDILKNL` |
+| 562 | orf_0562 | DNA-binding response regulator, OmpR family (Rec-wHTH domains) | 5 | 72279 | 72536 | - | 86 | low | `MVTHLKHISLSYGNTKILDDTTMSISHNSFNLLIGPSGSGKSTLLRIFAGLYPQLKGEVL` |
+| 563 | orf_0563 | hypothetical protein | 5 | 72677 | 72847 | - | 57 | low | `MVSVMWFRRDLRLEDNIALFNALRHSNEIFCVFHINPEQVTEKSTVNQSAFFASVLYFKN` |
+| 564 | orf_0564 | hypothetical protein | 5 | 72813 | 72947 | - | 45 | low | `MNLSVKFLLILIVSIELTFVLNYQVNVVVAIIAGIYLVFSKLSWKRYLLLIAMPILPVLG` |
+| 565 | orf_0565 | Uncharacterized conserved membrane protein | 5 | 73165 | 73473 | - | 103 | low | `MTDTIANIKLQLKNTSPNDEQLLIWQQDKRVGVQNALKAWQKKQVMLREKREHFLSRFDI` |
+| 566 | orf_0566 | Acetylornithine deacetylase/Succinyl-diaminopimelate desuccinylase | 5 | 73488 | 73802 | - | 105 | low | `MAQIIQWFPGHMAKAFRLMRENLKLVDVVFELVDSRIPESSRNPEVDKLIGNKPRLLIMT` |
+| 567 | orf_0567 | hypothetical protein (no reference match) | 5 | 73805 | 73939 | - | 45 | none | `MRKSDRSFYNWLMTNRNSMAANEVQQFANNAFLDSSFPKQSSDFDELSQYLEENTTYLMS` |
+| 568 | orf_0568 | Signal transduction diguanylate cyclase | 6 | 2 | 295 | - | 98 | low | `MADQTIARSNKIVKKKKPIWFWLFWGLISILLVGGIWLFNEASGPVKIKDNVSKISKSDA` |
+| 569 | orf_0569 | ABC-type multidrug transport system, ATPase component | 6 | 564 | 1469 | + | 302 | low | `MRKFAISLITILLIGIGAFYGIKTWENQKNDLNQPQKSVQKVSHINLVALGDSLTEGVGD` |
+| 570 | orf_0570 | Septum formation initiator | 6 | 1469 | 2218 | + | 250 | low | `MKKLSTQRITLIALFIVINIVGGHIALLAKLPVYLDTIGTLLGASFFGPVGGVVVGILTA` |
+| 571 | orf_0571 | ribosomal large subunit pseudouridine synthase D | 6 | 2220 | 2972 | + | 251 | low | `MQKVIIDTDPGIDDSLALLVALKSPELDVIAITVVEGNVPTKIGVQNTLKVLEEVGRTDV` |
+| 572 | orf_0572 | permease of the major facilitator superfamily | 6 | 3450 | 4151 | + | 234 | low | `MSNIKIVTDSAVALTPEEITKYDIKIVPLSVQIDGTVYEDGVTIQRDEFLEKMIESKSLP` |
+| 573 | orf_0573 | Predicted conjugal transfer protein, ATPase | 6 | 4148 | 4717 | + | 190 | low | `MTKIKMVWAEDRQHAIGKDGGIPWHMPDDLKLFRDETVNTLMIMGRPTWLSIGRPLPKRT` |
+| 574 | orf_0574 | Transposase, IS30 family | 6 | 4897 | 6075 | + | 393 | high | `MTTVITNEFTKKLPKCELHVHIEGTIEPELKLKLAQRNHIALTETTVEDIQKSYQFNDLA` |
+| 575 | orf_0575 | NUDIX family hydrolase | 6 | 6457 | 6930 | - | 158 | high | `MKITQLPQEFIDAQPILTKLEDAGFEAYFVGGSVRDTMLGKTIHDVDIASSAFPEEVKSL` |
+| 576 | orf_0576 | Histidinol phosphatase related phosphatase | 6 | 6947 | 7504 | + | 186 | high | `METNYAQQMLDALSSGQLDDAKKFFAQSLRKDSDDLIYSLAGELYALGFLNQSRRAYKKL` |
+| 577 | orf_0577 | hypothetical protein | 6 | 7547 | 7711 | - | 55 | high | `MYQIKKITLIPIALTMLQAFETAHHTISERPLTIVTVELLNEDSGEIAVGYGEVQSFADF` |
+| 578 | orf_0578 | hypothetical protein | 6 | 7695 | 7907 | - | 71 | high | `MIIDVNNYPYQAYLTKNNDENQKWLLLHGFMGSHCDFNHIVDHLPGQVLTLDLLGFGGHT` |
+| 579 | orf_0579 | Predicted permease, cadmium resistance protein | 6 | 7960 | 8574 | - | 205 | high | `MTDTLTFNTKHLLEALFESGIRHFIVSPGSRSTPIALLLAEYAEQNNEIKLFVDVDERSA` |
+| 580 | orf_0580 | Cytidine deaminase | 6 | 8707 | 9120 | - | 138 | high | `MVIIDELIQYRRTLRSMDRSLLNQMLDNVQVAAFFETSDKKSTMYAFGQKKIWSKMPDKT` |
+| 581 | orf_0581 | Diadenosine tetraphosphate (Ap4A) hydrolase related HIT family hydrolase | 6 | 9304 | 9765 | + | 154 | high | `MVKKLLTIAGSDSLSGGGIQADLATFNEFGYFGLSVITSIVTVTNDNFKIYPTDLKIIQA` |
+| 582 | orf_0582 | hypothetical protein | 6 | 9871 | 10278 | + | 136 | high | `MADYNNYKRPQFYKKKHPVRNFFIVLVILIVVALSIFIYMNYSTAQKTTTPIEQKTSTNS` |
+| 583 | orf_0583 | transcriptional regulator, AraC family | 6 | 10270 | 11046 | - | 259 | high | `METTNLERISIRDLIMIAIGTGMYGWGLINVNIPNDLAEGGISGITLILRALFNWNPAYT` |
+| 584 | orf_0584 | DNA-binding response regulator (Rec-wHTH domains) | 6 | 11123 | 11770 | - | 216 | high | `MAETKTATKKKKAAPRKKSKIKKNLVIVESPSKAKTIEKYLGRNYKVVASLGHIRDLPKS` |
+| 585 | orf_0585 | Signal transduction histidine kinase | 6 | 11760 | 12992 | - | 411 | high | `MSTFLQQVKKLWPIAILLLSSILLLIPFFLNNAMIIGSDAIFHFNRLYDTAMQIKHGNFQ` |
+| 586 | orf_0586 | Predicted membrane protein | 6 | 13046 | 15160 | - | 705 | high | `MMSDIFLKKLRNIIGFDAIVSIIFGALILFWPTHSASVVAALIGLAFIAIGISHIASVFD` |
+| 587 | orf_0587 | Acetyltransferase, GNAT family | 6 | 15304 | 15765 | + | 154 | high | `MSRDIDYDVLRKNQQENRANAYLNKGLRLFGAAPMVTMRVATKGYMTESGFYSDKH*` |
+| 588 | orf_0588 | FAD/FMN-containing dehydrogenase | 6 | 15808 | 17178 | - | 457 | high | `MLKLLKKVTISAVLVVATSTIYPALGVAADSYQKDKLSGAEQHPLSFKNEKQLVLADQDS` |
+| 589 | orf_0589 | permease of the major facilitator superfamily | 6 | 17205 | 18404 | - | 400 | high | `MKKIKLNTLFKWAVALFIYNLVAKIIIYFAQKTLPDFYRVDTSSLASLTDSASKYLESLF` |
+| 590 | orf_0590 | transcriptional regulator, AraC family | 6 | 18523 | 19458 | - | 312 | high | `MSTFITNDDVKLNYNIYGDGQPIILVAGYSGNQATWAAQIEPLKQAGFQVITYDRRNHGE` |
+| 591 | orf_0591 | Short-chain alcohol dehydrogenase | 6 | 19468 | 20229 | - | 254 | high | `MVVGAQAREIDTVVIGSGPGGYVAAIRAAELGQKVVIIERDNIGGVCLNIGCIPSKALIN` |
+| 592 | orf_0592 | Predicted acyltransferase | 6 | 20335 | 21477 | - | 381 | high | `MTEIFKMPDIGEGMAEGDITSWLVKVGDTIAADDPVAEVQNDKLMQEILSPYGGKVTKLF` |
+| 593 | orf_0593 | Acyl-CoA synthetase (AMP-forming)/AMP-acid ligase II | 6 | 21461 | 22990 | - | 510 | high | `MAVKSYIDAIREAMDLALEKDDDVIIFGEDVGKNGGVFRATDGLQAKYGEDRVFNTPLAE` |
+| 594 | orf_0594 | ABC-type nitrate/sulfonate/bicarbonate transport systems, periplasmic component | 6 | 23010 | 23978 | - | 323 | high | `MADITATNKQVLDFNHQLTAQADSFPTLSVLDNTGKIVDDEAFERAELSNEDLINIIKRM` |
+| 595 | orf_0595 | ABC-type nitrate/sulfonate/bicarbonate transport system, ATPase component | 6 | 23975 | 24697 | - | 241 | high | `MADALESLGIHVDISGRNDLEIAGKKVSGNAQRYAGGYLMHHGTLLWDTDVDAMVRSLNV` |
+| 596 | orf_0596 | ABC-type nitrate/sulfonate/bicarbonate transport system, permease component | 6 | 24791 | 25477 | - | 229 | high | `MLRRHSPVWLHHFIVFVIICVSSLLSTLPAFTNNTFKLSYDGNIHLARYDAITQALSHGS` |
+| 597 | orf_0597 | Acetylornithine deacetylase/Succinyl-diaminopimelate desuccinylase related deacylase | 6 | 25682 | 26881 | - | 400 | high | `MQFINYFNQDAYTNIAMDAWLLKNLKPKKPVFALWQNKKAVIIGENQNTFSEVNQAYIES` |
+| 598 | orf_0598 | Uncharacterized conserved membrane protein | 6 | 26888 | 28114 | - | 409 | low | `MRLTTETIQNLLVDHNLLLDAPDVDMTFDFLHYDTREVQKNTLFVIKGAFKRAYLDNVHG` |
+| 599 | orf_0599 | thiazole-phosphate synthase | 6 | 28138 | 28914 | - | 259 | high | `MSELKPNFFWDEVIEKVQNNHESKQPFFSMAPMEAVTDTVFRRVVAKAAAPDVYYTEFTN` |
+| 600 | orf_0600 | Dinucleotide-utilizing enzyme for molybdopterin and thiamine biosynthesis | 6 | 28936 | 29583 | - | 216 | high | `MDKSELKVTTRYKTVLKSLDNTWRILDEGRVAVLKEVLMWLGHPDKSLKIIHIAGTNGKG` |
+| 601 | orf_0601 | Sulfur transfer protein for thiamine biosynthesis | 6 | 29594 | 29791 | - | 66 | high | `MTIKNPLVIVSFDAMGAEDIAEHIDLMPNVAALIARGTHVKKVEGIYPTLTYPSHTTIMT` |
+| 602 | orf_0602 | thiamine-phosphate diphosphorylase | 6 | 29818 | 30456 | - | 213 | high | `MPGFYIIIFSVLLLLIYVSFRLNDVHLLAFVSTVLIIQIGFCAFAFFLFKRL*` |
+| 603 | orf_0603 | 3-dehydroquinate dehydratase | 6 | 30828 | 31709 | - | 294 | high | `MNKLLAEYQDTEHIDNFALIKAAEVRLTKTGKTYISILFSDRSGDLPGNLWDATDEQIKT` |
+| 604 | orf_0604 | hypothetical protein | 6 | 31706 | 32260 | - | 185 | high | `MKIKRLEISGFGRWSQEAFDLSDGLQVIFGQNESGKTTLRAFIVGVLFGFPTKKNGHNVY` |
+| 605 | orf_0605 | shikimate kinase / chorismate mutase | 6 | 32264 | 33064 | - | 267 | high | `MKFIHAGDVHLGNPFSGLDKQLPFTLKKTVQTATIKAFEQLIDDAISAEVDFVLFPGDLY` |
+| 606 | orf_0606 | prephenate dehydrogenase | 6 | 33072 | 33923 | - | 284 | high | `MTRALLSVSDKSGLIPFAKNLVELGYELVSTGGTHKVLVDAGLDVISIDEVTDFPEMLDG` |
+| 607 | orf_0607 | 3-phosphoshikimate 1-carboxyvinyltransferase | 6 | 33920 | 35224 | - | 435 | high | `MTQQYDYDVLYLGSGHGTFDGAVPLAQSGVKVGIIEKDLIGGTCPNYGCNAKITLDAPVT` |
+| 608 | orf_0608 | chorismate synthase | 6 | 35271 | 36449 | - | 393 | high | `MVRKVKLAVFASGTGTNFQALNDAILQRNLNAEIVRLIVDKSTAGALNLAKLFGIPATAI` |
+| 609 | orf_0609 | 3-dehydroquinate synthase | 6 | 36451 | 37515 | - | 355 | high | `MSEKNAYQKAGVDIKAGERAVDLMKDAVADTYNDQVLDGIGGFGAAFALGKGYTDPVLIS` |
+| 610 | orf_0610 | 3-deoxy-D-arabinoheptulosonate-7-phosphate synthase | 6 | 37512 | 38504 | - | 331 | high | `METKRGVTMMNEQKKETSRLNVRSLNEECGIFGVWGRSDAAQLTYYGLHALQHRGQEGAG` |
+| 611 | orf_0611 | shikimate dehydrogenase | 6 | 38509 | 39333 | - | 275 | high | `MTTNELSPEEVRDSKIYIEWGLTEQEYDLIVKELKRLPNFTETGIFSGMWSEHVSYKKSK` |
+| 612 | orf_0612 | transketolase | 6 | 39330 | 41252 | - | 641 | high | `MKAAVISFPGSNCDFDMLHALQEFGVDAEIVSAKHNNLKEYDAIFLPGGFSYGDYLRTGA` |
+| 613 | orf_0613 | anthranilate synthase, component II | 6 | 41634 | 42206 | - | 191 | high | `MYLAKIYVTYKPSILDPQGEVIKAALNRMDYSGIEQVSQGKYFEIKLKATDVDAATSEVE` |
+| 614 | orf_0614 | anthranilate synthase, component I | 6 | 42203 | 43567 | - | 455 | high | `MSSATEYEDKTVTRGELKYQGKAKQVYFTDNPTILWVHYMDQATALNGKVHENIPEKGQL` |
+| 615 | orf_0615 | tryptophan synthase, alpha chain | 6 | 43554 | 44330 | - | 259 | high | `MTGVILPPATIGIIGGGQLGQMMALSAKEMGYRVGILDPTKGSPAGQVSDFQIVADYDDV` |
+| 616 | orf_0616 | phosphoribosylanthranilate isomerase | 6 | 44327 | 44902 | - | 192 | high | `MPQVAVVMGSTSDWSSMKKTTEILDILGVTYEKHVISAHRMPQELQSFGTQARNNKLQVI` |
+| 617 | orf_0617 | indole-3-glycerol phosphate synthase | 6 | 44899 | 45687 | - | 263 | high | `MARKTFTKEEIKQIVADENVEFIRVTFTDVLGAIKNVEVPTSQLDKVLDNDLMFDGSSIE` |
+| 618 | orf_0618 | anthranilate phosphoribosyltransferase | 6 | 45684 | 46709 | - | 342 | high | `MTVKSSIARVTAKTSYWFLRNILHRGGTSLPGKLAVSIDPDILKTIQQDFDLIIVTGTNG` |
+| 619 | orf_0619 | tryptophan synthase, beta chain | 6 | 46702 | 47889 | - | 396 | high | `MTKNFKGIAASNGVAIAKAYLLVDPDLSFEKTTVTNVAAEQARVDDALKASSDDVKLIKA` |
+| 620 | orf_0620 | Galactose mutarotase related enzyme | 6 | 48323 | 49201 | - | 293 | high | `MITNKYNNSHSSFIICDKIKLMKILAFDTSNQPLTVSLAEHNSVKNVFTTNVARNHSIQL` |
+| 621 | orf_0621 | tyrosine recombinase XerC subunit | 6 | 49266 | 50168 | - | 301 | high | `MFLKFRKSKHLLNSLPKYTEKVVDVQGTTFLLRRATMSDIDMLIKIEEAVYNGSAPWLLR` |
+| 622 | orf_0622 | hypothetical protein | 6 | 50310 | 50750 | + | 147 | high | `MRYRWHYTLMIRRATTEDIDLIWHIADAAFGSSPWPKSVFEHDLASPRTAYFIGDGGFVG` |
+| 623 | orf_0623 | hypothetical protein | 6 | 50784 | 52127 | - | 448 | high | `MTKIISFESSADETSVAIVEDGHIVLSNSVATQINSHQRFGGIVPEVASRHHIEWITRVL` |
+| 624 | orf_0624 | ACT domain-containing protein | 6 | 52181 | 52459 | - | 93 | high | `MTQQPKIPRATAKRLPIYFRYLTFLHDAGKERISSSELSEAIKFDAATIRRDFSYFGALG` |
+| 625 | orf_0625 | purine deoxyribosyltransferase | 6 | 52685 | 53128 | - | 148 | high | `MTILNLDDSKKVTDYQQFVRENPRGQVTQDPLWGELKSNWGHIYVYHETDGKIDAAMSIL` |
+| 626 | orf_0626 | hypothetical protein | 6 | 53395 | 54030 | + | 212 | high | `MSIKLIASDMDGTFLTANDEYSQARFERVLSVMETRDMRFVAASGRQVKNLQQLFAPTIN` |
+| 627 | orf_0627 | hydroxymethylglutaryl-CoA synthase | 6 | 54058 | 55215 | - | 386 | high | `MQFGKFRLGLRTLKTALAVMLIITSFYFLNRPPFVACLAAVFALRESWDKTLNFAKVRLI` |
+| 628 | orf_0628 | ATPase component of ABC transporter with duplicated ATPase domains | 6 | 55352 | 56974 | - | 541 | high | `MSNPTLDVLNQHMSIRSFTDEMVSDQQVSEIIRAATAGPNMNNYQPVTFIEITSQDIKAD` |
+| 629 | orf_0629 | hypothetical protein | 6 | 57138 | 57575 | - | 146 | high | `MKKIVIASNNSAKTREIQQVFAEFGVQVINYRSIMSEKTFPEETTDDQYENALAKARFIK` |
+| 630 | orf_0630 | hypothetical protein | 6 | 57624 | 58361 | - | 246 | high | `MTILHLQAELHEKMWGGNALEDFNYKIPSDHTGEAWTIAAHSNGQSTVINGKLAGQGLSR` |
+| 631 | orf_0631 | [LSU ribosomal protein L11P]-lysine N-methyltransferase | 6 | 58361 | 59251 | - | 297 | high | `MVNLIIASHGDFAKGILMSGSMIFGEQENVAVVTFLPNEGPDDLDKHYQEALAKFNNDDQ` |
+| 632 | orf_0632 | NADPH:quinone reductase related Zn-dependent oxidoreductase | 6 | 59238 | 60308 | - | 357 | high | `MSVIAIVLVVIIAFFAGMEGILDEFQIHQPLVSATLIGLVTGHLTAGIILGGTLQMIALG` |
+| 633 | orf_0633 | hypothetical protein | 6 | 60305 | 61096 | - | 264 | high | `MAERKIELTKRDRMSVAWRSQFLQGSWNYERMQNVGWAYSMIPAIKKLYKSKEDRALALQ` |
+| 634 | orf_0634 | GTP-binding protein LepA | 6 | 61080 | 62942 | - | 621 | high | `MVQSLNAKAEYTTQGISYLGIGAKYGKILVGDQAFEFFNDNNVEDYIQIPWENISAVYVH` |
+| 635 | orf_0635 | Predicted dehydrogenase | 6 | 63062 | 64114 | - | 351 | high | `MKILKNYQALRYIVIVMALEIVAISINFFYAPAKVAAGGATGLAILINELVGFDRAATVL` |
+| 636 | orf_0636 | glycyl-tRNA synthetase beta chain | 6 | 64158 | 66215 | - | 686 | high | `MLKPLGDRVIIEVTEAAEETVGGIVLASNAKDKPVTGKVVAAGTGYVLNDGTVRDLTVKV` |
+| 637 | orf_0637 | glycyl-tRNA synthetase alpha chain | 6 | 66253 | 67194 | - | 314 | high | `MAKELKFSEDARAKMKAGVDKLADTVKTTIGPKGRNVVLEQSYGAPTITNDGVTIAKAIE` |
+| 638 | orf_0638 | Predicted membrane protein | 6 | 67472 | 68599 | - | 376 | high | `MTLKEQLLQIKQNSPSIISNKLLFEMVENIGSLDSELRDTLIYSLFSDWTTTGKLSVNQE` |
+| 639 | orf_0639 | ribosome recycling factor | 6 | 68667 | 69212 | - | 182 | high | `MSTEITNQRIKDFRTATDDKHNNIIRRAVTKNGIHSASFDQEIANINTPIFSIDLDTGKV` |
+| 640 | orf_0640 | uridylate kinase | 6 | 69212 | 69937 | - | 242 | high | `MKSRKKVSRSKSKKHARRKHWWIVAVPIVIIGLAGTYAVRTNVINLPDNIKALPQKVLKA` |
+| 641 | orf_0641 | translation elongation factor Ts (EF-Ts) | 6 | 70084 | 70959 | - | 292 | high | `MFFLFLAGARYTDYQQAKSQDDQKTQMAAFVTKFAKTQGVSKDKLYFNSTTVSDGMLVKM` |
+| 642 | orf_0642 | SSU ribosomal protein S2P | 6 | 71069 | 71845 | - | 259 | high | `MSIYLPILTKLAIGLVALIIQINVMGKGNLAPTNALDQVQNYVLGGIIGAVIYSDTITVF` |
+| 643 | orf_0643 | URI-like endonuclease | 6 | 71991 | 72254 | - | 88 | high | `MMTYKQFLDLVEIRVVVPSIAPLLVGLAYSRWQYARVNWVNTLLLIIATVAVHLAVNTFN` |
+| 644 | orf_0644 | 3-oxoacyl-[acyl-carrier-protein] synthase II | 7 | 2 | 226 | - | 75 | high | `MKIFAYGIRDDEKPSLEEWKAANPEIEVDYTQELLTPETAKLAEGSDSAVVYQQLDYTRE` |
+| 645 | orf_0645 | 3-oxoacyl-[acyl-carrier-protein] reductase | 7 | 349 | 1080 | - | 244 | high | `MSIKAEGEKWSAKESQDLRNEEYARKAKENAPVEFSGQTDLRLKDFFFKVLSGSAQGILI` |
+| 646 | orf_0646 | [Acyl-carrier-protein] S-malonyltransferase | 7 | 1082 | 2032 | - | 317 | high | `MFSIARKHSKNMAQLFFEYGAMSSGKSIEILKVAHNYESQGRKVLLMTPIMDTRAGVGVV` |
+| 647 | orf_0647 | Dioxygenase | 7 | 2078 | 3043 | - | 322 | high | `MDPIFQSLQTVIDHYDELNEQLADPEVMNNGQHYMKLSKEAGEIRQTVEVYTRYKQVIQD` |
+| 648 | orf_0648 | Acyl carrier protein | 7 | 3094 | 3333 | - | 80 | high | `MTGKHFETPDQFKKSKSDPKVLSSKLNTPKWFEWDDIKKPVNPATVKISLLEAKKWAISE` |
+| 649 | orf_0649 | 3-oxoacyl-[acyl-carrier-protein] synthase III | 7 | 3409 | 4380 | - | 324 | high | `MKTKIFETTKNDIEEASRLIQNGEVVAFPTETVYGLGADATNESAIKKVFVAKGRPADNP` |
+| 650 | orf_0650 | transcriptional regulator, MarR family | 7 | 4392 | 4859 | - | 156 | high | `MTTQHDLFDSVKEQTILTQIAALSGWDALTGMPKDAGHFRAEMDAYLAEKLFQVSTGSAR` |
+| 651 | orf_0651 | 3-hydroxymyristoyl/3-hydroxydecanoyl-(acyl carrier protein) dehydratase | 7 | 4843 | 5289 | - | 149 | high | `MAQSKDFHIIAETGIHARPATLLVQAASKFASDVTLSYQGKDVNLKSIMGVMSLGVGQGA` |
+| 652 | orf_0652 | Predicted phosphohydrolase | 7 | 5426 | 6235 | - | 270 | high | `MFPENFILYSIQILLVVVMIAMIIVVIRSYLLHRQPIFKRFGLGMLIGFITDFGDTLGIG` |
+| 653 | orf_0653 | glyceraldehyde-3-phosphate dehydrogenase | 7 | 6439 | 7458 | - | 340 | high | `MEKAKKRQFGIIATIVLAAVIVLGLLWATTAAKKNEEHQDTLQRVEKLGRIIWGVKSDTK` |
+| 654 | orf_0654 | dethiobiotin synthase | 7 | 7656 | 8333 | - | 226 | high | `MSMIEFKNVEKYYGKFHALKNINLKIDEGETVVLIGPSGSGKSTLIRAINGLEEIQEGKL` |
+| 655 | orf_0655 | L-glutamine synthetase | 7 | 8323 | 8475 | - | 51 | low | `MMMTEKNNSVWAKNIPVREQLHVIWTLIKMAKPFRSMFIVALVIGAAFALLQAAAPRVIA` |
+| 656 | orf_0656 | hypothetical protein | 7 | 8922 | 9491 | + | 190 | high | `MTIFGKLMWFFKEHKRLYMLGLTFLFLTEVSQMVSPALIGRFTDVIVSRQMTMHQLFFYA` |
+| 657 | orf_0657 | Biotin operon repressor | 7 | 9530 | 10513 | - | 328 | high | `MIAILTILTLAISIFSWLLWHQIRINPASLRLGFYVLIIVIFLFISLQVIQFPSISVVHI` |
+| 658 | orf_0658 | methionyl-tRNA synthetase | 7 | 10622 | 12730 | - | 703 | high | `MTREYSVAILGATGAVGTRLIEQLEQSTIPVKNIKLLASSRSAGKTLQFKGTDVVVEEAT` |
+| 659 | orf_0659 | Predicted HD superfamily hydrolase | 7 | 12989 | 13642 | + | 218 | high | `MVEAITRPTRLEVSKSAVEHNITTVKNVSGADKVFLTVKSNAYGFGLIPMAQAAVAGGIY` |
+| 660 | orf_0660 | DNA-entry nuclease | 7 | 13718 | 14587 | + | 290 | high | `MNLITYEMMGTMTRLVTATEMQQIDNYTIETIGMPQDVLIERAAMAVLDVIGAGRFDLSH` |
+| 661 | orf_0661 | Thioredoxin reductase | 7 | 14634 | 15644 | - | 337 | high | `MKMSSAVEQSLVVLVMLALQKDGLPVKSHVLSEHLEVSESYLKKTMRKLVVANLIKAIAS` |
+| 662 | orf_0662 | Inosine-uridine nucleoside N-ribohydrolase | 7 | 15783 | 16739 | + | 319 | high | `MRKFFENSEWNRVRKIRGLPLLLVGITLIPSLYAVIFLSSLWDTYGRVDHLPVAIVNQDK` |
+| 663 | orf_0663 | glutamate-5-semialdehyde dehydrogenase | 7 | 16819 | 18060 | - | 414 | high | `MVRIQDDFYEAINGEWEKKAVIPSDKPRTGGFSDLADDIEQWLLKTTSGWQKGQDLPDDD` |
+| 664 | orf_0664 | glutamate 5-kinase | 7 | 18065 | 18853 | - | 263 | high | `MNIKLITVGKLKEKYLTEGIAEYTKRLSRFCKVQVVELIDEKTPENASEAQNNQIMAKEG` |
+| 665 | orf_0665 | Deoxynucleoside kinase | 7 | 18923 | 19570 | - | 216 | high | `MVQSALTKTLLTGVIAGVVGGGAILYGQQGVQLLQNQNQKVSTTATSTKTIAKNATATSA` |
+| 666 | orf_0666 | D-Ala-D-Ala carboxypeptidase, Metallo peptidase, MEROPS family M15B | 7 | 19669 | 20442 | - | 258 | high | `MQFRRLKILMTMLFIFLDVFLFFWWRSNQRPSIKVTDANANIISEIKNQKIKVANFSTSV` |
+| 667 | orf_0667 | branched chain amino acid: 2-keto-4-methylthiobutyrate aminotransferase / fructokinase | 7 | 21010 | 21876 | - | 289 | high | `MQNNRSVQGVMINILLTIAIIVSIVLTALIFISAGSQEAPTQTDQQSQQASELFRPTNYI` |
+| 668 | orf_0668 | beta-fructofuranosidase | 7 | 21977 | 23242 | - | 422 | high | `MTSITKFFQSIRFRITLVFVLLMIIALELLGAFFVRQIERQNLRTFQQQITLPKYVTDPI` |
+| 669 | orf_0669 | PTS system sucrose-specific IIC component, Glc family / PTS system sucrose-specific IIB component, Glc family / PTS system sucrose-specific IIA | 7 | 23295 | 25256 | - | 654 | high | `MSKVLVVDDEKPISDIIKFNLTKEGYDVVTAADGQEALDMYNDENPDLVLLDQMLPEVDG` |
+| 670 | orf_0670 | transcriptional regulator, LacI family | 7 | 25416 | 26381 | + | 322 | high | `KIADSVGVPLSRISVKRFADGEVQINIEESIRGDNVFVIQSTSAPVNDNLMELLIMIDAL` |
+| 671 | orf_0671 | Fe2+ transport system protein B | 7 | 26910 | 29024 | - | 705 | high | `MTKEAPKKLVELKDLQLYFNKGKSNEVRAIDHVSFDIYEGEVFGLVGESGSGKTTIGRTI` |
+| 672 | orf_0672 | Fe2+ transport system protein A | 7 | 29028 | 29501 | - | 158 | high | `MSNPILKVENLHVNFNTYAGTVQAIRDVSFDLNEGETLAIVGESGSGKSVTTKTLMGLNA` |
+| 673 | orf_0673 | UDP-galactose 4-epimerase | 7 | 29700 | 30692 | - | 331 | high | `MAANTEDFVIVGAQSSDANEHISKPALSFWQDAWRRLKLNKLAVVSMWFLVFILGFAIIS` |
+| 674 | orf_0674 | Acyl-ACP thioesterase | 7 | 30721 | 31452 | - | 244 | high | `MVKYILKRLALLIFTLFLVITATFFLMQVMPGTPFNNPKLTPQMIAQLNKAYGLDLPLWQ` |
+| 675 | orf_0675 | Predicted methyltransferase | 7 | 31454 | 32323 | - | 290 | high | `MDTWKKWAIGAAVVVVAGAGTRAAGLWGGSNGSSSDTLKFSFPTEIQTLDISKNTDTYSG` |
+| 676 | orf_0676 | DNA polymerase III, delta prime subunit | 7 | 32325 | 33227 | - | 301 | high | `MVTLGIFDAFTPQNVQYLLGGLGITVGVSIISVIVSFIAGSIIGIVQFERIPYFSKFVGT` |
+| 677 | orf_0677 | hypothetical protein | 7 | 33227 | 33556 | - | 110 | high | `MTLLQNNFPTFLQGFGYTLLSSIIALIISMILGTFFAILQILPQKWAQKIGNVYVQVFRN` |
+| 678 | orf_0678 | thymidylate kinase | 7 | 33553 | 34194 | - | 214 | high | `FPLIIQQQYTWHILQTFINFAAIPIFGTVIVPLVMIGFFGQYIPFLTYITNLIIRYFAYM` |
+| 679 | orf_0679 | hypothetical protein | 7 | 34225 | 34485 | - | 87 | high | `MTINYFEHDLTSLHNQLVNKEVSAVDLTRASLDNISKTDDKLNAFISTNPDEAIAQAQKI` |
+| 680 | orf_0680 | DNA replication and repair protein RecR | 7 | 34482 | 35123 | - | 214 | high | `MGTGNFETTIGLEVHVEMQTNSKLLSPSPVHYGDKPNTNTNVIDFGYPGVLPVANKGALE` |
+| 681 | orf_0681 | DNA polymerase III, gamma/tau subunit | 7 | 35142 | 36863 | - | 574 | high | `MKRARIIYNPTSGREAIKREMLDILAVYEKAGYETSAFATTPEPLSAAKEARRAAEAGFD` |
+| 682 | orf_0682 | Predicted HD superfamily hydrolase | 7 | 37120 | 37638 | - | 173 | high | `MAKANRVYKTEAPVAKNQEIEATVIDITYQGMGVVKVDNFPIFVVDAIPGEIVRVSVTKV` |
+| 683 | orf_0683 | tRNA-adenosine deaminase | 7 | 37702 | 38208 | - | 169 | high | `MAKVAETPMMVQYHVIKSQYPDAFVFYRLGDFYELFEDDAVLGAKLLELTLTARNKNSEN` |
+| 684 | orf_0684 | 16S rRNA m(2)G 1207 methyltransferase | 7 | 38186 | 38821 | - | 212 | high | `MRIHELSNLLANQIAAGEVIERPASVVKELVENAIDAGATQIDVIVEEAGESLIRVVDNG` |
+| 685 | orf_0685 | LSU ribosomal protein L12P | 7 | 38921 | 39286 | - | 122 | high | `MALNTKLNQTKNNVKKNTKIIKDNSKQVVKNSIEDFKHDSVPMEHKK*` |
+| 686 | orf_0686 | LSU ribosomal protein L10P | 7 | 39332 | 39868 | - | 179 | high | `MSFEEKFDNAKDKIAGKAKELEGKITGDKAREVEGKTQNVKGEAKDDVQKVRDVAHDDVD` |
+| 687 | orf_0687 | LSU ribosomal protein L1P | 7 | 40052 | 40744 | - | 231 | high | `MTFGQYIFYLLGSTTMAFNNNDIIIRLRYALNIKDADMIKIFKFGGVTIDEDQLHNLLTK` |
+| 688 | orf_0688 | LSU ribosomal protein L11P | 7 | 40744 | 41208 | - | 155 | high | `MVERTFMMIKPDGVSRSKIGEIIQRIEHKGYAIKAMKMVQPTPELLAKHYAEHVGKSFYP` |
+| 689 | orf_0689 | transcription antitermination protein nusG | 7 | 41335 | 41913 | - | 193 | high | `MHVDILKFGHHGSKTSTNPEVINKWHPEIGIISAGRNNRYNHPNKETLETAQNNKMTVFN` |
+| 690 | orf_0690 | protein translocase subunit secE/sec61 gamma | 7 | 41992 | 42168 | - | 59 | high | `MQLENIEILENHSLAPYAYTQAGGLVDYLAIPKSIHELKVLVNWAKELGMPVQVFGRLSN` |
+| 691 | orf_0691 | LSU ribosomal protein L33P | 7 | 42179 | 42328 | - | 50 | high | `MAILELIVILIVAVTISNIVSHFIPEIPISLFQIAIGLFLALVCGIYVEVDSEWFMLLFI` |
+| 692 | orf_0692 | transcriptional regulator, TetR family | 7 | 42369 | 42953 | - | 195 | high | `MNILLYFTFNNLMHVIDIAIIWFILYKLIQFVEGTRALQILFGVGFVILVKVVSWYLGLV` |
+| 693 | orf_0693 | D-alanine--D-alanine ligase | 7 | 43039 | 44172 | - | 378 | high | `MKKIGQSKIVNLVVSLVIAILLAAYVSSTKQGTATNNGGSTNFSTLIPEKRATLKVPLNL` |
+| 694 | orf_0694 | hypothetical protein | 7 | 44216 | 45220 | - | 335 | high | `MSEFNLKYFGTDGVRGVANKTLTPELAFRLGRTGGAILTRHANDENKKPVVIVGRDTRIS` |
+| 695 | orf_0695 | cell division membrane protein | 7 | 45220 | 46434 | - | 405 | high | `MSQDSFKSYILKKFNISFNDESLLTEALTQRNYLNEHPDEKGRDYQRLEFLGDSVMQMIV` |
+| 696 | orf_0696 | hypothetical protein | 7 | 46564 | 46773 | - | 70 | high | `MKLKSLEISGFKSFADKTMIELMPGMTGIIGPNGSGKSNIIEAIQWVMGEQSAKDLRGTK` |
+| 697 | orf_0697 | Actin-like ATPase for cell morphogenesis | 7 | 46773 | 47765 | - | 331 | high | `MGLFDIFRKKKNETVEQESASESTEILSESESNSDASEDEQSTAVSENTSAVTQPMMEQV` |
+| 698 | orf_0698 | Glycopeptide antibiotics resistance protein | 7 | 48108 | 48758 | - | 217 | high | `MNLKQLQQQIENNAMANFYIVTGEEETLLSHAKSMFKGLVDQEDRDMNYSQIDLTEQTLD` |
+| 699 | orf_0699 | ketopantoate reductase | 7 | 48938 | 49933 | + | 332 | high | `MPEFLIAADNRRIIHVDLDAFYAQIEMRDHPELRNLPLIISRDPIESNGRGVVATANYAA` |
+| 700 | orf_0700 | Membrane-associated phospholipid phosphatase | 7 | 50050 | 50715 | + | 222 | high | `MSVIEEQILEQIKRYDTIIIHRHQRPDPDAFGSQLGLKEILKASFPEKKIYAVGKEVQGL` |
+| 701 | orf_0701 | ribonucleoside-diphosphate reductase class Ib beta subunit | 7 | 50746 | 51723 | - | 326 | high | `MAEKANQFGQFNLKKEVIDALSAIGFYEPTAVQAKLIPDVLQGRDVVGQSQTGSGKTHTF` |
+| 702 | orf_0702 | Ribonucleotide reduction protein | 7 | 51726 | 52166 | - | 147 | high | `MPVIESAIQRVRLTKKQHDRNEPQLSAYRTAVKKFEKAAAAGTDNLAELYKAASSAIDHA` |
+| 703 | orf_0703 | ribonucleoside-diphosphate reductase class Ib alpha subunit | 7 | 52203 | 54374 | - | 724 | high | `MALTQERKNEIIKAYARHEGDTGSAEVQIAVLTADINELNTHMAAHKHDFHSQRGLMKKI` |
+| 704 | orf_0704 | Glutaredoxin related protein | 7 | 54542 | 54772 | - | 77 | high | `MAETTITRDEVAHVAGLAKLAFNDADLDQFTTQLGDILNIFDTLSEVNTDDVIPTYSVTE` |
+| 705 | orf_0705 | Hemolysins related protein with CBS domains | 7 | 55201 | 56601 | + | 467 | high | `DRMPELAKRIKTETNVSVELGDF*` |
+| 706 | orf_0706 | Phosphoglycerate mutase family protein | 7 | 56695 | 57366 | + | 224 | high | `MNELPKINEMIVVEGRSDTQNLARAVIADTIETGGSAVNEDAIERAKLAAKTRGIIILTD` |
+| 707 | orf_0707 | Predicted membrane protein | 7 | 57410 | 58948 | - | 513 | high | `MAQTIDIANPTRTQAILNEYGLRAKKKFGQNFLTDLNVLHNIVEAAEITAEDYVIEIGPG` |
+| 708 | orf_0708 | SSU ribosomal protein S30P | 7 | 59096 | 59641 | - | 182 | high | `MPSSLQDIKTKIDAHVGQEVTIMAQAGRKKITERSGILRSTFPSLFVVELDEDANFEHAS` |
+| 709 | orf_0709 | Predicted amidophosphoribosyltransferase | 7 | 59778 | 60452 | - | 225 | high | `MNKQSVYAILTIMLIPIGILLVCAKMVGDTTEAQDTAVKITTDNPAYQQIAKAIAGKKGR` |
+| 710 | orf_0710 | Superfamily II DNA/RNA helicase required for DNA uptake (late competence protein) | 7 | 60466 | 61746 | - | 427 | high | `MNTIISTKDFMVRYGEKVILSHINIEVLAGQFLAVLGENGAGKTSFIKALTGQNKQTEGT` |
+| 711 | orf_0711 | hypothetical protein | 7 | 61764 | 62399 | + | 212 | high | `MFSYDFMQNAFIAGTIVSIVAGVIGTFVVARNYAFLTHSLSEIGFAGAAFGLWIGWPALL` |
+| 712 | orf_0712 | Exopolyphosphatase | 7 | 62536 | 63501 | - | 322 | high | `MKTRRSDRLVDMARYMLERPRKLISLSYFSKRYESAKSSISEDLSILKRTFQERGTGLLE` |
+| 713 | orf_0713 | Polyphosphate kinase | 7 | 63498 | 65630 | - | 711 | high | `MSNINVLILAAGNGSRMKSTTPKVLHSVAGQTMINWVLDAVEPLKTDKLITVIGVGAERV` |
+| 714 | orf_0714 | Exopolyphosphatase | 7 | 65639 | 67117 | - | 493 | high | `MQITGERALVNIENETFYTKRIDVADDETIPLDALFSEIDSHIENENFIHIELQINGGVE` |
+| 715 | orf_0715 | DNA-3-methyladenine glycosylase I | 7 | 67194 | 67781 | - | 196 | high | `MIKLTKLEKNYIDRIANPTKAALEDLIVPMSDLNDKAKLAQYTIDTYNLGELNNVKTTVS` |
+| 716 | orf_0716 | enolase | 7 | 67877 | 69202 | - | 442 | high | `MTYSVDIKPNEVAVYALGGLGEIGKNTYGIEYQNEIIVVDAGIKFPEDELLGIDYVIPDY` |
+| 717 | orf_0717 | triosephosphate isomerase | 7 | 69344 | 70153 | - | 270 | high | `MEKERNQYLTVSALTAYLKRKFDADPYLAKVYVTGEISNMGRRRGPHLYFSIKDSESNAV` |
+| 718 | orf_0718 | hypothetical protein | 7 | 70150 | 70485 | - | 112 | high | `MSEQPTFEDKLQQLESIVSQLEKGDRPLETALADFQTGVGLVKDLQKTLKDAEDTLAKVI` |
+| 719 | orf_0719 | hypothetical protein | 8 | 61 | 561 | + | 167 | high | `MIDLKSFQKEWLPKINQQLENDLSMASPDADLVAMMKYAVLNGGKRLRPLLTLAVVTSFG` |
+| 720 | orf_0720 | valyl-tRNA synthetase | 8 | 878 | 3562 | + | 895 | high | `MSIEKERVDVLLVQQGLFQSREQAKRAVMAGQILGNNEERLDKAGEKIPVTTELHFKGEQ` |
+| 721 | orf_0721 | 3-oxoacyl-[acyl-carrier-protein] synthase III | 8 | 3742 | 4710 | + | 323 | high | `MNKKDRQKALLSLIKEHPVGRQEDIVAYFEKIGEKVTQATISRDINELGLIKVPNSHDGF` |
+| 722 | orf_0722 | Muramidase | 8 | 5028 | 6338 | + | 437 | high | `MLENLIIENFAIIEKVDLQFEGGMSVLTGETGAGKSIIIDALFMLTGGRANSEMVRHGSK` |
+| 723 | orf_0723 | Cell wall-associated hydrolase | 8 | 6340 | 6693 | + | 118 | high | `MSTIAHYFKLDELNTSVRTEFIAGLTTFASMAYILFVNPTVLGAAGMDKGAVFTATAIAS` |
+| 724 | orf_0724 | Muramidase | 8 | 6885 | 8003 | + | 373 | high | `MRDLTQGTPAKQILFFTIPLVIGNLFQQLYNFSDTLIVGQTLGVKSLAAVGATGSIMFLV` |
+| 725 | orf_0725 | Peptidoglycan interpeptide bridge formation enzyme | 8 | 8079 | 9332 | + | 418 | high | `MAAKLVLVRHGESTANRDNEFTGWTDVPLTLKGVRQANRVGEVLKRHGLQFDVSFTSFLK` |
+| 726 | orf_0726 | cell elongation-specific peptidoglycan D,D-transpeptidase | 8 | 9413 | 11455 | + | 681 | high | `MNDRTWARVKKYTELQGTSGQEHAIRQSFRSDLEPLVDTIHQEGLGGVCGVKEGQGPRVM` |
+| 727 | orf_0727 | transcriptional regulator, ArsR family | 8 | 11578 | 11844 | + | 89 | high | `MIYKIYYQEHPERNPKRETTISMYIEAESLPQAREIIEENTEYNVEFIEELSDKAVTYEK` |
+| 728 | orf_0728 | Predicted integral membrane protein | 8 | 11834 | 12469 | + | 212 | high | `MFKKIRKLDYWIAVPFAILSALGVVMVFSASLTNSAMLNFYKQLLFVFIGWIGAFTLFHF` |
+| 729 | orf_0729 | ABC-type antimicrobial peptide transport system, ATPase component | 8 | 12675 | 14663 | + | 663 | high | `MTFQIQPRRAIYIYINNIRHAQQLKKFGQITYISRKMMFVGLYVNDENVEQLVEKIKQYK` |
+| 730 | orf_0730 | Transcriptional regulator | 8 | 14879 | 16027 | + | 383 | high | `MRVVSGRFRGTRLEAVNGDKTRPTTDKVKEAMFSMLMPYLDGGDVLDLYAGTGGLSIEAV` |
+| 731 | orf_0731 | hypothetical protein | 8 | 16077 | 16478 | - | 134 | high | `MSIAVFPGSFDPLTNGHLDIIKRASGIFEKVIVGVGNNTSKAALFTPQEKMTLISTVVKD` |
+| 732 | orf_0732 | Exopolyphosphatase | 8 | 16538 | 17461 | + | 308 | high | `MRKKSKIVLAVASLLVIVGIVVGVWPLNGYIESPGEADDLAQFVKIDGKKDTSKGQYRIT` |
+| 733 | orf_0733 | 3-hydroxy-3-methylglutaryl-coenzyme A reductase | 8 | 17454 | 18659 | + | 402 | high | `MSDMLEIVKEKYYEYKIWIFIILFILAAITYCAYSHQTKEVPQTSLSSSIASTSDVKKSE` |
+| 734 | orf_0734 | hypothetical protein | 8 | 18643 | 19593 | + | 317 | high | `MFASLLIASLTGIIYYSCAVTWFFFTFMVVLCSWQRQIDFLFKILLLTLPFMVYSIYNSH` |
+| 735 | orf_0735 | NAD-dependent protein deacetylase, SIR2 family | 8 | 19635 | 20339 | + | 235 | high | `MKISSIGVFMGSQSGNDPQYIEAAEELGKRIALKKIKLVFGAGKDGLMGATARSAMEAGG` |
+| 736 | orf_0736 | Co/Zn/Cd efflux system component | 8 | 20441 | 21358 | + | 306 | high | `MQNSELLNESINVYMSALKNLEKLISQPTSEYGASFEQWLIMAAVADSDEPLTMTKIAKD` |
+| 737 | orf_0737 | Mn2+ and Fe2+ transporter of the NRAMP family | 8 | 21733 | 23127 | + | 465 | high | `MAIGMNDLKTGLTIEYSNSIWRVLDFQHVKPGKGGAFVRSKLKNLRTGAVNEVTFRPGDK` |
+| 738 | orf_0738 | nucleotide-binding protein, UspA family | 8 | 23166 | 23633 | + | 156 | high | `MAKEIKYNKATTKNLLLITESEVPGTTQVTPEVIEVIAQIAAQEVSGVYSMRGKLSDRFA` |
+| 739 | orf_0739 | transcriptional regulator, ArsR family | 8 | 23718 | 24062 | + | 115 | high | `MANLTRHESRQAAFQVLFALEKDPQSNKIDDLYEIVLNGKQFDDYLPRLVNGVLGSKADL` |
+| 740 | orf_0740 | ABC-type oligopeptide transport system, periplasmic component | 8 | 24377 | 26011 | + | 545 | high | `MAIYDPTKTPTDSYDTHTHLNDDQLFHDVPAYIGRANEFRVMEMNVVGYNAQSNERALEI` |
+| 741 | orf_0741 | Inosine-uridine nucleoside N-ribohydrolase | 8 | 26303 | 27250 | + | 316 | high | `GEFIDADGDTFYTSATDGRLVTGVQKINGITYAFDNTGNLITNQYYQLADGKYMLLDDSG` |
+| 742 | orf_0742 | 16S rRNA m(7)G-527 methyltransferase | 8 | 27327 | 28046 | + | 240 | high | `MIGTSTTALKHQLELEPSETKHRIGIFGGTFNPPHVGQLVLAECVGKQLGLEKVYWMPNA` |
+| 743 | orf_0743 | chromosome segregation ATPase | 8 | 28065 | 28826 | + | 254 | high | `MTKYFNGTITDLEAKISGKLSDYRYQHVLRVRDYAVKLAKANDVDVDKAEVAALVHDYAK` |
+| 744 | orf_0744 | chromosome segregation DNA-binding protein | 8 | 28816 | 29715 | + | 300 | high | `MTTTALNVQDTLNTAVEAVDNKKANNIVALDMRKVSLMADYFVIADAASTRQVQAIATEV` |
+| 745 | orf_0745 | hypothetical protein | 8 | 29715 | 29924 | + | 70 | high | `MNNEINNNYSTFAEKYDQLFDSALYQEWVDFVTKNSKATSIMDLGGGAGRLAVLLAQLGY` |
+| 746 | orf_0746 | Predicted GTPase, probable translation factor | 8 | 29926 | 31026 | + | 367 | high | `MQAVGIITEYNPFHNGHIYHIQQAKKLTGADVVVAVMSGNFVQRGEPALFDKWQRTQMAL` |
+| 747 | orf_0747 | Uncharacterized membrane-bound protein conserved in bacteria | 8 | 31071 | 31769 | + | 233 | high | `MKYAKNQLLKYRQSPLIIEETLNLEEQAKSRFSETVLALSPLEVTGSINYLDNDDITLDV` |
+| 748 | orf_0748 | DNA-binding response regulator, OmpR family (Rec-wHTH domains) | 8 | 31806 | 32498 | + | 231 | high | `MSKVLIVEDEENLAKFVGLELKHEGYEAETVNDGRSGLDLALENDYDVILLDLMLPELNG` |
+| 749 | orf_0749 | Signal transduction histidine kinase | 8 | 32495 | 33580 | + | 362 | high | `MDNNEKETTKKAVRRFSLRWQLALGMASGFFVIFIVFALLLSGLIKHHYGALPNEVIFWL` |
+| 750 | orf_0750 | D-alanyl-D-alanine carboxypeptidase | 8 | 33588 | 34922 | + | 445 | high | `MKAIEVDVFGLVQGVGFRWFAQRTAQQHNIVGWVSNQTDGSVKIQAQGSQSDLIDFLSML` |
+| 751 | orf_0751 | Glucosamine-6-phosphate isomerase | 8 | 35057 | 35758 | + | 234 | high | `MKQLKRVLTFAFVIFDIILLTGGYNQHSRMYRWIGQPLAELMTNIAHFIGGVNGIGWAII` |
+| 752 | orf_0752 | glucose-6-phosphate isomerase | 8 | 35806 | 37158 | + | 451 | high | `MKYSTKLSDAIHILTYIVINQGTDLSSTQIAKSVNSNPVVIRRIMSQLKNDGCLLSSNGR` |
+| 753 | orf_0753 | transcriptional regulator, GntR family | 8 | 37277 | 37891 | - | 205 | high | `MERIISNQNARVKAWAKLATKKGRQENHTYLLDGLHLVEEAVKAGAKFHAIMATEKQMAD` |
+| 754 | orf_0754 | ABC-type proline/glycine betaine transport system, ATPase component | 8 | 38107 | 39300 | + | 398 | high | `MEKLLTIALIVVGFLLIMTVMMQPSKQQDALSALSGGAGDLFAERKSRGFEAVMRRTTAV` |
+| 755 | orf_0755 | ABC-type proline/glycine betaine transport system, permease component | 8 | 39287 | 41008 | + | 574 | high | `MELEQLKSQLTGFLKANREQIFTAQNLADGLRMTDSQEYKQVVNALNASVRDGDAIDIKN` |
+| 756 | orf_0756 | hypothetical protein | 8 | 41047 | 41526 | - | 160 | high | `MAKKKQNTENYLAQNRKARFNYAIAETFEAGISLTGTEIKSVRAGQITIGDGFVTVHNGN` |
+| 757 | orf_0757 | ABC-type Na+ efflux pump, permease component | 8 | 41541 | 42761 | - | 407 | high | `MVVTIISVFFAIVIGLGIGYYVRKSQDAHKVISAEQMATNILEQANNEAKSLKRAAEADA` |
+| 758 | orf_0758 | ABC-type uncharacterized transport system, ATPase component | 8 | 42754 | 43647 | - | 298 | high | `MEPGQLALIIFAVAFLLLVIFIGIFLLRLTRSLGVITMDVDTIARSSNEILGNANVLLND` |
+| 759 | orf_0759 | hypothetical protein | 8 | 43659 | 44126 | - | 156 | high | `MSKTKVFIAGVLATTAAYVAYKALPKDKQDELSAKAHNTGALLRDKAYDAAYNAADVAAD` |
+| 760 | orf_0760 | Predicted transcriptional regulator | 8 | 44119 | 44325 | - | 69 | high | `MQKVIQVNNQKLKQMAHYYSQFSSKKVPTGALFSISSGSATVTGYYSGKVMFQGKTASAE` |
+| 761 | orf_0761 | hypothetical protein | 8 | 44469 | 44684 | + | 72 | high | `MLKTKSLLIAIIIVVVFGGVAILLWEFTTGADYTVMNKDDERKFYQVLHKTDVSDKILQF` |
+| 762 | orf_0762 | hypothetical protein | 8 | 45026 | 45331 | + | 102 | high | `MTEQQRRQYKATIAGKTYVISGEASLPHFKSTEELLNKQIKQIKVVAPKLSQLDQAILLT` |
+| 763 | orf_0763 | Amidase | 8 | 46080 | 46262 | - | 61 | high | `MAQINVWQALAANDIGASLQHYNPLIDDDVHTAFDIPESWNLRGQMPFGSIEAPAGTKEY` |
+| 764 | orf_0764 | amino acid ABC transporter membrane protein 1, PAAT family | 8 | 46887 | 47633 | + | 249 | high | `MILLGLAIIFILITIRMGYRMGLVNAVLRFILWVIVWYIAIKFSKPFGQLLTDFVSGQFV` |
+| 765 | orf_0765 | amino acid ABC transporter substrate-binding protein, PAAT family | 8 | 47684 | 48511 | + | 276 | high | `MNQKVLQTLEYDKIKSQLSDFLSTPIGRQEADALQPITDVHIINYWLQETADAMMIDRLK` |
+| 766 | orf_0766 | amino acid ABC transporter membrane protein 2, PAAT family | 8 | 48524 | 49228 | + | 235 | high | `MAKEKFNSQEFLSSLFHYAHGFNFNHIIFDANRYRVSVSLMRRSATYGNAEMFYVSADPK` |
+| 767 | orf_0767 | amino acid ABC transporter ATP-binding protein, PAAT family | 8 | 49231 | 49968 | + | 246 | high | `MKQGKSAQIKKMRHIKSKQKFTSKSVLPEFNYNDFAGFLRARYYLTYNTKYSTETFEVAS` |
+| 768 | orf_0768 | 2-aminoadipate aminotransferase apoenzyme / aromatic amino acid aminotransferase apoenzyme | 8 | 50001 | 51236 | + | 412 | high | `MQNYIVQHQFQAPLHHLLQKLIKYVASKKAVPLKRQLNAQEIIVRLELALNTTDPVTVQL` |
+| 769 | orf_0769 | Lactate dehydrogenase related 2-hydroxyacid dehydrogenase | 8 | 51248 | 52219 | + | 324 | high | `MTQRGLLIVLSGPSGVGKGTVRKAIFEEESIDFQYSISATTRQPRAGEVDGEDYFFVTRE` |
+| 770 | orf_0770 | amino acid ABC transporter ATP-binding protein, PAAT family | 8 | 52230 | 53003 | + | 258 | high | `MLLYPSVDKLLEKVDSRYKLIALGAKRARELDAGLPATQETFESNKSVGQALEEIENGAV` |
+| 771 | orf_0771 | permease of the major facilitator superfamily | 8 | 53000 | 54235 | + | 412 | high | `MVDYPQLDAANYSGPVAIFKTNKGDIRIKLFSDIAPKTVENFITHAKNGYYNNGIFHRVI` |
+| 772 | orf_0772 | hypothetical protein (no reference match) | 8 | 54257 | 54370 | + | 38 | none | `MKYSVGQKLKGRITGIQPYGAFVSLDDHTQGLIHISECKSGIVRDLNGELKVGKEVNIVI` |
+| 773 | orf_0773 | tRNA-guanine transglycosylase | 8 | 54386 | 55606 | + | 407 | high | `MSLIAVTAIAVKDNLPYFLVQKKENGYQFFTTKMHKHNNDTSLGAALRGLKELGAVNFDD` |
+| 774 | orf_0774 | protein translocase subunit yajC | 8 | 55698 | 56060 | + | 121 | high | `MAIKIGVIGATGMAGSAVYQEAFDQGFDVTAIVRSTVKAHKTLGQDAKVLEKDAFALTKE` |
+| 775 | orf_0775 | Alpha/beta superfamily hydrolase | 8 | 56118 | 56852 | + | 245 | high | `MLKFLLAVVVIGTIAGVISGMVKIGWEAILPPRTQERDETNPPQRLLQQMGIPRKWTHAY` |
+| 776 | orf_0776 | Lysyl-tRNA synthetase (class II) | 8 | 56839 | 59373 | + | 845 | high | `MKRIIISALLTGLSLVVLGTQLETENQPAEAASMNQTVNVKAVSSAISSFTDVKLTKVEA` |
+| 777 | orf_0777 | Predicted hydrolase of HD superfamily | 8 | 59431 | 60084 | + | 218 | high | `MRLEHFTPTYMVERIYDLTVEDLKARGIKTVLADLDNTLLAWNNPDGTPELKQWLQDLRD` |
+| 778 | orf_0778 | ADP-ribose pyrophosphatase | 8 | 60086 | 60580 | + | 165 | high | `MTTEITDEYVQEQLNEGLRCIGCGALMQVEDKDKIGYLPMSALKKSISSEELFCQRCFRL` |
+| 779 | orf_0779 | Phosphoglycerate mutase family protein | 8 | 60577 | 61233 | + | 219 | high | `MQLTGKQKRYLRSQANTLSPIFSVGKNGLTQNWVDEIVLALAKRELVKISLQQSADETAK` |
+| 780 | orf_0780 | permease of the major facilitator superfamily | 8 | 61432 | 62622 | + | 397 | high | `IHNEYVVFSQNLNKKNYNQLLALVAYKNLYPKKFDDIQNGGGTLKIIKDNFRNHILNEIN` |
+| 781 | orf_0781 | Glycosidase | 8 | 62625 | 64103 | + | 493 | high | `MQKQLASHFKHKSLLFLAPYLAFFLVLLLIVMALFYQDNNNDCQSTDTTVTVTTNADKEA` |
+| 782 | orf_0782 | ABC-type multidrug transport system, ATPase and permease component | 8 | 64299 | 66017 | + | 573 | high | `MKNSRLIIFASLVLAGIILVQFNQIPNLDKQLVQAKHDLKHAKANQVKSQTIVSSPKSQQ` |
+| 783 | orf_0783 | ABC-type multidrug transport system, ATPase and permease component | 8 | 66017 | 67345 | + | 443 | high | `MKNKVLLSIMGLLLVGLGITMSITNHKRSQIADVRKEVSQVAKTQKHVTTQIDNLQTTYN` |
+| 784 | orf_0784 | H+/gluconate symporter related permease | 9 | 2 | 874 | - | 291 | high | `MMKHYIKGGNNTKKVTKKQLPKPITIIVNKVLPVIVLLVAGFYFIPYASMNFQNNDVDHI` |
+| 785 | orf_0785 | Sugar phosphate isomerase/epimerase | 9 | 890 | 1633 | - | 248 | high | `MAKKATVKYENPVVQYRDNLLLTTIGDVWAYYKIKPFQINVANVEDKRKYKNSFIDVFER` |
+| 786 | orf_0786 | hypothetical protein | 9 | 1644 | 1898 | - | 85 | high | `MGNFILFLICGFGIAFLYLHHNRDFEALDDLGKAIYKTKDLAFTMPQASDLSKDIQEKTG` |
+| 787 | orf_0787 | transcriptional regulator, LacI family | 9 | 2018 | 3007 | + | 330 | high | `MTKIDFTMADLQPMALGYEEGQDVTREVLKRAEKAYHYFHNKYLELVASGVEPELRDLLI` |
+| 788 | orf_0788 | sodium/proton antiporter, CPA1 family | 9 | 3053 | 5140 | + | 696 | high | `MSSVFKKYRMTRKNVLLLAQAIINVNGKIAWQDYASDSPYPDQHSLTLNEIKGSFEKFER` |
+| 789 | orf_0789 | hypothetical protein | 9 | 5184 | 5777 | - | 198 | high | `MTVVELTGTDFKKIYFPKYRAFQDVTEDTVKDAKRCSDTFHDFLVNSRFFSGVSCFRVYD` |
+| 790 | orf_0790 | Ribonuclease BN-like family enzyme | 9 | 5761 | 6621 | - | 287 | high | `MFKKIKYSDQYLAKTLFKRTLLFNLFLVTICFGFWYLNIFQSLMQGQYSWWYLLPVVLSL` |
+| 791 | orf_0791 | Uncharacterized membrane protein | 9 | 6699 | 7382 | - | 228 | high | `MVNKFGSLSLQGKSIGKLTFAGRNLVGANADVAVAMLNVNNTLSTENVTPQAGFDFSMAF` |
+| 792 | orf_0792 | Uncharacterized membrane protein | 9 | 7397 | 8083 | - | 229 | high | `MTPNELFKKAQESNIVPHDAKLQSAFQFGVSADELANLVISGQKTATTSSLDLYEKDEPL` |
+| 793 | orf_0793 | Fe2+/Zn2+ uptake regulation protein | 9 | 8206 | 8610 | + | 135 | high | `MNRRFKKPGTHVDHSQRPNLIKHQPNARIWRADITYLELRPGTWVYLSSIYEPKVHQVLA` |
+| 794 | orf_0794 | hydrolase of the alpha/beta superfamily | 9 | 8669 | 9598 | - | 310 | high | `MKRYQDDFKASIVKMHREEKRSIRSLSEEYGVSPAAIHNWVKGAKSVELEDGTEVTSKEF` |
+| 795 | orf_0795 | oligoendopeptidase F | 9 | 9756 | 11567 | + | 604 | high | `MRNNVEKKKIKKQNVMQKYDLITKEPIFQKFKTNNKQLYKQNIDLRNAVLRKPLKKLITL` |
+| 796 | orf_0796 | Predicted membrane protein | 9 | 11614 | 12357 | - | 248 | high | `MALEVKKIQSLSAQAIEDLKAIEKIGGLEHLAQLSEELKKAMADEEQLRAVSPMLPPYFA` |
+| 797 | orf_0797 | NAD-dependent aldehyde dehydrogenase | 9 | 12469 | 13875 | - | 469 | high | `MITINNEPKACTPIFLGTTQHSLRLSLEILIMVGMKLNDEIIETYNVTVSAIELGQLPNI` |
+| 798 | orf_0798 | thiamine-phosphate diphosphorylase | 9 | 13995 | 14420 | - | 142 | high | `MMKKRQNLRKKPTYHSKRFWDTVGRGLNWFDGLVTLVCKPYLIWLGLECFIFLVLMLSES` |
+| 799 | orf_0799 | thiamine-phosphate diphosphorylase | 9 | 14486 | 14632 | - | 49 | high | `MYKAVGWHSQNEYMAGNSLADVMRKLQKEYPAPRRTSRGMRTQQIYSEPLRIINETGKDK` |
+| 800 | orf_0800 | Hydroxymethylpyrimidine/phosphomethylpyrimidine kinase | 9 | 14625 | 15458 | - | 278 | high | `MNQVDAVIGDIKEMFAKQPNTIYEVRVVDQIYSKKVNIFFEWYKIGKATRSQQIAQFDST` |
+| 801 | orf_0801 | Hydroxyethylthiazole kinase, sugar kinase family | 9 | 15451 | 16230 | - | 260 | high | `MSKKLTPFSWMLGFIGFSGFAGLYSYPQYFLLLALFSGFQNFWWYKLGSQYDERLIKNRL` |
+| 802 | orf_0802 | amino acid/amide ABC transporter ATP-binding protein 2, HAAT family | 9 | 16503 | 17216 | - | 238 | high | `MLKENQSKWSSAGALIAIGIVFGDIGTSPLYTMNSILNSAKSAHNLDTFVIGSVSLVFWT` |
+| 803 | orf_0803 | amino acid/amide ABC transporter ATP-binding protein 1, HAAT family | 9 | 17213 | 17998 | - | 262 | high | `MTLVKTNIKTYRTIKELTQEDLANLVGVRRETIMRLENAKYNPSLELAVNIAKELDTTIE` |
+| 804 | orf_0804 | amino acid/amide ABC transporter membrane protein 2, HAAT family | 9 | 17970 | 18944 | - | 325 | high | `MTTKIWLNPEQLELYIKQLERFRDLYSQLDQTLESDRQGFQFKAGAPNFQTTLSVSMQLQ` |
+| 805 | orf_0805 | amino acid/amide ABC transporter membrane protein 1, HAAT family | 9 | 18944 | 19822 | - | 293 | high | `MQNSQTYKLYKSGKLWVIGAVAVAGVAVSANTTQVSADTVPTTTDASTAQSVQATTKALP` |
+| 806 | orf_0806 | amino acid/amide ABC transporter substrate-binding protein, HAAT family | 9 | 19880 | 21055 | - | 392 | high | `MRGLPKLKVNFEYEKKQKAKAVKIPKAHVYNLSKVRKIVVGLLIILVLYFAYVLVLANSV` |
+| 807 | orf_0807 | hypothetical protein | 9 | 21406 | 21912 | - | 169 | high | `MDFYNSIKPLLLVGTVVIAGGRALMHYGKNESKDMWMSIFIGALVYFFVNGPQDSLQAFS` |
+| 808 | orf_0808 | hypothetical protein | 9 | 21909 | 22199 | - | 97 | high | `MFNYRRVYINSAKFSKIGKGMRLPIMVDTRFLYLFSITLIITAFISYVLGWFHMQYLSLG` |
+| 809 | orf_0809 | hypothetical protein | 9 | 22196 | 23353 | - | 386 | high | `MDLTKRDVREITMPKDIKKQKLLDEVKNEKPIKSKILTLPILIIGFLVVLFGAYMLYAMT` |
+| 810 | orf_0810 | Predicted ATPase | 9 | 23350 | 24501 | - | 384 | high | `MKKSIILLLVLGSMFSSLVVSSFMIAPQTVYALTADTPALRKAKRESNKEALKKDKAEGK` |
+| 811 | orf_0811 | Saccharopine dehydrogenase related protein | 9 | 24626 | 25243 | + | 206 | high | `MKDIKKLANILNADVILIDIATKQVNYLDESTNNSNKNVVNLLIDNIELLTNHIYQSLDY` |
+| 812 | orf_0812 | Predicted membrane protein | 9 | 25332 | 27941 | + | 870 | high | `MFSEELRTQAAPIMTAIHDHAFVRGIADGYVPREALIFYVEQDFQYLSEFIKIYANAITK` |
+| 813 | orf_0813 | transcription elongation factor GreA | 9 | 27997 | 28479 | + | 161 | high | `MKKTVKALAAYQAELPVETVKAKYGLQHLARLSANESVYGPSPKVAQAVRAVSDDILGYY` |
+| 814 | orf_0814 | Putative glucose uptake permease | 9 | 28561 | 29526 | - | 322 | high | `MPQQTIEELYEQALERKQNPQTGSYTDYLYQKGLDKILKKVGEESTEVILGAKNNNEELI` |
+| 815 | orf_0815 | Aminodeoxychorismate lyase family | 9 | 29910 | 31211 | - | 434 | high | `MIGTEPDFNKQSQNGLIPAVIVDTETKAFLMLGYMNKESYSLTKSTGQTWFWSRERQELW` |
+| 816 | orf_0816 | acetate kinase | 9 | 31286 | 32545 | - | 420 | high | `MTLAKRIVPALDIKNGRVVKGVNFVNLREVGDPVESAKAYQAAGADELVFLDITATLEER` |
+| 817 | orf_0817 | Adenine-specific DNA methylase | 9 | 32608 | 33597 | - | 330 | high | `MIFPAIDLLNGQSVRLYQGDYEKETTINPDPLKQAKQIESAGLKHLHLVDLDGAKEGKPV` |
+| 818 | orf_0818 | hypothetical protein | 9 | 33635 | 33922 | - | 96 | high | `MAIIIVDYGAGNIRNVMKAIEYTGLNAKVSQDPAEIAAADGLVVPGVGAFASAMDKLRER` |
+| 819 | orf_0819 | Competence protein ComGF | 9 | 33915 | 34328 | - | 138 | high | `MSRTATIKRDTFETQIELTLNLDEQTPIKVDTGIGYIDHMLTLFAKHGRFGLQADVKGDL` |
+| 820 | orf_0820 | hypothetical protein | 9 | 34318 | 34530 | - | 71 | high | `MNIIKNESLEAIKARIRQQTEKTVDPQVEARVTDIIKNVRANGDEALKEYGEKFDGVSLD` |
+| 821 | orf_0821 | Type II secretory pathway, pseudopilin PulG | 9 | 34505 | 34906 | - | 134 | high | `MNDKVLAAGSRDEFGEKLQQKQKISQMITTILNDADFTPINTPLIERESTFDKYQNKNVF` |
+| 822 | orf_0822 | Competence protein ComGC | 9 | 34890 | 35201 | - | 104 | high | `MPKEWTAQKYSQNYVADYKAFNFVDGEGVRCSLYVSGCLFLCPGCYNVAAQNFHFGQPYT` |
+| 823 | orf_0823 | Type II secretory pathway/competence component | 9 | 35198 | 36208 | - | 337 | high | `MLTYLFSYLLLMLVIMNLAISTLISMQFLMYSNSGSRYEQWIKPIIYVAMLYTSMSVSYH` |
+| 824 | orf_0824 | Type II secretory pathway/competence component, ATPase | 9 | 36177 | 37118 | - | 314 | high | `MTEHHKQLEVIKDFYFVMQPVVKISDKQKDKIAFYEILLRSKKTRQFPGEIFFDLIKSQS` |
+| 825 | orf_0825 | 5,10-methylenetetrahydrofolate dehydrogenase (NADP+) / methenyltetrahydrofolate cyclohydrolase | 9 | 37227 | 38072 | - | 282 | high | `MIKKDGHTHTQFSHHGSTEQLDMYIERAIDLGFTEYVVTEHAPLPQQFLEEFVGPDDARD` |
+| 826 | orf_0826 | Deoxycytidylate deaminase | 9 | 38144 | 38620 | + | 159 | high | `MTLKLIASDLDATFLRDDKTINEPLFREVLQKMKAQNMQFIVATGNHLQKVLEYFKNFEG` |
+| 827 | orf_0827 | thymidylate synthase | 9 | 38821 | 39789 | + | 323 | high | `MKSMERILPVFVFVVLLGSNLLNISHFSFISVFIAVFWPLVAGVFVFGLIKLLWWWVQR*` |
+| 828 | orf_0828 | DNA repair protein | 9 | 39812 | 40420 | - | 203 | high | `MAFENLTERLSKAIKNLTGRGRVSEEDLRATMREIRLALLEADVNYDTVKKFVANVREKA` |
+| 829 | orf_0829 | permease of the major facilitator superfamily | 9 | 40456 | 41844 | - | 463 | high | `MNLAKKTHINELFGFYEKLLTDKQQAYLRYYFEDDYSIVEIAEAETVSRQAVSDNINRAI` |
+| 830 | orf_0830 | Folylpolyglutamate synthase | 9 | 41834 | 43015 | - | 394 | high | `ETETETETETETETETETEAETTEQQIYDAGLKKSRTGFADRFNRFLANFRSVDENFFED` |
+| 831 | orf_0831 | Superfamily II DNA and RNA helicase | 9 | 43160 | 44785 | - | 542 | high | `MNNTIKLMKLPDLTVIKHSGEGTQFYAYKINFILEKLNLSENIINDINRDLYQMLANQAS` |
+| 832 | orf_0832 | Beta-lactamase class C related penicillin binding protein | 9 | 44785 | 45927 | - | 381 | high | `MYSDDSLVLHTDAYQINMIYTYWKQGIDQKPVVFEAYFRKMPFNNGYVIFSGLERIVKIL` |
+| 833 | orf_0833 | UDP-N-acetylmuramoyl-tripeptide--D-alanyl-D- alanine ligase | 9 | 45951 | 47279 | - | 443 | high | `MRPLQSKIIADLHVQPVIDPNIEIKRSVNFLKQYLTHSAYTGLAIAVSGGQDSTLAGKIG` |
+| 834 | orf_0834 | 23S rRNA m(5)U-1939 methyltransferase | 9 | 47281 | 48672 | - | 464 | high | `MIMKLKQADLLFVKNGHSDLDEGIAESTGNFVHVAILADEENVIHATADSGVCLQSLQLF` |
+| 835 | orf_0835 | LSU ribosomal protein L31P | 9 | 48712 | 48978 | - | 89 | high | `MNETQKLLLVLLISIEIAFTKSVYLNLFLIVVSILILIVTKSHLKTFARLLIVSILPAFG` |
+| 836 | orf_0836 | UDP-N-acetylglucosamine 1-carboxyvinyltransferase | 9 | 49071 | 50357 | - | 429 | high | `MTELKANHLDIKFDDEIILEDISLEIRPEQFILLVGSSGCGKSTLMTALAGLYPKYGGEL` |
+| 837 | orf_0837 | phenylalanyl-tRNA synthetase beta subunit | 9 | 50438 | 52894 | - | 819 | high | `MEQVETVTAGSKGKWSLREVILMALIGIAFGVIYFIMDPVYTALDAVLVPLGLHQYTIAI` |
+| 838 | orf_0838 | phenylalanyl-tRNA synthetase, alpha subunit | 9 | 52897 | 53946 | - | 350 | high | `MSMTDPIADFLTRVRNANLARHEVVEAPASKIKKSIAEILKAEGFIRDFEYIDDNKQGVI` |
+| 839 | orf_0839 | Predicted transcriptional regulator | 9 | 54250 | 54618 | - | 123 | high | `MARSLKKGPFADPHLLKKIEAQVDSEKKSVIKTWSRRSTIFPSFIGFTIAVYDGRKHVPV` |
+| 840 | orf_0840 | Lactate dehydrogenase related enzyme | 9 | 54638 | 55567 | - | 310 | high | `MAIKSYKPTSAGRRNMTTSDFAEITKTTPEKSLLAKKSKTGARNASGRMTVRHHAGGHKQ` |
+| 841 | orf_0841 | purine deoxyribosyltransferase | 9 | 55567 | 56007 | - | 147 | high | `MDARDIIRRPIITEASMAQTERKRYVFEVDTRATKPEIKKAIEEIFEVKVSGLNTANVRG` |
+| 842 | orf_0842 | cytidine deaminase | 9 | 56024 | 56413 | - | 130 | high | `MTKVAVLKQDGSQAAEIELNDAVFAIEPNNAVITDAVLMQRASLRQGTHAVKNRSAVSGG` |
+| 843 | orf_0843 | oligopeptidase F, Metallo peptidase, MEROPS family M03B | 9 | 56524 | 58317 | - | 598 | high | `MTKGILGRKVGMTQVFTESGELIAVTAVEATPNVVLQVKNAETDGYSAIQLGYQDKRTVL` |
+| 844 | orf_0844 | hypothetical protein | 9 | 58375 | 59397 | - | 341 | low | `MAQKKIRIRLKAYEHRILDQSAEKIVETAKRTGAEIAGPIPLPTERTLYTILRSPHKHKD` |
+| 845 | orf_0845 | amino acid ABC transporter membrane protein, PAAT family / amino acid ABC transporter substrate-binding protein, PAAT family | 9 | 59439 | 59624 | - | 62 | high | `MKKLLSSVVGILIVVALLISAQHYFSAQTGTGDKSGKVLNLYNWGDYIDPALLKKFTKET` |
+| 846 | orf_0846 | nucleoside ABC transporter membrane protein | 10 | 1 | 105 | + | 35 | high | `MHKKFRWSNLYLVFVFVLLYLPIFFLIIYSFNAGDVMQGWDGFSLKHYTELFVDTRILEI` |
+| 847 | orf_0847 | malate dehydrogenase (NAD) | 10 | 145 | 1059 | - | 305 | high | `MRVWKVMRTMMKSKQQRQIFYIVPYGIWLLLFVIAPLILMLFQSFTTASGHFTFSNYAAY` |
+| 848 | orf_0848 | ABC-type uncharacterized transport system, ATPase component | 10 | 1175 | 1930 | - | 252 | high | `MSEKQVPIIAFNQVDLSFGDTHVLNNVDLEIEAGKFYTLLGPSGSGKSTILKLISGQLTA` |
+| 849 | orf_0849 | Ribose/xylose/arabinose/galactoside ABC-type transport systems, permease component | 10 | 1923 | 2822 | - | 300 | high | `MANALKEKYVNEVQPALIEKFNFKSSMQAPKIDKIVLNMGVGDAVSNSKNLDEAVEELKL` |
+| 850 | orf_0850 | ABC-type uncharacterized transport system, periplasmic component | 10 | 2819 | 3823 | - | 335 | high | `MLKNNKNHSKFLVPGIIVVGMVLRLPFTSIPPILGNIARSLHVPVSSLGILTTIPLLAFA` |
+| 851 | orf_0851 | Transcriptional regulator, xre family | 10 | 4290 | 4877 | + | 196 | high | `MAKREYPLERTRNIGIMAHIDAGKTTTTERILYYTGKIHKIGETHDGASQMDFMEQEKER` |
+| 852 | orf_0852 | Short-chain alcohol dehydrogenase | 10 | 4935 | 5672 | + | 246 | high | `MPRKGYTKRQEILPDPIYNSKLVSRLINKLMLDGKRGTASTILYDAFDRIKEATGNDPLE` |
+| 853 | orf_0853 | hypothetical protein | 10 | 5788 | 5913 | + | 42 | high | `MPTINQLVRKPRKSKVSKSKSPALNFGYNSMKKKATNNAAPQKRGVATRVGTMTPKKPNS` |
+| 854 | orf_0854 | lactococcin A ABC transporter permease protein | 10 | 6667 | 6870 | - | 68 | high | `MENIFVFLFNSIIVSTIICAAARLSNSVSLKIQRSFCFYCDHNLAWFDIIPVISACVLRN` |
+| 855 | orf_0855 | 4-amino-4-deoxy-L-arabinose transferase related glycosyltransferase of PMT family | 10 | 7265 | 8044 | + | 260 | high | `MDNNYTPSAQNVLVLAQEQAKYFKHQAVGTEHLLLALAIEKEGIASKILGQFNVMDDDIR` |
+| 856 | orf_0856 | Glycosyltransferase related enzyme | 10 | 8065 | 9069 | + | 335 | high | `MEIIDAKHAVSDMQENIERFRGTLDMEALTEEIADYENRMTEPDFWNDNEKAQKVIEENN` |
+| 857 | orf_0857 | Conserved membrane protein, GtcA family | 10 | 9152 | 9634 | + | 161 | high | `MDSFFGIISHIIHIFCSNIQKIDFRGETSELTTRTLKVMANPIRKLVDNSKQQLKKLNKI` |
+| 858 | orf_0858 | NAD(FAD)-dependent dehydrogenase | 10 | 9815 | 11185 | + | 457 | high | `MLDIRYMRKNSAEVKQRLEDRGVNPETIDELLELDQKRRDLIQKVESLKAQRNDVSDKIA` |
+| 859 | orf_0859 | Predicted periplasmic/secreted protein | 10 | 11273 | 11812 | - | 180 | high | `MFVKTGDKVRVIAGKDKGKEGTITKTVAGKDRVVVEGVNIVKKHQKPSNEYPQGGVIDIE` |
+| 860 | orf_0860 | Predicted metal-dependent hydrolase | 10 | 12339 | 13085 | + | 249 | high | `MIQQESRLKVADNSGAREILTIKVLGGSGRKFAGVGDMIVATVKQAIPGGNVKKGDVIKA` |
+| 861 | orf_0861 | Amino acid transporter | 10 | 13087 | 14418 | + | 444 | high | `MSEERNTRKVYQGRVVSDKMNKTITVAVDTYLTHDVYGKRVKYTKKFKAHDENNAAKQGD` |
+| 862 | orf_0862 | acetoin reductase | 10 | 14469 | 15245 | + | 259 | high | `MAKASELKELSLADLQKREAEFKEELFNLRFQLATGQLENTARIAQVRKDIARVKTVIRA` |
+| 863 | orf_0863 | ABC-type metal ion transport system, periplasmic component/surface antigen | 10 | 15293 | 16156 | + | 288 | high | `MLVPKRVKFRRVHRGHMRGEAKGGKTVTFGDFGLQATTSSWITNRQIEAARIAMTRYMKR` |
+| 864 | orf_0864 | Glycine/D-amino acid oxidase (deaminating) | 10 | 16192 | 17319 | + | 376 | high | `MGQKINPTGFRVGVIRDWDAKWFADKADYANQLHEDLRIRKYIEKNLADASVDRIEIERT` |
+| 865 | orf_0865 | camphor resistance protein CrcB | 10 | 17468 | 17866 | + | 133 | high | `MAEQVTSARATAKIVRVAPRKARLVLDTIRRKSVNEAYAILKFLPNTSTEDIYKVLNSAV` |
+| 866 | orf_0866 | camphor resistance protein CrcB | 10 | 17863 | 18201 | + | 113 | high | `MNYDNYVPKESRKEVSQERIRFLKLLSKVAVVFCCLMYISYIPQITANLSGNPVSVLQPL` |
+| 867 | orf_0867 | hypothetical protein | 10 | 18245 | 19126 | + | 294 | high | `MVEKKLTWKQLVLVASLIFGMFFGAGNLIFPIQLGQLSGGNWLPATIGFLITGTVVPFLA` |
+| 868 | orf_0868 | Predicted membrane protein, hemolysin III related protein | 10 | 19210 | 19848 | + | 213 | high | `MDHPLIQHKLTMIRNKNVGTKDFRALVDEIAMLMTYEASRDLQLEDVEVETPVTKTIKKQ` |
+| 869 | orf_0869 | D-xylose proton-symporter | 10 | 19991 | 20194 | + | 68 | high | `MKRRSQIRPKKHHRVRNTILTIIGLLFVVGLGLGAYAYTKVNHTITKMQKTSTTTKSADK` |
+| 870 | orf_0870 | D-xylose proton-symporter | 10 | 20161 | 21444 | + | 428 | high | `MIQLKSPREIEAMRQSGAIIAGMHHMLRDLIEPGIDTWEIETKSREYIESHGGVPLQIGF` |
+| 871 | orf_0871 | transcriptional regulator, MarR family | 10 | 21650 | 22819 | + | 390 | high | `MLIDLHSHLLPNIDDGSKSLRASIRMAKEAVDSGIKAALMTPHHMNGHYVNHKDDVIRLT` |
+| 872 | orf_0872 | D-xylose isomerase | 10 | 22994 | 24340 | + | 449 | high | `MKKIFGIIAAVIVVIVGIIALGHQNNDSSKTSKSSTTVKVSKSSSKTSKSSSVEKSSSSS` |
+| 873 | orf_0873 | xylulokinase | 10 | 24487 | 25998 | + | 504 | high | `MNKITFWSSIAAVSIAASLVAVGQAHAADGVPAITAGTSGLPRMDVVDVSSNNGTISVAD` |
+| 874 | orf_0874 | Undecaprenyl-diphosphatase | 10 | 26327 | 27208 | + | 294 | high | `MKRYYYMDILTILATIAVVFLHTSEYAFSNQTGDSHWVIAVILQVTFIWAVPIFFMMSGA` |
+| 875 | orf_0875 | Uroporphyrinogen-III decarboxylase | 10 | 27756 | 28787 | + | 344 | high | `MTLSIATGSATVQADTVTAANATTSKTTDQESISTTTSDTTEIQTEPDDASNTVNKQEVA` |
+| 876 | orf_0876 | Uroporphyrinogen-III decarboxylase | 10 | 28780 | 29781 | + | 334 | high | `MQRHRVRKVLSIIMAGIVLFSIGWLICLKNNSKNMTQQQLPQKWHLNGLSKNGLSNDTQT` |
+| 877 | orf_0877 | amino acid ABC transporter substrate-binding protein, PAAT family | 10 | 29797 | 30069 | + | 91 | high | `MDNKKIIVGGGTGFVGQGILSALNNKDFELHSLSRHQFSPADATDQVTYHAADLNKPGEW` |
+| 878 | orf_0878 | amino acid ABC transporter substrate-binding protein, PAAT family | 10 | 30069 | 30656 | + | 196 | high | `MQVAKNYLYTAAYQLLNIIAPLITMPYLARVLGRNGVGVASWTNSFVTYFLLIASLGIVT` |
+| 879 | orf_0879 | amino acid ABC transporter membrane protein 1, PAAT family | 10 | 30680 | 31402 | + | 241 | high | `MKRKLGYLTAKRGLDISVSLAAMFLLSPVFAIIALIIIKDKKTSKIIYAQERVGQYGKRF` |
+| 880 | orf_0880 | amino acid ABC transporter membrane protein 2, PAAT family | 10 | 31399 | 32109 | + | 237 | high | `MSFSLIDLVKRLLKNSWWILILGIVMGASLYTYAKHSVLTAYTAERYVIVAKSNTGVKDP` |
+| 881 | orf_0881 | amino acid ABC transporter ATP-binding protein, PAAT family | 10 | 32120 | 32902 | + | 261 | high | `MAAFLLPITFFSKTYSYSFAETTMMIAFPVFVLLILLQIYRFPSRIAKIIPSAQSFLLAG` |
+| 882 | orf_0882 | bacterial peptide chain release factor 3 (bRF-3) | 10 | 33021 | 34532 | + | 504 | high | `MTLYIATHKPYIMPEDSDYQPIFVGAAQHDSVPDGYQSDAVGQNISTKNPNFNELTAIYW` |
+| 883 | orf_0883 | hypothetical protein | 10 | 34622 | 35164 | + | 181 | high | `MIKIKEAAVDSVQRAREMISRGANRIELNSRLDLGGITPDTKKIIDTLAIANELPVVIMV` |
+| 884 | orf_0884 | hypothetical protein | 10 | 35451 | 36008 | + | 186 | high | `MATPSNKNSKSHKRNRRGHIGLNVPNIVLDQTTGEYRVSHRVSPSGVYNGKQVIDKK*` |
+| 885 | orf_0885 | Hydroxymethylpyrimidine/phosphomethylpyrimidine kinase | 10 | 36047 | 36874 | + | 276 | high | `MSSKKITFKDLFSFKWYVHQMSGWTRTSYILLIFGYLVITYSSFFAGSPINHMTWWTFVA` |
+| 886 | orf_0886 | Predicted membrane protein | 10 | 36890 | 37573 | - | 228 | high | `MKKQDITSVLAIHVIVLLFFGFVLLTPTHFTFLNWNIFLALLPLDFAIIVNISKRRSIQI` |
+| 887 | orf_0887 | acetoin reductase | 10 | 37700 | 38476 | + | 259 | high | `MLIHDGKQEEMSTRDAQQLANDADMDLVLVQANAEVPVAKIMDWGKAKFEAQKKQKEQRK` |
+| 888 | orf_0888 | acetaldehyde dehydrogenase / alcohol dehydrogenase AdhE | 10 | 38703 | 41405 | + | 901 | high | `MPKMKTHRASAKRFKKTANGGLKSASAYTSHRFHGKTKKQRRQLRGTRMMDSTTVKTYAK` |
+| 889 | orf_0889 | 23S rRNA m(5)U-1939 methyltransferase | 10 | 41438 | 42934 | - | 499 | high | `MRVKGGTVSRARRKKFVKLAKGYRGQRRINYKVAKQQVYKSYLYAYRDRKNTKRNFRKLW` |
+| 890 | orf_0890 | Uncharacterized conserved membrane protein | 10 | 43000 | 44163 | - | 388 | high | `MTAAQVAEIIRKTDLELAMDDFTGKVINRKRALIENTWVEAGEINDRFFPILQVYLERTF` |
+| 891 | orf_0891 | hypothetical protein | 10 | 44437 | 44661 | + | 75 | high | `MKSNNKDLIAQLERIQGDVDRINNQLPANMKTVKYYGKDVTAFLSIMIGRIKNVR*` |
+| 892 | orf_0892 | ATP-binding subunit of Clp protease and DnaK/DnaJ chaperones | 10 | 44718 | 46868 | + | 717 | high | `MASVPDALNFYQGDIQEEPVGFKARLFDFSSGEYVTKQFRTEGKAYSAIAEQVDRLNEIA` |
+| 893 | orf_0893 | hypothetical protein | 10 | 46976 | 47968 | + | 331 | high | `MWFLQVIALLIVVGAVFYLGMLQGEAQYKESIRRHRDFHRMGGMSNENKYWR*` |
+| 894 | orf_0894 | ADP-ribose pyrophosphatase with uncharacterized conserved domain | 10 | 47980 | 48918 | + | 313 | high | `MVTQLLAKLDEIIKFFHKSQLPEIMDKTELAQFLGVGINNVNKYIYSDGFPYIEQPNMKD` |
+| 895 | orf_0895 | fumarase | 10 | 48950 | 50380 | - | 477 | high | `MIKFGDWLAEFKDVDRPVGDLANDMISENAIDTFNKVTSVDELPSNLTGEVLTVAIQAFE` |
+| 896 | orf_0896 | ribose-5-phosphate isomerase | 10 | 50498 | 51184 | - | 229 | high | `MEYNAGKTKTAQVIDSGDIGNVEIRLKYAKHELELPDDYTVIIVPKYQ*` |
+| 897 | orf_0897 | Predicted acetyltransferase | 10 | 51181 | 51462 | - | 94 | high | `MTEQMIVDAAKLFKKRVKDGLFDRDMTQRDLANAVGVTEAVLSLAINTYAINKQSREVRA` |
+| 898 | orf_0898 | deoxyuridine 5'-triphosphate nucleotidohydrolase | 10 | 51695 | 52234 | + | 180 | high | `MTLLSRTKEIAKRRGISMEKLANQVGISKSGIYQWDNHEPKPSTIDKVADVLNVSTDYLL` |
+| 899 | orf_0899 | Predicted ATP-dependent serine protease | 10 | 52426 | 53652 | + | 409 | high | `MNNIIEKILEEYKRNGVIVLEATSLSPDVPDIADLISRQVVINTNSKYSTQLPFRLAHEL` |
+| 900 | orf_0900 | Predicted membrane protein | 10 | 53863 | 55101 | - | 413 | high | `MSRHYQHNHYLWIDVARIFAIFLVILNHVNEQINVTPITGKTISIEFLGRLGVPVFLILS` |
+| 901 | orf_0901 | Transcriptional regulator | 10 | 55236 | 55823 | + | 196 | high | `MRKIEAVNTLKSGYRITPVVDKKPILPFATVESDKRWVLTNWKPDYDIAVIAGGDDWFVV` |
+| 902 | orf_0902 | glutamyl-tRNA synthetase | 10 | 55922 | 57418 | + | 499 | high | `MASIYKRGKTFTVSVSVPYQGGYKKKTKSGFKTKTEANQWAIKTEGSKIDGDIDFKPSQL` |
+| 903 | orf_0903 | cysteinyl-tRNA synthetase | 10 | 57560 | 58966 | + | 469 | high | `MINAYREFWTKMFSWHATATRTQYWVPLIVNYFLGGILVSILENMQGHSIEDIYTVGDLS` |
+| 904 | orf_0904 | PTS system IIA component, Glc family / PTS system IIC component, Glc family / PTS system IIB component, Glc family | 11 | 1 | 1002 | + | 334 | high | `MTSRKIPSIMGTQHPDNANAPFWESSQQPFISAYRETGEAFENFNELNVDEYMWDWEGKH` |
+| 905 | orf_0905 | alpha, alpha-phosphotrehalase | 11 | 1016 | 2665 | + | 550 | high | `MPDFHIINIVQDKHQDIQSADFVSHVKNSLKFSSWYEATFDAEITFIAKKLAKNLPDESS` |
+| 906 | orf_0906 | transcriptional regulator, GntR family | 11 | 2709 | 3431 | - | 241 | high | `MVKKGSTIQFLLKGMAVGESIAYLPVREQEKLLRGESDHELRWGSQTSLALTTTASLSRG` |
+| 907 | orf_0907 | HD superfamily phosphohydrolase | 11 | 3441 | 4787 | - | 449 | high | `MAKYFTSESVSAGHPDKIADQIADAILDAVLEQDPKARSAVEVTTSTGDVSIFGELSTNA` |
+| 908 | orf_0908 | hypothetical protein | 11 | 4849 | 5295 | + | 149 | high | `MEQDYFQQSNMAYRLPDGRSMPRRLSNDAQDKRSFENFYPIHFRDRRFWIPLSVIVISLN` |
+| 909 | orf_0909 | DNA-directed RNA polymerase, delta subunit | 11 | 5323 | 5910 | + | 196 | high | `MNKIVVLTGPTASGKSSLSIQMAQRLNGEIVSADSMQIYRNLDVGTAKVTKEEQNIVPHH` |
+| 910 | orf_0910 | amino acid/polyamine/organocation transporter, APC superfamily | 11 | 6665 | 8074 | + | 470 | high | `MTEIIAHRGYRIVAPENTLPAFEAALAYDIDMLETDVHRTKDGYLVVIHDETVDRTTNGT` |
+| 911 | orf_0911 | hypothetical protein | 11 | 8156 | 8698 | + | 181 | high | `MKSFKLGVIIGTFGTAAAVAGSALVYRHKVIKPIEKAEEEYNEVSKAAIRRSVAAHQSRY` |
+| 912 | orf_0912 | Biotin operon repressor | 11 | 9010 | 9987 | + | 326 | high | `MTDFNDIFNQAANATNDDVVSEGGFNPLEEGIYNLTITDVRFDPFKNGQSFAVDYATQNG` |
+| 913 | orf_0913 | CTP synthase | 11 | 10204 | 11817 | + | 538 | high | `MNNILLLVATIVFAWILFSFAGWLWVFISAKMHGTLLKPIEFTEKLEADNGQIIDVREST` |
+| 914 | orf_0914 | Excinuclease ABC subunit C | 11 | 11935 | 13734 | + | 600 | high | `MEKERINENTIRVMIDNSDLKDRGITVMELLGNHEKIESFFYNILSEVDTEHDFEDDDQV` |
+| 915 | orf_0915 | Predicted GTPase | 11 | 13900 | 15219 | + | 440 | high | `MVTLFLSPSCTSCRKAKQWLEEHNISYLERNLSKEPLRAEEVSKMLRLTEDGTDEIISRR` |
+| 916 | orf_0916 | Acetolactate synthase | 11 | 15402 | 17087 | + | 562 | high | `MITINKPSKDIQLKSPLPNNIMVSGEAMAGKTTFVGDFPTPFFLSFDGNAIKEGRDGVDL` |
+| 917 | orf_0917 | UDP-N-acetylmuramyl tripeptide synthase | 11 | 17155 | 17544 | - | 130 | low | `MEQDLKKVIQKAIDLNVQRMSPTRARKFSENPARALYDLTGDYPWWTGDNKALDYGTIVH` |
+| 918 | orf_0918 | PepS aminopeptidase, Metallo peptidase, MEROPS family M29 | 11 | 17602 | 18831 | - | 410 | high | `MSQPSFKLYDAQREQVEKSKSTYYYIMKMGTGKTVVGLSHAKKWFPDKDVIVAAPRQVVN` |
+| 919 | orf_0919 | Lyzozyme M1 (1,4-beta-N-acetylmuramidase) | 11 | 18976 | 19713 | + | 246 | high | `MKEEAKLQTKIIKFLRHEGRFVIKTQGGTPGTDTGTPDVITIYPDGRFIGLEIKRPDGKG` |
+| 920 | orf_0920 | Predicted dehydrogenase | 11 | 19710 | 20027 | + | 106 | high | `MEKEPELVIQAKDSKREYALKPIFIAGEHHAKVKELSQQTGLTMGELTETLLDFALEHLK` |
+| 921 | orf_0921 | Predicted dehydrogenase | 11 | 20061 | 20714 | + | 218 | high | `MYVNYDLMIEHAKGELDISIKELRFYRMYTSKLETGFTRKENIRNLQNRKRMLEQRVRML` |
+| 922 | orf_0922 | Superfamily II DNA and RNA helicase | 11 | 20716 | 22011 | + | 432 | high | `YFNEYTDFIFEVLGKVEAKVDVDKLEGQEKRVYGFLSERLMDTWVNTKKLTVAECPVIEL` |
+| 923 | orf_0923 | DNA-(apurinic or apyrimidinic site) lyase | 11 | 22202 | 23035 | + | 278 | high | `MEKIKLLLTQYQEAILYIVFGGLTMLVNIIAFWLAFQAWHMNSSVSYLFAWFWSIFFAYL` |
+| 924 | orf_0924 | Predicted integral membrane protein | 11 | 23037 | 23771 | + | 245 | high | `MADRVDSILRDYFSGRLELRIKQRIETIRYDSQEVDENIGGGRAQNKHTRPVDDMVIRID` |
+| 925 | orf_0925 | dephospho-CoA kinase | 11 | 23772 | 24392 | + | 207 | high | `MDNDTMNSIIAFFDKEDKLYSEKSNPDWSPEKNEGFREGIAYTVEMLSIIKSTTCD*` |
+| 926 | orf_0926 | replicative DNA helicase loader DnaB | 11 | 24379 | 25668 | + | 430 | high | `MKFKQNHFRKIPEKLLFELSQIKSDTVLVSTNISVSIKDVADGKYKNWNINSISDLADDS` |
+| 927 | orf_0927 | replicative DNA helicase loader DnaI | 11 | 25676 | 26623 | + | 316 | high | `MKIDKDYGLVASDDELNIYRRLDKQQKYNKKHKKASKRKSNTDKRKDAFYDDRK*` |
+| 928 | orf_0928 | Predicted multitransmembrane protein | 11 | 26620 | 27705 | + | 362 | high | `MANIKWTDEHKNRVAELGKQGLSSSKIAQQLFDEFGVNLSRRTVSRYLSTGHTSSRYDKL` |
+| 929 | orf_0929 | Predicted multitransmembrane protein | 11 | 27705 | 28481 | + | 259 | high | `MNNDYLALILMLLAILLFLASFLMMNCASKIVKDIDERNKLIDNLLDKRSKLLDEKEKIL` |
+| 930 | orf_0930 | hypothetical protein | 11 | 28522 | 28824 | + | 101 | high | `MSDIPWGLVLSIIGIALSCLKIGYDIGKDSKQ*` |
+| 931 | orf_0931 | ATP-dependent DNA helicase RecG | 11 | 29361 | 31391 | + | 677 | high | `MKKSIITLDTTKAQQAFDLLGETVKQIKNDEHVTKQPHIRIEFDDIRDVPKVWVDGELIG` |
+| 932 | orf_0932 | phosphate:acyl-[acyl carrier protein] acyltransferase | 11 | 31471 | 32517 | + | 349 | high | `MVELPKHYCVKHAVQEREYVPRDKQAVHRYNIVTRNRDDNKRGQYNFYRTKQWVNLRQRV` |
+| 933 | orf_0933 | Acyl carrier protein | 11 | 32567 | 32815 | + | 83 | high | `MSKLNSHKPTINFAVCIDEYGNKKFKIASVTYPNQESKG*` |
+| 934 | orf_0934 | Zinc-dependent metalloprotease | 11 | 33001 | 33453 | + | 151 | high | `MKAQVVYATLTGNNEDVADIIIEALENADVTVKKSEISQTEVDELEDVDIAVVVPYTYDQ` |
+| 935 | orf_0935 | Predicted hydrolase of the HAD superfamily | 11 | 33498 | 34331 | + | 278 | high | `MVKKVDKDVNGGRLTITPPAYLGQQAKAIWRKVVPFLETQSSVNRIDSGLVEMYCTQYEI` |
+| 936 | orf_0936 | hypothetical protein | 11 | 34332 | 34538 | + | 69 | high | `MKKIDLTISHDVIGIYHSLDFSDIRLRYHDEGTQYAFDVLDEKIEQGYFIKLASFRHLRD` |
+| 937 | orf_0937 | Predicted metal-dependent membrane protease | 11 | 34531 | 35265 | + | 245 | high | `MIFKKLLPFIWRIFDLMCYLAALITINWAMFRLNQIAGGVTLAVSFAVTGLVSELIANNT` |
+| 938 | orf_0938 | Xaa-Pro aminopeptidase, Metallo peptidase, MEROPS family M24B | 11 | 35306 | 36403 | - | 366 | high | `MPLFSPRFTNSLDVGGGNEINFDDPEIVNFLNPVGKNDYVSADVALRNSDIYSTVFQLSA` |
+| 939 | orf_0939 | transcriptional regulator, LacI family | 11 | 36605 | 37612 | + | 336 | high | `MTKTIDIKGTVVDDETAAFYSFFGIPSASPSAVAQILNDGDDDDDVEVNVASNGGDVFSA` |
+| 940 | orf_0940 | peptidoglycan-N-acetylmuramate O-acetyltransferase | 11 | 37721 | 39586 | + | 622 | high | `MAVNINDLNEKWVNLGQKVSDLQNKAQLMVDDDDTSAEDVADIQTKITNAIAKRDLAHEN` |
+| 941 | orf_0941 | permease of the major facilitator superfamily | 11 | 39700 | 41046 | + | 449 | high | `MTVTLDSLKISLRVDSAVDDDLLRGYISAATNYIKNAIGTDDEKFYADDNISSLVDVATI` |
+| 942 | orf_0942 | sodium/proton antiporter NapA, CPA2 family | 11 | 41330 | 42175 | + | 282 | high | `MLIIWQIRGYLMAINPLEFNERAEFGVEGTTGYNPKNGNAIKGFVASFSRWFGYRTQNLT` |
+| 943 | orf_0943 | permease of the drug/metabolite transporter (DMT) superfamily | 11 | 42284 | 43222 | + | 313 | high | `MASLSEQLDEMLQEIGGVVNLTIEEREEITQAGADVLAENLKQATKDAGHYNANREIGKM` |
+| 944 | orf_0944 | Alpha-acetolactate decarboxylase | 11 | 43302 | 44021 | + | 240 | high | `MTVVMDTFNLIKEHVTWADGIYPKLIPQEVPASQTSLLIRDAYSSLGSYGSNTFNSVAQN` |
+| 945 | orf_0945 | Transcriptional regulator | 11 | 44092 | 44946 | - | 285 | high | `MIHQLLAEFMGTALMIIFGVGVHADEVLNRTKYHGSGHLFSITTWGFGIAVVLFIFGEVY` |
+| 946 | orf_0946 | 6-phosphogluconate dehydrogenase (decarboxylating) | 11 | 45076 | 45984 | + | 303 | high | `MATLGIAGAKLALVDKKGGVLTGANGIYKYTDKATSDKTGIFDVTVDNSFGVASVALTNL` |
+| 947 | orf_0947 | gluconate kinase, FGGY family | 11 | 46092 | 46769 | + | 226 | high | `MSVKINVAKELGIKKSFEVKESNKNIRKTWQLQKLMTKLSIDQELADSDNLEKAEEMIDM` |
+| 948 | orf_0948 | hypothetical protein | 12 | 1 | 288 | - | 96 | high | `MPSEFEEEDFYRLNEVLSAQSQEDRPMTGSQFMASLGIDPETAEQSI*` |
+| 949 | orf_0949 | hypothetical protein | 12 | 708 | 1196 | + | 163 | high | `MAKQIVNEMATNLTLDSNSASQALKELTREVKNSSAEAKILESQYKASGDAVSASKAKYE` |
+| 950 | orf_0950 | Uncharacterized conserved membrane protein | 12 | 1263 | 2303 | + | 347 | high | `MSMFVLNNARGESVDLNNDSLLSYTPTGLGTTFTNIYSQYESYFKMTKANI` |
+| 951 | orf_0951 | ABC-type antimicrobial peptide transport system, ATPase component | 12 | 2296 | 2985 | + | 230 | high | `MHTNDEMQALLVDTVRRKVGYPLRKKVTLGILGGVAISLGFLAAIRAMAPLTALQSPVVS` |
+| 952 | orf_0952 | ABC-type antimicrobial peptide transport system, permease component | 12 | 2972 | 4153 | + | 394 | high | `MLERYSREQLRDIWSLKNQYQTWLDVEIAVDAGWVAEGHIPAEDLAKIRANAKFDVDRIA` |
+| 953 | orf_0953 | glutamate-cysteine ligase | 12 | 4189 | 5643 | - | 485 | high | `MKPLITHPAIKGVLATETDIQAQVQRVANELTTKFEGNKERPIFIAVLKGGVIFATDLLR` |
+| 954 | orf_0954 | Esterase/lipase | 12 | 5754 | 6665 | + | 304 | high | `MTESAQSHRKDEHLSLGVKLWRQNTMPVIGATYDDVRWLPNTFPETSVSEVDVSTKLFEH` |
+| 955 | orf_0955 | Putative stress-responsive transcriptional regulator | 12 | 6748 | 7011 | - | 88 | high | `MTKILIPGKLFLAGEYAITNPGNTALVVAITTGLAIEITTAREVSTITSNIITDDLTFNI` |
+| 956 | orf_0956 | hypothetical protein | 12 | 7067 | 8401 | - | 445 | high | `MKATAHTNIALIKYWGKKNTELNLPTTSSLSLTLDKFYTTTSVEPANHDRFILNDQVVNA` |
+| 957 | orf_0957 | transcriptional regulator, PadR family | 12 | 8388 | 8738 | - | 117 | high | `MLSQMNGVGQSHAKAILIGEHAVVYGEPAIAIPLPNMTVTATLRPAFRGQTIDGAEFHGD` |
+| 958 | orf_0958 | tyrosyl-tRNA synthetase | 12 | 9132 | 10379 | + | 416 | high | `MTNQFNTKNYDYLIVGAGPFGMIFAHEAAKRGKRSLVVEKRPYIGGNTHTHTEHGITVHD` |
+| 959 | orf_0959 | Lactate dehydrogenase | 12 | 10410 | 11399 | + | 330 | high | `MNANDTFVVVDLETTGHSVKKGGRIIQIGMTFIKKRQIVDHFESFVNPGQLIDRQIQQLT` |
+| 960 | orf_0960 | Na+-transporting methylmalonyl-CoA/oxaloacetate decarboxylase, beta subunit | 12 | 11493 | 12455 | - | 321 | high | `MIQFKDDIRIRQRHRQARIHWAHFWFIVIGILIILAAFILGYFYVSLAPMRQAENRVEKL` |
+| 961 | orf_0961 | Predicted metal-sulfur cluster biosynthetic enzyme | 12 | 12497 | 12817 | - | 107 | high | `MKTFSNRVNAITASPTLAMNGLAKQMQEEGIDVINLGVGEPDFQTPKNISDAAIEAIQAQ` |
+| 962 | orf_0962 | dihydroxyacid dehydratase | 12 | 12853 | 14595 | - | 581 | high | `MTEEIPKIKIIDAKNFVGKTVTIGAWLRQKRGSGKIAFLQLRDGTAFFQGVVAKADVSEE` |
+| 963 | orf_0963 | Transcriptional regulator, xre family | 12 | 15044 | 15886 | + | 281 | high | `MTLEKRLQQYIQAGNTGVSNDLLLHYQDVGLDNDDLALYMQVERIQGRGDQATPAAIAQV` |
+| 964 | orf_0964 | Iron-regulated ABC transporter ATPase subunit SufC | 12 | 15888 | 16688 | + | 267 | high | `MRLTDLEDLTQYMSLDTKLLVQTEDFVNPVTAIKYANNHSDIILLANNQTNAMTLSQLFA` |
+| 965 | orf_0965 | Fe-S cluster assembly ABC-type transport system, permease component | 12 | 16690 | 17874 | + | 395 | high | `MEKTYHLMATAAAGLESLVGKELERLGYEHQVENYRVRFDGTQKDILNTNIWLRTADRIK` |
+| 966 | orf_0966 | cysteine desulfurase / L-selenocysteine selenide-lyase (L-alanine-forming) | 12 | 17861 | 19087 | + | 409 | high | `MIKSKLEQVGIFNDNLDKVKPSPIHSFDEKVSDIPNILKLTIGEPDFSVPQHIKEAALAA` |
+| 967 | orf_0967 | Fe-S cluster formation protein, NifU-like protein | 12 | 19074 | 19508 | + | 145 | high | `MTSVYMRRAHEEDIKSIVSIINNARYHLKEQGLSQWQSGYPNQDTIEEDLVLQRGFVLVV` |
+| 968 | orf_0968 | Iron-regulated ABC transporter membrane component SufB | 12 | 19522 | 20952 | + | 477 | high | `MITLYVDAARDVSTGRSSAGAVLIIDKVQKQLKTALRETVNNHEAEFLAVLWALKYLPSN` |
+| 969 | orf_0969 | Predicted metal-sulfur cluster biosynthetic enzyme | 12 | 20956 | 21261 | + | 102 | high | `MESTVQRHLKKNILSLVVPVHNEEATINIFYNTIEKLKPNLTADVHYHFIDDGSTDSTLS` |
+| 970 | orf_0970 | 2-isopropylmalate synthase | 12 | 21564 | 22589 | + | 342 | high | `MIPRRGFFQPLDSTGTISWLWWGIFFMGSIVVWDEMSFKLEILPILFIMVMILLGVLLVV` |
+| 971 | orf_0971 | 2-isopropylmalate synthase | 12 | 22573 | 22737 | + | 55 | high | `MANKILIHITDQAGRVDAVLSKENLSYSRTTLSNWLVDGTILVNNHKVKRSYKVVSGDTI` |
+| 972 | orf_0972 | 3-isopropylmalate dehydrogenase | 12 | 22739 | 23812 | + | 358 | high | `MPNKEVLDNASLQRALTRITYEIIERNKGGKNLVLVGIKTRGEYLARRIADRLEQLEGVQ` |
+| 973 | orf_0973 | 3-isopropylmalate dehydratase, large subunit | 12 | 23809 | 25185 | + | 459 | high | `MIRHLILEDGTVFEGLGFGAPATTFGEIIFHTAMTGYQEIITDPIYDGQMIVFSMPVIGT` |
+| 974 | orf_0974 | 3-isopropylmalate dehydratase, small subunit | 12 | 25195 | 25779 | + | 195 | high | `MSNITAKNILFIGAGSNDFGLESEHDAAIYQVMPELKGHGINVFLIDENPYALSLESLAA` |
+| 975 | orf_0975 | permease of the major facilitator superfamily | 12 | 25790 | 27076 | + | 429 | high | `MSKDKYETHMFTGIVVEQDLSGNYIPKDGATLHRWRTGKHTKGKYKHTGQVFLTENNQSV` |
+| 976 | orf_0976 | Putative translation factor (SUA5) | 12 | 27094 | 27882 | + | 263 | high | `MSKNQEKSLWKRNVLVLWFGVFMTGIALSEVMPFLSLYIDTLGHFSKNQLTFYSGAIFSV` |
+| 977 | orf_0977 | transcriptional regulator, PadR family | 12 | 28086 | 28394 | + | 103 | high | `MAKTKHYTGPEVLEMVGQYMSESDTKNVKKAYEWASELHKEQKRKSGEPYIIHPIQVAGI` |
+| 978 | orf_0978 | Predicted membrane protein | 12 | 28399 | 29004 | + | 202 | high | `MKVVLQRVSKASVKIDDQVKGAINKGYVLLVGVAAGDEQADIDYLVRKIHNLRIFEDESG` |
+| 979 | orf_0979 | hypothetical protein | 12 | 29006 | 29983 | + | 326 | high | `MFTTILMFILSYLIGSLVPGFWVGKIFYHKDIRDEGSGNIGTTNSFRVLGIRAGITVLAL` |
+| 980 | orf_0980 | High-affinity nickel permease | 12 | 30477 | 31502 | + | 342 | high | `MDKLAILIPAYNESQTIVKVVNDVLKVTENIPGSVVYVYDNNSKDNTAELAASAGAVVRH` |
+| 981 | orf_0981 | Acetyltransferase (GNAT) family | 12 | 31660 | 32175 | + | 172 | high | `MPEKNHYDSDSIKILEGLEAVRKRPGMYIGSTDGRGLHHLVYEIVDNAVDEALGGYGNEI` |
+| 982 | orf_0982 | Acyl-CoA synthetase (AMP-forming)/AMP-acid ligase II | 12 | 32251 | 33690 | + | 480 | high | `MADRITELSLEAVMGERFGRYSKYIIQERALPDIRDGLKPVQRRILFAMDQDGNTYDHPY` |
+| 983 | orf_0983 | demethylmenaquinone methyltransferase | 12 | 33687 | 34397 | + | 237 | high | `MAKTLVFGHKNPDTDTIASAIAASYLLNQQGQDTEAVAQGEPNAETQFALDYFKVKPLRV` |
+| 984 | orf_0984 | ABC-type metal ion transport system, periplasmic component/surface adhesin | 12 | 34502 | 35383 | - | 294 | high | `MRIHVVLGNDETGERIYLTSKNRRNTPDRLELKKYSPKLRKVVTFKEIK*` |
+| 985 | orf_0985 | Transcriptional regulator | 12 | 35380 | 35820 | - | 147 | high | `MAKKSKIAKAQKREALVAKYADKRAALKAAGDYIGLAALPKDSSPVRVHNRDWIDGRPHA` |
+| 986 | orf_0986 | D-alanyl-D-alanine carboxypeptidase | 12 | 35898 | 36815 | + | 306 | high | `MANKTEQTVIDLISPIIEAHNDLLWDLTFTKEGGQKVLRILLDKPDHQFITMNDLTLFTQ` |
+| 987 | orf_0987 | glucose-6-phosphate 1-dehydrogenase | 12 | 36862 | 38322 | - | 487 | high | `MSKELVEALNALESERGIDRLVVVEALEDALKAAYKKQYNTADNVEATFDDKKGNISIKQ` |
+| 988 | orf_0988 | hypothetical protein | 12 | 38522 | 38662 | + | 47 | high | `MKPRKIPMRKDIVTGEMFPKKELVRVVRSKEGDVTLDPTGKANGRGAYVSLNVKNAEMAK` |
+| 989 | orf_0989 | permease of the major facilitator superfamily | 12 | 38738 | 39970 | + | 411 | high | `MINKNDQILNLVGLAMRAGKLVLGTEPTLSAIRGQKVFLVFFPSDGGKSQAKKFADKSNF` |
+| 990 | orf_0990 | Phosphoribosylanthranilate isomerase | 12 | 39972 | 40484 | - | 171 | high | `MTEEKKFSGSNRPARKQAVPERKELPASQRRHAAKLADGTTPAQGGSRPSRPARPNNNNQ` |
+| 991 | orf_0991 | Aryl-alcohol dehydrogenase family enzyme | 12 | 41026 | 42003 | + | 326 | high | `MPMKKLKSIQMNKKVINYVFCFISYLALGIAYPSTSFETLSSRIHARFSVSAYESLLAMI` |
+| 992 | orf_0992 | Transcriptional regulator | 12 | 42014 | 42484 | - | 157 | high | `MANPQRAGRLAQEVQRDVTDLLLKRINDPRVKEVTVTSVELSGDLQIATIYYSILSDLAS` |
+| 993 | orf_0993 | Aryl-alcohol dehydrogenase family enzyme | 12 | 42577 | 43551 | + | 325 | high | `MTNPTQPFNSIVLDMAPDKLLDFQLKVRDIPDILRLTFGEPGFAVDERIKQATIDAITND` |
+| 994 | orf_0994 | Predicted transcriptional regulator | 12 | 43712 | 43918 | - | 69 | medium | `MNFWKRLFGSEKKLSQLKSTGQINATRLARNNDTPVLVAPVTGDLQKITDSRDEPFKTKN` |
+| 995 | orf_0995 | phosphate ABC transporter membrane protein 1, PhoT family | 13 | 3 | 137 | - | 45 | high | `MTKNQIVDGLLVINKPRGMTSFDVVSRVRRIIGQKKVGHAGTLDPNVDGVLVVALGKATK` |
+| 996 | orf_0996 | phosphate ABC transporter substrate-binding protein, PhoT family | 13 | 190 | 1071 | - | 294 | high | `MTMTELIRLHYPILDFKKPVQQVVAMGFFDGVHRGHQAVLARAKAEAEKQGVPLAVLTYD` |
+| 997 | orf_0997 | Signal transduction histidine kinase | 13 | 1213 | 2472 | - | 420 | high | `MALTERQKLILTAIIYEYTQREHAVGSKSLQEHLDIKISSATIRNEMAALESDDLIKKLH` |
+| 998 | orf_0998 | phosphate ABC transporter substrate-binding protein, PhoT family | 13 | 2637 | 3545 | - | 303 | high | `MTEKNEEVVEDKNISDQTDENLTEEIESEADDLQVEPDPKQAEIDKLTEQVNNLEEKLLR` |
+| 999 | orf_0999 | DNA-binding response regulator, OmpR family (Rec-wHTH domains) | 13 | 3785 | 4477 | - | 231 | high | `MSKIIGIDLGTTNSAVAVLEGGEPKIITNPDGGRTTPSVVSFKNGESQVGDVAKRQAITN` |
+| 1000 | orf_1000 | RecA protein | 13 | 4560 | 5717 | - | 386 | high | `MNNTEYYDRLGVSKDASQDEIKKAYRKLSKKYHPDLNHEPGAEEKYKEVQEAFETLGDEQ` |
+| 1001 | orf_1001 | CDP-diacylglycerol--glycerol-3-phosphate 3-phosphatidyltransferase | 13 | 5857 | 6438 | - | 194 | high | `MTIRFTMDKITRDGDPVLRKTAASVPFPLSEEHAQLAKDMMEYLVVSQDEKQNEKYGLRP` |
+| 1002 | orf_1002 | Xre-like DNA-binding protein | 13 | 6449 | 7324 | - | 292 | high | `MKKVYKELVAVVGIAVTTAILFNAIFFVPIRLPWDAYYHVSRIENLRQSGLAFLYPQNFT` |
+| 1003 | orf_1003 | Predicted Zn-dependent peptidase | 13 | 7339 | 8610 | - | 424 | high | `MNENYVLPIDGDWTTQDIIIVTNFINSVLGVYEKGSSREEVLKNYDAYRKIMPAKSEQKK` |
+| 1004 | orf_1004 | Predicted Zn-dependent peptidase | 13 | 8612 | 9877 | - | 422 | high | `MSTLSPFEIQEIDQTVLVWLDELQKSTIAAMNQHLDVATKHDARDLVTNVDKSNEQIINK` |
+| 1005 | orf_1005 | Phosphatidylserine/phosphatidylglycerophosphate/ cardiolipin synthase family enzyme | 13 | 9874 | 11328 | - | 485 | high | `MANREDIRNIAIIAHVDHGKTTLVNELLKQSDTLDSRKELGDRAMDTNDIEKERGITILS` |
+| 1006 | orf_1006 | amino acid ABC transporter substrate-binding protein, PAAT family | 13 | 11411 | 12265 | - | 285 | high | `MDWKNYSLQTQNADWAFLDEMLRRSKSKKFELSDFFENYQHKRYVLENWSRNHLHKQVFF` |
+| 1007 | orf_1007 | amino acid ABC transporter ATP-binding protein, PAAT family | 13 | 12265 | 12903 | - | 213 | high | `MINKVKYIIGKHLNISVCLLFALFSCLIILPYLHGPAYIHQEGWDGRFHMARVAESYLNL` |
+| 1008 | orf_1008 | amino acid ABC transporter membrane protein, PAAT family | 13 | 12908 | 13549 | - | 214 | high | `MSWIFLLFAGISEILWSTAMKLSDGFSKVGWAVITVVGLITSMLCLLQAVKHLSFSLAYP` |
+| 1009 | orf_1009 | rod shape-determining protein MreD | 13 | 14036 | 14563 | - | 176 | high | `MDYSFIYLAVFLLWWLGLWSINDIKKKRSHAPWYKIKGTYGLIFIALFLLIEASPNHSSS` |
+| 1010 | orf_1010 | rod shape-determining protein MreC | 13 | 14563 | 15420 | - | 286 | high | `MENKRLGIISGLSAYLLWGMLGVFWELLSVVPAMDTLAYRIVWSLVTISVVLTFQKSWKE` |
+| 1011 | orf_1011 | Actin-like ATPase for cell morphogenesis | 13 | 15582 | 16589 | - | 336 | high | `MMNVRTVKLADAPTLLNIYKPYVERTTSTFEYNVPTIQDFEDRIANTLEKYPYIVIEEDN` |
+| 1012 | orf_1012 | hypothetical protein | 13 | 16686 | 16859 | - | 58 | high | `MRKAFIALGVVIAALLIAFITFNQQPKYADVSMPKADYTHLQESRTNIKRLIDDLSKFNY` |
+| 1013 | orf_1013 | ATP-binding subunit of Clp protease and DnaK/DnaJ chaperones | 13 | 17045 | 19099 | + | 685 | high | `MKIKYKIFKFLRLNFLFLWLSIVSLYIIQIGVMLTDPTYGTGDWGRSAWTNGIQFVINQT` |
+| 1014 | orf_1014 | hypothetical protein | 13 | 19178 | 19870 | + | 231 | high | `MASIYKRGSKWTASVSIKVDGSFKKKTKSGFKTKREATNWAIEMENKKINDTLSKRDGII` |
+| 1015 | orf_1015 | hypothetical protein | 13 | 19898 | 21040 | - | 381 | high | `MFILAIIGFIAIFWCLLSGLVRIIPWLILAVIVTSIISLVLDHFIWVAIIVGAFIFFYIV` |
+| 1016 | orf_1016 | NAD-dependent DNA ligase | 13 | 21040 | 23082 | - | 681 | high | `MITENIIQAFAIAGGFGFINVLTLEQIGVQTFDDKSNRDRNIMLFSFSAFNYLLYTYSNS` |
+| 1017 | orf_1017 | hypothetical protein | 13 | 23091 | 23579 | - | 163 | high | `MSQNENQNTNQNPKENIETRSLNNQSPRSSHGGPTRPTKK*` |
+| 1018 | orf_1018 | ATP-dependent DNA helicase PcrA | 13 | 23576 | 25876 | - | 767 | high | `MNVMTDQKFIEYIRTNSKVFDIFMEKALPIQTEKFGPHLGKLNVYLTVESELKFRYIMFL` |
+| 1019 | orf_1019 | Acetyltransferase | 13 | 26012 | 26509 | + | 166 | high | `MYPSFYDTNEIALSEVTDIVYEKIAENNINVINISASETDSDIANINKRVIVFNPNFDTT` |
+| 1020 | orf_1020 | N-acetylmuramidase | 13 | 26533 | 27171 | - | 213 | high | `MTLYERTISISKKRGYSLKNLAIKAGLAENSIYDWKKSTPKADNLQKVADVLHVSTDYLL` |
+| 1021 | orf_1021 | Cytochrome bd biosynthesis ABC-type transporter, ATPase and permease component | 13 | 27171 | 28895 | - | 575 | high | `MSVQEAIQTLEEERFKFSLHLKKKRLKPRMLAPVIGKSESYVRQLLSGAATGDAAKEHLA` |
+| 1022 | orf_1022 | Cytochrome bd biosynthesis ABC-type transporter, ATPase and permease component | 13 | 28892 | 30619 | - | 576 | high | `MSFDVTKNYLQKEIQIELKGITSETFNKHYRSDKNFPKPIFDTPRKKVWDGRALVWYFDK` |
+| 1023 | orf_1023 | cytochrome bd quinol oxidase subunit 2 apoprotein | 13 | 30731 | 31744 | - | 338 | high | `MQSEVQVFDNLKVKQENGQVLFDAETAAIGLGISEVAKSGNTVVKWTRINKYLGIDTSVD` |
+| 1024 | orf_1024 | cytochrome bd quinol oxidase subunit 1 apoprotein | 13 | 31741 | 33219 | - | 493 | high | `MTKKYLNAFLTVIIALIGVVYLTKVTGDLHAFHGLGKLVSYFSWPLLLVGLARLASLEDR` |
+| 1025 | orf_1025 | hypothetical protein | 13 | 33424 | 33723 | - | 100 | high | `MEEKSYQFIYFYYKDGKRIPILTGASRDLNNVLFTPQKKSILKDFSIKNGLFVWVDGTEF` |
+| 1026 | orf_1026 | RNase H-like ribonuclease | 13 | 33800 | 34231 | - | 144 | high | `MELNHELVRDFLLLIEKSTNMRGPSEQEFVNVASSHKADKQLAGYTLDKLYEAGFIELKP` |
+| 1027 | orf_1027 | hypothetical protein | 13 | 34231 | 34482 | - | 84 | high | `MSKSADLEDIRQSLLDYAQAAISKGREAIEGELSVNYRPIDEAEKAMKLFERISE*` |
+| 1028 | orf_1028 | alanyl-tRNA synthetase | 13 | 34579 | 37260 | - | 894 | high | `MKFTEEQYQEIINATESIVNSGDMRLMGANAGISSVHGKLLSNKIARFLPFRSLENEIMA` |
+| 1029 | orf_1029 | aminotransferase | 13 | 37517 | 38851 | - | 445 | high | `MAYGIVAIIIVVVAIIYFFYSERKFDEKEALRDINELMDSGMTWNQAQRHIEHASDNTRA` |
+| 1030 | orf_1030 | amino acid/polyamine/organocation transporter, APC superfamily | 13 | 38926 | 40356 | - | 477 | high | `MVQDALAHFQPGVESSAWRKKQSRIEYLCKERDAALDEIQGCQDYVEELEQELTQLESGD` |
+| 1031 | orf_1031 | H+/gluconate symporter related permease | 13 | 40580 | 41950 | - | 457 | high | `MANEITIIDDFGQKFGLSIMTDDVQLKQLDNTTFEDLVYLIKYLKNGIKKTDAELKSRLD` |
+| 1032 | orf_1032 | gluconate kinase, FGGY family | 13 | 42052 | 42909 | - | 286 | high | `MSDYQNLYEALAETQNNIEQPKKDASNPMFKSSYVTLDAVINSIVKARKEAGAKFFFTNV` |
+| 1033 | orf_1033 | hypothetical protein | 14 | 3 | 470 | - | 156 | high | `MNQVNLTGRLTKDIELRYTQSGKAVGSGTVAVNRRFKQQDGPTADFINFIMWGKAAENFS` |
+| 1034 | orf_1034 | Adenylate kinase | 14 | 565 | 1068 | - | 168 | high | `MVEEQDIKYFTQIPAWVDELDNISDFQARLIGYIYTFENITGSAFPSNQRIAKRFGKSTK` |
+| 1035 | orf_1035 | transcriptional regulator, TetR family | 14 | 1247 | 1855 | - | 203 | high | `MSQNVSAVIVTFNRLTLLKEVIESLQTQDTKLSHIIVVDNNSKSDTQEYLTSLGNQIEYV` |
+| 1036 | orf_1036 | Acetyltransferase | 14 | 2198 | 2746 | - | 183 | high | `MNSLKEMLENDERFAKNKVSDEELQAWREKVEREDQERVRQALFNNRARIYKRDSVWGTS` |
+| 1037 | orf_1037 | hypothetical protein (no reference match) | 14 | 3047 | 3160 | + | 38 | none | `MSYQMICTENDRVIMRDPRVFTNFDDVEYALAKRMCVDSEPWNWGIEEI*` |
+| 1038 | orf_1038 | Subtilisin-like serine protease | 14 | 3150 | 4766 | + | 539 | high | `MSEVFGYKTKHVYFHGTKPDCMKYINGLKKIVRSPKTKKESEVFGFDEPLLVRKVVDE*` |
+| 1039 | orf_1039 | hypothetical protein | 14 | 4828 | 5766 | - | 313 | high | `MTELFGQVNKLDPNKGLVTLRMSDDDLRTLQKYHATNQQQVLSVVASDDSEPTPKQRRFA` |
+| 1040 | orf_1040 | transcriptional regulator, GntR family | 14 | 5964 | 7325 | + | 454 | high | `MATSKKLSPFEEARQAFLTPDGETRGVVDGRYALGVINKLERRIKSHNDLIIMQRASR*` |
+| 1041 | orf_1041 | Transcriptional regulator | 14 | 7470 | 8087 | - | 206 | high | `MFKFETELTVNPAPHNQSNFNKFGKVYKSKQEKAYIADLAIRLKSKLNRSKFKRFGPQPI` |
+| 1042 | orf_1042 | Predicted membrane protein | 14 | 8210 | 10957 | + | 916 | high | `MTNYATEFCSLERSKGFEEACVWMQKQLKAETAGGEESDHFWSESQTKALITMLSDGCGI` |
+| 1043 | orf_1043 | proline dipeptidase | 14 | 10977 | 12101 | + | 375 | high | `MTIEEYNKSVQDRHNKQAVSDGRFSDSFERRSAVQRHKMAQRKQRVRLLLQEGITSIDVL` |
+| 1044 | orf_1044 | Transcriptional regulator, xre family | 14 | 12252 | 13007 | + | 252 | high | `MRIYKITAVPSHFMDLFNSYYDYEYQNGEYVSDKHYEALKAEVEHFNSNVSKAVTIKLEK` |
+| 1045 | orf_1045 | hypothetical protein | 14 | 13131 | 13571 | + | 147 | high | `MNTRLCMKKYKQSWGFLWSSHDQIDYIQSNSRLYMHPRFTHPKFPHYKWAKERYFENRKG` |
+| 1046 | orf_1046 | hypothetical protein | 14 | 13738 | 14136 | + | 133 | low | `MSVILNNGLLKRESFVIGRFEVLEPTINILLVNLMPNRLQTEKQFTRLLSHLPINVRVTF` |
+| 1047 | orf_1047 | permease of the major facilitator superfamily | 14 | 14648 | 14908 | + | 87 | low | `MDLKEQIVEILNTVIGEDISDQMDDDFFENGLLDSMATVELLLDLESKFNIQAPVSEFNR` |
+| 1048 | orf_1048 | Cation transport ATPase | 14 | 14994 | 16001 | - | 336 | low | `MLNLQPYADPQYFIILLLALVPLAIGLYFGKRIAWYEVLVSLVFIFLMFDGEKYHEGIAL` |
+| 1049 | orf_1049 | TPR repeat protein | 14 | 15994 | 16485 | - | 164 | low | `MIDNVLKQVDLIATTQPKKVAYDELGKKHTYEQLKKASDSLAHALDELNLPEKAPVMAYG` |
+| 1050 | orf_1050 | Prebacteriocin | 14 | 16674 | 17060 | - | 129 | high | `MLKHFFQHPVINFVGRTVFYFLIILSLLYLYGYSGVGEGHFLYNEF*` |
+| 1051 | orf_1051 | Acetyltransferase, GNAT family | 14 | 17134 | 17754 | + | 207 | high | `MIKKCFSLIVKLDNIVLKNHVFQAIFSAMRQTLPVLAIDVYLRLFFVLFLAPNALFPVIF` |
+| 1052 | orf_1052 | Membrane-associated phospholipid phosphatase | 14 | 17829 | 18818 | - | 330 | high | `MRNKLIILSSFILLIVIGIFSHSWVVHTRTTQSKIQTSHMSPIILIPGSSASVNRFDSLL` |
+| 1053 | orf_1053 | Predicted Co/Zn/Cd cation transporter | 14 | 18944 | 19867 | - | 308 | high | `MGTDRLIGAVIAAQRGHEFAYNVLIKHLKAAIFDVHSRKISGRMKQDDWYSEGLEILMKC` |
+| 1054 | orf_1054 | transcriptional regulator, MarR family | 14 | 19864 | 20283 | - | 140 | high | `MKPIESTEFVYGHHASVESLKSTQEINKVWLQTGLQDKIRNEITQLAKKKKLVIQQAPKS` |
+| 1055 | orf_1055 | Superfamily I DNA and RNA helicase | 14 | 20517 | 22880 | + | 788 | high | `MHNLNYRQMNGLSLAYIGDAIYELEVRRHLLSLGLTKVNELQKRSKHYVSAKAHAALFEQ` |
+| 1056 | orf_1056 | pantothenate kinase | 14 | 22880 | 23569 | + | 230 | high | `MAIDVNKFESMQIALASPDKIRSWSYGEVKKPETINYRTLKPEKDGLFDERIFGPTKDYE` |
+| 1057 | orf_1057 | permease of the major facilitator superfamily | 14 | 23690 | 25201 | + | 504 | high | `MYEPTHNSNEAVEEHINKPGRHVMFLSADWCGDCKAIKPFIQTIKDEVTQTAEWFDADRD` |
+| 1058 | orf_1058 | hypothetical protein | 14 | 25198 | 25875 | + | 226 | high | `GELLQNQFRIGLTRMERVVRERMSIQDANTVTPQQLINIRPVVAAVKEFFGSSQLSQFMD` |
+| 1059 | orf_1059 | cold-shock DNA-binding protein family | 14 | 26054 | 26254 | + | 67 | high | `MKKHSLIIVAIVSALVASFVVYSGLQPDSWFQQRTNTTKTSNSAGTTTIAKTAYTSSDTA` |
+| 1060 | orf_1060 | phosphoglycerate mutase | 14 | 26362 | 27075 | + | 238 | high | `MPNAINKKQQVRGFIWLLASFFVIFSILASVIFVSYTRTVFNSADSAINQTLSMYDSNGL` |
+| 1061 | orf_1061 | Xanthine/uracil permease | 14 | 27202 | 28473 | + | 424 | high | `MSKAIKILLIEDDVNLADNVVGFLQDFADINAVTDGLDGEFEAQEAPYDLIISDLMLPGE` |
+| 1062 | orf_1062 | F0F1-type ATP synthase, subunit a | 14 | 28831 | 29556 | + | 242 | high | `MTEEHQAVMRGDVFYADLKQGIGSEQAGVRPVLIIQNDVGNANSPTTIVAAITSQISKPK` |
+| 1063 | orf_1063 | ATP synthase F0 subcomplex C subunit | 14 | 29729 | 29956 | + | 76 | high | `MTDNDILCLRPTWLDIDLKAIQTNAKLIMRHAGAQRLIAVVKANAYGHGAKQVVGALFEV` |
+| 1064 | orf_1064 | ATP synthase F0 subcomplex B subunit | 14 | 29983 | 30486 | + | 168 | high | `MIIGIGNDTEAISRVAEIGERQKSFITLILTPAERAAAAERKGKHQNEYIAGRFSAKEAF` |
+| 1065 | orf_1065 | ATP synthase F1 subcomplex delta subunit | 14 | 30498 | 31040 | + | 181 | high | `MLKKRGLWWIFGPVILAFVMVTALFLAPFSLNYLSNKDIQKASVSFSKNVFKGESVKMAA` |
+| 1066 | orf_1066 | ATP synthase F1 subcomplex alpha subunit | 14 | 31053 | 32570 | + | 506 | high | `MSISFVRIDDRIIHGQTVTRWAKEYPCDGLIAVNDAAATNPILKDAFKSASEKKTFVWTL` |
+| 1067 | orf_1067 | ATP synthase F1 subcomplex gamma subunit | 14 | 32585 | 33493 | + | 303 | high | `MVKKWLLSNLIGIIITVSILITVVGLIISLVSKEEIITHPNNVQFRNGPGRQYKSLASLK` |
+| 1068 | orf_1068 | ATP synthase F1 subcomplex beta subunit | 14 | 33656 | 35056 | + | 467 | high | `MSLFKKATSQIEENAANQATETVENRLDGMIVQPFAYKKLLIIYRIEQYPSTSNHIENKI` |
+| 1069 | orf_1069 | ATP synthase F1 subcomplex epsilon subunit | 14 | 35071 | 35517 | + | 149 | high | `MTELIQHEPTQDVIAQSVAAKVTNITKKQINATLTLLNEGSTVPFIARYRKEMTGELDEV` |
+| 1070 | orf_1070 | Aggregation promoting factrelated surface protein | 14 | 35887 | 36525 | + | 213 | high | `MISRIVVAIDGSEAAQRAVDFSVELAKKFDAKIDIVNVIQYPTITYYDSDQSFYDSLVQR` |
+| 1071 | orf_1071 | NADH:flavin oxidoreductase, Old Yellow Enzyme family | 14 | 36586 | 37830 | + | 415 | high | `MQKIKLPITDNIATEQVNEFRKFITSPAIIQLSIGVIVGGSLTDLIKSVISFASNLFYYL` |
+| 1072 | orf_1072 | pyrroline-5-carboxylate reductase | 14 | 38030 | 38797 | - | 256 | high | `MNKKSQVAHAVISKRYKMYKAGKVWLFAGLSALVIGGLGQITASADTTSTDAVYTTNTAS` |
+| 1073 | orf_1073 | permease of the major facilitator superfamily | 14 | 38854 | 40251 | - | 466 | high | `MLIKNIHQLVGQTPLIELQIPVPNQSRIFAKLEMFNPGGSIKDRLGQFLISDAWQRNLIN` |
+| 1074 | orf_1074 | hypothetical protein | 14 | 40336 | 40479 | - | 48 | high | `MKFDTQLIHGGISVDQSTGAVSVPIHMASTFKQTKIGEAKYEYSRSGNPTREAVESLIAD` |
+| 1075 | orf_1075 | A/G-specific DNA-adenine glycosylase | 14 | 40568 | 41305 | + | 246 | high | `MFFTAKSILKRDPAAKSLMMVILTYPGLHALWFHRVAHWLHIHHRYLLAAIIARWSAKRT` |
+| 1076 | orf_1076 | hypothetical protein | 15 | 88 | 1950 | + | 621 | low | `NRMPELAKRIKTETNVSVELGDLE*` |
+| 1077 | orf_1077 | RNA polymerase, sigma 70 subunit, RpoD | 15 | 1999 | 3297 | + | 433 | high | `MNYLILVSHGQFSEGLKDALGMFVGDGIKTVKAIGLQSGEDTDHFENRFKSLLSTLEQNS` |
+| 1078 | orf_1078 | Predicted membrane protein | 15 | 3371 | 3928 | + | 186 | high | `MADIRKIKTKKNIEMAFVTLLNERNFKSITVEEICKQAMTSRSTFYLHYLDKYGLLNQLV` |
+| 1079 | orf_1079 | Short-chain alcohol dehydrogenase | 15 | 3925 | 4662 | + | 246 | high | `MFYEYIKNNPQWNLQINRQLEGIKESSKVKDDLKIIIPKLTNDASWYKTWFSFGELREKE` |
+| 1080 | orf_1080 | transcriptional regulator, LysR family | 15 | 4943 | 5848 | - | 302 | high | `MGRYQIDFKQKQANAKYKSSQQTQATKAEKVAAIKSALLSQAKKQDK*` |
+| 1081 | orf_1081 | cystathionine gamma-synthase | 15 | 6171 | 7367 | + | 399 | high | `MILKQFLLGLHLTSGIGHAGEKRVIEVIANHLIPENYPWNIETLLAVVRPLPQHIAKIKA` |
+| 1082 | orf_1082 | amino acid ABC transporter substrate-binding protein, PAAT family | 15 | 7370 | 8206 | + | 279 | high | `MKQFRVDNLKSTYGEKVLFNDISFLITEGDRIGLIGVNGSGKTSLLNAISGKKPADAGTI` |
+| 1083 | orf_1083 | amino acid ABC transporter membrane protein, PAAT family | 15 | 8218 | 8877 | + | 220 | high | `MNLTANIAGFNFDHILLNAAGVVCQTSDELDSVLASDYTGAVVTKSATPSLRPGNVSPRY` |
+| 1084 | orf_1084 | amino acid ABC transporter ATP-binding protein, PAAT family | 15 | 8870 | 9592 | + | 241 | high | `MSKIMAVNAGSSSLKFQLLEMPEETVITQGVIERIGMDDAIITVKYGADVEPVRLVGTED` |
+| 1085 | orf_1085 | Lactate dehydrogenase related dehydrogenase | 15 | 9611 | 10549 | + | 313 | high | `MADYDISVAHLYGNLMNTYGDYGNIIALTYYAKQIGVAVDYHLVSLGDKFNATAYDFVLF` |
+| 1086 | orf_1086 | aminotransferase | 15 | 10580 | 11761 | + | 394 | high | `MTNPEKKYAFETLQLHAGQEEPDSATGARAVPIYQTTSFVFKDAKQAAGRFALTDAGNIY` |
+| 1087 | orf_1087 | permease of the major facilitator superfamily | 15 | 11836 | 12978 | + | 381 | high | `MQATTPNRFFETTRALSTLLGCGLVQTRMWYQ*` |
+| 1088 | orf_1088 | Parvulin-like peptidyl-prolyl isomerase | 15 | 13058 | 14011 | - | 318 | high | `MTTQTLKALGFQHVGSFLRPAELKQARQDFEAGKLTQEELEGVENSTIAHLVDQQVAAGI` |
+| 1089 | orf_1089 | hypothetical protein | 15 | 14067 | 14309 | - | 81 | high | `MSETVVESFTLDHTKVKAPYVRVIETQAGPNGGSITNYDLRLTQPNETSIETGGLHTLEH` |
+| 1090 | orf_1090 | Diadenosine tetraphosphate (Ap4A) hydrolase related HIT family hydrolase | 15 | 14344 | 14766 | - | 141 | high | `MTTTETKKLNYHFDQVGSYLRPENLKKAREQYAQGEIAHDDLLKVQHDEIKNLVDEQVKV` |
+| 1091 | orf_1091 | ABC-type multidrug transport system, ATPase component | 15 | 14929 | 15669 | + | 247 | high | `MSDWTNIIDAATTNDPLSGAINAPIQLSSTFSQKSFDEFGEYDYARSGNPTRDAGEKALA` |
+| 1092 | orf_1092 | Predicted ABC-type exoprotein transport system, permease component | 15 | 15659 | 16945 | + | 429 | high | `MSIKIDTLLAQGGNGSDDIKTGAVVSPLYFSTAYRHPNLGESSGFDYARLQTPTRQILEE` |
+| 1093 | orf_1093 | tRNA (guanine-N(7)-)-methyltransferase | 15 | 16958 | 17617 | + | 220 | high | `YFTVPNFGVARRLKVAGDDILGAFILRDEHVNSTYITGHFEYDTETLENEYLRDIAIDPN` |
+| 1094 | orf_1094 | hypothetical protein | 15 | 17943 | 18161 | - | 73 | high | `MSQDTKLILFFIWVVIAMLISTVGLVMIMRWYHREVTKVKKQQAEEHQKLNNQDKNI*` |
+| 1095 | orf_1095 | hypothetical protein | 15 | 18730 | 19089 | + | 120 | high | `MFENIKRTLIGKPLKTLDEGGQSLSKTKALALLSSDALSSVAYGTESITTALLAAGAVAL` |
+| 1096 | orf_1096 | hypothetical protein | 15 | 20290 | 20493 | + | 68 | high | `MDAPLSTTPAKEEAKTVSDMKEQPRKVSEVVFDVSQGISNAILAVLGMGLLMASIGNIFH` |
+| 1097 | orf_1097 | Uncharacterized protein encoded in hypervariable junctions of pilus gene clusters | 15 | 20598 | 20945 | + | 116 | high | `MNLLETIQKRIPYRYGVLLAIILLIFALKQFMSLLLLTIIFSYLAMSVAKPLAHFLKISR` |
+| 1098 | orf_1098 | Membrane protease subunit, stomatin/prohibitin family | 15 | 20957 | 21772 | + | 272 | high | `MTNTVKSSNLGYPRLGEHREWKKLLESYWQGKIDEAQFNETAKKLRLINLKKQIEFGLDI` |
+| 1099 | orf_1099 | hypothetical protein | 15 | 21769 | 22266 | + | 166 | high | `MTRITDIYKKKSAPVLSFEIFPPKTEDGLHALYKTLQEVNPKETGVDYISVTYGAGGGSN` |
+| 1100 | orf_1100 | Phosphopantothenoylcysteine decarboxylase / Phosphopantothenate-cysteine ligase | 15 | 22337 | 23542 | + | 402 | high | `MKKIGIPSNNLVHANAHFGTNYVDYIQKNYIDGISGANALPIVFPIGDIKLAKAYIDSVD` |
+| 1101 | orf_1101 | hypothetical protein | 15 | 23597 | 23866 | + | 90 | high | `MNKKIVIGAVAVIAVAGIYAATRPSKSAKGHTLRVAVQNNISTLDPNLADQVGANWAEVQ` |
+| 1102 | orf_1102 | arginyl-tRNA synthetase | 15 | 24146 | 25837 | + | 564 | high | `MTLIDFLSDTVTIKKLNEQATVGSAQLLLGVNGTARAASIAALYRKNPRPMLIISDTQVH` |
+| 1103 | orf_1103 | transcriptional regulator, ArgR family | 15 | 25950 | 26420 | + | 157 | high | `MLDNKYNTSDLKQILSRLRAMIDSTDGSVQTRRFDAFGIETLQVTYDQLTRIWTVQEHRE` |
+| 1104 | orf_1104 | Membrane carboxypeptidase (penicillin-binding protein) | 15 | 26424 | 28484 | + | 687 | high | `MFKRDRVSMIIVVVLTAIVVYFLTKELSGKGHQLSVALENLDWHWLLFGLFTMIISIFLE` |
+| 1105 | orf_1105 | hypothetical protein | 15 | 28573 | 28926 | + | 118 | high | `MKVLLYFENQNLIAKSGIGRALKLQKEALSYTDVEVTTDTKSLDYDVLHINTYGVNSHHM` |
+| 1106 | orf_1106 | type I signal peptidase, Serine peptidase, MEROPS family S26A | 15 | 28987 | 29610 | + | 208 | high | `MNIGLFTDTYFPQVSGVATSIKTLKEALESQGHEVYIFTSTDPKVPKNKFESHIYRFSSL` |
+| 1107 | orf_1107 | aspartate carbamoyltransferase | 15 | 29788 | 30681 | + | 298 | high | `VADNIKFGEPDATEEEMIDAAKQANINDFIMTLPEGYQTKVDDENSVFSTGQKQLLSIAR` |
+| 1108 | orf_1108 | dihydroorotase | 15 | 30686 | 31963 | + | 426 | high | `MKFIFGLGNIGAEYDQTRHNIGFMAVDAFATANHMSFSPSKQFALVAKTIIGGESVMLVK` |
+| 1109 | orf_1109 | carbamoyl-phosphate synthase small subunit | 15 | 31960 | 33045 | + | 362 | high | `MFQKSLVIPKSELTTVTENATIQEVYDIFNDPENAHTRTMPILDESGKLFRGNVYKQHVF` |
+| 1110 | orf_1110 | carbamoyl-phosphate synthase large subunit | 15 | 33038 | 36217 | + | 1060 | high | `MWPGVIEQTANGRENYDLPSRLLKDRIILVQGEIEDSMATSIVAQLLFLEAQDPTKEISM` |
+| 1111 | orf_1111 | orotidine-5'-phosphate decarboxylase | 15 | 36262 | 36957 | + | 232 | high | `MSYAADVKKELTGLIVHAGNAKAELAALMRMNGVSTLGFDQTIRVQTENAAIARRIYTLL` |
+| 1112 | orf_1112 | orotate phosphoribosyltransferase | 15 | 36958 | 37590 | + | 211 | high | `MNVSIWKVNYYMKPKIVIIGGGSGLPVIIKPLVKQEVDLSAIVTVADDGGSSGLLRNYIN` |
+| 1113 | orf_1113 | Transcriptional regulator, xre family | 15 | 37630 | 38268 | - | 213 | high | `MAKDHIEIRGARAHNLKNIDVNIPKNQLTVVTGLSGSGKSSLAFDTLYAEGQRRYVESLS` |
+| 1114 | orf_1114 | hypothetical protein | 15 | 38518 | 38754 | + | 79 | high | `MIERQIEHEFEIKSKYEPTSDQPQAIEKLVGGINNHVKEQILLGATGTGKTFTISNVIKE` |
+| 1115 | orf_1115 | 1-acyl-sn-glycerol-3-phosphate acyltransferase | 15 | 38765 | 39403 | - | 213 | high | `MISLLKRISNPRNLWHQVKRTMDTSAPIVWFFILNVVLVWLKTYAEYHMNFNLGVEGSTQ` |
+| 1116 | orf_1116 | Predicted O-methyltransferase | 15 | 39463 | 40227 | + | 255 | high | `APTLFTSKDGSLSYAAFDWLQDSVSQEEFPTLGTMLDAYYIGKAERERVNQQAGTLVRVV` |
+| 1117 | orf_1117 | transcription-repair coupling factor | 16 | 2 | 730 | + | 243 | high | `MSGVIVVGSQWGDEGKGKIVDFFAEHADAVVRYQGGNNAGHTIWHGDTKFELSALPSGIV` |
+| 1118 | orf_1118 | Ribosome-associated heat shock protein implicated in the recycling of the 50S subunit (S4 paralog) | 16 | 746 | 1027 | + | 94 | high | `MSGHSKWHNIQGRKNAQDAKRGKIFQKIAHDLYVAAKAGGADPDMNASLRLVVEKAKAAN` |
+| 1119 | orf_1119 | Septum formation initiator | 16 | 1109 | 1507 | + | 133 | high | `MTKELQESAITTLARRGVTTNDIAEGTRTFLSGKYKDTINEEVLAKSIAHVLYKDEVADI` |
+| 1120 | orf_1120 | tRNA(Ile)-lysidine synthetase, MesJ | 16 | 1523 | 2830 | + | 436 | high | `MTNIKTYNAISSKGLDYLKDHHYDINGNDAPKGILLRSQNLHDEPIDDNVRAIVRAGAGF` |
+| 1121 | orf_1121 | hypoxanthine phosphoribosyltransferase | 16 | 2831 | 3370 | + | 180 | high | `MTNYNFSAGPGVLPTPVLTKIKNEFIKNEFTHMSIIEISHRSTQFEEIINSAEERLRDLM` |
+| 1122 | orf_1122 | membrane protease FtsH catalytic subunit | 16 | 3398 | 5500 | + | 701 | high | `LVERRKGKTDAETAAKWLQNVNYFGTMLVYTGKADGMVSGAVHPTGDTVRPALQIIKTAP` |
+| 1123 | orf_1123 | Disulfide bond chaperones of the HSP33 family | 16 | 5609 | 6502 | + | 298 | high | `MTENLFKDEVVANQFNDYNDVLEQVLGYNFVLSILKSTQAKKILDYGCGPGKVSLRLANQ` |
+| 1124 | orf_1124 | Lysyl-tRNA synthetase (class II) | 16 | 6590 | 8077 | + | 496 | high | `MARELNLKVGKYYHSVGTMHVYEPDNQWVTHVLNESNDQTFISPKMPQGNNWAMVHELMH` |
+| 1125 | orf_1125 | ribosomal large subunit pseudouridine synthase E | 16 | 8547 | 9080 | + | 178 | high | `MTTYETFDDAYIAELNEIYHHAEFFNEPRGFSSREKLGVNFKIENPVQRIVYSQTRKTNI` |
+| 1126 | orf_1126 | hypothetical protein | 16 | 9151 | 9867 | + | 239 | high | `MNQRVFLAAPFKQLLNQNNRVNTETTQALQQVMQVLEDKGMFVDNAHKRENWGLEMMTPT` |
+| 1127 | orf_1127 | ferrochelatase | 16 | 9916 | 10863 | - | 316 | high | `MNIDSTDYLNNLDAYWRATNYLSVGQLYLLDNPLLKEKLTAEQVKIHPIGHWGTIPSQNF` |
+| 1128 | orf_1128 | Xanthine/uracil/vitamin C permease | 16 | 11676 | 13124 | + | 483 | high | `MHSHFQGKSFLKEIDFTKKELETFIDLAAHFKYLKQNNIPHKYLEGKNIALLFEKTSTRT` |
+| 1129 | orf_1129 | ABC-type multidrug transport system, ATPase component | 16 | 13244 | 14044 | + | 267 | high | `MSDKLWGGRFTAKAAEWVDEFGTSIHFDQKMAAEDIEGSIAHAKMLGKQGIISPEESEKI` |
+| 1130 | orf_1130 | hypothetical protein | 16 | 14041 | 14769 | + | 243 | high | `MTDTLVLAYSGGLDTSVAIPWLKDKGYDVIAVVLDVGQHGKNLNEIQAKALKVGAKQSIV` |
+| 1131 | orf_1131 | Response regulator of the LytR/AlgR family | 16 | 14747 | 15214 | + | 156 | high | `MKKIIFEQTGNIITTPLIAFAMIQSILLSPQSINKYKHHKYKHFYYCNVNKYADSCVFNI` |
+| 1132 | orf_1132 | hypothetical protein | 16 | 15201 | 15611 | + | 137 | high | `MVKAIKIDNLKYSYDERSLFSDFNLDIDAGQWVALVGHNGSGKSTLAKLILGLLVAEQGD` |
+| 1133 | orf_1133 | DNA topoisomerase I, TopA | 16 | 15745 | 17835 | + | 697 | high | `MNEKNIVIVGAGFGGVFAAKTLSKKLRSHKEYNIILVDKHSYFTYMTELHEVASQRVKPK` |
+| 1134 | orf_1134 | permease of the major facilitator superfamily | 16 | 17868 | 18248 | - | 127 | high | `MAMPSLPKIWDTFPELNPPLQNVLIEMSESWRIGFSEIDNAIRSQASAGKLVRPALTLLF` |
+| 1135 | orf_1135 | permease of the major facilitator superfamily | 16 | 18410 | 19693 | - | 428 | high | `MAYRKLGRTSSQRKAMLRDLTTDLLINGRITTTEARAKEVRKTTDKMITLGKRGDLNARR` |
+| 1136 | orf_1136 | transcriptional regulator, TetR family | 16 | 19916 | 20464 | + | 183 | high | `MIEFEKPNIHNIEEDARYGKFVVEPLERGYGTTLGNSLRRILLSSLPGAAVNTVQIDGVV` |
+| 1137 | orf_1137 | alanine racemase | 16 | 20576 | 21697 | + | 374 | high | `MAGRTTRKRRVKKNIESGVAHIHSTFNNTIVMITDAQGNAVAWSSAGALGFKGSRKSTPF` |
+| 1138 | orf_1138 | Phosphatidylglycerophosphatase A related protein | 16 | 21913 | 22437 | + | 175 | high | `MARIAGIDLPRDKRIVIGLTYIYGIGNTTAQKVLAEAGVSEDVRVRDLTSDQEDAIRATV` |
+| 1139 | orf_1139 | N-acetylglucosamine 6-phosphate deacetylase | 16 | 22548 | 23714 | + | 389 | high | `MKVRPSVKKMCDACRVIKRNGRTMIICSANPKHKQRAGK*` |
+| 1140 | orf_1140 | transcriptional regulator, GntR family | 16 | 23692 | 24417 | + | 242 | high | `MANDVIEIEGKVKETLPNAMFQVELENGAVILAHVSGKIRKNFIRILPGDRVTVEMSPYD` |
+| 1141 | orf_1141 | ABC-type metal ion transport system, permease component | 16 | 24451 | 25146 | - | 232 | high | `MAKNLILLGLPGAGKGTQADFIVKDYSIVHISTGDIFRANLAENTELGQKARQFMDAGDL` |
+| 1142 | orf_1142 | ABC-type metal ion transport system, ATPase component | 16 | 25149 | 26228 | - | 360 | high | `MKNLIDKVTFRHGATIDTRTAQSPMLTNSGLNEKVTQDTINYYNARSQSAGMVIVEYTSV` |
+| 1143 | orf_1143 | Acetylornithine deacetylase/Succinyl-diaminopimelate desuccinylase | 16 | 26225 | 27562 | - | 446 | high | `MLSTLFNAVREKDIRKKLGWTFFILFIYRVGTHITVPGVNPSAMSEMASSGLMNILNIFS` |
+| 1144 | orf_1144 | ABC-type metal ion transport system, periplasmic component/surface antigen | 16 | 27608 | 28450 | - | 281 | high | `MNLNELQPAAGSRHVRNRVGRGTSSGNGKTSGRGQKGQKARGKVRLGFEGGQMPLYRRIP` |
+| 1145 | orf_1145 | ABC-type metal ion transport system, periplasmic component/surface antigen | 16 | 28478 | 29323 | - | 282 | high | `MADLKITLIKSAVHRLPKQRAIVKSLGLGRVSSSVVKPNNEATRGAIFHIAHLVNVEEVK` |
+| 1146 | orf_1146 | Predicted membrane protein | 16 | 29771 | 30430 | - | 220 | high | `IRKAIEDAKRKLITVPTVSTTIPHDVLGEWGGGKILVKPAEEGSGVAAGGAARSVMELAG` |
+| 1147 | orf_1147 | Predicted membrane protein | 16 | 30527 | 32368 | + | 614 | high | `MNFDQLLYAEVLAQHNSMQKAADVLHISKSGLSIAIHQLENELEVTLFDKSSSGTKLTSE` |
+| 1148 | orf_1148 | Cation transport ATPase | 16 | 32640 | 35303 | + | 888 | high | `MTTAVQYAGTGRRKNSVARVRLVPGNGQITMNGKSIEEYIPFANLREVVLQPFNVTETLG` |
+| 1149 | orf_1149 | hypothetical protein | 16 | 35310 | 35756 | + | 149 | high | `MRTTFLAKPGEIEKKWYIIDAKDVVLGRLSTVVASILRGKNKPTFTPNVDMGDNVIIINA` |
+| 1150 | orf_1150 | Glycosyltransferase | 16 | 35827 | 36804 | - | 326 | high | `MTFFEEYIQASRGLVFVATTRDNQPSIRIMGFAVSPERENLWYFNVDPTSYKVHDIDNND` |
+| 1151 | orf_1151 | nucleoside-binding protein | 16 | 36978 | 38033 | + | 352 | high | `MPRYKAVIAYDGAEFFGFQLQTKNGVESVRTVQGELNKVINKMAKNPSPQIKVVGASRTD` |
+| 1152 | orf_1152 | amino acid ABC transporter membrane protein, PAAT family / amino acid ABC transporter substrate-binding protein, PAAT family | 16 | 38291 | 38986 | + | 232 | high | `MNNIMIGRFVPGDSWIHRLDPRTKMIGTFIFIFVMLWSTSWATYAWSAAFVVLAIRLTKQ` |
+| 1153 | orf_1153 | glycerol 3-phosphate dehydrogenase (NAD(P)+) | 17 | 1 | 984 | + | 328 | high | `MAINFEQVNFSYGAGTTLAQPILHDINVTIPDGQVTAIIGQTGSGKSTFIQHLNGLLKPT` |
+| 1154 | orf_1154 | UDP-glucose pyrophosphorylase | 17 | 1008 | 1883 | + | 292 | high | `SLILLIPTLVAEITNLITALPEFAQNVQRFVTDSLQSKWLSNLNLSIDIDEVKSAVGKYS` |
+| 1155 | orf_1155 | Thioredoxin reductase | 17 | 1997 | 2950 | + | 318 | high | `MSEHKGHIQRNLKTRHVSMIALGGSIGTGLFVASGATVAQAGPLGAIVAYLAIGVMVYFL` |
+| 1156 | orf_1156 | methylmalonyl-CoA epimerase | 17 | 2997 | 3380 | - | 128 | high | `MTANYHRILVPMDGSKESEAALTRAIELTLDAGDEGILSILNVIDTRAFQNVASFDDTMV` |
+| 1157 | orf_1157 | Predicted membrane protein | 17 | 3431 | 4168 | - | 246 | high | `MWTHGLSPEHSIDTVNRYADFPRNYRGGWFIKIVRLPNERAYLLSPEFPTENKSCKEKAD` |
+| 1158 | orf_1158 | Threonine dehydrogenase related Zn-dependent dehydrogenase | 17 | 4171 | 5187 | - | 339 | high | `SAYKAIDLAISDVRHGKSYDIPDHLKDAHYKGSSELNHGIDYTYPHDYDNDWVAQQYLPD` |
+| 1159 | orf_1159 | transcriptional regulator, LacI family | 17 | 5334 | 6311 | + | 326 | high | `MQENPRKVFLVGLTTNQGNLDYELEELANLAKANNLEPVETFTQKLERPNPSTYFGKGKV` |
+| 1160 | orf_1160 | Uncharacterized membrane-associated protein | 17 | 6364 | 7023 | + | 220 | high | `MSKEIYLTGDRPTGKLHIGHYIGSLKNRVSMQNSGDYLPFVMIADTQAFTDNARNPEKIR` |
+| 1161 | orf_1161 | alpha-phosphoglucomutase | 17 | 7066 | 8766 | + | 567 | high | `MGNNEQKLNRGFGLTASLALVVGTIIGSGIFFKQGSVLESAGSTNAAMLAWIAGGLLTLA` |
+| 1162 | orf_1162 | LSU ribosomal protein L19P | 17 | 8890 | 9249 | + | 120 | high | `MNKNIRWAAGVIIVAAISGVLFTKNNDGDVSKVRTLQVMMKDDVMTMNPIMTTDIYSSQA` |
+| 1163 | orf_1163 | Predicted hydrocarbon binding protein, V4R domain | 17 | 9599 | 10312 | - | 238 | high | `MTETKYYNFNGFNSKTGNFDPQCYAIVDDETGRYTEVGHG*` |
+| 1164 | orf_1164 | glutamate racemase | 17 | 10361 | 11236 | + | 292 | high | `MGQSVDVGEKYMMPGIINTHIHVDSDVNYEFGKTKFGVDNENEHVRAVIVATHNMKTMLR` |
+| 1165 | orf_1165 | Xanthosine triphosphate pyrophosphatase | 17 | 11233 | 11838 | + | 202 | high | `MKKNKQTAVKSRIDRYSKSSHRLRNIILLIVGLLLIVSGTFAWMAIHNTKSAIDKTYKSS` |
+| 1166 | orf_1166 | Predicted phosphoesterase | 17 | 11838 | 12374 | + | 179 | high | `MLIPPDKLRKILIITFGIIFVFLGIQVRFHMIFMQVLDATTDFAVNNILSLKIPLYLGLG` |
+| 1167 | orf_1167 | Holliday junction DNA helicase subunit RuvB | 17 | 12510 | 13565 | + | 352 | high | `MLIRDMVRTKPISWLLFIFGSDIMMTYGLLLYQGSTRFNPMRDYITILKFVSMDLVSFVF` |
+| 1168 | orf_1168 | Predicted phosphoesterase or phosphohydrolase | 17 | 13562 | 14419 | + | 286 | high | `MSEQNSRPQNSERPQRSRRPQGGPRRRRKVDFIAANHIEYIDYKNTELLERFISERGKIL` |
+| 1169 | orf_1169 | S-adenosylmethionine--tRNA ribosyltransferase-isomerase | 17 | 14457 | 15590 | + | 378 | high | `MKRFFSFKNLPIFFQNTKLSTVAFLLLVSSVMSVIFAMLFNITFGLIWLAIVIIGLVFSA` |
+| 1170 | orf_1170 | Glycerophosphoryl diester phosphodiesterase | 17 | 15794 | 16819 | + | 342 | high | `MKVVFLEDVKGCGKKGEIKEVPDGYANNFLIKNKKAEPATGKNLGAVKGRQKAEEKAAAE` |
+| 1171 | orf_1171 | Holliday junction DNA helicase subunit RuvA | 17 | 16895 | 17485 | + | 197 | high | `MDNPVSNEYRQVPQDGDAERAVLGSIFFAVKSENAMVEASAILVPEDFNKLANQTIFKAM` |
+| 1172 | orf_1172 | Deoxynucleoside kinase | 17 | 17726 | 18358 | + | 211 | high | `MQTANPQTILKEKFGYDNFRAGQLDVINKVLAHKHALAIMPTGGGKSITYQLPAMMFEGI` |
+| 1173 | orf_1173 | Large-conductance mechanosensitive channel | 17 | 18392 | 18775 | - | 128 | high | `MTNNHLVLQTDFGLQDGAVSSMRGVAYNVADNIVVSDLTHGITPFNIFEGSFRLFQTFDY` |
+| 1174 | orf_1174 | ABC-type antimicrobial peptide transport system, permease component | 17 | 18947 | 20422 | + | 492 | high | `MKENNKKTGLSVRSVVATGIGAAVFFILMKYIAIPTGVPNTNVNVAEGWLALIAGLFGPV` |
+| 1175 | orf_1175 | ABC-type antimicrobial peptide transport system, ATPase component | 17 | 20483 | 21145 | + | 221 | high | `MVEPFIDFQHVAFKYHAQSEPTLHDVSFQIYPGEKVLIAGASGSGKTTLLRLLNGLIPQA` |
+| 1176 | orf_1176 | Predicted membrane protein | 17 | 21251 | 21865 | + | 205 | high | `MDNSLFGYKARNTWINHATGTAKLVGFLALTTIGMISYDTRFLIALTILSFVLIKMAHIK` |
+| 1177 | orf_1177 | Predicted membrane protein | 17 | 22078 | 22692 | + | 205 | high | `MESFQMTAEQWQQKSQLYKSELLTDLLQFLSIPSVLDKTTANVQQPFGAGIETALQFLVD` |
+| 1178 | orf_1178 | hypothetical protein | 17 | 22730 | 23386 | - | 219 | high | `MATSYEMTYIVRPDLDADAKKTLVERFDAILTDNGATIQKSADWATRRFAYEIAGYREGT` |
+| 1179 | orf_1179 | Predicted hydrolase of the metallo-beta-lactamase superfamily | 17 | 23673 | 25502 | + | 610 | high | `MINRVVLIGRLTRDVELRYTQSGVAVGTFSLAVNRQFTNASGEREADFINAVIWRKAAEN` |
+| 1180 | orf_1180 | BS_ysoA related protein with TPR repeats | 17 | 25608 | 26531 | + | 308 | high | `MNKLLLTAYGFSTDKIKRAALGLLNIEHSSKACIISTSRPEEKEKHPQMQQIR` |
+| 1181 | orf_1181 | translation elongation factor 1A (EF-1A/EF-Tu) | 17 | 26695 | 27882 | + | 396 | high | `MENKVSTKNAMAIIAVALVSFSGIMAETAMNVTFPVLTRYFSTSLNSIQWVTTAYLLSVT` |
+| 1182 | orf_1182 | hypothetical protein | 17 | 27927 | 28061 | - | 45 | high | `MTSIGKLFKIGQRNLVRDLDTLAVTHGVTGAQLSAIDFIADNKYVTQKDIEQEFHIKASS` |
+| 1183 | orf_1183 | amino acid ABC transporter ATP-binding protein, PAAT family | 17 | 28199 | 28933 | + | 245 | high | `MEKNRDTNTPSVTKSRMALFHSKKHSSFKLYIVLAAVIVLLSASGYAAYYFYSLNNTLSK` |
+| 1184 | orf_1184 | ribose-5-phosphate isomerase | 17 | 28943 | 29632 | + | 230 | high | `MLKKWLTTVLLIIITLLLVTIAYLLYSNHNNINTSRSTDSSFDTSSSSKSSSNDDDLLSL` |
+| 1185 | orf_1185 | nucleotide-binding protein, UspA family | 17 | 29707 | 30147 | + | 147 | high | `MSKSKIVKANKKIEEKVVKTYKTIENGAVEGFGNISDKFVDKYLAKDGESAQDAKKRIET` |
+| 1186 | orf_1186 | Peptidyl-prolyl cis-trans isomerase (rotamase) - cyclophilin family | 17 | 30185 | 30934 | - | 250 | high | `MSRNEEKVWLVTGGSTGFGRKLIEELIAKKIPVVATARNLSAFNDLETNEDDLLLKVQLD` |
+| 1187 | orf_1187 | SAM-dependent methyltransferase | 17 | 30937 | 31458 | - | 174 | high | `MKIVLLDGYDLNQDLNWETLKNLGDFEFYSRTSVDNDTEILQRIDDAEVVITHKTPLDDS` |
+| 1188 | orf_1188 | Membrane-associated phospholipid phosphatase | 17 | 31442 | 32095 | - | 218 | high | `MTVNDWITFILASTVIIISPGPSVIYVTTNSMTNEIKTMMPLIIGLTAGYFCGMGISLIF` |
+| 1189 | orf_1189 | leucyl-tRNA synthetase | 17 | 32436 | 34862 | + | 809 | high | `MSVENVRQFFKKYHLENRIVEHENIGDTVEHAAELLKCEIKQIAKSMTFIVAENPILIVL` |
+| 1190 | orf_1190 | Polysaccharide transport membrane protein | 17 | 34958 | 36775 | + | 606 | high | `MNIKKVAEITKLSADTIRYYERIGIIGPVPRQENGIRNFNDRSLNQLKFVKIMRNAGMSI` |
+| 1191 | orf_1191 | Transcriptional regulator | 18 | 3 | 755 | + | 251 | high | `MDYKTLASGIEMPLLGFGVFQVQEKGAAKQAVLDAIKTGYRLIDTAASYGNEREVGEAIL` |
+| 1192 | orf_1192 | Adenine/guanine phosphoribosyltransferase related PRPP-binding protein | 18 | 750 | 1319 | - | 190 | high | `MVKNSTTEYTFIKAQIDLVIHNIVSNKYNEELTYYDVLWLPDNLTNPDSKELWQSFQDNL` |
+| 1193 | orf_1193 | Mg2+ and Co2+ transporter | 18 | 1439 | 2362 | - | 308 | high | `MSTKSKEVDDDVPLSSSAKFHHQEWSKIVNDLHANYPSGLSDEQVNNRLQKNGYNEVNPK` |
+| 1194 | orf_1194 | Acetyltransferase, GNAT family | 18 | 2359 | 2823 | - | 155 | high | `MTEFLLQFAQNIGYFLILPIIIAWSISFLSSLLSQWLTIHTSYTITAILSFFGVVIHELS` |
+| 1195 | orf_1195 | Signal peptidase I | 18 | 2792 | 3397 | - | 202 | high | `MTTEGKLTAEEIDEAHRVLSKVVTHTPLAYDDYLSKKYRANVYLKREDMQRVRSFKIRGA` |
+| 1196 | orf_1196 | Preprotein translocase subunit YidC | 18 | 3515 | 4351 | - | 279 | high | `MSKKVVSTTTAPKALGPYSQAILNDNTLYISGQIGIDPETDEFAGATTAEQAHQIFDNID` |
+| 1197 | orf_1197 | RNase P protein component | 18 | 4348 | 4698 | - | 117 | high | `MMYKLAILKGDKESSSVIDRALGIIKSSVNDSTAFEVTELPFGVNAVLSFNEPLPNQTLR` |
+| 1198 | orf_1198 | LSU ribosomal protein L34P | 18 | 4837 | 4971 | - | 45 | high | `MSEIKIVSIDIDGTLINDERQIPLDVKSAVQQALAQDVKVVITTGRPLPGVRNILDELGI` |
+| 1199 | orf_1199 | transcriptional regulator, Crp/Fnr family | 18 | 5250 | 5924 | + | 225 | high | `MNVLLNGNKVALEGDPLKVGDEVPHFKLVDQNNEKVKTADLLGKVTLLSVVPDLNTDICS` |
+| 1200 | orf_1200 | Uncharacterized NAD(FAD)-dependent dehydrogenase | 18 | 6004 | 7359 | + | 452 | high | `MKKTLPEQVMDKHKVKYEPLELNILDKTPVQRDAILETFHVKHDDIYKTLAAHGDKTGPI` |
+| 1201 | orf_1201 | hypothetical protein | 18 | 7535 | 7804 | - | 90 | high | `MCGILIITMSESIYVTVQADLKQKIYQGEFPNLKLPDERSLAEQYSVSRSSIKRALNVLV` |
+| 1202 | orf_1202 | 3-hydroxyisobutyrate dehydrogenase related enzyme | 18 | 8015 | 8536 | - | 174 | high | `MADFDSKEYLELVDKWWRATNYLSAGMIFLKSNPLFSVTNTPIKAEDVKVKPIGHWGTIS` |
+| 1203 | orf_1203 | 3-hydroxyisobutyrate dehydrogenase related enzyme | 18 | 8561 | 8878 | - | 106 | high | `MNEAIGLLKKLGGDELINKPYRVLSQGQRQLVLIARALLGKPELLILDEPCNGLDLFSRE` |
+| 1204 | orf_1204 | Predicted hydrolase of the HAD superfamily | 18 | 8934 | 9743 | - | 270 | high | `MTNNAVLSMKNVSFERDKIILKNINWSLHSGENWVLMGLNGAGKTTLLSLIYGNHWATTG` |
+| 1205 | orf_1205 | Predicted FAD(NAD)-dependent oxidoreductase | 18 | 9851 | 11701 | - | 617 | high | `MKNVVLTEGKNGAHILLDSLEKAGVNSLFGYPGGAVIPLYDALYESSHIKHILVRHEQAA` |
+| 1206 | orf_1206 | Auxin efflux carrier (AEC) family permease | 18 | 11879 | 12772 | - | 298 | high | `MDKTFITRVYNRPGLLVRFASVLTRLNLNIKSLMVTPDEDQKISTISFIFESQNDKQTAT` |
+| 1207 | orf_1207 | hypothetical protein (no reference match) | 18 | 12873 | 12986 | - | 38 | none | `MTTKMFYDKDIDTTPLENKKIAVIGYGAQGHAQANNLRDSGFDVIMGLRPGKSFDSAKKD` |
+| 1208 | orf_1208 | Carbonic anhydrase | 18 | 12949 | 13662 | - | 238 | high | `NNTSKFSIIIAGVLMLVLAVFYFFIRNIFKQANEVGELQN*` |
+| 1209 | orf_1209 | DNA replication ATPase initiation | 18 | 14297 | 15643 | + | 449 | high | `MTEIYEELIHVFKKQFHHEPTDKFFSPGRINLIGEHTDYNGGHVFPASITLGTYGVASQR` |
+| 1210 | orf_1210 | DNA polymerase III, beta subunit | 18 | 15856 | 16992 | + | 379 | high | `MLENNLITEFTQRIIEQSDYTNEDAIYLGNQILGMIGESNYEHVTSDQDVSRLSTLTLLD` |
+| 1211 | orf_1211 | S4-like RNA binding protein | 18 | 17185 | 17631 | + | 149 | high | `MGNNEWIGIDNAHQNNLKNISVKIPKHQLTVFTGVSGSGKSTLVFDTLVAQSRRELNDTF` |
+| 1212 | orf_1212 | DNA replication and repair protein RecF | 18 | 17613 | 18737 | + | 375 | high | `MFKQYIKNEQFNLQINRFINDEYENDQKVQEDLKSIIPQLKDEESWFKAWNDKAIAREQD` |
+| 1213 | orf_1213 | DNA gyrase subunit B | 18 | 18799 | 20817 | + | 673 | high | `MSKDKRVIKTEKLITETMMRLLATTSISKITVKKICDQALISKSTFYDHYVDKFDVIDKI` |
+| 1214 | orf_1214 | DNA gyrase subunit A | 18 | 20892 | 23438 | + | 849 | high | `MGLSMLTETLESIQQLLDEKIFMQDTHCNVIFGDEKLLMKFDDELHFNDEILDNPSAILF` |
+| 1215 | orf_1215 | Glutathione peroxidase | 18 | 23584 | 24057 | + | 158 | high | `MSDKIDRYYCFDRLWLLVAYYHGCSKKNIFNDVLPSKETAAKDLEILNIAIMLGQTGGHG` |
+| 1216 | orf_1216 | Response regulator of the LytR/AlgR family | 18 | 24082 | 24795 | - | 238 | high | `MKVKIEKRQNETKINPRLHGQFIEFLGNAINDGIWVGKESKIPNINGMRLDVINALKEIE` |
+| 1217 | orf_1217 | Predicted signal transduction protein with a C-terminal ATPase domain | 18 | 24749 | 25582 | - | 278 | high | `MVTIQDIANKTGVAISTVSRALGDSPKISLRTKERIRKAARDMGYTPNFAARNLTQTESN` |
+| 1218 | orf_1218 | Glycosyltransferase | 18 | 25848 | 27473 | + | 542 | high | `MTNLNDVARNAHVSKMTVSRVINHPERVSDELKELVEKAIQDVGYEPNRMAKALVNKRHY` |
+| 1219 | orf_1219 | Glycosyltransferase | 18 | 27470 | 28942 | + | 491 | high | `MSTKFNLSFVQGLTVREKAELVMGKDFWFTAENIENDIPKIMVTDGPSGLRKQASSADAL` |
+| 1220 | orf_1220 | hypothetical protein | 18 | 29004 | 30467 | + | 488 | high | `MDDKHKGQGLPNLPLSTIWMLSFGFLGVQMAFSLQSSQMGRIFQTLGADPTKLGFFFILP` |
+| 1221 | orf_1221 | Uncharacterized conserved membrane protein | 18 | 30495 | 32015 | + | 507 | high | `MKRIFEINPWTVVTHDLNPEDKRLQESMTSLGNEYMGMRGMFEEVYSGDTHQGIYIGGVW` |
+| 1222 | orf_1222 | hypothetical protein | 18 | 32015 | 33052 | + | 346 | high | `MQKFKDIKGFAFDLDGVIADTARFHGQAWHQTADEVGTTWTPQLAESLKGISRMESLQMI` |
+| 1223 | orf_1223 | Aromatic compounds catabolism protein | 18 | 33097 | 33471 | - | 125 | high | `MAITIKDIADKAGLSPASVSRILTNRGRFNADTAKRVRELAESMGYLKNQSAADLSQKQS` |
+| 1224 | orf_1224 | 1,4-Dihydroxy-2-naphthoate synthase | 18 | 33507 | 34340 | + | 278 | high | `MEKVQWWQNTVVYQIYPRSFQDSNGDGVGDIPGIIERLPYLKALGVQVIWLSPIYQSPND` |
+| 1225 | orf_1225 | Predicted amidohydrolase | 18 | 34360 | 35154 | + | 265 | high | `MSSNEHKKGQLPMLTSMQLFLMTFGYAGVQVAFSVQTGNMGRIFQTLGSDPTKLGFFFIL` |
+| 1226 | orf_1226 | aminotransferase | 18 | 35167 | 36351 | + | 395 | high | `MTEDIKWWQKAVVYQVYPRSFQDANGDGIGDLQGIEQRLDYIKKLGADVIWLNPIYASPD` |
+| 1227 | orf_1227 | Rad3-related DNA helicase | 18 | 36264 | 36467 | - | 68 | low | `MIYNNIIKLDWDGDLSTQEQLQVRYQAVHHQFVASAIATKQLKEIAPNAKIGSMLARMQT` |
+| 1228 | orf_1228 | Predicted sugar phosphatase of the HAD superfamily | 19 | 2 | 763 | - | 254 | high | `MFTFQKFVIDHYKVQLVMPENSHAAELFRIINQDRETLSRWMPWTPNIKTVEDEAQFLNY` |
+| 1229 | orf_1229 | hypothetical protein | 19 | 999 | 1442 | + | 148 | high | `MSKVISLVGQQLDALLENETNIVSNLANAAALLFQNYENLNWAGFYIYNDDAKELDLGPF` |
+| 1230 | orf_1230 | hypothetical protein | 19 | 1442 | 2233 | + | 264 | high | `MTKYGVVVGSIRENSFSKGVADALVAGLPEDAEVNYLNISNLPLYNQDFDADSPEEYTKF` |
+| 1231 | orf_1231 | Acetyltransferase, GNAT family | 19 | 2269 | 2709 | - | 147 | high | `MRLKKLSQNQLTNGTAWLAFGNITSRVLGALYVIPWTIMLGALSLQANTLMGKGYNLYQF` |
+| 1232 | orf_1232 | Phosphoglycerol transferase related protein, alkaline phosphatase superfamily | 19 | 2811 | 5009 | + | 733 | high | `MVNMNDVASLAGVSRGSVSNYINGKKTKPNTQKKIAEAIAELNYVPNATARSLKTSQSNF` |
+| 1233 | orf_1233 | Glycosyltransferase | 19 | 5063 | 6124 | + | 354 | high | `MAKNFTIDPHEFAMALISNTNRPEKLTNQRFIKNQLTLYLEAYFMIEDFNHLEVKQIENM` |
+| 1234 | orf_1234 | transcriptional regulator, MerR family | 19 | 6192 | 6632 | + | 147 | high | `MSSNGTVTVEKSNGKLPWNERLSYGASDFACSFTFSLIGTYLMYFYTDVFGITAGAVGTL` |
+| 1235 | orf_1235 | Pseudouridylate synthase, 23S RNA-specific | 19 | 6715 | 7608 | + | 298 | high | `MNPNYQSINAEDELSNPNSLFYFYQKLIKLRHTLPVITDGDFNLFKGNEEDKEVFAYTRK` |
+| 1236 | orf_1236 | Glycerol uptake facilitator related permease | 19 | 7682 | 8434 | - | 251 | high | `MNKKMWWQNAVVYQVYPKSFQDSDGDGIGDLRGIINRLDYIEKLGVDVIWLNPVYKTSNI` |
+| 1237 | orf_1237 | Cation transport ATPase | 19 | 8527 | 10578 | - | 684 | high | `MRFKKILTLFVLAVSLFTVTSLYPSPVKADTANNYNITIDGNFEDWADKPKTDIFFDYNN` |
+| 1238 | orf_1238 | Predicted transcriptional regulator | 19 | 10575 | 11000 | - | 142 | high | `MSIFLLISGVIWLYALSVFKRAKLPAFYFIVGSVGLFFILFFFSKPYFIWIMARAVTIGV` |
+| 1239 | orf_1239 | transcriptional regulator, GntR family | 19 | 11202 | 11567 | + | 122 | high | `MNYLFFSTLSQMGFWITWLLIPILVETVPAISSFVKIFFIRLVSQNLKKIQVSGLLFQLL` |
+| 1240 | orf_1240 | ABC-type multidrug transport system, ATPase component | 19 | 11564 | 12469 | + | 302 | high | `MVDNKSQDKSFKAFQSAQNSFPKLNMQWMKTEQGKARALNSAIYSSSGAYIINIDSDGIL` |
+| 1241 | orf_1241 | hypothetical protein | 19 | 12466 | 13299 | + | 278 | high | `MDKNQFKKGNDDPVSEDKEFNSFFSEVLQRFPDKTSKIIQNSYEKSKSRADKIFFKSRSN` |
+| 1242 | orf_1242 | ABC-type multidrug transport system, ATPase component | 19 | 13325 | 14230 | + | 302 | high | `MNLVGTYHLKYYIHASHAIRWENGEGDEHAHSWEIAVEFRSTNENMIVFDKIESSLDDLF` |
+| 1243 | orf_1243 | ABC-type transport system for multi-copper enzyme maturation, permease component | 19 | 14234 | 15001 | + | 256 | high | `MKKKIFSLGNATILILFYLLFGVTYLSAILSDNFTIGDNLKRGTTTTLGLLVFISIILLF` |
+| 1244 | orf_1244 | Aldo/keto reductase of diketogulonate reductase family | 19 | 15053 | 15913 | - | 287 | high | `MTKQKIVLITGASSGIGYQAAEKLSAYGFKVYGAARRIEKMSPLSSLGIIPLKMDLTDEH` |
+| 1245 | orf_1245 | acetylornithine aminotransferase apoenzyme | 19 | 16406 | 17524 | - | 373 | high | `MDSFPLERPYITITNVIWSFDYDTQQVKVLLIKRADEPFKNFWALPEILLREDESAHEAS` |
+| 1246 | orf_1246 | N-acetylglutamate kinase | 19 | 17535 | 18269 | - | 245 | high | `MDKKRHLLFIIGTAWMIDALDVALLSFIMPLIKNEWDVGSTELGLAAAVTSIGMFVGSIV` |
+| 1247 | orf_1247 | glutamate N-acetyltransferase / N-acetylglutamate synthase | 19 | 18313 | 19527 | - | 405 | high | `MKAAVWHGVKDVRVEDVELKPTKSNEVVVRVAYAGICGSDLHEYLEGPVFIPVDQPDELT` |
+| 1248 | orf_1248 | N-acetyl-gamma-glutamyl-phosphate reductase | 19 | 19572 | 20612 | - | 347 | high | `MDDVKNLSSVYWVNMLSNKFVFIFNLVIPTIYFLYININSFTRDSVTFNHETFKVIGYFW` |
+| 1249 | orf_1249 | Phospholipid-binding protein | 19 | 21049 | 21243 | - | 65 | high | `MQIKKYSLHFGKRILAKNLDVILAEDKINIISGGNGVGKTTFLDFLAGVGPKTATGEKIG` |
+| 1250 | orf_1250 | hypothetical protein | 19 | 21246 | 21626 | - | 127 | high | `MTIFEDIKADKDNLTYTEKGLNPVFYTPKSAKILIIGQAPGKKVQETEIMWNDASGDRLR` |
+| 1251 | orf_1251 | hypothetical protein | 19 | 21737 | 22033 | + | 99 | high | `MIEQKNHTKQITILATIIAFNIALSYIVKIPVPATNGFVNLVEAGIFLAALLGGARSGLI` |
+| 1252 | orf_1252 | K+ transport systems, NAD-binding component | 19 | 22054 | 22719 | - | 222 | high | `MLISQITLPIFLMFQYKSRKNDLRIIMPFAKDKKAYRYLLGYAAGAMSFVLTWIIAVAFE` |
+| 1253 | orf_1253 | Trk-type K+ transport systems, membrane component | 19 | 22751 | 24154 | - | 468 | high | `MMRKIAFFDLDGTLCSGGDLHVSLEIKQAFQSMRENEIEPVIATGSSFYEVQHLLTFLEV` |
+| 1254 | orf_1254 | permease of the major facilitator superfamily | 19 | 24466 | 25671 | + | 402 | high | `MTNHLKRTYVSLMLSPFFSQIGSAIYVLGLNWLIVKSTGTTQLLGIIEGIGGLAFLIGDL` |
+| 1255 | orf_1255 | hypothetical protein | 19 | 25728 | 26450 | - | 241 | high | `MSKKVAVLVTDLVEDIEFTDPVKALKESGASVTTISFSTEAVTGKHGTKIDIDKSIGDVA` |
+| 1256 | orf_1256 | Transcriptional regulator, xre family | 19 | 26623 | 26886 | + | 88 | high | `MALLSEEMKKMIDQQLPFLATTGGDGSPQVGPKGSTRVYDDEHLIYYEHTFKQAYANLQQ` |
+| 1257 | orf_1257 | hypothetical protein | 19 | 26991 | 27161 | + | 57 | high | `MPNSQENMEKENVMTKPINHQVIKTEASGIRLVLDLVKKPADQMIELTVGEIDLPTPAAT` |
+| 1258 | orf_1258 | Cytochrome bd biosynthesis ABC-type transporter, ATPase and permease component | 19 | 27191 | 27343 | + | 51 | low | `MMDSLSNLFDLTGRVAIVTGGASGLGKYYSQALLDAGADVFIVSRSERGWPELTQFAENR` |
+| 1259 | orf_1259 | hypothetical protein | 19 | 27333 | 27530 | + | 66 | high | `MPLLTVLIGVILLVFLITKFKLNTFLSLVITAFVVGLILGIPVSDISTSIETGIGGQLGH` |
+| 1260 | orf_1260 | Predicted metal-dependent membrane protease | 19 | 28235 | 28900 | + | 222 | high | `MEQADFGVVGLAVMGRNLALNIESRGYRVAVYNRSRERTDDLVQKHEDKAFIPSYTTEEF` |
+| 1261 | orf_1261 | nucleoside ABC transporter ATP-binding protein | 19 | 29078 | 30634 | + | 519 | high | `METIFPKKIQKDDEIRIISPSSSIKRVGGFDQNLVAKERLEKLGYKVTFGDHILENDLFY` |
+| 1262 | orf_1262 | nucleoside ABC transporter membrane protein | 19 | 30634 | 31755 | + | 374 | high | `MTFRELKQSDEKIFNDWIKSWITESVIVSVAKPITGSFAEHLANLEQMKNNSINNFVPAS` |
+| 1263 | orf_1263 | nucleoside ABC transporter membrane protein | 19 | 31757 | 32608 | + | 284 | high | `MLRSILIFPKLSEITTIKNIRRELDPLYPHIRPHITLVFPFESEATDEVIIQNIQTILKP` |
+| 1264 | orf_1264 | UDP-N-acetylmuramyl tripeptide synthase | 20 | 1 | 1323 | - | 441 | high | `MSKRLSEDFLWGGAVAAHQLEGAWQEGGKGVSVADVMTVGGPDKERNITKGVVSGEYYPN` |
+| 1265 | orf_1265 | Xanthosine triphosphate pyrophosphatase | 20 | 1571 | 2188 | + | 206 | high | `MKKALIICAAGMSSSMMAKKTTDYFKNKNIDIEVDAITATEGEDAIRNSDFDLFLVSPQT` |
+| 1266 | orf_1266 | Cell wall-associated hydrolase with YG repeats | 20 | 2295 | 3206 | + | 304 | high | `MRKKERDLLIYLVDNSDRFVTSEELSTLLSLTPRTIRNYIKILKETLVSQGALLDAKPSL` |
+| 1267 | orf_1267 | thymidine kinase | 20 | 3388 | 4023 | + | 212 | high | `MKSEDIQVVAFEIILHSGNARTMVHKAFEAMREKNFKLSNENLKLSNDELLLAHKSQTNL` |
+| 1268 | orf_1268 | bacterial peptide chain release factor 1 (bRF-1) | 20 | 4113 | 5183 | + | 357 | high | `MKKGIKRGPKKPQDKQHGLEVAIEKNRTEMSLKSMQFNRFMLIRYATAFFLFVNLYWAII` |
+| 1269 | orf_1269 | Methylase of polypeptide chain release factor | 20 | 5180 | 6172 | + | 331 | high | `MENGPMFNFLQKVLLKPMTKVSQYRIVRAIMAAGMASIPFTIVGSMILVLNILPTVFPFL` |
+| 1270 | orf_1270 | translation factor SUA5 | 20 | 6169 | 7182 | + | 338 | high | `MMTPKHNRIMDRGLAGIQHVFVSNVWLDPIYVAAAAGLSLNLSTNLVNTIFIVSGLVTLT` |
+| 1271 | orf_1271 | Zn-dependent carboxypeptidase | 20 | 7333 | 8823 | + | 497 | high | `MIEKSKKIQSDILTFINKYKDHQTEQYESDFNQLAMRIFAYQFQNNLPYKKFAQLRHKNL` |
+| 1272 | orf_1272 | Phosphotransferase system, HPr-related protein | 20 | 9083 | 9352 | + | 90 | high | `MSNKEMTKINIFYTPDSIILGDLTEKVVENETHHLVLCYPKITEQEIKEITKIITHNRNH` |
+| 1273 | orf_1273 | phosphoenolpyruvate--protein phosphotransferase | 20 | 9354 | 11069 | + | 572 | high | `MLLKNKVALVTGASRGIGAAIAKEYAKQGAFVIINYLENTKKADEVVAEIISDGGQAIAI` |
+| 1274 | orf_1274 | Metal-dependent protease-like protein, putative molecular chaperone | 20 | 11122 | 11895 | + | 258 | high | `MFFATLSTYFIMFVTTHLFNSGNAAQNDKMTSSITLIIFLLRFVELAIDPFIGNAIDNTS` |
+| 1275 | orf_1275 | Acetyltransferase | 20 | 11879 | 12436 | + | 186 | high | `MNKNVKLTKIMVVTIMIALDIVLSPIFRIEGMAPMSSVMNIIAGVILGPVYAVVMAVVTG` |
+| 1276 | orf_1276 | [SSU ribosomal protein S18P]-alanine acetyltransferase | 20 | 12387 | 12824 | + | 146 | high | `MLGSIAMKNELIKIKSILPLQKAPLVHCITNDITLETVANTILYLGGKPIMSSDTREFSS` |
+| 1277 | orf_1277 | O-sialoglycoprotein endopeptidase | 20 | 12817 | 13827 | + | 337 | high | `MATKNILLICNTGASSSFMAQKIRQASNENQQACQVHAASMTQIDEYIDRIDYLLISPQL` |
+| 1278 | orf_1278 | AT-rich DNA-binding protein | 20 | 13931 | 14581 | + | 217 | high | `MMNNILNSQFIKKVNDVTSNSWIQGIQKSITLILSFIIIGSLITVISLINNIKANLIPDL` |
+| 1279 | orf_1279 | Peptidoglycan interpeptide bridge formation enzyme | 20 | 14588 | 15625 | + | 346 | high | `MNSKYDLTNDAMQIIVWAGDARQLIMTALEKIAQHQFSKTRSLLDEAESLLNNAHKIQSR` |
+| 1280 | orf_1280 | Predicted hydrolase of the HAD superfamily | 20 | 15692 | 16510 | + | 273 | high | `MSKNHFPQFFLWGGSFSANQAEGGYKSAGKGVSQTDLIPLNKSSKITSSFELNNCLADEN` |
+| 1281 | orf_1281 | Predicted membrane protein | 20 | 16520 | 17002 | - | 161 | high | `MKVTIFGKGNMGQAIGANFEKAGNDVNYLTSEDTATSLSELVILAVPYPALDTIAQQYKQ` |
+| 1282 | orf_1282 | Nitroreductase | 20 | 17095 | 17838 | + | 248 | high | `MSRKLLEQNGICPVATTIDLLSSKWKVLIIRDLLPGTKRFSELKISVAGISQKMLTQSLR` |
+| 1283 | orf_1283 | mannose-6-phosphate isomerase, type 1 | 20 | 17873 | 18832 | + | 320 | high | `MNKDEHLYDELCLSIYNTNRYFHHLYGYVLEKYDLSYLQYMSLLIIYKQNSVKLMDIGAE` |
+| 1284 | orf_1284 | Phosphotransferase system, mannose/fructose-specific component IIA | 20 | 19085 | 20029 | + | 315 | high | `MNYDVIFIGSGHAAWHGAQTLARSEKKVALVEENKVAGTCTNFGCNAKILLDGPAEMMHH` |
+| 1285 | orf_1285 | mannose-specific PTS system component IIC | 20 | 20069 | 20875 | + | 269 | high | `MVTIKQIALETDVSSSTVSRVLNNDLTLSVSDETRRKIIDAAQRLNYTKKHKKSISKKLI` |
+| 1286 | orf_1286 | PTS system IID component, Man family | 20 | 20890 | 21804 | + | 305 | high | `MKAAVINHYGGREQLEVIDMPIPKIKSDEVLVENMATSINPIDYKAREGLLKRMFSWQFP` |
+| 1287 | orf_1287 | hypothetical protein | 20 | 21883 | 22242 | + | 120 | high | `MFAYIMVTLVSLEAIGIMFVEMFGTDSQQAKAFDLKESFVQIPEVKTLLANQGIYNGLFG` |
+| 1288 | orf_1288 | hypothetical protein | 20 | 22272 | 23105 | + | 278 | high | `MEEINILVTLDKSYIKPLKVMLLSLKATNVDCRFSIWLLHDSIPEAEINHLRGFTDKLDY` |
+| 1289 | orf_1289 | Co-chaperonin GroES (HSP10) | 20 | 23229 | 23513 | + | 95 | high | `MIKVRDLTVAYDGTPVFTNLSIQFEPGKITGIIGPNGAGKSTMIKGILGLINKQNGKVTL` |
+| 1290 | orf_1290 | Chaperonin GroEL (HSP60 family) | 20 | 23542 | 25161 | + | 540 | high | `MHSIELFIDGLTKYNFLQTALVTSILVGIMSGIIGSFIILRGMSLMGDAISHAVLPGVAV` |
+| 1291 | orf_1291 | hypothetical protein | 20 | 25238 | 26041 | - | 268 | high | `MIKRLSIIVVAVVVILGGVLWFVNSSQGGKTSQHDKLQVVATNSIIGNMVEEVAGNKVNL` |
+| 1292 | orf_1292 | aminopeptidase C, Cysteine peptidase, MEROPS family C01B | 20 | 26067 | 27404 | - | 446 | high | `MSTIYQHGTLELIMSGLYDGTAPLSSILNHGSSGIGTMDELDGEVTIIENSVYQTKANGV` |
+| 1293 | orf_1293 | hypothetical protein, LysM motif protein | 20 | 27614 | 27892 | + | 93 | high | `MTTSTTLNTTYQDIFKTENGKTYLSALPKLEKITSGQSFLYRQNGAPSMVIDIRLTNDID` |
+| 1294 | orf_1294 | Predicted membrane protein | 20 | 27889 | 28527 | + | 213 | high | `MANIIVVEDDPNFNRILSIYLSNHGHQVQSALSAQEAYDKMYNQLFDMILSDVMMPNIDG` |
+| 1295 | orf_1295 | 1,4-dihydroxy-2-naphthoate octaprenyltransferase | 20 | 28625 | 29515 | + | 297 | high | `MKKIKKHKITFQKVSIKDLIAAYVIFLLFATIPNIVLMHGGQLALFTNSNFIWYLIYWFI` |
+| 1296 | orf_1296 | D-lactate dehydrogenase, LdhA | 20 | 29702 | 30697 | + | 332 | high | `MANANISFDDKQNVFHLSNQQISYLIQIEEGGLLSHLYFGKKITKYHGSRHYPRLDRGFS` |
+| 1297 | orf_1297 | Predicted membrane protein, putative toxin regulator | 20 | 30858 | 31604 | + | 249 | high | `MYEKQFIGYEYQERVVEKKYEPVYLDAYPNFGWVIDQHHKSTQNPNNIMLHMRRNRDLVN` |
+| 1298 | orf_1298 | hypothetical protein | 21 | 50 | 934 | - | 295 | high | `MTQEPLAYRMRPTKIEEIVGQQHLVGEGKIIWRMVAAHRLSSMILYGPPGTGKTSIASAI` |
+| 1299 | orf_1299 | oligopeptidase O3, Metallo peptidase, MEROPS family M13 | 21 | 1029 | 2921 | - | 631 | high | `MNKILMTSVRSDEEQAIRHYAEKNNVEIVISRDDFHPETLPDLTEIDGLVIQQTAKIGGD` |
+| 1300 | orf_1300 | ABC-type oligopeptide transport system, ATPase component | 21 | 3027 | 3962 | - | 312 | high | `MKSVKHSSAATIKKFIIDILNGTSLGIVLTLIPSALVSQLLLLFSGNEIATQIAFMTTLI` |
+| 1301 | orf_1301 | ABC-type dipeptide/oligopeptide/nickel transport system, ATPase component | 21 | 3965 | 5014 | - | 350 | high | `MDVNERLQQEQLGNGSPKINPDEQNRYLGTFRERVIVAIKVSQLGNSNIQSQFAASLKSH` |
+| 1302 | orf_1302 | ABC-type dipeptide/oligopeptide/nickel transport systems, permease component | 21 | 5029 | 6054 | - | 342 | high | `MWKNLHPNIRKRIQIEFLSRLGSSLIFPFMSIYLFHAYNAQITGVLMMINIIISFLAGIY` |
+| 1303 | orf_1303 | ABC-type dipeptide/oligopeptide/nickel transport systems, permease component | 21 | 6066 | 6983 | - | 306 | high | `MIDQTYFDLRMTYQQFGQKLTISISELAKFWSISTKQVKRRLRAYEEQKLLHYYPGQGRG` |
+| 1304 | orf_1304 | ABC-type oligopeptide transport system, periplasmic component | 21 | 7067 | 8701 | - | 545 | high | `MSRYTGPKWRISRRLGVSLSGTGKELSRRAYAPGDHGAGRRAKISEYGMQLREKQKLRFT` |
+| 1305 | orf_1305 | amino acid ABC transporter membrane protein 2, PAAT family | 21 | 9055 | 9714 | - | 220 | high | `MFNFTVLAIILLLVVIAYLAIFVMQRTTVKKVSDLRARKDQLESLKVREELVEGRKLPLT` |
+| 1306 | orf_1306 | amino acid ABC transporter membrane protein 1, PAAT family | 21 | 9725 | 10366 | - | 214 | high | `MSLLARAFKRESVDNYLSADSHMSRVLTTRDLISLGVGTVIGTGIFILPGHEAADHAGPA` |
+| 1307 | orf_1307 | amino acid ABC transporter substrate-binding protein, PAAT family | 21 | 10366 | 11232 | - | 289 | high | `MMKNNKVFVITGATGVGKTTIARYLQDTYRMPRVLTHTTRPPREREEDGIAYYFETDNSF` |
+| 1308 | orf_1308 | amino acid ABC transporter ATP-binding protein, PAAT family | 21 | 11324 | 12061 | - | 246 | high | `MPEVKPSLLNNLNQHLKLVGPSAIRAFDIEVSEIPDIIKLTLGEPDFNVPDHIKQAAIRS` |
+| 1309 | orf_1309 | ABC-type multidrug transport system, ATPase and permease component | 21 | 12245 | 14050 | - | 602 | high | `MELILLPEQLSVFQIESLEQLDLSMKPLFIGSTADELSIVAPTKSVPTKTINQEDGWRAL` |
+| 1310 | orf_1310 | ABC-type multidrug transport system, ATPase and permease component | 21 | 14028 | 15809 | - | 594 | high | `MNFFVNKAIGESNSGVEHAQFYRAHCFREKKIEFKFIFTDLLPQLHHHMQLWSLPENEVI` |
+| 1311 | orf_1311 | hypothetical protein | 21 | 15898 | 16905 | - | 336 | high | `MAYAEKTLYEDAAFELQAGEHMGIVGQNGAGKSTLIKIITGQELPLSGKIEWQKGLKVGY` |
+| 1312 | orf_1312 | aspartate semialdehyde dehydrogenase | 21 | 16993 | 18087 | - | 365 | high | `MNYGATFKRLREDKGLKIVDLEQPSISRSLIGKFEKGHTRISADRLDKLLSDMGVSHDEF` |
+| 1313 | orf_1313 | Alanine racemase | 21 | 18097 | 19209 | - | 371 | high | `MLQHCQTKHLVAFTEILPTLFSIIVGNFADKTKHHLRSWSIARLSQSIIFLIITVILIFF` |
+| 1314 | orf_1314 | hypothetical protein | 21 | 19568 | 20266 | + | 233 | high | `MKPRKLNIKTIPAADINRAYRFWRDVFDLPQSGHQSGRHLVIDGEDIVFVTGKPTDRLEM` |
+| 1315 | orf_1315 | transcriptional regulator, BadM/Rrf2 family | 21 | 20351 | 20803 | - | 151 | high | `MKAAVVRNVNDGYVDLIEDWQPRALAFGDALVDVEYVGLCHTDLHCANGDFGDPNKIGER` |
+| 1316 | orf_1316 | Predicted membrane protein | 21 | 20857 | 23022 | - | 722 | high | `MTISQSENVMQQDQVETGAQMTSEQKVVLGSTTLGFTLDHMDATFLSFALAPMIAELHIT` |
+| 1317 | orf_1317 | hypothetical protein | 21 | 23116 | 23595 | - | 160 | high | `MAKLTVSDLELSGKKVLMRVDFNVPIKAGVIGNDNRIVAALPTIKYVLENNGRAILFSHL` |
+| 1318 | orf_1318 | Trypsin-like serine protease with PDZ domain | 21 | 24226 | 25365 | - | 380 | high | `MKIEIINSLTETNLKGVAWQIEQVKSGNSDELWLATPHEDAAHLIKKLGLNPHRVFDIYA` |
+| 1319 | orf_1319 | hypothetical protein | 21 | 25426 | 26229 | - | 268 | high | `MALVMFAGAATMNVPHFKSMIEVILPSSPLVLAIAIGILAPLALFRGPLHVWGAGAATAA` |
+| 1320 | orf_1320 | hypothetical protein | 21 | 26286 | 27578 | - | 431 | high | `MSEILTLGEPVVTFASTDLNKGLVDSINYYKFLGGAELNVMIGATRLGHNTEYISQVGAD` |
+| 1321 | orf_1321 | PAS/PAC sensor signal transduction histidine kinase | 21 | 27568 | 29433 | - | 622 | high | `MTKQVFLPDDIPAVGKKILEEAGLEVVVGSGRDHEKMKAEGVEASAVLIGTQKFDADIMD` |
+| 1322 | orf_1322 | DNA-binding response regulator, OmpR family (Rec-wHTH domains) | 21 | 29501 | 30208 | - | 236 | high | `MTQFTRLYNNFQPEHYDIYLDINRETKQFNGKTKISGNALVNNIALHQKNLQIQSVHINE` |
+| 1323 | orf_1323 | Phosphoribosylpyrophosphate synthetase | 21 | 30317 | 31240 | - | 308 | high | `MYYSNGNYEAFATPRKPKNVDQKSAYIVGSGLAGLATAVFLIRDGHMKGESIHIFEELPL` |
+| 1324 | orf_1324 | Predicted hydrolase (metallo-beta-lactamase superfamily) | 22 | 1 | 891 | + | 297 | high | `MINQYGRIAVDSATELEELRAVGFNSEDFETLLRRALTNYKTYEAQNDWLREHVATDEQN` |
+| 1325 | orf_1325 | Predicted hydrolase (metallo-beta-lactamase superfamily) | 22 | 913 | 1194 | + | 94 | high | `MFGFGKKISKDEHVYAPVTGEVIPLDKVSDPVFAQKMMGDGYAVEPNASKIVSPVSGKVT` |
+| 1326 | orf_1326 | DNA polymerase III, delta subunit | 22 | 1163 | 2164 | + | 334 | high | `MAKEDYEGMAQDIIKNVGGKDNVDKVIHCITRLRFYLNDETKANTEEMSKVPGIAGAVYN` |
+| 1327 | orf_1327 | Nucleotidyltransferase/DNA polymerase for DNA repair | 22 | 2212 | 3297 | + | 362 | high | `VDAADQALTNAGLKAEEGAEAPTTVADSTRFGVILGNGIGGLTTIQDQVIKMHDKGPQRV` |
+| 1328 | orf_1328 | Exopolyphosphatase-related protein | 22 | 3337 | 4317 | + | 327 | high | `MLSEKQEIRTYILENLSSYKPDDKLKHETRLYTQLFNCQLWQDASTVAVTMSMENELNTQ` |
+| 1329 | orf_1329 | Superfamily II DNA and RNA helicase | 22 | 4317 | 5681 | + | 455 | high | `MSIFDEIEQDPANKKFTQLGLKPIYNAPTNARIVIIGQAPGLRVQNTGIMWNDASGDRLR` |
+| 1330 | orf_1330 | SSU ribosomal protein S20P | 22 | 5737 | 5988 | - | 84 | high | `MYLTSEDYLNIGFYGTLGLILLVSMFAVIA*` |
+| 1331 | orf_1331 | SSU ribosomal protein S15P | 22 | 6038 | 6307 | - | 90 | high | `MLIIITVILIANLTMKLNQTVLGSITMILPAFIMFPFAYESYQDKKWLPFSAYSLVSVLS` |
+| 1332 | orf_1332 | aspartyl/glutamyl-tRNA(Asn/Gln) amidotransferase subunit C | 22 | 6528 | 6836 | + | 103 | high | `MLVFTLENTGVACWKMLELHAKIFEILCLHGFNIKYDYPITILIKII*` |
+| 1333 | orf_1333 | aspartyl/glutamyl-tRNA(Asn/Gln) amidotransferase subunit A | 22 | 6838 | 8304 | + | 489 | high | `MSLNIEEIRGLIADLENSSLREFKVVDGEFSLHLSKNKNEAVVNAPVQTPVVAPAAVTSD` |
+| 1334 | orf_1334 | aspartyl/glutamyl-tRNA(Asn/Gln) amidotransferase subunit B | 22 | 8320 | 9759 | + | 480 | high | `MSILNTQQIQEILPHRYPMLMLDTVEELVPGERAVAIKNISVNEEIFQGHFPGNPTFPGA` |
+| 1335 | orf_1335 | diacylglycerol kinase | 22 | 9841 | 10827 | + | 329 | high | `MFKKVLVANRGEIAVRIIRTLREMGIASVAVYSTADKDSLHVQIADEAIAVGGVKPTDSY` |
+| 1336 | orf_1336 | tRNA (uracil-5-)-methyltransferase related enzyme | 22 | 10908 | 12302 | + | 465 | high | `MDLYNNKNSDTSKIKRDASVNDRIPDGLFLACPYCGAQMYNKQLGKYRVCAKCNYGFRLQ` |
+| 1337 | orf_1337 | DNA mismatch repair protein MutS | 22 | 12443 | 15007 | + | 855 | high | `MPDILSGLKLFKRELTPAQVVKKSREDRFMAREIIDGIFTDFVELHGDRLGGDDMSIIGG` |
+| 1338 | orf_1338 | DNA mismatch repair protein MutL | 22 | 15012 | 16958 | + | 649 | high | `MTTAWTNREILKSYFRGIIDLQIEYMNNYPDMNNDYRRENETFIKAVKTALDEFSCKLSP` |
+| 1339 | orf_1339 | hypothetical protein | 22 | 17121 | 17264 | + | 48 | high | `MADRTDKMLRDYFSGRLKLMAEVEPRYKQDMADIKFCLSVIKPEHSEVIKRYYSDKFITW` |
+| 1340 | orf_1340 | hypothetical protein | 22 | 17434 | 17661 | + | 76 | high | `MYAKRFIQLFIIFLVTIFFSMIFVVYFNIEGYVSQSLVLSLVGYIILVIPLTILTFLKQR` |
+| 1341 | orf_1341 | Protein of unknown function (DUF1456) | 22 | 17809 | 18375 | + | 189 | high | `MEKIYHIGVEATLDVIGGKWKPIILCHLGNGPIRTGELRRRIPNIAQKTLTQQLREL` |
+| 1342 | orf_1342 | nucleoside diphosphate kinase | 22 | 18440 | 18853 | + | 138 | high | `MPLFILGLVIGFGLPIQTAVNSKLRSVLGSAFNSSLVSFGVGTLFLIAVTLVTTHSLTIS` |
+| 1343 | orf_1343 | UDP-N-acetylmuramate dehydrogenase | 22 | 19044 | 19922 | + | 293 | high | `MTNKIKMIALDMDNTLLMPNKTLSERNIKVLQSLHTMGKSIVLTTGRPFPNVQPFLSQLQ` |
+| 1344 | orf_1344 | sodium/proton antiporter, CPA1 family | 22 | 19926 | 22022 | + | 699 | high | `KNGFEFKEPRYDLLVHAYNSLMLLQSHRNPLNYFIHSLDGEPSHSKFLLVSEKLKNMYKD` |
+| 1345 | orf_1345 | hypothetical protein | 22 | 22029 | 22850 | + | 274 | high | `MEKRKFLSRFKFDNGLVIKNHIVMSPMTTMTSFYNGMITTDELNYYAARAGGPGIIITGV` |
+| 1346 | orf_1346 | hypothetical protein | 22 | 22847 | 23944 | + | 366 | high | `MIKNKSEWLQQYITVIYESKEHVFRIVDTDALYKFTNTKHEDLLDSKKITTTLLDSFRAK` |
+| 1347 | orf_1347 | phosphoglucosamine mutase | 22 | 23948 | 25315 | + | 456 | high | `MENKLTTKLSTTLLIVVIIILATAVIVFGLSPSVPILLVISMIVLVARLRGVSWQESQAA` |
+| 1348 | orf_1348 | RNAse III | 22 | 25427 | 26137 | + | 237 | high | `MIIRTIKKEDNLIVKKIIQESLESLNFAIEGTAYFDPQLGRLNEYYDNLDNAKYWVVELD` |
+| 1349 | orf_1349 | condensin subunit Smc | 22 | 26134 | 29691 | + | 1186 | high | `MDKEIIDDIRRFNRFYATVIGMLDSKISNTEYSITEARVLFEIREKNGEYIANDLVAKLN` |
+| 1350 | orf_1350 | signal recognition particle-docking protein FtsY | 22 | 29761 | 30075 | + | 105 | high | `MIPEDAVQLPKTAKFVWLIHDVIWFLFTFIGLATVYILFLQSKRDIYTNIALVFMLIVVS` |
+| 1351 | orf_1351 | hypothetical protein | 23 | 1 | 72 | + | 24 | medium | `MIKQHQSLFAVFINVLTNIKLIIWPALLGLFNMNESRFTYFPIIVIVTLLLLLLSAWVQW` |
+| 1352 | orf_1352 | RNase J1 | 23 | 634 | 2316 | - | 561 | high | `MQIDTSGQGKPDVIFDALTIKQANLIEQKRRVAQNSIQKEFETIETTKLQYQVTIKELIV` |
+| 1353 | orf_1353 | RNA binding protein, RRM domain | 23 | 2316 | 2528 | - | 71 | high | `TFGIERDHNNPVKGTIGSNWSRISQTGHVDYGVKTLVMYFDSSDSPLDVYIKLPKLETGN` |
+| 1354 | orf_1354 | Predicted Rossmann fold nucleotide-binding protein | 23 | 2666 | 3217 | + | 184 | high | `MSLRVVEEILIFYKKLPTYNPQMGKGFKHYFNRKKASLSRNYKAHGGTESKSNGERFPID` |
+| 1355 | orf_1355 | Transcriptional regulator | 23 | 3221 | 3697 | + | 159 | high | `MEEINVDIIIKFFKRKNIESLRREEIFFPDLNLFIDNNDSLTDDQSDSQEAQHTTILDKE` |
+| 1356 | orf_1356 | translation elongation factor P (EF-P) | 23 | 3783 | 4343 | + | 187 | high | `MDPIRYRDDRYFIKENLRNDPIELAFTKRDNYASQKEYRVLAIHPDGVQPRNMKLDLFKN` |
+| 1357 | orf_1357 | hypothetical protein | 23 | 4466 | 4918 | + | 151 | high | `MNEAEKKLRKRRRHIKQATDVNRKHADMMKTESIARHERSRIQVRSEVMENRQINYRSYM` |
+| 1358 | orf_1358 | NusB antitermination factor | 23 | 4918 | 5331 | + | 138 | high | `MALAREDVNFESIKSEADVEMLVKNMVQTNNMIAHLKDEQLEMRNELKRRDETISKVKDD` |
+| 1359 | orf_1359 | Mg-dependent DNase | 23 | 5424 | 6221 | + | 266 | high | `MEFLGLEIGSWADIAAAFGTIGAVWIALLLSRADRRLHFEDKQIEDLNVMYRLILKMNSL` |
+| 1360 | orf_1360 | RNAse M5 | 23 | 6214 | 6783 | + | 190 | high | `MKFKTFYFLMQLIFIIGKILSLVAWSWWIVLIPLWVPAVLLIIFIVLGIFIESLIKQLEN` |
+| 1361 | orf_1361 | dimethyladenosine transferase | 23 | 6785 | 7672 | + | 296 | high | `MINTNMLRRVENDKKQKYNRKTKFLNQPLTHFEYQFSSKKKRDFFLIKDVLNFLK*` |
+| 1362 | orf_1362 | hypothetical protein | 23 | 7777 | 8022 | + | 82 | high | `MVGNSRTVVYLNIKKAIPIDNLTITFLEYVCYYIVAE` |
+| 1363 | orf_1363 | ABC-type metal ion transport system, periplasmic component/surface adhesin | 23 | 8070 | 8912 | + | 281 | high | `MNTIQPNNNDVINRLLQQNAQLSLVNAQLESMIQQYKAQAEAPVEETEEDK*` |
+| 1364 | orf_1364 | ABC-type Mn/Zn transport systems, ATPase component | 23 | 8909 | 9613 | + | 235 | high | `MNITVNEKVTNFVDKKEVLAYASVQFNSGQFPNSLNGNLQVTTDDSIDVTATEDEIIAAA` |
+| 1365 | orf_1365 | ABC-type Mn2+/Zn2+ transport systems, permease component | 23 | 9606 | 10397 | + | 264 | high | `MATKYGFVFIESNVTGREKAITLDNNSEYYGVQSGSPSLVTITGRCNVYPKWQIIQDGAV` |
+| 1366 | orf_1366 | Adenine/guanine phosphoribosyltransferase related PRPP-binding protein | 23 | 10501 | 11334 | + | 278 | high | `MSLALDITVFDSAKLVIKGTYKLFSYDIQMDALSNATSSFTIDKNTNIMTGDYVAVRPNN` |
+| 1367 | orf_1367 | UDP-N-acetylglucosamine pyrophosphorylase | 23 | 11341 | 12714 | + | 458 | high | `MYTSDRAFVTPREFASAQSALSGDTSGVLKRGNQLKITVNGLTATVATGQALILGRLVEV` |
+| 1368 | orf_1368 | hypothetical protein | 23 | 12829 | 13314 | + | 162 | high | `MQMPHDLLGWLSVGSILLGGLWWVLKNTIVNSINGLRTDIAGLKGELKISNSITDNHEIR` |
+| 1369 | orf_1369 | hypothetical protein | 23 | 13325 | 13579 | - | 85 | high | `MNKLKRWVIASIGAVAFLVATISGVSANTNGIDIASYQGTTTSYFSQFKSYGDNFTMVKL` |
+| 1370 | orf_1370 | Exodeoxyribonuclease VII large subunit | 23 | 13999 | 15276 | + | 426 | high | `MTFNVDSNIAILVIVWLIVQVLKPTKINNHLLPLIAVFVGALVAIGLSFYTKDTKLVQDI` |
+| 1371 | orf_1371 | Exodeoxyribonuclease VII small subunit | 23 | 15269 | 15493 | + | 75 | high | `MNKWDYIKQYQQAGTYVFMALPNQKHNGIAGGFHNSFANGDELRQWVTQHPD` |
+| 1372 | orf_1372 | farnesyl-diphosphate synthase | 23 | 15486 | 16400 | + | 305 | high | `MTISNALFTEAQVIKDTNSALEDIQETLALSLVDSLKAGDHITTPTVIDMLKDLEDMQLK` |
+| 1373 | orf_1373 | Predicted rRNA methylase | 23 | 16397 | 17233 | + | 279 | high | `MSKTAERIKELRTQKKLTQSELAELVNTSRVTISRIESDIRNPSFAMLSLIADALDTTVD` |
+| 1374 | orf_1374 | transcriptional regulator, ArgR family | 23 | 17226 | 17681 | + | 152 | high | `MYEYLDYTSPLDYFNDVVEDYNVARSNHDKIVITEMNGSIYDPDVALPSDNLIIVNPTFK` |
+| 1375 | orf_1375 | DNA replication and repair protein RecN | 23 | 17718 | 19385 | + | 556 | high | `MKLQKHFFNHLLHHPDTPVWTLICTMVAIMASYNTVIRYGFSEKMFLRILVVYPLIVIFI` |
+| 1376 | orf_1376 | Xanthine/uracil/vitamin C permease | 23 | 19439 | 20746 | - | 436 | high | `MKNYNKIMIIGCSGSGKSTLARKLSQKIDVQVFHLDTLLWHDNWEMSSKDEQHHVISNVL` |
+| 1377 | orf_1377 | Na+-driven multidrug efflux pump | 23 | 20900 | 22255 | - | 452 | high | `MDKLVIPEISEKSNFWMIRAGQAGKYYNDFRINGYVSVDTFDVEKQKIPENTKPDIRKIQ` |
+| 1378 | orf_1378 | phosphoglycerate mutase | 23 | 22596 | 23258 | + | 221 | high | `MKFIDKLEEIVVTLGIYFLICGVMSLVLMIINERISPYFNSFEQIVISFLMTTLFKVKVF` |
+| 1379 | orf_1379 | glutamyl aminopeptidase, Metallo peptidase, MEROPS family M42 | 23 | 23255 | 24322 | + | 356 | high | `MAKYNHIQLTINQGVVTPEKSHYKILKEKNIIYIYRNSDTKKMYVGQTKDFISRHTQHFN` |
+| 1380 | orf_1380 | cell division-specific peptidoglycan biosynthesis regulator FtsW | 23 | 24322 | 25494 | + | 391 | high | `MADSTDKLLRDYFSGRLKLMSEIDPINKQEIVDIEFCLLVINPEHKQAIQRYYSDKFLTW` |
+| 1381 | orf_1381 | hypothetical protein | 23 | 25491 | 25781 | + | 97 | high | `MTQSQHVAVNHVLESVRSAKSLVDLARYQKEPQKLISMLLRIGTNLNEVETRLQTLKGKV` |
+| 1382 | orf_1382 | N6-adenine-specific methylase | 23 | 25803 | 26357 | + | 185 | high | `MTVNVNNIHGFNINVVDAIKPRQYTATEYLRNQLIFLKRLRSELDNELDSNTKIVSMVDM` |
+| 1383 | orf_1383 | Phosphopantetheine adenylyltransferase | 23 | 26361 | 26849 | + | 163 | high | `MKDIETLSNIEQQILNTLPAGRAQAITLNKLAYLLRINKKRVSDIVADLRKRGYLIGSNR` |
+| 1384 | orf_1384 | Lon-like protease with PDZ domain | 23 | 26833 | 27924 | + | 364 | high | `MEKGIKKGHPLPTKVVDEPSYKRPLHGFCYTHFNMESGKILKVWNLDLQILSAKAQNVQA` |
+| 1385 | orf_1385 | DNA uptake protein related DNA-binding protein | 23 | 27989 | 28624 | + | 212 | high | `MTVTNEQLMAELKRMQKQLSNPQPHVWKRAGKVAKHFDVSESTVKNWKDKGIIKPHKQGN` |
+| 1386 | orf_1386 | Predicted hydrolase (metallo-beta-lactamase superfamily) | 23 | 28641 | 29681 | + | 347 | high | `MTSYQETLKRLFDTLPDIAKSEAMTGHDKVISEIWCAYTHLDTALTRLVIEK*` |
+| 1387 | orf_1387 | Glycosyl hydrolase family 70 with YG repeats | 24 | 1 | 522 | + | 174 | high | `MIQWTGEVITLLILIGGAFITGVYMGSEMNKGATK*` |
+| 1388 | orf_1388 | transcriptional regulator, BadM/Rrf2 family | 24 | 579 | 998 | - | 140 | high | `MKLPRSEQETIVIFDVEVGKWHIDTTYPTHIRKYAELLGEIEEKTEDRLAGWIDEQYSSS` |
+| 1389 | orf_1389 | Predicted oxidoreductase | 24 | 1527 | 1742 | + | 72 | high | `ESQTSLQDRVTDAGSTIKEKTSDGVDAVKKTTSQAVNDDDNRVK*` |
+| 1390 | orf_1390 | Putative NADH-flavin reductase | 24 | 1767 | 2417 | + | 217 | high | `MIKQLNEKARTIITTDGEVDDMNSFLRYLLYSNEFDTEGIILTSSVYHYAGDDEKGIKPE` |
+| 1391 | orf_1391 | Predicted periplasmic/secreted protein | 24 | 2524 | 3027 | + | 168 | high | `MKRIKIQKFLHKHGNVFLLALTSGTLVALLTSLTASWEYILLTGWDCAIFVLFCLVIYSF` |
+| 1392 | orf_1392 | hypothetical protein | 24 | 3146 | 3799 | + | 218 | high | `MGLIWTLIVGAVIGAIAGAITSRGAAMGWISNIIAGLIGSWLGESLLGSWGPSLAGMALI` |
+| 1393 | orf_1393 | Predicted hydrolase of the HAD superfamily | 24 | 3875 | 4411 | + | 179 | high | `MTENKNKGQNKEEQVKDQKEKIDPESTAENTNLYEHDPKNADYKKAD*` |
+| 1394 | orf_1394 | Predicted GTPase | 24 | 4401 | 5540 | + | 380 | high | `MSLNELYELNDGHQLPKIGLGTFQIRGYQGVDQILNAIQIGYRLLDTSTNYDSEGAVGEA` |
+| 1395 | orf_1395 | RNA-binding protein, KH domain | 24 | 5540 | 5851 | + | 104 | high | `MKTKSKKVKLNFLHYCVYVISLGGFLFGYDTGVINGALAFMSRPDQLNLTPTLQGVVSSS` |
+| 1396 | orf_1396 | nicotinate-nucleotide adenylyltransferase | 24 | 5862 | 6500 | + | 213 | high | `MANFYIDTTEVVHEIPQNDRPKFYMFGVPRYTNMGDQAVSLAERKYIENEFPNYQYIEII` |
+| 1397 | orf_1397 | NAD metabolism hydrolase of HD superfamily | 24 | 6493 | 7077 | + | 195 | high | `MKSRLYLLVFSLLLNALGNAVAITTNLGANPWTAAGQGLAATFDISLGTALVSFGVFVLL` |
+| 1398 | orf_1398 | Iojap family protein | 24 | 7081 | 7455 | + | 125 | high | `MNMEKIAKIAGVSKAAVSFALNDKPGISQATRNQILKIAEELNYVPRRKIKKDTIVFLLV` |
+| 1399 | orf_1399 | SAM-dependent methyltransferase | 24 | 7543 | 8295 | + | 251 | high | `MAQNSVTVKQLVENTRLKIVAGEQYLDREITTADISRPGLEMTGYFNYYAPERIQLLGIT` |
+| 1400 | orf_1400 | Predicted nucleotidyltransferase | 24 | 8295 | 9467 | + | 391 | high | `MRFIVRLAINMLTFLLLSMIFPSGFRVDSWGAALLAAFVLSILNAIIKPILTILTLPLTI` |
+| 1401 | orf_1401 | Predicted metal-binding, possibly nucleic acid-binding protein | 24 | 9469 | 10014 | + | 182 | high | `MINTLKRILTDKTFFITLILSILSLCFGQVKSTDIDFKTIMSLSSLLIIIAIYQDLGILK` |
+| 1402 | orf_1402 | DNA-binding response regulator, OmpR family (Rec-wHTH domains) | 24 | 10111 | 10800 | + | 230 | high | `MRRLFDEELADLDSSFTEMGMLVSQTIQKAVQSFVDHDREGARKILENDHQINEREAAIE` |
+| 1403 | orf_1403 | Signal transduction histidine kinase | 24 | 10813 | 11913 | + | 367 | high | `MTDNKEKTILSTRDVHLWYGKKEALHGIDLDFPEKGITALIGPSGSGKSTYLRAINRMHD` |
+| 1404 | orf_1404 | Acylphosphatase | 24 | 11900 | 12172 | + | 91 | high | `MINSNTDLKPASEFIRENAPERFIYKMDTEKHEIALSTHDLQVFYGDNLALSEGDLQFER` |
+| 1405 | orf_1405 | Preprotein translocase subunit YidC | 24 | 12244 | 13167 | + | 308 | high | `MNAKTADKIATGVIYAISGIVALILFAMLAFILVQGVPHLSWHFLTSPARAFEAGGGIGI` |
+| 1406 | orf_1406 | rRNA methylase | 24 | 13227 | 14000 | + | 258 | high | `RTRGLSTFFRDGVNVKDFLFGTTWNPSVTNPATKQPYIGALPMIIGSFLVTFLAAVVATP` |
+| 1407 | orf_1407 | Preprotein translocase subunit SecG | 24 | 14078 | 14314 | + | 79 | high | `MFEDVRLQGQILGEMATFLGDSYMRSVSIALVIQDLGGTEETFSNVLTKTHQLVHNNDIS` |
+| 1408 | orf_1408 | RNAse R | 24 | 14420 | 16744 | + | 775 | high | `MLEKLKNEVYKANMALPKLGLVTFTWGNVSGIDREKGLFVIKPSGIEYDQLKPSDMVVVN` |
+| 1409 | orf_1409 | SsrA-binding protein | 24 | 16756 | 17220 | + | 155 | high | `MAKLGINEKSLPFQMSWRDKLNLAKKHGFSFVEISIDETDERIERLDWNKEQRFQLVRDV` |
+| 1410 | orf_1410 | Predicted membrane-associated HD superfamily hydrolase | 24 | 17356 | 18912 | + | 519 | high | `MTKPNLQIALDQNTLADAARIAHLAGPIVDIVEVGTILELQAGQQAIRVLREMFPDKIIA` |
+| 1411 | orf_1411 | Methyl-accepting chemotaxis-like protein | 24 | 19057 | 19449 | + | 131 | high | `MNILVSCANGSGTSLMMMKSVEKSMKKLGIPISKINHTSIAEGKSTASQYDAVFTPLNFV` |
+| 1412 | orf_1412 | hypothetical protein | 24 | 19452 | 19982 | + | 177 | high | `MDSILAGILKIWEFFADNILTQPAYMIGFIVLIGYMLEKKPWYESLAGFLKATIGYMILI` |
+| 1413 | orf_1413 | Ribonuclease HIII | 24 | 20000 | 20911 | - | 304 | high | `MTMLKYFHDNDLVRIYDETPQDWREALRIASENLKEKEIITDAYINEIIKNVEVNGAYIV` |
+| 1414 | orf_1414 | hypothetical protein | 24 | 21090 | 21467 | + | 126 | high | `MVKAKNVQEATRENWIENTFPEWGTWLNEEIEASQVPENNFRMWWLANNGVWLKTHENTN` |
+| 1415 | orf_1415 | Stimulator of FtsZ polymerization and component of cell-division Z-ring | 24 | 21575 | 21967 | + | 131 | high | `MQVSNMNYAKFINYIATQELLPNVQTMANRLNLSSRKIYYLLQAANSDLRSSNQPFLVPS` |
+| 1416 | orf_1416 | Predicted membrane ancor connecting MutS2 with cell-division Z-ring | 24 | 21964 | 22485 | + | 174 | high | `MKNNIHKIVNGLFLRVFGILLILSTLVANALMIPLTTVSAASDIMLQYTSNSTGVFPTNS` |
+| 1417 | orf_1417 | MutS family ATPase | 24 | 22544 | 24946 | + | 801 | high | `MKTLTEDILYRVIKKRAKDSHKGTYGRVLIIGGTAQFGGAVIMNALAAVNSGAGLVTVAT` |
+| 1418 | orf_1418 | hypothetical protein | 24 | 25102 | 25452 | + | 117 | high | `MEKNSFILSDEEKLSTEQAHLIQDVVDFANQGLKQEKKKVFIIEGGAGSGKSVVLFEIFK` |
+| 1419 | orf_1419 | hypothetical protein | 24 | 25516 | 26592 | + | 359 | high | `MTVDWKQETEKRKAAYIEDLKALLAVESVRDDSQATPDAPLGPGPTAALVKMLAIAERDG` |
+| 1420 | orf_1420 | hypothetical protein | 24 | 26643 | 26969 | - | 109 | high | `MTLVIIVAVGLIGFSLKKVLRVGQPQSVRVKNDR*` |
+| 1421 | orf_1421 | guanylate kinase | 24 | 27226 | 27822 | + | 199 | high | `MSIQNFLVELKKSKWVDLSHEFGPNSPHFPKFNAASAKTIFTNEKDGFLVKEFSFVGQYA` |
+| 1422 | orf_1422 | DNA-directed RNA polymerase subunit omega | 24 | 27833 | 28045 | + | 71 | high | `MSKWTPAADEKNQGTLEFEIARAQVEEGLEQAFQRNKNEVSIPGFRKGKVTKQLFFQKFG` |
+| 1423 | orf_1423 | Peptidyl-prolyl cis-trans isomerase (rotamase) - cyclophilin family | 24 | 28085 | 28672 | + | 196 | high | `MVQTESKLENQLIAQLGKSGWQFRPELNHYSLIVNHFRVLLNRRNIDKLDGTLLTDQEFQ` |
+| 1424 | orf_1424 | RNA binding protein (S1 domain) | 24 | 28745 | 29128 | + | 128 | high | `MSNTNQTQQSQQAELQKRLWKIANDLRGNMDANEFRNYILSLIFYRFLSDKIEDYVNNNL` |
+| 1425 | orf_1425 | hypothetical protein | 24 | 29135 | 29506 | + | 124 | high | `MTDKTMPALRFRGFYDAWEQRKLDTIFKKIRNAFVGTATPYYVDRGHFYLESNNIKNGQI` |
+| 1426 | orf_1426 | Phosphoglycerol transferase related protein, alkaline phosphatase superfamily | 25 | 2 | 1945 | + | 648 | low | `MDGTVGRTAKVVDDNLILAQRVGRLVSNTNPEFVYQWLNHGSFFNEMTKVSHGGTIKHIS` |
+| 1427 | orf_1427 | hypothetical protein | 25 | 2039 | 2821 | + | 261 | high | `MIKKMIVFIITCISFGLLSLQQDNLKVLADTDNQFTIELHHQLSVYESNPVSYTPGSNVT` |
+| 1428 | orf_1428 | K+ transporter | 25 | 3089 | 5122 | + | 678 | high | `MIPRKAYIEKLTKFKDTEFIKIITGVRRSGKTYVMQMFRDDLLSSGTKDDQIIYLSFEDV` |
+| 1429 | orf_1429 | hypothetical protein | 25 | 5502 | 6509 | + | 336 | high | `MLITKTGLRFAEALGLTPADFDFEKQIITIDKTWNYKAVQADFAPTKNNSSIRKVQIDWQ` |
+| 1430 | orf_1430 | hypothetical protein | 25 | 6544 | 7491 | + | 316 | high | `MTQNQTFHAYFKDWMTLYKQGAVRPVTYQKYVITHQHLVKLAPRLKTSKLSRSTYQQLLN` |
+| 1431 | orf_1431 | hypothetical protein | 25 | 7507 | 7734 | + | 76 | high | `MFIPKIKKGKTELPVLSVTQTSGVVYRDEVGIDIKYNRNTLSNYKVIEPNDFVISLRSFQ` |
+| 1432 | orf_1432 | hypothetical protein | 25 | 7736 | 8104 | + | 123 | high | `MANTPNFEEEIHCSFCGKSASEVKKIVAGPNDVYICNECVALAEGIIEEELTVDRAAEVL` |
+| 1433 | orf_1433 | hypothetical protein | 25 | 8239 | 8847 | + | 203 | medium | `MDVHNVEMVMSAVSASQYPTDGKPEIALVGRSNVGKSSLTNTLIQRKNFARTSSQPGKTQ` |
+| 1434 | orf_1434 | hypothetical protein | 25 | 8910 | 10952 | + | 681 | high | `MTKYNDEELRARLTPEEYEVTQHAATERPFTGKYDQWWEDGIFVDVVSGEPLFSSTDKYD` |
+| 1435 | orf_1435 | Surface antigen | 25 | 10952 | 12127 | + | 392 | high | `MVEEPVWHRFWRYFNPVNIFKELLFGWKWAEGVLFLVLILLQLLVWTLGVVHNSTLDWFG` |
+| 1436 | orf_1436 | hypothetical protein | 25 | 12147 | 12671 | + | 175 | high | `MRTIAGNLFTDDLQGDKIGVFFGTLAPMHVGHQAEIYKAAALNDGVVVIASGYTNDRGYQ` |
+| 1437 | orf_1437 | hypothetical protein | 25 | 12661 | 13227 | + | 189 | high | `MIKLRQFKTEDLALFWETAYSDPQAEWTKWNGPYFKDVLPKKDDFINNIGPERFVNNMNR` |
+| 1438 | orf_1438 | hypothetical protein | 25 | 13237 | 13683 | + | 149 | medium | `MKSKSWSQMANAILLVLPLLVSALFGITNVSADTTDSVNVTLHKRVFDEGQVPDSKTNTG` |
+| 1439 | orf_1439 | Predicted conjugal transfer protein, ATPase | 25 | 13695 | 16193 | + | 833 | high | `MTKQYAQIIVDVPTMQTDQPYTYAVPENMIDSLLLGMRVTVPFGRRNVMGFVVGLIASTD` |
+| 1440 | orf_1440 | hypothetical protein | 25 | 16207 | 16542 | + | 112 | low | `MTYSVVLMGTPSFAVPILEALLENNDYDVKAVVTQPDRPQGRKHTLTPSPVKVAALAHDV` |
+| 1441 | orf_1441 | hypothetical protein | 25 | 16529 | 16780 | + | 84 | low | `MSDKRVYSDNPRVLAVQTLAKIKNGAYSNLQLNQVIKQHKLGEADTRLLTTLVYGVIQHR` |
+| 1442 | orf_1442 | protein translocase subunit secA | 25 | 16867 | 17124 | + | 86 | low | `MAIAYRTDPGSKRHDNEDYVGSFINKVGRTMVIVADGVTSNEGGEVASAMTVEHFGHAWE` |
+| 1443 | orf_1443 | LSU ribosomal protein L9P | 25 | 17146 | 17460 | + | 105 | low | `MLPDTLVDNRYRIIKSLGDGGMANVYLAHDEFLNRDVTFKMMRLDMKNDVDLAKRFQREA` |
+| 1444 | orf_1444 | DNA segregation ATPase FtsK/SpoIIIE related protein | 25 | 17478 | 18860 | + | 461 | high | `MINGMKTGRIIRSLSGYYDIQLPSGDIQRTRARGEFRKSKQKPLVGDFVDFESENDEGFI` |
+| 1445 | orf_1445 | UDP-N-acetylglucosamine--N-acetylmuramyl- (pentapeptide) pyrophosphoryl-undecaprenol N-acetylglucosamine transferase | 25 | 18947 | 19396 | - | 150 | low | `MSGIIAPSILSADYTNLERDVKLVEAAGAEYLHIDVMDGTFVPAISYGPNWVKQLCPETD` |
+| 1446 | orf_1446 | Transposase | 25 | 19747 | 20259 | - | 171 | low | `MQINILAGGPTELWPKNLFQEQGMWIGADRGAWYLYQKNIPMIMAVGDFDSLTDFELTTI` |
+| 1447 | orf_1447 | hypothetical protein (no reference match) | 25 | 20553 | 20816 | - | 88 | none | `MAVKTVEDATFNQETNTGVSITDFWATWCGPCRMQSPVLDVLSDEVDDVKFVKMDVDANP` |
+| 1448 | orf_1448 | dihydroxyacid dehydratase | 25 | 20969 | 21493 | - | 175 | low | `MAKDAITGARTRFGNQRSHALNSSRRSWKPNLQKVTVKINGAAPKKVYLTARTLKAGLKN` |
+| 1449 | orf_1449 | hypothetical protein | 25 | 21691 | 21987 | + | 99 | high | `MAEQKQNNANIFLKLFIALMFFIGFLVFMYPFIANGVNNYVAQKELNAVNQLNQSNQKAS` |
+| 1450 | orf_1450 | Predicted transcriptional regulator | 25 | 22385 | 24037 | + | 551 | medium | `MFLNFMAIIIKTNNGDISLENDVIATIVGGSAIENPGVVGMASKATFRDGVNQILNRENY` |
+| 1451 | orf_1451 | Predicted membrane protein | 25 | 23988 | 24368 | + | 127 | low | `MSVNSLTKITNVEFGKMINAAAAVLAANADKINKLNVFPVPDGDTGTNMSLSMASGAQYE` |
+| 1452 | orf_1452 | hypothetical protein | 25 | 24361 | 24555 | + | 65 | high | `MTDEQNHRPVNTKLQAEIESKLNQHKVPKIDKKPRTRLEKMTLVMSWFMVILMAGSVIYA` |
+| 1453 | orf_1453 | hypothetical protein | 25 | 24642 | 24902 | + | 87 | medium | `MQWWIWPLGGFIFWTVVIIFKKWTALKQASIKTLDIITIPNWIVLHQTMGYLFGISFVPW` |
+| 1454 | orf_1454 | permease of the major facilitator superfamily | 25 | 25094 | 25459 | + | 122 | low | `MFMGEYSHTLDTKSRLIIPAKFRNQLGDQFIITKWMEKSLRAMPMAVWEKLQEQLNQLPL` |
+| 1455 | orf_1455 | TPR repeat protein | 25 | 25462 | 25662 | + | 67 | low | `MPFEHVTVLLHEAIALLDIKPEGTYVDATLGGGGHTGEILKQLTTGTLYSFDQDDTAIQY` |
+| 1456 | orf_1456 | hypothetical protein | 25 | 25773 | 26192 | + | 140 | high | `MAQNAYQYTPLAQQAPLTASQPRTHSRTKYKAAAWTKKERIMVAIVATVVLALMVGVVYT` |
+| 1457 | orf_1457 | transcriptional regulator, AraC family | 26 | 36 | 1148 | + | 371 | high | `MKNKVRRIPHKKITKNAKTFGVLLLIATTIVILGLGVRLFIIAGNKSVDGHNLTKATREA` |
+| 1458 | orf_1458 | ribonucleoside-triphosphate reductase class III activase subunit | 26 | 1228 | 1776 | - | 183 | high | `MTEYFWAFTRAFIVTVIFMPAVIKFLKQSKEQAVIRKLGPDHQSKAGTPSMGGALFIAAA` |
+| 1459 | orf_1459 | ribonucleoside-triphosphate reductase class III catalytic subunit / ribonucleoside-triphosphate reductase | 26 | 1745 | 3955 | - | 737 | high | `MQATDFKNKKVMVFGWARSGKAAAQLLTKLGSKVTVVNGGEFDAQDATYRSLLAADVTLI` |
+| 1460 | orf_1460 | Nicotinic acid phosphoribosyltransferase | 26 | 4250 | 5692 | + | 481 | high | `MTKQTSKKKNKQNIFLNIIFLIGFLVALYPFYVGALNHFIDQQRIKTIQKETNQDISAKE` |
+| 1461 | orf_1461 | NH(3)-dependent NAD(+) synthetase | 26 | 5689 | 6510 | + | 274 | high | `MKIILSGGGTGGHIYPALALAEVIRKHEPNTEFLYVGSERGVESNIVPATGMPFEKLTVQ` |
+| 1462 | orf_1462 | Protein of unknown function (DUF1105) | 26 | 6605 | 7129 | - | 175 | high | `MEKIKSQFMKRRPLQLWISLTAFVVLIVGLILSLQPWRTISSVNIDSNMLTKQQVQKYVG` |
+| 1463 | orf_1463 | ABC-type cobalt transport system, permease component CbiQ related transporter | 26 | 7146 | 7814 | - | 223 | high | `MNNSGVTVGLDIGTTSIKVVITQMTGNQFNVIGAGNAPSRGLRRGVIVDIDATASAIREA` |
+| 1464 | orf_1464 | ABC-type cobalt transport system, ATPase component | 26 | 7811 | 9214 | - | 468 | high | `MDFSIDDAQQAGAIIKVIGVGGGGSNAVNHMIEEGVSGVEFIVANTDVQALDKSKADTKI` |
+| 1465 | orf_1465 | ABC-type cobalt transport system, membrane component | 26 | 9228 | 9818 | - | 197 | high | `MALGDTIKRLFSNEEDDYYEEDGYEQSQQQEQQTTQQTSSQPRFVRQTTQSQTPAGLNSA` |
+| 1466 | orf_1466 | Putative transcription activator | 26 | 10337 | 11041 | + | 235 | high | `MIIEIIKWVFNLIQYYEYAIVVYILMSWLPGARESGLGRFLGKIVEPYLSMFRFIPPIAM` |
+| 1467 | orf_1467 | histidinol phosphate aminotransferase apoenzyme | 26 | 11129 | 12202 | - | 358 | high | `MTNKLSTISQHFRSNEQPFVKQVDDWIQQSRNEYRSILTRFLNPREQYILNVLVNHAADL` |
+| 1468 | orf_1468 | phosphoribosyl-ATP pyrophosphatase | 26 | 12186 | 12530 | - | 115 | high | `MALTPDEILNHEFTKKGSKAYIATDVDAFLDQINGDYEALIAERDELKHQNELAQVKIEE` |
+| 1469 | orf_1469 | phosphoribosyl-AMP cyclohydrolase | 26 | 12554 | 12952 | - | 133 | high | `MKYKDTLNLGKTGFPMRGSLPKTEPERQAKWYAQDLYQKRLSQNQLKPHFNLHDGPPYAN` |
+| 1470 | orf_1470 | imidazole glycerol phosphate synthase subunit hisF | 26 | 12949 | 13713 | - | 255 | high | `MGENDQLKIWQDELVKIINDLNTPHTLGGITNPANRKHDSMLARRALDNLIILSEEINTA` |
+| 1471 | orf_1471 | 1-(5-phosphoribosyl)-5-[(5- phosphoribosylamino)methylideneamino] imidazole-4-carboxamide isomerase | 26 | 13710 | 14426 | - | 239 | high | `MKEFLTNNFEQTQSLASRIASFVYPGLVITLNGDLGAGKTTFTQGFSRALGVKSRVKSPT` |
+| 1472 | orf_1472 | imidazole glycerol phosphate synthase subunit hisH | 26 | 14423 | 15040 | - | 206 | high | `MAVKIRLKRMGAKKRPFYRVVIADSRSPRDGRFIETVGTYNPISQPAEIKLDEEKILSWL` |
+| 1473 | orf_1473 | imidazoleglycerol-phosphate dehydratase | 26 | 15092 | 15679 | - | 196 | high | `MLLSFVNVTLVFLIGTLLVNIIAVALNRRVKWFILSTLIEFILAYVVLYIQLPPKNMTTL` |
+| 1474 | orf_1474 | histidinol dehydrogenase | 26 | 15681 | 16958 | - | 426 | high | `MAFLEVNYYSKVLGMDRVMNVILPELSDHNPTWTTETLKDIPVLYLLHGMSGDHAIWQRR` |
+| 1475 | orf_1475 | ATP phosphoribosyltransferase regulatory subunit / ATP phosphoribosyltransferase catalytic subunit | 26 | 16955 | 18562 | - | 536 | high | `MSLNVVMGNGQHDLRSEMLTMIQQQFRQNELLTVFYIVPNHVKFDSEVNVLQRFSIMNGN` |
+| 1476 | orf_1476 | Signal transduction diguanylate cyclase | 26 | 18941 | 20047 | - | 369 | high | `MATKFTKNQQRAIEEKGHNILVAASAGSGKTTVLIERLIQKILSGVSVEKFLIVTFTNAA` |
+| 1477 | orf_1477 | C-di-GMP-specific phosphodiesterase | 26 | 20041 | 20769 | - | 243 | high | `MIKYETISFLNGKLTLFKKNDQIVCISLADDGVSEFLNDFPEYELKQQVLPETSLFRAYA` |
+| 1478 | orf_1478 | histidinol-phosphate phosphatase | 26 | 20861 | 21703 | - | 281 | high | `MTNTEKYFKVGTIVNTHGIRGEVKIMAITDFAQDRFKKGADLFIDTKQGRIPVKVQSSRL` |
+| 1479 | orf_1479 | Predicted hydrolase of the HAD superfamily | 26 | 21753 | 22559 | - | 269 | high | `MRIDVLSLFPDMFAPMRQSIIGKAIDKGALDFQVTDFRNFTENKHNNVDDYPFGGGAGML` |
+| 1480 | orf_1480 | hypothetical protein | 26 | 22628 | 22807 | - | 60 | high | `MRLAISGIVNKYLITHASKIMKIAIAGFGALGARVGVMLQQAGHEVTGIDGWAAHIAAIS` |
+| 1481 | orf_1481 | signal recognition particle subunit FFH/SRP54 (srp54) | 26 | 22807 | 24282 | - | 492 | high | `MAIETAIFAGGCFWCMVQPFDSLDGIEKVRSGYTGGHVENPTYEQVLTHTTGHTEAVKIW` |
+| 1482 | orf_1482 | hypothetical protein | 26 | 24325 | 24669 | - | 115 | high | `MTFDMSQPITFSLEEASLARAAEWQQLIQDLMVETDTFLIASMRDGDEIPVKNDVPAITL` |
+| 1483 | orf_1483 | signal recognition particle-docking protein FtsY | 26 | 24666 | 25670 | - | 335 | high | `MQLEFLGTGSGQPSKFRNVTSIALRLLDERNAVWLFDVGEATQHQILKTTLRPRKVEKIF` |
+| 1484 | orf_1484 | SSU ribosomal protein S8P | 27 | 2 | 184 | - | 61 | high | `MNQNNWNILPQPSEKVVRQLSAQLNISQFMSTIVAQRGYTDPEAAFKYLQPSVEQLHDPM` |
+| 1485 | orf_1485 | LSU ribosomal protein L5P | 27 | 318 | 860 | - | 181 | high | `MTVDLHDFVATVEDYPEPGVSFRDISPLMGDGVAYKQSVDAIADFAKHLNVDLIAGPESR` |
+| 1486 | orf_1486 | LSU ribosomal protein L24P | 27 | 884 | 1192 | - | 103 | high | `MNNSNIKEWFIRFFKGIFIALGFILPGVSGGVLAAILGLYERMLNFMAHLRQNFKKDFWF` |
+| 1487 | orf_1487 | LSU ribosomal protein L14P | 27 | 1216 | 1584 | - | 123 | high | `MTMKIKLAQYAQQFSDSPDTLVKINAARKALQSLAQHTLPENPLPQLSFSSQDILSDLRL` |
+| 1488 | orf_1488 | SSU ribosomal protein S17P | 27 | 1633 | 1899 | - | 89 | high | `MKQIFQFIGAVVTAIIGLLILIPVILTIIGVAVPVVLSIIGIALFVALIIAAVAGIIGLV` |
+| 1489 | orf_1489 | LSU ribosomal protein L29P | 27 | 1922 | 2128 | - | 69 | high | `MAQNAITPQHKIDTDQIKEKVAQEKESVRDTVYKVSAAVSNAILVTLGMGLLLQTIAGFI` |
+| 1490 | orf_1490 | LSU ribosomal protein L16P | 27 | 2128 | 2541 | - | 138 | high | `MTKYYLRQRHSINDGVNIVFDQDFKASYLVSGRSGKKSDEIQVQDMSGRVLVRIRQTSYG` |
+| 1491 | orf_1491 | SSU ribosomal protein S3P | 27 | 2556 | 3227 | - | 224 | high | `MPLSHTTWAPAVKDKLNPEYLKQVAQFIQSTYREDAHIFPQQKNIFAALEKTPLPETKVV` |
+| 1492 | orf_1492 | LSU ribosomal protein L22P | 27 | 3227 | 3583 | - | 119 | high | `MELFEQLKNKITGQNKTIVFPEGEDPRIQGAAIRLAADNLIEPILLGDAQEISKTAQAHN` |
+| 1493 | orf_1493 | SSU ribosomal protein S19P | 27 | 3598 | 3876 | - | 93 | high | `MNFVAMDFETANREKHSAVSIALAIVRDNQVVDKFYSLIKPETTFSSYNTAIHGLHRQDV` |
+| 1494 | orf_1494 | LSU ribosomal protein L2P | 27 | 3894 | 4727 | - | 278 | high | `MLKYLYNSQGDENLKFISWNIDSINAAVEHKSVRGEMTWSTLNEIATIRPDVFAIQETKL` |
+| 1495 | orf_1495 | LSU ribosomal protein L23P | 27 | 4749 | 5036 | - | 96 | high | `PFGIERDSNKPVKGNIRSEWSRISQTGHVDYGVKTLVMYFDTTDSPLDVYIKLPKLETGN` |
+| 1496 | orf_1496 | LSU ribosomal protein L4P | 27 | 5036 | 5659 | - | 208 | high | `MNNIQMKNEIPDSNADTVKLVFNVTFDDGTAIGDGTIVITRADWLNMTGQQKLDKIADVI` |
+| 1497 | orf_1497 | LSU ribosomal protein L3P | 27 | 5692 | 6378 | - | 229 | high | `MQPDTNKVIQKLLQENATLTLVKAQLESLVEQYQEKEREEPKKAEEK*` |
+| 1498 | orf_1498 | SSU ribosomal protein S10P | 27 | 6452 | 6760 | - | 103 | high | `MNMTVGDLQFNFVDGKLTLKYASVSFNAGTFPNSLNGNLQVTPEDGVSMKSSENDIKAAA` |
+| 1499 | orf_1499 | Spermidine/putrescine-binding periplasmic protein | 27 | 7057 | 8136 | - | 360 | high | `MAFPHDLLGWLSVGSILLGGLWWVLKNTIVNSINGLRTDIAGLKDELKISNSITDNHEIR` |
+| 1500 | orf_1500 | spermidine/putrescine ABC transporter permease protein | 27 | 8138 | 8968 | - | 277 | high | `MNKLKRWVVASVGAVAFLVATISGVSANTNGIDIASYQGTTTSYFSQFKSYGDNFTMVKL` |
+| 1501 | orf_1501 | spermidine/putrescine ABC transporter permease protein | 27 | 8982 | 9830 | - | 283 | high | `MTFNVDSNIAILVIVWLIVQVLKPTKINNHLLPLIAVVVGALVAVGLSFYTKDTKLVQDI` |
+| 1502 | orf_1502 | ABC-type spermidine/putrescine transport systems, ATPase component | 27 | 9790 | 10896 | - | 369 | high | `MPDNLSFENQLSLLKSRGMVIDPDKRDESIHTLKTVSYYRIKEFAKPFEVTNQGDKIYHN` |
+| 1503 | orf_1503 | Cyanate permease | 27 | 10977 | 12170 | - | 398 | high | `MLVLRSNKVFDFDLFFSEDSQYQLFIITNKLVIAPKEKHIMETGTVKWFNGDKGFGFITR` |
+| 1504 | orf_1504 | translation elongation factor 2 (EF-2/EF-G) | 27 | 12261 | 14372 | - | 704 | high | `SSTIYDNQDSQKETYVGSRLLNTFTKNDVKIAQYQVGYTVGNDKNTIIRVFNLPFAQKAG` |
+| 1505 | orf_1505 | SSU ribosomal protein S7P | 27 | 14533 | 15003 | - | 157 | high | `MKAIITNFVFQIPTGSISFTGLQSEVAGWVSAFIAMGIMYLVVRHFIKGSIGQIIVSLAV` |
+| 1506 | orf_1506 | SSU ribosomal protein S12P | 27 | 15019 | 15432 | - | 138 | high | `MAEVYNYQKALKQDIVIRKISDEYSLPVGISLKPAIIFFASVVVIYLIFHVPLQAFYHAN` |
+| 1507 | orf_1507 | Type II secretory pathway, prepilin signal peptidase PulO | 27 | 15685 | 16344 | + | 220 | high | `MKNSKTYKLYKSGKLWVIGAVAVAGVAVSANTTQVNADKVSNTDAQAVKTTDTVQDDKQA` |
+| 1508 | orf_1508 | ATP-binding subunit of Clp protease and DnaK/DnaJ chaperones | 27 | 16349 | 18829 | - | 827 | high | `MIKFSEIKIFVGAVNVPSLGQWFTLPVSPSRVTQVLTEKGVIRSDTGNEEIMISDYEAPF` |
+| 1509 | orf_1509 | bacterial peptide chain release factor 2 (bRF-2) | 27 | 18975 | 20093 | - | 373 | high | `MLVAEFKAIYNAYLYDLNVTDIKWTYLKTTLELRYFDSNGLIQIRWRIKNGFVLEDTKKV` |
+| 1510 | orf_1510 | protein translocase subunit secA | 27 | 20144 | 22669 | - | 842 | high | `MKLAVPFKAVKDNILLTQDNEAWAYFNIEALSISDNDEAGISKRQTQLSLLFDRLADFED` |
+| 1511 | orf_1511 | seryl-tRNA synthetase | 27 | 22691 | 23998 | - | 436 | high | `NDLLEFRLDQVDFLDVEFESAKKLYGYDLIFLNGGYPFYLLHFLKKSGADHILKDISRTG` |
+| 1512 | orf_1512 | Small conserved membrane protein | 28 | 79 | 393 | + | 105 | high | `MFNKKLRSYSFRLCLSIVGTIIIAFGIVLFRLANMGIDPATAADVGISDTFHWNLGNYQL` |
+| 1513 | orf_1513 | Nucleoside-diphosphate-sugar epimerase | 28 | 458 | 1099 | - | 214 | high | `MVNKQKIEYNYTQEERRVIFMIDSKSFYASVECVERNYNPLKALLVVMSEQENTNGGLVL` |
+| 1514 | orf_1514 | Copper resistance protein | 28 | 1140 | 1772 | - | 211 | high | `MTDNDDFTTIINRYFQSDYRERGKIKWNGYFLSDHTSSLTKEGIQRNAITKKLPAISLND` |
+| 1515 | orf_1515 | LSU ribosomal protein L32P | 28 | 1832 | 2005 | - | 58 | high | `MNPIENIIAEINSLFTKQPNTIYEVRLVNQRYAKKVNVFFEYYRIGHATHSQQIARLNDE` |
+| 1516 | orf_1516 | Nicotinamide mononucleotide transporter | 28 | 2102 | 2896 | - | 265 | high | `MSDKKISAGLAALKVMEGWGVHTIYGIPSGTLSGLMDAMGHPENNIKFLQVKHEEVAAMA` |
+| 1517 | orf_1517 | Predicted membrane protein | 28 | 3227 | 3877 | + | 217 | high | `MIPKTIHYVWFGGNEKPKSVLNAIETWRTNLPDYEIREWNELNYAVTENSPKYVQQAFKE` |
+| 1518 | orf_1518 | bacterial translation initiation factor 3 (bIF-3) | 28 | 4104 | 4565 | + | 154 | high | `MDWISLIDQIELDEDAAVLGDLYEYLIGMIAANSGAKAGEFYTPHQVSDIMARILTAGRE` |
+| 1519 | orf_1519 | LSU ribosomal protein L35P | 28 | 4631 | 4828 | + | 66 | high | `MVQDTLLDSFRAGRRNYTIFQVGKATLLRVSDVMKLKKTDVFNLDFNPNADEDLDGLD*` |
+| 1520 | orf_1520 | LSU ribosomal protein L20P | 28 | 4873 | 5292 | + | 140 | high | `MDNKDIELIQQMENKYDTFMPVLTNLIDSVEKFNSIYNNYIELRNFYGSEKWFEYMEIEK` |
+| 1521 | orf_1521 | Branched-chain amino acid permease | 28 | 5663 | 7015 | + | 451 | high | `MILCQLEEIQKRVVQGWTPDVIVGRAEFSISCSMRTLYRMFKQGVFEVTHLPMKGKRKAN` |
+| 1522 | orf_1522 | uracil phosphoribosyltransferase | 28 | 7187 | 7798 | + | 204 | high | `MRILSALKIKSSTYYNWRHWQPSRQEKRRESLKPYILDVWKTFKFYGYRRIAAYSHLNND` |
+| 1523 | orf_1523 | Transcriptional regulator | 28 | 7931 | 8893 | + | 321 | high | `MSIRYSQDFKDSLVKLHQEGRSLKSLAEEFGTSKDSIAIWVKQATPVMIQGQSKTLKDVK` |
+| 1524 | orf_1524 | methionine aminopeptidase, type I | 28 | 9009 | 9797 | + | 263 | high | `MLNHRQTKIQFESLATLQAIQKQAYQMLMQGLTTTGVSMREWGILIYLEQHGQATASELA` |
+| 1525 | orf_1525 | Capsular polysaccharide biosynthesis protein | 28 | 9899 | 10561 | + | 221 | high | `NIQSTEAKTVTETIHYQGAGNQTPADNTAQVTFTRQVSTDTVTGEKTYGSWSSDQSFAAV` |
+| 1526 | orf_1526 | hypothetical protein, lipoprotein | 28 | 10829 | 11338 | + | 170 | high | `MVTNSWAELADGSWMYLDNDGNPLTGPQKIDGQSLYFNDAGKQIKNALVKLDDGSTIYLD` |
+| 1527 | orf_1527 | Lyzozyme M1 (1,4-beta-N-acetylmuramidase) | 28 | 11384 | 12697 | + | 438 | high | `DTDGNVHYFDGKTGNMVINSWGKISDGSWLYLNDSGVAVTGPQNINGQNLYFNEDGIQVK` |
+| 1528 | orf_1528 | polysaccharide biosynthesis protein (putative) | 28 | 12758 | 13789 | + | 344 | high | `MTKHKQELKTQIVAYGWQLFIP` |
+| 1529 | orf_1529 | hypothetical protein | 28 | 13996 | 16953 | + | 986 | high | `MQKATIFRIIATVGILGTVLYEIVTNTNTLYIKIVQAVFMVILWTALAVDRYQHNKSKRE` |
+| 1530 | orf_1530 | Sucrose-6-phosphate hydrolase | 28 | 17062 | 18573 | + | 504 | high | `MDLLTTFPMAMSGLTFLILSKDKKSKKYRVAGIMMLLASFISFVTYFVYK*` |
+| 1531 | orf_1531 | Polysaccharide Transporter, PST family | 28 | 18670 | 20115 | + | 482 | high | `MSRKNIKTRSKNKSFYQSIWITTLIIVIVVIIGFWQVYTRYSGDLVKKVDTTSSKNTLKP` |
+| 1532 | orf_1532 | Lipopolysaccharide synthesis sugar transferase | 28 | 20181 | 20807 | + | 209 | high | `MMTTQDNILLKTAIKMRHEKEFKASNRILKKLDAKYPLNANIQYQYAWSFDILGQEREAV` |
+| 1533 | orf_1533 | Capsular polysaccharide biosynthesis protein | 28 | 20825 | 21451 | + | 209 | high | `MDENGKIVPVEIKGWNWGAFMYNIFWGIGNKTYLPLLCLIPLFNFIWIFVCGFKGNEWAW` |
+| 1534 | orf_1534 | hypothetical protein | 28 | 21461 | 22837 | + | 459 | high | `MFIGNNVKLSHYHEEDGKKLASWQWDEDFVTPLASDMIHPYTAEDWEKIFRDASNSYENV` |
+| 1535 | orf_1535 | Lipopolysaccharide biosynthesis glycosyltransferase | 28 | 22834 | 23340 | + | 169 | high | `MNKILRDQFMIDQLSDNQKETITNINSYINKSIKGNQHAVAVIQGAAGTGKSVVLMNLVT` |
+| 1536 | orf_1536 | Superfamily II DNA and RNA helicase | 29 | 301 | 1512 | - | 404 | low | `MFKKRIRLNTSKLSVVLYGTLIGFLTGIVVSVFRWTIEKLLQFVQTLYLDISHGNIALIF` |
+| 1537 | orf_1537 | ABC-type multidrug transport system, ATPase and permease component | 29 | 1513 | 2223 | - | 237 | low | `MKAKRYSTEFKSSIVALHNEGRSANSLANEYPVWLCKPSLVGLKKPKSLGLMLMDSLCLV` |
+| 1538 | orf_1538 | ATP-binding subunit of Clp protease and DnaK/DnaJ chaperones | 29 | 2220 | 2699 | - | 160 | low | `MLHDIWQNNYKVYGAPRLRLALANLNLYHGTNRIRRLMQEAGIYSVMSRRSNKPTTTVEY` |
+| 1539 | orf_1539 | ATP-binding subunit of Clp protease and DnaK/DnaJ chaperones | 29 | 2699 | 3394 | - | 232 | low | `METGIDGSSHALIVSGNFQFLSYRMDALVLNTNDQFCVDLTNFQSQD*` |
+| 1540 | orf_1540 | Glycerol uptake facilitator related permease | 29 | 3391 | 4149 | - | 253 | low | `MIHEIANSIKLMDGSYYEIGHAGCEKIARDNGEFWSIYVNGVKKTWIGREFIAYIDGQSQ` |
+| 1541 | orf_1541 | Hydroxyethylthiazole kinase, sugar kinase family | 29 | 4152 | 5309 | - | 386 | low | `MIEFNKNNAQLEKHLCFSIYELSRAIQRMYTPFLNELNLTYPQYLVLVALYDHDNITVSE` |
+| 1542 | orf_1542 | Inosine-uridine nucleoside N-ribohydrolase | 29 | 5290 | 5592 | - | 101 | low | `MKFLLARETQHQLQFIKAQEELEERYGVVVPGNMNDIQHSEYSHVIMNFSDGEGSRAFEN` |
+| 1543 | orf_1543 | ATPase component of ABC transporter with duplicated ATPase domains | 29 | 5589 | 5804 | - | 72 | low | `DCQNGNVGIDLSKSNLVVVDIDKHKHNGMASILSWFKTHQIAPDTIQDTYVEQTPTGGLH` |
+| 1544 | orf_1544 | tRNA (uracil-5-)-methyltransferase related enzyme | 29 | 5855 | 6058 | - | 68 | low | `MAEIDTTALPEKQSMPDWLNTNDNGDVKGIDTLKLSEAIIKDSPVLGVPFNGSIRYYKYN` |
+| 1545 | orf_1545 | homoserine dehydrogenase | 29 | 6048 | 6215 | - | 56 | low | `MVQPTELAENNRKGDEMNYIVGFMFVVLVAIIIRQRHQFEKMRQSARFMSYYAKLNENAK` |
+| 1546 | orf_1546 | DNA-directed RNA polymerase subunit beta' | 29 | 6202 | 6435 | - | 78 | low | `MKIIIVIIFLALIGYILEQRRHIKFLEKVNFNQETRHIMTAHEIFLLKHQIGTYVYSLET` |
+| 1547 | orf_1547 | hypothetical protein | 29 | 6439 | 6597 | - | 53 | low | `MIASTEHAQLWPKWLKRSEAHKYISVADNTFIKRYVNTGKVKAYPTEHGIRYDRDEIDEA` |
+| 1548 | orf_1548 | hypothetical protein | 29 | 6603 | 6845 | - | 81 | high | `MKLQQVDTPKGKVWEVNGYLINKSQKIRVKKRGFDSKQSARQWFNNESVLFDNGESRYNK` |
+| 1549 | orf_1549 | hypothetical protein | 29 | 6914 | 7123 | + | 70 | high | `MKDITKQKFSRNKLVEMISFALGNLGHSAFYGALSTYFIVYVTSGMFDGLPQSVANKLIG` |
+| 1550 | orf_1550 | hypothetical protein | 29 | 7101 | 7247 | - | 49 | high | `MTDTLQISKFLHGGDYNPEQWIDNSEIINRDFTLFKQSKINTFTIGIFSWAKIEPKEGVY` |
+| 1551 | orf_1551 | hypothetical protein | 29 | 7264 | 7479 | - | 72 | high | `MIVDLHSHLLPNIDDGSKSYRASIRMAKEAVDNGIRAALMTPHHMNGHYVNHKPDVIRLT` |
+| 1552 | orf_1552 | Transcriptional regulator, xre family | 29 | 7764 | 8096 | + | 111 | low | `MNNVLELRQLWHIIQKHLFALIFMAIIGACAGYGVAKFVIAPTYSASTSMLVNRSADDTS` |
+| 1553 | orf_1553 | ABC-type Mn/Zn transport systems, ATPase component | 29 | 8089 | 8499 | + | 137 | low | `MSFFKKRSSVDKDGLSVETMTKGARLITAAEPKNPVSEQFRTLRTNIEFASVSRGEIKTL` |
+| 1554 | orf_1554 | UDP-N-acetylmuramyl tripeptide synthase | 29 | 8548 | 9603 | + | 352 | low | `MYRRFLKRFFDLLLAIFLFIILLLPLVIIALIVKLTSKGPILFIQERYGRNSRPFKLYKF` |
+| 1555 | orf_1555 | Integrase | 29 | 9774 | 10820 | + | 349 | high | `MSKKVLMLAAKANMIQQFNHRNIKILQNLGYEVHVATNMVDFGSMSTDENERFKLWMSDN` |
+| 1556 | orf_1556 | Predicted membrane protein | 29 | 11000 | 11389 | - | 130 | high | `MIYIFDKKQAIIKVLTNDDFTAAHLNFKINTATTFEFSLPASKALPSGSKYVATPHPLND` |
+| 1557 | orf_1557 | Phosphoenolpyruvate carboxylase | 29 | 12308 | 13822 | + | 505 | high | `MKLSDLKTMLQIKDNKRDDILNLIIKNTTQALSFKLGLKASVSIPDVLDYIALEVSVKRY` |
+| 1558 | orf_1558 | Diacylglycerol kinase family protein | 29 | 13920 | 14831 | + | 304 | high | `MSNTLTKLADLVNPEVLAPIVSYEFKQAMRFTPLASVDTTLQGRSGDTLKFPAFTYIGDA` |
+| 1559 | orf_1559 | ADP-ribosylglycohydrolase | 29 | 14849 | 15808 | - | 320 | high | `MTEPIESTQPVEQNQPENEETKTLTQSELDSLMDKHTAKVLEKQKADFEKQLAEAIQQGK` |
+| 1560 | orf_1560 | methionine adenosyltransferase | 29 | 15827 | 16984 | - | 386 | high | `MAQRPKQTNKYWEKRLKQEQAYMNKATNTDDIVRRYDLVIDDITRKIESEYARLELRGFE` |
+| 1561 | orf_1561 | hypothetical protein | 29 | 17346 | 18173 | + | 276 | high | `MQKIFSDNQKANLIYQDSLDNLTPQRVMQFVKHHNQYQRPRLERLDEYYKGLNVGILEQE` |
+| 1562 | orf_1562 | tRNA delta(2)-isopentenylpyrophosphate transferase | 29 | 18219 | 19112 | - | 298 | high | `MANDLVIDVPEMVDKAYYKLYTSKQQYIALKGARASGKSVATAFKVVIDILRYPYVNWLV` |
+| 1563 | orf_1563 | Glycerophosphoryl diester phosphodiesterase | 29 | 19105 | 19848 | - | 248 | high | `MKKYEEAEQDYLSGLKYKDIADKYGVSISTVKSWKSRYWKSNDVATKDKQVAKKVAKVAK` |
+| 1564 | orf_1564 | hypothetical protein | 29 | 19932 | 20114 | + | 61 | high | `MFKNFDTENWLSFWSIGVPVILSAFGFIISLILSFFADRNKRRPVILITINKYHKNGVYN` |
+| 1565 | orf_1565 | Rhodanese-related sulfurtransferase | 29 | 20143 | 20547 | - | 135 | high | `MEKKIPSIEYRNMDVEERLNFDWDEYNAMSIWESGKWAFKNPEANKYALDTLKRERLDIK` |
+| 1566 | orf_1566 | Negative regulator of genetic competence, sporulation and motility | 29 | 20615 | 21322 | - | 236 | high | `MANIKWTDEHKNRVTELGKQGLSSSKIAQKLFDEFGVNLSRRTVSRYLSTGHTSSRYDKL` |
+| 1567 | orf_1567 | Arsenate reductase related protein, glutaredoxin family | 29 | 21379 | 21813 | - | 145 | high | `MSLYEFTDLTVGTSSVSLPSESITFNGHKLDSELVGYQTLNVEGRSSFTRSLSTATGLAD` |
+| 1568 | orf_1568 | homoserine O-succinyltransferase | 30 | 2 | 544 | - | 181 | high | `MKIDKDYGLVASDDELNIYRKIDKQRQYSRKQNKASKRRRHTDKRKDAFYDDRKWQ*` |
+| 1569 | orf_1569 | Thiol-disulfide isomerase and thioredoxin | 30 | 1053 | 1379 | + | 109 | high | `MSDLYYETSYRWNSEEIMEATYKCGYCGSKITSDEGMYLGELSSYGQNKNSLPQGVFICT` |
+| 1570 | orf_1570 | Trypsin-like serine protease with PDZ domain | 30 | 1473 | 2330 | - | 286 | high | `MADRIDRYLSDYYSGVIDMQIKLRKIELQTPETVDENIGGGTAQNKENRVLDNQLIIEES` |
+| 1571 | orf_1571 | Signal transduction histidine kinase | 30 | 2422 | 3720 | - | 433 | high | `MIVSLLKSFFIGALSYLMMGTWINWGDLPPTMKTPGVAYGLNAVMLIFWITSFVIYEKLR` |
+| 1572 | orf_1572 | DNA-binding response regulator, OmpR family (Rec-wHTH domains) | 30 | 3701 | 4402 | - | 234 | high | `MTEPVAYLAKSRKSGAVNATVKEWSYHDFENIPLYTKEQLQPKVQMTQAEFNEFKKLKLL` |
+| 1573 | orf_1573 | Toxin-antitoxin addiction module toxin component MazF (an endoRNAse) | 30 | 4483 | 4848 | - | 122 | high | `MTKYQKKPVTVEAFQWTKEKIPEWFRILGYRTYGNNIDIGDDSRNIVYPGDYIICDEDGE` |
+| 1574 | orf_1574 | alanine racemase | 30 | 4887 | 6008 | - | 374 | high | `MLKDSFDVTFRGGSSYRTYFEIPNLCPHCGEKMSPRYCYGLSRQTHDDRDENNAVGLLLQ` |
+| 1575 | orf_1575 | Phosphopantetheinyl transferase (holo-ACP synthase) | 30 | 6005 | 6415 | - | 137 | high | `MKKLENKKDQLSYEELVEENKILNLLIDTQKETIDINSKTIKILFQALRIL*` |
+| 1576 | orf_1576 | D-alanyl transfer protein | 30 | 6486 | 7772 | - | 429 | high | `MTIEEYKRQSIKRINKQAAVSGAFTNCFDTRAQSERKRTSERKRRLRELVRSNITEIDVL` |
+| 1577 | orf_1577 | D-alanyl carrier protein | 30 | 7777 | 8013 | - | 79 | high | `MKTYYSIYVNDDFWRAFDTEREAKKYLYEFQKTHHVKTEIIVTGGKKSNVGR*` |
+| 1578 | orf_1578 | D-alanyl transfer protein | 30 | 8084 | 9292 | - | 403 | high | `MESYSVQAVLSAVDKNLSSTFGKAAQAASDFESKSKQSLENVGKFMAVAGAAVTAIGIKS` |
+| 1579 | orf_1579 | D-alanine-activating enzyme | 30 | 9285 | 10814 | - | 510 | high | `MTIFKFDIEPVAQARPRAARIGNSIRMYDPKKTANFKTDLRMMAQIAARGKHYKLLDGGL` |
+| 1580 | orf_1580 | D-Ala-teichoic acid biosynthesis protein (putative) | 30 | 10829 | 10969 | - | 47 | high | `MTELFAKLNKVEPNKGLITLQLSTDDIHTLEKYHANGQQQVVSLIASDENGVSAQQRKFA` |
+| 1581 | orf_1581 | cellobiose-specific PTS system IIC component | 30 | 11115 | 12311 | + | 399 | high | `MNNEELELSFLGDLMLSNDIQGLLADVASQMKADDFNNQEAKQTFSVINEIANNGDEVNP` |
+| 1582 | orf_1582 | alpha/beta hydrolase superfamily protein | 30 | 12301 | 13137 | + | 279 | high | `MSNKRKPIYFWLRLDNNFYKNLAIKKARKMAGGDTMVVIYQKMMLTSLDTSGVIYYEGVY` |
+| 1583 | orf_1583 | ComX | 30 | 13160 | 13711 | - | 184 | high | `MNQVNLTGRLTKDVEVRYTQSGKAVGSGTIAVTRRFKNADGNTDSDFIQYVVWGKSAEIL` |
+| 1584 | orf_1584 | rRNA methylase | 30 | 13750 | 14499 | - | 250 | high | `MTFVELQNHMNLKKQAGQQVKYTYRSAEQILQTFKTLDSGWEIALNDEIVTVANRIFIQS` |
+| 1585 | orf_1585 | Ribonuclease III family protein | 30 | 14496 | 14903 | - | 136 | high | `MANEITIIDDFGQNFGLSLLNDKEQLQGLTNEQLEDLVYLIKHLKVGISNVDKELKGRLD` |
+| 1586 | orf_1586 | DNA-directed RNA polymerase subunit beta' | 30 | 15120 | 18782 | - | 1221 | high | `MNQTYVKDVTQRHEQVDRDNFIYDDKPTLSVYPFGEMTQSEVAKANNAERVFFLKPEDKH` |
+| 1587 | orf_1587 | DNA-directed RNA polymerase subunit beta | 30 | 18806 | 21160 | - | 785 | high | `MDRLRKLRKERNVTQQELADDMLVTTRTLGRYELGEREPRLPMVLDLADYFKVSIDYLVG` |
+| 1588 | orf_1588 | Phosphotransferase system, mannose/fructose/N-acetylgalactosamine-specific component IIB | 31 | 2 | 448 | - | 149 | high | `MVFLQIIAVAIVLGVVFVGGMMQGESQEREHQRNMRRLERMGGTDGSNKYMRVK*` |
+| 1589 | orf_1589 | Phosphotransferase system, mannose/fructose-specific component IIA | 31 | 464 | 895 | - | 144 | high | `MYEIETMTLPDYQLAMEAYAIKQALRREDIALHAWYNQTVQATKGSDKHPKPRYQKFSDF` |
+| 1590 | orf_1590 | Transcriptional regulator | 31 | 1078 | 1653 | - | 192 | high | `MEEIIKINQNEQGETRVSARELHKGLGVKKRFSAWFEQYREMYVEGTDFTSVLSGTVVNN` |
+| 1591 | orf_1591 | Alpha/beta hydrolase superfamily enzyme | 31 | 1796 | 2932 | + | 379 | high | `MATAFQLTPERVEKIETYNRIGWPNLMTISLLELYTQTSQDTLRSVFLSRDDAPFIKYHQ` |
+| 1592 | orf_1592 | hypothetical protein | 31 | 3035 | 3178 | + | 48 | high | `MGKNQHVVPDGAGGWNVKGEGNSRATANYSKQSDAVKKAKDIAKNQNSEELTHGRDGKIR` |
+| 1593 | orf_1593 | Rossmann fold nucleotide-binding protein for DNA uptake | 31 | 3219 | 4085 | - | 289 | high | `MENKNVVIVEPANDKEFGTTVLNSKNWDRIVITDSNGKKVAEINGETATPATGYLVEMYP` |
+| 1594 | orf_1594 | ATPase component of ABC transporter with duplicated ATPase domains | 31 | 4140 | 6017 | - | 626 | high | `MLANKQALFDIRMQKRLTQKDLALASGLSERTINTYESDIDNLRNARYKNVEKVANALGV` |
+| 1595 | orf_1595 | dihydroorotate oxidase B, catalytic subunit | 31 | 6111 | 7049 | + | 313 | high | `MFANNLRYLREKHGMDQIDLAMKLGRKSSSSVSEWEKGKYTPKIGVLNDIAEIFGVSITD` |
+| 1596 | orf_1596 | acetate kinase | 31 | 7078 | 8334 | - | 419 | high | `MSKKITGDDGKTYVQKKPFYKRWWFILFAIVVIGAGIRSASASDSDSDSSSSSKEAKVSS` |
+| 1597 | orf_1597 | N-acetylmuramoyl-L-alanine amidase | 31 | 8491 | 9354 | + | 288 | high | `MGMLNGLIGDASGVSIESVKEEISPLLIDDEVIEHAFKLVRDLVVFTNKRLILSDKQGLT` |
+| 1598 | orf_1598 | hypothetical protein | 31 | 9354 | 9653 | + | 100 | high | `MASFEKRGKKWRAVVSYVNGHGVFKKVTSTFDTQREAKLWAAKEEVKVKNGYDPEKSKTT` |
+| 1599 | orf_1599 | Transcriptional accessory protein | 31 | 9713 | 11905 | - | 731 | high | `MANKQELVDSVAKATGLTKKDATASVDAVFASIEEALKNGEKVQLIGFGNFEVRDRAARK` |
+| 1600 | orf_1600 | nucleotide-binding protein, UspA family | 31 | 12029 | 12460 | - | 144 | high | `MQVKINNKEVKLKFGVKFVRELDKVAGLDVNGASFGMGLTKSVPALNTADPAVLADVIYS` |
+| 1601 | orf_1601 | Large-conductance mechanosensitive channel | 31 | 12802 | 13278 | - | 159 | high | `MSAPIVAIVGRPNVGKSTIFNRMAGERIAIVEDMPGVTRDRLYAPAEWLNYEFRMIDTGG` |
+| 1602 | orf_1602 | hypothetical protein | 31 | 13439 | 15679 | - | 747 | high | `MSETNNELLAALESADQIKVGDVVTGEVLAVDNDNQAVIGLHTGEEGVVPAREYSDDRNI` |
+| 1603 | orf_1603 | cystathionine beta-synthase (acetylserine-dependent) | 31 | 16112 | 17026 | + | 305 | high | `MTNFQVAIDGPASAGKSTIAKILATKLNYVYVDTGAMYRTITLAAKKNGIAYNDEEKIKN` |
+| 1604 | orf_1604 | cystathionine gamma-lyase | 31 | 17037 | 18176 | + | 380 | high | `MNDFDPNNMSRSKRPKKDKLEPKFSRKSDSKSPNKGFRVLLVVLALAVISFVPVYGMIAN` |
+| 1605 | orf_1605 | serine O-acetyltransferase | 31 | 18190 | 18684 | + | 165 | high | `MSIVPVTRVQRTTLIAILSAISFGLMLFPQVPIIPSADFLKLDFSIVPVVIGLYWLNYSA` |
+| 1606 | orf_1606 | hypothetical protein | 31 | 19379 | 19453 | - | 25 | low | `MYINQKVKKKMSEEAQRLQKIIAQAGLASRRGAEELIINGRVQVNGQTVTELGTKVTAND` |
+| 1607 | orf_1607 | Predicted glutamine amidotransferase | 32 | 36 | 767 | + | 244 | high | `MNNLSQIEALLFVSGDEGISVKNMSIITGFDRSAIQGLLEELVLKYDTDLSSALQIRESD` |
+| 1608 | orf_1608 | hypothetical protein | 32 | 810 | 983 | - | 58 | high | `MEKSNIAKNGLTIKLSDFEGPIDLLLHLIKKSEMNIFDLKIADITSQYLDFIHAQQAMQL` |
+| 1609 | orf_1609 | amino acid/polyamine/organocation transporter, APC superfamily | 32 | 1070 | 2914 | - | 615 | high | `MLTQSRQSDEKTIMGILSLLPGLREISHLNAEIAWYHDNEARSLYVWQKESQGQVLGVLG` |
+| 1610 | orf_1610 | Predicted membrane protein, putative toxin regulator | 32 | 3044 | 4174 | - | 377 | high | `MQEIDNAIVDYLHYIRIERGLSENTIKSYHQDLVQFGEYLNGEKLVLDQVDHIVILSWLN` |
+| 1611 | orf_1611 | Predicted permease | 32 | 4606 | 5601 | + | 332 | high | `MALSTLKGVNAVAFARKLSDAAKKPADLIPWQTSLSFDPSRDSDSTVTKDGNVNTQSSVS` |
+| 1612 | orf_1612 | methionine synthase (B12-independent) | 32 | 5635 | 7935 | - | 767 | high | `MNPKVGTIIKANVTDENEKYFFAQVDGFTYEIDKSELEKPLKIGGFVTGFAYENEGHKLQ` |
+| 1613 | orf_1613 | 5,10-methylenetetrahydrofolate reductase | 32 | 8103 | 8996 | - | 298 | high | `MSLLEELNNDIKQAMKDKNKDVLSVIRMVKSTVMNEQINLGHDLTKEEELTVLSREVKQR` |
+| 1614 | orf_1614 | Predicted glutamine amidotransferase | 32 | 9497 | 10213 | - | 239 | high | `MAKVIVRKNESLDDALRRFKRGVSKDGTLQEYRKREYYVKPSVARKLKSEAAQKRNKKKG` |
+| 1615 | orf_1615 | ABC-type oligopeptide transport system, periplasmic component | 32 | 10222 | 11817 | - | 532 | high | `MQRTEKKIVSNILKGSLGNLIEWFDWYVYASFSIYFAPSFFPSHDKTAALLSTAGVFAIG` |
+| 1616 | orf_1616 | O-acetylhomoserine sulfhydrolase | 32 | 11931 | 13223 | - | 431 | high | `MNVKELLANPVLAEYPILAGAEGLNREINQVGMIDAPDFDEYIAPGQLLLTTGFLFKEDW` |
+| 1617 | orf_1617 | hypothetical protein | 32 | 13274 | 13372 | - | 33 | high | `MSQQKNATMNADGTIRGLKKKHVQMIAIGGTIGTGLFLGAGNSIAKTGPSILIVYAVLGA` |
+| 1618 | orf_1618 | Methionine synthase II (cobalamin-independent) | 32 | 13417 | 14544 | - | 376 | high | `MQKIVHNFMKNQYAGRIGGAVFYGVIVAFAMNYFWHPGHIYSSGFTGFAQLVSTLTGDRI` |
+| 1619 | orf_1619 | Autoinducer AI2 synthesis LuxS-like protein | 32 | 14969 | 15445 | - | 159 | high | `MKRTNYAGLIDETYLNQTVTLTGWVQKRRDFGDLIFVDLRDREGIVQLTFNATNADALAV` |
+| 1620 | orf_1620 | Methionine synthase II (cobalamin-independent) | 32 | 15647 | 16774 | - | 376 | high | `MAKPIFQRPKGTADLLPQKTVQWQHVEAVARVLFGDYNFKEIRTPLFENFEVFSRSAGDT` |
+| 1621 | orf_1621 | cystathionine beta-lyase | 32 | 16826 | 17965 | - | 380 | high | `MKVTEEVFGTLPDGEKVTAFTLENINHTQVTVISYGATWQSFSIERSGEKKELLVQFDDL` |
+| 1622 | orf_1622 | cysteine synthase / cystathionine gamma-synthase | 32 | 17962 | 19071 | - | 370 | high | `MISPQKILFDTYYGLLQSGGYNVYDYLPLEDEPVDYPIVVIGNTQQTSATTKYSRNDHVF` |
+| 1623 | orf_1623 | homoserine O-succinyltransferase | 32 | 19068 | 19439 | - | 124 | high | `MEKSLFNIVNEHTLESSIFFDFSGVSKTFSGHASGPLKRSHYLLHFVLEGQGTYFTMNHK` |
+| 1624 | orf_1624 | transcription-repair coupling factor | 33 | 3 | 2810 | - | 936 | high | `MKRIKALNTKFAEKFGPHETQQYFSPGRINLIGEHTDYNGGHVFPAAITYGTYGVARKRD` |
+| 1625 | orf_1625 | peptidyl-tRNA hydrolase | 33 | 2811 | 3377 | - | 189 | high | `MSDKMKQRFSYAFGAFGHDAYYVTLSTYFMIFVTSTLFAGSDKATESKYIGIVTSLVVGI` |
+| 1626 | orf_1626 | CBS domain containing protein | 33 | 3503 | 4147 | + | 215 | high | `MYSANKNRYEKMIYNRIGNSGLQISAISLGLWNNFGSVDPYENQKEIIHQAFDLGITYFD` |
+| 1627 | orf_1627 | ATP-dependent Clp protease proteolytic subunit ClpP | 33 | 4219 | 4821 | - | 201 | high | `MTSIKQILARHDWENPVVTNWNRLPLHTSMSYANERDKREIKQPRKSLNGPWQFSYFENL` |
+| 1628 | orf_1628 | hypothetical protein | 33 | 4909 | 5853 | - | 315 | high | `MDKNSNPHVLKKIPLSLRHHMTIPWATFIKSENIPAKNASLQERASIVGRIGILMLSCGT` |
+| 1629 | orf_1629 | hypothetical protein | 33 | 5854 | 6855 | - | 334 | high | `MALLLAVKAITQENREFLAQYDISVVTPDTITDEQLPEVLISYAWDTEIGHKILANPESK` |
+| 1630 | orf_1630 | Excinuclease ABC subunit A | 33 | 6920 | 9778 | - | 953 | high | `MSEQRKAKAEDFDWDNLGFEYHDLPYRFRAYYKDGKWSEGGLETDSNIPVNEAATGLHYG` |
+| 1631 | orf_1631 | Excinuclease ABC subunit B | 33 | 9810 | 11819 | - | 670 | high | `MDHDTLKERTLKQQEERKGTYKVKKLGTEVEIDRLTLEIVEDFKDAFDEDKLAIRYTPLL` |
+| 1632 | orf_1632 | Phosphoglycerol transferase related protein, alkaline phosphatase superfamily | 33 | 11936 | 14074 | - | 713 | high | `MGTIHLLHTNDIHSHFENWPRISRYLLAGQAKYDESLTFDIGDAIDRLHPLTEATQGLSN` |
+| 1633 | orf_1633 | hypothetical protein | 33 | 14126 | 14389 | - | 88 | high | `MSNISFSVTGVDKLSKALLSHASAGDIKSVVKRNTTQMQQQAMSNASIVYTKGYSTGDTK` |
+| 1634 | orf_1634 | Predicted integral membrane protein | 33 | 14382 | 15419 | - | 346 | high | `MAQERLDFLVFYRGNLVTGFDYIYVKRQEGHAFWQSDLKAQEAKDILDKDFMFYNPHLND` |
+| 1635 | orf_1635 | Glycosyltransferase | 33 | 15429 | 16436 | - | 336 | high | `MSKYYEARIAKLQKLLAKLNLDGMIVYQGFNTKYLTGFEGGTGDGIVVVGKKNARLITDA` |
+| 1636 | orf_1636 | 1,2-diacylglycerol 3-glucosyltransferase | 33 | 16437 | 17663 | - | 409 | high | `MLMNQENLQMFAHHKGGGSSANGRDSAGRRLGTKVADGQDLTAGSIIYRQRGTHIYPGVN` |
+| 1637 | orf_1637 | ABC-type multidrug transport system, ATPase and permease component | 33 | 17842 | 18294 | - | 151 | high | `MAYAIIVTGGKQYKVAEGDTIFVEKLDAEAGEKVTFDQVVLTDSKIGTPFVEGAKVEGTV` |
+| 1638 | orf_1638 | Fibronectin-binding protein | 34 | 1 | 987 | + | 329 | high | `MSNKTDARVVRTKHIIQAETILLISTQPDFSITTLLARANITRGTFYKYYRNKEHLISEI` |
+| 1639 | orf_1639 | SAM-dependent methyltransferase | 34 | 1037 | 1795 | - | 253 | high | `MKETNFIKYLSWIATVMAVLMYVSYIPQIADNLAGSKANPLQPLVAAINCTLWVIYALKK` |
+| 1640 | orf_1640 | thymidylate synthase | 34 | 1776 | 2201 | - | 142 | high | `MMNSGAVGSGKIKIDNNTFLKQLRQDYPILNTKFDMGSFELFGVRVVQVYTAYPNEASLA` |
+| 1641 | orf_1641 | thymidylate synthase | 34 | 2186 | 2782 | - | 199 | high | `MEETTLVKRKRNKKNCYKKVTKPKPTEKPIEELSDSELTDKQKAFVLEYLRISNVT*` |
+| 1642 | orf_1642 | Nucleoside 2-deoxyribosyltransferase | 34 | 2807 | 3277 | - | 157 | high | `MKKYEEAEQDYLSGLKYKKILLISMAFLKERLDSGRDDIGQKKT*` |
+| 1643 | orf_1643 | Phosphoketolase | 34 | 3873 | 6239 | + | 789 | high | `MANFLIDTLKQFAPIVAVFISSWALFVSYKTNRHKDNFEIAKQKYFSILVDDLPQKIADI` |
+| 1644 | orf_1644 | ornithine carbamoyltransferase | 34 | 6324 | 7340 | - | 339 | high | `MRFPDNIQFYSNVKEHYDPKVGDYVGGPELVGEAIANVTETGTETSVQDFGDITTKSLVI` |
+| 1645 | orf_1645 | argininosuccinate lyase | 34 | 7340 | 8722 | - | 461 | high | `MIKIKLDWPDKTLQFWSGNKFGRLVYKEQVAPKLSTNEVDDVIELIFPAQIIFLNFSFVQ` |
+| 1646 | orf_1646 | argininosuccinate synthase | 34 | 8778 | 10004 | - | 409 | high | `SDGYIGMNSNTYIDQIPEEKTLLRLSTEFPGTAYHLSFVFEKGN*` |
+| 1647 | orf_1647 | Adenylosuccinate synthetase | 34 | 10194 | 11477 | - | 428 | high | `MNKIKNNCYLLFSMAILSILYSLPLFYNQDLRAFNNQDLLFHLTRSLGMNNVLSSPVNFL` |
+| 1648 | orf_1648 | hypothetical protein | 34 | 11824 | 12546 | - | 241 | high | `MDTNTITKLITTIAITAIPIIGAYVSKVILGNKQVVNLIQVLSPLAKDAVVAMQKLGVTE` |
+| 1649 | orf_1649 | Phosphatidylglycerophosphatase A | 34 | 12631 | 13119 | - | 163 | high | `MNKLKRWVVASIGAVAFFGAIITGVSANTNGIDVASYQGDTASYFNSFKQVDDNFTMVKL` |
+| 1650 | orf_1650 | D-3-phosphoglycerate dehydrogenase | 34 | 13136 | 14314 | - | 393 | high | `MQMPHDLLSWLSVGSILLGGLWWVLKNTIVNSINGLRTDIASLKDELKISNSITDNHEIR` |
+| 1651 | orf_1651 | phosphoserine aminotransferase apoenzyme | 34 | 14311 | 15399 | - | 363 | high | `NTVQGQAGQPNYYPTINQVYLSAVTGDLVQEDLNNGGFIYELPLATFSTTATSGTATQHN` |
+| 1652 | orf_1652 | phosphotransacetylase | 34 | 15767 | 16492 | - | 242 | high | `MKAKRYSTEFKLSIVALYNEGRSVNSLANEYHLAVQTVTGWVKNLKSIPTALILKIVHFI` |
+| 1653 | orf_1653 | hypothetical protein | 35 | 317 | 520 | + | 68 | high | `MTVYGYARVSTAGQSLSEQKDTLKNAGADIIMSEKYSGTTTTRPQFERLVHLVEPNDTLI` |
+| 1654 | orf_1654 | NADH:flavin oxidoreductase, Old Yellow Enzyme family | 35 | 758 | 1942 | + | 395 | high | `MATIHLYLASTNHQSTNITATTPAAWVVILRYADHEKALNDGGYGHTETSLALSVLLY*` |
+| 1655 | orf_1655 | fhu operon transcription regulator | 35 | 1965 | 2882 | - | 306 | high | `MQTLIQTFIDRRGDLLTALWQHLGISLASLVIAMVIAIPLAIWVVRRPRWAEGLLQLTSV` |
+| 1656 | orf_1656 | SSU ribosomal protein S9P | 35 | 3071 | 3466 | - | 132 | high | `MTTAIEFQHVQKDFNGQTVIPDLNLTIDQGELFVLVGTSGSGKTTSLKMINCLEPLTAGK` |
+| 1657 | orf_1657 | LSU ribosomal protein L13P | 35 | 3485 | 3928 | - | 148 | high | `MYKSGKMLVIAGSVSIIGVTSFIQQAQADVSQNNGVVVATAVDQSNLDATTSDKSITTDD` |
+| 1658 | orf_1658 | hypothetical protein | 35 | 4066 | 4476 | - | 137 | high | `MNNKKGSVIKEIRKIRGISQQRLGVLIGSQSMVSRIENNKTEPTDHTILLLCDALNISFE` |
+| 1659 | orf_1659 | Pseudouridylate synthase | 35 | 4526 | 5293 | - | 256 | high | `MNQLTQLLQNDTIKNPSDPFMRHYYLMSLSTLYHLDFLVASIDDQNELIDYFFNISYWQF` |
+| 1660 | orf_1660 | ABC-type cobalt transport system, permease component CbiQ related transporter | 35 | 5314 | 6117 | - | 268 | high | `PVSTVGIALAISLSGIGSGAAAMGVVATTIVLLINSWKVNKPGVTVAIALGAMKGMMPSV` |
+| 1661 | orf_1661 | ABC-type cobalt transport system, ATPase component | 35 | 6110 | 6967 | - | 286 | high | `MVIDIYDSEILYGIRKKIKLLRKLNDLTQHELAKSLYVSYQLVSKWERNISSPTFETLIT` |
+| 1662 | orf_1662 | ABC-type cobalt transport system, ATPase component | 35 | 6943 | 7761 | - | 273 | high | `MTYIQTKRNGWCYLSTIMDLHSRRIIGYSFSKKMDTDLVLKTLESAVKNRTITGDLIIHT` |
+| 1663 | orf_1663 | NADH dehydrogenase, FAD-containing subunit | 35 | 7936 | 9606 | + | 557 | high | `MKGRFFVLKGNYFGETKTHYKLYKCGKNWAVMAISAFSLGLGMLVTSRPVSADVAATSTS` |
+| 1664 | orf_1664 | Geranylgeranyl pyrophosphate synthase | 35 | 9675 | 10673 | + | 333 | high | `MEHKILKYIKNKINSHSKQKKPSSDAQDLVSLSSKKDIDINEDENMGNYIRYLDGGIANP` |
+| 1665 | orf_1665 | LSU ribosomal protein L17P | 35 | 10715 | 11098 | - | 128 | high | `MLSISKPAVSRLINKLEINQLITITFGQDKRQKIVQLTSQGKILAAQHDRLHSQAVKDYL` |
+| 1666 | orf_1666 | DNA-directed RNA polymerase subunit alpha | 35 | 11135 | 12079 | - | 315 | high | `MADILKFIFEIINNTPFWVWVVLIILIKRGTSLINDSPASIGRSIIMPFIFVIWGLNTVV` |
+| 1667 | orf_1667 | SSU ribosomal protein S11P | 35 | 12127 | 12513 | - | 129 | high | `MKIFVIGANGRVGQELIKHLINQHHEIIAGSRNPERTMKHKNITAINFDLHDDIETLSQK` |
+| 1668 | orf_1668 | SSU ribosomal protein S13P | 35 | 12639 | 13010 | - | 124 | high | `MSNNLMQRFSSDDIFDFMNQAMHPWSDQRLLPKSIKTDVIEKDDRFTVTAELAGVNKDDI` |
+| 1669 | orf_1669 | LSU ribosomal protein L36P | 35 | 13087 | 13206 | - | 40 | high | `MAIILTFGNFKGGTGKTTNSTMIGYELSKRDKRVLLLDLDPQGNATNLYLKTKSAIDNEV` |
+| 1670 | orf_1670 | bacterial translation initiation factor 1 (bIF-1) | 35 | 13251 | 13466 | - | 72 | high | `MNTDEIEKYTELENQANQLIETVATENNCDPQDLKWWHISNYLEDNHKIVLVPLNKNEFS` |
+| 1671 | orf_1671 | Adenylate kinase | 35 | 13573 | 14136 | - | 188 | high | `METILDRTKKLAKEKGLSLSELEEKIGIAKTSIYSWKSNIPKGETIQKTADVLDTSTDYL` |
+| 1672 | orf_1672 | protein translocase subunit secY/sec61 alpha | 35 | 14129 | 15463 | - | 445 | high | `MDEYPDVFTLDDEDLLTTDIELLSGLRKKIIKF*` |
+| 1673 | orf_1673 | LSU ribosomal protein L15P | 35 | 15463 | 15897 | - | 145 | high | `MNKRIMKGGLNVIMTNDEGKTKIFLRGDFEKPLTAEEHAELLADLKPLADKYEL` |
+| 1674 | orf_1674 | LSU ribosomal protein L30P | 35 | 15928 | 16110 | - | 61 | high | `MTTNFIDSEITDFKVNAYHDGDFTEVTKQDTLGKWGVYFFYPADFSFVCPTELGDLADHY` |
+| 1675 | orf_1675 | SSU ribosomal protein S5P | 35 | 16122 | 16445 | - | 108 | high | `MTEPHIYDTIIIGGGPAGLSAGIYAGRSTMDTLIIEGDQIGGQVTTTSTVANYPAVEAID` |
+| 1676 | orf_1676 | Predicted permease | 36 | 3 | 830 | + | 276 | high | `MPLDGLFTHAIVHELNDLITGGRITKVHQPYPNEIVLVVRNNGQNYPLLLSAHPSYARAQ` |
+| 1677 | orf_1677 | GTPase | 36 | 1180 | 2481 | - | 434 | high | `MSIRYSQDFKDSLVKLHQEGRSLKSLAEEFGPSKDSIAIWVKQATPVMIQGQSKTLKDVK` |
+| 1678 | orf_1678 | tryptophanyl-tRNA synthetase | 36 | 2775 | 3794 | + | 340 | high | `MGLPLVNQFLAQGYALVRILSALKIKPSTYYNWRHWQPSRQEKRRESLKPYILDVWKTFK` |
+| 1679 | orf_1679 | serine/threonine exchange transporter, LAT family | 36 | 3880 | 5211 | + | 444 | high | `SVGDWAVVKSIMRLYQTIYRILAGIVLVIGITLIPFLPIIAGKPIKNLTVYYCILLFNSV` |
+| 1680 | orf_1680 | ABC-type oligopeptide transport system, periplasmic component | 36 | 6413 | 8029 | + | 539 | high | `MAKQSNLTTPTSLPDFMYNVGDRIDLLKRLLKVLDNPDKQFKIIHICGTNGKGSTATMIA` |
+| 1681 | orf_1681 | Pro-Hyp dipeptidase, Metallo peptidase, MEROPS family M38 | 36 | 8057 | 8179 | + | 41 | high | `MNNNIILSLGSNIGNREFYLNQAISQIGHDPHILVNQQSGFYETSPVGNVKQRQFINLAL` |
+| 1682 | orf_1682 | Pro-Hyp dipeptidase, Metallo peptidase, MEROPS family M38 | 36 | 8189 | 9289 | + | 367 | high | `MYTIRIKNMAFHSHIGVLKEEKKVGQTIEIDIDVAVDAIPKDDALSTTVSYGDFYPTIKQ` |
+| 1683 | orf_1683 | Transcriptional regulator | 36 | 9336 | 10514 | - | 393 | high | `MKSVSFGSLGFFKLRTIDIAVVGILMALELIINRFMVATQFIQISFGSVIVAIASYLYGP` |
+| 1684 | orf_1684 | Membrane-associated phospholipid phosphatase | 36 | 11014 | 11667 | + | 218 | high | `MVPKWLLIKGHVAHSSFKTIESESKNFYARNVDTRPLRTSLTFNQTTISTQTVMRAAEGL` |
+| 1685 | orf_1685 | lysine:proton symporter, AAT family | 36 | 11926 | 13365 | + | 480 | high | `MKQFSNIIIGFGKAGKTLAGTLAKHGEEVLIIEKDPNMYGGTCINVACLPTKNMIINAHR` |
+| 1686 | orf_1686 | nucleotide-binding protein, UspA family | 36 | 13422 | 13865 | - | 148 | high | `MKSLISYSAVSLSIMFYLNQNQVTHWLLISLFLVTLALLIFLDARPAILNLLLGFLTTTC` |
+| 1687 | orf_1687 | hypothetical protein | 36 | 14000 | 14215 | + | 72 | high | `MRNLADLYAQFNGAKVGSNSTDNIEKMVNDTYEIYTPEQERHYGVLAIEMLLGD*` |
+| 1688 | orf_1688 | Recombination protein MgsA | 36 | 14257 | 14547 | - | 97 | high | `MLMGLNHDQFVLVQRGTKTIEIRLYDEKRSQLKIGHKILFTDLENDKQIMVSVKQLYKFA` |
+| 1689 | orf_1689 | hypothetical protein | 37 | 48 | 506 | + | 153 | high | `MLKDVLTAIFSYIGTTTDYFVVLLLLFGKYSTKQDTKLVVLGAYLGNGLLVLTSIIIALV` |
+| 1690 | orf_1690 | ATP-dependent DNA helicase, RecQ-like protein | 37 | 553 | 2361 | + | 603 | high | `MDIWQKLYEAAKKQYRPTEVNEFIYAHHVVSALEAENGDIYTGFCIEGLCGTMNLCAERT` |
+| 1691 | orf_1691 | hypothetical protein | 37 | 2714 | 3574 | + | 287 | high | `MNNCEICRRIKMIEEGTNPHFVAELETGYVVIGDHQYFEGYTLFLSKKHVTELHYLQTDF` |
+| 1692 | orf_1692 | Predicted membrane protein | 37 | 3600 | 4163 | + | 188 | high | `MKMKCVVIVDPELPIGLVANTASILGCSLGKAHPEINGEDTYDKNDQLYPGIVNIPIPIL` |
+| 1693 | orf_1693 | ABC-type cobalt transport system, ATPase component | 37 | 4195 | 5871 | + | 559 | high | `MTINYSRSLVNQSLIIKRCAHELQTARYQYHDFLSIGIVEGGSCIANIDKVRHIKKNTLV` |
+| 1694 | orf_1694 | ABC-type cobalt transport system, permease component CbiQ related transporter | 37 | 5873 | 6700 | + | 276 | high | `MTSKIMIVDNHFIIREGIKLIFESHSDYDVAYEAADGDEAIDIIKKSQVDLVLLDIKMPK` |
+| 1695 | orf_1695 | dipeptidase | 37 | 6682 | 8127 | + | 482 | high | `MFLEGNLRMRKNLDVEMNKHIMMIYRWPMIFWSMMIYFLASYFKTEYGAVQSINSALFFN` |
+| 1696 | orf_1696 | SSU ribosomal protein S6P | 37 | 8385 | 8681 | + | 99 | high | `MGQLLSKLGRWIYRHAKLTIVAFFITIAVSVGAALSFGIHFDSAGMSIQGSQSERANKLM` |
+| 1697 | orf_1697 | single-strand binding protein | 37 | 8715 | 9281 | + | 189 | high | `MTNNVLEVNNLSKSFKGIPVLQDVSLKVQEGDIYGLLGKNGAGKSTTMKIILKLIKLDSG` |
+| 1698 | orf_1698 | SSU ribosomal protein S18P | 37 | 9314 | 9598 | + | 95 | high | `MLRLEKMTATHFDDYMSRSIKEYALEKVQAGSWTQEDSLGNAKLTYDRLLPDGLNTPDNF` |
+| 1699 | orf_1699 | Signaling protein (consists of PAS, a modified GGDEF and a DHH family phosphatase domains) | 37 | 9768 | 11795 | + | 676 | high | `MTDSDNQQKWPALPATLSNIAVTKNSGKYESVSSNYFKVGHPRLVFMAENDEQVSHVVEY` |
+| 1700 | orf_1700 | LSU ribosomal protein L9P | 37 | 11812 | 12264 | + | 151 | high | `MKKKLFVATLVSYLGIYITMPVLSAISTKAHMIPSQIGIMISLGAAAMLLFAPIWGKMSD` |
+| 1701 | orf_1701 | primary replicative DNA helicase | 37 | 12266 | 13729 | + | 488 | high | `MTNKNNYLNFLKHINKVNKTNLFSNSGNLQPIAIKLTQGLDLVIHDYSFDRYYGAITFSD` |
+| 1702 | orf_1702 | Peptidase E | 38 | 3 | 161 | - | 53 | medium | `MVKVAVVTGGGQGIGEGIVKQLASDGFTVAVADLNKDNAVKVAEEVGNDSKGYYVDISSH` |
+| 1703 | orf_1703 | Short-chain alcohol dehydrogenase | 38 | 511 | 1374 | - | 288 | high | `MQQSNKRIYLFEVDFFRIVFILGVLANHTTTLVTHKISTHSMPYEILMATHISLHFTRMG` |
+| 1704 | orf_1704 | 2-hydroxyacid dehydrogenase | 38 | 1677 | 2636 | + | 320 | high | `MSVLLDRLNKQLELHENEIQLIDVKSEIKLTGKETKEAIHLFREQFINQNIQRGDVVLIG` |
+| 1705 | orf_1705 | Putative threonine efflux protein | 38 | 2676 | 3248 | - | 191 | high | `MTQLVRKTMLVIFLFLWAVCAIYGYTQTIEKKTTLQTITIGYQKGDPIDIAKQHGELIKN` |
+| 1706 | orf_1706 | hypothetical protein | 38 | 3307 | 3771 | - | 155 | high | `MNSVIRLDNICKTYGEKQVLKNINFDIQEGEFVSFVGESGGGKTTLLRLISGLEKPTSGQ` |
+| 1707 | orf_1707 | transcriptional regulator, MerR family | 38 | 4071 | 4310 | - | 80 | medium | `MSSIKYRSKTGNQILIPFVLPIAILVTWQVTTSINLIDESLLPTPVAVISKCITLIQSGE` |
+| 1708 | orf_1708 | Aldo/keto reductase of diketogulonate reductase family | 38 | 4331 | 5209 | - | 293 | high | `MIRSIFIEITKNKRRPFWLGLILIIIVETCWFYASMIRTQSLPNKIFTLDQNYLLLMLMT` |
+| 1709 | orf_1709 | hypothetical protein | 38 | 5382 | 5813 | - | 144 | high | `MKNIVSLLNEFKKIGLTSFDGVTRCVYDENWLAAQKKYMQIASDYGLYTFVDDIGNVYAT` |
+| 1710 | orf_1710 | Cation transport ATPase | 38 | 6011 | 8701 | - | 897 | high | `MENTIDPINKRHNSWVTIILLNFFGWIFIYADRTILNPVMPAIQSEFGLNHSQLGLISSL` |
+| 1711 | orf_1711 | permease of the major facilitator superfamily | 38 | 8899 | 10248 | - | 450 | high | `MKENTDTLTIGGHTFTSRFILGSGKYSYELIDSAVKNADAQIITMALRRSNDAKENILNY` |
+| 1712 | orf_1712 | Transcriptional regulator | 38 | 10238 | 10681 | - | 148 | high | `MHKINIDGYSVQEVYEDMKQRNVPGTSEKLAQAHVTIAGAGGLGSNIAIALARAGVGHLT` |
+| 1713 | orf_1713 | Transcriptional regulator | 38 | 11031 | 12263 | - | 411 | high | `MLKINGSVENQYVGKTIAQLLNDKNDALENIVVEHNGKILQRERFVDTFIHNDDQIEIIS` |
+| 1714 | orf_1714 | Predicted membrane protein | 38 | 12434 | 13042 | - | 203 | high | `MDVNITKVLKLYLVTNRYDYSDEEFLGRIEKACQNGVTLVQLREKEVTTHKYFELATKVK` |
+| 1715 | orf_1715 | hypothetical protein | 38 | 13222 | 13455 | - | 78 | high | `MTLRELLNIPSSTNKPIIAVPLTLGPTDKISPFAQKLQQQNPDIVEWRADYIADDFSQAV` |
+| 1716 | orf_1716 | hypothetical protein | 39 | 3 | 518 | - | 172 | high | `MKLHTLGPSGTDSEQAAQYYLTDETLILHNSFEEVLLHLSDYKGDKIILPVAFKSNQEPD` |
+| 1717 | orf_1717 | hypothetical protein | 39 | 511 | 996 | - | 162 | high | `MIKEPDTLMLIGFMGAGKTTVGKEIARQHHSKFVDIDSEIERAAGKSIAEIFEERGEAGF` |
+| 1718 | orf_1718 | transcriptional regulator, GntR family | 39 | 1065 | 1817 | + | 251 | high | `MKNIVVVGLGEMGASLAKILNKEPKNQVIGVDINEKSLSYAKDHGIVFEAASNLVNVASH` |
+| 1719 | orf_1719 | Phosphoketolase | 39 | 2004 | 4445 | + | 814 | high | `MKNMLNLIYAEYLKNKRTWGIIILLVGSVLGSLLGTFLYVANKQVFIQNHTQWLALWGES` |
+| 1720 | orf_1720 | ABC-type molybdenum transport system, ATPase component/photorepair protein PhrA | 39 | 4858 | 5289 | - | 144 | high | `MIKLTKAEKNGLHGEITVPGDKSISHRALMFGAIAEGKTVIDNFLMSDDVMHTMGVFRAL` |
+| 1721 | orf_1721 | ABC-type molybdenum transport system, ATPase component/photorepair protein PhrA | 39 | 5286 | 5648 | - | 121 | high | `MRYVTAGESHGPEEIAVIEGIPAGLHISQEDVNEQLARRQRGYGRGERQKIETDTVTFLT` |
+| 1722 | orf_1722 | acetolactate synthase, large subunit | 39 | 5967 | 7679 | + | 571 | high | `MSTITVDLATKKYDVKIDNTLHTRLGQEISAVWSARKIALLTDSNVGPLYLKDTAKQLRE` |
+| 1723 | orf_1723 | Acetolactate synthase, small (regulatory) subunit | 39 | 7679 | 7924 | + | 82 | high | `MIIIAKTSQDAEKIAAQLDTKDPIKPVFVHSNRVALAGVKKLPEDILKNISQDFVEIITN` |
+| 1724 | orf_1724 | ketol-acid reductoisomerase | 39 | 7961 | 9004 | + | 348 | high | `MTLYGLIAHPAGHSRSPQMQNMMIAEYGIDAHYHAFDILPEKLEEAIVGLKALHVGGFNV` |
+| 1725 | orf_1725 | L-threonine ammonia-lyase | 39 | 9077 | 10342 | + | 422 | high | `MKTSSLSTETIQSLRLLSNQMISKAGSGHPGIALGAAPILYELYANQLNVDPENPNMINR` |
+| 1726 | orf_1726 | endoribonuclease L-PSP | 39 | 10377 | 10769 | - | 131 | high | `MILIVDNYDSFTYNLAQIVGTKTDLVVLRNDDQKLYATADKADGIIFSPGPGKPEQAGEM` |
+| 1727 | orf_1727 | 3-isopropylmalate dehydrogenase | 39 | 10869 | 11798 | + | 310 | high | `MRQIKTIDADTLTVISAYFRLRGEHSFLLESVPTDSEKSRYSIIALDPVHEFKTNGMLVT` |
+| 1728 | orf_1728 | Predicted hydrolase of the HAD superfamily | 39 | 11906 | 12718 | + | 271 | high | `MTRISQALENKNAFIGFAVAGYPDFEKSAKYIVDMAEAGADLIEIGIAFSDPSADGPTIM` |
+| 1729 | orf_1729 | thiol peroxidase (atypical 2-Cys peroxiredoxin) | 39 | 12818 | 13315 | + | 166 | high | `MTLIKLCGNFRLQDIDYLNEVRPDLAGIILVPNKRRSVSLALAQKMRSQLDEKIPLVGVF` |
+| 1730 | orf_1730 | Recombination protein MgsA | 40 | 1 | 996 | - | 332 | high | `MKVTKYKNLYQLTWAPMLFPINCYLWENDDDIIVIDMGVISFVSEIKKIAERLNKPISSL` |
+| 1731 | orf_1731 | hypothetical protein | 40 | 1003 | 1377 | - | 125 | high | `MILDDLVAATCQNMLARQAQKSLHDLQKEAAHITVSREFPFEKSLAQQKISVIAEIKQAS` |
+| 1732 | orf_1732 | permease of the major facilitator superfamily | 40 | 1472 | 2701 | - | 410 | high | `MSNIQEALKTLLVQKNLTDDMAQKVMNDIMDGKVSDPEIAAYLMGLAAKKEAVSEIVGSA` |
+| 1733 | orf_1733 | ABC-type oligopeptide transport system, periplasmic component | 40 | 2812 | 4521 | + | 570 | high | `MTRKGYYGEYGGQFVPELLMPAINEVTEAFNKYKEDPAFKSELKDLFDNYANRPSMLYYA` |
+| 1734 | orf_1734 | SSU ribosomal protein S4P | 40 | 4646 | 5257 | - | 204 | high | `MITLENKHLIVKINPEGAELTSVWHKNAELEYIWTADPKYWGRHASNLFPIVGRLRGDQF` |
+| 1735 | orf_1735 | Negative regulator of septation ring formation | 40 | 5563 | 7278 | + | 572 | high | `MTTREEQLYHDYLESERQYSPQTLKAYLTDIAEFKNYLHESGGFTKFGEVQTLDVRVYLN` |
+| 1736 | orf_1736 | amino acid/polyamine/organocation transporter, APC superfamily | 40 | 7330 | 8730 | - | 467 | high | `MKVPVYSPIEQLRERVMKLQNKALVNIANFRKNVLKNRDDRRKRIAKLSKTREISIVPYE` |
+| 1737 | orf_1737 | guanylate kinase | 40 | 8844 | 9437 | + | 198 | high | `METKQIQETINMVEEEHLDIRTVTMGISLLDTIAGDPQQTAKNIYKKVTTYAKDLIKVAE` |
+| 1738 | orf_1738 | aromatic amino acid aminotransferase apoenzyme | 40 | 9713 | 10906 | + | 398 | high | `MTMSKAVVTVVGKDKPGIIAGVANTLADHNINILDVSQTIMSDIFTMSMLINLEELEGQF` |
+| 1739 | orf_1739 | Lactate dehydrogenase related 2-hydroxyacid dehydrogenase | 40 | 10903 | 11892 | + | 330 | high | `MSKNVYLASPFFDKEQIERVERVEKALAANQTLSSVFSPREHQHEEFEMFGPEWRVATYN` |
+| 1740 | orf_1740 | Predicted membrane protein, putative toxin regulator | 40 | 11927 | 12985 | + | 353 | high | `MIFLFIILFLLSILLVSFTIQNKQRYGTFLVPLIFSILCISGTIFFGFQLPSAIQKIQKN` |
+| 1741 | orf_1741 | hypothetical protein | 41 | 100 | 471 | + | 124 | high | `MKRKVDINDIINCAIDILDNQGLDYVTLKEISSRLSIQSPSLYNHVKGLDDILVKVANKS` |
+| 1742 | orf_1742 | ATPase component of ABC transporter with duplicated ATPase domains | 41 | 965 | 2491 | - | 509 | high | `MAIGIDKLSFYTSEYVLDLVELAQRRGVDPNKYTIGIGQDKQSVIPNYEDVVTMGANAAA` |
+| 1743 | orf_1743 | Transcriptional regulator, xre family | 41 | 2542 | 3489 | - | 316 | high | `MITVSDMSFSFSGPKIYQDVNLKLTPGNTYGIIGANGAGKSTFLKLLQGELQPTEGTISI` |
+| 1744 | orf_1744 | Permease of the major facilitator superfamily | 41 | 3703 | 4872 | + | 390 | high | `MLKIFKKYYGYQWLAAFMLGLVLPFIGKLLSVSGLHKVIWFYLIINGLYTLYLGYSVRKR` |
+| 1745 | orf_1745 | Lactoylglutathione lyase related lyase | 41 | 4878 | 5210 | + | 111 | high | `MQRYFLNEPINDTIRLTADNDIFKHFGKVLRARVGSKAEFVSNNLEICLGEVTLIDSEVI` |
+| 1746 | orf_1746 | Zn-dependent alcohol dehydrogenase | 41 | 5266 | 6318 | - | 351 | high | `MTNNKWQALTVATNNDGIEPIADILMSTGAEGVQIVDDISPVTVTAYFEDDASLPNTVSR` |
+| 1747 | orf_1747 | permease of the major facilitator superfamily | 41 | 6489 | 7760 | - | 424 | high | `MNLLDKIKNIWPFGQSHKMRAIGFERPLLIDQPDAFVEKVIPRPQPDKDELLVKVLASSV` |
+| 1748 | orf_1748 | phosphoglycerate kinase | 41 | 7909 | 9126 | - | 406 | high | `MPEETNTKRSRLARNLSEQSKPTNRKVKILTVCSVLVMLLVVSLTVARVVFNFDGISQET` |
+| 1749 | orf_1749 | hypothetical protein | 41 | 9212 | 10042 | - | 277 | high | `MPIMTELNLNELKERQKHIRNFSIVAHIDHGKSTIADRILEQTHTVAERDMQNQLLDTMD` |
+| 1750 | orf_1750 | Glycosyltransferase | 41 | 10039 | 11484 | - | 482 | high | `MLNIAYVGFGKSTNRYHLPYLKLRQDKFHVSRVVTPTLGKRPTEQSELEVTGTVFSTDID` |
+| 1751 | orf_1751 | H+/gluconate symporter related permease | 42 | 3 | 404 | + | 134 | high | `MSTFLLEIGLEEVPAHLVKSSENQLIERTRNFLAEHRLTVGAINPYSTPRRLAVELTDVA` |
+| 1752 | orf_1752 | 2-dehydro-3-deoxygluconokinase | 42 | 426 | 1388 | + | 321 | high | `MSDETPKKRKRQPHINENQRHMIEYLWNIEKMTQADIARRLGYTPSSILRELHRGNTLDF` |
+| 1753 | orf_1753 | Lactate dehydrogenase related enzyme | 42 | 1390 | 2334 | + | 315 | high | `MTNEKLSLQGIILTLQQYWAKQGANLMQAYDNEVGAGTQSPYTFLRANGPEPWNAAYVQP` |
+| 1754 | orf_1754 | lysyl aminopeptidase, Metallo peptidase, MEROPS family M01 | 42 | 2416 | 4950 | + | 845 | high | `MLRRYLRYWREAFDFHSGAYRLDFWWVHIVNTFIFASILFVSIIFFNSWSLATKLSGTFS` |
+| 1755 | orf_1755 | Predicted oxidoreductase; Myosin-crossreactive antigen ortholog | 42 | 5093 | 6865 | + | 591 | high | `MTFDLTNAKERMKGAQEALQRELANIRTGRANPNILNRVEVEYYGAMTPLNQVASISVPE` |
+| 1756 | orf_1756 | dipeptidyl-peptidase IV, Serine peptidase, MEROPS family S15 | 42 | 6938 | 9271 | + | 778 | high | `MTDIKYKRVLMKLSGEALAGDKGQGIDLETVSAIAEELKDVHDLGTQIAIVVGGGNLWRG` |
+| 1757 | orf_1757 | PTS system IIA component, Glc family | 42 | 9411 | 9896 | + | 162 | high | `MAITAAQVKELRDKTSVGMMDAKKALVEADGDLDKAIDLLREKGMAKAAKKGDRVAAEGM` |
+| 1758 | orf_1758 | PTS system IIA component, Glc family / PTS system IIC component, Glc family / PTS system IIB component, Glc family | 42 | 9899 | 10411 | + | 171 | high | `MAVISMKELLEAGVHFGHQTRRWDPKMDEYIFTERNGIHIIDLQKTVKLVDEAYNFIRNA` |
+| 1759 | orf_1759 | 3-oxoacyl-[acyl-carrier-protein] synthase II | 43 | 3 | 1037 | + | 345 | high | `YYFYVLYTADGYFYGGFTDNVQRRLATHESGKGAKFTRVKSRHPLKLIHYEEFQTKSEAL` |
+| 1760 | orf_1760 | biotin carboxyl carrier protein | 43 | 1041 | 1499 | + | 153 | high | `MNKIKMEQKNISYKSLIHQNQTILSSATVIILDDSKVLVGWNTWREQWELPSGHIEPGEK` |
+| 1761 | orf_1761 | 3-hydroxymyristoyl/3-hydroxydecanoyl-(acyl carrier protein) dehydratase | 43 | 1579 | 2010 | + | 144 | high | `MNELYTKNMNILNNYTTVFIDRDGTIGGNGHYQSLNDFELFPYALSSIARLKAHGMSVFA` |
+| 1762 | orf_1762 | Biotin carboxylase | 43 | 2012 | 3388 | + | 459 | high | `PDKPNSFEQSKTPTRQVVIQDNAKTVDRDKIARELLAERDKQKEQKQKLRDEKGSQLKNK` |
+| 1763 | orf_1763 | acetyl-CoA carboxylase carboxyltransferase subunit alpha | 43 | 3445 | 4287 | + | 281 | high | `MFITIATIVVAVVTTAFLRYNNKYHDTPNDRLKTVFHQTLGKHKTVIVFHKKGCSTCEKL` |
+| 1764 | orf_1764 | acetyl-CoA carboxylase carboxyltransferase subunit alpha | 43 | 4288 | 5091 | + | 268 | high | `MNKKSALTLGSIGGVLVILIIIIAFVMTGQHETSSQSASSKLPKINQAKVMKRVDYEMFN` |
+| 1765 | orf_1765 | D-3-phosphoglycerate dehydrogenase | 43 | 5795 | 6133 | + | 113 | low | `MTNTRIKVLSAIGFFLIGAFFYTQFQKSQLKQATATVAKLSATQTLINNSGTITKVVAND` |
+| 1766 | orf_1766 | Adenine-specific DNA methylase | 43 | 6327 | 6644 | + | 106 | low | `MTRKTEIGYYALLVVLVLGSLRFGQLMWQQQQTLSHLQKQAKQLKHKQAIAKTSQQKVKQ` |
+| 1767 | orf_1767 | Predicted membrane protein | 43 | 6788 | 7417 | + | 210 | low | `MKNKVKQAVVMKIALYCAPLLVILIPVLLIIALTMNNPSVTCQTDTTTTTTSSDSGSSNG` |
+| 1768 | orf_1768 | hypothetical protein | 43 | 7493 | 8029 | - | 179 | low | `PDKPNSFEQSKTPKRQEIANDQKKTVNRDKIARELLAERDKQKEQKQKLRDEKGSQLKNK` |
+| 1769 | orf_1769 | Uracil-DNA glycosylase | 43 | 8057 | 8629 | - | 191 | low | `MFIIIATIVVVVVTTAFLRYNNKYHDTPNDRLKTAFHQTLGKHKTVIVFHKKGCSTCEKL` |
+| 1770 | orf_1770 | glutamyl-tRNA synthetase | 43 | 9360 | 9452 | + | 31 | low | `MNKKSALTLGSIGGVLVILIIIIAFIMTGQHKTSSQSTSSKLPKINQAKVMKRIDYEIFS` |
+| 1771 | orf_1771 | hypothetical protein | 43 | 9849 | 10079 | - | 77 | low | `MTNTKIKVLSAIGFFLIGAFFYTQFQKSQIKQATATVAKLSVTQTLINNSGTITKVIAND` |
+| 1772 | orf_1772 | amino acid ABC transporter membrane protein, PAAT family / amino acid ABC transporter substrate-binding protein, PAAT family | 43 | 10169 | 10312 | - | 48 | low | `MTRKTEIGYYALLVVLVLGSLRFGQLMWQQQQTLSHLQKHAKQLRHKQVTAKTSHQKVKQ` |
+| 1773 | orf_1773 | Predicted transcriptional regulator | 44 | 2 | 172 | - | 57 | high | `MLVKIQKGDHVKNKVKQAVVMKIALYCAPLFVILIPVLLIIALTMNNPSVVCQTDTTTTT` |
+| 1774 | orf_1774 | NADH:flavin oxidoreductase, Old Yellow Enzyme family | 44 | 314 | 1504 | + | 397 | high | `MREAGIHSVMSRRFNKPTTTVDYIQRPNLIRKLQDANVWSMDITYLKLSNGQWVYLASVL` |
+| 1775 | orf_1775 | hypothetical protein | 44 | 1652 | 1903 | + | 84 | high | `MNELTTEIIAALAQKQDLDEVFRHHLEIAINQLLQTELAEFLGYERYSYAGINTGNNRNG` |
+| 1776 | orf_1776 | putative tyrosine permease, NhaC family | 44 | 2261 | 3616 | + | 452 | high | `TPFSLTFSQTDAPFAFSCLPYTAAELENATHMEELPLARRTVLSIYGAVRGVGGIDSWGT` |
+| 1777 | orf_1777 | Acetyltransferase, GNAT family | 44 | 3623 | 4111 | - | 163 | high | `MISIIMPVYNSGKTLGTVIEQLIQQTSNDFEVVFVDDGSTDNSV` |
+| 1778 | orf_1778 | Transcriptional regulator | 44 | 4231 | 4659 | + | 143 | high | `MIPKNIYYTWFGGAPKSKIVIENINRWKILNPDYQVIEINETNFDVNLTCFSKKASENKR` |
+| 1779 | orf_1779 | hypothetical protein | 44 | 5133 | 5624 | + | 164 | high | `MRKISVIMPIYNEKLDWIQKSLDSIMNQTYTNIEIIIILDNPDNKELKEFLVKKESEVDN` |
+| 1780 | orf_1780 | Predicted membrane protein | 44 | 5617 | 5898 | + | 94 | high | `FWIISIILGLLDITNLNQRLFGSIASIFSDNYDLYIDSTAQANYGTGSKYAFVFISFLLA` |
+| 1781 | orf_1781 | Predicted membrane protein | 44 | 5943 | 7067 | + | 375 | high | `MKKNVPLSIIVPIYNVEKYIGSLVNSLVKQTNKNFEVIFIDDGSTDESMQILKEIMAGSE` |
+| 1782 | orf_1782 | hypothetical protein | 44 | 7191 | 8147 | - | 319 | high | `MGTAAAVSKIIVPSKNAFSKYEQILELTRETIKTYDKKNLIVLLAIGLTATVLSYDLADN` |
+| 1783 | orf_1783 | Predicted hydrolase of the HAD superfamily | 44 | 8287 | 9108 | - | 274 | high | `RRKSVRKSSIRAFVAYDSKSLDITNREAVMETFKVEQPDVVLHAAAYTKVDLAEDEGRAM` |
+| 1784 | orf_1784 | transcriptional antiterminator, BglG family | 44 | 9098 | 10192 | - | 365 | high | `MTKKITFGNFKGGTGKTTNSTLISYHLAKQGFKTLLVDLDPQANATSLLLKTAQNETNEV` |
+| 1785 | orf_1785 | hypothetical protein | 45 | 1 | 1767 | + | 589 | low | `MSGLLQKQDDTSKLIERKGDIKPKNTFSRNSLFSADEPTTKKKSISKEKQTTLRVSETVS` |
+| 1786 | orf_1786 | hypothetical protein (no reference match) | 45 | 1786 | 1941 | + | 52 | none | `MEETLLDRIKYLAKEKELSLSQIEKDANLAKTSIYTWKNKTPNAKNLEKVANILDTNTDY` |
+| 1787 | orf_1787 | Predicted membrane-associated HD superfamily hydrolase | 45 | 1944 | 2183 | + | 80 | low | `MYPEELEKYLELQQISKELAQTISEYYHIRETQIRWWNVTEFFKDTKKITISPLNKHQFN` |
+| 1788 | orf_1788 | hypothetical protein | 45 | 2234 | 2659 | + | 142 | high | `TYGRDRILKSFYRFYLEMIKRGREYHDLLNDNLEENVGNYRKYGLKPHFFVFDEFGAFVS` |
+| 1789 | orf_1789 | hypothetical protein | 45 | 2656 | 3747 | + | 364 | high | `MMFPDDVDEVQFKELSKNLKGWGYLAMTPGQARSFFAPVIPKDFVPFKYFDELGQQYPAV` |
+| 1790 | orf_1790 | hypothetical protein | 45 | 3778 | 4572 | + | 265 | high | `MLYQYLGILPNELYGTTHNTGYAFLFGHFLDDHVIDTRVYQVAGDKLPPALALGAIVDPE` |
+| 1791 | orf_1791 | hypothetical protein | 45 | 4590 | 4814 | + | 75 | high | `MSEKYFKLDYETTTGADLVAFRQELELTQAQMALFLNVSRPTYINKIERSDEVIARLLNA` |
+| 1792 | orf_1792 | Lyzozyme M1 (1,4-beta-N-acetylmuramidase) | 45 | 4818 | 5909 | + | 364 | high | `MLKKIFEVIQGIYPKGDPFVIQHWNTYVKNPSLFTSIKNNMISDPLKFKNKGAVYAQRKD` |
+| 1793 | orf_1793 | hypothetical protein | 45 | 5919 | 6224 | + | 102 | high | `MQGILLALVPIFAWGSIGVVANKIGGDANQQTLGMTLGAFVFALIVFLFRMPTLTWQIFL` |
+| 1794 | orf_1794 | dihydrolipoamide dehydrogenase | 45 | 6788 | 7234 | + | 149 | low | `AYDDENGNKPYVDEAQVDITSIE*` |
+| 1795 | orf_1795 | ABC-type multidrug transport system, ATPase and permease component | 45 | 7372 | 7866 | + | 165 | low | `MAYQPTDWEHGDIITGGKLNKIEEELTHVSDNAIYGFGGAQLSSDGLTPFSYINAGDPMP` |
+| 1796 | orf_1796 | methionyl-tRNA synthetase | 45 | 7853 | 8092 | + | 80 | low | `MTRVVITGLGAVTPLGNNTQSFLDGIFNEKIGIKPITKFDASETGITVAGQVDGFDPAAR` |
+| 1797 | orf_1797 | hypothetical protein | 45 | 8226 | 8423 | + | 66 | high | `MTVKIGINGFGRIGRLAFRRILELSDRASDIEVVAINDLTSPDMLAYLLKYDSIHGTLNA` |
+| 1798 | orf_1798 | hypothetical protein | 45 | 8470 | 8691 | + | 74 | medium | `MKNKGYFITGTDTEIGKTFVTARLARYFNKHNQDIGVFKPLMSGTRRENPCSDAYILKSG` |
+| 1799 | orf_1799 | FAD/FMN-containing dehydrogenase | 45 | 8850 | 9449 | + | 200 | low | `MRKLGLLTRPLGDTIAFLPPLIATKEEIKQIIVIIKEGIQTVMEEMNHEE*` |
+| 1800 | orf_1800 | permease of the major facilitator superfamily | 45 | 9538 | 9765 | + | 76 | low | `MYQQTNVSVSAQTICKIGIYFALLVLSAKVAIPIPFYDYISLQTAFIFLVYPILGAKYGS` |
+| 1801 | orf_1801 | Ribonuclease HIII | 45 | 9869 | 10036 | + | 56 | low | `MSTADKLLALLVNTAGEWVSGEAIAQQLGITRTSIWKSVKKLESQGHLIESVRGQGYRYV` |
+| 1802 | orf_1802 | DNA-entry nuclease | 45 | 10055 | 10165 | + | 37 | low | `MSEPNNILFNTGNHTDSAVIYDKFSKAEQQFSVKKDKTFYITTPIYYPSGKLQLGNTYTT` |
+| 1803 | orf_1803 | hypothetical protein (no reference match) | 46 | 1 | 156 | - | 52 | none | `MDQLEMINRYMKDALTKDNTGHSIDHINRVLALANKILAHEKKADAFVVRAAALLHDVYD` |
+| 1804 | orf_1804 | Glycoside-Pentoside-Hexuronide (GPH):Cation symporter family protein | 46 | 159 | 341 | - | 61 | low | `MARKRTYRRKSKPQNKILSLLILIVVAGFYLWQNYESTNTSTETSHPTVTAQSDQALLNL` |
+| 1805 | orf_1805 | UDP-N-acetylglucosamine pyrophosphorylase | 46 | 338 | 580 | - | 81 | low | `MTELYDVAIIGGGPVGMFTAFYAGLRDTKAVLVESLATLGGQVTSLYPEKKILDVAGFTG` |
+| 1806 | orf_1806 | Nucleoside-diphosphate-sugar epimerase | 46 | 583 | 903 | - | 107 | low | `MATKKMILDLDTGVDDALALAYAVADPNVDLIGIISSYGNTLVETAAQNSLNLLHLLGAD` |
+| 1807 | orf_1807 | Uncharacterized conserved membrane protein | 46 | 900 | 1214 | - | 105 | low | `MADFTDKTVLVTGSSRGIGLAIAKAFDAAGANVILHARSEISPETLTEFKSEPKTLQFDI` |
+| 1808 | orf_1808 | 4-amino-4-deoxy-L-arabinose transferase related glycosyltransferase of PMT family | 46 | 1231 | 1467 | - | 79 | low | `MNAVEEIGKRAKLVTSDVANLSVDIRNQILLDMSSALVANWQEIVAANKKDLDAATQLSG` |
+| 1809 | orf_1809 | Propionate catabolism protein | 46 | 1544 | 1702 | - | 53 | low | `MNSWHRIVVKVGTSTIVNRDGQINYPVVNRLAQTLSSLQKSGHEILLVTSGAIGVALDQM` |
+| 1810 | orf_1810 | hypothetical protein (no reference match) | 46 | 1699 | 1806 | - | 36 | none | `MIVLSGTIGAGKTSLTKMLAKHLDSQAFYESVDDNPILPLFYQNPKKYGFLLQIYFLNKR` |
+| 1811 | orf_1811 | hypothetical protein (no reference match) | 46 | 1803 | 2066 | - | 88 | none | `MQRNVGKKLKKHLLLIVLVIMLIVVVVICFFNTKQPIKNTGKIAKTSSVKKVDDLPKGVK` |
+| 1812 | orf_1812 | NADPH:quinone reductase related Zn-dependent oxidoreductase | 46 | 2063 | 2329 | - | 89 | low | `MGLLGAIEAGGTKFVVAVADHDYNIVERTSFPTLDGQKTVEQVIAFFDKFDDIDAIGIAA` |
+| 1813 | orf_1813 | ABC-type uncharacterized transport system, ATPase component | 46 | 2584 | 2955 | + | 124 | low | `MLIKDDINHFEKYHLYPTQGLLNDPNGLIYFKGQYHVFFQWNPHACNHKYKEWGHFVSND` |
+| 1814 | orf_1814 | hypothetical protein | 46 | 2956 | 3387 | + | 144 | low | `MDHNKVAKRIADAVGKDNIVAAAHCATRLRLVIKDVKKINQDALDNDSDLKGTFNANGQY` |
+| 1815 | orf_1815 | Exopolyphosphatase | 46 | 3682 | 4209 | + | 176 | low | `MEKKLTITDIANMAQVAKSTVSRYLNGGPVSAKTREKINKVVTENNYQPNTFAQSLKQKV` |
+| 1816 | orf_1816 | Adenylate kinase | 46 | 4292 | 4810 | + | 173 | low | `MNKQCTVALAGNPNSGKTTLFNLLTGSHQHIGNWPGVTVEKKSGRLKNNPDIIIQDLPGT` |
+| 1817 | orf_1817 | hypothetical protein | 46 | 4880 | 5995 | + | 372 | low | `MQMLSEIAGKGTYIIRELTGSRRLTKRLAEIGIKAGKSIEVISLPDHTSGLIIYFQGQRL` |
+| 1818 | orf_1818 | amidophosphoribosyltransferase | 46 | 5967 | 6230 | - | 88 | low | `MGFNMKIGLLFSGQGAQQAGMGTDLYEALPEYKSTIDRASEVLGYDLSDVMKNADKIAQT` |
+| 1819 | orf_1819 | Transcriptional regulator, xre family | 46 | 7043 | 8779 | + | 579 | low | `MAILVLGGAGYIGSHMVKRLIEADRDVVVVDALFTGHREAVNPKAKFYQVDIRDKTALSE` |
+| 1820 | orf_1820 | 3-hydroxy-3-methylglutaryl-coenzyme A reductase | 46 | 9234 | 9551 | - | 106 | low | `MKKYEIKRRVEYYEADTTQKLSLPMILNYAVLASKCQSDELGVGQDFHLGRGLGWIILQY` |
+| 1821 | orf_1821 | hypothetical protein | 47 | 2 | 136 | + | 45 | high | `MQQQKSFENQETGTLFLVPTPIGNLQDMSPRAIDTLRDVDIIAAEDTRHTQQLLNHFAIT` |
+| 1822 | orf_1822 | Predicted membrane protein | 47 | 229 | 873 | + | 215 | high | `MLPDFATIAQKNYPAQLAHFNDLLQQDKLSHLYLFVGPSQSAKLAFSRYIAWQVVHADER` |
+| 1823 | orf_1823 | Predicted membrane protein | 47 | 989 | 1237 | + | 83 | high | `MKLVTAIVQDKDTTKLSNAFVKANIRATRLATSGGFLRSGNTTFMIAIEDERVPDVMEII` |
+| 1824 | orf_1824 | hypothetical protein | 47 | 1310 | 1453 | + | 48 | high | `MPKPIFISFEGPEGAGKTSVLEALISELKTKLGDNLVTTREPGGNPISEAIRSILQPEED` |
+| 1825 | orf_1825 | Aldo/keto reductase of diketogulonate reductase family | 47 | 1550 | 2392 | + | 281 | high | `MIFGKKKTGLRKEYDRALVFQIDKAKIDWDTARNSEAALLDGQVNLRLIQAQTALARAKF` |
+| 1826 | orf_1826 | D-xylose proton-symporter | 47 | 2446 | 3819 | + | 458 | high | `MFNAVRVRHFENMQYPEPIAKLIDSYTKLPGIGPKTATRLAFYTLGMNEEDVQDFSKALI` |
+| 1827 | orf_1827 | Exopolysaccharide biosynthesis protein | 47 | 3842 | 4861 | + | 340 | high | `MAYQALYRVYRPRSFDDMVGQKIITQTLKNAIATQQTGHAYLFSGPRGTGKTSAAKIFAR` |
+| 1828 | orf_1828 | Predicted membrane protein | 47 | 4901 | 5521 | - | 207 | high | `MQNPNAWRTDKDYINIIDDLLQHEEVQQLALYTQHHFSNRLTHSISVSYQSYLIAKKIGA` |
+| 1829 | orf_1829 | transcriptional regulator, LacI family | 47 | 5511 | 6482 | - | 324 | high | `MTVKTMNPIFEKLGMKYPIVEGGMTWAGTGALAAAISEAGGLGFIGTGYWHGDDVRKEIR` |
+| 1830 | orf_1830 | hypothetical protein | 47 | 6634 | 7614 | + | 327 | high | `MAQIPAFSDEQIDYFMQEALNEAKIAQSEGEVPIGAVIVYENQMIARAHNHREADQLATA` |
+| 1831 | orf_1831 | Hpr(Ser) kinase/phosphatase | 48 | 20 | 985 | - | 322 | high | `MTEKNISGEQYFTANPNAEHHYQNFDFDLLGHELHFTTDSGVFSKSTVDFGTRTMLDALE` |
+| 1832 | orf_1832 | Predicted membrane protein | 48 | 987 | 1343 | - | 119 | high | `MAFDKDAIIASLKDATILDLADLVSAIEEEFNVSAAAPVAAAGAADGAAAAKSEFDVELT` |
+| 1833 | orf_1833 | transporter, YbiR family | 48 | 1724 | 2824 | + | 367 | high | `MSEKAIAVKAQKVEEIADQFKAAASAVVVDPRGLTVAQSTELRHQLREEGVVLEVIKNKV` |
+| 1834 | orf_1834 | phosphate uptake regulator, PhoU | 48 | 2912 | 3586 | - | 225 | high | `MTQKHGKNYVAAVAKVEAEKAYALNDAVSLVKEIDFAKFDASVEVVFKLNVDTRQADQQL` |
+| 1835 | orf_1835 | phosphate ABC transporter ATP-binding protein, PhoT family | 48 | 3645 | 4415 | - | 257 | high | `MAKKVVNVVKLQIAAAKATPAPPVGPALGQAGINIAQFTKEFNARTADQAGSIIPVEISV` |
+| 1836 | orf_1836 | phosphate ABC transporter ATP-binding protein, PhoT family | 48 | 4412 | 5254 | - | 281 | high | `MSEEIEKSWFVVHTYSGYEHKVKANLESRTQTMGMSEQIFRILVPEQEVTTIQDGEAKQT` |
+| 1837 | orf_1837 | phosphate ABC transporter membrane protein 2, PhoT family | 48 | 5262 | 6146 | - | 295 | high | `MINYFKNVAQEMKNVTWLTGEQTSKETITVITVSIIFALFLGGVDWLLQQGFNFLLAK*` |
+| 1838 | orf_1838 | phosphate ABC transporter membrane protein 1, PhoT family | 48 | 6146 | 6940 | - | 265 | high | `MASHKVSLACTVCGSRNYTVTLSKDRTERLSVSKFCQHCGKHTLHQQTK*` |
+| 1839 | orf_1839 | hypothetical protein | 49 | 2 | 229 | - | 76 | high | `MVQVISQNEHRRQQIIEAATTIFLSKGFEQTTTRDIAKKVNISQPALYHHFGDKESLFVE` |
+| 1840 | orf_1840 | L-ribulose 5-phosphate 4-epimerase | 49 | 575 | 1303 | - | 243 | high | `MTDAEIFDKTKEILVDQFDLEEDEVSLTTDLTNDIDADSLDLFEVLNRVEDDFDIKLAVA` |
+| 1841 | orf_1841 | Putative L-xylulose-5-phosphate 3-epimerase | 49 | 1306 | 2169 | - | 288 | high | `MTKKRVALIFGGNSSEHDVSKRSAQNFYNAIEATGKYEIIVFAIAQNGFFLDTESSKKIL` |
+| 1842 | orf_1842 | 3-hexulose-6-phosphate synthase | 49 | 2172 | 2810 | - | 213 | high | `MIELDELKKEFITLRQKVRNGDVFQSLGELMKESLHKMPPQSLTTVSLPVDGEFALKRMQ` |
+| 1843 | orf_1843 | PTS system IIB component, L-Asc family | 49 | 2821 | 3126 | - | 102 | high | `MQQTRQTSRRTSGSELDWGIILALLLFMIIGLSSLYEAATHMQGATTLSAVKVVMNQGIF` |
+| 1844 | orf_1844 | PTS system IIC component, L-Asc family | 49 | 3163 | 4674 | - | 504 | high | `MRRKNQNFDVELIVNDQQTQVLVDKKQIGYIEKADRGFVGFFGQQAIINQAKDEDEALQA` |
+| 1845 | orf_1845 | PTS system IIA component, L-Asc family | 49 | 4688 | 5164 | - | 159 | high | `MAKDIGIDLGTANVLIYVEGKGIVLNEPSVVAVDDKTDRVLAVGSEAYRMVGRTPGNIRA` |
+| 1846 | orf_1846 | L-ascorbate 6-phosphate lactonase | 49 | 5177 | 6250 | - | 358 | high | `MHIVYLNNQQYIAQSVHATTIVSLLCVYILLRHTLKSLRNKSFSWRGLLGRAILSVYATL` |
+| 1847 | orf_1847 | transcriptional antiterminator, BglG family | 49 | 6471 | 6884 | + | 138 | high | `MKYTVVGAGAMGLRYGILLQENAGVPVDFVEPTQASLDKIHEQGDKVWKSRDHKDRHEIK` |
+| 1848 | orf_1848 | hypothetical protein | 50 | 1 | 2535 | + | 845 | low | `MIISVKNKQLRYAIICFISALIISVFVKIKFIFPTIIDNSIHSFMAGIQTGLNDILMTVF` |
+| 1849 | orf_1849 | hypothetical protein | 50 | 2532 | 2747 | + | 72 | low | `MAHINNGSYTAINWNNIEDELDKATWEKLTQQFWLDTRIPISNDLRTWRGNMSEQERQTM` |
+| 1850 | orf_1850 | ketopantoate reductase | 50 | 2750 | 2893 | + | 48 | low | `MTTINILYASTEGNTKAFIEKLAAVAESNGNGFSARLIGDETEYANETQPYVAFVPTYLT` |
+| 1851 | orf_1851 | ribonucleoside-triphosphate reductase class III activase subunit | 50 | 2896 | 3132 | + | 79 | low | `MEQLKIVASARQIPDRQVTNQELSTMMETDDEWIYTRTGIHQRNVVTTENTSDLASEVAK` |
+| 1852 | orf_1852 | hypothetical protein | 50 | 3134 | 3358 | + | 75 | high | `MSLKELDLENVTYFDLNNQVNIPKNNEIQLDKDQEALNAFLDENVLPNVMHFDSLQERLD` |
+| 1853 | orf_1853 | Lyzozyme M1 (1,4-beta-N-acetylmuramidase) | 50 | 3362 | 4453 | + | 364 | high | `MEKVTVYTKYNCVQCKMTKKFLEAQGIPFKEINIEEETQFVEELKANGHRQTPVVAVEGL` |
+| 1854 | orf_1854 | hypothetical protein | 50 | 4463 | 4768 | + | 102 | high | `MDSGPSMIINFFIILVVLLLAILFTLTEYSLVKVRLSALKALQETREKPSRNISNAIYMT` |
+| 1855 | orf_1855 | Cytochrome bd biosynthesis ABC-type transporter, ATPase and permease component | 50 | 4813 | 5742 | - | 310 | low | `MTVNIYMVRHGETYFNLLHRFQGWSDAPLTEKGIQDGYAAGTRLANVHFDGAYSSGLTRT` |
+| 1856 | orf_1856 | cold-shock DNA-binding protein family | 50 | 6000 | 6320 | + | 107 | medium | `MFGWQTILKNKHSLVKWLLAMVIPVILVAGYLGATSHVTQHANRLKVAVVNLDKPAQFEG` |
+| 1857 | orf_1857 | permease of the major facilitator superfamily | 51 | 3 | 590 | + | 196 | low | `MLDYNVRGENITVTDAIREYVEKRLTKLNRYIEENAKANVNLRTYKSDNSGKVEVTIVLP` |
+| 1858 | orf_1858 | ribonucleoside-diphosphate reductase class Ib alpha subunit | 51 | 603 | 866 | + | 88 | low | `MHCALCQTQLFEVNSFLQFFGLIRHENSVLCESCRHNFDAINDQSCPACGRQQLNNDACY` |
+| 1859 | orf_1859 | Acetyltransferase, GNAT family | 51 | 868 | 1302 | + | 145 | low | `MNDEYFYGRQIVQPKVETTTKHIIEPFIGKKCQRCGQKNTEELPNQHYYCNACLILGRVS` |
+| 1860 | orf_1860 | hypothetical protein | 51 | 1358 | 2410 | + | 351 | medium | `MVKYFTIKPTAFTWEKEIKKSRFILNMARITSENDARDFIEKINKIHYKASHNVFAYVLG` |
+| 1861 | orf_1861 | 2-aminoadipate aminotransferase apoenzyme / aromatic amino acid aminotransferase apoenzyme | 51 | 2442 | 2963 | + | 174 | low | `MTVIAVIDLGSNSVRMTISRYHQDGHYEVLNRLQEMVRLSEGMGENKVLQPEAIKRTMNA` |
+| 1862 | orf_1862 | deoxyribodipyrimidine photo-lyase type I | 51 | 2963 | 3154 | + | 64 | low | `MKKMNEAITTDFEQINTELVGVFNNVMWIEEAALKRSYFSDITLKDMHTIEAISMYDEKS` |
+| 1863 | orf_1863 | NAD-dependent DNA ligase | 51 | 3217 | 5520 | + | 768 | low | `MTDLKQHKYYVNREMSWLAFNKRVLEEGRDTQNPILERANFLAITQKNMDEWFMVRVASL` |
+| 1864 | orf_1864 | Peptidase E | 52 | 2 | 466 | + | 155 | high | `MAKLQGVILLNTDAAALQIVDSRGRQIEHVKREYSEKNLPLASFSAEVMQRALSQLQRFQ` |
+| 1865 | orf_1865 | Predicted membrane protein | 52 | 679 | 1329 | + | 217 | high | `MDDLKRCSWVDNYPDSNIMTTYHDAEWGQPNQYSDEKLFELLTLEVFQAGLSWETSLKRR` |
+| 1866 | orf_1866 | Nucleotidyltransferase/DNA polymerase for DNA repair | 52 | 1433 | 2755 | + | 441 | high | `MSLITDIIAREVLDSRGNPTLEAEVITELGGFGRGMVPSGASTGEHEAVELRDGDKSRFG` |
+| 1867 | orf_1867 | hypothetical protein of possible phage origin | 52 | 2748 | 3128 | + | 127 | high | `MSQHNASRIPFVVANWKINKLHADVAEFLDKVNGKVPAENVVETGIAAQDLFLSDMVRAT` |
+| 1868 | orf_1868 | hypothetical protein | 52 | 3115 | 3366 | + | 84 | high | `MRFFNRKKTEVITPEIQAHNEALQNENDDLLDQIEALKLDVSELKSENQHLTERLSRSKY` |
+| 1869 | orf_1869 | pyruvate oxidase | 52 | 3619 | 5439 | + | 607 | high | `MPVLTTTEIMDLIPNRYPILYMDYVEEMVPDESIVAVKNVTINEQFFQGHFPGNPVMPGV` |
+| 1870 | orf_1870 | NAD(FAD)-dependent dehydrogenase | 53 | 534 | 1250 | - | 239 | low | `MKVAFSSDNHFDLNKINVERAMRAQALYLLNKNVNVYVIAGDLFNDFKQSLAFARNMQDL` |
+| 1871 | orf_1871 | Amino acid transporter | 53 | 1283 | 1582 | - | 100 | low | `ITLKDTSILSAIGILELTQTGTLIVSRNSQGFRVWAIVAVIYLVVITLLTWLSNWVEKRT` |
+| 1872 | orf_1872 | hypothetical protein | 53 | 1569 | 1745 | - | 59 | low | `MSEAQTKVKVHVDKVNKSYGSNHVLRDISLDINENEVVVMIGPSGSGKSTFLRMLNQLET` |
+| 1873 | orf_1873 | Aldo/keto reductase of diketogulonate reductase family | 53 | 1774 | 2070 | - | 99 | low | `MFKKGFILAVTLVVALLSFSLAADCIHADKPHYTISTDATYPPFDFQDKNNDYIGIDQDI` |
+| 1874 | orf_1874 | hypothetical protein (no reference match) | 53 | 2206 | 2529 | + | 108 | none | `MNKSRLQYAVLNMGVSGMTTVLKMVLSFVSRTIFIYILGSKFLGLNGLLTSILTTLSLAE` |
+| 1875 | orf_1875 | Transposase | 53 | 2586 | 3344 | - | 253 | high | `MKIPNSQIMSVRGKLSQELMGLDSEITLGDPGLLLSSVIPKETTKWRILIIPHFQDYNNK` |
+| 1876 | orf_1876 | Transposase | 53 | 3438 | 3680 | - | 81 | high | `MEEKLFNKGFLTITIINFIVYLVYYLMMVIIAVVAHNQLHASFGQAGLASGIYIIGTLIA` |
+| 1877 | orf_1877 | Thioredoxin reductase | 53 | 3957 | 4394 | - | 146 | low | `ASQTSLQDRVTDAGSIIKEKTSDGVDAVKKTTSQAVNDDDNRVK*` |
+| 1878 | orf_1878 | DNA-binding response regulator, OmpR family (Rec-wHTH domains) | 53 | 4406 | 4906 | - | 167 | low | `MSIRYSQDFKDSLVKLHQEGRSLKSLAEEFGPSKDSIAI*` |
+| 1879 | orf_1879 | Membrane associated glycosyl hydrolase with glucan-binding domain | 54 | 266 | 4360 | - | 1365 | high | `MSNLETLRKRGNFTPKQSFVEPEKEPKVEINQPTQSAEIIETDKYIPSPNQRKTLKVSPQ` |
+| 1880 | orf_1880 | Membrane associated glycosyl hydrolase with glucan-binding domain | 54 | 4427 | 4795 | - | 123 | high | `MEKLIKKNNNKGLIITVGNYKGGAGKTSNSTLIGYTLAKQGIKVLVVDLDPQTNATKALL` |
+| 1881 | orf_1881 | hypothetical protein | 55 | 3 | 68 | - | 22 | high | `MKINQIQAPKASLKNQINVNFITIFNEAEKLRNLIGTNYLSMTSNSNNTTLTITHGQLNQ` |
+| 1882 | orf_1882 | hypothetical protein | 55 | 152 | 385 | - | 78 | high | `IGWRESNLNPKAVNSAGSVKGIWQWGAGGINGNRYQNTADTVEAQVDLAFKELASSHTVA` |
+| 1883 | orf_1883 | hypothetical protein | 55 | 498 | 650 | - | 51 | high | `MTAVQVGSDISILPDSAYHLVKEIFITVKNDYLHLYTAYQSSNKLSSKAMQSVYIELAHF` |
+| 1884 | orf_1884 | hypothetical protein | 55 | 917 | 1492 | - | 192 | high | `FLKYGEDRNRVITGIQRISKPGLRKYVKAEELPKVLNGLGIAIISTSAGVITDKEARSKQ` |
+| 1885 | orf_1885 | Tetratricopeptide repeat domain | 55 | 1662 | 2132 | - | 157 | high | `MSRIGNKTITLPADVTVSQEGAVVTVKGPKGELSREIVSAITMTVEGNEVSFSRDSDDSK` |
+| 1886 | orf_1886 | hypothetical protein | 55 | 2231 | 2572 | - | 114 | high | `MISKPDKNKLRVKRHKRVRGKISGTAARPRLNVFRSNANIYAQLIDDVAGVTLASASSHD` |
+| 1887 | orf_1887 | Acetyltransferase | 55 | 2652 | 3191 | - | 180 | high | `MVEFVNPKSLGELEENVVAINRVTKVVKGGRRLRFAALVVVGDKQGHVGFGTGKAQEVPE` |
+| 1888 | orf_1888 | Thymidine kinase | 55 | 3501 | 4670 | + | 390 | high | `MVGHLVKYGKHRTRRSYASIKEVLDVPNLIEIQTASYQWFLNDGIKEMFGDIMPIDDFQG` |
+| 1889 | orf_1889 | permease of the drug/metabolite transporter (DMT) superfamily | 56 | 1 | 1509 | - | 503 | low | `MESLNLIEGVVAHVYQCDVTRVSEESQNNEYEGTTLFVGNKSLRTRLAKKTPTKQGYFVV` |
+| 1890 | orf_1890 | alanine racemase | 56 | 1652 | 1891 | + | 80 | low | `MKNKKSFLPLIITLLPIFYGLILWTKLPVELPIHFNINGEVDRYANKVWLIIIWPIIATL` |
+| 1891 | orf_1891 | Transposase | 56 | 2098 | 2442 | + | 115 | low | `MSFLELKDIHKSYFLGKDEFPVLKGINLSFDKGEFVSILGESGGGKSTLMNIIGGLDRNF` |
+| 1892 | orf_1892 | hypothetical protein (no reference match) | 56 | 2529 | 2672 | - | 48 | none | `MSRMARQNQAPRPDDKQPRKPKRRHKKLRWIVSIIVILLIIGGVVISMLLSNIKESVDTM` |
+| 1893 | orf_1893 | NADH:flavin oxidoreductase, Old Yellow Enzyme family | 56 | 2983 | 3240 | - | 86 | low | `MKILLIALGALSFAIGTIAIWIPGLPTTGFYVLTAILWSKSSKKLDSWLHNNKYYQKYVD` |
+| 1894 | orf_1894 | cell division protein FtsQ | 56 | 3279 | 3719 | - | 147 | low | `MSYLAIVDLGSNSARMVVEELHDDGTHTELIREKRDTRIAQNMGEELLLKETPILRTIEA` |
+| 1895 | orf_1895 | methionyl-tRNA synthetase | 56 | 3875 | 4165 | - | 97 | low | `MSKKFYELTPDERLLALNLKEDIRLSFSSRQSPVNAQMVENYISDFRMPMGVVHDILIDE` |
+| 1896 | orf_1896 | 3-oxoacyl-[acyl-carrier-protein] synthase II | 57 | 1 | 666 | + | 222 | low | `MNPKIKDLLDNVNGVYPGTVMTRVNGGETGELHIDQVSQEILGQRLLIEIANKTESDFLL` |
+| 1897 | orf_1897 | GTP-binding protein LepA | 57 | 653 | 2080 | + | 476 | low | `MLVTAEIQKRFDNAKNIVFMTGAGVSTLSGIPDYRSKGGIYDDISLQPEYLLSATAFHNE` |
+| 1898 | orf_1898 | amino acid ABC transporter substrate-binding protein, PAAT family | 57 | 2369 | 2770 | + | 134 | low | `MKKPMEQLKMKQMPYLIGISLNMIFVLSELVFAKLAHSTALFADAFHNLSDVLALMIAWL` |
+| 1899 | orf_1899 | Sortase (surface protein transpeptidase) | 57 | 2767 | 3111 | + | 115 | low | `MQDSTSVNPKHHLVQKTEDDLSLSDVNGSIEVPENGSFWRKLLAFSGPGALVAVGYMDPG` |
+| 1900 | orf_1900 | dTDP-4-dehydrorhamnose 3,5-epimerase related enzyme | 57 | 3300 | 3500 | + | 67 | low | `MRDIDMSTKYDPTSVEAGRYDNWQSKKLFAPESNKEIQGNEPEPYSIVIPPPNVTGKLHL` |
+| 1901 | orf_1901 | D-3-phosphoglycerate dehydrogenase | 57 | 3625 | 4497 | + | 291 | low | `MSELNLNIEPTQFKNILVGVDESEQGYFALANAIHQASEDGATLTIATILEMGDLSAIEA` |
+| 1902 | orf_1902 | PTS system IIA component, Glc family | 58 | 3 | 1376 | - | 458 | high | `MKKEAIIELEKIFKLLGNKQRLIILELLRERSYSVSEIINSLGMEQSAVSHQLKLLREAQ` |
+| 1903 | orf_1903 | Beta-galactosidase | 58 | 1392 | 3443 | - | 684 | high | `MKNWQKLTLVGVALVAVVGGTRAAGLWGNSGNSNDKTLRFSLPTPLNGLDSATITDEYSI` |
+| 1904 | orf_1904 | Capsular polysaccharide biosynthesis protein | 59 | 189 | 959 | + | 257 | high | `MTIPLIFDTDPGIDDAAAIAILLTNDDFEVRLITSVSGNVSVDKTTNNVLKLTHYFNRPD` |
+| 1905 | orf_1905 | Capsular polysaccharide biosynthesis protein | 59 | 982 | 1881 | + | 300 | medium | `MTNEDFIEALSSAGITLTTQQVRQFERYYELLVATNEHVNLTAITEKKDVYLKHFYDSLT` |
+| 1906 | orf_1906 | Tyrosine-protein kinase (capsular polysaccharide biosynthesis) | 59 | 1898 | 2671 | + | 258 | high | `MAQIIVLANQKGGVGKTTTSINLGAALAQAGQRVLLVDIDAQGNATSGSGVDKSLLEHDS` |
+| 1907 | orf_1907 | Lipopolysaccharide synthesis sugar transferase | 59 | 2713 | 3372 | + | 220 | low | `MVSKKGGLGKGMNSLFGANNVSKEAVEHTKVVTKEQEATEQVVKLPLKDIQPNPFQPRHH` |
+| 1908 | orf_1908 | Glycosyltransferase | 59 | 3335 | 4237 | + | 301 | low | `MAIAPDYKLHDIVEMKKPHACGANSWEITRVGADIKLSCTNCGRGIMMSRFDFNKRIKKI` |
+| 1909 | orf_1909 | Predicted membrane protein | 60 | 175 | 1797 | + | 541 | low | `MALTAGIVGLPNVGKSTLFNAITKAGAEMANYPFATIEPNVGMVEVPDTRLARIQEVVPA` |
+| 1910 | orf_1910 | Arabinogalactan endo-1,4-beta-galactosidase | 60 | 1843 | 2316 | - | 158 | low | `MSEQKRELTKKNQDFIFQFKKLLAQNSKLTGEQIEGIVTEVENNLLETQGKGQTAAQIYG` |
+| 1911 | orf_1911 | Lyzozyme M1 (1,4-beta-N-acetylmuramidase) | 60 | 2326 | 3417 | - | 364 | high | `MSGSKILASAHYVPRDIVTNNDLAKIIDTSDEWIQAHTGIKTRHISLQGENTSDLATRAA` |
+| 1912 | orf_1912 | hypothetical protein | 60 | 3421 | 3645 | - | 75 | high | `MKILVVDDDIEIAELLEIYLKNEGYEPIMADDGKEALSKLNTNPDIALMILDVMMPNMNG` |
+| 1913 | orf_1913 | hypothetical protein | 60 | 3663 | 4202 | - | 180 | high | `MTKVALILKHNRTKIYYLVVTILLLLLFSWTIMTGFDALRHRFSFISFNIWNVLEFVTFV` |
+| 1914 | orf_1914 | hypothetical protein | 61 | 445 | 633 | + | 63 | low | `MLQNKKHQVKRIWFIITALVVVLLAIFFMVPRHEQSTQSTTKVATVDDQPIQLNTSATSA` |
+| 1915 | orf_1915 | Propionate catabolism protein | 61 | 949 | 1509 | - | 187 | low | `MNIIRVKDVEQSAEKALEIYQNAVQHGAKVLGLATGSTPIPLYQKLATSQINFSELVSIN` |
+| 1916 | orf_1916 | Ribonuclease HI | 61 | 1750 | 1926 | - | 59 | high | `MAHITFDTKNIENFVADHELDEMQPLIKMADEQLRNRSGAGAEYSDWITLPTDYDKDEFA` |
+| 1917 | orf_1917 | ABC-type proline/glycine betaine transport systems, permease and substrate binding protein | 61 | 2164 | 3690 | + | 509 | high | `MSKIREPRYRKIAFQIAEKIVNNEYKVGSKLHARSTLSVTFGVSAETARKAINILSDLDI` |
+| 1918 | orf_1918 | ABC-type proline/glycine betaine transport systems, ATPase component | 61 | 3691 | 4134 | + | 148 | high | `MPKVEIKHLTKIFGKRPKAAMKMVKQNKSKNEIVEKTGSTVGVYDINMSIEEGEIFVIMG` |
+| 1919 | orf_1919 | Membrane associated glycosyl hydrolase with glucan-binding domain | 62 | 2 | 1957 | - | 652 | high | `MTMNNLVSIPKIPLEDWVSSAVSWLTTNLSGFFDAIQSGGQYIMDALTNGLTAVPMPLMI` |
+| 1920 | orf_1920 | Transcriptional regulator, xre family | 62 | 2297 | 2518 | + | 74 | high | `MNNTPYFLTNPKWYKYEERQTSTGIPFQRFELTKHATPEAIASFKQTMIAIGPDTSIDPN` |
+| 1921 | orf_1921 | Transcriptional regulator, xre family | 62 | 2572 | 3180 | + | 203 | high | `MTNQLFIVIKDTFLSQFKSRGYWMLVISPLIFAALAGAVIFGITKMQGNTTPNIAVVGNQ` |
+| 1922 | orf_1922 | Predicted membrane protein, putative toxin regulator | 62 | 3212 | 3700 | - | 163 | high | `MGKFFKKTLLTTAAGAAAFVGGHAAASADTVEVQSGDTLSKIAAANNTTVDALAKANGIS` |
+| 1923 | orf_1923 | hypothetical protein | 63 | 118 | 906 | - | 263 | low | `MIQLTNLNKTFGQNIAVSNMNMTLTEGKVMGLIGQNGAGKTTTFRMLLNFIKPTSGTITW` |
+| 1924 | orf_1924 | Nucleotidyltransferase/DNA polymerase for DNA repair | 63 | 1140 | 1622 | + | 161 | low | `MINKLFASPKPGITDDEYRAKIKYQVNFLTIVIILTVAITMLLASLQKSPASRSFLRGFS` |
+| 1925 | orf_1925 | LysM domain | 63 | 1797 | 3665 | + | 623 | low | `MINRIQELRKSRKLTQAELAAELEVTRQTVISLEKGKYNASLFLAHRIAEFFDLPIEDVF` |
+| 1926 | orf_1926 | Polysaccharide transport membrane protein | 64 | 2 | 388 | - | 129 | low | `MADEKFETLDLPMSEVFSWSEDKTPLRDALWNHYMDTSNKNTLETLKHLKAYESMSSDEV` |
+| 1927 | orf_1927 | SSU ribosomal protein S7P | 64 | 1180 | 1443 | - | 88 | low | `MEFLESIIILADELFDVDDNKPFGFKFWLSIFVWLIMLSGFIVVATVFIILFPAVFLKIL` |
+| 1928 | orf_1928 | hypothetical protein | 64 | 1430 | 1813 | - | 128 | high | `MLPISDTLLVIDFQNGVCKEPQDIFNIQECVTGINSRITAYRHAHKPIIFIQHNDEELIF` |
+| 1929 | orf_1929 | Nucleoside-diphosphate-sugar epimerase | 64 | 2267 | 2902 | + | 212 | high | `MNIFFQPHLIWEYLPDVLSALPTTLLLTLVSTIIGVIVGAGIAFVKMEDTPIFKQIAVVF` |
+| 1930 | orf_1930 | heat shock protein Hsp20 | 64 | 3063 | 3485 | - | 141 | high | `MQNKASRSKGLWIGIIVVVVAVIAVALLHNNGKSSGSSSKVQTIKVGSGNDAQPFAYLDK` |
+| 1931 | orf_1931 | ATP-dependent DNA helicase, RecD/TraA family | 65 | 3 | 218 | - | 72 | low | `MNFDIGFIFQVVVKLIPYIPITIYMAFVSLILGGLLGLVIALVRHYKVPVLSQLFTIMIT` |
+| 1932 | orf_1932 | Uncharacterized conserved membrane protein | 65 | 1301 | 1957 | - | 219 | low | `MIEVKDVHKSFNDNEVIKGVSLSLNEGEVVTILGPSGSGKTTFLRCLNFLETADSGSITV` |
+| 1933 | orf_1933 | Uncharacterized NAD(FAD)-dependent dehydrogenase | 65 | 1958 | 2314 | - | 119 | low | `MQNDYLKLALDNLGKTFNDYNSGRFVAQQLMRAQVPLPEGSHWDASPAHLIKQMHHLLGV` |
+| 1934 | orf_1934 | aminotransferase | 65 | 3043 | 3144 | + | 34 | low | `MSEKRYEFATRVAGLLPNPLREQAKHVQEADDYIKLTYGYPSNQAFPVEKLAKISEKIYR` |
+| 1935 | orf_1935 | O-acetylhomoserine sulfhydrolase | 65 | 3187 | 3348 | + | 54 | low | `MKILFFNVSAVEKNIIDEWADTQLISVKTLPVSIDYDNIDLTRNFDAVIFYPGKSFQTDE` |
+| 1936 | orf_1936 | Peroxiredoxin | 66 | 135 | 704 | + | 190 | high | `MSFIEIKDVHKSFYQKEILKGIDLTLHKGEVIVILGPSGSGKTTFLRCLNTLEKADKGQI` |
+| 1937 | orf_1937 | Alkyl hydroperoxide reductase, large subunit | 66 | 715 | 2424 | + | 570 | high | `MMQNNQQSLDKVKGAVSTQSRDTDQRLFTKDFIILMMINFLVMTAVTTQMGTLPLYVTHL` |
+| 1938 | orf_1938 | Fibronectin-binding protein | 66 | 2618 | 3325 | + | 236 | high | `MPEVLIKLTVFGFFTYNSKVSNYHFRGNFNMTWSIRC*` |
+| 1939 | orf_1939 | Transposase | 67 | 795 | 1037 | + | 81 | high | `MANEKHPAVWYEHLHTEKYTGARRGRIHTPHGTFETPMFMPVGTQGAVKGVGTRELKDIG` |
+| 1940 | orf_1940 | Transposase | 67 | 1083 | 1886 | + | 268 | high | `MSLNLILPLVIIVAMFWFMSRQQKKQREQQQNMQKSLQKGSKVVTIGGLHAVVDSVDNAA` |
+| 1941 | orf_1941 | permease of the major facilitator superfamily | 67 | 1931 | 3259 | - | 443 | low | `MKTVTKVMSDGTKIVYDEYGNDQLKTVFLLHGNGSSAHYFKRQLPSYTAYFHVIAIDSRG` |
+| 1942 | orf_1942 | Folylpolyglutamate synthase | 68 | 2 | 928 | - | 309 | low | `MKGINHVLSKLIILVITLVLITQLFIMTREITWHAILSTMNDIAWWQMVLLLLAGFLVIM` |
+| 1943 | orf_1943 | Uroporphyrinogen-III decarboxylase | 68 | 912 | 1985 | - | 358 | low | `MAMHQYFMGMSQLELINRAPGFFKYQPHSVAAHSWKVTQIAQFLADVEEQNGAQINWKSV` |
+| 1944 | orf_1944 | 1,4-dihydroxy-2-naphthoate octaprenyltransferase | 68 | 1988 | 2335 | - | 116 | low | `MKKSTIAKSVVTAAGAFAVAGAAQVSANTVSVKAGDTLYKIASANGTTVDALVKANNISN` |
+| 1945 | orf_1945 | ATP synthase F1 subcomplex epsilon subunit | 68 | 2398 | 2943 | - | 182 | low | `MEKNYIARMREKVGHEGMIFVSAFGVLWNDAHDAILLEKRWDSDEGWGFPGGYLEYGDSP` |
+| 1946 | orf_1946 | Thiol-disulfide isomerase and thioredoxin | 69 | 3 | 1076 | - | 358 | low | `MKLYVVRHGQTIFNTLNKVQGWADTPLTKKGEKDGQEAGKRLKNVAFDVAFSSDTSRAMH` |
+| 1947 | orf_1947 | ATP-dependent nuclease, subunit B | 69 | 1459 | 2793 | - | 445 | low | `MVKQDSLLTKIAFLGISFVLTSAYAINGALPQMTEALHISSTEAQVLATTPSITVTIFVL` |
+| 1948 | orf_1948 | GTPase | 70 | 2 | 202 | + | 67 | low | `MEIQNKAMLITYADSLGKNLKDVRKVLKEDIGDAIGGVHLLPFFPSTGDRGFAPSDYTRV` |
+| 1949 | orf_1949 | ABC-type metal ion transport system, periplasmic component/surface adhesin | 70 | 208 | 597 | + | 130 | low | `MQILKEHAKPYARDIMFSIIAVVIMAVASLWQPRLLQQVMKAIIADDQNKVVAYGFQLLF` |
+| 1950 | orf_1950 | amino acid/polyamine/organocation transporter, APC superfamily | 70 | 617 | 1132 | + | 172 | low | `MTDIKHAIKYFAKYLKRYWLALSFVVVVTIASTYFQVKAPVYMGKAITELSTYLGQYLNP` |
+| 1951 | orf_1951 | von Willebrand factor (vWF) domain containing protein | 70 | 1135 | 1665 | + | 177 | low | `MLYKFTELTKEEYTEFEKQSSVGTFLQSGEQAELLQKRGYKIWLLGIKADDKVVAAALVM` |
+| 1952 | orf_1952 | Branched-chain amino acid permease | 70 | 1665 | 2294 | + | 210 | low | `MKHNPYLEERDNKNDARANLPTRLRILLFISFILMVALVVQLGFLTIKQGANYLAEVNRS` |
+| 1953 | orf_1953 | PTS system IIA component, Glc family | 70 | 2340 | 2624 | + | 95 | low | `MSLQNTLKAISNPVRRDILTLLKEGPQSAGSIADHFELSKATISSHLAQLKQADLIREDK` |
+| 1954 | orf_1954 | GTPase | 71 | 2 | 202 | + | 67 | low | `TTDVLILTHYLPKGNKKGEVILSYFLMGHPGLEPGTSALSTQRSNQLS*` |
+| 1955 | orf_1955 | Nucleoside permease | 71 | 208 | 597 | + | 130 | low | `TPYIQDQGNVLAVRVYKRSTAAFIEDQDMFRFSGIFRDVNILAEPASHITDLDIRPVPNA` |
+| 1956 | orf_1956 | amino acid/polyamine/organocation transporter, APC superfamily | 71 | 617 | 1123 | + | 169 | low | `MVKQKIKLPKVSLKNNGQVGFSIYLPMDGQKYQDRFRDRRI` |
+| 1957 | orf_1957 | von Willebrand factor (vWF) domain containing protein | 71 | 1126 | 1656 | + | 177 | low | `MSQLFPRGFRVRYWHRHLRRDVFIAIGSVPVVIFLITIIFRLLAIMPPSKGLVSFTKSLV` |
+| 1958 | orf_1958 | Branched-chain amino acid permease | 71 | 1656 | 2285 | + | 210 | low | `DADALTVTPVGKLPEGLKPKDVVKFENMTLDLVPIGGSRTKVSGLTAVIKKENETVATTW` |
+| 1959 | orf_1959 | PTS system IIA component, Glc family | 71 | 2301 | 2657 | + | 119 | low | `MSLVRNNNKEKNKIIPRGSDIKPKKEFSIDELENNNEETTAHRQIFEYIPAVTSIKVDTK` |
+| 1960 | orf_1960 | Transposase | 72 | 126 | 683 | + | 186 | low | `QIIYILIWAVSSLVLALNNEVVIFDTTLMAAIKNKDLSSAIINIKDNLDVLPSATDFSLF` |
+| 1961 | orf_1961 | pyrroline-5-carboxylate reductase | 72 | 858 | 2033 | + | 392 | low | `EIDKLQQWAPWRAFLQQASVVEYVAQPVDLSMARSLDWFITQVAPTLKALILYFGQETID` |
+| 1962 | orf_1962 | Predicted oxidoreductase; Myosin-crossreactive antigen ortholog | 72 | 2262 | 2510 | - | 83 | low | `MSEQGTQFKKALSATATEVANFKALSKIEDGNLYAAVNKAKEIMENDPKWSDLIGDDLAS` |
+| 1963 | orf_1963 | Glycosyltransferase related enzyme | 73 | 3 | 134 | - | 44 | low | `MFDKLKSIKKGYVKSRDKPDQSLPYAKVQKRGKWIRRFVKIALVLVGLSGAIAYIKASNV` |
+| 1964 | orf_1964 | transcriptional antiterminator, BglG family | 73 | 148 | 879 | - | 244 | low | `MKKSQKIVLSIFSLGYLVGLCLLIWPKIIDEVFKFLAEFNIHLDFKSDLFIYYYGLVLLA` |
+| 1965 | orf_1965 | Peptidyl-prolyl cis-trans isomerase (rotamase) - cyclophilin family | 73 | 967 | 1902 | - | 312 | low | `MIWSLIVGAIIGAIAGAITNRGESMGWISNILAGLIGSSIGQGLLGHWGPSLAGMAIIPS` |
+| 1966 | orf_1966 | 4-amino-4-deoxy-L-arabinose transferase related glycosyltransferase of PMT family | 73 | 1920 | 2390 | - | 157 | low | `KRKTMLKTVLKVLLASTLILGVIAVGGTIFAAKGIDKAGDRLEEEIHN*` |
+| 1967 | orf_1967 | Glycosyltransferase related enzyme | 74 | 3 | 596 | - | 198 | low | `RKTMLKTVLKVLLASTLILGGIAVGGTIFAAKGIDKAGDRLEEEIHN*` |
+| 1968 | orf_1968 | Lipopolysaccharide biosynthesis glycosyltransferase | 74 | 608 | 943 | - | 112 | medium | `MIWSLIVGAIIGAIAGAITNRGESMGWISNIIAGLIGSAIGQALLGQWGPSLARMAIIPS` |
+| 1969 | orf_1969 | dTDP-4-dehydrorhamnose reductase | 74 | 1305 | 2096 | - | 264 | medium | `MKKSQKIVLSIFSLGYLVGLCLLIWPQIIDEVFKFLAEFNIHLDFKSDLFIYYYGLVLLA` |
+| 1970 | orf_1970 | Tyrosine-protein kinase (capsular polysaccharide biosynthesis) | 75 | 407 | 1228 | + | 274 | low | `ITVHHTTVMRWVHHYGPIFKALWRRHQTAHAKSWRIDETYIRVKGRWSYLYRAIDSNGLT` |
+| 1971 | orf_1971 | SSU ribosomal protein S13P | 75 | 1225 | 1554 | + | 110 | low | `VVAKASGQVVGATLLSDVADEMINYFTLLIEKHVTLPDLQRLVLAYPTPASDLQYLY*` |
+| 1972 | orf_1972 | Predicted hydrolase of HD superfamily | 76 | 625 | 1005 | + | 127 | low | `FVTHDMNEALKLGDRIGVMQHGQLIQVDTPAALAQHPVNDFVRNFFGASRAKNVYDVYVG` |
+| 1973 | orf_1973 | sodium/proton antiporter, CPA1 family | 76 | 1005 | 1679 | + | 225 | low | `MAEQYDVVVIGGGPAGNAMASGLKAQGKTVLIVEADLWGGTCPNRGCDPKKILLSAVEAR` |
+| 1974 | orf_1974 | DNA segregation ATPase FtsK/SpoIIIE related protein | 77 | 1 | 327 | + | 109 | low | `MTIYGYARVSTAGQSLNEQKETLKNAGAEMILSEKYSGTTTVRPQFEKLVAIIEPNDTLI` |
+| 1975 | orf_1975 | DNA segregation ATPase FtsK/SpoIIIE related protein | 77 | 370 | 624 | + | 85 | low | `MTNIIISILLLLTFVGFIYYIVKGGNLVIGFFVMALLWSVIGLVPFDQVVQKVIAEPALN` |
+| 1976 | orf_1976 | ABC-type oligopeptide transport system, periplasmic component | 77 | 1078 | 1389 | + | 104 | low | `MTDQKLRTILQEHGLKATYQRMAVLEYLATNKTHPTAEMIHEDLNNISLATVYNTLDKLI` |
+| 1977 | orf_1977 | oligoendopeptidase F | 77 | 1370 | 1780 | + | 137 | low | `MKRKYKWLIGCLVFIAILLLSAGMYFFHVAEVRDVAADKPDKLRAKTNSLYHYEHDFLSR` |
+| 1978 | orf_1978 | amino acid/polyamine/organocation transporter, APC superfamily | 78 | 2 | 562 | - | 187 | low | `MTYSQKWNLESIFPGGITSPQLTQKYELIAKQINDFTDMIADYSLAQDKDFTVLSDLADL` |
+| 1979 | orf_1979 | Putative glucose uptake permease | 78 | 793 | 1680 | - | 296 | low | `MTSMQRSFTCFVDGEEKNVVDGVLLAELDIELQQKIKHDFPDSMLADFICFDHLLQYRLE` |
+| 1980 | orf_1980 | hypothetical protein | 79 | 3 | 74 | + | 24 | high | `MSYQTINPFNDEVIQTFDNHDDAYVEKAIAEGHALYKKWRNDPASSRAEILNKIADLMEE` |
+| 1981 | orf_1981 | hypothetical protein | 79 | 89 | 1729 | + | 547 | medium | `MIIDDDIQLAHEIDAEGVHFGQKDGDIINNIQLAGNLAVGVSVSNDSQYKRIENIKEIDY` |
+| 1982 | orf_1982 | amino acid ABC transporter membrane protein, PAAT family / amino acid ABC transporter substrate-binding protein, PAAT family | 80 | 2 | 190 | + | 63 | high | `MFDPSILVNYFVLGTQDTNGERHFFEVLEEALQSKISVFQYRKKGNWL*` |
+| 1983 | orf_1983 | amino acid ABC transporter ATP-binding protein, PAAT family | 80 | 187 | 939 | + | 251 | high | `MVNKTPQVLTIAGMDSSGGAGVSADLKTFAAQGVYGANVIVALTAQNTMGVQQVSMTSPS` |
+| 1984 | orf_1984 | amino acid ABC transporter membrane protein, PAAT family / amino acid ABC transporter substrate-binding protein, PAAT family | 80 | 1006 | 1737 | + | 244 | high | `MNITDIRTKSPLVLTYANFVTPQFVANVVNVVGASPLMSRELAEFKELAGIANAVIINTG` |
+| 1985 | orf_1985 | LSU ribosomal protein L5P | 81 | 579 | 764 | - | 62 | low | `MSALLTVENLNVSYGAIKAVQDVNFVVNNNEIVSLIGANGAGKTTILRTISGLEKPTKGR` |
+| 1986 | orf_1986 | Lactam utilization protein B related protein | 81 | 773 | 1348 | - | 192 | low | `MRKEQIVLNNLVFMNDHEKGMQQLEMLKKAVSFGVSSVELRREYFDDIVKETPAIAQYAV` |
+| 1987 | orf_1987 | permease of the major facilitator superfamily | 82 | 60 | 1265 | - | 402 | high | `MAQTILKTRDLSIRFGGVTAVDGVNIEAAENELIGLIGPNGAGKTTLFNLLTGVYSPSEG` |
+| 1988 | orf_1988 | hypothetical protein | 83 | 2 | 136 | + | 45 | high | `MDQAHIKYTLSWASLAAMGFILIFVAQMVGLIGHYGITTIVLIGINIIAALGLNLVVGIS` |
+| 1989 | orf_1989 | Transposase | 83 | 693 | 812 | - | 40 | high | `MTTFIQQLINGLMLGSVYALLALGYTMVYGIIKLINFAHGDIYMLGAYFGYFFIKVLHLN` |
+| 1990 | orf_1990 | ABC-type oligopeptide transport system, periplasmic component | 84 | 1 | 288 | - | 96 | low | `MKKIVIIGAAFIVAIGGIVAFGVVNKSSKASTSNVIKIGGVFDTSGDASSYGKAEQDGAN` |
+| 1991 | orf_1991 | Sortase (surface protein transpeptidase) | 84 | 281 | 1129 | - | 283 | low | `MKINLVLAPEQPVSELLTLQSAQPQNVFYLGKISQLAGTNLLIIDAQNVVAKFARPIGFE` |
+| 1992 | orf_1992 | ribulose-5-phosphate 3-epimerase | 85 | 310 | 1404 | - | 365 | low | `MKLKPRDLKSFIDKDIRYKRAEALLIGQWESLLLSEPWDMPMITRADVSFAKTLSEANVV` |
+| 1993 | orf_1993 | maltose phosphorylase | 87 | 1 | 975 | + | 325 | low | `MKSENDNLIIDGIKTLLDVSPLYGNIVMNLVREVNPQAANPLALKWQGHHWYLLVNPNLL` |
+| 1994 | orf_1994 | ABC-type antimicrobial peptide transport system, ATPase component | 87 | 992 | 1420 | + | 143 | low | `MSLTYQKLLVAVPLILRGGNVPTIVGEAGIGKSALVAEIAKKLGAKLFTTVVSLSEKGDL` |
+| 1995 | orf_1995 | SSU ribosomal protein S8P | 88 | 3 | 215 | + | 71 | high | `MTKNILILGANGQIAKIVVDILANTDTKITLTSLHARPEKSIKSLDATKEENLVRALKDI` |
+| 1996 | orf_1996 | LSU ribosomal protein L6P | 88 | 240 | 776 | + | 179 | high | `MKSKIKKYTISPLALSFWIPFLVLIGYFAYRKMAPFGSNSILTVDLGQQYIDQFAAFKYT` |
+| 1997 | orf_1997 | LSU ribosomal protein L18P | 88 | 857 | 1210 | + | 118 | high | `MEKEQLHIDPEKFALQFLESFKLNFDAKNLEGMAKQQLAAYLSAYFLVEKFNKIEGENFD` |
+| 1998 | orf_1998 | SSU ribosomal protein S5P | 88 | 1230 | 1409 | + | 60 | high | `MSEEKTYPMTAEGRDKLQLELEDLIANQRPEITKRIQIARSYGDLSENSEYQSAKDEQAF` |
+| 1999 | orf_1999 | DNA-directed RNA polymerase subunit beta | 89 | 1 | 1254 | - | 418 | high | `MSLAILLALVPALAWGSVGIVNTKMGGTAGQQTLGMTFGALIFGLATMFFFVMPRHIELS` |
+| 2000 | orf_2000 | bacteriocin-processing peptidase, Cysteine peptidase, MEROPS family C39 | 90 | 1214 | 1360 | - | 49 | low | `MQSRKERHQHEIKNAEAIEKGLDPFADTMNSGNKGGSPRKKRKKPNRLILLLLLLVIVIG` |
+| 2001 | orf_2001 | Beta-galactosidase | 91 | 1 | 1287 | - | 429 | low | `MAKTMAVNAGSSSLKFQLLEMPAEQVIAQGVIERIGMDDAIVTIKYGAEINAERLVGHSE` |
+| 2002 | orf_2002 | Large-conductance mechanosensitive channel | 92 | 3 | 125 | - | 41 | low | `MTQEKIAQYFDALTSASQSLVKDTNTSYIDALIEILEDINSQTVHREFDKPSNDVVQIIQ` |
+| 2003 | orf_2003 | aminotransferase | 92 | 119 | 565 | - | 149 | low | `MNKKNAYVLVPTIFVLGALSALFILQNMAFNQQLRAQTHLVEIAKIDKIQMIVSTQVYKN` |
+| 2004 | orf_2004 | Na+/xyloside symporter related transporter | 92 | 587 | 1192 | - | 202 | low | `MKNDGFTLLEALISLLIAALVLTSLQFVVPFLKQISDAPKATVLQTITHQLETQKYTITS` |
+| 2005 | orf_2005 | hypothetical protein | 93 | 104 | 478 | - | 125 | low | `MLKQIIQNKQSAFVLAESMLALILVSVCMSFEYEQVHQFHIHKSNLERKLKVAERERIDA` |
+| 2006 | orf_2006 | hypothetical protein | 93 | 480 | 1163 | - | 228 | low | `MKHVNSGFTLIESAVTLTIVSLLLFVGAQTSARPKIDTQQWLATFQTYWQNARLTAQHEQ` |
+| 2007 | orf_2007 | Preprotein translocase subunit YidC | 94 | 1 | 261 | + | 87 | low | `MNIFKKSKKAFTLIEAAIVLFIISLLMLLILPNLNAQRKHAVENHATAMVSTVQTQIDLY` |
+| 2008 | orf_2008 | dihydrodipicolinate synthase | 94 | 287 | 586 | + | 100 | low | `MSKKVTINVIAEMARVSKTTVSRFLNGKFDNMSEATKERIAETIAELDYHPSRQAQALKA` |
+| 2009 | orf_2009 | GTP-binding protein LepA | 94 | 592 | 972 | + | 127 | low | `MKPIKNLARFNKRDQVLFFQELGELLSSGYSIAQSIDILASAHQKWQSILSQVQKGLSTG` |
+| 2010 | orf_2010 | hypothetical protein | 95 | 3 | 356 | - | 118 | high | `MEIDQLLDNAVAEEASDIYILPNDDRFTIKFHAGGSIVTQEYLDNKAAEKMISAIKYRAK` |
+| 2011 | orf_2011 | Predicted membrane protein | 95 | 381 | 626 | - | 82 | high | `MTEILDGKAVAKTINEQTKARVAKQKRPVTLAVIYDPSNDGSQLYVGMKSRQAAKLGIVT` |
+| 2012 | orf_2012 | hypothetical protein | 95 | 823 | 969 | - | 49 | high | `MADQRISWHQYFIAQAAILSTRSTCTRLHVGAIIVRDHRIIASGYNGSVSGTPHCTEVGD` |
+| 2013 | orf_2013 | hypothetical protein | 96 | 3 | 146 | + | 48 | high | `MSQNEQQYLDLAQKILDEGSHKGDRTGTGTRSLFGTQMRFNLAEGFPLLTTKKVFFGLIK` |
+| 2014 | orf_2014 | Predicted membrane protein | 96 | 343 | 588 | + | 82 | high | `MVKEKVEKFYNVLGYKEKKDIRIFQRYFPNNYNLNELTNDIVEDFLSHNPIANEVLLLGI` |
+| 2015 | orf_2015 | hypothetical protein | 96 | 613 | 966 | + | 118 | high | `MIDDKLSPRLVLSVLAIGLLGFTDIMLETALNVSFPMLMTEFKVTSSTVQWLTSGVILLT` |
+| 2016 | orf_2016 | Transposase | 97 | 2 | 568 | + | 189 | high | `MKTVEDAISYIHNRPKGGQKESLYRMTTLLAALGNLQNDLPYAIHITGTNGKGSVSTMAS` |
+| 2017 | orf_2017 | Glutathione reductase | 97 | 747 | 920 | - | 58 | high | `MANAHKAQGERILKFSELGLSQDILDAITTHGYVEATPIQEKTIPLTLAGRDVIGQAQTG` |
+| 2018 | orf_2018 | ABC-type proline/glycine betaine transport systems, ATPase component | 98 | 2 | 394 | + | 131 | high | `MKRSQKQQFKIRKWSVFLILVCTMGLVLWPNQLNNGQYTINPIVDDKYSANSMSALKSNI` |
+| 2019 | orf_2019 | Glutathione reductase | 98 | 472 | 864 | + | 131 | high | `MTALYTLALLLIGVIGTNLIKQFFPKIPEPFILIIVGIFLSFTPIFQNFELEPEFFMLMI` |
+| 2020 | orf_2020 | N-formyl-4-amino-5-aminomethyl-2- methylpyrimidine deformylase | 99 | 156 | 713 | - | 186 | low | `MNYSVKKIGQILNATTQIDSKIVTGVSFDSRKVKSGDLFVALVAENDGHDYVQQALTKGA` |
+| 2021 | orf_2021 | PTS system IIA component, Glc family | 100 | 2 | 742 | + | 247 | low | `MYEVKIIARTVLPVKLNQELIVVVDDIRIDGMGIVYVTAKYPLYVADALPGEKVHLLVTQ` |
+| 2022 | orf_2022 | D-alanyl-D-alanine carboxypeptidase | 101 | 3 | 710 | - | 236 | low | `MQAEIHPDYRQVVFIDASTGKKFLSASTVTSNDTTDFEGKEYPAIRMDITSDSHPFYTGK` |
+| 2023 | orf_2023 | Superfamily II DNA and RNA helicase | 103 | 3 | 524 | - | 174 | low | `MAKIIVHGGKRIRGEVTIGGAKNSTVALIPAAILADTPVKFDTVPQILDVKNLQLILQAM` |
+| 2024 | orf_2024 | DNA topoisomerase IV subunit A | 105 | 107 | 379 | - | 91 | low | `MKTSLTWINEYLDNAIDLHPKSVSDLAEKVERTSVEIDSNTTIASGQNGLVVAKILSVIP` |
+| 2025 | orf_2025 | Integrase | 105 | 376 | 591 | - | 72 | low | `MGLIEDLTALKNSAVERINDKNADIEQLRVKLLGKKGELTGLLKGMKDVAAENRKMVGEV` |
+| 2026 | orf_2026 | PTS system IIA component, Glc family | 106 | 2 | 544 | + | 181 | high | `MVKKTKNTENTLCKNFTCTFELLGRKWNGLIIETLLISGAKRFLEISRAVSGCSDRVLVE` |
+| 2027 | orf_2027 | Arabinogalactan endo-1,4-beta-galactosidase | 106 | 566 | 640 | + | 25 | high | `MKKVLVANMTSQKAVDYLESKGYQVIKNDQASDDDFLGHADVDGILIMMHPFGESLMSKM` |
+| 2028 | orf_2028 | hypothetical protein (no reference match) | 108 | 2 | 235 | + | 78 | none | `MSQIYLAGPFFSDEQIDRVKRIEAALDSNPTVTDYYSPRKHQKTENPEFTSPWAAEVFQR` |
+| 2029 | orf_2029 | Transposase, IS30 family | 108 | 355 | 567 | + | 71 | high | `MAPRKLVDVANQALNGTYTPYSHFPVGAALLGENGEIFKGVNIENVSFGLTNCAERTAIF` |
+| 2030 | orf_2030 | transporter, YbiR family | 109 | 2 | 118 | + | 39 | low | `MFRNSDFDIFEDKTLNGRMEKIRTIIDPKFEEFASIALPILNTDGQEWYAHVAKHLRRTT` |
+| 2031 | orf_2031 | Transposase | 109 | 166 | 561 | + | 132 | medium | `MSEKQLLRNQVPENLTWDLSSIFPTDEAWETAFNETRKSAQALSKYAGHVGDSADVLKEA` |
+| 2032 | orf_2032 | amino acid ABC transporter membrane protein, PAAT family / amino acid ABC transporter substrate-binding protein, PAAT family | 110 | 2 | 553 | + | 184 | high | `MIIACDSNKKYVRADEANKRNNYFCPGCHEKVILKNGEVKQKHFSHCAGAACVTFTENES` |
+| 2033 | orf_2033 | Predicted permease | 111 | 2 | 280 | - | 93 | high | `ITLKDTSILSAIGILELTQTGTLIVARNSQGFRVWAIIAIIYLIIITLLTWLSNWAQKKI` |
+| 2034 | orf_2034 | A/G-specific DNA-adenine glycosylase | 111 | 264 | 554 | - | 97 | high | `MNKKIMHKWRVLDARLKISTLTTFFTRSQIGYVGPTFAYYALLTVFPILMGAALIVSFTS` |
+| 2035 | orf_2035 | hypothetical protein (no reference match) | 112 | 2 | 235 | + | 78 | none | `MEKVKKHETMDERLNAIRAGVLGSNDGILTVVGVLFSVAAATTNQFAIFIAGLADLVSCA` |
+| 2036 | orf_2036 | Transposase | 113 | 1 | 123 | - | 41 | high | `MSEKSEKTSFMQRNNIIRAAVMGANDGILSVSGIVLGVAGATSHTDTILLAGFAGMLAGT` |
+
+## 3. Aerobic Metabolism Analysis
+
+### Background
+*L. mesenteroides* is an obligate fermenter. It lacks a complete electron transport chain (ETC) and cannot perform oxidative phosphorylation. It generates ATP exclusively through substrate-level phosphorylation via the phosphoketolase pathway.
+
+### Table 3.1: Aerobic/Oxidative Metabolism Genes PRESENT in Genome
+
+| # | Gene | Function | Contig | Confidence |
+|---|------|----------|--------|------------|
+| 1 | orf_0030 | homoserine dehydrogenase | 1 | high |
+| 2 | orf_0075 | dihydrolipoamide dehydrogenase | 1 | high |
+| 3 | orf_0076 | acetoin/pyruvate dehydrogenase complex, E2 component, dihydrolipoamide succinyltransferase | 1 | high |
+| 4 | orf_0077 | acetoin dehydrogenase complex, E1 component, beta subunit | 1 | high |
+| 5 | orf_0078 | acetoin dehydrogenase complex, E1 component, alpha subunit | 1 | high |
+| 6 | orf_0117 | Aryl-alcohol dehydrogenase family enzyme | 1 | high |
+| 7 | orf_0173 | IMP dehydrogenase/GMP reductase | 1 | high |
+| 8 | orf_0174 | inosine-5'-monophosphate dehydrogenase | 1 | high |
+| 9 | orf_0300 | FAD/FMN-containing dehydrogenase | 2 | low |
+| 10 | orf_0304 | Aryl-alcohol dehydrogenase family enzyme | 2 | low |
+| 11 | orf_0310 | Predicted flavoprotein | 3 | high |
+| 12 | orf_0349 | Short-chain dehydrogenase of various substrate specificities | 3 | high |
+| 13 | orf_0352 | Threonine dehydrogenase related Zn-dependent dehydrogenase | 3 | high |
+| 14 | orf_0360 | Pyridoxine 5'-phosphate oxidase V related favin-nucleotide-binding protein | 3 | high |
+| 15 | orf_0362 | 2-deoxy-D-gluconate 3-dehydrogenase | 3 | high |
+| 16 | orf_0364 | 6-phosphogluconate dehydrogenase (decarboxylating) | 3 | high |
+| 17 | orf_0387 | NADPH:quinone reductase related Zn-dependent oxidoreductase | 3 | high |
+| 18 | orf_0435 | Thiol-disulfide isomerase and thioredoxin | 4 | high |
+| 19 | orf_0488 | Putative NADH-flavin reductase | 5 | low |
+| 20 | orf_0549 | Aryl-alcohol dehydrogenase family enzyme | 5 | high |
+| 21 | orf_0552 | Phosphoglycerate dehydrogenase related enzyme | 5 | high |
+| 22 | orf_0588 | FAD/FMN-containing dehydrogenase | 6 | high |
+| 23 | orf_0591 | Short-chain alcohol dehydrogenase | 6 | high |
+| 24 | orf_0606 | prephenate dehydrogenase | 6 | high |
+| 25 | orf_0611 | shikimate dehydrogenase | 6 | high |
+| 26 | orf_0632 | NADPH:quinone reductase related Zn-dependent oxidoreductase | 6 | high |
+| 27 | orf_0635 | Predicted dehydrogenase | 6 | high |
+| 28 | orf_0653 | glyceraldehyde-3-phosphate dehydrogenase | 7 | high |
+| 29 | orf_0661 | Thioredoxin reductase | 7 | high |
+| 30 | orf_0663 | glutamate-5-semialdehyde dehydrogenase | 7 | high |
+| 31 | orf_0769 | Lactate dehydrogenase related 2-hydroxyacid dehydrogenase | 8 | high |
+| 32 | orf_0797 | NAD-dependent aldehyde dehydrogenase | 9 | high |
+| 33 | orf_0811 | Saccharopine dehydrogenase related protein | 9 | high |
+| 34 | orf_0825 | 5,10-methylenetetrahydrofolate dehydrogenase (NADP+) / methenyltetrahydrofolate cyclohydrolase | 9 | high |
+| 35 | orf_0840 | Lactate dehydrogenase related enzyme | 9 | high |
+| 36 | orf_0847 | malate dehydrogenase (NAD) | 10 | high |
+| 37 | orf_0852 | Short-chain alcohol dehydrogenase | 10 | high |
+| 38 | orf_0858 | NAD(FAD)-dependent dehydrogenase | 10 | high |
+| 39 | orf_0864 | Glycine/D-amino acid oxidase (deaminating) | 10 | high |
+| 40 | orf_0888 | acetaldehyde dehydrogenase / alcohol dehydrogenase AdhE | 10 | high |
+| 41 | orf_0920 | Predicted dehydrogenase | 11 | high |
+| 42 | orf_0921 | Predicted dehydrogenase | 11 | high |
+| 43 | orf_0946 | 6-phosphogluconate dehydrogenase (decarboxylating) | 11 | high |
+| 44 | orf_0959 | Lactate dehydrogenase | 12 | high |
+| 45 | orf_0972 | 3-isopropylmalate dehydrogenase | 12 | high |
+| 46 | orf_0983 | demethylmenaquinone methyltransferase | 12 | high |
+| 47 | orf_0987 | glucose-6-phosphate 1-dehydrogenase | 12 | high |
+| 48 | orf_0991 | Aryl-alcohol dehydrogenase family enzyme | 12 | high |
+| 49 | orf_0993 | Aryl-alcohol dehydrogenase family enzyme | 12 | high |
+| 50 | orf_1021 | Cytochrome bd biosynthesis ABC-type transporter, ATPase and permease component | 13 | high |
+| 51 | orf_1022 | Cytochrome bd biosynthesis ABC-type transporter, ATPase and permease component | 13 | high |
+| 52 | orf_1023 | cytochrome bd quinol oxidase subunit 2 apoprotein | 13 | high |
+| 53 | orf_1024 | cytochrome bd quinol oxidase subunit 1 apoprotein | 13 | high |
+| 54 | orf_1071 | NADH:flavin oxidoreductase, Old Yellow Enzyme family | 14 | high |
+| 55 | orf_1079 | Short-chain alcohol dehydrogenase | 15 | high |
+| 56 | orf_1085 | Lactate dehydrogenase related dehydrogenase | 15 | high |
+| 57 | orf_1153 | glycerol 3-phosphate dehydrogenase (NAD(P)+) | 17 | high |
+| 58 | orf_1155 | Thioredoxin reductase | 17 | high |
+| 59 | orf_1158 | Threonine dehydrogenase related Zn-dependent dehydrogenase | 17 | high |
+| 60 | orf_1200 | Uncharacterized NAD(FAD)-dependent dehydrogenase | 18 | high |
+| 61 | orf_1202 | 3-hydroxyisobutyrate dehydrogenase related enzyme | 18 | high |
+| 62 | orf_1203 | 3-hydroxyisobutyrate dehydrogenase related enzyme | 18 | high |
+| 63 | orf_1205 | Predicted FAD(NAD)-dependent oxidoreductase | 18 | high |
+| 64 | orf_1215 | Glutathione peroxidase | 18 | high |
+| 65 | orf_1258 | Cytochrome bd biosynthesis ABC-type transporter, ATPase and permease component | 19 | low |
+| 66 | orf_1296 | D-lactate dehydrogenase, LdhA | 20 | high |
+| 67 | orf_1312 | aspartate semialdehyde dehydrogenase | 21 | high |
+| 68 | orf_1343 | UDP-N-acetylmuramate dehydrogenase | 22 | high |
+| 69 | orf_1389 | Predicted oxidoreductase | 24 | high |
+| 70 | orf_1390 | Putative NADH-flavin reductase | 24 | high |
+| 71 | orf_1474 | histidinol dehydrogenase | 26 | high |
+| 72 | orf_1545 | homoserine dehydrogenase | 29 | low |
+| 73 | orf_1569 | Thiol-disulfide isomerase and thioredoxin | 30 | high |
+| 74 | orf_1595 | dihydroorotate oxidase B, catalytic subunit | 31 | high |
+| 75 | orf_1650 | D-3-phosphoglycerate dehydrogenase | 34 | high |
+| 76 | orf_1654 | NADH:flavin oxidoreductase, Old Yellow Enzyme family | 35 | high |
+| 77 | orf_1663 | NADH dehydrogenase, FAD-containing subunit | 35 | high |
+| 78 | orf_1703 | Short-chain alcohol dehydrogenase | 38 | high |
+| 79 | orf_1704 | 2-hydroxyacid dehydrogenase | 38 | high |
+| 80 | orf_1727 | 3-isopropylmalate dehydrogenase | 39 | high |
+| 81 | orf_1729 | thiol peroxidase (atypical 2-Cys peroxiredoxin) | 39 | high |
+| 82 | orf_1739 | Lactate dehydrogenase related 2-hydroxyacid dehydrogenase | 40 | high |
+| 83 | orf_1746 | Zn-dependent alcohol dehydrogenase | 41 | high |
+| 84 | orf_1753 | Lactate dehydrogenase related enzyme | 42 | high |
+| 85 | orf_1755 | Predicted oxidoreductase; Myosin-crossreactive antigen ortholog | 42 | high |
+| 86 | orf_1765 | D-3-phosphoglycerate dehydrogenase | 43 | low |
+| 87 | orf_1774 | NADH:flavin oxidoreductase, Old Yellow Enzyme family | 44 | high |
+| 88 | orf_1794 | dihydrolipoamide dehydrogenase | 45 | low |
+| 89 | orf_1799 | FAD/FMN-containing dehydrogenase | 45 | low |
+| 90 | orf_1812 | NADPH:quinone reductase related Zn-dependent oxidoreductase | 46 | low |
+| 91 | orf_1855 | Cytochrome bd biosynthesis ABC-type transporter, ATPase and permease component | 50 | low |
+| 92 | orf_1869 | pyruvate oxidase | 52 | high |
+| 93 | orf_1870 | NAD(FAD)-dependent dehydrogenase | 53 | low |
+| 94 | orf_1877 | Thioredoxin reductase | 53 | low |
+| 95 | orf_1893 | NADH:flavin oxidoreductase, Old Yellow Enzyme family | 56 | low |
+| 96 | orf_1901 | D-3-phosphoglycerate dehydrogenase | 57 | low |
+| 97 | orf_1933 | Uncharacterized NAD(FAD)-dependent dehydrogenase | 65 | low |
+| 98 | orf_1946 | Thiol-disulfide isomerase and thioredoxin | 69 | low |
+| 99 | orf_1962 | Predicted oxidoreductase; Myosin-crossreactive antigen ortholog | 72 | low |
+
+### Table 3.2: Genes MISSING for Aerobic Metabolism (Ranked by Importance)
+
+| # | Gene | Function | Importance | Rationale |
+|---|------|----------|------------|-----------|
+| 1 | **cydA** | Cytochrome bd ubiquinol oxidase subunit I — terminal electron acceptor for O₂ | CRITICAL | Required for any aerobic respiration; directly transfers electrons to O₂ |
+| 2 | **cydB** | Cytochrome bd ubiquinol oxidase subunit II — partner of cydA | CRITICAL | Forms the functional cydAB complex |
+| 3 | **ndh** | NADH dehydrogenase (type II, non-proton pumping) | CRITICAL | Entry point for electrons from NADH into ETC; simpler than complex I |
+| 4 | **menA** | 1,4-dihydroxy-2-naphthoate polyprenyltransferase — menaquinone biosynthesis | CRITICAL | Menaquinone is the electron shuttle between NADH DH and cytochrome bd |
+| 5 | **menB** | Naphthoate synthase — menaquinone biosynthesis | CRITICAL | Part of menaquinone biosynthesis pathway |
+| 6 | **menC** | O-succinylbenzoate synthase — menaquinone biosynthesis | HIGH | Menaquinone precursor synthesis |
+| 7 | **menD** | 2-succinyl-5-enolpyruvyl-6-hydroxy-3-cyclohexene-1-carboxylate synthase | HIGH | Early step in menaquinone biosynthesis |
+| 8 | **menE** | O-succinylbenzoic acid-CoA ligase | HIGH | Menaquinone biosynthesis |
+| 9 | **menF** | Isochorismate synthase — menaquinone biosynthesis | HIGH | First committed step in menaquinone from chorismate |
+| 10 | **menH** | 2-succinyl-6-hydroxy-2,4-cyclohexadiene-1-carboxylate synthase | HIGH | Menaquinone biosynthesis |
+| 11 | **atpA** | F1F0-ATP synthase subunit alpha — oxidative phosphorylation | HIGH | Already present for substrate-level phosphorylation but needed for proton-motive force coupling |
+| 12 | **sdhA** | Succinate dehydrogenase flavoprotein subunit — TCA cycle/ETC | MEDIUM | Links TCA cycle to ETC; only needed if full TCA is introduced |
+| 13 | **sdhB** | Succinate dehydrogenase iron-sulfur subunit | MEDIUM | Partner of sdhA |
+| 14 | **gltA** | Citrate synthase — TCA cycle | MEDIUM | First step of TCA cycle; only if full aerobic metabolism desired |
+| 15 | **acnA** | Aconitase — TCA cycle | MEDIUM | TCA cycle enzyme |
+| 16 | **icd** | Isocitrate dehydrogenase — TCA cycle | MEDIUM | TCA cycle enzyme producing NADH |
+| 17 | **sucA** | 2-oxoglutarate dehydrogenase E1 — TCA cycle | LOW | Expensive to add; full TCA rarely engineered into LAB |
+| 18 | **fumC** | Fumarase — TCA cycle | LOW | Non-essential if partial TCA sufficient |
+| 19 | **mdh** | Malate dehydrogenase — TCA cycle | LOW | May already exist for malolactic fermentation |
+
+### Textual Analysis: Restoring Aerobic Metabolism
+
+#### The Problem
+*L. mesenteroides* is an obligate fermenter because it lacks three essential components:
+1. **Terminal oxidase** (cydAB) — the enzyme that actually reduces O₂
+2. **Electron shuttle** (menaquinone) — the molecule that carries electrons from NADH to the oxidase
+3. **Electron entry point** (NADH dehydrogenase) — the enzyme that strips electrons from NADH
+
+Without these, NADH generated during sugar catabolism must be recycled by reducing pyruvate to lactate/ethanol, which is exactly what fermentation does.
+
+#### Variation A: Full Self-Sufficient Aerobic Respiration
+**Minimum gene additions:** cydAB + ndh + menABCDEFH (10 genes)
+
+This gives the bacterium a minimal respiratory chain:
+```
+NADH → [ndh] → menaquinone → [cydAB] → O₂ + H₂O
+```
+The proton motive force generated by cydAB can drive the F1F0-ATP synthase (already present) to produce ATP from oxidative phosphorylation. This would roughly double ATP yield per glucose.
+
+**Donor organisms:** *Lactobacillus plantarum* has cydABCD and can respire when heme is supplied. *Enterococcus faecalis* has a similar minimal respiratory chain. Gene cassettes from these related Firmicutes would be most compatible.
+
+**Challenges:**
+- 10 genes is a large insert (~12-15 kb)
+- Menaquinone pathway requires chorismate as precursor (check if shikimate pathway is complete)
+- Expression levels must be balanced to avoid toxic ROS accumulation
+- The organism may need additional ROS defense genes (sodA, katA)
+
+#### Variation B: Heme-Dependent Respiration (Fewer Genes, External Supplement)
+**Minimum gene additions:** cydAB + ndh (3 genes)
+**Culture media addition:** Heme (hemin) + menaquinone (vitamin K₂)
+
+This is the *L. plantarum* strategy: it has cydAB but no heme biosynthesis. When you add heme + menaquinone to the growth medium, it assembles a functional respiratory chain and shifts from fermentation to respiration.
+
+**Advantages:**
+- Only 3 genes needed (~4-5 kb insert)
+- Well-characterized in related LAB species
+- Heme and menaquinone are commercially available
+- Respiration can be turned on/off by media composition
+
+**Required media supplements:**
+- Hemin chloride: 2-10 μg/mL
+- Menaquinone-4 (vitamin K₂): 1-5 μg/mL
+
+#### Variation C: NADH Oxidase Only (No ATP Gain, But Aerobic Tolerance)
+**Minimum gene additions:** nox (1 gene, NADH oxidase)
+**No media supplements needed**
+
+Some LAB already have NADH oxidases that directly reduce O₂ to H₂O without generating proton motive force. This doesn't produce extra ATP but allows the cell to regenerate NAD⁺ under aerobic conditions, improving growth rate and shifting the fermentation balance toward acetate (producing ATP via substrate-level phosphorylation through the acetate kinase pathway).
+
+This is the simplest modification and may already be partially present in the genome (check for nox/noxE homologs).
+
+#### Variation D: Partial TCA Cycle (Maximum Carbon Efficiency)
+**Gene additions:** All of Variation A + gltA + acnA + icd + sdhAB + fumC + mdh (16+ genes)
+
+This would give the organism a complete TCA cycle, allowing full oxidation of glucose to CO₂ + H₂O with maximum ATP yield (~38 ATP/glucose vs ~2 from fermentation). However:
+- This is a massive engineering project (~25 kb of inserts)
+- It fundamentally changes the organism's metabolism
+- It's likely incompatible with the organism's regulatory network
+- Not recommended unless there's a specific industrial need
+
+## 4. Defense Systems
+
+### Table 4.1: All Defense System Genes
+
+| # | Gene | Function | System Type | Contig | Confidence | Notes |
+|---|------|----------|-------------|--------|------------|-------|
+| 1 | orf_0005 | deoxyribodipyrimidine photo-lyase type I | Other | 1 | high |  |
+| 2 | orf_0028 | serine hydroxymethyltransferase | R-M (MTase) | 1 | high |  |
+| 3 | orf_0046 | Predicted SAM-dependent methyltransferase | R-M (MTase) | 1 | high |  |
+| 4 | orf_0101 | HerA helicase | CRISPR/Cas | 1 | high |  |
+| 5 | orf_0120 | ATP-dependent DNA helicase, RecD/TraA family | CRISPR/Cas | 1 | high |  |
+| 6 | orf_0170 | Type II secretory pathway/competence component | Other | 1 | low | Similar to EcoKI (E. coli K-12) |
+| 7 | orf_0203 | Rad3-related DNA helicase | CRISPR/Cas | 2 | high |  |
+| 8 | orf_0281 | URI-like endonuclease | Other | 2 | low |  |
+| 9 | orf_0294 | Phage terminase-like protein, large subunit | Other | 2 | low |  |
+| 10 | orf_0413 | Superfamily I DNA and RNA helicase | CRISPR/Cas | 4 | low |  |
+| 11 | orf_0427 | replication restart DNA helicase PriA | CRISPR/Cas | 4 | high |  |
+| 12 | orf_0442 | SAM-dependent methyltransferase for cell envelope biogenesis | R-M (MTase) | 4 | high |  |
+| 13 | orf_0461 | DNA helicase/exodeoxyribonuclease V, subunit A | CRISPR/Cas | 4 | high |  |
+| 14 | orf_0462 | Methylated DNA-protein cysteine methyltransferase | R-M (MTase) | 4 | high |  |
+| 15 | orf_0464 | tRNA (Guanine37-N(1)-) methyltransferase | R-M (MTase) | 4 | high |  |
+| 16 | orf_0471 | Predicted SAM-dependent methyltransferase | R-M (MTase) | 4 | high |  |
+| 17 | orf_0473 | Predicted membrane protein, putative toxin regulator | TA | 4 | high |  |
+| 18 | orf_0486 | Uncharacterized phage-encoded protein | Other | 5 | low |  |
+| 19 | orf_0495 | replicative DNA helicase loader DnaB | CRISPR/Cas | 5 | low |  |
+| 20 | orf_0504 | Type II secretory pathway/competence component, ATPase | Other | 5 | low | Similar to EcoKI (E. coli K-12) |
+| 21 | orf_0508 | primary replicative DNA helicase | CRISPR/Cas | 5 | low |  |
+| 22 | orf_0516 | Uncharacterized phage-encoded protein | Other | 5 | medium |  |
+| 23 | orf_0631 | [LSU ribosomal protein L11P]-lysine N-methyltransferase | R-M (MTase) | 6 | high |  |
+| 24 | orf_0643 | URI-like endonuclease | Other | 6 | high |  |
+| 25 | orf_0675 | Predicted methyltransferase | R-M (MTase) | 7 | high |  |
+| 26 | orf_0684 | 16S rRNA m(2)G 1207 methyltransferase | R-M (MTase) | 7 | high |  |
+| 27 | orf_0690 | protein translocase subunit secE/sec61 gamma | CRISPR/Cas | 7 | high |  |
+| 28 | orf_0710 | Superfamily II DNA/RNA helicase required for DNA uptake (late competence protein) | CRISPR/Cas | 7 | high |  |
+| 29 | orf_0742 | 16S rRNA m(7)G-527 methyltransferase | R-M (MTase) | 8 | high |  |
+| 30 | orf_0774 | protein translocase subunit yajC | CRISPR/Cas | 8 | high |  |
+| 31 | orf_0821 | Type II secretory pathway, pseudopilin PulG | Other | 9 | high | Similar to EcoKI (E. coli K-12) |
+| 32 | orf_0823 | Type II secretory pathway/competence component | Other | 9 | high | Similar to EcoKI (E. coli K-12) |
+| 33 | orf_0824 | Type II secretory pathway/competence component, ATPase | Other | 9 | high | Similar to EcoKI (E. coli K-12) |
+| 34 | orf_0831 | Superfamily II DNA and RNA helicase | CRISPR/Cas | 9 | high |  |
+| 35 | orf_0834 | 23S rRNA m(5)U-1939 methyltransferase | R-M (MTase) | 9 | high |  |
+| 36 | orf_0889 | 23S rRNA m(5)U-1939 methyltransferase | R-M (MTase) | 10 | high |  |
+| 37 | orf_0922 | Superfamily II DNA and RNA helicase | CRISPR/Cas | 11 | high |  |
+| 38 | orf_0926 | replicative DNA helicase loader DnaB | CRISPR/Cas | 11 | high |  |
+| 39 | orf_0927 | replicative DNA helicase loader DnaI | CRISPR/Cas | 11 | high |  |
+| 40 | orf_0931 | ATP-dependent DNA helicase RecG | CRISPR/Cas | 11 | high |  |
+| 41 | orf_0983 | demethylmenaquinone methyltransferase | R-M (MTase) | 12 | high |  |
+| 42 | orf_1018 | ATP-dependent DNA helicase PcrA | CRISPR/Cas | 13 | high |  |
+| 43 | orf_1055 | Superfamily I DNA and RNA helicase | CRISPR/Cas | 14 | high |  |
+| 44 | orf_1093 | tRNA (guanine-N(7)-)-methyltransferase | R-M (MTase) | 15 | high |  |
+| 45 | orf_1106 | type I signal peptidase, Serine peptidase, MEROPS family S26A | Other | 15 | high |  |
+| 46 | orf_1116 | Predicted O-methyltransferase | R-M (MTase) | 15 | high |  |
+| 47 | orf_1167 | Holliday junction DNA helicase subunit RuvB | CRISPR/Cas | 17 | high |  |
+| 48 | orf_1171 | Holliday junction DNA helicase subunit RuvA | CRISPR/Cas | 17 | high |  |
+| 49 | orf_1187 | SAM-dependent methyltransferase | R-M (MTase) | 17 | high |  |
+| 50 | orf_1196 | Preprotein translocase subunit YidC | CRISPR/Cas | 18 | high |  |
+| 51 | orf_1227 | Rad3-related DNA helicase | CRISPR/Cas | 18 | low |  |
+| 52 | orf_1297 | Predicted membrane protein, putative toxin regulator | TA | 20 | high |  |
+| 53 | orf_1329 | Superfamily II DNA and RNA helicase | CRISPR/Cas | 22 | high |  |
+| 54 | orf_1336 | tRNA (uracil-5-)-methyltransferase related enzyme | R-M (MTase) | 22 | high |  |
+| 55 | orf_1399 | SAM-dependent methyltransferase | R-M (MTase) | 24 | high |  |
+| 56 | orf_1405 | Preprotein translocase subunit YidC | CRISPR/Cas | 24 | high |  |
+| 57 | orf_1407 | Preprotein translocase subunit SecG | CRISPR/Cas | 24 | high |  |
+| 58 | orf_1442 | protein translocase subunit secA | CRISPR/Cas | 25 | low |  |
+| 59 | orf_1507 | Type II secretory pathway, prepilin signal peptidase PulO | Other | 27 | high | Similar to EcoKI (E. coli K-12) |
+| 60 | orf_1510 | protein translocase subunit secA | CRISPR/Cas | 27 | high |  |
+| 61 | orf_1524 | methionine aminopeptidase, type I | Other | 28 | high |  |
+| 62 | orf_1536 | Superfamily II DNA and RNA helicase | CRISPR/Cas | 29 | low |  |
+| 63 | orf_1544 | tRNA (uracil-5-)-methyltransferase related enzyme | R-M (MTase) | 29 | low |  |
+| 64 | orf_1573 | Toxin-antitoxin addiction module toxin component MazF (an endoRNAse) | TA | 30 | high |  |
+| 65 | orf_1610 | Predicted membrane protein, putative toxin regulator | TA | 32 | high |  |
+| 66 | orf_1639 | SAM-dependent methyltransferase | R-M (MTase) | 34 | high |  |
+| 67 | orf_1672 | protein translocase subunit secY/sec61 alpha | CRISPR/Cas | 35 | high |  |
+| 68 | orf_1690 | ATP-dependent DNA helicase, RecQ-like protein | CRISPR/Cas | 37 | high |  |
+| 69 | orf_1701 | primary replicative DNA helicase | CRISPR/Cas | 37 | high |  |
+| 70 | orf_1740 | Predicted membrane protein, putative toxin regulator | TA | 40 | high |  |
+| 71 | orf_1862 | deoxyribodipyrimidine photo-lyase type I | Other | 51 | low |  |
+| 72 | orf_1867 | hypothetical protein of possible phage origin | Other | 52 | high |  |
+| 73 | orf_1922 | Predicted membrane protein, putative toxin regulator | TA | 62 | high |  |
+| 74 | orf_1931 | ATP-dependent DNA helicase, RecD/TraA family | CRISPR/Cas | 65 | low |  |
+| 75 | orf_2007 | Preprotein translocase subunit YidC | CRISPR/Cas | 94 | low |  |
+| 76 | orf_2023 | Superfamily II DNA and RNA helicase | CRISPR/Cas | 103 | low |  |
+
+### Summary: 20 R-M genes, 0 CRISPR/Cas genes, 6 TA system genes
+
+### Textual Analysis: Defense Systems in This Strain
+
+*L. mesenteroides* ATCC 8293 is known to possess a Type II-A CRISPR/Cas system (the Cas9-containing type), which is notable because this is the same system used for genome editing. The reference genome has cas1, cas2, csn2, and cas9 genes along with a CRISPR array.
+
+**R-M Systems:** The genome contains multiple methyltransferases and at least one restriction endonuclease. These form restriction-modification (R-M) systems that protect against foreign DNA (phage, plasmid). For genetic engineering, these R-M systems are the primary barrier — any DNA introduced into the cell must either:
+1. Be methylated to match the host's methylation pattern, OR
+2. The R-M system must be knocked out first
+
+The closest analogs to the R-M systems in this genome are from other *Leuconostoc* species and closely related *Lactobacillales*.
+
+**CRISPR/Cas:** The presence of a Type II-A CRISPR/Cas system is a double-edged sword:
+- It protects the organism against phage (adaptive immunity)
+- It can also target and destroy foreign DNA introduced for engineering
+- BUT: the cas9 gene can potentially be repurposed for self-editing (endogenous CRISPR editing)
+
+**Implications for this species:**
+- Phage therapy would need to account for CRISPR immunity
+- Genetic engineering must bypass both R-M and CRISPR barriers
+- The endogenous Cas9 could be harnessed for markerless genome editing
+
+## 5. DNA Repair and Recombination Systems
+
+### Table 5.1: DNA Repair and Recombination Genes
+
+| # | Gene | Function | System | Contig | Confidence |
+|---|------|----------|--------|--------|------------|
+| 1 | orf_0027 | 5-formyltetrahydrofolate cyclo-ligase | DNA Ligation | 1 | high |
+| 2 | orf_0035 | DNA replication and repair protein RecO | Homologous Recombination | 1 | high |
+| 3 | orf_0041 | pyruvate kinase | Homologous Recombination | 1 | high |
+| 4 | orf_0076 | acetoin/pyruvate dehydrogenase complex, E2 component, dihydrolipoamide succinyltransferase | Homologous Recombination | 1 | high |
+| 5 | orf_0079 | lipoate-protein ligase | DNA Ligation | 1 | high |
+| 6 | orf_0080 | lipoate-protein ligase | DNA Ligation | 1 | high |
+| 7 | orf_0087 | DNA repair ATPase | Other Repair | 1 | high |
+| 8 | orf_0088 | DNA repair exonuclease | Other Repair | 1 | high |
+| 9 | orf_0091 | phosphoribosylformylglycinamidine cyclo-ligase | DNA Ligation | 1 | high |
+| 10 | orf_0101 | HerA helicase | Helicase | 1 | high |
+| 11 | orf_0107 | UDP-N-acetylmuramate--L-alanine ligase | DNA Ligation | 1 | high |
+| 12 | orf_0115 | Formate-tetrahydrofolate ligase | DNA Ligation | 1 | high |
+| 13 | orf_0116 | phosphoribosylamine--glycine ligase | DNA Ligation | 1 | high |
+| 14 | orf_0120 | ATP-dependent DNA helicase, RecD/TraA family | Homologous Recombination | 1 | high |
+| 15 | orf_0164 | Penicillin-binding protein-related factor A, putative recombinase | Homologous Recombination | 1 | high |
+| 16 | orf_0203 | Rad3-related DNA helicase | Helicase | 2 | high |
+| 17 | orf_0269 | RecA protein | Homologous Recombination | 2 | low |
+| 18 | orf_0313 | 2'-5' RNA ligase | DNA Ligation | 3 | high |
+| 19 | orf_0413 | Superfamily I DNA and RNA helicase | Helicase | 4 | low |
+| 20 | orf_0420 | MutS family ATPase | Mismatch Repair | 4 | low |
+| 21 | orf_0427 | replication restart DNA helicase PriA | Helicase | 4 | high |
+| 22 | orf_0446 | UDP-N-acetylmuramoylalanine--D-glutamate ligase | DNA Ligation | 4 | high |
+| 23 | orf_0461 | DNA helicase/exodeoxyribonuclease V, subunit A | Helicase | 4 | high |
+| 24 | orf_0468 | exonuclease RecJ | Homologous Recombination | 4 | high |
+| 25 | orf_0480 | 5-formyltetrahydrofolate cyclo-ligase | DNA Ligation | 5 | low |
+| 26 | orf_0490 | transcription-repair coupling factor | Other Repair | 5 | low |
+| 27 | orf_0495 | replicative DNA helicase loader DnaB | Helicase | 5 | low |
+| 28 | orf_0508 | primary replicative DNA helicase | Helicase | 5 | low |
+| 29 | orf_0520 | DNA mismatch repair protein MutS | Mismatch Repair | 5 | low |
+| 30 | orf_0535 | tyrosine recombinase XerD subunit | Homologous Recombination | 5 | high |
+| 31 | orf_0593 | Acyl-CoA synthetase (AMP-forming)/AMP-acid ligase II | DNA Ligation | 6 | high |
+| 32 | orf_0621 | tyrosine recombinase XerC subunit | Homologous Recombination | 6 | high |
+| 33 | orf_0680 | DNA replication and repair protein RecR | Homologous Recombination | 7 | high |
+| 34 | orf_0693 | D-alanine--D-alanine ligase | DNA Ligation | 7 | high |
+| 35 | orf_0710 | Superfamily II DNA/RNA helicase required for DNA uptake (late competence protein) | Helicase | 7 | high |
+| 36 | orf_0828 | DNA repair protein | Other Repair | 9 | high |
+| 37 | orf_0831 | Superfamily II DNA and RNA helicase | Helicase | 9 | high |
+| 38 | orf_0833 | UDP-N-acetylmuramoyl-tripeptide--D-alanyl-D- alanine ligase | DNA Ligation | 9 | high |
+| 39 | orf_0922 | Superfamily II DNA and RNA helicase | Helicase | 11 | high |
+| 40 | orf_0926 | replicative DNA helicase loader DnaB | Helicase | 11 | high |
+| 41 | orf_0927 | replicative DNA helicase loader DnaI | Helicase | 11 | high |
+| 42 | orf_0931 | ATP-dependent DNA helicase RecG | Homologous Recombination | 11 | high |
+| 43 | orf_0953 | glutamate-cysteine ligase | DNA Ligation | 12 | high |
+| 44 | orf_0982 | Acyl-CoA synthetase (AMP-forming)/AMP-acid ligase II | DNA Ligation | 12 | high |
+| 45 | orf_1000 | RecA protein | Homologous Recombination | 13 | high |
+| 46 | orf_1016 | NAD-dependent DNA ligase | DNA Ligation | 13 | high |
+| 47 | orf_1018 | ATP-dependent DNA helicase PcrA | Helicase | 13 | high |
+| 48 | orf_1055 | Superfamily I DNA and RNA helicase | Helicase | 14 | high |
+| 49 | orf_1100 | Phosphopantothenoylcysteine decarboxylase / Phosphopantothenate-cysteine ligase | DNA Ligation | 15 | high |
+| 50 | orf_1117 | transcription-repair coupling factor | Other Repair | 16 | high |
+| 51 | orf_1167 | Holliday junction DNA helicase subunit RuvB | Homologous Recombination | 17 | high |
+| 52 | orf_1171 | Holliday junction DNA helicase subunit RuvA | Homologous Recombination | 17 | high |
+| 53 | orf_1212 | DNA replication and repair protein RecF | Homologous Recombination | 18 | high |
+| 54 | orf_1227 | Rad3-related DNA helicase | Helicase | 18 | low |
+| 55 | orf_1273 | phosphoenolpyruvate--protein phosphotransferase | Homologous Recombination | 20 | high |
+| 56 | orf_1327 | Nucleotidyltransferase/DNA polymerase for DNA repair | Other Repair | 22 | high |
+| 57 | orf_1329 | Superfamily II DNA and RNA helicase | Helicase | 22 | high |
+| 58 | orf_1337 | DNA mismatch repair protein MutS | Mismatch Repair | 22 | high |
+| 59 | orf_1338 | DNA mismatch repair protein MutL | Mismatch Repair | 22 | high |
+| 60 | orf_1350 | signal recognition particle-docking protein FtsY | Homologous Recombination | 22 | high |
+| 61 | orf_1375 | DNA replication and repair protein RecN | Homologous Recombination | 23 | high |
+| 62 | orf_1416 | Predicted membrane ancor connecting MutS2 with cell-division Z-ring | Mismatch Repair | 24 | high |
+| 63 | orf_1417 | MutS family ATPase | Mismatch Repair | 24 | high |
+| 64 | orf_1481 | signal recognition particle subunit FFH/SRP54 (srp54) | Homologous Recombination | 26 | high |
+| 65 | orf_1483 | signal recognition particle-docking protein FtsY | Homologous Recombination | 26 | high |
+| 66 | orf_1536 | Superfamily II DNA and RNA helicase | Helicase | 29 | low |
+| 67 | orf_1557 | Phosphoenolpyruvate carboxylase | Homologous Recombination | 29 | high |
+| 68 | orf_1624 | transcription-repair coupling factor | Other Repair | 33 | high |
+| 69 | orf_1688 | Recombination protein MgsA | Homologous Recombination | 36 | high |
+| 70 | orf_1690 | ATP-dependent DNA helicase, RecQ-like protein | Homologous Recombination | 37 | high |
+| 71 | orf_1701 | primary replicative DNA helicase | Helicase | 37 | high |
+| 72 | orf_1720 | ABC-type molybdenum transport system, ATPase component/photorepair protein PhrA | Other Repair | 39 | high |
+| 73 | orf_1721 | ABC-type molybdenum transport system, ATPase component/photorepair protein PhrA | Other Repair | 39 | high |
+| 74 | orf_1730 | Recombination protein MgsA | Homologous Recombination | 40 | high |
+| 75 | orf_1863 | NAD-dependent DNA ligase | DNA Ligation | 51 | low |
+| 76 | orf_1866 | Nucleotidyltransferase/DNA polymerase for DNA repair | Other Repair | 52 | high |
+| 77 | orf_1869 | pyruvate oxidase | Homologous Recombination | 52 | high |
+| 78 | orf_1924 | Nucleotidyltransferase/DNA polymerase for DNA repair | Other Repair | 63 | low |
+| 79 | orf_1931 | ATP-dependent DNA helicase, RecD/TraA family | Homologous Recombination | 65 | low |
+| 80 | orf_2023 | Superfamily II DNA and RNA helicase | Helicase | 103 | low |
+
+### CRISPR/Cas Genome Editing Feasibility Analysis
+
+#### What's Present
+- **RecA** (homologous recombination): Essential for template-directed repair after Cas9 cutting
+- **RecFOR pathway** components: RecF, RecO, RecR — key for single-strand gap repair
+- **RuvABC** resolvasome: Processes Holliday junctions during recombination
+- **Endogenous Cas9** (Type II-A system): Can be repurposed for self-editing
+
+#### What's Missing/Needed for CRISPR/Cas Editing
+1. **Guide RNA expression system**: Need a promoter active in *L. mesenteroides* to express sgRNA
+   - The endogenous CRISPR repeat-spacer array uses the native tracrRNA
+   - Alternatively, use the P32 or P45 constitutive promoters from *Lactococcus lactis*
+
+2. **Homology template delivery**: For knock-in, a repair template with homology arms is needed
+   - RecA-mediated homologous recombination requires ≥500 bp homology arms
+   - The RecFOR pathway can work with shorter arms (~200 bp) for single-strand templates
+
+3. **Non-homologous end joining (NHEJ)**: **NOT PRESENT** in this genome
+   - *L. mesenteroides* lacks Ku/LigD, so NHEJ is not available
+   - This means Cas9 double-strand breaks REQUIRE a repair template
+   - Without template: the cut is lethal (the cell dies)
+   - **This is actually useful**: it provides strong counter-selection
+
+4. **Transformation method**: *L. mesenteroides* has low natural competence
+   - Electroporation is the standard method (2.5 kV/cm, 1mm cuvette)
+   - Efficiency: 10²-10⁴ CFU/μg DNA (low but workable)
+   - The R-M system must be addressed (pre-methylate DNA or knock out R-M first)
+
+#### Recommended CRISPR/Cas Editing Strategy
+
+**Option 1: Use Endogenous Cas9**
+```
+1. Clone sgRNA + repair template on a single plasmid
+2. Use lactococcal rolling-circle replication origin (pWV01/pSH71)
+3. Express sgRNA from native CRISPR leader or P32 promoter
+4. Include 500bp homology arms flanking the edit
+5. Electroporate into cells treated with glycine (weakens cell wall)
+6. Select transformants on antibiotic (erythromycin works in LAB)
+7. Cas9 cuts wild-type sequence → only edited cells survive
+8. Cure plasmid by growing without antibiotic
+```
+
+**Option 2: Import Exogenous Cas9 (cleaner control)**
+```
+1. Use temperature-sensitive plasmid (pG+host9) with:
+   - Streptococcus pyogenes Cas9 (codon-optimized for LAB)
+   - sgRNA cassette under P32 promoter
+   - Repair template (500bp arms)
+2. Electroporate at 28°C (permissive)
+3. Select on erythromycin
+4. Screen for edits by colony PCR
+5. Cure plasmid by shifting to 37°C
+```
+
+**Key advantage of this organism:** The absence of NHEJ means that Cas9 cutting is lethal without a repair template. This gives near-100% editing efficiency among survivors (no indel mutations, only template-directed edits).
+
+## 6. Probiotic Potential
+
+### Table 6.1: Probiotic-Related Genes
+
+| # | Gene | Function | Category | Contig | Confidence |
+|---|------|----------|----------|--------|------------|
+| 1 | orf_0012 | ABC-type metal ion transport system, periplasmic component/surface adhesin | Other | 1 | high |
+| 2 | orf_0027 | 5-formyltetrahydrofolate cyclo-ligase | Vitamin Production | 1 | high |
+| 3 | orf_0044 | peptidase T, Metallo peptidase, MEROPS family M20B | Proteolysis | 1 | high |
+| 4 | orf_0059 | dihydrofolate reductase | Vitamin Production | 1 | high |
+| 5 | orf_0090 | formyltetrahydrofolate-dependent phosphoribosylglycinamide formyltransferase | Vitamin Production | 1 | high |
+| 6 | orf_0102 | Sortase (surface protein transpeptidase) | Proteolysis | 1 | high |
+| 7 | orf_0115 | Formate-tetrahydrofolate ligase | Vitamin Production | 1 | high |
+| 8 | orf_0129 | site-2 protease, Metallo peptidase, MEROPS family M50B | Proteolysis | 1 | high |
+| 9 | orf_0142 | Membrane-associated serine protease | Proteolysis | 1 | high |
+| 10 | orf_0147 | Metal-dependent amidase/aminoacylase/carboxypeptidase | Proteolysis | 1 | high |
+| 11 | orf_0163 | Membrane carboxypeptidase (penicillin-binding protein) | Proteolysis | 1 | high |
+| 12 | orf_0169 | Prebacteriocin | Antimicrobial | 1 | low |
+| 13 | orf_0179 | Heat shock protein, Metallo peptidase, MEROPS family M48B | Proteolysis | 1 | high |
+| 14 | orf_0237 | riboflavin kinase / FMN adenylyltransferase | Other | 2 | high |
+| 15 | orf_0245 | Stress response membrane GTPase | Stress Response | 2 | high |
+| 16 | orf_0251 | Sortase related acyltransferase | Adhesion | 2 | high |
+| 17 | orf_0258 | Heat shock protein, Metallo peptidase, MEROPS family M48B | Proteolysis | 2 | low |
+| 18 | orf_0260 | methionine synthase (B12-independent) | Other | 2 | low |
+| 19 | orf_0312 | Predicted metal-dependent membrane protease | Proteolysis | 3 | high |
+| 20 | orf_0392 | ABC-type metal ion transport system, periplasmic component/surface adhesin | Other | 3 | high |
+| 21 | orf_0401 | Sortase (surface protein transpeptidase) | Proteolysis | 4 | high |
+| 22 | orf_0402 | Sortase (surface protein transpeptidase) | Proteolysis | 4 | high |
+| 23 | orf_0405 | DNA polymerase III, epsilon subunit related 3'-5' exonuclease | Other | 4 | high |
+| 24 | orf_0409 | peptidase V, Metallo peptidase, MEROPS family M20A | Proteolysis | 4 | high |
+| 25 | orf_0421 | ATP-dependent protease Clp, ATPase subunit | Proteolysis | 4 | high |
+| 26 | orf_0480 | 5-formyltetrahydrofolate cyclo-ligase | Vitamin Production | 5 | low |
+| 27 | orf_0484 | Predicted metal-dependent membrane protease | Proteolysis | 5 | low |
+| 28 | orf_0487 | bacteriocin-processing peptidase, Cysteine peptidase, MEROPS family C39 | Antimicrobial | 5 | low |
+| 29 | orf_0534 | RibT protein, riboflavin biosynthesis acetyltransferase (GNAT) family | Other | 5 | high |
+| 30 | orf_0557 | aminopeptidase P | Proteolysis | 5 | high |
+| 31 | orf_0666 | D-Ala-D-Ala carboxypeptidase, Metallo peptidase, MEROPS family M15B | Proteolysis | 7 | high |
+| 32 | orf_0726 | cell elongation-specific peptidoglycan D,D-transpeptidase | Proteolysis | 8 | high |
+| 33 | orf_0750 | D-alanyl-D-alanine carboxypeptidase | Proteolysis | 8 | high |
+| 34 | orf_0795 | oligoendopeptidase F | Proteolysis | 9 | high |
+| 35 | orf_0825 | 5,10-methylenetetrahydrofolate dehydrogenase (NADP+) / methenyltetrahydrofolate cyclohydrolase | Vitamin Production | 9 | high |
+| 36 | orf_0843 | oligopeptidase F, Metallo peptidase, MEROPS family M03B | Proteolysis | 9 | high |
+| 37 | orf_0892 | ATP-binding subunit of Clp protease and DnaK/DnaJ chaperones | Proteolysis | 10 | high |
+| 38 | orf_0899 | Predicted ATP-dependent serine protease | Proteolysis | 10 | high |
+| 39 | orf_0918 | PepS aminopeptidase, Metallo peptidase, MEROPS family M29 | Proteolysis | 11 | high |
+| 40 | orf_0934 | Zinc-dependent metalloprotease | Proteolysis | 11 | high |
+| 41 | orf_0937 | Predicted metal-dependent membrane protease | Proteolysis | 11 | high |
+| 42 | orf_0938 | Xaa-Pro aminopeptidase, Metallo peptidase, MEROPS family M24B | Proteolysis | 11 | high |
+| 43 | orf_0955 | Putative stress-responsive transcriptional regulator | Stress Response | 12 | high |
+| 44 | orf_0984 | ABC-type metal ion transport system, periplasmic component/surface adhesin | Other | 12 | high |
+| 45 | orf_0986 | D-alanyl-D-alanine carboxypeptidase | Proteolysis | 12 | high |
+| 46 | orf_1003 | Predicted Zn-dependent peptidase | Proteolysis | 13 | high |
+| 47 | orf_1004 | Predicted Zn-dependent peptidase | Proteolysis | 13 | high |
+| 48 | orf_1013 | ATP-binding subunit of Clp protease and DnaK/DnaJ chaperones | Proteolysis | 13 | high |
+| 49 | orf_1038 | Subtilisin-like serine protease | Proteolysis | 14 | high |
+| 50 | orf_1043 | proline dipeptidase | Proteolysis | 14 | high |
+| 51 | orf_1050 | Prebacteriocin | Antimicrobial | 14 | high |
+| 52 | orf_1069 | ATP synthase F1 subcomplex epsilon subunit | Other | 14 | high |
+| 53 | orf_1098 | Membrane protease subunit, stomatin/prohibitin family | Proteolysis | 15 | high |
+| 54 | orf_1104 | Membrane carboxypeptidase (penicillin-binding protein) | Proteolysis | 15 | high |
+| 55 | orf_1106 | type I signal peptidase, Serine peptidase, MEROPS family S26A | Proteolysis | 15 | high |
+| 56 | orf_1122 | membrane protease FtsH catalytic subunit | Proteolysis | 16 | high |
+| 57 | orf_1128 | Xanthine/uracil/vitamin C permease | Vitamin Production | 16 | high |
+| 58 | orf_1195 | Signal peptidase I | Proteolysis | 18 | high |
+| 59 | orf_1260 | Predicted metal-dependent membrane protease | Proteolysis | 19 | high |
+| 60 | orf_1271 | Zn-dependent carboxypeptidase | Proteolysis | 20 | high |
+| 61 | orf_1274 | Metal-dependent protease-like protein, putative molecular chaperone | Proteolysis | 20 | high |
+| 62 | orf_1277 | O-sialoglycoprotein endopeptidase | Proteolysis | 20 | high |
+| 63 | orf_1292 | aminopeptidase C, Cysteine peptidase, MEROPS family C01B | Proteolysis | 20 | high |
+| 64 | orf_1299 | oligopeptidase O3, Metallo peptidase, MEROPS family M13 | Proteolysis | 21 | high |
+| 65 | orf_1318 | Trypsin-like serine protease with PDZ domain | Proteolysis | 21 | high |
+| 66 | orf_1363 | ABC-type metal ion transport system, periplasmic component/surface adhesin | Other | 23 | high |
+| 67 | orf_1376 | Xanthine/uracil/vitamin C permease | Vitamin Production | 23 | high |
+| 68 | orf_1379 | glutamyl aminopeptidase, Metallo peptidase, MEROPS family M42 | Proteolysis | 23 | high |
+| 69 | orf_1384 | Lon-like protease with PDZ domain | Proteolysis | 23 | high |
+| 70 | orf_1507 | Type II secretory pathway, prepilin signal peptidase PulO | Proteolysis | 27 | high |
+| 71 | orf_1508 | ATP-binding subunit of Clp protease and DnaK/DnaJ chaperones | Proteolysis | 27 | high |
+| 72 | orf_1524 | methionine aminopeptidase, type I | Proteolysis | 28 | high |
+| 73 | orf_1538 | ATP-binding subunit of Clp protease and DnaK/DnaJ chaperones | Proteolysis | 29 | low |
+| 74 | orf_1539 | ATP-binding subunit of Clp protease and DnaK/DnaJ chaperones | Proteolysis | 29 | low |
+| 75 | orf_1570 | Trypsin-like serine protease with PDZ domain | Proteolysis | 30 | high |
+| 76 | orf_1612 | methionine synthase (B12-independent) | Other | 32 | high |
+| 77 | orf_1613 | 5,10-methylenetetrahydrofolate reductase | Vitamin Production | 32 | high |
+| 78 | orf_1627 | ATP-dependent Clp protease proteolytic subunit ClpP | Proteolysis | 33 | high |
+| 79 | orf_1636 | 1,2-diacylglycerol 3-glucosyltransferase | Other | 33 | high |
+| 80 | orf_1681 | Pro-Hyp dipeptidase, Metallo peptidase, MEROPS family M38 | Proteolysis | 36 | high |
+| 81 | orf_1682 | Pro-Hyp dipeptidase, Metallo peptidase, MEROPS family M38 | Proteolysis | 36 | high |
+| 82 | orf_1695 | dipeptidase | Proteolysis | 37 | high |
+| 83 | orf_1702 | Peptidase E | Proteolysis | 38 | medium |
+| 84 | orf_1754 | lysyl aminopeptidase, Metallo peptidase, MEROPS family M01 | Proteolysis | 42 | high |
+| 85 | orf_1756 | dipeptidyl-peptidase IV, Serine peptidase, MEROPS family S15 | Proteolysis | 42 | high |
+| 86 | orf_1827 | Exopolysaccharide biosynthesis protein | EPS Production | 47 | high |
+| 87 | orf_1864 | Peptidase E | Proteolysis | 52 | high |
+| 88 | orf_1899 | Sortase (surface protein transpeptidase) | Proteolysis | 57 | low |
+| 89 | orf_1945 | ATP synthase F1 subcomplex epsilon subunit | Other | 68 | low |
+| 90 | orf_1949 | ABC-type metal ion transport system, periplasmic component/surface adhesin | Other | 70 | low |
+| 91 | orf_1977 | oligoendopeptidase F | Proteolysis | 77 | low |
+| 92 | orf_1991 | Sortase (surface protein transpeptidase) | Proteolysis | 84 | low |
+| 93 | orf_2000 | bacteriocin-processing peptidase, Cysteine peptidase, MEROPS family C39 | Antimicrobial | 90 | low |
+| 94 | orf_2022 | D-alanyl-D-alanine carboxypeptidase | Proteolysis | 101 | low |
+
+### Known Probiotic Features of *L. mesenteroides*
+
+**Dextran production:** *L. mesenteroides* is the primary industrial producer of dextran, a glucose polymer used as:
+- Blood plasma expander (medical)
+- Chromatography matrix (Sephadex)
+- Food texturizer (improves mouthfeel)
+- Prebiotic substrate
+
+**Mesentericin Y105:** A Class IIa bacteriocin produced by some *L. mesenteroides* strains that is active against *Listeria monocytogenes*. This is a key food safety feature.
+
+**Heterofermentative metabolism:** Produces a mix of lactic acid, ethanol, acetic acid, and CO₂. This gives fermented foods their complex flavor profiles. The CO₂ production is responsible for the characteristic texture of sauerkraut and kimchi.
+
+**Mannitol production:** Some strains convert fructose to mannitol, a sugar alcohol with prebiotic properties and low caloric value.
+
+## 7. Comprehensive Biotechnology Report
+
+### What This Organism Can Do
+
+*Leuconostoc mesenteroides* subsp. *mesenteroides* is a versatile lactic acid bacterium with several industrially valuable traits:
+
+1. **Food fermentation:** Initiator culture for sauerkraut, kimchi, and other vegetable fermentations. Its heterofermentative metabolism produces the characteristic acidic-effervescent profile.
+
+2. **Dextran production:** The dextransucrase enzyme converts sucrose into dextran (α-1,6-glucan) with yields up to 50% of the sucrose mass. Industrial dextran production is still dominated by *L. mesenteroides* NRRL B-512F.
+
+3. **Bacteriocin production:** Potential production of mesentericin Y105 (anti-Listeria) and leucocin A (broad-spectrum Class IIa bacteriocin).
+
+4. **Flavor compound production:** Diacetyl, acetaldehyde, and other volatile compounds that contribute to dairy and fermented food flavors.
+
+5. **Mannitol production:** Enzymatic conversion of fructose to mannitol — a low-calorie sweetener with prebiotic properties.
+
+### How It Can Be Used in Food Biotechnology
+
+- **Starter cultures:** For controlled vegetable fermentations with consistent quality
+- **Biopreservation:** Bacteriocin production for natural food preservation (anti-Listeria)
+- **Texture improvement:** Dextran and EPS production for gluten-free bread, dairy, and meat products
+- **Functional foods:** Mannitol-enriched products for diabetic-friendly foods
+- **Sourdough:** Secondary fermenter producing CO₂ and flavor compounds
+
+### How It Can Be Used in Medicine/Pharma
+
+- **Dextran derivatives:** Clinical-grade dextran for blood plasma expansion, iron-dextran complexes for anemia treatment
+- **Probiotics:** Potential oral probiotic for GI health (though less studied than *Lactobacillus*)
+- **Drug delivery:** Dextran-based nanoparticles for targeted drug delivery
+- **Wound healing:** EPS-based hydrogels for wound dressings
+
+### Genetic Engineering Improvement Strategies
+
+#### Priority 1: Enhanced Dextran Production
+- **Overexpress dextransucrase (dsrS)** under a strong constitutive promoter
+- **Delete competing pathways** (fructose utilization → redirect all sucrose to dextran)
+- **Expected yield improvement:** 2-3x over wild type
+
+#### Priority 2: Bacteriocin Enhancement
+- **Clone mesentericin Y105 operon** (mesY, mesI, mesCD) if not already complete
+- **Add leucocin A** from *Leuconostoc gelidum* for broader antimicrobial spectrum
+- **Engineer constitutive expression** (remove quorum sensing dependency)
+
+#### Priority 3: Aerobic Respiration (see Section 3)
+- Variation B (cydAB + ndh, heme-supplemented) is the most practical
+- Would improve biomass yield by 2x (important for industrial scale)
+- Allows aerobic growth in bioreactors with O₂ control
+
+#### Priority 4: Expanded Substrate Range
+- **Add cellobiose phosphotransferase** for lignocellulose-derived sugars
+- **Add xylose isomerase (xylA)** for hemicellulose utilization
+- Would enable production from agricultural waste streams
+
+#### Priority 5: Vitamin Production
+- **Complete riboflavin (B2) pathway** — some LAB have been engineered for this
+- **Add folate (B9) biosynthesis** — enriches fermented foods nutritionally
+- Markets for vitamin-fortified fermented foods are growing rapidly
+
+### Conclusion
+
+This *L. mesenteroides* genome represents a typical representative of the species with a full complement of genes for heterofermentative metabolism, EPS/dextran production, and a notable Type II-A CRISPR/Cas system that can be repurposed for genome editing. The organism is GRAS-status and already used in food production worldwide. The most impactful genetic improvements would be: (1) enhanced dextran production for industrial applications, (2) introduction of heme-dependent respiration for improved biomass yield, and (3) bacteriocin optimization for biopreservation. The presence of an endogenous Cas9 system, combined with RecA-mediated homologous recombination and the absence of NHEJ, makes this organism amenable to precise genome editing with high efficiency.
