@@ -47,9 +47,11 @@ except ImportError:
 _SECRET_PATTERNS = [
     (re.compile(r'AIzaSy[A-Za-z0-9_-]{33}'), '[REDACTED_GEMINI_KEY]'),
     (re.compile(r'sk-ant-[A-Za-z0-9_-]{20,}'), '[REDACTED_ANTHROPIC_KEY]'),
+    (re.compile(r'sk-proj-[A-Za-z0-9_-]{20,}'), '[REDACTED_OPENAI_KEY]'),
     (re.compile(r'sk-[A-Za-z0-9]{20,}'), '[REDACTED_OPENAI_KEY]'),
     (re.compile(r'hf_[A-Za-z0-9]{20,}'), '[REDACTED_HF_KEY]'),
     (re.compile(r'gsk_[A-Za-z0-9]{20,}'), '[REDACTED_GROQ_KEY]'),
+    (re.compile(r'dsk-[A-Za-z0-9]{20,}'), '[REDACTED_DEEPSEEK_KEY]'),
 ]
 
 
