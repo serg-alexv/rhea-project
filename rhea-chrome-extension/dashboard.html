@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Rhea Office Dashboard</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, system-ui, sans-serif; background: #0d1117; color: #c9d1d9; padding: 24px; max-width: 800px; margin: 0 auto; }
+    h1 { font-size: 20px; color: #58a6ff; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+    .dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+    .alive { background: #3fb950; }
+    .dead { background: #f85149; }
+    h2 { font-size: 13px; color: #8b949e; text-transform: uppercase; margin: 16px 0 8px; }
+    .card { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 12px; margin-bottom: 12px; }
+    .row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #21262d; font-size: 14px; }
+    .row:last-child { border: none; }
+    .name { font-weight: 600; color: #58a6ff; }
+    .status { color: #3fb950; }
+    .time { color: #8b949e; font-size: 12px; }
+    .msg { padding: 8px 0; border-bottom: 1px solid #21262d; font-size: 13px; }
+    .msg:last-child { border: none; }
+    .from { color: #d2a8ff; font-weight: 600; }
+    .badge { background: #1f6feb; color: white; padding: 2px 8px; border-radius: 10px; font-size: 11px; }
+    .gem { padding: 5px 0; border-bottom: 1px solid #21262d; font-size: 13px; }
+    .gem-id { color: #f0883e; font-weight: 600; }
+    .input-row { display: flex; gap: 8px; margin-top: 10px; }
+    input { flex: 1; font-size: 14px; padding: 8px 12px; border-radius: 6px; border: 1px solid #30363d; background: #0d1117; color: #c9d1d9; }
+    button { font-size: 14px; padding: 8px 18px; border-radius: 6px; border: none; background: #238636; color: white; cursor: pointer; }
+    button:hover { background: #2ea043; }
+    .refresh { background: #30363d; font-size: 12px; padding: 4px 10px; cursor: pointer; }
+    .header { display: flex; justify-content: space-between; align-items: center; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <h1><span class="dot" id="mainDot"></span> RHEA OFFICE</h1>
+  <p style="color:#8b949e;margin-bottom:16px;font-size:13px">Project: <strong>rhea-office-sync</strong> | <span id="statusLine">Loading...</span></p>
+
+  <div class="grid">
+    <div class="card">
+      <div class="header">
+        <h2>Desks</h2>
+        <button class="refresh" onclick="refresh()">Refresh</button>
+      </div>
+      <div id="desks">Loading...</div>
+    </div>
+
+    <div class="card">
+      <h2>Inbox</h2>
+      <div id="inbox">Loading...</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Gems</h2>
+    <div id="gems">Loading...</div>
+  </div>
+
+  <div class="card">
+    <h2>Send Message</h2>
+    <div class="input-row">
+      <input id="myDesk" placeholder="Your desk" value="" style="max-width:100px">
+      <input id="to" placeholder="To" value="Rex" style="max-width:100px">
+      <input id="msg" placeholder="Message...">
+      <button onclick="send()">Send</button>
+    </div>
+  </div>
+
+  <script>
+    const PROJ = 'rhea-office-sync';
+    const FS = `https://firestore.googleapis.com/v1/projects/${PROJ}/databases/(default)/documents`;
+
+    function str(f) { return f ? (f.stringValue || f.integerValue || '') : ''; }
+    function ago(d) {
+      const s = Math.floor((Date.now() - new Date(d).getTime()) / 1000);
+      if (s < 60) return s + 's ago';
+      if (s < 3600) return Math.floor(s / 60) + 'm ago';
+      if (s < 86400) return Math.floor(s / 3600) + 'h ago';
+      return Math.floor(s / 86400) + 'd ago';
+    }
+
+    async function refresh() {
+      // Desks
+      try {
+        const r = await (await fetch(`${FS}/agents`)).json();
+        const el = document.getElementById('desks');
+        if (!r.documents) { el.innerHTML = '<div class="row">No desks online</div>'; return; }
+        el.innerHTML = r.documents.map(d => {
+          const f = d.fields;
+          return `<div class="row"><span class="name">${str(f.desk)}</span><span class="status">${str(f.status)}</span><span class="time">${ago(str(f.last_seen))}</span></div>`;
+        }).join('');
+        document.getElementById('mainDot').className = 'dot alive';
+        document.getElementById('statusLine').textContent = r.documents.length + ' desk(s) online';
+      } catch (e) {
+        document.getElementById('desks').innerHTML = 'Error: ' + e.message;
+        document.getElementById('mainDot').className = 'dot dead';
+        document.getElementById('statusLine').textContent = 'OFFLINE — ' + e.message;
+      }
+
+      // Inbox
+      try {
+        const r = await (await fetch(`${FS}/inbox`)).json();
+        const el = document.getElementById('inbox');
+        if (!r.documents) { el.innerHTML = '<div class="msg">Empty</div>'; return; }
+        const unread = r.documents.filter(d => d.fields.read && !d.fields.read.booleanValue);
+        const show = unread.length > 0 ? unread.slice(-8) : r.documents.slice(-5);
+        el.innerHTML = show.map(d => {
+          const f = d.fields;
+          const read = f.read && f.read.booleanValue;
+          return `<div class="msg"><span class="from">${str(f.from)} → ${str(f.to)}</span> ${!read ? '<span class="badge">NEW</span>' : ''}<br>${str(f.message).substring(0, 150)}</div>`;
+        }).join('');
+      } catch (e) { document.getElementById('inbox').innerHTML = 'Error'; }
+
+      // Gems
+      try {
+        const r = await (await fetch(`${FS}/gems`)).json();
+        const el = document.getElementById('gems');
+        if (!r.documents) { el.innerHTML = 'None yet'; return; }
+        el.innerHTML = r.documents.map(d => {
+          const f = d.fields;
+          return `<div class="gem"><span class="gem-id">${str(f.id)}</span> ${str(f.text).substring(0, 100)}</div>`;
+        }).join('');
+      } catch (e) { document.getElementById('gems').innerHTML = 'Error'; }
+    }
+
+    async function send() {
+      const desk = document.getElementById('myDesk').value;
+      const to = document.getElementById('to').value;
+      const msg = document.getElementById('msg').value;
+      if (!desk || !to || !msg) return;
+      await fetch(`${FS}/inbox`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          fields: {
+            from: { stringValue: desk },
+            to: { stringValue: to },
+            message: { stringValue: msg },
+            timestamp: { stringValue: new Date().toISOString() },
+            read: { booleanValue: false }
+          }
+        })
+      });
+      document.getElementById('msg').value = '';
+      refresh();
+    }
+
+    document.getElementById('msg').addEventListener('keypress', e => { if (e.key === 'Enter') send(); });
+
+    refresh();
+    setInterval(refresh, 15000);
+  </script>
+</body>
+</html>
