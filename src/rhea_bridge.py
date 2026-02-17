@@ -340,7 +340,7 @@ PROVIDERS = {
     "azure": ProviderConfig(
         name="azure",
         display_name="Azure AI Foundry",
-        base_url="https://models.inference.ai.azure.com",
+        base_url=os.environ.get("AZURE_ENDPOINT", "https://models.inference.ai.azure.com"),
         api_key_env="AZURE_API_KEY",
         models=[
             "gpt-4o", "gpt-4o-mini",
@@ -654,8 +654,15 @@ class RheaBridge:
             "temperature": temperature,
             "max_tokens": max_tokens,
         }
+
+        if cfg.name == "azure" and "AZURE_ENDPOINT" in os.environ:
+            # Azure OpenAI Service: /openai/deployments/{model}/chat/completions
+            url = f"{cfg.base_url}/openai/deployments/{model}/chat/completions?api-version=2024-10-21"
+        else:
+            url = f"{cfg.base_url}/chat/completions"
+
         resp = requests.post(
-            f"{cfg.base_url}/chat/completions",
+            url,
             headers=headers, json=body, timeout=60,
         )
         resp.raise_for_status()
