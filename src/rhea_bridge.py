@@ -636,6 +636,12 @@ class RheaBridge:
         if cfg.name == "openrouter":
             headers["HTTP-Referer"] = "https://github.com/serg-alexv/rhea-project"
             headers["X-Title"] = "Rhea"
+        if cfg.name == "azure":
+            # Azure AI Foundry uses api-key header, not Bearer token
+            headers = {
+                "api-key": api_key,
+                "Content-Type": "application/json",
+            }
 
         messages = []
         if system:
