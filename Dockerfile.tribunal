@@ -1,0 +1,30 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Install dependencies
+RUN pip install --no-cache-dir \
+    fastapi==0.128.8 \
+    uvicorn==0.39.0 \
+    requests==2.32.3 \
+    python-dotenv==1.0.1 \
+    google-auth==2.38.0 \
+    google-auth-httplib2==0.2.0
+
+# Copy source
+COPY src/rhea_bridge.py src/
+COPY src/consensus_analyzer.py src/
+COPY src/tribunal_api.py src/
+
+# Create log directory
+RUN mkdir -p logs
+
+WORKDIR /app/src
+
+EXPOSE 8400
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=5s --retries=3 \
+    CMD python3 -c "import urllib.request; urllib.request.urlopen('http://localhost:8400/health')"
+
+CMD ["uvicorn", "tribunal_api:app", "--host", "0.0.0.0", "--port", "8400"]
