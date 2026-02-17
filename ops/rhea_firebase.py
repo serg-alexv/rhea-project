@@ -21,9 +21,24 @@ import urllib.error
 from datetime import datetime, timezone
 from pathlib import Path
 
+import re
+
 PROJ = "rhea-office-sync"
 BASE = f"https://firestore.googleapis.com/v1/projects/{PROJ}/databases/(default)/documents"
 LOG_PATH = Path(__file__).parent.parent / "logs" / "firebase_calls.jsonl"
+
+_SECRET_RE = [
+    (re.compile(r'AIzaSy[A-Za-z0-9_-]{33}'), '[REDACTED]'),
+    (re.compile(r'sk-ant-[A-Za-z0-9_-]{20,}'), '[REDACTED]'),
+    (re.compile(r'sk-[A-Za-z0-9]{20,}'), '[REDACTED]'),
+    (re.compile(r'hf_[A-Za-z0-9]{20,}'), '[REDACTED]'),
+    (re.compile(r'ya29\.[A-Za-z0-9_-]{50,}'), '[REDACTED]'),
+]
+
+def _redact(text):
+    for pat, rep in _SECRET_RE:
+        text = pat.sub(rep, text)
+    return text
 
 # --- Error mapping ---
 ERROR_MAP = {
@@ -68,7 +83,7 @@ def _log_call(method, url, status, latency_ms, error=None, root_cause=None):
         "root_cause": root_cause,
     }
     with open(LOG_PATH, "a") as f:
-        f.write(json.dumps(entry) + "\n")
+        f.write(_redact(json.dumps(entry)) + "\n")
 
 def _classify_error(code, body):
     """Map HTTP code to human-readable root cause."""
@@ -76,9 +91,9 @@ def _classify_error(code, body):
     detail = ""
     try:
         data = json.loads(body)
-        detail = data.get("error", {}).get("message", "")[:150]
+        detail = _redact(data.get("error", {}).get("message", "")[:150])
     except:
-        detail = body[:150] if body else ""
+        detail = _redact(body[:150]) if body else ""
     return mapped, detail
 
 def _request(method, url, data=None, retries=3, backoff=1.0):

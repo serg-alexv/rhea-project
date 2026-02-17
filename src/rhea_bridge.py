@@ -17,6 +17,7 @@ Usage:
 
 import json
 import os
+import re
 import time
 import uuid
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -37,6 +38,26 @@ try:
     _HAS_ANALYZER = True
 except ImportError:
     _HAS_ANALYZER = False
+
+
+# ---------------------------------------------------------------------------
+# Secret redaction — NEVER log API keys
+# ---------------------------------------------------------------------------
+
+_SECRET_PATTERNS = [
+    (re.compile(r'AIzaSy[A-Za-z0-9_-]{33}'), '[REDACTED_GEMINI_KEY]'),
+    (re.compile(r'sk-ant-[A-Za-z0-9_-]{20,}'), '[REDACTED_ANTHROPIC_KEY]'),
+    (re.compile(r'sk-[A-Za-z0-9]{20,}'), '[REDACTED_OPENAI_KEY]'),
+    (re.compile(r'hf_[A-Za-z0-9]{20,}'), '[REDACTED_HF_KEY]'),
+    (re.compile(r'gsk_[A-Za-z0-9]{20,}'), '[REDACTED_GROQ_KEY]'),
+]
+
+
+def redact_secrets(text: str) -> str:
+    """Remove API keys from any string before logging."""
+    for pattern, replacement in _SECRET_PATTERNS:
+        text = pattern.sub(replacement, text)
+    return text
 
 
 # ---------------------------------------------------------------------------
@@ -225,11 +246,11 @@ def _log_call(
         "cost_usd": _compute_cost(model, prompt_tokens, completion_tokens),
         "latency_ms": round(latency_ms, 1),
         "status": status,
-        "error_short": (str(error)[:100] if error else ""),
+        "error_short": redact_secrets(str(error)[:200]) if error else "",
     }
     try:
         with open(CALL_LOG_PATH, "a") as f:
-            f.write(json.dumps(record) + "\n")
+            f.write(redact_secrets(json.dumps(record)) + "\n")
     except OSError:
         pass  # logging must never break the bridge
 
