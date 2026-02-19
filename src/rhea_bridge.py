@@ -366,6 +366,7 @@ class RheaBridge:
         self.default_tier = DEFAULT_TIER
 
 from rhea_profile_manager import profile_manager
+from rhea_visual_context import get_context_block
 
 # ---------------------------------------------------------------------------
 # Bridge
@@ -446,17 +447,23 @@ class RheaBridge:
     ) -> ModelResponse:
         """Send a prompt to a specific model. Format: 'provider/model'."""
         
-        # --- Nexus/GPT-Profiler Injection ---
-        # Get active constraints for the requested mode (or default if None)
+        # --- Nexus/GPT-Profiler & Visual Context Injection ---
         constraints = profile_manager.get_constraints(mode)
+        visual_context = get_context_block()
         
-        # Merge system prompt with constraints
+        # Merge system prompt with constraints and visual context
+        injected = ""
         if constraints:
+            injected += constraints
+        if visual_context:
+            injected += f"\n{visual_context}"
+            
+        if injected:
             if system:
-                system = f"{system}\n\n{constraints}"
+                system = f"{system}\n\n{injected}"
             else:
-                system = constraints
-        # ------------------------------------
+                system = injected
+        # ----------------------------------------------------
 
         provider_name, model_id = self._resolve_model(model)
         cfg = self.providers.get(provider_name)
