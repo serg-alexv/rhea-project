@@ -1,6 +1,6 @@
 # Nexus State Export
-Generated UTC: 2026-02-19T23:22:52Z
-STATE_HASH = bb19ba8967d9a132bacb53d00f210176875d57af31c64a9ff28cb20d72a9b69e
+Generated UTC: 2026-02-19T23:38:03Z
+STATE_HASH = 3d2267546e687ceb774c88b1f1cd30e04ff88f557850a2bd68fde52a6d675d2e
 === PAYLOAD ===
 ## 1) INVARIANTS
 - Every agent writes to inbox/, only LEAD reads and routes
@@ -184,13 +184,6 @@ STATE_HASH = bb19ba8967d9a132bacb53d00f210176875d57af31c64a9ff28cb20d72a9b69e
 ```
 
 ## 4) RECENT SIGNALS
-- `{"actor":"R2","event_hash":"c1cdcfd368b8c05950e3b0e1cacf67f30ef19b9993dc02c0de4f950a7cf40492","event_type":"race","payload":{"i":378},"prev_hash":"68da677d43a6c4b7ffc0b76ed129c805c2ab10d0c6608ed07e5a0682ead63196","timestamp":"2026-02-19T14:30:35.011819+00:00"}`
-- `{"actor":"R3","event_hash":"55159560e64e11258947c0f78246650929277b109369c0ab788fcbe83717efb5","event_type":"race","payload":{"i":379},"prev_hash":"c1cdcfd368b8c05950e3b0e1cacf67f30ef19b9993dc02c0de4f950a7cf40492","timestamp":"2026-02-19T14:30:35.012555+00:00"}`
-- `{"actor":"R5","event_hash":"8075be25028dfc165c23e72f27b63c1fa99877a552ffbd1d875f31c7eb446611","event_type":"race","payload":{"i":378},"prev_hash":"55159560e64e11258947c0f78246650929277b109369c0ab788fcbe83717efb5","timestamp":"2026-02-19T14:30:35.013269+00:00"}`
-- `{"actor":"R4","event_hash":"5b379bb873ce004bb94a1bc22748f4b248658d33639715745f23b624d4b51018","event_type":"race","payload":{"i":379},"prev_hash":"8075be25028dfc165c23e72f27b63c1fa99877a552ffbd1d875f31c7eb446611","timestamp":"2026-02-19T14:30:35.014022+00:00"}`
-- `{"actor":"R1","event_hash":"c6a985d23ccf37d7750dd9b85898ba84ca4316ed7b0ff6303ad899a3d683a16a","event_type":"race","payload":{"i":384},"prev_hash":"5b379bb873ce004bb94a1bc22748f4b248658d33639715745f23b624d4b51018","timestamp":"2026-02-19T14:30:35.014755+00:00"}`
-- `{"actor":"R6","event_hash":"0e0d4cf7d27b64caa5c85fbaeabb4d867cff592bf65a60ebe0e12088461578f8","event_type":"race","payload":{"i":381},"prev_hash":"c6a985d23ccf37d7750dd9b85898ba84ca4316ed7b0ff6303ad899a3d683a16a","timestamp":"2026-02-19T14:30:35.015531+00:00"}`
-- `{"actor":"R2","event_hash":"189210593f0fa70dbd2cb8f9173aca4d4cf9fcb9489189ff8e10d42d0a1afcf1","event_type":"race","payload":{"i":379},"prev_hash":"0e0d4cf7d27b64caa5c85fbaeabb4d867cff592bf65a60ebe0e12088461578f8","timestamp":"2026-02-19T14:30:35.016278+00:00"}`
 - `{"actor":"R3","event_hash":"f3101041c96e7c426e24684e329ce9c843c1201b2c9a57026ca3623641d3ff98","event_type":"race","payload":{"i":380},"prev_hash":"189210593f0fa70dbd2cb8f9173aca4d4cf9fcb9489189ff8e10d42d0a1afcf1","timestamp":"2026-02-19T14:30:35.017016+00:00"}`
 - `{"actor":"R5","event_hash":"2f815314c6a660cc5b57b432f093a54d46af9418638d1aab4e18e203014be719","event_type":"race","payload":{"i":379},"prev_hash":"f3101041c96e7c426e24684e329ce9c843c1201b2c9a57026ca3623641d3ff98","timestamp":"2026-02-19T14:30:35.017765+00:00"}`
 - `{"actor":"R4","event_hash":"70f143d016bfb3bb45463d56b07f6bb2007fb19c18dd00548346e2c2196d72a2","event_type":"race","payload":{"i":380},"prev_hash":"2f815314c6a660cc5b57b432f093a54d46af9418638d1aab4e18e203014be719","timestamp":"2026-02-19T14:30:35.018498+00:00"}`
@@ -384,6 +377,13 @@ STATE_HASH = bb19ba8967d9a132bacb53d00f210176875d57af31c64a9ff28cb20d72a9b69e
 - `{"actor":"GPT","event_hash":"c5187671f4091abb6ee8a2ef362ae4d08b5523aaab0130ece1e2c746dee8d563","event_type":"relay.enqueue","payload":{"msg_id":"19c7802a45e-42caca070d59448f8075","seq":81,"target":"LEAD"},"prev_hash":"03940c71df1d6b14b934e49754e90a4cb0ef2e945c4d159987751f4cdcf1d358","timestamp":"2026-02-19T22:26:05.023803+00:00"}`
 - `{"actor":"GPT","event_hash":"82a3dd9fa829d4ab13fbc9d7dd2d573e6f303dbae665690712e655b7c9176e0a","event_type":"relay.enqueue","payload":{"msg_id":"19c78316dbc-9999aff26fca4b148b5f","seq":82,"target":"LEAD"},"prev_hash":"c5187671f4091abb6ee8a2ef362ae4d08b5523aaab0130ece1e2c746dee8d563","timestamp":"2026-02-19T23:17:11.231344+00:00"}`
 - `{"actor":"GPT","event_hash":"c9f6db311bb70ee3c30c530e36cd6688dd6b9e51153bdbc162abd83f5340cb45","event_type":"relay.enqueue","payload":{"msg_id":"19c78316e4f-a23db1e991d04cdd8f39","seq":83,"target":"REX"},"prev_hash":"82a3dd9fa829d4ab13fbc9d7dd2d573e6f303dbae665690712e655b7c9176e0a","timestamp":"2026-02-19T23:17:11.376465+00:00"}`
+- `{"actor":"ORION","event_hash":"147bd9a709f43857285f439e2d86cf7a84f95cd86fa16b72531f9db99494877e","event_type":"relay.enqueue","payload":{"msg_id":"19c7837eae9-59c216fef1b14dcfbb73","seq":84,"target":"GPT"},"prev_hash":"c9f6db311bb70ee3c30c530e36cd6688dd6b9e51153bdbc162abd83f5340cb45","timestamp":"2026-02-19T23:24:17.962782+00:00"}`
+- `{"actor":"ORION","event_hash":"eeaec177fcdab5f2dc8e53b0ef48a108925fc3e08a244888beaa5df200b575fd","event_type":"relay.enqueue","payload":{"msg_id":"19c78394fe4-f56c207b6c3c48299952","seq":85,"target":"LEAD"},"prev_hash":"147bd9a709f43857285f439e2d86cf7a84f95cd86fa16b72531f9db99494877e","timestamp":"2026-02-19T23:25:49.636772+00:00"}`
+- `{"actor":"ORION","event_hash":"d4740abc14706a08392b778ed368d9daf34b80871a506b2c89aeacb2270ddc7c","event_type":"relay.enqueue","payload":{"msg_id":"19c78395772-303224958f7447488664","seq":86,"target":"GPT"},"prev_hash":"eeaec177fcdab5f2dc8e53b0ef48a108925fc3e08a244888beaa5df200b575fd","timestamp":"2026-02-19T23:25:51.119568+00:00"}`
+- `{"actor":"ORION","event_hash":"55a6ad2db34721c0b6e3b8da91544344b381da7f36af006b1225a5edaeed4092","event_type":"relay.enqueue","payload":{"msg_id":"19c783a1d5b-72cda5a454ed41899446","seq":87,"target":"LEAD"},"prev_hash":"d4740abc14706a08392b778ed368d9daf34b80871a506b2c89aeacb2270ddc7c","timestamp":"2026-02-19T23:26:41.795850+00:00"}`
+- `{"actor":"ORION","event_hash":"9a374eac2172e083fce564b4b87350d2daa99fa73ed40c023a20097640a2ac7a","event_type":"relay.enqueue","payload":{"msg_id":"19c783a2335-b99fd4663947494bb4cf","seq":88,"target":"B2"},"prev_hash":"55a6ad2db34721c0b6e3b8da91544344b381da7f36af006b1225a5edaeed4092","timestamp":"2026-02-19T23:26:43.728661+00:00"}`
+- `{"actor":"ORION","event_hash":"bfc12b6c98ac1453420601fa6ea948b802b3ae36d39c1a21c25f6ca38b7b6f2f","event_type":"relay.enqueue","payload":{"msg_id":"19c783a2acb-ca9bcc585a604b88bf81","seq":89,"target":"GPT"},"prev_hash":"9a374eac2172e083fce564b4b87350d2daa99fa73ed40c023a20097640a2ac7a","timestamp":"2026-02-19T23:26:45.163907+00:00"}`
+- `{"actor":"ORION","event_hash":"2248e9f485edb06c8b035c33e6a540540fc1689bda3340a0f75b31526823e7bc","event_type":"relay.enqueue","payload":{"msg_id":"19c783a3063-905c585cf1b649f68387","seq":90,"target":"COWORK"},"prev_hash":"bfc12b6c98ac1453420601fa6ea948b802b3ae36d39c1a21c25f6ca38b7b6f2f","timestamp":"2026-02-19T23:26:46.568046+00:00"}`
 
 ## 5) CHECKLIST
 - Verify stop sentinel path exists and is monitored.
