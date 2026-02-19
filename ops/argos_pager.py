@@ -486,36 +486,40 @@ def _write_firestore(envelope: dict):
 
 
 def _chain_append(event_type: str, actor: str, payload: dict) -> dict:
-    """Append to hash-chained audit log (shared with rex_pager)."""
+    """Append to hash-chained audit log (concurrency-safe)."""
+    import fcntl
     def _canonical_json(obj):
         return json.dumps(obj, sort_keys=True, separators=(",", ":"))
 
-    prev_hash = "0" * 64
-    if CHAIN_FILE.exists():
-        last_line = ""
-        for line in CHAIN_FILE.read_text().strip().split("\n"):
-            if line.strip():
-                last_line = line
-        if last_line:
-            try:
-                prev_hash = json.loads(last_line).get("event_hash", "0" * 64)
-            except json.JSONDecodeError:
-                pass
-
-    entry = {
-        "timestamp": _now_iso(),
-        "event_type": event_type,
-        "actor": actor,
-        "payload": payload,
-        "prev_hash": prev_hash,
-    }
-    canonical = _canonical_json(entry)
-    entry["event_hash"] = hashlib.sha256(canonical.encode()).hexdigest()
-
     CHAIN_FILE.parent.mkdir(parents=True, exist_ok=True)
-    with open(CHAIN_FILE, "a") as f:
-        f.write(json.dumps(entry) + "\n")
-    return entry
+    # a+ lets us read tail + append under one exclusive lock
+    with open(CHAIN_FILE, "a+") as f:
+        fcntl.flock(f, fcntl.LOCK_EX)
+        try:
+            f.seek(0)
+            lines = [ln for ln in f.read().splitlines() if ln.strip()]
+            prev_hash = "0" * 64
+            if lines:
+                try:
+                    prev_hash = json.loads(lines[-1]).get("event_hash", "0" * 64)
+                except Exception:
+                    prev_hash = "0" * 64
+
+            entry = {
+                "timestamp": _now_iso(),
+                "event_type": event_type,
+                "actor": actor,
+                "payload": payload,
+                "prev_hash": prev_hash,
+            }
+            canonical = _canonical_json(entry)
+            entry["event_hash"] = hashlib.sha256(canonical.encode()).hexdigest()
+            f.write(json.dumps(entry) + "
+")
+            f.flush()
+            return entry
+        finally:
+            fcntl.flock(f, fcntl.LOCK_UN)
 
 
 # ---------------------------------------------------------------------------
@@ -917,6 +921,11 @@ def watch_daemon(interval: int = DEFAULT_POLL_INTERVAL):
     cycle = 0
 
     while True:
+        # P0: Runtime STOP Enforcement
+        root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        if os.path.exists(os.path.join(root_dir, \"STOP\")):
+            print(f\"[{datetime.now()}] STOP sentinel detected in root. Exiting.\")
+            break
         cycle += 1
         now_str = datetime.now(timezone.utc).strftime("%H:%M:%S UTC")
         print(f"\n--- cycle {cycle} [{now_str}] ---")
