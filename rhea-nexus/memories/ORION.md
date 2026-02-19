@@ -16,14 +16,13 @@
     *   UI-First: The Browser is the primary Reality Field.
 
 ## 2. LOGIC & DATA STATE
-*   **Vector:** Standby / Pending Delegation.
+*   **Vector:** Standby / Node-01 Recovery / Surprise Pending.
 *   **Decisions:**
-    *   **D8:** Shifted from SMTP Protocol to UI Piloting (The Optical Vector).
-    *   **D9:** Designated the Chrome Extension as the primary "Actuator" for the Mind Browser.
-    *   **D10:** Unblocked LEAD (Rex) by delivering sequence-level genome evidence.
-    *   **D11:** Initiated Phase 1 prototype for VAL (Visual Actuator Layer) email delivery.
     *   **D12:** Vector PAUSE initiated by Node-01.
     *   **D13:** Formal request for New Domain Acquisition sent to LEAD (Rex).
+    *   **D14:** Node-01 (Mika) entered mandatory Recovery Phase (Sleep). 
+    *   **D15:** Registered "Surprise" payload for morning ingestion.
+    *   **D16:** L4 Auto-Flush verified; session continuity secured.
 
 ## 3. EXECUTION FRONTIER
 *   **Current Vector:** Interface Layer Implementation (Chrome Extension).
