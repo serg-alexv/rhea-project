@@ -20,8 +20,7 @@ def get_context_block() -> str:
     if s["url"] == "none":
         return ""
         
-    lines = [f"
-=== CURRENT BROWSER CONTEXT (HUMAN-LIKE VISION) ==="]
+    lines = ["\n=== CURRENT BROWSER CONTEXT (HUMAN-LIKE VISION) ==="]
     lines.append(f"URL: {s['url']}")
     lines.append(f"PAGE TITLE: {s['title']}")
     
@@ -29,9 +28,8 @@ def get_context_block() -> str:
         lines.append("VISIBLE INTERACTIVE ELEMENTS:")
         # Limit to top 15 elements to avoid bloat
         for el in s["elements"][:15]:
-            lines.append(f"- [{el['id']}] {el['tag']} (role: {el['role']}): "{el['text']}"")
+            # Use single quotes inside f-string to avoid quote collision
+            lines.append(f"- [{el['id']}] {el['tag']} (role: {el['role']}): '{el['text']}'")
             
-    lines.append("====================================================
-")
-    return "
-".join(lines)
+    lines.append("====================================================\n")
+    return "\n".join(lines)
