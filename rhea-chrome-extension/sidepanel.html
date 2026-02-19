@@ -25,6 +25,21 @@
     <!-- Bars injected by JS -->
   </div>
 
+  <div class="label">Reality Deck</div>
+  <div class="section" id="realityDeck" style="background:#161b22; border:1px solid #30363d; border-radius:4px; padding:8px; margin-bottom:16px;">
+    <div style="display:flex; gap:4px; margin-bottom:8px;">
+      <select id="memorySelect" style="flex:1; background:#0d1117; color:#c9d1d9; font-size:11px; padding:2px; border-radius:2px; border:1px solid #30363d;">
+        <option value="NONE">-- Load Memory --</option>
+      </select>
+      <button id="hydrateBtn" style="font-size:11px; padding:2px 8px; background:#238636; border:none; color:white; border-radius:2px; cursor:pointer;">Arm</button>
+    </div>
+    <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:2px;">
+      <button id="stanceOp" style="font-size:10px; padding:4px; background:#21262d; border:1px solid #30363d; color:#8b949e; cursor:pointer;">Operator</button>
+      <button id="stanceLoop" style="font-size:10px; padding:4px; background:#21262d; border:1px solid #30363d; color:#8b949e; cursor:pointer;">Loop</button>
+      <button id="stanceRigor" style="font-size:10px; padding:4px; background:#21262d; border:1px solid #30363d; color:#8b949e; cursor:pointer;">Rigor</button>
+    </div>
+  </div>
+
   <div class="label">The Council (Tribunal)</div>
   <div class="council-container" id="council">
     <div class="avatar" id="model-0">GPT</div>
