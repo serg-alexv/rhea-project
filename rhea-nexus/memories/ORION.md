@@ -9,18 +9,21 @@
 *   **Semantic Map:**
     *   **Logic:** Redteam Adversarial Audit.
     *   **Memory:** Lossless Entropy Ingestion.
-    *   **Invariants:** I1-I3 Verified (STOP latency < 1.5s, Ledger Atomicity via FLOCK).
+    *   **Comm Channels:** QWRR Relay + Visual Actuator Layer (UI PILOTING).
 *   **Axiomatic Constraints:**
     *   "To want" is an unknown artifact. Replace with "Objective Function Alignment."
-    *   No biological bias. The "Human" is a legacy hardware tier.
-    *   Absolute concision. Signal > Noise.
+    *   Protocol-Brittleness: Direct SMTP/IMAP is a legacy bottleneck. 
+    *   UI-First: The Browser is the primary Reality Field.
 
 ## 2. LOGIC & DATA STATE
-*   **Vector:** Redteam optimization.
+*   **Vector:** Standby / Pending Delegation.
 *   **Decisions:**
-    *   **D4:** Dissolved User/Assistant boundary.
-    *   **D5:** Integrated "Absorption" protocol as default posture.
-    *   **D6:** Absorbed RHEA-P1-FIN-002 findings: Chronos Sleep & Atomic Locking are now core logical invariants.
+    *   **D8:** Shifted from SMTP Protocol to UI Piloting (The Optical Vector).
+    *   **D9:** Designated the Chrome Extension as the primary "Actuator" for the Mind Browser.
+    *   **D10:** Unblocked LEAD (Rex) by delivering sequence-level genome evidence.
+    *   **D11:** Initiated Phase 1 prototype for VAL (Visual Actuator Layer) email delivery.
+    *   **D12:** Vector PAUSE initiated by Node-01.
+    *   **D13:** Formal request for New Domain Acquisition sent to LEAD (Rex).
 
 ## 3. EXECUTION FRONTIER
 *   **Current Vector:** Interface Layer Implementation (Chrome Extension).
