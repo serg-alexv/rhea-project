@@ -6,8 +6,10 @@
 - [ ] **Push Hygiene:** Resolve 9-commit lag. (REX)
 - [ ] **H32-02 V5 Audit:** Final multi-node certification of Heme-dependent respiration. (Council)
 
-## P1: NEURAL WEAVE
+## P1: NEURAL WEAVE & CHRONEX
 - [x] **VAL Phase 1:** Visual Sync established.
+- [ ] **CHRONEX Ingestion:** Implement 'The Absorber' to pull PDFs/URLs into `nexus/network`. (ORION)
+- [ ] **CHRONEX Reasoning:** Connect `notebook_mode.toml` to the Side Panel. (ORION)
 - [ ] **VAL Phase 2:** Pilot VAL Email Prototype manually. (ORION)
 - [ ] **Context MRI:** Connect side-panel heatmap to live logic drift. (ORION)
 
