@@ -32,6 +32,7 @@ from pydantic import BaseModel, Field
 sys.path.insert(0, str(Path(__file__).parent))
 from rhea_bridge import RheaBridge
 from consensus_analyzer import ConsensusAnalyzer
+from rhea_profile_manager import profile_manager
 
 # ---------------------------------------------------------------------------
 # App setup
@@ -141,6 +142,9 @@ class TribunalICERequest(BaseModel):
     tier: str = Field(default="cheap", description="Cost tier for queries + critiques")
     chairman_tier: str = Field(default="balanced", description="Cost tier for final chairman synthesis")
 
+class SetModeRequest(BaseModel):
+    mode: str = Field(..., description="The mode to set as default (e.g. operator_first, loop_killer)")
+
 
 class ModelInfo(BaseModel):
     model: str
@@ -225,6 +229,7 @@ async def health():
         "providers_total": status["summary"]["total_providers"],
         "total_models": status["summary"]["total_models"],
         "analyzer_version": "v2-ice-council",
+        "profile_mode": profile_manager.get_active_mode(),
     }
 
 
@@ -233,6 +238,21 @@ async def models():
     bridge = get_bridge()
     return bridge.models_status()
 
+@app.get("/modes")
+async def get_modes():
+    """Get active and available cognitive stance modes."""
+    return {
+        "active": profile_manager.get_active_mode(),
+        "available": profile_manager.get_available_modes(),
+    }
+
+@app.post("/modes", dependencies=[Depends(verify_api_key)])
+async def set_mode(req: SetModeRequest):
+    """Set the active cognitive stance mode (Hot Swap)."""
+    if profile_manager.set_active_mode(req.mode):
+        return {"status": "ok", "active": req.mode}
+    else:
+        raise HTTPException(status_code=400, detail=f"Invalid mode: {req.mode}")
 
 @app.post("/tribunal", response_model=TribunalResponse, dependencies=[Depends(verify_api_key), Depends(check_rate_limit)])
 async def tribunal(req: TribunalRequest):
