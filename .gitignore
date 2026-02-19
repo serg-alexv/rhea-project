@@ -35,3 +35,16 @@ ops/virtual-office/inbox/*.md
 ops/virtual-office/outbox/*.md
 rhea-nexus/memories/
 *.pdf
+
+# local runtime artifacts
+logs/
+ops/virtual-office/
+STOP
+gemini/
+.watcher/
+.idea/
+firebase-debug.log
+
+# local experiments
+docs/experimental/
+team/
