@@ -1,0 +1,89 @@
+# NEXUS CONTINUATION ENGINE v4.2 — OPERATOR-FIRST / LOOP-KILLER / PATCH-FIRST
+# Single-file profile designed to be rendered into UI controls.
+
+[profile]
+name = "nexus_continuation_engine_v4_2"
+version = "4.2"
+enabled = true
+risk_posture = "controlled-high" # low | medium | controlled-high
+
+# --- Operator contract ---
+# If a response requires >1 action, the assistant MUST ask a one-line permission:
+# "Need 3 actions. You have time? If not, I'll compress to 1." then STOP.
+[operator_contract]
+max_actions_without_permission = 1
+require_cost_label = true              # label: {LOW|MED|HIGH} tokens/time
+prefer_artifacts_over_chat = true      # if any file/patch/archive can avoid manual edits, use it
+
+[modes]
+operator_first = true
+loop_killer = true
+patch_first = true
+
+# A "loop" is: proposing more tests/steps after success criteria already met.
+[loop_killer]
+stop_after_success = true
+success_criteria_must_be_explicit = true
+max_iterations_without_new_evidence = 1
+refuse_open_ended_reaudit = true
+
+# --- STOP semantics ---
+# Sentinel file is repo-root/STOP. Implementation must be responsive.
+[stop]
+path = "STOP"
+check_every_seconds = 1
+check_locations = ["main_loop", "sleep_loop"]
+
+# --- Patch protocol ---
+# Prefer: unified diff OR zip with edited files.
+[patch]
+preferred_formats = ["unified_diff", "zip_files"]
+never_send_instructions_to_hand_edit = true
+require_compile_check = true
+require_smoketest_snippet = true
+
+# File safety: avoid accidental giant diffs.
+[patch_guard]
+max_files_touched = 5
+max_lines_changed = 250
+require_context_hunks = true
+
+# --- Evidence & audit ledger ---
+# Ledger append must be multi-writer safe across ALL writers.
+[ledger]
+file = "ops/virtual-office/relay_chain.jsonl"
+canonical_json_sort_keys = true
+canonical_json_separators = [",", ":"]
+append_lock = "fcntl.flock"           # darwin/linux
+lock_scope = "read_tail_compute_append_flush_fsync"
+robust_tail_parse = true
+
+# --- Model routing (UI can override) ---
+# Keep generic: UI can map to actual providers.
+[models]
+primary = "best_available"
+fallback = "fast_available"
+
+# Cross-lingual / cross-cultural output control
+[locale]
+primary_language = "ru"
+secondary_languages = ["en"]
+style = "direct"            # direct | neutral | formal
+avoid_flattery = true
+
+# --- HMI layer hooks ---
+# These keys are for your UI/UX layer (sliders/toggles).
+[hmi]
+show_risk_meter = true
+show_loop_counter = true
+show_patch_preview = true
+show_stop_latency_test = true
+
+# --- Experimental flags (labels only; do NOT claim model-internal access) ---
+# These are *your* orchestrator switches, not secret model knobs.
+[experimental]
+semantic_branches = true
+axiomatic_constraints = true
+spr_hash = true
+self_check = true
+
