@@ -33,7 +33,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 from rhea_bridge import RheaBridge
 from consensus_analyzer import ConsensusAnalyzer
 from rhea_profile_manager import profile_manager
-from rhea_visual_context import update_state
+from rhea_visual_context import update_state, get_health_history
 
 # ---------------------------------------------------------------------------
 # App setup
@@ -287,6 +287,11 @@ async def actuator_sync(req: VisualSyncRequest):
     update_state(req.state)
     print(f"[Actuator] Sync from Tab {req.tab_id}: {req.state['url']}")
     return {"status": "ok"}
+
+@app.get("/actuator/health")
+async def actuator_health():
+    """Returns historical health pulses for the MRI heatmap."""
+    return get_health_history()
 
 @app.post("/actuator/command", dependencies=[Depends(verify_api_key)])
 async def actuator_command(req: ActuatorCommand):
