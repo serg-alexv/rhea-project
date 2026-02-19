@@ -54,6 +54,7 @@ app.add_middleware(
 # Singleton bridge + analyzer
 _bridge = None
 _analyzer = None
+_last_visual_state: dict = {}
 
 
 def get_bridge() -> RheaBridge:
@@ -148,6 +149,10 @@ class SetModeRequest(BaseModel):
 
 class HydrateMemoryRequest(BaseModel):
     id: str = Field(..., description="The ID of the memory entity to load (e.g. ORION.md)")
+
+class VisualSyncRequest(BaseModel):
+    tab_id: int
+    state: dict
 
 
 class ModelInfo(BaseModel):
@@ -262,6 +267,14 @@ async def hydrate_memory(req: HydrateMemoryRequest):
         return {"status": "ok", "armed_with": req.id}
     else:
         raise HTTPException(status_code=400, detail=f"Memory entity not found: {req.id}")
+
+@app.post("/actuator/sync", dependencies=[Depends(verify_api_key)])
+async def actuator_sync(req: VisualSyncRequest):
+    """Receive visual state from the browser extension."""
+    global _last_visual_state
+    _last_visual_state = req.state
+    print(f"[Actuator] Sync from Tab {req.tab_id}: {req.state['url']}")
+    return {"status": "ok"}
 
 @app.post("/modes", dependencies=[Depends(verify_api_key)])
 async def set_mode(req: SetModeRequest):

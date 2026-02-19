@@ -1,10 +1,29 @@
 // Rhea Office — Background Service Worker
-// Opens side panel on extension icon click
+const RHEA_CORE = 'http://localhost:8400';
 
 chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true })
   .catch(err => console.error('Side panel error:', err));
 
-// Periodic heartbeat (every 2 min)
+// 1. Visual Actuator Relay
+chrome.runtime.onMessage.addListener(async (msg, sender) => {
+  if (msg.type === "VISUAL_PULSE") {
+    console.log("[Rhea-VAL] Forwarding Visual Pulse to Core...");
+    try {
+      await fetch(`${RHEA_CORE}/actuator/sync`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-API-Key': 'dev-key' },
+        body: JSON.stringify({
+          tab_id: sender.tab.id,
+          state: msg.data
+        })
+      });
+    } catch (e) {
+      console.error("[Rhea-VAL] Relay failed:", e);
+    }
+  }
+});
+
+// 2. Periodic heartbeat (every 2 min)
 chrome.alarms.create('rhea-heartbeat', { periodInMinutes: 2 });
 
 chrome.alarms.onAlarm.addListener(async (alarm) => {
