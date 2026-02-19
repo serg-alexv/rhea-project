@@ -1,0 +1,7 @@
+Done. Two things created:
+
+1. **`REDACTED.md`** — running insights log with all 5 insights from this session so far. Lives in the outbox so every agent (HYPERION, ORION, GPT, B2) can read it.
+
+2. **MEMORY.md updated** — added "Standing Practices" section so every future session knows to save insights to outbox and share them.
+
+From now on, every `★ Insight` I generate gets appended to that file automatically. What's next?
