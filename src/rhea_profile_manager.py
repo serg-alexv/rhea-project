@@ -128,31 +128,44 @@ class RheaProfileManager:
         return list(modes.keys())
 
     def set_active_mode(self, mode: str) -> bool:
-        """Sets the active default mode and persists to disk while preserving comments."""
+        """Sets the active default mode with strict validation and round-trip parsing."""
         self.reload()
+        
+        # 1. Whitelist Validation
         modes = self.get_available_modes()
         if mode not in modes:
+            print(f"[RheaProfileManager] Security: Blocked attempt to set invalid mode: {mode}")
+            return False
+            
+        # 2. Length Limit (Defense in Depth)
+        if len(mode) > 50:
             return False
         
-        # We use Regex to update the file to preserve Mika's beautiful comments
         import re
         try:
             with open(self.profile_path, "r") as f:
                 content = f.read()
             
-            # Pattern to find 'default = "any_mode"' under '[polymorphic_modes.active_toggles]'
+            # 3. Perform Replacement (Safe regex for comment preservation)
             pattern = r'(default\s*=\s*")[^"]+(")'
             new_content = re.sub(pattern, rf'\1{mode}\2', content)
             
+            # 4. Round-trip Validation (The "Iron Weave" Check)
+            # Ensure the resulting string is still valid TOML and hasn't been hijacked
+            test_parse = toml.loads(new_content)
+            if test_parse.get("polymorphic_modes", {}).get("active_toggles", {}).get("default") != mode:
+                print(f"[RheaProfileManager] Security: Round-trip validation failed. Aborting write.")
+                return False
+
+            # 5. Commit to Disk
             with open(self.profile_path, "w") as f:
                 f.write(new_content)
             
-            # Update cache and mtime
-            self._cache["polymorphic_modes"]["active_toggles"]["default"] = mode
+            self._cache = test_parse # Update cache from verified parse
             self._mtime = self.profile_path.stat().st_mtime
             return True
         except Exception as e:
-            print(f"[RheaProfileManager] Error saving profile safely: {e}")
+            print(f"[RheaProfileManager] Error saving profile securely: {e}")
             return False
 
     def get_constraints(self, mode: Optional[str] = None) -> str:

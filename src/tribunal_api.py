@@ -87,7 +87,8 @@ if not TRIBUNAL_API_KEYS:
 
 async def verify_api_key(x_api_key: str = Header(None, alias="X-API-Key")):
     if not TRIBUNAL_API_KEYS:
-        return  # no keys configured = open access
+        # FAIL-CLOSED: No keys configured means no one gets in.
+        raise HTTPException(status_code=401, detail="API is locked: No keys configured in TRIBUNAL_API_KEYS")
     if not x_api_key or x_api_key not in TRIBUNAL_API_KEYS:
         raise HTTPException(status_code=401, detail="Invalid or missing API key")
 
