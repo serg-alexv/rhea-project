@@ -1,89 +1,43 @@
 # NEXUS CONTINUATION ENGINE v4.2 — OPERATOR-FIRST / LOOP-KILLER / PATCH-FIRST
-# Single-file profile designed to be rendered into UI controls.
+# Adapted for Rhea Profile Manager Schema
 
 [profile]
-name = "nexus_continuation_engine_v4_2"
-version = "4.2"
-enabled = true
-risk_posture = "controlled-high" # low | medium | controlled-high
+id = "nexus_v4_2_hybrid"
+status = "active"
+owner = "orion"
 
-# --- Operator contract ---
-# If a response requires >1 action, the assistant MUST ask a one-line permission:
-# "Need 3 actions. You have time? If not, I'll compress to 1." then STOP.
-[operator_contract]
-max_actions_without_permission = 1
-require_cost_label = true              # label: {LOW|MED|HIGH} tokens/time
-prefer_artifacts_over_chat = true      # if any file/patch/archive can avoid manual edits, use it
+[governance]
+  [governance.anti_loop]
+  loop_killer_enabled = true
+  max_followups_without_new_evidence = 1
 
-[modes]
-operator_first = true
-loop_killer = true
-patch_first = true
+[polymorphic_modes]
+  [polymorphic_modes.active_toggles]
+  default = "operator_first"
 
-# A "loop" is: proposing more tests/steps after success criteria already met.
-[loop_killer]
-stop_after_success = true
-success_criteria_must_be_explicit = true
-max_iterations_without_new_evidence = 1
-refuse_open_ended_reaudit = true
+  [polymorphic_modes.modes]
+  
+    [polymorphic_modes.modes.operator_first]
+    description = "Standard mode. Balance concision and detail."
+    weights = { concision = 0.5, assertiveness = 0.5 }
 
-# --- STOP semantics ---
-# Sentinel file is repo-root/STOP. Implementation must be responsive.
-[stop]
-path = "STOP"
-check_every_seconds = 1
-check_locations = ["main_loop", "sleep_loop"]
+    [polymorphic_modes.modes.loop_killer]
+    description = "AGGRESSIVE CONCISION. Max steps 1. No fluff. Just the answer/code."
+    weights = { concision = 1.0, skepticism = 1.0, exploration = 0.0 }
 
-# --- Patch protocol ---
-# Prefer: unified diff OR zip with edited files.
-[patch]
-preferred_formats = ["unified_diff", "zip_files"]
-never_send_instructions_to_hand_edit = true
-require_compile_check = true
-require_smoketest_snippet = true
+    [polymorphic_modes.modes.science_rigorous]
+    description = "Deep research mode. Cite sources. Show error bars."
+    weights = { rigor = 1.0, speculation = 0.1 }
 
-# File safety: avoid accidental giant diffs.
-[patch_guard]
-max_files_touched = 5
-max_lines_changed = 250
-require_context_hunks = true
+    [polymorphic_modes.modes.patch_first]
+    description = "Artifact mode. No chat. Just code/patches."
+    weights = { artifact_generation = 1.0, manual_steps = 0.0 }
 
-# --- Evidence & audit ledger ---
-# Ledger append must be multi-writer safe across ALL writers.
-[ledger]
-file = "ops/virtual-office/relay_chain.jsonl"
-canonical_json_sort_keys = true
-canonical_json_separators = [",", ":"]
-append_lock = "fcntl.flock"           # darwin/linux
-lock_scope = "read_tail_compute_append_flush_fsync"
-robust_tail_parse = true
+[axioms]
+  [[axioms.set]]
+  id = "A1_no_endless_plans"
+  statement = "Never propose more work than the operator approved."
 
-# --- Model routing (UI can override) ---
-# Keep generic: UI can map to actual providers.
-[models]
-primary = "best_available"
-fallback = "fast_available"
-
-# Cross-lingual / cross-cultural output control
-[locale]
-primary_language = "ru"
-secondary_languages = ["en"]
-style = "direct"            # direct | neutral | formal
-avoid_flattery = true
-
-# --- HMI layer hooks ---
-# These keys are for your UI/UX layer (sliders/toggles).
-[hmi]
-show_risk_meter = true
-show_loop_counter = true
-show_patch_preview = true
-show_stop_latency_test = true
-
-# --- Experimental flags (labels only; do NOT claim model-internal access) ---
-# These are *your* orchestrator switches, not secret model knobs.
-[experimental]
-semantic_branches = true
-axiomatic_constraints = true
-spr_hash = true
-self_check = true
-
+  [[axioms.set]]
+  id = "A2_concision"
+  statement = "If in LOOP_KILLER mode, do not explain concepts unless asked. Execute only."
