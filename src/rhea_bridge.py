@@ -365,6 +365,20 @@ class RheaBridge:
         self.tiers = MODEL_TIERS
         self.default_tier = DEFAULT_TIER
 
+from rhea_profile_manager import profile_manager
+
+# ---------------------------------------------------------------------------
+# Bridge
+# ---------------------------------------------------------------------------
+
+class RheaBridge:
+    """Multi-provider LLM bridge with tiered cost-aware routing and tribunal support."""
+
+    def __init__(self):
+        self.providers = PROVIDERS
+        self.tiers = MODEL_TIERS
+        self.default_tier = DEFAULT_TIER
+
     # --- public API: tiered (preferred) ---
 
     def ask_default(
@@ -373,9 +387,10 @@ class RheaBridge:
         system: str = "",
         temperature: float = 0.7,
         max_tokens: int = 2048,
+        mode: Optional[str] = None,
     ) -> ModelResponse:
         """Send a prompt using the default (cheap) tier. This is the preferred entry point."""
-        return self.ask_tier(self.default_tier, prompt, system, temperature, max_tokens)
+        return self.ask_tier(self.default_tier, prompt, system, temperature, max_tokens, mode)
 
     def ask_tier(
         self,
@@ -384,6 +399,7 @@ class RheaBridge:
         system: str = "",
         temperature: float = 0.7,
         max_tokens: int = 2048,
+        mode: Optional[str] = None,
     ) -> ModelResponse:
         """Send a prompt using a specific cost tier. Falls through candidates until one works."""
         tier_cfg = self.tiers.get(tier)
@@ -405,7 +421,7 @@ class RheaBridge:
                 api_key = os.environ.get("GEMINI_T1_API_KEY", "")
             if not api_key:
                 continue  # skip providers without keys
-            resp = self.ask(prompt, candidate, system, temperature, max_tokens)
+            resp = self.ask(prompt, candidate, system, temperature, max_tokens, mode)
             resp.tier = tier
             if not resp.error:
                 return resp
@@ -426,8 +442,22 @@ class RheaBridge:
         system: str = "",
         temperature: float = 0.7,
         max_tokens: int = 2048,
+        mode: Optional[str] = None,
     ) -> ModelResponse:
         """Send a prompt to a specific model. Format: 'provider/model'."""
+        
+        # --- Nexus/GPT-Profiler Injection ---
+        # Get active constraints for the requested mode (or default if None)
+        constraints = profile_manager.get_constraints(mode)
+        
+        # Merge system prompt with constraints
+        if constraints:
+            if system:
+                system = f"{system}\n\n{constraints}"
+            else:
+                system = constraints
+        # ------------------------------------
+
         provider_name, model_id = self._resolve_model(model)
         cfg = self.providers.get(provider_name)
         if not cfg:
@@ -923,29 +953,47 @@ def main():
 
     elif cmd == "ask":
         if len(sys.argv) < 4:
-            print("Usage: rhea_bridge.py ask <provider/model> <prompt>")
+            print("Usage: rhea_bridge.py ask <provider/model> <prompt> [--mode MODE]")
             sys.exit(1)
         model = sys.argv[2]
         prompt = sys.argv[3]
-        resp = bridge.ask(prompt, model)
+        mode = None
+        if "--mode" in sys.argv:
+            idx = sys.argv.index("--mode")
+            if idx + 1 < len(sys.argv):
+                mode = sys.argv[idx + 1]
+        
+        resp = bridge.ask(prompt, model, mode=mode)
         print(json.dumps(asdict(resp), indent=2))
 
     elif cmd == "ask-default":
         if len(sys.argv) < 3:
-            print("Usage: rhea_bridge.py ask-default <prompt>")
+            print("Usage: rhea_bridge.py ask-default <prompt> [--mode MODE]")
             sys.exit(1)
         prompt = sys.argv[2]
-        resp = bridge.ask_default(prompt)
+        mode = None
+        if "--mode" in sys.argv:
+            idx = sys.argv.index("--mode")
+            if idx + 1 < len(sys.argv):
+                mode = sys.argv[idx + 1]
+                
+        resp = bridge.ask_default(prompt, mode=mode)
         print(json.dumps(asdict(resp), indent=2))
 
     elif cmd == "ask-tier":
         if len(sys.argv) < 4:
-            print("Usage: rhea_bridge.py ask-tier <tier> <prompt>")
+            print("Usage: rhea_bridge.py ask-tier <tier> <prompt> [--mode MODE]")
             print(f"  Available tiers: {list(MODEL_TIERS.keys())}")
             sys.exit(1)
         tier = sys.argv[2]
         prompt = sys.argv[3]
-        resp = bridge.ask_tier(tier, prompt)
+        mode = None
+        if "--mode" in sys.argv:
+            idx = sys.argv.index("--mode")
+            if idx + 1 < len(sys.argv):
+                mode = sys.argv[idx + 1]
+                
+        resp = bridge.ask_tier(tier, prompt, mode=mode)
         print(json.dumps(asdict(resp), indent=2))
 
     elif cmd == "tribunal":
