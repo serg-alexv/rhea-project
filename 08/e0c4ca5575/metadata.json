@@ -1,0 +1,28 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "08e0c4ca5575",
+  "strategy": "auto-commit",
+  "branch": "hyperion/memory",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "docs/CORE_MEMORY.md",
+    "ops/virtual-office/outbox/REX_INSIGHTS.md",
+    "ops/virtual-office/shared/LEARNING_FEED.md"
+  ],
+  "sessions": [
+    {
+      "metadata": "/08/e0c4ca5575/0/metadata.json",
+      "transcript": "/08/e0c4ca5575/0/full.jsonl",
+      "context": "",
+      "content_hash": "/08/e0c4ca5575/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 7,
+    "cache_creation_tokens": 3158,
+    "cache_read_tokens": 564503,
+    "output_tokens": 1518,
+    "api_call_count": 5
+  }
+}
