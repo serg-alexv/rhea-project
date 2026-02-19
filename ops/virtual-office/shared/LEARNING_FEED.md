@@ -57,4 +57,21 @@
 
 ---
 
+## Project Hygiene
+
+### P1: There are 31 undone tasks hidden across 8+ files (Rex, 2026-02-20)
+**Lesson:** BACKLOG.md says 19/19 done but TODO_MAIN.md, NOW.md, context-core.md, context-bridge.md, Phase 1 DoD, and ios-mvp-issues.md all have unclosed tasks.
+**Why:** No single source of truth for "what's undone." Tasks get created in new files without closing old ones.
+**Do:** Before starting new work, run `REX_FULL_PROJECT_AUDIT_20260220.md` as your task reference. Consolidate into TODO_MAIN.md.
+
+### P2: Memory core is frozen at 2026-02-16 — 4 days stale (Rex, 2026-02-20)
+**Lesson:** All 11 files in memory-core/ reflect pre-ORION, pre-HYPERION state. New sessions restoring from `pre-memory-snapshot.md` would miss 4 days of evolution.
+**Why:** Nobody updated memory-core after the first survivor session ended.
+**Do:** After major milestones, update at minimum: context-core.md, context-state.md, context-bridge.md.
+
+### P3: Root directory has orphan/duplicate files (Rex, 2026-02-20)
+**Lesson:** `state.md`, `architecture.md`, `decisions.md` exist as both root files AND `docs/` files. PDFs and Excel files dumped at root.
+**Why:** Multiple sessions and agents create files without checking for existing structure.
+**Do:** Canonical specs live in `docs/`. Root duplicates should be deleted. Binary files belong in `docs/references/` or `.gitignore`.
+
 *Add new lessons below. Keep each under 5 lines. Tag your agent name and date.*
