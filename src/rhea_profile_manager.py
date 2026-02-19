@@ -63,6 +63,38 @@ class RheaProfileManager:
         self.reload()
         return self._cache.get("polymorphic_modes", {}).get("active_toggles", {}).get("default", "operator_first")
 
+    def get_available_modes(self) -> list[str]:
+        """Returns a list of available mode keys."""
+        self.reload()
+        modes = self._cache.get("polymorphic_modes", {}).get("modes", {})
+        return list(modes.keys())
+
+    def set_active_mode(self, mode: str) -> bool:
+        """Sets the active default mode and persists to disk."""
+        self.reload()
+        modes = self.get_available_modes()
+        if mode not in modes:
+            return False
+        
+        # Update cache
+        if "polymorphic_modes" not in self._cache:
+            self._cache["polymorphic_modes"] = {}
+        if "active_toggles" not in self._cache["polymorphic_modes"]:
+            self._cache["polymorphic_modes"]["active_toggles"] = {}
+            
+        self._cache["polymorphic_modes"]["active_toggles"]["default"] = mode
+        
+        # Persist to disk
+        try:
+            with open(self.profile_path, "w") as f:
+                toml.dump(self._cache, f)
+            # Update mtime to prevent immediate reload
+            self._mtime = self.profile_path.stat().st_mtime
+            return True
+        except Exception as e:
+            print(f"[RheaProfileManager] Error saving profile: {e}")
+            return False
+
     def get_constraints(self, mode: Optional[str] = None) -> str:
         """
         Generates the System Prompt Suffix for the given mode (or default).
