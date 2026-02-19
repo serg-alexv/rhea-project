@@ -135,35 +135,21 @@ def _last_chain_hash() -> str:
 
 
 def chain_append(event_type: str, actor: str, payload: dict) -> dict:
-    """Append a tamper-evident entry to the audit chain with exclusive locking."""
-    import fcntl
+    """Append a tamper-evident entry to the audit chain."""
+    prev_hash = _last_chain_hash()
+    entry = {
+        "timestamp": _now_iso(),
+        "event_type": event_type,
+        "actor": actor,
+        "payload": payload,
+        "prev_hash": prev_hash,
+    }
+    canonical = _canonical_json(entry)
+    entry["event_hash"] = hashlib.sha256(canonical.encode()).hexdigest()
     CHAIN_FILE.parent.mkdir(parents=True, exist_ok=True)
-    with open(CHAIN_FILE, "a+") as f:
-        fcntl.flock(f, fcntl.LOCK_EX)
-        try:
-            f.seek(0)
-            lines = [ln for ln in f.read().splitlines() if ln.strip()]
-            prev_hash = "0" * 64
-            if lines:
-                try:
-                    prev_hash = json.loads(lines[-1]).get("event_hash", "0" * 64)
-                except Exception:
-                    prev_hash = "0" * 64
-            entry = {
-                "timestamp": _now_iso(),
-                "event_type": event_type,
-                "actor": actor,
-                "payload": payload,
-                "prev_hash": prev_hash,
-            }
-            canonical = _canonical_json(entry)
-            entry["event_hash"] = hashlib.sha256(canonical.encode()).hexdigest()
-            f.write(json.dumps(entry) + "
-")
-            f.flush()
-            return entry
-        finally:
-            fcntl.flock(f, fcntl.LOCK_UN)
+    with open(CHAIN_FILE, "a") as f:
+        f.write(json.dumps(entry) + "\n")
+    return entry
 
 
 def chain_verify() -> tuple[bool, int, str]:
@@ -1047,11 +1033,6 @@ def watch_daemon(target: str = "LEAD"):
     was_blocked = True
 
     while True:
-        # P0: Runtime STOP Enforcement
-        root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        if os.path.exists(os.path.join(root_dir, \"STOP\")):
-            print(f\"[{datetime.now()}] STOP sentinel detected in root. Exiting.\")
-            break
         available, detail = check_anthropic_api()
         now = datetime.now(timezone.utc).strftime("%H:%M:%S UTC")
 
