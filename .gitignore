@@ -16,3 +16,22 @@ __pycache__/
 .entire/snapshots/
 .entire/chat_extracts.json
 firebase/service-account.json
+
+# --- Rhea local runtime junk ---
+STOP
+logs/
+.watcher/
+gemini/
+firebase-debug.log
+GEMINI.md
+.idea/
+ops/Archive.zip
+ops/virtual-office/relay_chain.jsonl
+ops/virtual-office/**/observations.jsonl
+ops/virtual-office/**/watcher_state.json
+ops/virtual-office/leases/*.json
+ops/virtual-office/snapshots/*.json
+ops/virtual-office/inbox/*.md
+ops/virtual-office/outbox/*.md
+rhea-nexus/memories/
+*.pdf
