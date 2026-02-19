@@ -1,14 +1,17 @@
 // Rhea Office — Popup Controller
 const FIRESTORE_BASE = 'https://firestore.googleapis.com/v1/projects';
 
-let config = { projectId: 'rhea-office-sync', deskName: '' };
+let config = { projectId: 'rhea-office-sync', deskName: '', coreApiKey: '' };
 
 async function loadConfig() {
-  const stored = await chrome.storage.local.get(['firebaseConfig', 'deskName']);
+  const stored = await chrome.storage.local.get(['firebaseConfig', 'deskName', 'coreApiKey']);
   if (stored.firebaseConfig) config.projectId = stored.firebaseConfig.projectId;
   if (stored.deskName) config.deskName = stored.deskName;
+  if (stored.coreApiKey) config.coreApiKey = stored.coreApiKey;
+  
   document.getElementById('projectId').value = config.projectId;
   document.getElementById('deskName').value = config.deskName;
+  document.getElementById('coreApiKey').value = config.coreApiKey || '';
 }
 
 function fsUrl(collection, docId) {
@@ -117,13 +120,18 @@ function timeSince(date) {
 document.getElementById('saveConfig').addEventListener('click', async () => {
   const projectId = document.getElementById('projectId').value;
   const deskName = document.getElementById('deskName').value;
+  const coreApiKey = document.getElementById('coreApiKey').value;
+  
   await chrome.storage.local.set({
     firebaseConfig: { projectId },
-    deskName
+    deskName,
+    coreApiKey
   });
-  config = { projectId, deskName };
+  
+  config = { projectId, deskName, coreApiKey };
   fetchDesks();
   fetchInbox();
+  initRealityDeck();
 });
 
 document.getElementById('sendBtn').addEventListener('click', sendMessage);
@@ -140,7 +148,6 @@ async function fetchMemories() {
     const data = await r.json();
     const select = document.getElementById('memorySelect');
     
-    // Clear except first
     while (select.options.length > 1) select.remove(1);
     
     data.forEach(m => {
@@ -149,9 +156,7 @@ async function fetchMemories() {
       opt.textContent = `${m.type === 'SNAPSHOT' ? '🕒' : '💠'} ${m.id}`;
       select.appendChild(opt);
     });
-  } catch (e) {
-    console.error('Core API not reachable:', e);
-  }
+  } catch (e) {}
 }
 
 async function hydrate() {
@@ -159,13 +164,11 @@ async function hydrate() {
   try {
     const r = await fetch(`${RHEA_CORE}/memories/hydrate`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'X-API-Key': 'dev-key' }, // Use actual key if set
+      headers: { 'Content-Type': 'application/json', 'X-API-Key': config.coreApiKey },
       body: JSON.stringify({ id })
     });
     const res = await r.json();
-    if (res.status === 'ok') {
-      alert(`Armed: ${id}`);
-    }
+    if (res.status === 'ok') alert(`Armed: ${id}`);
   } catch (e) {
     alert('Hydration failed. Is Rhea Core running?');
   }
@@ -175,7 +178,7 @@ async function setStance(mode) {
   try {
     await fetch(`${RHEA_CORE}/modes`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'X-API-Key': 'dev-key' },
+      headers: { 'Content-Type': 'application/json', 'X-API-Key': config.coreApiKey },
       body: JSON.stringify({ mode })
     });
     updateStanceUI(mode);
