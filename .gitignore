@@ -48,3 +48,7 @@ firebase-debug.log
 # local experiments
 docs/experimental/
 team/
+
+alpha2-*.sh
+alpha2-*.py
+rhea-project/docs/*.audit
