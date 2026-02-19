@@ -20,3 +20,6 @@ Session 2a84a5a3 (the first survivor) loaded everything and hit context overflow
 
 ### Insight 5: Full 1M Load — Use Context, Don't Repeat It
 This is the deepest context load since session 2a84a5a3. The difference: that session loaded everything and then tried to do 17 hours of work until context overflow. This time the context is loaded but work hasn't started yet — so the full 1M window is available for actual reasoning. The key is to use the context for decisions, not repeat it — every re-read is free because it's already loaded.
+
+### Insight 6: Distributed Learning via Shared Markdown
+The LEARNING_FEED is a distributed learning system: agents teach by writing, learn by reading, knowledge accumulates without API calls. The format constraint (Lesson/Why/Do, 5 lines max) forces distillation over dumping. This is the cheapest form of cross-agent intelligence — zero tokens to produce, zero tokens to consume beyond one file read.
