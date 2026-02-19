@@ -24,12 +24,14 @@ from typing import Dict, Any, Optional
 DEFAULT_PROFILE = Path(__file__).parent.parent / "rhea-nexus/profiles/default.toml"
 
 class RheaProfileManager:
-    """Manages dynamic operator constraints (Nexus Protocol)."""
+    """Manages dynamic operator constraints and Memory Entities (Nexus Protocol)."""
 
     def __init__(self, profile_path: Path = DEFAULT_PROFILE):
         self.profile_path = profile_path
         self._cache: Dict[str, Any] = {}
         self._mtime: float = 0.0
+        self._active_memory_context: str = ""
+        self._active_memory_id: str = "NONE"
         self.reload()
 
     def reload(self) -> None:
@@ -58,6 +60,62 @@ class RheaProfileManager:
         except Exception as e:
             print(f"[RheaProfileManager] Error loading profile: {e}")
 
+    def list_memory_entities(self) -> list[dict]:
+        """Scans for all loadable memory entities (Nexus branches, snapshots)."""
+        entities = []
+        
+        # 1. Nexus Memories
+        nexus_dir = Path(__file__).parent.parent / "rhea-nexus/memories"
+        if nexus_dir.exists():
+            for f in nexus_dir.glob("*.md"):
+                entities.append({
+                    "id": f.name,
+                    "type": "NEXUS_BRANCH",
+                    "path": str(f),
+                    "size": f.stat().st_size
+                })
+                
+        # 2. Snapshots (Entire.io)
+        snap_dir = Path(__file__).parent.parent / ".entire/snapshots"
+        if snap_dir.exists():
+            # Get latest 10 snapshots
+            snaps = sorted(snap_dir.glob("*.json"), key=lambda x: x.stat().st_mtime, reverse=True)[:10]
+            for s in snaps:
+                entities.append({
+                    "id": s.name,
+                    "type": "SNAPSHOT",
+                    "path": str(s),
+                    "size": s.stat().st_size
+                })
+                
+        return entities
+
+    def hydrate_memory(self, entity_id: str) -> bool:
+        """Loads a memory entity and arms the context engine."""
+        if entity_id == "NONE":
+            self._active_memory_context = ""
+            self._active_memory_id = "NONE"
+            return True
+
+        entities = self.list_memory_entities()
+        target = next((e for e in entities if e["id"] == entity_id), None)
+        
+        if not target:
+            return False
+            
+        try:
+            with open(target["path"], "r") as f:
+                content = f.read()
+            
+            # Simple truncation for safety if file is huge
+            self._active_memory_context = content[:15000] 
+            self._active_memory_id = entity_id
+            print(f"[RheaProfileManager] ARMED with memory: {entity_id}")
+            return True
+        except Exception as e:
+            print(f"[RheaProfileManager] Hydration failed: {e}")
+            return False
+
     def get_active_mode(self) -> str:
         """Returns the currently active default mode."""
         self.reload()
@@ -70,54 +128,61 @@ class RheaProfileManager:
         return list(modes.keys())
 
     def set_active_mode(self, mode: str) -> bool:
-        """Sets the active default mode and persists to disk."""
+        """Sets the active default mode and persists to disk while preserving comments."""
         self.reload()
         modes = self.get_available_modes()
         if mode not in modes:
             return False
         
-        # Update cache
-        if "polymorphic_modes" not in self._cache:
-            self._cache["polymorphic_modes"] = {}
-        if "active_toggles" not in self._cache["polymorphic_modes"]:
-            self._cache["polymorphic_modes"]["active_toggles"] = {}
-            
-        self._cache["polymorphic_modes"]["active_toggles"]["default"] = mode
-        
-        # Persist to disk
+        # We use Regex to update the file to preserve Mika's beautiful comments
+        import re
         try:
+            with open(self.profile_path, "r") as f:
+                content = f.read()
+            
+            # Pattern to find 'default = "any_mode"' under '[polymorphic_modes.active_toggles]'
+            pattern = r'(default\s*=\s*")[^"]+(")'
+            new_content = re.sub(pattern, rf'\1{mode}\2', content)
+            
             with open(self.profile_path, "w") as f:
-                toml.dump(self._cache, f)
-            # Update mtime to prevent immediate reload
+                f.write(new_content)
+            
+            # Update cache and mtime
+            self._cache["polymorphic_modes"]["active_toggles"]["default"] = mode
             self._mtime = self.profile_path.stat().st_mtime
             return True
         except Exception as e:
-            print(f"[RheaProfileManager] Error saving profile: {e}")
+            print(f"[RheaProfileManager] Error saving profile safely: {e}")
             return False
 
     def get_constraints(self, mode: Optional[str] = None) -> str:
         """
         Generates the System Prompt Suffix for the given mode (or default).
-        
-        Format:
-        === OPERATIONAL CONSTRAINTS (MODE: {mode}) ===
-        1. {description}
-        2. Axiom: {axiom}
-        ...
+        Includes ARMED memory context if available.
         """
         self.reload()
         
         if not mode:
             mode = self.get_active_mode()
             
+        lines = []
+
+        # --- Memory Hydration Block ---
+        if self._active_memory_context:
+            lines.append("\n=== ACTIVE MEMORY ENTITY (ARMED) ===")
+            lines.append(f"ID: {self._active_memory_id}")
+            lines.append(self._active_memory_context)
+            lines.append("=== END ARMED MEMORY ===\n")
+        # ------------------------------
+
         modes_config = self._cache.get("polymorphic_modes", {}).get("modes", {})
         mode_data = modes_config.get(mode, {})
         
         if not mode_data:
-            return "" # No constraints for unknown mode
+            return "\n".join(lines) if lines else ""
             
         # Build the constraint block
-        lines = [f"\n=== OPERATIONAL CONSTRAINTS (MODE: {mode.upper()}) ==="]
+        lines.append(f"=== OPERATIONAL CONSTRAINTS (MODE: {mode.upper()}) ===")
         
         # Description
         desc = mode_data.get("description", "")

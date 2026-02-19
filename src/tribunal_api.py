@@ -145,6 +145,9 @@ class TribunalICERequest(BaseModel):
 class SetModeRequest(BaseModel):
     mode: str = Field(..., description="The mode to set as default (e.g. operator_first, loop_killer)")
 
+class HydrateMemoryRequest(BaseModel):
+    id: str = Field(..., description="The ID of the memory entity to load (e.g. ORION.md)")
+
 
 class ModelInfo(BaseModel):
     model: str
@@ -245,6 +248,19 @@ async def get_modes():
         "active": profile_manager.get_active_mode(),
         "available": profile_manager.get_available_modes(),
     }
+
+@app.get("/memories")
+async def get_memories():
+    """List available memory entities (Nexus branches, snapshots)."""
+    return profile_manager.list_memory_entities()
+
+@app.post("/memories/hydrate", dependencies=[Depends(verify_api_key)])
+async def hydrate_memory(req: HydrateMemoryRequest):
+    """Arm the system with a specific memory entity."""
+    if profile_manager.hydrate_memory(req.id):
+        return {"status": "ok", "armed_with": req.id}
+    else:
+        raise HTTPException(status_code=400, detail=f"Memory entity not found: {req.id}")
 
 @app.post("/modes", dependencies=[Depends(verify_api_key)])
 async def set_mode(req: SetModeRequest):
