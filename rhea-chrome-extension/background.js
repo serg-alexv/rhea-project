@@ -23,7 +23,41 @@ chrome.runtime.onMessage.addListener(async (msg, sender) => {
   }
 });
 
-// 2. Periodic heartbeat (every 2 min)
+// 2. Command Polling Loop (The Hands)
+async function pollCommands() {
+  try {
+    const r = await fetch(`${RHEA_CORE}/actuator/command`);
+    const cmd = await r.json();
+    
+    if (cmd.status === "empty") return;
+    
+    console.log("[Rhea-VAL] Received command:", cmd);
+    
+    // Find active tab
+    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    if (!tab) return;
+
+    // Send to content script
+    const result = await chrome.tabs.sendMessage(tab.id, { type: "ACTUATE", command: cmd });
+    
+    // Report receipt
+    await fetch(`${RHEA_CORE}/actuator/receipt`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-API-Key': 'dev-key' },
+      body: JSON.stringify({
+        command_id: cmd.id,
+        status: result.status,
+        error: result.error
+      })
+    });
+  } catch (e) {
+    // Silence polling errors to avoid log spam
+  }
+}
+
+setInterval(pollCommands, 1000);
+
+// 3. Periodic heartbeat (every 2 min)
 chrome.alarms.create('rhea-heartbeat', { periodInMinutes: 2 });
 
 chrome.alarms.onAlarm.addListener(async (alarm) => {

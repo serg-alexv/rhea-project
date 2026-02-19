@@ -55,6 +55,8 @@ app.add_middleware(
 # Singleton bridge + analyzer
 _bridge = None
 _analyzer = None
+_command_queue: list[dict] = []
+_receipts: dict[str, dict] = {}
 
 
 def get_bridge() -> RheaBridge:
@@ -153,6 +155,17 @@ class HydrateMemoryRequest(BaseModel):
 class VisualSyncRequest(BaseModel):
     tab_id: int
     state: dict
+
+class ActuatorCommand(BaseModel):
+    action: str # CLICK, TYPE, SCROLL
+    elementId: Optional[int] = None
+    text: Optional[str] = None
+    tab_id: Optional[int] = None
+
+class ActuatorReceipt(BaseModel):
+    command_id: str
+    status: str
+    error: Optional[str] = None
 
 
 class ModelInfo(BaseModel):
@@ -273,6 +286,30 @@ async def actuator_sync(req: VisualSyncRequest):
     """Receive visual state from the browser extension."""
     update_state(req.state)
     print(f"[Actuator] Sync from Tab {req.tab_id}: {req.state['url']}")
+    return {"status": "ok"}
+
+@app.post("/actuator/command", dependencies=[Depends(verify_api_key)])
+async def actuator_command(req: ActuatorCommand):
+    """Queue a command for the browser extension to execute."""
+    command_id = str(uuid.uuid4())[:8]
+    cmd = req.dict()
+    cmd["id"] = command_id
+    _command_queue.append(cmd)
+    print(f"[Actuator] Queued Command {command_id}: {req.action}")
+    return {"status": "ok", "command_id": command_id}
+
+@app.get("/actuator/command")
+async def actuator_get_command():
+    """Extension polls this to get the next command."""
+    if not _command_queue:
+        return {"status": "empty"}
+    return _command_queue.pop(0)
+
+@app.post("/actuator/receipt")
+async def actuator_receipt(req: ActuatorReceipt):
+    """Extension reports the result of a command."""
+    _receipts[req.command_id] = req.dict()
+    print(f"[Actuator] Receipt for {req.command_id}: {req.status}")
     return {"status": "ok"}
 
 @app.post("/modes", dependencies=[Depends(verify_api_key)])
