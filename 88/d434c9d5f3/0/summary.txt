@@ -1,0 +1,28 @@
+Full audit complete. Here's the summary:
+
+---
+
+**Audit report:** `REDACTED.md`
+
+### Headlines
+
+- **300+ files** across 15+ directories
+- **Original backlog: 19/19 DONE** — all shipped
+- **31 undone tasks** found scattered across 8+ source files
+- **12 stale memory files** (oldest: 7 days)
+- **9 orphan/duplicate file issues** at repo root
+- **0/12 iOS MVP issues** started
+- **Genome evidence ARRIVED** — tribunal can proceed
+- **2 new ADRs (015, 016)** not synced to main decisions.md
+- **5 active agents** (Rex, B2, ORION, HYPERION, GPT)
+- **4 new src/ modules** built since last memory snapshot
+
+### The Biggest Finding
+
+The project did a **full pivot** between 2026-02-16 and 2026-02-19 — from "fix foundations" to "Neural Weave + Genetics" — but the memory system didn't follow. Any new session booting from memory-core would think it's still Feb 16 with 19 undone backlog items.
+
+`★ Insight ─────────────────────────────────────`
+The original backlog is 100% done. That's a real achievement. But the project grew faster than its bookkeeping. ORION and HYPERION brought new workstreams (Nexus, Chrome extension, genetics, adversarial audit) that created tasks in new files without retiring old tracking. The result: 31 undone tasks that no single file knows about. The audit report is now the canonical "what's really undone" reference until TODO_MAIN.md is updated to absorb everything.
+`─────────────────────────────────────────────────`
+
+Ready to discuss priorities or start fixing the stale files. What's your call?

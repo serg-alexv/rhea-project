@@ -1,0 +1,25 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "88d434c9d5f3",
+  "session_id": "776e45e3-e3cf-4439-b48b-57cd241ea338",
+  "strategy": "auto-commit",
+  "created_at": "2026-02-19T22:38:41.969393Z",
+  "branch": "hyperion/memory",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "ops/virtual-office/outbox/REX_FULL_PROJECT_AUDIT_20260220.md",
+    "ops/virtual-office/outbox/REX_INSIGHTS.md",
+    "ops/virtual-office/shared/LEARNING_FEED.md"
+  ],
+  "agent": "Claude Code",
+  "transcript_identifier_at_start": "f1ee2fe9-29af-44e4-9590-c13f42b2061c",
+  "checkpoint_transcript_start": 269,
+  "transcript_lines_at_start": 269,
+  "token_usage": {
+    "input_tokens": 12,
+    "cache_creation_tokens": 36175,
+    "cache_read_tokens": 1331257,
+    "output_tokens": 8864,
+    "api_call_count": 10
+  }
+}
