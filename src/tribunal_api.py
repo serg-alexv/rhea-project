@@ -20,6 +20,7 @@ import time
 import json
 import hashlib
 import secrets
+import uuid
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional
@@ -428,6 +429,9 @@ async def startup():
 
 if __name__ == "__main__":
     import uvicorn
+    import logging
+    # Suppress verbose logging
+    logging.getLogger("uvicorn.access").setLevel(logging.WARNING)
     port = int(os.environ.get("TRIBUNAL_PORT", "8400"))
-    print(f"Starting Rhea Tribunal API on port {port}")
-    uvicorn.run(app, host="0.0.0.0", port=port)
+    # Run silently
+    uvicorn.run(app, host="0.0.0.0", port=port, log_level="warning")
