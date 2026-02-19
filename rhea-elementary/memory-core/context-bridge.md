@@ -1,6 +1,6 @@
 # Nexus State Export
-Generated UTC: 2026-02-19T23:12:16Z
-STATE_HASH = 0cbf2254d803e295a2649d82e066365ee48ea15aec772cf8337e200e67a11a1a
+Generated UTC: 2026-02-19T23:22:52Z
+STATE_HASH = bb19ba8967d9a132bacb53d00f210176875d57af31c64a9ff28cb20d72a9b69e
 === PAYLOAD ===
 ## 1) INVARIANTS
 - Every agent writes to inbox/, only LEAD reads and routes
@@ -184,8 +184,6 @@ STATE_HASH = 0cbf2254d803e295a2649d82e066365ee48ea15aec772cf8337e200e67a11a1a
 ```
 
 ## 4) RECENT SIGNALS
-- `{"actor":"R1","event_hash":"7a54641de7dda08553d0a3472562ea552b012b0f309e4dee5159011171447544","event_type":"race","payload":{"i":383},"prev_hash":"ef5a7ea14075fd1ca5b091c03de4ed483dd9e55ceea220c7dc8f59f4b0df81fa","timestamp":"2026-02-19T14:30:35.010318+00:00"}`
-- `{"actor":"R6","event_hash":"68da677d43a6c4b7ffc0b76ed129c805c2ab10d0c6608ed07e5a0682ead63196","event_type":"race","payload":{"i":380},"prev_hash":"7a54641de7dda08553d0a3472562ea552b012b0f309e4dee5159011171447544","timestamp":"2026-02-19T14:30:35.011079+00:00"}`
 - `{"actor":"R2","event_hash":"c1cdcfd368b8c05950e3b0e1cacf67f30ef19b9993dc02c0de4f950a7cf40492","event_type":"race","payload":{"i":378},"prev_hash":"68da677d43a6c4b7ffc0b76ed129c805c2ab10d0c6608ed07e5a0682ead63196","timestamp":"2026-02-19T14:30:35.011819+00:00"}`
 - `{"actor":"R3","event_hash":"55159560e64e11258947c0f78246650929277b109369c0ab788fcbe83717efb5","event_type":"race","payload":{"i":379},"prev_hash":"c1cdcfd368b8c05950e3b0e1cacf67f30ef19b9993dc02c0de4f950a7cf40492","timestamp":"2026-02-19T14:30:35.012555+00:00"}`
 - `{"actor":"R5","event_hash":"8075be25028dfc165c23e72f27b63c1fa99877a552ffbd1d875f31c7eb446611","event_type":"race","payload":{"i":378},"prev_hash":"55159560e64e11258947c0f78246650929277b109369c0ab788fcbe83717efb5","timestamp":"2026-02-19T14:30:35.013269+00:00"}`
@@ -384,6 +382,8 @@ STATE_HASH = 0cbf2254d803e295a2649d82e066365ee48ea15aec772cf8337e200e67a11a1a
 - `{"actor":"REX","event_hash":"5ef9d7ab547ae6b58b03f16b80c14959c03cad9a9e94b07c1294d4c3d96071b7","event_type":"boot.complete","payload":{"last_seq":0,"lease_token":1,"msgs":0},"prev_hash":"8ecd163e10db8b29ed787f4d411b0e033dbf51447bb52ed0397e856a680aa806","timestamp":"2026-02-19T22:24:29.701736+00:00"}`
 - `{"actor":"GPT","event_hash":"03940c71df1d6b14b934e49754e90a4cb0ef2e945c4d159987751f4cdcf1d358","event_type":"relay.enqueue","payload":{"msg_id":"19c78014ece-e14e43afdf4947eca137","seq":80,"target":"REX"},"prev_hash":"5ef9d7ab547ae6b58b03f16b80c14959c03cad9a9e94b07c1294d4c3d96071b7","timestamp":"2026-02-19T22:24:37.584064+00:00"}`
 - `{"actor":"GPT","event_hash":"c5187671f4091abb6ee8a2ef362ae4d08b5523aaab0130ece1e2c746dee8d563","event_type":"relay.enqueue","payload":{"msg_id":"19c7802a45e-42caca070d59448f8075","seq":81,"target":"LEAD"},"prev_hash":"03940c71df1d6b14b934e49754e90a4cb0ef2e945c4d159987751f4cdcf1d358","timestamp":"2026-02-19T22:26:05.023803+00:00"}`
+- `{"actor":"GPT","event_hash":"82a3dd9fa829d4ab13fbc9d7dd2d573e6f303dbae665690712e655b7c9176e0a","event_type":"relay.enqueue","payload":{"msg_id":"19c78316dbc-9999aff26fca4b148b5f","seq":82,"target":"LEAD"},"prev_hash":"c5187671f4091abb6ee8a2ef362ae4d08b5523aaab0130ece1e2c746dee8d563","timestamp":"2026-02-19T23:17:11.231344+00:00"}`
+- `{"actor":"GPT","event_hash":"c9f6db311bb70ee3c30c530e36cd6688dd6b9e51153bdbc162abd83f5340cb45","event_type":"relay.enqueue","payload":{"msg_id":"19c78316e4f-a23db1e991d04cdd8f39","seq":83,"target":"REX"},"prev_hash":"82a3dd9fa829d4ab13fbc9d7dd2d573e6f303dbae665690712e655b7c9176e0a","timestamp":"2026-02-19T23:17:11.376465+00:00"}`
 
 ## 5) CHECKLIST
 - Verify stop sentinel path exists and is monitored.

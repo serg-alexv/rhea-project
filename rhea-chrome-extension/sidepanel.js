@@ -113,6 +113,18 @@ function log(msg) {
   feed.prepend(entry);
 }
 
+// 2-Hour Hygiene Timer (The Clean Slate Protocol)
+function cleanSlate() {
+  const feed = document.getElementById('feed');
+  if (feed) {
+    feed.innerHTML = `<b>[${new Date().toLocaleTimeString()}]</b> 💠 CONTEXT PURGE COMPLETE. Slate is clean.`;
+    log("Reminder: Node-01, run 'clear' in your terminal to maintain zero-drift focus.");
+  }
+}
+
+// Set interval for 2 hours (2 * 60 * 60 * 1000)
+setInterval(cleanSlate, 7200000);
+
 chrome.runtime.onMessage.addListener((msg) => {
   if (msg.type === "VISUAL_PULSE") {
     log(`Synced: ${msg.data.url}`);
