@@ -33,6 +33,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 from rhea_bridge import RheaBridge
 from consensus_analyzer import ConsensusAnalyzer
 from rhea_profile_manager import profile_manager
+from rhea_visual_context import update_state
 
 # ---------------------------------------------------------------------------
 # App setup
@@ -54,7 +55,6 @@ app.add_middleware(
 # Singleton bridge + analyzer
 _bridge = None
 _analyzer = None
-_last_visual_state: dict = {}
 
 
 def get_bridge() -> RheaBridge:
@@ -271,8 +271,7 @@ async def hydrate_memory(req: HydrateMemoryRequest):
 @app.post("/actuator/sync", dependencies=[Depends(verify_api_key)])
 async def actuator_sync(req: VisualSyncRequest):
     """Receive visual state from the browser extension."""
-    global _last_visual_state
-    _last_visual_state = req.state
+    update_state(req.state)
     print(f"[Actuator] Sync from Tab {req.tab_id}: {req.state['url']}")
     return {"status": "ok"}
 
