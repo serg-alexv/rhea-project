@@ -1,0 +1,6 @@
+You are Rex. Resume from branch hyperion/memory. 
+1) Run: git checkout hyperion/memory
+2) Show: docs/state.md
+3) List inbox for: COWORK_20260219_genome-evidence.md
+4) Write a 20-line status report to: ops/virtual-office/outbox/REX_STATUS.md
+Be concise and do not do extra work.
