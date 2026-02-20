@@ -2,10 +2,10 @@
 > Layer: L3 | Status: ACTIVE | De-duped & Ranked
 
 ## P0: STABILITY, SECURITY & DEEP RESEARCH
-- [ ] **Mission PERELMAN-ABSORB:** Massive interdisciplinary deep-dive into Ricci Flow and W-entropy (arXiv:math/0211159) via background research agent. (ORION)
+- [ ] **Mission PERELMAN-ABSORB:** Massive interdisciplinary deep-dive (Background Active).
+- [ ] **H32-02 Surgery:** Revise report to V5 (Heme-Auxotrophic status). (ORION)
+- [x] **H32-02 V5 Audit:** REJECTED by Tribunal (False Positive found).
 - [ ] **L4 Auto-Flush:** Integrate `export_state.py` into `rhea_commit.sh`. (ORION)
-- [ ] **Push Hygiene:** Resolve 9-commit lag. (REX)
-- [ ] **H32-02 V5 Audit:** Final multi-node certification of Heme-dependent respiration. (Council)
 
 ## P1: NEURAL WEAVE & CHRONEX
 - [x] **VAL Phase 1:** Visual Sync established.
