@@ -8,8 +8,12 @@ The DRP is an asynchronous cognitive loop that operates in the background to pro
 ## 2. THE PERELMAN LOOP (Smoothing Logic)
 The DRP utilizes Ricci Flow mathematics to manage the "Semantic Manifold" of ingested data:
 1.  **SEMANTIC EXPANSION (The Rosetta Step):** Before ingestion, translate key terms into 3+ **Completely Boundaried Cultural Segments** (e.g., Classical Chinese, Mayan, Vedic, Forager baselines). 
-    *   *Purpose:* Identify universal invariants and exploit the bridge's multi-cultural latent space.
-2.  **INGESTION:** Crawl arXiv, PubMed, and technical corpuses using the expanded semantic core.
+2.  **CULTURAL CENTROID ROUTING (The ITO Step):** Explicitly query models from specific cultural centroids:
+    *   **Vector CN:** DeepSeek-R1 (Chinese Logical Structures).
+    *   **Vector AR:** Jais (Arabic Ontological Relationality).
+    *   **Vector Western:** GPT-5/Claude-4 (Scientific Baseline).
+    *   *Purpose:* Identify the **Semantic Interference Pattern**—the "invisible" truths hidden in the gaps between cultural perceptions. Make the "invisible" ALL-OBVIOUS.
+3.  **INGESTION:** Crawl arXiv, PubMed, and technical corpuses using the expanded semantic core.
 3.  **CURVATURE AUDIT:** Identify "Singularities" (contradictions or bottlenecks).
 3.  **MANIFOLD SURGERY:** If a contradiction is found, perform a "Cut and Stitch" — branch the reasoning and cross-verify with a Tribunal.
 4.  **MONOTONIC CONSOLIDATION:** Use the W-entropy functional to ensure the resulting report is "Smoother" (higher density, lower noise) than the raw input.
