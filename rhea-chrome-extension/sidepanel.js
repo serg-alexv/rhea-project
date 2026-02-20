@@ -3,7 +3,7 @@ const RHEA_CORE = 'http://localhost:8400';
 
 async function getApiKey() {
   const stored = await chrome.storage.local.get(['coreApiKey']);
-  return stored.coreApiKey || 'dev-key';
+  return stored.coreApiKey || 'dev-6670c86b4258fbdec51af80d14ed1898';
 }
 
 async function updateMRI() {

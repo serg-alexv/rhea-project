@@ -1,0 +1,52 @@
+Memory Source Adapter Spec v1
+
+Purpose
+- Add new memory sources without bypassing GitHub/Firebase fundamentals.
+- Keep ingestion deterministic, auditable, and replay-safe.
+
+Required Envelope
+- source_id: stable adapter identifier
+- event_type: typed operation name
+- version: schema version integer
+- timestamp_utc: ISO-8601 UTC time
+- trace_id: correlation id across events
+- idempotency_key: deterministic dedup key
+- origin_ref: source path/url/document id
+- content_hash: sha256 of canonical content
+- collector: actor/tool that ingested the item
+- trust_class: fact | claim | hypothesis
+- retention_ttl_s: retention in seconds (or null for durable)
+
+Rules
+- No direct promotion from raw source into durable truth.
+- Every record must carry provenance and hash.
+- Cross-domain recall is deny-by-default unless policy allows it.
+- Unknown schema fields are preserved but never trusted by default.
+- Replays must be deterministic: same input -> same idempotency_key.
+
+State Flow
+- INGESTED -> NORMALIZED -> VERIFIED -> PROMOTED
+- On verification failure: QUARANTINED with reason code.
+
+Verification Gates
+- Schema valid for version
+- Provenance fields present
+- Hash matches canonical payload
+- Policy check passed for trust_class and domain
+- Duplicate check passed by idempotency_key
+
+Rollout
+1) Shadow mode: ingest + log only (no promotion)
+2) Replay test: verify deterministic rebuild + dedup
+3) Controlled promotion: enable Verified -> Promoted
+
+Storage Mapping
+- Firebase: transport/state fan-out, leases, acks, live coordination
+- GitHub: durable artifacts, diff history, rollback, human audit
+
+Success Metrics
+- duplicate_drop_rate
+- verification_fail_rate
+- missing_provenance_rate
+- replay_match_rate
+- promotion_latency_ms

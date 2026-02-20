@@ -6,7 +6,7 @@ chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true })
 
 async function getApiKey() {
   const stored = await chrome.storage.local.get(['coreApiKey']);
-  return stored.coreApiKey || 'dev-key';
+  return stored.coreApiKey || 'dev-6670c86b4258fbdec51af80d14ed1898';
 }
 
 // 1. Visual Actuator Relay
@@ -37,9 +37,22 @@ async function pollCommands() {
     
     if (cmd.status === "empty" || cmd.detail) return;
     
+    console.log("[Rhea-VAL] Received command:", cmd);
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
     if (!tab) return;
 
+    // A. Handle Navigation
+    if (cmd.action === "NAVIGATE") {
+      await chrome.tabs.update(tab.id, { url: cmd.text });
+      await fetch(`${RHEA_CORE}/actuator/receipt`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-API-Key': apiKey },
+        body: JSON.stringify({ command_id: cmd.id, status: "SUCCESS" })
+      });
+      return;
+    }
+
+    // B. Handle DOM Actions
     const result = await chrome.tabs.sendMessage(tab.id, { type: "ACTUATE", command: cmd });
     
     await fetch(`${RHEA_CORE}/actuator/receipt`, {
