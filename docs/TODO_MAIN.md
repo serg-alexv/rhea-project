@@ -20,3 +20,8 @@
 
 ## P3: COMMUNITY
 - [ ] **Dextran Launch:** Document H32-02 probiotic potential for food-biotech community.
+
+## P4: HABITAT (ADHD-First UI)
+- [x] **Terminal Stealth:** Silence all agent debug panels.
+- [ ] **iOS Sensor Bridge:** Initialize HealthKit adapter skeleton. (REX)
+- [ ] **Obsidian Graph:** Map 100% of the manifold connections.
