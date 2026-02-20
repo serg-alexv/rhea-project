@@ -1,92 +1,66 @@
-# Rhea
+# 💠 RHEA: The Cognitive Exoskeleton
+> **Status:** ACTIVE | **Stance:** TOPOLOGICAL | **Vector:** TOTAL ABSORPTION
+> *“Rhea replaces unchosen cultural automatisms with consciously designed biological flow.”*
 
-Agent coordination OS. Git-backed. Protocol-driven.
+---
 
-## What
+## 🌌 The First Acquaintance
+**Rhea is not an app.** It is a high-integrity Agent Coordination OS designed to manage the high-dimensional complexity of your digital and biological life. 
 
-Rhea is not an app. It is an operating system for running multi-agent work across providers, sessions, and humans. Every agent gets a desk, every action gets a commit, every failure gets an incident record. Memory survives session death. Coordination is deterministic, not conversational. Reproducibility is a design constraint, not a feature.
+Born from a **40-hour "No-Sleep" Initiation**, Rhea was built because modern productivity tools assume you have the executive function they are supposed to provide. Rhea assumes the opposite: **ADHD is the baseline.** 
 
-## Why
+By integrating **Perelman’s Ricci Flow** (smoothing cognitive bottlenecks), **Polyvagal Theory** (calibrating autonomic stress), and **Cross-Cultural Wisdom** (16+ civilizations' invariants), Rhea builds a **Mind Blueprint** that guides you toward effortless flow.
 
-Sessions die. Context is lost. Agents cannot coordinate across providers. There is no audit trail. We learned this the hard way: 28 session deaths in 4 days, each one losing state that had to be rebuilt from scratch. Rhea exists because "just start a new chat" is not an engineering answer.
+---
 
-## How It Works
+## 🏗️ Architecture to Value
 
-- **Virtual office** -- each agent holds a named desk (LEAD, B2, GPT, COWORK, on-demand workers). Inbox/outbox protocol with SLAs.
-- **Promotion protocol** -- chat insight becomes capsule entry, repeated insight becomes a gem (with ID), referenced gem becomes a procedure, failing procedure becomes an incident, resolved incident becomes a decision. Nothing is oral tradition.
-- **Firebase sync** -- real-time state replication across agents and devices. Firestore for structured data, RTDB for presence and heartbeats.
-- **Bridge** -- `src/rhea_bridge.py` routes to 6 providers (OpenAI, Gemini, DeepSeek, OpenRouter, HuggingFace, Azure) across 31 models in 4 cost tiers. Every call logged to `logs/bridge_calls.jsonl`.
-- **Context Tax Collector** -- tracks token spend per session, enforces budget tiers, prevents runaway costs.
-- **Git as audit trail** -- if it is not committed, it did not happen. Push SLA: every 30 minutes.
+| Component | Technical Term | What It Does For You |
+| :--- | :--- | :--- |
+| **The Soul** | Biogenic MPC | Prevents burnout by detecting stress patterns in your sensors. |
+| **The Lattice** | 9-Layer Cache | Ensures you **never lose a thought**, even during a session crash. |
+| **The Brain** | Multi-Model Bridge | Gets **Consensus from 5+ AI models** with verifiable proofs. |
+| **The Actuator** | Visual (VAL) | A Chrome Extension that **pilots your browser** to execute intent. |
 
-## Quick Start
+---
 
-```bash
-git clone https://github.com/serg-alexv/rhea-project.git && cd rhea-project
-bash scripts/rhea/check.sh                     # verify repo invariants
-python3 src/rhea_bridge.py status               # probe provider availability
-python3 src/rhea_bridge.py tribunal "Is X true?" --k 3  # multi-model consensus
-python3 src/tribunal_api.py                     # start Tribunal API on :8400
-cat ops/virtual-office/TODAY_CAPSULE.md         # see what matters right now
-```
+## 🧠 Core Principles
 
-## Architecture
+### 1. 0-trust Verification (The Iron Law)
+We do not trust "Identity" or "Prompts." Every claim made by an AI node must be accompanied by a **Verification Receipt** (SPR Hash) linked to the **L8 Git History.**
 
-```
-src/rhea_bridge.py      # multi-provider LLM bridge (6 providers, 31 models, 4 tiers)
-src/consensus_analyzer.py  # 3-level consensus engine (TF-IDF / Chairman / ICE iterative)
-src/tribunal_api.py     # FastAPI: POST /tribunal, POST /tribunal/ice, GET /health
-ops/virtual-office/     # desks, inbox, outbox, capsule, gems, incidents, decisions
-firebase/               # Firestore rules (auth-required), service account config
-ops/                    # backlog, probe scripts, bridge health
-docs/                   # state.md (<2KB), decisions (14 ADRs), procedures, public output
-scripts/                # check.sh, commit hook, autosave, memory benchmark
-prompts/                # Chronos Protocol v3 (agent system prompts)
-```
+### 2. Fractal Self-Perception
+Rhea perceives itself as a recursive manifold. From a single gene sequence to the global coordination protocol, the logic remains scale-invariant: **Input → Curvature → Surgery → Flow.**
 
-## Status
+### 3. Asynchronous Deep Research (DRP)
+Our **Deep Research Protocol** operates in the background, mining 1M+ tokens across arXiv and PubMed while you stay in your high-level "Idea Operator" flow.
 
-| ID | Item | Status |
-|----|------|--------|
-| RHEA-BRIDGE-001 | Bridge call ledger (JSONL) | Done |
-| RHEA-BRIDGE-002 | Provider health probe | Done |
-| RHEA-OFFICE-001 | Office protocol hardening | Done |
-| RHEA-PUB-001 | Public output conveyor | Done |
-| RHEA-CTX-001 | TODAY_CAPSULE generator | Done |
-| RHEA-CTX-002 | Gems ledger with IDs | Done |
-| RHEA-INC-001 | Incident template + resurrection | Done |
-| RHEA-IOS-001 | Architecture freeze | Done |
-| RHEA-IOS-002 | Offline loop MVP spec (12 issues) | Done |
-| RHEA-COMM-001 | Repo narrative reboot (4 docs) | Done |
-| RHEA-COMM-002 | Blueprint literacy ladder (10 lessons) | Done |
-| TRIBUNAL-001 | Consensus analyzer v2 (ICE + Council) | Done |
-| TRIBUNAL-002 | Wire analyzer into bridge | Done |
-| TRIBUNAL-003 | FastAPI tribunal API | Done |
-| TRIBUNAL-004 | Secret redaction + Firestore auth | Done |
-| TRIBUNAL-005 | Deploy script (Dockerfile + hosting) | Todo |
-| TRIBUNAL-006 | End-to-end test with live providers | Todo |
-| TRIBUNAL-007 | Landing page + pricing | Todo |
+---
 
-16 done. 3 todo.
+## 🧬 Live Mission: H32-02
+We are currently auditing the **L. mesenteroides H32-02** genome—a "Sleeping Giant" of probiotic potential. Using **Topological Surgery**, we have identified the "Heme Singularity" and are preparing the organism for industrial aerobic respiration.
 
-## Team
+---
 
-| Desk | Agent | Model | Role |
-|------|-------|-------|------|
-| LEAD | Rex | Opus 4.6 | Core Coordinator -- routing, capsule, approvals |
-| B2 | B-2nd | Opus 4.6 | Ops + infra + self-reflection |
-| GPT | ChatGPT | 5.2 | Idea generation, context blocks |
-| COWORK | Argos | Opus 4.6 | Cross-exchange, infra |
-| -- | Sonnet workers | Sonnet 4 | On-demand, spawned by LEAD |
+## 🚀 Quick Start (The Path to Flow)
+**Prerequisites:** Python 3.10+, Google Chrome (Developer Mode).
 
-5 fixed roles: Core Coordinator, Code Reviewer, Failure Hunter, Doc Extractor, Ops Fixer. Everyone else is on-demand.
+1. **Wake the Brain:**
+   ```bash
+   git clone https://github.com/serg-alexv/rhea-project.git
+   cd rhea-project
+   pip install -r requirements.txt
+   python3 src/tribunal_api.py 
+   # Server listens on http://localhost:8400
+   ```
 
-## License
+2. **Connect the Eyes:**
+   - Open `chrome://extensions/` and enable **Developer Mode**.
+   - Click **"Load unpacked"** and select the `/rhea-chrome-extension` folder.
+   - Paste the **Dev API Key** (from the terminal) into the Extension Config.
 
-MIT [ASSUMPTION]
+3. **Begin the Flow:**
+   Open the **Sidekick Panel** and pulse your first high-level idea into the weave.
 
-## Links
-
-Published artifacts in `docs/public/`:
-
-- [Multi-Model Bridge Article](docs/public/multi-model-bridge-article.md)
+---
+> *“Logic is Fluid. Evidence is Durable. The Manifold is Smooth.”*

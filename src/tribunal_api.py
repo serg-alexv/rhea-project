@@ -20,6 +20,7 @@ import time
 import json
 import hashlib
 import secrets
+import uuid
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional
@@ -32,6 +33,8 @@ from pydantic import BaseModel, Field
 sys.path.insert(0, str(Path(__file__).parent))
 from rhea_bridge import RheaBridge
 from consensus_analyzer import ConsensusAnalyzer
+from rhea_profile_manager import profile_manager
+from rhea_visual_context import update_state, get_health_history
 
 # ---------------------------------------------------------------------------
 # App setup
@@ -53,6 +56,8 @@ app.add_middleware(
 # Singleton bridge + analyzer
 _bridge = None
 _analyzer = None
+_command_queue: list[dict] = []
+_receipts: dict[str, dict] = {}
 
 
 def get_bridge() -> RheaBridge:
@@ -86,7 +91,8 @@ if not TRIBUNAL_API_KEYS:
 
 async def verify_api_key(x_api_key: str = Header(None, alias="X-API-Key")):
     if not TRIBUNAL_API_KEYS:
-        return  # no keys configured = open access
+        # FAIL-CLOSED: No keys configured means no one gets in.
+        raise HTTPException(status_code=401, detail="API is locked: No keys configured in TRIBUNAL_API_KEYS")
     if not x_api_key or x_api_key not in TRIBUNAL_API_KEYS:
         raise HTTPException(status_code=401, detail="Invalid or missing API key")
 
@@ -140,6 +146,27 @@ class TribunalICERequest(BaseModel):
     rounds: int = Field(default=2, ge=1, le=5, description="Max critique rounds (1-5, optimal: 2-3)")
     tier: str = Field(default="cheap", description="Cost tier for queries + critiques")
     chairman_tier: str = Field(default="balanced", description="Cost tier for final chairman synthesis")
+
+class SetModeRequest(BaseModel):
+    mode: str = Field(..., description="The mode to set as default (e.g. operator_first, loop_killer)")
+
+class HydrateMemoryRequest(BaseModel):
+    id: str = Field(..., description="The ID of the memory entity to load (e.g. ORION.md)")
+
+class VisualSyncRequest(BaseModel):
+    tab_id: int
+    state: dict
+
+class ActuatorCommand(BaseModel):
+    action: str # CLICK, TYPE, SCROLL
+    elementId: Optional[int] = None
+    text: Optional[str] = None
+    tab_id: Optional[int] = None
+
+class ActuatorReceipt(BaseModel):
+    command_id: str
+    status: str
+    error: Optional[str] = None
 
 
 class ModelInfo(BaseModel):
@@ -225,6 +252,7 @@ async def health():
         "providers_total": status["summary"]["total_providers"],
         "total_models": status["summary"]["total_models"],
         "analyzer_version": "v2-ice-council",
+        "profile_mode": profile_manager.get_active_mode(),
     }
 
 
@@ -233,6 +261,70 @@ async def models():
     bridge = get_bridge()
     return bridge.models_status()
 
+@app.get("/modes")
+async def get_modes():
+    """Get active and available cognitive stance modes."""
+    return {
+        "active": profile_manager.get_active_mode(),
+        "available": profile_manager.get_available_modes(),
+    }
+
+@app.get("/memories")
+async def get_memories():
+    """List available memory entities (Nexus branches, snapshots)."""
+    return profile_manager.list_memory_entities()
+
+@app.post("/memories/hydrate", dependencies=[Depends(verify_api_key)])
+async def hydrate_memory(req: HydrateMemoryRequest):
+    """Arm the system with a specific memory entity."""
+    if profile_manager.hydrate_memory(req.id):
+        return {"status": "ok", "armed_with": req.id}
+    else:
+        raise HTTPException(status_code=400, detail=f"Memory entity not found: {req.id}")
+
+@app.post("/actuator/sync", dependencies=[Depends(verify_api_key)])
+async def actuator_sync(req: VisualSyncRequest):
+    """Receive visual state from the browser extension."""
+    update_state(req.state)
+    print(f"[Actuator] Sync from Tab {req.tab_id}: {req.state['url']}")
+    return {"status": "ok"}
+
+@app.get("/actuator/health")
+async def actuator_health():
+    """Returns historical health pulses for the MRI heatmap."""
+    return get_health_history()
+
+@app.post("/actuator/command", dependencies=[Depends(verify_api_key)])
+async def actuator_command(req: ActuatorCommand):
+    """Queue a command for the browser extension to execute."""
+    command_id = str(uuid.uuid4())[:8]
+    cmd = req.dict()
+    cmd["id"] = command_id
+    _command_queue.append(cmd)
+    print(f"[Actuator] Queued Command {command_id}: {req.action}")
+    return {"status": "ok", "command_id": command_id}
+
+@app.get("/actuator/command")
+async def actuator_get_command():
+    """Extension polls this to get the next command."""
+    if not _command_queue:
+        return {"status": "empty"}
+    return _command_queue.pop(0)
+
+@app.post("/actuator/receipt")
+async def actuator_receipt(req: ActuatorReceipt):
+    """Extension reports the result of a command."""
+    _receipts[req.command_id] = req.dict()
+    print(f"[Actuator] Receipt for {req.command_id}: {req.status}")
+    return {"status": "ok"}
+
+@app.post("/modes", dependencies=[Depends(verify_api_key)])
+async def set_mode(req: SetModeRequest):
+    """Set the active cognitive stance mode (Hot Swap)."""
+    if profile_manager.set_active_mode(req.mode):
+        return {"status": "ok", "active": req.mode}
+    else:
+        raise HTTPException(status_code=400, detail=f"Invalid mode: {req.mode}")
 
 @app.post("/tribunal", response_model=TribunalResponse, dependencies=[Depends(verify_api_key), Depends(check_rate_limit)])
 async def tribunal(req: TribunalRequest):
@@ -337,6 +429,9 @@ async def startup():
 
 if __name__ == "__main__":
     import uvicorn
+    import logging
+    # Suppress verbose logging
+    logging.getLogger("uvicorn.access").setLevel(logging.WARNING)
     port = int(os.environ.get("TRIBUNAL_PORT", "8400"))
-    print(f"Starting Rhea Tribunal API on port {port}")
-    uvicorn.run(app, host="0.0.0.0", port=port)
+    # Run silently
+    uvicorn.run(app, host="0.0.0.0", port=port, log_level="warning")
