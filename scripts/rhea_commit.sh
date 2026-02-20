@@ -51,6 +51,18 @@ else
     SESSION_STARTED=false
 fi
 
+# Step 1.5: L4 Auto-Flush (Context Cache Coherency)
+# Generate fresh L4 bridge from virtual office state before commit
+L4_BRIDGE="rhea-elementary/memory-core/context-bridge.md"
+EXPORTER="rhea-nexus/tools/export_state.py"
+OFFICE_DIR="ops/virtual-office"
+
+if [ -f "$EXPORTER" ] && [ -d "$OFFICE_DIR" ]; then
+    log "Flushing L4 Context Cache (context-bridge.md)..."
+    python3 "$EXPORTER" --from "$OFFICE_DIR" --to "$L4_BRIDGE" >/dev/null 2>&1 || warn "L4 flush failed"
+    git add "$L4_BRIDGE" 2>/dev/null || true
+fi
+
 # Step 2: Run git commit with all user arguments
 # The commit-msg hook will inject trailers if session is active
 log "Running git commit..."

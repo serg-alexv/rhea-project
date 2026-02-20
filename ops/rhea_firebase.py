@@ -70,7 +70,7 @@ def extract(field):
     return field.get("stringValue", field.get("integerValue", field.get("booleanValue", "")))
 
 def _log_call(method, url, status, latency_ms, error=None, root_cause=None):
-    """Append every Firestore call to JSONL ledger."""
+    """Append every Firestore call to JSONL ledger and monitor quotas."""
     LOG_PATH.parent.mkdir(exist_ok=True)
     entry = {
         "timestamp": now_iso(),
@@ -84,6 +84,15 @@ def _log_call(method, url, status, latency_ms, error=None, root_cause=None):
     }
     with open(LOG_PATH, "a") as f:
         f.write(_redact(json.dumps(entry)) + "\n")
+    
+    # Quota monitoring (Spark tier ~20k writes/day, 50k reads/day)
+    try:
+        with open(LOG_PATH, "r") as f:
+            count = sum(1 for _ in f)
+        if count > 0 and count % 500 == 0:
+            print(f"⚠️ [Firebase] Usage Notice: {count} calls made in this ledger. Monitor billing thresholds.")
+    except:
+        pass
 
 def _classify_error(code, body):
     """Map HTTP code to human-readable root cause."""
@@ -234,6 +243,15 @@ def cmd_incident(inc_id, symptom, status):
     })
     print(f"[incident] {inc_id} → {status}")
 
+def cmd_thinking(desk, thought):
+    """Streams thinking pulses to the 'thinking' collection."""
+    fs_post("thinking", {
+        "desk": sv(desk),
+        "thought": sv(thought),
+        "timestamp": sv(now_iso()),
+    })
+    print(f"[thinking] {desk} pulse sent")
+
 def cmd_status():
     print("RHEA FIREBASE OFFICE STATUS")
     print("=" * 50)
@@ -327,6 +345,8 @@ if __name__ == "__main__":
             cmd_gem(args[0], args[1], args[2], args[3])
         elif cmd == "incident" and len(args) >= 3:
             cmd_incident(args[0], args[1], args[2])
+        elif cmd == "thinking" and len(args) >= 2:
+            cmd_thinking(args[0], " ".join(args[1:]))
         elif cmd == "status":
             cmd_status()
         elif cmd == "health":
