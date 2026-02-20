@@ -32,3 +32,6 @@ All 11 files in `rhea-elementary/memory-core/` are frozen at 2026-02-16. Meanwhi
 
 ### Insight 9: Root Directory Pollution
 PDFs, Excel files, PNGs, tarballs, and orphan duplicate files (state.md, architecture.md, decisions.md) at repo root. These are from various sessions dumping files without structure. The ARCHITECTURE_FREEZE defined a clean iOS folder structure but the repo root itself never got cleaned.
+
+### Insight 10: LiteLLM Replaces 300 Lines of Provider Plumbing
+`rhea_bridge.py` has ~300 lines of hand-rolled HTTP calls across 6 providers. LiteLLM does this with one unified `completion()` call for 100+ providers. The existing `rhea-commander-stack/litellm_config.yaml` already defines 12 models — it was written but never wired in. The play: LiteLLM becomes the transport layer, bridge.py slims to a ~200-line routing+tribunal+logging wrapper. Kills the bespoke `_call_openai`, `_call_gemini`, etc. methods entirely.
