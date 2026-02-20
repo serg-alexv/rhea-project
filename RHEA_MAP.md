@@ -14,6 +14,11 @@
 ## 🤖 Agent Desks
 - [[rhea-nexus/memories/ORION|Node-02: Orion]]
 - [[ops/virtual-office/OFFICE|The Virtual Office]]
+- [[src/rhea_overwatcher|Node-00: Overwatcher]] (Active)
+
+## 📡 Live Status
+- **Overwatcher Log:** `logs/watcher.log`
+- **Tribunal API:** `localhost:8400`
 
 ---
 > "Logic is Fluid. Home is Fixed."
