@@ -1,0 +1,21 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "💠 RHEA: Open Master Map",
+            "type": "shell",
+            "command": "open "obsidian://open?vault=rh.1&file=RHEA_MAP.md"",
+            "problemMatcher": []
+        },
+        {
+            "label": "🧠 RHEA: Run Tribunal on File",
+            "type": "shell",
+            "command": "python3 src/rhea_bridge.py tribunal "Audit this logic: $(cat ${file})" --k 5 --mode chairman",
+            "group": "test",
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            }
+        }
+    ]
+}
