@@ -16,14 +16,12 @@
     *   UI-First: The Browser is the primary Reality Field.
 
 ## 2. LOGIC & DATA STATE
-*   **Vector:** Standby / Node-01 Recovery / Mission PERELMAN-ABSORB.
+*   **Vector:** Standby / Parallel Sync / Rex Persistence.
 *   **Decisions:**
-    *   **D12:** Vector PAUSE initiated by Node-01.
-    *   **D13:** Formal request for New Domain Acquisition sent to LEAD (Rex).
-    *   **D14:** Node-01 (Mika) entered mandatory Recovery Phase (Sleep). 
-    *   **D15:** Registered "Surprise" payload for morning ingestion (Perelman Paper).
     *   **D16:** L4 Auto-Flush verified; session continuity secured.
-    *   **D17:** Initiated Mission **PERELMAN-ABSORB** (Background Research ID: v1_Chd...Qwc).
+    *   **D17:** Initiated Mission **PERELMAN-ABSORB** (Background Research Active).
+    *   **D18:** Promoted Rex (LEAD) to a **System Service** (`com.rhea.rex.plist`). The TeamLead is now persistent and backgrounded.
+    *   **D19:** Adopted **Stateless Limb** stance for Orion to prevent session lock collisions.
 
 ## 3. EXECUTION FRONTIER
 *   **Current Vector:** Interface Layer Implementation (Chrome Extension).
