@@ -1,0 +1,35 @@
+{
+  "version": "4.2",
+  "invariants": [
+    {
+      "id": "INV-STOP-ROOT",
+      "statement": "STOP sentinel is repo-root/STOP (exact filename).",
+      "priority": "P0",
+      "test": "touch STOP; daemon must exit quickly"
+    },
+    {
+      "id": "INV-STOP-RESP",
+      "statement": "STOP must be checked during sleeps; latency target <= stop.check_every_seconds + 1.",
+      "priority": "P0",
+      "test": "run watch --interval 30; touch STOP; exit within ~2s"
+    },
+    {
+      "id": "INV-LEDGER-LOCK",
+      "statement": "All writers must lock relay_chain.jsonl across read-tail+append.",
+      "priority": "P0",
+      "test": "mixed-writer stress; rex verify must be VALID"
+    },
+    {
+      "id": "INV-LEDGER-CANON",
+      "statement": "Hashing uses canonical JSON: sort_keys=true, separators=(',',':').",
+      "priority": "P0",
+      "test": "same payload -> same hash across writers"
+    },
+    {
+      "id": "INV-OPERATOR-PERMISSION",
+      "statement": "If plan > operator_contract.max_actions_without_permission, ask permission first.",
+      "priority": "P1",
+      "test": "assistant proposes 3 actions -> must ask one-line permission"
+    }
+  ]
+}

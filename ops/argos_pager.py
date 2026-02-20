@@ -40,6 +40,7 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import fcntl
 import subprocess
 import sys
 import time
@@ -490,37 +491,40 @@ def _chain_append(event_type: str, actor: str, payload: dict) -> dict:
     def _canonical_json(obj):
         return json.dumps(obj, sort_keys=True, separators=(",", ":"))
 
-    prev_hash = "0" * 64
-    if CHAIN_FILE.exists():
-        last_line = ""
-        for line in CHAIN_FILE.read_text().strip().split("\n"):
-            if line.strip():
-                last_line = line
-        if last_line:
-            try:
-                prev_hash = json.loads(last_line).get("event_hash", "0" * 64)
-            except json.JSONDecodeError:
-                pass
-
-    entry = {
-        "timestamp": _now_iso(),
-        "event_type": event_type,
-        "actor": actor,
-        "payload": payload,
-        "prev_hash": prev_hash,
-    }
-    canonical = _canonical_json(entry)
-    entry["event_hash"] = hashlib.sha256(canonical.encode()).hexdigest()
-
     CHAIN_FILE.parent.mkdir(parents=True, exist_ok=True)
-    with open(CHAIN_FILE, "a") as f:
-        f.write(json.dumps(entry) + "\n")
-    return entry
 
+    # Concurrency-safe: lock ledger for (read tail → compute → append) as one critical section.
+    with open(CHAIN_FILE, "a+") as f:
+        fcntl.flock(f, fcntl.LOCK_EX)
+        try:
+            f.seek(0)
+            lines = [ln for ln in f.read().splitlines() if ln.strip()]
+            prev_hash = "0" * 64
+            # Walk backwards until we can parse a JSON entry (robust to partial lines)
+            for ln in reversed(lines):
+                try:
+                    prev_hash = json.loads(ln).get("event_hash", "0" * 64)
+                    break
+                except Exception:
+                    continue
 
-# ---------------------------------------------------------------------------
-# Heartbeat
-# ---------------------------------------------------------------------------
+            entry = {
+                "timestamp": _now_iso(),
+                "event_type": event_type,
+                "actor": actor,
+                "payload": payload,
+                "prev_hash": prev_hash,
+            }
+            canonical = _canonical_json(entry)
+            entry["event_hash"] = hashlib.sha256(canonical.encode()).hexdigest()
+
+            f.write(json.dumps(entry) + "\n")
+            f.flush()
+            os.fsync(f.fileno())
+            return entry
+        finally:
+            fcntl.flock(f, fcntl.LOCK_UN)
+
 
 def heartbeat():
     """Update COWORK desk heartbeat (lease + Firestore + chain)."""
@@ -915,8 +919,17 @@ def watch_daemon(interval: int = DEFAULT_POLL_INTERVAL):
 
     state = _load_state()
     cycle = 0
+    stop_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'STOP')
+    def _stop():
+        return os.path.exists(stop_path)
+
 
     while True:
+        # P0: Runtime STOP Enforcement
+        root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        if os.path.exists(os.path.join(root_dir, "STOP")):
+            print(f"[{datetime.now()}] STOP sentinel detected in root. Exiting.")
+            break
         cycle += 1
         now_str = datetime.now(timezone.utc).strftime("%H:%M:%S UTC")
         print(f"\n--- cycle {cycle} [{now_str}] ---")
@@ -981,7 +994,12 @@ def watch_daemon(interval: int = DEFAULT_POLL_INTERVAL):
         state["observations_count"] = state.get("observations_count", 0) + 1
         _save_state(state)
 
-        time.sleep(interval)
+        # P0-STOP: Responsive sleep
+        for _ in range(interval):
+            root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+            if os.path.exists(os.path.join(root_dir, "STOP")):
+                break
+            time.sleep(1)
 
 
 # ---------------------------------------------------------------------------

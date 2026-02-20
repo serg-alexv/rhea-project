@@ -6,14 +6,25 @@
   "permissions": [
     "storage",
     "activeTab",
-    "sidePanel"
+    "sidePanel",
+    "scripting",
+    "webNavigation"
   ],
   "host_permissions": [
-    "https://firestore.googleapis.com/*"
+    "https://firestore.googleapis.com/*",
+    "http://localhost:8400/*",
+    "<all_urls>"
   ],
   "side_panel": {
     "default_path": "sidepanel.html"
   },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
   "action": {
     "default_popup": "popup.html",
     "default_icon": {

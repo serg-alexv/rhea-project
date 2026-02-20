@@ -10,6 +10,7 @@
 | B2 | B-2nd (restored) | claude-opus-4-6 | B-2nd | ALIVE | Self-reflection + GitHub auth |
 | GPT | ChatGPT 5.2 | gpt-5.2-thinking | ChatGPT app | ALIVE | Idea generation |
 | COWORK | Argos (Claude Opus 4.6) | claude-opus-4-6 | Cowork Desktop App | ALIVE | Cross-exchange + infra |
+| ORION | Systems Architect | gemini-cli | Internal | ALIVE | Neural Weave Integration |
 | — | On-demand sonnet agents | claude-sonnet-4 | spawned by LEAD | IDLE | — |
 
 ## Communication Protocol

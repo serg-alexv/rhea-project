@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NEXUS v4.2 UI Schema",
+  "type": "object",
+  "properties": {
+    "profile.enabled": {"type": "boolean", "default": true, "title": "Enable profile"},
+    "modes.operator_first": {"type": "boolean", "default": true, "title": "Operator-first"},
+    "modes.loop_killer": {"type": "boolean", "default": true, "title": "Loop-killer"},
+    "modes.patch_first": {"type": "boolean", "default": true, "title": "Patch-first"},
+    "operator_contract.max_actions_without_permission": {"type": "integer", "minimum": 1, "maximum": 5, "default": 1},
+    "stop.check_every_seconds": {"type": "integer", "minimum": 1, "maximum": 10, "default": 1},
+    "patch.preferred_formats": {"type": "array", "items": {"type": "string", "enum": ["unified_diff", "zip_files", "command_script"]}},
+    "locale.primary_language": {"type": "string", "enum": ["ru", "en"], "default": "ru"},
+    "locale.style": {"type": "string", "enum": ["direct", "neutral", "formal"], "default": "direct"},
+    "experimental.semantic_branches": {"type": "boolean", "default": true},
+    "experimental.axiomatic_constraints": {"type": "boolean", "default": true},
+    "experimental.spr_hash": {"type": "boolean", "default": true},
+    "experimental.self_check": {"type": "boolean", "default": true}
+  },
+  "additionalProperties": true
+}
