@@ -22,6 +22,7 @@
 - [ ] **Wire CHRONOS A→A messages** to rhea_bridge.py (REX)
 - [ ] **QWRR Phase 1** — leases, fencing, zombie protection (B2)
 - [ ] **CI enforcement** — commit fails without checkpoint trailer (REX)
+- [ ] **LiteLLM integration** — replace bridge.py provider plumbing with litellm transport, keep tier/tribunal/logging wrapper (REX)
 
 ## P2: iOS MVP (0/12)
 
