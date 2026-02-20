@@ -12,3 +12,4 @@
 ## 3. COORDINATION
 - **Option E:** Tribunal ICE-v3 — Semantic similarity-driven convergence scoring.
 - **Option F:** QWRR-v2 — Multi-device relay (Firestore + Local Mirror).
+- **Option G:** RHEA COMMANDER — React-based high-level cockpit featuring Agent Lattice Grid, Profile Controller (sliders/toggles), and live Tribunal visualization.
