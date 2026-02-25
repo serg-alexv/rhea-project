@@ -1,6 +1,6 @@
 # Nexus State Export
-Generated UTC: 2026-02-20T01:32:07Z
-STATE_HASH = 3ecf607e7858876aa4c19563c29683652785ff5be2924473332c76df6a91c703
+Generated UTC: 2026-02-25T20:16:49Z
+STATE_HASH = 8e27708fd8f15d1363ee760179844b718cc8450e5fe418f7ee606797ba39c276
 === PAYLOAD ===
 ## 1) INVARIANTS
 - Every agent writes to inbox/, only LEAD reads and routes
@@ -15,12 +15,22 @@ STATE_HASH = 3ecf607e7858876aa4c19563c29683652785ff5be2924473332c76df6a91c703
 - inbox: `ops/virtual-office/inbox`
 - outbox: `ops/virtual-office/outbox`
 - STOP: `ops/virtual-office/STOP`
-- agent_id: `--interval`
+- agent_id: `--INTERVAL`
 - agent_id: `B2`
+- agent_id: `CLAUDE`
 - agent_id: `COWORK`
+- agent_id: `GEMINI`
+- agent_id: `GEMINI-FLASH`
+- agent_id: `GEMINI-PRO`
+- agent_id: `GPT`
+- agent_id: `HYPERION`
 - agent_id: `LEAD`
+- agent_id: `ORION`
+- agent_id: `PERSONAL`
 - agent_id: `REX`
-- agent_id: `gpt`
+- agent_id: `SONETTE`
+- agent_id: `SONNET`
+- agent_id: `TEAMLEAD`
 
 ## 3) LAST KNOWN STATE
 ### watcher_state.json
@@ -42,291 +52,374 @@ STATE_HASH = 3ecf607e7858876aa4c19563c29683652785ff5be2924473332c76df6a91c703
 - path: `ops/virtual-office/snapshots/--interval.json`
 ```json
 {
-  "agent": "--interval",
+  "agent": "--INTERVAL",
   "last_seq_applied": 0,
-  "lease_token": 8,
+  "lease_token": 9,
   "messages_drained": 0,
-  "saved_at": "2026-02-19T15:02:36.554546+00:00",
-  "state_hash": "1132e5c191440f13"
+  "saved_at": "2026-02-20T07:13:22.350130+00:00",
+  "state_hash": "19a16499d2be1b92"
 }
 ```
 - path: `ops/virtual-office/snapshots/B2.json`
 ```json
 {
   "agent": "B2",
-  "last_seq_applied": 50,
-  "lease_token": 1,
+  "last_seq_applied": 88,
+  "lease_token": 2,
+  "messages_drained": 6,
+  "saved_at": "2026-02-20T07:13:22.756868+00:00",
+  "state_hash": "9171cbac697a8665"
+}
+```
+- path: `ops/virtual-office/snapshots/CLAUDE.json`
+```json
+{
+  "agent": "CLAUDE",
+  "last_seq_applied": 123,
+  "lease_token": 3,
   "messages_drained": 1,
-  "saved_at": "2026-02-19T17:51:11.544243+00:00",
-  "state_hash": "de001abe9a722099"
+  "saved_at": "2026-02-20T07:24:29.765006+00:00",
+  "state_hash": "c8067c95faf61652"
 }
 ```
 - path: `ops/virtual-office/snapshots/COWORK.json`
 ```json
 {
   "agent": "COWORK",
-  "agent_name": "Argos",
-  "git_sha": "52482de8",
-  "inbox_files": 7,
-  "last_seq_applied": 4,
-  "lease_token": 12,
-  "pending_messages": 1,
-  "saved_at": "2026-02-19T14:30:32.198197+00:00",
-  "state_hash": "e2d29aca53dcfeb9"
+  "last_seq_applied": 133,
+  "lease_token": 14,
+  "messages_drained": 2,
+  "saved_at": "2026-02-20T07:24:32.445123+00:00",
+  "state_hash": "3291b668f5ed7cd9"
+}
+```
+- path: `ops/virtual-office/snapshots/GEMINI-FLASH.json`
+```json
+{
+  "agent": "GEMINI-FLASH",
+  "last_seq_applied": 128,
+  "lease_token": 3,
+  "messages_drained": 1,
+  "saved_at": "2026-02-20T07:24:31.101827+00:00",
+  "state_hash": "4d98e3abaef03cf8"
+}
+```
+- path: `ops/virtual-office/snapshots/GEMINI-PRO.json`
+```json
+{
+  "agent": "GEMINI-PRO",
+  "last_seq_applied": 127,
+  "lease_token": 3,
+  "messages_drained": 1,
+  "saved_at": "2026-02-20T07:24:30.837098+00:00",
+  "state_hash": "02871cd9a2890cb9"
+}
+```
+- path: `ops/virtual-office/snapshots/GEMINI.json`
+```json
+{
+  "agent": "GEMINI",
+  "last_seq_applied": 126,
+  "lease_token": 3,
+  "messages_drained": 1,
+  "saved_at": "2026-02-20T07:24:30.570518+00:00",
+  "state_hash": "621c4f6d2d1727e9"
+}
+```
+- path: `ops/virtual-office/snapshots/HYPERION.json`
+```json
+{
+  "agent": "HYPERION",
+  "last_seq_applied": 129,
+  "lease_token": 3,
+  "messages_drained": 1,
+  "saved_at": "2026-02-20T07:24:31.369591+00:00",
+  "state_hash": "1fffbf8f534542da"
 }
 ```
 - path: `ops/virtual-office/snapshots/LEAD.json`
 ```json
 {
   "agent": "LEAD",
-  "last_seq_applied": 51,
-  "lease_token": 4,
+  "last_seq_applied": 132,
+  "lease_token": 6,
+  "messages_drained": 2,
+  "saved_at": "2026-02-20T07:24:32.176641+00:00",
+  "state_hash": "fa95289abebe20c1"
+}
+```
+- path: `ops/virtual-office/snapshots/ORION.json`
+```json
+{
+  "agent": "ORION",
+  "last_seq_applied": 122,
+  "lease_token": 8,
   "messages_drained": 1,
-  "saved_at": "2026-02-19T17:51:07.237073+00:00",
-  "state_hash": "7ed8ac97ee628209"
+  "saved_at": "2026-02-20T07:24:29.496347+00:00",
+  "state_hash": "f75654504d56e6ca"
+}
+```
+- path: `ops/virtual-office/snapshots/PERSONAL.json`
+```json
+{
+  "agent": "PERSONAL",
+  "last_seq_applied": 0,
+  "lease_token": 1,
+  "messages_drained": 0,
+  "saved_at": "2026-02-20T07:13:26.841181+00:00",
+  "state_hash": "ee4b17986a7a9471"
 }
 ```
 - path: `ops/virtual-office/snapshots/REX.json`
 ```json
 {
   "agent": "REX",
-  "last_seq_applied": 83,
-  "lease_token": 2,
+  "last_seq_applied": 131,
+  "lease_token": 10,
+  "messages_drained": 2,
+  "saved_at": "2026-02-20T07:24:31.908445+00:00",
+  "state_hash": "3343bb0a43ff4cf5"
+}
+```
+- path: `ops/virtual-office/snapshots/SONETTE.json`
+```json
+{
+  "agent": "SONETTE",
+  "last_seq_applied": 125,
+  "lease_token": 3,
   "messages_drained": 1,
-  "saved_at": "2026-02-20T01:09:07.183473+00:00",
-  "state_hash": "be7070a9325ce513"
+  "saved_at": "2026-02-20T07:24:30.300928+00:00",
+  "state_hash": "9d12d1c735d3b94f"
+}
+```
+- path: `ops/virtual-office/snapshots/SONNET.json`
+```json
+{
+  "agent": "SONNET",
+  "last_seq_applied": 124,
+  "lease_token": 4,
+  "messages_drained": 1,
+  "saved_at": "2026-02-20T07:24:30.034030+00:00",
+  "state_hash": "140934d9cdfa6f5c"
+}
+```
+- path: `ops/virtual-office/snapshots/TEAMLEAD.json`
+```json
+{
+  "agent": "TEAMLEAD",
+  "last_seq_applied": 134,
+  "lease_token": 2,
+  "messages_drained": 2,
+  "saved_at": "2026-02-20T07:24:32.709841+00:00",
+  "state_hash": "0339de5b6c6febcc"
 }
 ```
 - path: `ops/virtual-office/snapshots/gpt.json`
 ```json
 {
-  "agent": "gpt",
-  "last_seq_applied": 55,
-  "lease_token": 11,
+  "agent": "GPT",
+  "last_seq_applied": 130,
+  "lease_token": 14,
   "messages_drained": 0,
-  "saved_at": "2026-02-19T20:58:08.823343+00:00",
-  "state_hash": "fd8ad818296c8f87"
+  "saved_at": "2026-02-20T11:29:09.311577+00:00",
+  "state_hash": "eb7a9d81c2ba14b1"
 }
 ```
 ### leases
 - path: `ops/virtual-office/leases/--interval.json`
 ```json
 {
-  "acquired_at": "2026-02-19T15:02:36.553074+00:00",
-  "agent": "--interval",
-  "expires_at": "2026-02-19T15:12:36.553098+00:00",
-  "lease_token": 8,
-  "prev_token": 7,
-  "renewed_at": "2026-02-19T15:02:36.553074+00:00",
+  "acquired_at": "2026-02-20T07:13:22.346912+00:00",
+  "agent": "--INTERVAL",
+  "expires_at": "2026-02-20T07:23:22.347053+00:00",
+  "lease_token": 9,
+  "prev_token": 8,
+  "renewed_at": "2026-02-20T07:13:22.346912+00:00",
   "ttl_s": 600
 }
 ```
 - path: `ops/virtual-office/leases/B2.json`
 ```json
 {
-  "acquired_at": "2026-02-19T17:51:10.269724+00:00",
+  "acquired_at": "2026-02-20T07:13:22.752691+00:00",
   "agent": "B2",
-  "expires_at": "2026-02-19T18:01:10.269934+00:00",
-  "lease_token": 1,
-  "prev_token": 0,
-  "renewed_at": "2026-02-19T17:51:10.269724+00:00",
+  "expires_at": "2026-02-20T07:23:22.752815+00:00",
+  "lease_token": 2,
+  "prev_token": 1,
+  "renewed_at": "2026-02-20T07:13:22.752691+00:00",
+  "ttl_s": 600
+}
+```
+- path: `ops/virtual-office/leases/CLAUDE.json`
+```json
+{
+  "acquired_at": "2026-02-20T07:24:29.762463+00:00",
+  "agent": "CLAUDE",
+  "expires_at": "2026-02-20T07:34:29.762571+00:00",
+  "lease_token": 3,
+  "prev_token": 2,
+  "renewed_at": "2026-02-20T07:24:29.762463+00:00",
   "ttl_s": 600
 }
 ```
 - path: `ops/virtual-office/leases/COWORK.json`
 ```json
 {
-  "acquired_at": "2026-02-19T14:30:32.193362+00:00",
+  "acquired_at": "2026-02-20T07:24:32.441997+00:00",
   "agent": "COWORK",
-  "desk_name": "Argos",
-  "expires_at": "2026-02-19T14:40:32.193893+00:00",
-  "lease_token": 12,
-  "prev_token": 11,
-  "renewed_at": "2026-02-19T14:30:32.193362+00:00",
+  "expires_at": "2026-02-20T07:34:32.442108+00:00",
+  "lease_token": 14,
+  "prev_token": 13,
+  "renewed_at": "2026-02-20T07:24:32.441997+00:00",
+  "ttl_s": 600
+}
+```
+- path: `ops/virtual-office/leases/GEMINI-FLASH.json`
+```json
+{
+  "acquired_at": "2026-02-20T07:24:31.098680+00:00",
+  "agent": "GEMINI-FLASH",
+  "expires_at": "2026-02-20T07:34:31.098803+00:00",
+  "lease_token": 3,
+  "prev_token": 2,
+  "renewed_at": "2026-02-20T07:24:31.098680+00:00",
+  "ttl_s": 600
+}
+```
+- path: `ops/virtual-office/leases/GEMINI-PRO.json`
+```json
+{
+  "acquired_at": "2026-02-20T07:24:30.834615+00:00",
+  "agent": "GEMINI-PRO",
+  "expires_at": "2026-02-20T07:34:30.834719+00:00",
+  "lease_token": 3,
+  "prev_token": 2,
+  "renewed_at": "2026-02-20T07:24:30.834615+00:00",
+  "ttl_s": 600
+}
+```
+- path: `ops/virtual-office/leases/GEMINI.json`
+```json
+{
+  "acquired_at": "2026-02-20T07:24:30.567978+00:00",
+  "agent": "GEMINI",
+  "expires_at": "2026-02-20T07:34:30.568084+00:00",
+  "lease_token": 3,
+  "prev_token": 2,
+  "renewed_at": "2026-02-20T07:24:30.567978+00:00",
+  "ttl_s": 600
+}
+```
+- path: `ops/virtual-office/leases/HYPERION.json`
+```json
+{
+  "acquired_at": "2026-02-20T07:24:31.366739+00:00",
+  "agent": "HYPERION",
+  "expires_at": "2026-02-20T07:34:31.366861+00:00",
+  "lease_token": 3,
+  "prev_token": 2,
+  "renewed_at": "2026-02-20T07:24:31.366739+00:00",
   "ttl_s": 600
 }
 ```
 - path: `ops/virtual-office/leases/LEAD.json`
 ```json
 {
-  "acquired_at": "2026-02-19T17:51:05.165451+00:00",
+  "acquired_at": "2026-02-20T07:24:32.172889+00:00",
   "agent": "LEAD",
-  "expires_at": "2026-02-19T18:01:05.165791+00:00",
-  "lease_token": 4,
-  "prev_token": 3,
-  "renewed_at": "2026-02-19T17:51:05.165451+00:00",
+  "expires_at": "2026-02-20T07:34:32.173006+00:00",
+  "lease_token": 6,
+  "prev_token": 5,
+  "renewed_at": "2026-02-20T07:24:32.172889+00:00",
+  "ttl_s": 600
+}
+```
+- path: `ops/virtual-office/leases/ORION.json`
+```json
+{
+  "acquired_at": "2026-02-20T07:24:29.493608+00:00",
+  "agent": "ORION",
+  "expires_at": "2026-02-20T07:34:29.493728+00:00",
+  "lease_token": 8,
+  "prev_token": 7,
+  "renewed_at": "2026-02-20T07:24:29.493608+00:00",
+  "ttl_s": 600
+}
+```
+- path: `ops/virtual-office/leases/PERSONAL.json`
+```json
+{
+  "acquired_at": "2026-02-20T07:13:26.839173+00:00",
+  "agent": "PERSONAL",
+  "expires_at": "2026-02-20T07:23:26.839304+00:00",
+  "lease_token": 1,
+  "prev_token": 0,
+  "renewed_at": "2026-02-20T07:13:26.839173+00:00",
   "ttl_s": 600
 }
 ```
 - path: `ops/virtual-office/leases/REX.json`
 ```json
 {
-  "acquired_at": "2026-02-20T01:09:07.181278+00:00",
+  "acquired_at": "2026-02-20T07:24:31.905623+00:00",
   "agent": "REX",
-  "expires_at": "2026-02-20T01:19:07.181441+00:00",
+  "expires_at": "2026-02-20T07:34:31.905737+00:00",
+  "lease_token": 10,
+  "prev_token": 9,
+  "renewed_at": "2026-02-20T07:24:31.905623+00:00",
+  "ttl_s": 600
+}
+```
+- path: `ops/virtual-office/leases/SONETTE.json`
+```json
+{
+  "acquired_at": "2026-02-20T07:24:30.298555+00:00",
+  "agent": "SONETTE",
+  "expires_at": "2026-02-20T07:34:30.298664+00:00",
+  "lease_token": 3,
+  "prev_token": 2,
+  "renewed_at": "2026-02-20T07:24:30.298555+00:00",
+  "ttl_s": 600
+}
+```
+- path: `ops/virtual-office/leases/SONNET.json`
+```json
+{
+  "acquired_at": "2026-02-20T07:24:30.031629+00:00",
+  "agent": "SONNET",
+  "expires_at": "2026-02-20T07:34:30.031721+00:00",
+  "lease_token": 4,
+  "prev_token": 3,
+  "renewed_at": "2026-02-20T07:24:30.031629+00:00",
+  "ttl_s": 600
+}
+```
+- path: `ops/virtual-office/leases/TEAMLEAD.json`
+```json
+{
+  "acquired_at": "2026-02-20T07:24:32.706985+00:00",
+  "agent": "TEAMLEAD",
+  "expires_at": "2026-02-20T07:34:32.707090+00:00",
   "lease_token": 2,
   "prev_token": 1,
-  "renewed_at": "2026-02-20T01:09:07.181278+00:00",
+  "renewed_at": "2026-02-20T07:24:32.706985+00:00",
   "ttl_s": 600
 }
 ```
 - path: `ops/virtual-office/leases/gpt.json`
 ```json
 {
-  "acquired_at": "2026-02-19T20:58:08.820939+00:00",
-  "agent": "gpt",
-  "expires_at": "2026-02-19T21:08:08.820964+00:00",
-  "lease_token": 11,
-  "prev_token": 10,
-  "renewed_at": "2026-02-19T20:58:08.820939+00:00",
+  "acquired_at": "2026-02-20T11:29:09.308390+00:00",
+  "agent": "GPT",
+  "expires_at": "2026-02-20T11:39:09.308415+00:00",
+  "lease_token": 14,
+  "prev_token": 13,
+  "renewed_at": "2026-02-20T11:29:09.308390+00:00",
   "ttl_s": 600
 }
 ```
 
 ## 4) RECENT SIGNALS
-- `{"actor":"R1","event_hash":"229e3e5408b116980cf03c8d7c61aa8828035859b30d8b8d939a461fe9c3d4f8","event_type":"race","payload":{"i":385},"prev_hash":"70f143d016bfb3bb45463d56b07f6bb2007fb19c18dd00548346e2c2196d72a2","timestamp":"2026-02-19T14:30:35.019222+00:00"}`
-- `{"actor":"R6","event_hash":"7a56ce8af616e10b4c4006546e6b70fdacde2d56fec8850a824242324eabf174","event_type":"race","payload":{"i":382},"prev_hash":"229e3e5408b116980cf03c8d7c61aa8828035859b30d8b8d939a461fe9c3d4f8","timestamp":"2026-02-19T14:30:35.019952+00:00"}`
-- `{"actor":"R2","event_hash":"af6d654804cef86f8241c79c62ec2988192c4deb2a364b3d83d6b1553f8f51c4","event_type":"race","payload":{"i":380},"prev_hash":"7a56ce8af616e10b4c4006546e6b70fdacde2d56fec8850a824242324eabf174","timestamp":"2026-02-19T14:30:35.020673+00:00"}`
-- `{"actor":"R3","event_hash":"3df103dc501470c8fd5d7190e2658b9cd0ccccb262243fe91191603593ba91a3","event_type":"race","payload":{"i":381},"prev_hash":"af6d654804cef86f8241c79c62ec2988192c4deb2a364b3d83d6b1553f8f51c4","timestamp":"2026-02-19T14:30:35.021408+00:00"}`
-- `{"actor":"R5","event_hash":"dab0c992c1688b94f6be2f24976416b5919cbfe80a7b679bd77b7fbdcb00e155","event_type":"race","payload":{"i":380},"prev_hash":"3df103dc501470c8fd5d7190e2658b9cd0ccccb262243fe91191603593ba91a3","timestamp":"2026-02-19T14:30:35.022174+00:00"}`
-- `{"actor":"R4","event_hash":"f6354e079775fd6c2c99bdf5334c616b24d577da924238b1f0ec7cd033a487ca","event_type":"race","payload":{"i":381},"prev_hash":"dab0c992c1688b94f6be2f24976416b5919cbfe80a7b679bd77b7fbdcb00e155","timestamp":"2026-02-19T14:30:35.023077+00:00"}`
-- `{"actor":"R1","event_hash":"5dc6e37e141ce3168dc2edccab35dac20a132e9a6dadf3447794c9bdda9dc51d","event_type":"race","payload":{"i":386},"prev_hash":"f6354e079775fd6c2c99bdf5334c616b24d577da924238b1f0ec7cd033a487ca","timestamp":"2026-02-19T14:30:35.024010+00:00"}`
-- `{"actor":"R6","event_hash":"bcfb2a571caee98bfb0e400c56b0e28384bd170d7fc5b3ba866e45cb7abc5d7f","event_type":"race","payload":{"i":383},"prev_hash":"5dc6e37e141ce3168dc2edccab35dac20a132e9a6dadf3447794c9bdda9dc51d","timestamp":"2026-02-19T14:30:35.024864+00:00"}`
-- `{"actor":"R2","event_hash":"d471c41bdab60084b8569a719d6e31be0c2269dfea3f99bf0b11491d2ccd4252","event_type":"race","payload":{"i":381},"prev_hash":"bcfb2a571caee98bfb0e400c56b0e28384bd170d7fc5b3ba866e45cb7abc5d7f","timestamp":"2026-02-19T14:30:35.025703+00:00"}`
-- `{"actor":"R3","event_hash":"d6a5226d2cd0afec81174dd6f2048273e9bfa527f6e178a32dd8a0ace678c246","event_type":"race","payload":{"i":382},"prev_hash":"d471c41bdab60084b8569a719d6e31be0c2269dfea3f99bf0b11491d2ccd4252","timestamp":"2026-02-19T14:30:35.026556+00:00"}`
-- `{"actor":"R5","event_hash":"15376fd1512e56bd9107218e9eaa12a55f42026d0362f64b0e4774235dd43fd2","event_type":"race","payload":{"i":381},"prev_hash":"d6a5226d2cd0afec81174dd6f2048273e9bfa527f6e178a32dd8a0ace678c246","timestamp":"2026-02-19T14:30:35.027290+00:00"}`
-- `{"actor":"R4","event_hash":"0e9cf59e6102b3b45c772490f9ca01a3ad57cc2e6c754a9b5d3f5bdac82f51d2","event_type":"race","payload":{"i":382},"prev_hash":"15376fd1512e56bd9107218e9eaa12a55f42026d0362f64b0e4774235dd43fd2","timestamp":"2026-02-19T14:30:35.028047+00:00"}`
-- `{"actor":"R1","event_hash":"17ce07f36cd88d8b4de4f30683bfeed36fe9b097a7cb1b8325e6c3b9817a9719","event_type":"race","payload":{"i":387},"prev_hash":"0e9cf59e6102b3b45c772490f9ca01a3ad57cc2e6c754a9b5d3f5bdac82f51d2","timestamp":"2026-02-19T14:30:35.028803+00:00"}`
-- `{"actor":"R6","event_hash":"bcc01c8516955f7f7d5939046e856caa80d1cb68a1604afa3f7540bded955787","event_type":"race","payload":{"i":384},"prev_hash":"17ce07f36cd88d8b4de4f30683bfeed36fe9b097a7cb1b8325e6c3b9817a9719","timestamp":"2026-02-19T14:30:35.029544+00:00"}`
-- `{"actor":"R2","event_hash":"257a777a6e13c0946947d8c342691e2d547fff8b83eab4b31f62b6b217abbafb","event_type":"race","payload":{"i":382},"prev_hash":"bcc01c8516955f7f7d5939046e856caa80d1cb68a1604afa3f7540bded955787","timestamp":"2026-02-19T14:30:35.030332+00:00"}`
-- `{"actor":"R3","event_hash":"41fdb18cba7196366490e82690fc02480e7ccac62ea3aaf2aa41332844e17fa9","event_type":"race","payload":{"i":383},"prev_hash":"257a777a6e13c0946947d8c342691e2d547fff8b83eab4b31f62b6b217abbafb","timestamp":"2026-02-19T14:30:35.031121+00:00"}`
-- `{"actor":"R5","event_hash":"ceea30a649f04e83e1e7a52ba52c8247361cb758340e36e89e88d0f4e65516bd","event_type":"race","payload":{"i":382},"prev_hash":"41fdb18cba7196366490e82690fc02480e7ccac62ea3aaf2aa41332844e17fa9","timestamp":"2026-02-19T14:30:35.031920+00:00"}`
-- `{"actor":"R4","event_hash":"c015bdfbe949281400ac6067debf452b81e7e58ae6ffb68ffe6dcebfdcb02084","event_type":"race","payload":{"i":383},"prev_hash":"ceea30a649f04e83e1e7a52ba52c8247361cb758340e36e89e88d0f4e65516bd","timestamp":"2026-02-19T14:30:35.032806+00:00"}`
-- `{"actor":"R1","event_hash":"7fb51e2525d7fb077c02884ea6d5e62952433c7ab9d5ba59156cfd6f88e41fb2","event_type":"race","payload":{"i":388},"prev_hash":"c015bdfbe949281400ac6067debf452b81e7e58ae6ffb68ffe6dcebfdcb02084","timestamp":"2026-02-19T14:30:35.033595+00:00"}`
-- `{"actor":"R6","event_hash":"7465b6a849825e3479e7805b79ccbd7515a317d628a6bb254f15f76e06884ec7","event_type":"race","payload":{"i":385},"prev_hash":"7fb51e2525d7fb077c02884ea6d5e62952433c7ab9d5ba59156cfd6f88e41fb2","timestamp":"2026-02-19T14:30:35.034356+00:00"}`
-- `{"actor":"R2","event_hash":"d02a497c49498c1f6924c475f919586beaabdbc21c329a630a0e3d82094e4dee","event_type":"race","payload":{"i":383},"prev_hash":"7465b6a849825e3479e7805b79ccbd7515a317d628a6bb254f15f76e06884ec7","timestamp":"2026-02-19T14:30:35.035105+00:00"}`
-- `{"actor":"R3","event_hash":"f544c1698af51eff8f6ed50c2e685505a4633ed379a627a49495312185e7bcb0","event_type":"race","payload":{"i":384},"prev_hash":"d02a497c49498c1f6924c475f919586beaabdbc21c329a630a0e3d82094e4dee","timestamp":"2026-02-19T14:30:35.035901+00:00"}`
-- `{"actor":"R5","event_hash":"57e1b0d4892b6f03fa05a0e3c8b798df74aa7c096d552164f2df8fb7edea12c0","event_type":"race","payload":{"i":383},"prev_hash":"f544c1698af51eff8f6ed50c2e685505a4633ed379a627a49495312185e7bcb0","timestamp":"2026-02-19T14:30:35.036657+00:00"}`
-- `{"actor":"R4","event_hash":"a7d4d2689c7a5d2bf8268dbb013afa1553c4008c898c1cf72425ed57fbcdb52e","event_type":"race","payload":{"i":384},"prev_hash":"57e1b0d4892b6f03fa05a0e3c8b798df74aa7c096d552164f2df8fb7edea12c0","timestamp":"2026-02-19T14:30:35.037407+00:00"}`
-- `{"actor":"R1","event_hash":"c0e3de20283da196074b18175059f9fac753a97e713ae612be4ee17adb5b5438","event_type":"race","payload":{"i":389},"prev_hash":"a7d4d2689c7a5d2bf8268dbb013afa1553c4008c898c1cf72425ed57fbcdb52e","timestamp":"2026-02-19T14:30:35.038171+00:00"}`
-- `{"actor":"R6","event_hash":"525d66913e315689aa25f36e09bf55be1890290a62c081e2c7fd1fc2d1cde7ea","event_type":"race","payload":{"i":386},"prev_hash":"c0e3de20283da196074b18175059f9fac753a97e713ae612be4ee17adb5b5438","timestamp":"2026-02-19T14:30:35.038921+00:00"}`
-- `{"actor":"R2","event_hash":"8fe71d3c83b0fbc38681527cc0fb92e739e17e8a21f1e61861d676b0a66edce2","event_type":"race","payload":{"i":384},"prev_hash":"525d66913e315689aa25f36e09bf55be1890290a62c081e2c7fd1fc2d1cde7ea","timestamp":"2026-02-19T14:30:35.039855+00:00"}`
-- `{"actor":"R3","event_hash":"cc7aa87380b28c638bc921e64f2ae080c5563d61c416650651bd68da9cd34e53","event_type":"race","payload":{"i":385},"prev_hash":"8fe71d3c83b0fbc38681527cc0fb92e739e17e8a21f1e61861d676b0a66edce2","timestamp":"2026-02-19T14:30:35.040813+00:00"}`
-- `{"actor":"R5","event_hash":"d04d1211ea77ef7b614cd79d56d01617fb16740bdad02bdd9c0fe43edc6c344c","event_type":"race","payload":{"i":384},"prev_hash":"cc7aa87380b28c638bc921e64f2ae080c5563d61c416650651bd68da9cd34e53","timestamp":"2026-02-19T14:30:35.041709+00:00"}`
-- `{"actor":"R4","event_hash":"e13ca109a3658637b5b1452539610146bff9df888875a1e16c97303a3bfddc26","event_type":"race","payload":{"i":385},"prev_hash":"d04d1211ea77ef7b614cd79d56d01617fb16740bdad02bdd9c0fe43edc6c344c","timestamp":"2026-02-19T14:30:35.042529+00:00"}`
-- `{"actor":"R1","event_hash":"cf74e59978ed8a6a213d2e0d2518dc9cb3a3ab7687087e2bee24c5f8bfd38fe4","event_type":"race","payload":{"i":390},"prev_hash":"e13ca109a3658637b5b1452539610146bff9df888875a1e16c97303a3bfddc26","timestamp":"2026-02-19T14:30:35.043329+00:00"}`
-- `{"actor":"R6","event_hash":"efe21097bd5b2aee0325d2370f9a7a8fa2a7bc6dabc1a8c4f2c866e21a0d95f8","event_type":"race","payload":{"i":387},"prev_hash":"cf74e59978ed8a6a213d2e0d2518dc9cb3a3ab7687087e2bee24c5f8bfd38fe4","timestamp":"2026-02-19T14:30:35.044130+00:00"}`
-- `{"actor":"R2","event_hash":"7d7b4447427110402d65b4a6652d112b661c09d3072ca20f4ea4d94e4dbf262d","event_type":"race","payload":{"i":385},"prev_hash":"efe21097bd5b2aee0325d2370f9a7a8fa2a7bc6dabc1a8c4f2c866e21a0d95f8","timestamp":"2026-02-19T14:30:35.044930+00:00"}`
-- `{"actor":"R3","event_hash":"46c1884fef12a50c75bd5caa73a111ccb65ef5ea37dd681a0ad76729c2489a90","event_type":"race","payload":{"i":386},"prev_hash":"7d7b4447427110402d65b4a6652d112b661c09d3072ca20f4ea4d94e4dbf262d","timestamp":"2026-02-19T14:30:35.045734+00:00"}`
-- `{"actor":"R5","event_hash":"983728807fa2d0f18fc8ff82f0932a7d05db053ee2dc0616dc7906af722fb570","event_type":"race","payload":{"i":385},"prev_hash":"46c1884fef12a50c75bd5caa73a111ccb65ef5ea37dd681a0ad76729c2489a90","timestamp":"2026-02-19T14:30:35.046536+00:00"}`
-- `{"actor":"R4","event_hash":"3c21cb74fdc22a0351e5008919e5f9cd9b615b124eb8384378bb943909584f78","event_type":"race","payload":{"i":386},"prev_hash":"983728807fa2d0f18fc8ff82f0932a7d05db053ee2dc0616dc7906af722fb570","timestamp":"2026-02-19T14:30:35.047306+00:00"}`
-- `{"actor":"R1","event_hash":"69af4b567bedb5f869b90ebf17c0fcb2a4eb5dd17e62a0bc36b4059567864f4f","event_type":"race","payload":{"i":391},"prev_hash":"3c21cb74fdc22a0351e5008919e5f9cd9b615b124eb8384378bb943909584f78","timestamp":"2026-02-19T14:30:35.048077+00:00"}`
-- `{"actor":"R6","event_hash":"1521bad8d528d1bbee87f2d2588ae59ec021d60d55ae39c9229e2753175984de","event_type":"race","payload":{"i":388},"prev_hash":"69af4b567bedb5f869b90ebf17c0fcb2a4eb5dd17e62a0bc36b4059567864f4f","timestamp":"2026-02-19T14:30:35.048826+00:00"}`
-- `{"actor":"R2","event_hash":"05770fc36adc41b8844f878b584ed34c8a52d11f3815a7a45df986c6931da111","event_type":"race","payload":{"i":386},"prev_hash":"1521bad8d528d1bbee87f2d2588ae59ec021d60d55ae39c9229e2753175984de","timestamp":"2026-02-19T14:30:35.049584+00:00"}`
-- `{"actor":"R3","event_hash":"760082134c0595e169dd34976b28976c8c3d878744d3cd8b4aeb78c16301989f","event_type":"race","payload":{"i":387},"prev_hash":"05770fc36adc41b8844f878b584ed34c8a52d11f3815a7a45df986c6931da111","timestamp":"2026-02-19T14:30:35.050355+00:00"}`
-- `{"actor":"R5","event_hash":"5e594a38b68f2105233724378b1d5e6693392729dfdc786513da6487ad4b8bc6","event_type":"race","payload":{"i":386},"prev_hash":"760082134c0595e169dd34976b28976c8c3d878744d3cd8b4aeb78c16301989f","timestamp":"2026-02-19T14:30:35.051110+00:00"}`
-- `{"actor":"R4","event_hash":"96c5312577f06f375684cc857634c20e0da70de343454ade9426a4caecb7d86b","event_type":"race","payload":{"i":387},"prev_hash":"5e594a38b68f2105233724378b1d5e6693392729dfdc786513da6487ad4b8bc6","timestamp":"2026-02-19T14:30:35.051869+00:00"}`
-- `{"actor":"R1","event_hash":"fb6a2ad837a60cd54ee7345469917b6b53266356c9818f6d96cb0b67b539abf8","event_type":"race","payload":{"i":392},"prev_hash":"96c5312577f06f375684cc857634c20e0da70de343454ade9426a4caecb7d86b","timestamp":"2026-02-19T14:30:35.052605+00:00"}`
-- `{"actor":"R6","event_hash":"16e826b115443d9712a179e18fa51c1d649f5a53a74e79f1dfacc4223f598f4d","event_type":"race","payload":{"i":389},"prev_hash":"fb6a2ad837a60cd54ee7345469917b6b53266356c9818f6d96cb0b67b539abf8","timestamp":"2026-02-19T14:30:35.053354+00:00"}`
-- `{"actor":"R2","event_hash":"51e1384e5b4b513d9d200fca7ff469484133fe0d5438e2fec7e462c8bc111f5c","event_type":"race","payload":{"i":387},"prev_hash":"16e826b115443d9712a179e18fa51c1d649f5a53a74e79f1dfacc4223f598f4d","timestamp":"2026-02-19T14:30:35.054089+00:00"}`
-- `{"actor":"R3","event_hash":"c9f0d89e5b59ec1bce774903094c32ea24cb7557a882f279f63b124ea2643641","event_type":"race","payload":{"i":388},"prev_hash":"51e1384e5b4b513d9d200fca7ff469484133fe0d5438e2fec7e462c8bc111f5c","timestamp":"2026-02-19T14:30:35.054826+00:00"}`
-- `{"actor":"R5","event_hash":"1744ecca716b96755b4a35891e079ff224338d6642665057d055d06dc63b1f4c","event_type":"race","payload":{"i":387},"prev_hash":"c9f0d89e5b59ec1bce774903094c32ea24cb7557a882f279f63b124ea2643641","timestamp":"2026-02-19T14:30:35.055622+00:00"}`
-- `{"actor":"R4","event_hash":"2d1eb5ba8f1f8ea3d1eaee0f88048e59a3807200c0796a999d6aef4881a47d3c","event_type":"race","payload":{"i":388},"prev_hash":"1744ecca716b96755b4a35891e079ff224338d6642665057d055d06dc63b1f4c","timestamp":"2026-02-19T14:30:35.056526+00:00"}`
-- `{"actor":"R1","event_hash":"6cde20880d3267f89f53ce9ff9440cac6d2dfd561691f46597903a81c6520bc3","event_type":"race","payload":{"i":393},"prev_hash":"2d1eb5ba8f1f8ea3d1eaee0f88048e59a3807200c0796a999d6aef4881a47d3c","timestamp":"2026-02-19T14:30:35.057419+00:00"}`
-- `{"actor":"R6","event_hash":"9aa1013359555fd40fff41e2826044ddb887b1a2cc04cb1783e3d8dd7a9fe820","event_type":"race","payload":{"i":390},"prev_hash":"6cde20880d3267f89f53ce9ff9440cac6d2dfd561691f46597903a81c6520bc3","timestamp":"2026-02-19T14:30:35.058300+00:00"}`
-- `{"actor":"R2","event_hash":"c9053dd68ca43f89a327f53f19797334eabddf9cebee54d10cbf37472fb35343","event_type":"race","payload":{"i":388},"prev_hash":"9aa1013359555fd40fff41e2826044ddb887b1a2cc04cb1783e3d8dd7a9fe820","timestamp":"2026-02-19T14:30:35.059183+00:00"}`
-- `{"actor":"R3","event_hash":"c4420e49ffb72acdbae9ea9e27d92926d5f82a5e069e65ab1ae2c7f51b37a81e","event_type":"race","payload":{"i":389},"prev_hash":"c9053dd68ca43f89a327f53f19797334eabddf9cebee54d10cbf37472fb35343","timestamp":"2026-02-19T14:30:35.059989+00:00"}`
-- `{"actor":"R5","event_hash":"ef1c8beec6e482ffe7622d0eb275d6a254308a14d1f0fc3bda0ed5c0baea258f","event_type":"race","payload":{"i":388},"prev_hash":"c4420e49ffb72acdbae9ea9e27d92926d5f82a5e069e65ab1ae2c7f51b37a81e","timestamp":"2026-02-19T14:30:35.060774+00:00"}`
-- `{"actor":"R4","event_hash":"21b48f8da97c2c4d48ec496ff25ec872babd9e13da366952fd59a9fd16ac77b4","event_type":"race","payload":{"i":389},"prev_hash":"ef1c8beec6e482ffe7622d0eb275d6a254308a14d1f0fc3bda0ed5c0baea258f","timestamp":"2026-02-19T14:30:35.061572+00:00"}`
-- `{"actor":"R1","event_hash":"ee105764ba93b8168ea0ebcd060b399a18fd3a6a5201c345726bfb439c57e90d","event_type":"race","payload":{"i":394},"prev_hash":"21b48f8da97c2c4d48ec496ff25ec872babd9e13da366952fd59a9fd16ac77b4","timestamp":"2026-02-19T14:30:35.062390+00:00"}`
-- `{"actor":"R6","event_hash":"53e1263379995312d69d6faa2093c7bdc97c909b2b0b095332d33bd3cf059a27","event_type":"race","payload":{"i":391},"prev_hash":"ee105764ba93b8168ea0ebcd060b399a18fd3a6a5201c345726bfb439c57e90d","timestamp":"2026-02-19T14:30:35.063167+00:00"}`
-- `{"actor":"R2","event_hash":"18b96a89c465d1887ab7bd1e80e29f01b540b17f23588fb2e535527ed17a438e","event_type":"race","payload":{"i":389},"prev_hash":"53e1263379995312d69d6faa2093c7bdc97c909b2b0b095332d33bd3cf059a27","timestamp":"2026-02-19T14:30:35.063946+00:00"}`
-- `{"actor":"R3","event_hash":"a5f3470f04ddceacc24091e542f9926e0776f3afe3f69c439083032bcd2fd326","event_type":"race","payload":{"i":390},"prev_hash":"18b96a89c465d1887ab7bd1e80e29f01b540b17f23588fb2e535527ed17a438e","timestamp":"2026-02-19T14:30:35.064718+00:00"}`
-- `{"actor":"R5","event_hash":"5db792b372c8cdcf5ab9e5f31c3091410dbf6af2b79df3786e64bbe8a7fc3f94","event_type":"race","payload":{"i":389},"prev_hash":"a5f3470f04ddceacc24091e542f9926e0776f3afe3f69c439083032bcd2fd326","timestamp":"2026-02-19T14:30:35.065483+00:00"}`
-- `{"actor":"R4","event_hash":"54f6813dff5c0608bdb0973014d44b237f46f6016c4a78e9b861c169fbe901ab","event_type":"race","payload":{"i":390},"prev_hash":"5db792b372c8cdcf5ab9e5f31c3091410dbf6af2b79df3786e64bbe8a7fc3f94","timestamp":"2026-02-19T14:30:35.066243+00:00"}`
-- `{"actor":"R1","event_hash":"afde80ff0b34e6f3cc618737e52c730114093dc86e73f691096bbe02407994fc","event_type":"race","payload":{"i":395},"prev_hash":"54f6813dff5c0608bdb0973014d44b237f46f6016c4a78e9b861c169fbe901ab","timestamp":"2026-02-19T14:30:35.067036+00:00"}`
-- `{"actor":"R6","event_hash":"7e1cb8b5c4cbb5e70ee37145997ce6b583c3f41cfda0a49fd6e08fa9d6613879","event_type":"race","payload":{"i":392},"prev_hash":"afde80ff0b34e6f3cc618737e52c730114093dc86e73f691096bbe02407994fc","timestamp":"2026-02-19T14:30:35.067852+00:00"}`
-- `{"actor":"R2","event_hash":"be1075b3e833d24c28326c87c30593f533590199c4c03b04417a000d1333cd52","event_type":"race","payload":{"i":390},"prev_hash":"7e1cb8b5c4cbb5e70ee37145997ce6b583c3f41cfda0a49fd6e08fa9d6613879","timestamp":"2026-02-19T14:30:35.068689+00:00"}`
-- `{"actor":"R3","event_hash":"1ea99e87d3a106b55f78a874c159b84b91e0d16f40f816b131c9ae89b444088c","event_type":"race","payload":{"i":391},"prev_hash":"be1075b3e833d24c28326c87c30593f533590199c4c03b04417a000d1333cd52","timestamp":"2026-02-19T14:30:35.069469+00:00"}`
-- `{"actor":"R5","event_hash":"0265a32efb07bb0014ace0c9ee03ef1b7cc6ebfc71ea6a1bba95e87d55b4ad49","event_type":"race","payload":{"i":390},"prev_hash":"1ea99e87d3a106b55f78a874c159b84b91e0d16f40f816b131c9ae89b444088c","timestamp":"2026-02-19T14:30:35.070215+00:00"}`
-- `{"actor":"R4","event_hash":"a398566286ffde1eb98edbb30617cc51f9d0e600b0b62a3a56469fc22c5adb59","event_type":"race","payload":{"i":391},"prev_hash":"0265a32efb07bb0014ace0c9ee03ef1b7cc6ebfc71ea6a1bba95e87d55b4ad49","timestamp":"2026-02-19T14:30:35.070969+00:00"}`
-- `{"actor":"R1","event_hash":"04aaf616a0d153b8e08e51e3a1eac935b8e6122e939bec9924a46f83996c2497","event_type":"race","payload":{"i":396},"prev_hash":"a398566286ffde1eb98edbb30617cc51f9d0e600b0b62a3a56469fc22c5adb59","timestamp":"2026-02-19T14:30:35.071690+00:00"}`
-- `{"actor":"R6","event_hash":"c70bb44a9038eab5484fb0e1c7eac5ca20017e6b482b1960f7b69487a6195be7","event_type":"race","payload":{"i":393},"prev_hash":"04aaf616a0d153b8e08e51e3a1eac935b8e6122e939bec9924a46f83996c2497","timestamp":"2026-02-19T14:30:35.072471+00:00"}`
-- `{"actor":"R2","event_hash":"99429c2f7a16261d9f6616f36754b2b1daf3b653d93a5abf17e4c23de03baba7","event_type":"race","payload":{"i":391},"prev_hash":"c70bb44a9038eab5484fb0e1c7eac5ca20017e6b482b1960f7b69487a6195be7","timestamp":"2026-02-19T14:30:35.073382+00:00"}`
-- `{"actor":"R3","event_hash":"51f9c24be5d5c3026343d8744350dac384a8c5afed89ecfe8123d2540e0ce181","event_type":"race","payload":{"i":392},"prev_hash":"99429c2f7a16261d9f6616f36754b2b1daf3b653d93a5abf17e4c23de03baba7","timestamp":"2026-02-19T14:30:35.074195+00:00"}`
-- `{"actor":"R5","event_hash":"c79183f8cc0dbaf331cfa5446a3927e41889c32d92f7b8f6f782e8ff6607dc23","event_type":"race","payload":{"i":391},"prev_hash":"51f9c24be5d5c3026343d8744350dac384a8c5afed89ecfe8123d2540e0ce181","timestamp":"2026-02-19T14:30:35.075018+00:00"}`
-- `{"actor":"R4","event_hash":"07613cd35e17de73e442a64629f45ca943e9e1c42cda345c698228f0119ee539","event_type":"race","payload":{"i":392},"prev_hash":"c79183f8cc0dbaf331cfa5446a3927e41889c32d92f7b8f6f782e8ff6607dc23","timestamp":"2026-02-19T14:30:35.075898+00:00"}`
-- `{"actor":"R1","event_hash":"7ddeba094f3efcda4d06b296f05b074df9aff211d2c8192354a15f44282217fb","event_type":"race","payload":{"i":397},"prev_hash":"07613cd35e17de73e442a64629f45ca943e9e1c42cda345c698228f0119ee539","timestamp":"2026-02-19T14:30:35.076794+00:00"}`
-- `{"actor":"R6","event_hash":"d9664fea7290a9328911f5df005290d30b00d94040837e327507ec304873dc01","event_type":"race","payload":{"i":394},"prev_hash":"7ddeba094f3efcda4d06b296f05b074df9aff211d2c8192354a15f44282217fb","timestamp":"2026-02-19T14:30:35.077624+00:00"}`
-- `{"actor":"R2","event_hash":"8e6b8cf26c37d7323fa23fcd7f597f4e5136a1bba9af9bad019912ce29f59846","event_type":"race","payload":{"i":392},"prev_hash":"d9664fea7290a9328911f5df005290d30b00d94040837e327507ec304873dc01","timestamp":"2026-02-19T14:30:35.078436+00:00"}`
-- `{"actor":"R3","event_hash":"d40a51605b69431590b60dc8a71035bffd7d6b516a91b32047b29d9de32422d6","event_type":"race","payload":{"i":393},"prev_hash":"8e6b8cf26c37d7323fa23fcd7f597f4e5136a1bba9af9bad019912ce29f59846","timestamp":"2026-02-19T14:30:35.079267+00:00"}`
-- `{"actor":"R5","event_hash":"d0aeb6d1c653394ded06a70c91763cd4f8a57871a70acab622e8adfc0300188d","event_type":"race","payload":{"i":392},"prev_hash":"d40a51605b69431590b60dc8a71035bffd7d6b516a91b32047b29d9de32422d6","timestamp":"2026-02-19T14:30:35.080086+00:00"}`
-- `{"actor":"R4","event_hash":"e15056d7734d2abd534ceaad65d125f80c7269f664f9ced17d1f1f8ea24d8c58","event_type":"race","payload":{"i":393},"prev_hash":"d0aeb6d1c653394ded06a70c91763cd4f8a57871a70acab622e8adfc0300188d","timestamp":"2026-02-19T14:30:35.080852+00:00"}`
-- `{"actor":"R1","event_hash":"26c3c4affa420d2cee4a662db3fd84017ba4317b37c0d33cc4ecc5d42dcd35e4","event_type":"race","payload":{"i":398},"prev_hash":"e15056d7734d2abd534ceaad65d125f80c7269f664f9ced17d1f1f8ea24d8c58","timestamp":"2026-02-19T14:30:35.081607+00:00"}`
-- `{"actor":"R6","event_hash":"68b30292a5c0271010ed882d8fd739a0f9835904392cade2b1fe349e06f927e1","event_type":"race","payload":{"i":395},"prev_hash":"26c3c4affa420d2cee4a662db3fd84017ba4317b37c0d33cc4ecc5d42dcd35e4","timestamp":"2026-02-19T14:30:35.082359+00:00"}`
-- `{"actor":"R2","event_hash":"1c9aa4d075a4d13c0b22cd49bab1cccb826467f0dd11fa6edf549bcc2554bd63","event_type":"race","payload":{"i":393},"prev_hash":"68b30292a5c0271010ed882d8fd739a0f9835904392cade2b1fe349e06f927e1","timestamp":"2026-02-19T14:30:35.083106+00:00"}`
-- `{"actor":"R3","event_hash":"59309cb313c551e37ee729500fd4f51bf10dea3a16d0633df6cddb20c3fc5383","event_type":"race","payload":{"i":394},"prev_hash":"1c9aa4d075a4d13c0b22cd49bab1cccb826467f0dd11fa6edf549bcc2554bd63","timestamp":"2026-02-19T14:30:35.083863+00:00"}`
-- `{"actor":"R5","event_hash":"21b7b2342c28ac1f0ce89241cd0d46fddf4b6b691a8c4543ccfd2742980a23dc","event_type":"race","payload":{"i":393},"prev_hash":"59309cb313c551e37ee729500fd4f51bf10dea3a16d0633df6cddb20c3fc5383","timestamp":"2026-02-19T14:30:35.084623+00:00"}`
-- `{"actor":"R4","event_hash":"5a21fcaba7f16cf7549802fa4585d24fa5b8d86a481159f70e0a06dedac4e15b","event_type":"race","payload":{"i":394},"prev_hash":"21b7b2342c28ac1f0ce89241cd0d46fddf4b6b691a8c4543ccfd2742980a23dc","timestamp":"2026-02-19T14:30:35.085420+00:00"}`
-- `{"actor":"R1","event_hash":"0470aa054ccf1c159835f5da188936e04f80b1f3062ff7e9fba4027eb4218542","event_type":"race","payload":{"i":399},"prev_hash":"5a21fcaba7f16cf7549802fa4585d24fa5b8d86a481159f70e0a06dedac4e15b","timestamp":"2026-02-19T14:30:35.086246+00:00"}`
-- `{"actor":"R6","event_hash":"5e582fb409c2d05ebb628182ec7de8652d8927d9480097804786b5f653acd42f","event_type":"race","payload":{"i":396},"prev_hash":"0470aa054ccf1c159835f5da188936e04f80b1f3062ff7e9fba4027eb4218542","timestamp":"2026-02-19T14:30:35.087035+00:00"}`
-- `{"actor":"R2","event_hash":"d1b879da110219c974c71bd7f559e6382d74415d0d598ccc5e31b86a7e0b2347","event_type":"race","payload":{"i":394},"prev_hash":"5e582fb409c2d05ebb628182ec7de8652d8927d9480097804786b5f653acd42f","timestamp":"2026-02-19T14:30:35.087802+00:00"}`
-- `{"actor":"R3","event_hash":"b92a977245aef278dd2a9662917c5f355c857114c13366d748ca919983d685cd","event_type":"race","payload":{"i":395},"prev_hash":"d1b879da110219c974c71bd7f559e6382d74415d0d598ccc5e31b86a7e0b2347","timestamp":"2026-02-19T14:30:35.088555+00:00"}`
-- `{"actor":"R5","event_hash":"c6f8dfc7256af7a058af38221a44cf34c37419f7f6722c8fbb50952ea9b59b59","event_type":"race","payload":{"i":394},"prev_hash":"b92a977245aef278dd2a9662917c5f355c857114c13366d748ca919983d685cd","timestamp":"2026-02-19T14:30:35.089341+00:00"}`
-- `{"actor":"R4","event_hash":"d4b163afa28a4b725713aec0e13046ad3f9bab9e445cf137cb571e261c9b38f4","event_type":"race","payload":{"i":395},"prev_hash":"c6f8dfc7256af7a058af38221a44cf34c37419f7f6722c8fbb50952ea9b59b59","timestamp":"2026-02-19T14:30:35.090534+00:00"}`
-- `{"actor":"R6","event_hash":"44390fb43cc855d9d97d1712ea528d2484ae930fec15ac206a300534322af5ed","event_type":"race","payload":{"i":397},"prev_hash":"d4b163afa28a4b725713aec0e13046ad3f9bab9e445cf137cb571e261c9b38f4","timestamp":"2026-02-19T14:30:35.091554+00:00"}`
-- `{"actor":"R2","event_hash":"6331555dbc98aa897b0c67a0e05fceac639087ab432c6bc2d67696905c9f0a2f","event_type":"race","payload":{"i":395},"prev_hash":"44390fb43cc855d9d97d1712ea528d2484ae930fec15ac206a300534322af5ed","timestamp":"2026-02-19T14:30:35.092557+00:00"}`
-- `{"actor":"R3","event_hash":"df53fc4f4e5efcf7d804f8939c5ea1c6cd2947acdd234450f46102daf530b594","event_type":"race","payload":{"i":396},"prev_hash":"6331555dbc98aa897b0c67a0e05fceac639087ab432c6bc2d67696905c9f0a2f","timestamp":"2026-02-19T14:30:35.093507+00:00"}`
-- `{"actor":"R5","event_hash":"257d3559b8494bdaeff802c791adf115ec6e7913a5844284d603baa25fb63c14","event_type":"race","payload":{"i":395},"prev_hash":"df53fc4f4e5efcf7d804f8939c5ea1c6cd2947acdd234450f46102daf530b594","timestamp":"2026-02-19T14:30:35.094524+00:00"}`
-- `{"actor":"R4","event_hash":"7195785448c1e02113c2bdd5dcfbf64f1a27ab2e31163bff9c3cd65cf9527980","event_type":"race","payload":{"i":396},"prev_hash":"257d3559b8494bdaeff802c791adf115ec6e7913a5844284d603baa25fb63c14","timestamp":"2026-02-19T14:30:35.095432+00:00"}`
-- `{"actor":"R6","event_hash":"3d4af0e72229b3b50976fb69adbb646d730ad2d0d16e8fe3f4cfa0d13f0898b4","event_type":"race","payload":{"i":398},"prev_hash":"7195785448c1e02113c2bdd5dcfbf64f1a27ab2e31163bff9c3cd65cf9527980","timestamp":"2026-02-19T14:30:35.096341+00:00"}`
-- `{"actor":"R2","event_hash":"f2fbc290c6a9a5d0801c2ff3d0b0c61434ab2857400a01f6cbd0c67f2c5d4267","event_type":"race","payload":{"i":396},"prev_hash":"3d4af0e72229b3b50976fb69adbb646d730ad2d0d16e8fe3f4cfa0d13f0898b4","timestamp":"2026-02-19T14:30:35.097263+00:00"}`
-- `{"actor":"R3","event_hash":"38dafb5392d786ef1658d58d46c595bd3d1f399a75080a7bcc51142a2f9559d8","event_type":"race","payload":{"i":397},"prev_hash":"f2fbc290c6a9a5d0801c2ff3d0b0c61434ab2857400a01f6cbd0c67f2c5d4267","timestamp":"2026-02-19T14:30:35.098057+00:00"}`
-- `{"actor":"R5","event_hash":"34cc00e61c3d3b4f89b0a40c84df71adc766045ab6805beac9dcf95f2a8eb25b","event_type":"race","payload":{"i":396},"prev_hash":"38dafb5392d786ef1658d58d46c595bd3d1f399a75080a7bcc51142a2f9559d8","timestamp":"2026-02-19T14:30:35.098810+00:00"}`
-- `{"actor":"R4","event_hash":"e32eb2566766c0d262a71b28c7be214aae521a9e9d760459cfdf36ebbffafddd","event_type":"race","payload":{"i":397},"prev_hash":"34cc00e61c3d3b4f89b0a40c84df71adc766045ab6805beac9dcf95f2a8eb25b","timestamp":"2026-02-19T14:30:35.099527+00:00"}`
-- `{"actor":"R6","event_hash":"3a2cca4025b76956fa4d96b8df24f621e9ebd7e71c8a43e8446ce4b90274aa03","event_type":"race","payload":{"i":399},"prev_hash":"e32eb2566766c0d262a71b28c7be214aae521a9e9d760459cfdf36ebbffafddd","timestamp":"2026-02-19T14:30:35.100296+00:00"}`
-- `{"actor":"R2","event_hash":"23d161948da8a8291dca29f57b78e6cf0017a27b61be96549174b5ad9686bb99","event_type":"race","payload":{"i":397},"prev_hash":"3a2cca4025b76956fa4d96b8df24f621e9ebd7e71c8a43e8446ce4b90274aa03","timestamp":"2026-02-19T14:30:35.101008+00:00"}`
-- `{"actor":"R3","event_hash":"e338b5efa1ced8f00d7c8c820c2529dcd7c146469721f238d635c9c4ef47bb40","event_type":"race","payload":{"i":398},"prev_hash":"23d161948da8a8291dca29f57b78e6cf0017a27b61be96549174b5ad9686bb99","timestamp":"2026-02-19T14:30:35.101800+00:00"}`
-- `{"actor":"R5","event_hash":"93bb15bd815540f69680d7b697b776885a36e9c5d62ba87d6f765c8e7556745c","event_type":"race","payload":{"i":397},"prev_hash":"e338b5efa1ced8f00d7c8c820c2529dcd7c146469721f238d635c9c4ef47bb40","timestamp":"2026-02-19T14:30:35.102601+00:00"}`
-- `{"actor":"R4","event_hash":"770aaa86d618c80344eb2b1132df7e3130a4050e5837e404d0c4fce33423208a","event_type":"race","payload":{"i":398},"prev_hash":"93bb15bd815540f69680d7b697b776885a36e9c5d62ba87d6f765c8e7556745c","timestamp":"2026-02-19T14:30:35.103418+00:00"}`
-- `{"actor":"R2","event_hash":"652cae1872730d08846b76ef8b25315e122c4f39fd91360f92e1846c5e86e1ba","event_type":"race","payload":{"i":398},"prev_hash":"770aaa86d618c80344eb2b1132df7e3130a4050e5837e404d0c4fce33423208a","timestamp":"2026-02-19T14:30:35.104231+00:00"}`
-- `{"actor":"R3","event_hash":"9c6fa63b2cd1cad02aa01392f31640c3fda40e875de4552337b8dedc4fc67f29","event_type":"race","payload":{"i":399},"prev_hash":"652cae1872730d08846b76ef8b25315e122c4f39fd91360f92e1846c5e86e1ba","timestamp":"2026-02-19T14:30:35.105066+00:00"}`
-- `{"actor":"R5","event_hash":"5108a4558c91e2d13265eb3371b44ce9a5f6c0772bed10422c114fe566d656a8","event_type":"race","payload":{"i":398},"prev_hash":"9c6fa63b2cd1cad02aa01392f31640c3fda40e875de4552337b8dedc4fc67f29","timestamp":"2026-02-19T14:30:35.106659+00:00"}`
-- `{"actor":"R4","event_hash":"bd05c20d2dddeef5ee4bd91075392853065a4264991c2c948442bfbf259fced9","event_type":"race","payload":{"i":399},"prev_hash":"5108a4558c91e2d13265eb3371b44ce9a5f6c0772bed10422c114fe566d656a8","timestamp":"2026-02-19T14:30:35.107784+00:00"}`
-- `{"actor":"R2","event_hash":"5c484a4870468fdd96a45a4c38cfed8486bb8af76f8cbea473e7a970cf12b74b","event_type":"race","payload":{"i":399},"prev_hash":"bd05c20d2dddeef5ee4bd91075392853065a4264991c2c948442bfbf259fced9","timestamp":"2026-02-19T14:30:35.109019+00:00"}`
-- `{"actor":"R5","event_hash":"5aea7a59eb3910b9d52cbef8586a1b4fd9f8cfd7ab7f4209c358f45599adcb8e","event_type":"race","payload":{"i":399},"prev_hash":"5c484a4870468fdd96a45a4c38cfed8486bb8af76f8cbea473e7a970cf12b74b","timestamp":"2026-02-19T14:30:35.110104+00:00"}`
-- `{"actor":"--interval","event_hash":"5bc4e284fd2dc4b46ac09fe6df72565f22f6a45e876ae4f51256d224c0f69dd3","event_type":"lease.acquire","payload":{"lease_token":1,"prev_token":0,"ttl_s":600},"prev_hash":"5aea7a59eb3910b9d52cbef8586a1b4fd9f8cfd7ab7f4209c358f45599adcb8e","timestamp":"2026-02-19T14:45:26.329708+00:00"}`
-- `{"actor":"--interval","event_hash":"6ffb3956bf9b16c93b8169bcee282f66ec0e18bbf68bdb74eb0d9380f395ac9f","event_type":"boot.complete","payload":{"last_seq":0,"lease_token":1,"msgs":0},"prev_hash":"5bc4e284fd2dc4b46ac09fe6df72565f22f6a45e876ae4f51256d224c0f69dd3","timestamp":"2026-02-19T14:45:26.330766+00:00"}`
-- `{"actor":"--interval","event_hash":"5e37f30824f460d6e6a480cef5ac1930ccc282b30e71a812fb1ac77c4bc18998","event_type":"lease.acquire","payload":{"lease_token":2,"prev_token":1,"ttl_s":600},"prev_hash":"6ffb3956bf9b16c93b8169bcee282f66ec0e18bbf68bdb74eb0d9380f395ac9f","timestamp":"2026-02-19T14:47:12.776633+00:00"}`
-- `{"actor":"--interval","event_hash":"bc6808db7e094251cf84f20e3e215214a4647bf65c65ef4470e8e2418f98cf7c","event_type":"boot.complete","payload":{"last_seq":0,"lease_token":2,"msgs":0},"prev_hash":"5e37f30824f460d6e6a480cef5ac1930ccc282b30e71a812fb1ac77c4bc18998","timestamp":"2026-02-19T14:47:12.777912+00:00"}`
-- `{"actor":"--interval","event_hash":"04cc2e61b311f127482d897f5cf5ed83c0cf84f152021a2d574b936d55d852d1","event_type":"lease.acquire","payload":{"lease_token":3,"prev_token":2,"ttl_s":600},"prev_hash":"bc6808db7e094251cf84f20e3e215214a4647bf65c65ef4470e8e2418f98cf7c","timestamp":"2026-02-19T14:51:44.691208+00:00"}`
-- `{"actor":"--interval","event_hash":"83e32c59b0338bada730fc4c56eafaf7bc60768d8f852e0ebce855fc0f90d0f1","event_type":"boot.complete","payload":{"last_seq":0,"lease_token":3,"msgs":0},"prev_hash":"04cc2e61b311f127482d897f5cf5ed83c0cf84f152021a2d574b936d55d852d1","timestamp":"2026-02-19T14:51:44.692800+00:00"}`
-- `{"actor":"--interval","event_hash":"2c089559e69f013200055dcb77c91d0712e7723109b7251ac3af477a530dc39b","event_type":"lease.acquire","payload":{"lease_token":4,"prev_token":3,"ttl_s":600},"prev_hash":"83e32c59b0338bada730fc4c56eafaf7bc60768d8f852e0ebce855fc0f90d0f1","timestamp":"2026-02-19T14:52:43.481246+00:00"}`
-- `{"actor":"--interval","event_hash":"8b23280cce6d84ae122404d399e5f4d8d115fc1ba974853b256171988382f8ce","event_type":"boot.complete","payload":{"last_seq":0,"lease_token":4,"msgs":0},"prev_hash":"2c089559e69f013200055dcb77c91d0712e7723109b7251ac3af477a530dc39b","timestamp":"2026-02-19T14:52:43.482569+00:00"}`
-- `{"actor":"--interval","event_hash":"b6ad5dc2e1815eab7e8a9f365c9492b90c9a823cab16d9d98368630571c6676f","event_type":"lease.acquire","payload":{"lease_token":5,"prev_token":4,"ttl_s":600},"prev_hash":"8b23280cce6d84ae122404d399e5f4d8d115fc1ba974853b256171988382f8ce","timestamp":"2026-02-19T14:58:03.906281+00:00"}`
-- `{"actor":"--interval","event_hash":"408d6d939af6ac2be9b44597321c883d820d0814e050deaf5b6d32c0790f4de0","event_type":"boot.complete","payload":{"last_seq":0,"lease_token":5,"msgs":0},"prev_hash":"b6ad5dc2e1815eab7e8a9f365c9492b90c9a823cab16d9d98368630571c6676f","timestamp":"2026-02-19T14:58:03.908088+00:00"}`
-- `{"actor":"--interval","event_hash":"792d680e99a9cedce4ec224ab8a6eecc8e92eec00f1aae156b838cbce2bbcdec","event_type":"lease.acquire","payload":{"lease_token":6,"prev_token":5,"ttl_s":600},"prev_hash":"408d6d939af6ac2be9b44597321c883d820d0814e050deaf5b6d32c0790f4de0","timestamp":"2026-02-19T15:00:25.758590+00:00"}`
-- `{"actor":"--interval","event_hash":"6cc67b533aed8e8e2aa323d360aadb20e76e434f963a28971f04f2744b9d6465","event_type":"boot.complete","payload":{"last_seq":0,"lease_token":6,"msgs":0},"prev_hash":"792d680e99a9cedce4ec224ab8a6eecc8e92eec00f1aae156b838cbce2bbcdec","timestamp":"2026-02-19T15:00:25.759891+00:00"}`
-- `{"actor":"--interval","event_hash":"df1eef5c06ce4ae5f5e1d8a3e4dd6ec0e498f18a44e79a039efb727823c018e0","event_type":"lease.acquire","payload":{"lease_token":7,"prev_token":6,"ttl_s":600},"prev_hash":"6cc67b533aed8e8e2aa323d360aadb20e76e434f963a28971f04f2744b9d6465","timestamp":"2026-02-19T15:02:17.534832+00:00"}`
-- `{"actor":"--interval","event_hash":"b382848a84fac752e0c20791afeffb6e98ab1690a7cb23cdf228df526fde53f6","event_type":"boot.complete","payload":{"last_seq":0,"lease_token":7,"msgs":0},"prev_hash":"df1eef5c06ce4ae5f5e1d8a3e4dd6ec0e498f18a44e79a039efb727823c018e0","timestamp":"2026-02-19T15:02:17.535871+00:00"}`
-- `{"actor":"--interval","event_hash":"5cd49ef272962785d692d1fb32d564acec75a00e0d51febe6e9a836bb7a52fef","event_type":"lease.acquire","payload":{"lease_token":8,"prev_token":7,"ttl_s":600},"prev_hash":"b382848a84fac752e0c20791afeffb6e98ab1690a7cb23cdf228df526fde53f6","timestamp":"2026-02-19T15:02:36.554231+00:00"}`
-- `{"actor":"--interval","event_hash":"feeacff5eb27a23f9fa04d16c76e8868eb747aed4f3be4b050a232058b5fac46","event_type":"boot.complete","payload":{"last_seq":0,"lease_token":8,"msgs":0},"prev_hash":"5cd49ef272962785d692d1fb32d564acec75a00e0d51febe6e9a836bb7a52fef","timestamp":"2026-02-19T15:02:36.555301+00:00"}`
-- `{"actor":"gpt","event_hash":"4cd7086ebf10f16649fe672f33245149c83d54effe0bd4bc559ee2a9658ce010","event_type":"gpt.ping","payload":{"msg":"alive","ts":"2026-02-19T15:03:24.901300Z"},"prev_hash":"feeacff5eb27a23f9fa04d16c76e8868eb747aed4f3be4b050a232058b5fac46","timestamp":"2026-02-19T15:03:24.902343+00:00"}`
-- `{"actor":"gpt","event_hash":"5a5df6f317a0bcc440a4f8f9fd5f09eee210b2aca126f416d7211e6f3905f7ec","event_type":"lease.acquire","payload":{"lease_token":1,"prev_token":0,"ttl_s":600},"prev_hash":"4cd7086ebf10f16649fe672f33245149c83d54effe0bd4bc559ee2a9658ce010","timestamp":"2026-02-19T15:04:16.841008+00:00"}`
-- `{"actor":"gpt","event_hash":"14115638ff4556f9026bf555685b215c283d2b07a03c82ae461e74f57f9ab573","event_type":"boot.complete","payload":{"last_seq":0,"lease_token":1,"msgs":0},"prev_hash":"5a5df6f317a0bcc440a4f8f9fd5f09eee210b2aca126f416d7211e6f3905f7ec","timestamp":"2026-02-19T15:04:16.842056+00:00"}`
-- `{"actor":"ORION","event_hash":"d5b5ec61e55f1f7e4a14484699d2ad0a08eb33449dd5fc507c5e2d942c80749b","event_type":"relay.enqueue","payload":{"msg_id":"19c76eed821-3305ba14cf504884a61d","seq":50,"target":"GPT"},"prev_hash":"14115638ff4556f9026bf555685b215c283d2b07a03c82ae461e74f57f9ab573","timestamp":"2026-02-19T17:24:53.014651+00:00"}`
-- `{"actor":"ORION","event_hash":"10873aac35282a16775b2acc6d1812af79d5a71465e9526a8eabf98094378396","event_type":"relay.enqueue","payload":{"msg_id":"19c7706b2f3-e8a9bd73406b4b708a42","seq":51,"target":"LEAD"},"prev_hash":"d5b5ec61e55f1f7e4a14484699d2ad0a08eb33449dd5fc507c5e2d942c80749b","timestamp":"2026-02-19T17:50:55.558001+00:00"}`
-- `{"actor":"LEAD","event_hash":"9dcb6d62070bfffa231d69dc5c8373cc3ea3600555378ec97ae718094a24857e","event_type":"lease.acquire","payload":{"lease_token":4,"prev_token":3,"ttl_s":600},"prev_hash":"10873aac35282a16775b2acc6d1812af79d5a71465e9526a8eabf98094378396","timestamp":"2026-02-19T17:51:07.234491+00:00"}`
-- `{"actor":"LEAD","event_hash":"8600bc2b2c4a9e5308f66b157f6601f73e6b504e65e56b099608f57f284ad460","event_type":"boot.complete","payload":{"last_seq":51,"lease_token":4,"msgs":1},"prev_hash":"9dcb6d62070bfffa231d69dc5c8373cc3ea3600555378ec97ae718094a24857e","timestamp":"2026-02-19T17:51:10.093774+00:00"}`
-- `{"actor":"B2","event_hash":"344bc9e4deee498d97e582a09dd2b7e3c51c96e239b026cdb850f99bd4d5a521","event_type":"lease.acquire","payload":{"lease_token":1,"prev_token":0,"ttl_s":600},"prev_hash":"8600bc2b2c4a9e5308f66b157f6601f73e6b504e65e56b099608f57f284ad460","timestamp":"2026-02-19T17:51:11.542863+00:00"}`
-- `{"actor":"B2","event_hash":"4d3a7e33445e99ebd37339d52cf70f4c03f3a87b95394e6bd7abc8913bc75e07","event_type":"boot.complete","payload":{"last_seq":50,"lease_token":1,"msgs":1},"prev_hash":"344bc9e4deee498d97e582a09dd2b7e3c51c96e239b026cdb850f99bd4d5a521","timestamp":"2026-02-19T17:51:15.632130+00:00"}`
-- `{"actor":"gpt","event_hash":"508da68b14508afa680a505f179c5fcd19dca725efdd19f0fbb87c5957f15082","event_type":"lease.acquire","payload":{"lease_token":2,"prev_token":1,"ttl_s":600},"prev_hash":"4d3a7e33445e99ebd37339d52cf70f4c03f3a87b95394e6bd7abc8913bc75e07","timestamp":"2026-02-19T18:27:44.076886+00:00"}`
-- `{"actor":"gpt","event_hash":"daf5014956baefd1b91687565e739578a7fdaa1bcdaa0e47d3d6a226aab41601","event_type":"boot.complete","payload":{"last_seq":0,"lease_token":2,"msgs":0},"prev_hash":"508da68b14508afa680a505f179c5fcd19dca725efdd19f0fbb87c5957f15082","timestamp":"2026-02-19T18:27:44.078725+00:00"}`
-- `{"actor":"gpt","event_hash":"d7f3353be9bc98077dddf984eded5da975fa1dc31b54d22f60988915b819ab9d","event_type":"lease.acquire","payload":{"lease_token":3,"prev_token":2,"ttl_s":600},"prev_hash":"daf5014956baefd1b91687565e739578a7fdaa1bcdaa0e47d3d6a226aab41601","timestamp":"2026-02-19T18:29:02.854618+00:00"}`
-- `{"actor":"gpt","event_hash":"213812d416acab9bd1aa7ed1159318922f63787c93161a3ef5301213c04e8a1c","event_type":"boot.complete","payload":{"last_seq":0,"lease_token":3,"msgs":0},"prev_hash":"d7f3353be9bc98077dddf984eded5da975fa1dc31b54d22f60988915b819ab9d","timestamp":"2026-02-19T18:29:02.856300+00:00"}`
-- `{"actor":"gpt","event_hash":"c5539db33e913342b84413279afad515554fa980e2594325266b8470f2d96faf","event_type":"lease.acquire","payload":{"lease_token":4,"prev_token":3,"ttl_s":600},"prev_hash":"213812d416acab9bd1aa7ed1159318922f63787c93161a3ef5301213c04e8a1c","timestamp":"2026-02-19T18:29:26.073596+00:00"}`
-- `{"actor":"gpt","event_hash":"0a415433f34024a10ae84454eee97741251610abb5aefffcfad506255f68a2e1","event_type":"boot.complete","payload":{"last_seq":0,"lease_token":4,"msgs":0},"prev_hash":"c5539db33e913342b84413279afad515554fa980e2594325266b8470f2d96faf","timestamp":"2026-02-19T18:29:26.074955+00:00"}`
-- `{"actor":"gpt","event_hash":"a343b0ac6d163aea36babcf50f04e2e03ae6bf5fca1ec052fcda5e3e3d66d366","event_type":"lease.acquire","payload":{"lease_token":5,"prev_token":4,"ttl_s":600},"prev_hash":"0a415433f34024a10ae84454eee97741251610abb5aefffcfad506255f68a2e1","timestamp":"2026-02-19T18:30:48.410157+00:00"}`
 - `{"actor":"gpt","event_hash":"56f08e44d5f6c0c22eb8dcfe80a30538342565c2bdfd8310c80efa78b8ce3340","event_type":"boot.complete","payload":{"last_seq":0,"lease_token":5,"msgs":0},"prev_hash":"a343b0ac6d163aea36babcf50f04e2e03ae6bf5fca1ec052fcda5e3e3d66d366","timestamp":"2026-02-19T18:30:48.411526+00:00"}`
 - `{"actor":"gpt","event_hash":"7786ad2a4b483b5fbad84f48734c32ee8dd7d83962b205d9928d37a09c2f6022","event_type":"lease.acquire","payload":{"lease_token":6,"prev_token":5,"ttl_s":600},"prev_hash":"56f08e44d5f6c0c22eb8dcfe80a30538342565c2bdfd8310c80efa78b8ce3340","timestamp":"2026-02-19T18:36:01.471508+00:00"}`
 - `{"actor":"gpt","event_hash":"75d43256b38a5bfdba53166f3a620516e2e2b7cf3b2ce64de5a46b8c45d7c1db","event_type":"boot.complete","payload":{"last_seq":0,"lease_token":6,"msgs":0},"prev_hash":"7786ad2a4b483b5fbad84f48734c32ee8dd7d83962b205d9928d37a09c2f6022","timestamp":"2026-02-19T18:36:01.472879+00:00"}`
@@ -384,6 +477,149 @@ STATE_HASH = 3ecf607e7858876aa4c19563c29683652785ff5be2924473332c76df6a91c703
 - `{"actor":"GPT","event_hash":"6c2b4b47502cdb09a8ee14f32707a05f9e5d8384c29f41e194d21b16ad5cb7c5","event_type":"relay.enqueue","payload":{"msg_id":"19c7892a1e5-5ea30ffebf38438cbf0b","seq":91,"target":"ORION"},"prev_hash":"2248e9f485edb06c8b035c33e6a540540fc1689bda3340a0f75b31526823e7bc","timestamp":"2026-02-20T01:03:21.577296+00:00"}`
 - `{"actor":"REX","event_hash":"10ae8b8e09132444c73a5f7786e99439f0b97fc8d8762f5681f5433739cf53ad","event_type":"lease.acquire","payload":{"lease_token":2,"prev_token":1,"ttl_s":600},"prev_hash":"6c2b4b47502cdb09a8ee14f32707a05f9e5d8384c29f41e194d21b16ad5cb7c5","timestamp":"2026-02-20T01:09:07.182844+00:00"}`
 - `{"actor":"REX","event_hash":"a1b33ed08e0759f4e93e698beb7a505f5e312f2b5123cc7f160d905b02376d3c","event_type":"boot.complete","payload":{"last_seq":83,"lease_token":2,"msgs":1},"prev_hash":"10ae8b8e09132444c73a5f7786e99439f0b97fc8d8762f5681f5433739cf53ad","timestamp":"2026-02-20T01:09:07.184273+00:00"}`
+- `{"actor":"REX","event_hash":"1d237175a5791fbcd7888216f00b3346897455e32efcad4f9e5ba6820d67c05b","event_type":"lease.acquire","payload":{"lease_token":3,"prev_token":2,"ttl_s":600},"prev_hash":"a1b33ed08e0759f4e93e698beb7a505f5e312f2b5123cc7f160d905b02376d3c","timestamp":"2026-02-20T01:57:39.557134+00:00"}`
+- `{"actor":"REX","event_hash":"76e4893d41aaf53941de64220253122e8ea3c603e99ba8f1b44321928a4949d9","event_type":"boot.complete","payload":{"last_seq":83,"lease_token":3,"msgs":0},"prev_hash":"1d237175a5791fbcd7888216f00b3346897455e32efcad4f9e5ba6820d67c05b","timestamp":"2026-02-20T01:57:39.558537+00:00"}`
+- `{"actor":"REX","event_hash":"9265b3d3db579bf6b352b63362b188ed8ca1eb60a54ee5ecd06ac4abab8bb786","event_type":"lease.acquire","payload":{"lease_token":4,"prev_token":3,"ttl_s":600},"prev_hash":"76e4893d41aaf53941de64220253122e8ea3c603e99ba8f1b44321928a4949d9","timestamp":"2026-02-20T01:58:14.826473+00:00"}`
+- `{"actor":"REX","event_hash":"363e6075beba4614cfa4454ef03f3dbd056f40d13b38eb7acdf426e9e1409d1d","event_type":"boot.complete","payload":{"last_seq":83,"lease_token":4,"msgs":0},"prev_hash":"9265b3d3db579bf6b352b63362b188ed8ca1eb60a54ee5ecd06ac4abab8bb786","timestamp":"2026-02-20T01:58:14.827951+00:00"}`
+- `{"actor":"REX","event_hash":"05d880d183ed082a7e7c675bdd14488e622dd98f1b6bd36454f82d0d7642f8aa","event_type":"lease.acquire","payload":{"lease_token":5,"prev_token":4,"ttl_s":600},"prev_hash":"363e6075beba4614cfa4454ef03f3dbd056f40d13b38eb7acdf426e9e1409d1d","timestamp":"2026-02-20T02:35:54.342963+00:00"}`
+- `{"actor":"REX","event_hash":"6624c6593d294b4423f527b73b83baca79e751d2d87735d14ed48c1b65f6aecc","event_type":"boot.complete","payload":{"last_seq":83,"lease_token":5,"msgs":0},"prev_hash":"05d880d183ed082a7e7c675bdd14488e622dd98f1b6bd36454f82d0d7642f8aa","timestamp":"2026-02-20T02:35:54.344411+00:00"}`
+- `{"actor":"REX","event_hash":"39b276ef2502a7336f17706df89877065d50714a559dab367bfd5578678589c5","event_type":"lease.acquire","payload":{"lease_token":6,"prev_token":5,"ttl_s":600},"prev_hash":"6624c6593d294b4423f527b73b83baca79e751d2d87735d14ed48c1b65f6aecc","timestamp":"2026-02-20T02:35:56.032258+00:00"}`
+- `{"actor":"REX","event_hash":"de4fe01b82ff4586bad8e630c0d95d3b16d467a76bb17e0f06388226e0e05424","event_type":"boot.complete","payload":{"last_seq":83,"lease_token":6,"msgs":0},"prev_hash":"39b276ef2502a7336f17706df89877065d50714a559dab367bfd5578678589c5","timestamp":"2026-02-20T02:35:56.033814+00:00"}`
+- `{"actor":"REX","event_hash":"8a8b7445ec979f6120f4c2a20aadc4b8c719967d963717566b188ded43852bc7","event_type":"lease.acquire","payload":{"lease_token":7,"prev_token":6,"ttl_s":600},"prev_hash":"de4fe01b82ff4586bad8e630c0d95d3b16d467a76bb17e0f06388226e0e05424","timestamp":"2026-02-20T04:36:20.478499+00:00"}`
+- `{"actor":"REX","event_hash":"37de3b5d67cb596f07f0d7ad6f136860d0ceeb6aaa9f6c95299be807041850c9","event_type":"boot.complete","payload":{"last_seq":83,"lease_token":7,"msgs":0},"prev_hash":"8a8b7445ec979f6120f4c2a20aadc4b8c719967d963717566b188ded43852bc7","timestamp":"2026-02-20T04:36:20.480286+00:00"}`
+- `{"actor":"MIKA","event_hash":"656b2e32401f959172e1f7c992f4fb9edee8ae5d43c6c06a1342b5002b1a2f72","event_type":"relay.enqueue","payload":{"msg_id":"19c7959f56c-a823f39507b046d68ff5","seq":92,"target":"REX"},"prev_hash":"37de3b5d67cb596f07f0d7ad6f136860d0ceeb6aaa9f6c95299be807041850c9","timestamp":"2026-02-20T04:41:04.621856+00:00"}`
+- `{"actor":"REX","event_hash":"662103acfce9b0bd54ec733733e533716539a16a199305c482a218d722d1206f","event_type":"lease.acquire","payload":{"lease_token":8,"prev_token":7,"ttl_s":600},"prev_hash":"656b2e32401f959172e1f7c992f4fb9edee8ae5d43c6c06a1342b5002b1a2f72","timestamp":"2026-02-20T04:41:08.109616+00:00"}`
+- `{"actor":"REX","event_hash":"9ca4d612728a03e8fe19f88bcdb6ebf5701e3ead8faea6f9d494da7f34d9673a","event_type":"boot.complete","payload":{"last_seq":92,"lease_token":8,"msgs":1},"prev_hash":"662103acfce9b0bd54ec733733e533716539a16a199305c482a218d722d1206f","timestamp":"2026-02-20T04:41:08.111470+00:00"}`
+- `{"actor":"MIKA","event_hash":"003cc86f69e5a0feb60cb1dad21e73e39b2f53be6a6a5499a0a5d791654e191e","event_type":"relay.enqueue","payload":{"msg_id":"19c795aafac-6f161f179057487e9ff2","seq":93,"target":"ORION"},"prev_hash":"9ca4d612728a03e8fe19f88bcdb6ebf5701e3ead8faea6f9d494da7f34d9673a","timestamp":"2026-02-20T04:41:52.302414+00:00"}`
+- `{"actor":"ORION","event_hash":"519916fbf52119584932a097f2fe282339daa07d018143437646f69594b86c6a","event_type":"lease.acquire","payload":{"lease_token":1,"prev_token":0,"ttl_s":600},"prev_hash":"003cc86f69e5a0feb60cb1dad21e73e39b2f53be6a6a5499a0a5d791654e191e","timestamp":"2026-02-20T04:41:56.772057+00:00"}`
+- `{"actor":"ORION","event_hash":"c02973b5e69d3e1d706753e3f8d1d383a10f40363ceb6bab50f362cf17320af2","event_type":"boot.complete","payload":{"last_seq":93,"lease_token":1,"msgs":7},"prev_hash":"519916fbf52119584932a097f2fe282339daa07d018143437646f69594b86c6a","timestamp":"2026-02-20T04:41:56.774944+00:00"}`
+- `{"actor":"MIKA","event_hash":"fc740a92bdb2cfb9fcdcb6d5651ebba16a32e71ecf725faf925aed04fa48f33a","event_type":"relay.enqueue","payload":{"msg_id":"19c7964f974-b19312a098954e94ab40","seq":94,"target":"ORION"},"prev_hash":"c02973b5e69d3e1d706753e3f8d1d383a10f40363ceb6bab50f362cf17320af2","timestamp":"2026-02-20T04:53:06.551539+00:00"}`
+- `{"actor":"ORION","event_hash":"4f53503d3c323ff5fe766543ad369297a44aa9eae05eeb1346633d3078c8dabe","event_type":"lease.acquire","payload":{"lease_token":2,"prev_token":1,"ttl_s":600},"prev_hash":"fc740a92bdb2cfb9fcdcb6d5651ebba16a32e71ecf725faf925aed04fa48f33a","timestamp":"2026-02-20T04:53:11.053874+00:00"}`
+- `{"actor":"ORION","event_hash":"f54492f07a8cbf081024a743937386bf5a4e0de296e341922160aa1856943bd0","event_type":"boot.complete","payload":{"last_seq":94,"lease_token":2,"msgs":1},"prev_hash":"4f53503d3c323ff5fe766543ad369297a44aa9eae05eeb1346633d3078c8dabe","timestamp":"2026-02-20T04:53:11.056244+00:00"}`
+- `{"actor":"MIKA","event_hash":"68368c9fd795c0f3c1ac49d5832e5c4349bc73a06096d157c5dbfd9fa5512578","event_type":"relay.enqueue","payload":{"msg_id":"19c79657e37-c77d546c2148482dafa3","seq":95,"target":"ORION"},"prev_hash":"f54492f07a8cbf081024a743937386bf5a4e0de296e341922160aa1856943bd0","timestamp":"2026-02-20T04:53:40.536647+00:00"}`
+- `{"actor":"ORION","event_hash":"18ba871020f2652064f7c09d15e4f43571884780d92a14421c69fdd4711f3a04","event_type":"lease.acquire","payload":{"lease_token":3,"prev_token":2,"ttl_s":600},"prev_hash":"68368c9fd795c0f3c1ac49d5832e5c4349bc73a06096d157c5dbfd9fa5512578","timestamp":"2026-02-20T04:53:44.334204+00:00"}`
+- `{"actor":"ORION","event_hash":"1bd76fd5f903919c81313cfb2b51e1219cb8a8309158598b334c181d5e2c636e","event_type":"boot.complete","payload":{"last_seq":95,"lease_token":3,"msgs":1},"prev_hash":"18ba871020f2652064f7c09d15e4f43571884780d92a14421c69fdd4711f3a04","timestamp":"2026-02-20T04:53:44.336112+00:00"}`
+- `{"actor":"MIKA","event_hash":"029ef43fba3c41e439fef583a22b3db96574ae99a3fbd50238957f4e9641046f","event_type":"relay.enqueue","payload":{"msg_id":"19c796789ad-1a2710ae3a174745b992","seq":96,"target":"ORION"},"prev_hash":"1bd76fd5f903919c81313cfb2b51e1219cb8a8309158598b334c181d5e2c636e","timestamp":"2026-02-20T04:55:54.544410+00:00"}`
+- `{"actor":"ORION","event_hash":"8f7e0c1ae35df2c7af37a76f4bcb07855378327e9269e19e673eacbaad77d5fc","event_type":"lease.acquire","payload":{"lease_token":4,"prev_token":3,"ttl_s":600},"prev_hash":"029ef43fba3c41e439fef583a22b3db96574ae99a3fbd50238957f4e9641046f","timestamp":"2026-02-20T04:55:58.408695+00:00"}`
+- `{"actor":"ORION","event_hash":"49dde5b800b64c1841da1688ed7f4e9b1e1e933e291317ca5d3cc70b9477e92f","event_type":"boot.complete","payload":{"last_seq":96,"lease_token":4,"msgs":1},"prev_hash":"8f7e0c1ae35df2c7af37a76f4bcb07855378327e9269e19e673eacbaad77d5fc","timestamp":"2026-02-20T04:55:58.410455+00:00"}`
+- `{"actor":"MIKA","event_hash":"6468c2d20f34835a21ddfddcb52922ba684ca6f6f77bca153ebda3f8d451a0f0","event_type":"relay.enqueue","payload":{"msg_id":"19c797041c7-27e2678377e746b7bc83","seq":97,"target":"SONNET"},"prev_hash":"49dde5b800b64c1841da1688ed7f4e9b1e1e933e291317ca5d3cc70b9477e92f","timestamp":"2026-02-20T05:05:25.962044+00:00"}`
+- `{"actor":"SONNET","event_hash":"242908ac5ba5e4b5622a2d016ccc93f26ee0a0d0c5839c9719af4e1cedd5098e","event_type":"lease.acquire","payload":{"lease_token":1,"prev_token":0,"ttl_s":600},"prev_hash":"6468c2d20f34835a21ddfddcb52922ba684ca6f6f77bca153ebda3f8d451a0f0","timestamp":"2026-02-20T05:05:31.979024+00:00"}`
+- `{"actor":"SONNET","event_hash":"c79d3f1fb2e194df44ccbff2786f2719c7767d2f07494ed4257abf865bda8182","event_type":"boot.complete","payload":{"last_seq":97,"lease_token":1,"msgs":1},"prev_hash":"242908ac5ba5e4b5622a2d016ccc93f26ee0a0d0c5839c9719af4e1cedd5098e","timestamp":"2026-02-20T05:05:31.981342+00:00"}`
+- `{"actor":"ORION","event_hash":"b29c586783b11260c2e37eab6ab52d2c67527653f1293b50d43afb7c6a0fdda8","event_type":"lease.acquire","payload":{"lease_token":5,"prev_token":4,"ttl_s":600},"prev_hash":"c79d3f1fb2e194df44ccbff2786f2719c7767d2f07494ed4257abf865bda8182","timestamp":"2026-02-20T07:08:24.216789+00:00"}`
+- `{"actor":"ORION","event_hash":"fdf52e30f631a725953796e9af76127bb4a9181324ced32d043b39a3449a2ada","event_type":"boot.complete","payload":{"last_seq":96,"lease_token":5,"msgs":0},"prev_hash":"b29c586783b11260c2e37eab6ab52d2c67527653f1293b50d43afb7c6a0fdda8","timestamp":"2026-02-20T07:08:24.219130+00:00"}`
+- `{"actor":"--INTERVAL","event_hash":"82856760dc2b36d543027e3d1524f082a4f2a0d39504834b432a5e955298496a","event_type":"lease.acquire","payload":{"lease_token":9,"prev_token":8,"ttl_s":600},"prev_hash":"fdf52e30f631a725953796e9af76127bb4a9181324ced32d043b39a3449a2ada","timestamp":"2026-02-20T07:13:22.349193+00:00"}`
+- `{"actor":"--INTERVAL","event_hash":"3f8968f91ca0e378d804b851dfa366a6e9c311d377f6b4e477489d61ad341915","event_type":"boot.complete","payload":{"last_seq":0,"lease_token":9,"msgs":0},"prev_hash":"82856760dc2b36d543027e3d1524f082a4f2a0d39504834b432a5e955298496a","timestamp":"2026-02-20T07:13:22.351215+00:00"}`
+- `{"actor":"MIKA","event_hash":"246c7502d81966c27fa42c575fb2294f7d30e54763ad54527f9523bb2979c581","event_type":"relay.enqueue","payload":{"msg_id":"19c79e56435-96cb1a936768483b9d3e","seq":98,"target":"--INTERVAL"},"prev_hash":"3f8968f91ca0e378d804b851dfa366a6e9c311d377f6b4e477489d61ad341915","timestamp":"2026-02-20T07:13:22.487684+00:00"}`
+- `{"actor":"B2","event_hash":"7890cb2373fb7834c859a9c03cad7ec8875d204da3525e089ab1ea0ced851296","event_type":"lease.acquire","payload":{"lease_token":2,"prev_token":1,"ttl_s":600},"prev_hash":"246c7502d81966c27fa42c575fb2294f7d30e54763ad54527f9523bb2979c581","timestamp":"2026-02-20T07:13:22.755175+00:00"}`
+- `{"actor":"B2","event_hash":"6c30d6d248fbba13d3883fdae8bd412ac459fa36d1cf2c5ba1eaf51067b15696","event_type":"boot.complete","payload":{"last_seq":88,"lease_token":2,"msgs":6},"prev_hash":"7890cb2373fb7834c859a9c03cad7ec8875d204da3525e089ab1ea0ced851296","timestamp":"2026-02-20T07:13:22.757734+00:00"}`
+- `{"actor":"MIKA","event_hash":"814c073a8138406e9724650bced4123a01b25f622fab3014eb539cba6ffefff1","event_type":"relay.enqueue","payload":{"msg_id":"19c79e565c9-ea5ba5762f834fd0b720","seq":99,"target":"B2"},"prev_hash":"6c30d6d248fbba13d3883fdae8bd412ac459fa36d1cf2c5ba1eaf51067b15696","timestamp":"2026-02-20T07:13:22.891088+00:00"}`
+- `{"actor":"CLAUDE","event_hash":"3eec60ad109a8650ac127d41fe755b8233d9ecdf18efe0179d72bdd84b01e3ee","event_type":"lease.acquire","payload":{"lease_token":1,"prev_token":0,"ttl_s":600},"prev_hash":"814c073a8138406e9724650bced4123a01b25f622fab3014eb539cba6ffefff1","timestamp":"2026-02-20T07:13:23.157712+00:00"}`
+- `{"actor":"CLAUDE","event_hash":"cde75c6622f35e8b31dffe0bf6fb71f368563bb1c9c855b58f2bf0126c24f502","event_type":"boot.complete","payload":{"last_seq":0,"lease_token":1,"msgs":0},"prev_hash":"3eec60ad109a8650ac127d41fe755b8233d9ecdf18efe0179d72bdd84b01e3ee","timestamp":"2026-02-20T07:13:23.159147+00:00"}`
+- `{"actor":"MIKA","event_hash":"9b09d5301d481088832a170ca3c35cf3a311c953a4ff7e86c8570aefb0c2e827","event_type":"relay.enqueue","payload":{"msg_id":"19c79e5675a-d236f146a28b45d7b3b3","seq":100,"target":"CLAUDE"},"prev_hash":"cde75c6622f35e8b31dffe0bf6fb71f368563bb1c9c855b58f2bf0126c24f502","timestamp":"2026-02-20T07:13:23.291485+00:00"}`
+- `{"actor":"COWORK","event_hash":"0e9f7b57089ac4d73fcdf3c6d1264d3a5696f96b51cfc36eb6970514c901bc42","event_type":"lease.acquire","payload":{"lease_token":13,"prev_token":12,"ttl_s":600},"prev_hash":"9b09d5301d481088832a170ca3c35cf3a311c953a4ff7e86c8570aefb0c2e827","timestamp":"2026-02-20T07:13:23.558077+00:00"}`
+- `{"actor":"COWORK","event_hash":"168431ce1ea861b9ff98fc5c343ebbbe4dfcd58fc82dd708b7cff4fbd2805311","event_type":"boot.complete","payload":{"last_seq":90,"lease_token":13,"msgs":3},"prev_hash":"0e9f7b57089ac4d73fcdf3c6d1264d3a5696f96b51cfc36eb6970514c901bc42","timestamp":"2026-02-20T07:13:23.560432+00:00"}`
+- `{"actor":"MIKA","event_hash":"a96c15c724c0a3cbf4e244e7e60f67651e457d0518198ea0dd8ab1f2c955132d","event_type":"relay.enqueue","payload":{"msg_id":"19c79e568eb-faf6f689021d4b0585fb","seq":101,"target":"COWORK"},"prev_hash":"168431ce1ea861b9ff98fc5c343ebbbe4dfcd58fc82dd708b7cff4fbd2805311","timestamp":"2026-02-20T07:13:23.692976+00:00"}`
+- `{"actor":"GEMINI","event_hash":"728b99f2dc4ed77fbaa8e91bf2ce9607dc0c7d48d610fa48f58d5b37b5c0f0e6","event_type":"lease.acquire","payload":{"lease_token":1,"prev_token":0,"ttl_s":600},"prev_hash":"a96c15c724c0a3cbf4e244e7e60f67651e457d0518198ea0dd8ab1f2c955132d","timestamp":"2026-02-20T07:13:23.961380+00:00"}`
+- `{"actor":"GEMINI","event_hash":"541ba676ddaca659a641f071e0a5a05a60453ca95fa693acd6994a63b3645ae4","event_type":"boot.complete","payload":{"last_seq":0,"lease_token":1,"msgs":0},"prev_hash":"728b99f2dc4ed77fbaa8e91bf2ce9607dc0c7d48d610fa48f58d5b37b5c0f0e6","timestamp":"2026-02-20T07:13:23.962858+00:00"}`
+- `{"actor":"MIKA","event_hash":"4ec0eb5f941aec36a757a486dc24d9092179c252f9d01830b107bb5490eea390","event_type":"relay.enqueue","payload":{"msg_id":"19c79e56a83-7bb71bf4938e43d1b49f","seq":102,"target":"GEMINI"},"prev_hash":"541ba676ddaca659a641f071e0a5a05a60453ca95fa693acd6994a63b3645ae4","timestamp":"2026-02-20T07:13:24.101087+00:00"}`
+- `{"actor":"GEMINI-FLASH","event_hash":"8dae823c0d9d2515d8d722460c6d57d55e14e28d0fb9244c7674a6392e4be77c","event_type":"lease.acquire","payload":{"lease_token":1,"prev_token":0,"ttl_s":600},"prev_hash":"4ec0eb5f941aec36a757a486dc24d9092179c252f9d01830b107bb5490eea390","timestamp":"2026-02-20T07:13:24.362758+00:00"}`
+- `{"actor":"GEMINI-FLASH","event_hash":"1c1ea3da92fde3a69d36bb5fb2d9a71d7332ff9f724e32f65954d5a67aec98a3","event_type":"boot.complete","payload":{"last_seq":0,"lease_token":1,"msgs":0},"prev_hash":"8dae823c0d9d2515d8d722460c6d57d55e14e28d0fb9244c7674a6392e4be77c","timestamp":"2026-02-20T07:13:24.364173+00:00"}`
+- `{"actor":"MIKA","event_hash":"5b2e2ae12b30602db3dd3034defa5bfd66d69878218d4bc87aa2d60807c05469","event_type":"relay.enqueue","payload":{"msg_id":"19c79e56c12-c7e9cd08e49646ea8679","seq":103,"target":"GEMINI-FLASH"},"prev_hash":"1c1ea3da92fde3a69d36bb5fb2d9a71d7332ff9f724e32f65954d5a67aec98a3","timestamp":"2026-02-20T07:13:24.499807+00:00"}`
+- `{"actor":"GEMINI-PRO","event_hash":"0efa10a566005ac395b56aabf65fbe4651a65cbc61485e2b71c9b282d123196b","event_type":"lease.acquire","payload":{"lease_token":1,"prev_token":0,"ttl_s":600},"prev_hash":"5b2e2ae12b30602db3dd3034defa5bfd66d69878218d4bc87aa2d60807c05469","timestamp":"2026-02-20T07:13:24.766290+00:00"}`
+- `{"actor":"GEMINI-PRO","event_hash":"4b07f709ea56b52f7de46dd94f81a15dc30b82e0d267cb54e88129995b3c05df","event_type":"boot.complete","payload":{"last_seq":0,"lease_token":1,"msgs":0},"prev_hash":"0efa10a566005ac395b56aabf65fbe4651a65cbc61485e2b71c9b282d123196b","timestamp":"2026-02-20T07:13:24.768242+00:00"}`
+- `{"actor":"MIKA","event_hash":"2c751e4fd7c2543d1e806eae867b295faba4d633406ccbe9dc91e82bd9b7966a","event_type":"relay.enqueue","payload":{"msg_id":"19c79e56da4-3220ec39d7514b8b8f7e","seq":104,"target":"GEMINI-PRO"},"prev_hash":"4b07f709ea56b52f7de46dd94f81a15dc30b82e0d267cb54e88129995b3c05df","timestamp":"2026-02-20T07:13:24.902187+00:00"}`
+- `{"actor":"GPT","event_hash":"ba429d2dfa8229b5edef39747ecdd438ef15155d53198a5f23614dc1c0dcd080","event_type":"lease.acquire","payload":{"lease_token":12,"prev_token":11,"ttl_s":600},"prev_hash":"2c751e4fd7c2543d1e806eae867b295faba4d633406ccbe9dc91e82bd9b7966a","timestamp":"2026-02-20T07:13:25.170842+00:00"}`
+- `{"actor":"GPT","event_hash":"9e3e74c98473d7aa74ad93038da3ede4ac499dd1359a6a33a2968472864834ec","event_type":"boot.complete","payload":{"last_seq":55,"lease_token":12,"msgs":0},"prev_hash":"ba429d2dfa8229b5edef39747ecdd438ef15155d53198a5f23614dc1c0dcd080","timestamp":"2026-02-20T07:13:25.172530+00:00"}`
+- `{"actor":"MIKA","event_hash":"fbacecdc9c19f9ac0421a893b9d2192363f1ebe49d8ab3686f77e116bfc96ccc","event_type":"relay.enqueue","payload":{"msg_id":"19c79e56f3a-d43c96da3e814feeb66f","seq":105,"target":"GPT"},"prev_hash":"9e3e74c98473d7aa74ad93038da3ede4ac499dd1359a6a33a2968472864834ec","timestamp":"2026-02-20T07:13:25.307427+00:00"}`
+- `{"actor":"HYPERION","event_hash":"1538cfcb9ccece9d6f16fd76bf86fdbe0e84bcd56c9fb23d2c9878317e50b4bc","event_type":"lease.acquire","payload":{"lease_token":1,"prev_token":0,"ttl_s":600},"prev_hash":"fbacecdc9c19f9ac0421a893b9d2192363f1ebe49d8ab3686f77e116bfc96ccc","timestamp":"2026-02-20T07:13:25.574219+00:00"}`
+- `{"actor":"HYPERION","event_hash":"504e9ca23251bddc28b58b2958877ca71f50f6db23b447c8ca27c4b10e8ba13a","event_type":"boot.complete","payload":{"last_seq":64,"lease_token":1,"msgs":3},"prev_hash":"1538cfcb9ccece9d6f16fd76bf86fdbe0e84bcd56c9fb23d2c9878317e50b4bc","timestamp":"2026-02-20T07:13:25.576295+00:00"}`
+- `{"actor":"MIKA","event_hash":"b813cecd38ea98257040e5e7a3b14c0462a08d6e78c59024449d3fb342035bb6","event_type":"relay.enqueue","payload":{"msg_id":"19c79e570d0-03f7c94ced5e4f3d9b33","seq":106,"target":"HYPERION"},"prev_hash":"504e9ca23251bddc28b58b2958877ca71f50f6db23b447c8ca27c4b10e8ba13a","timestamp":"2026-02-20T07:13:25.713847+00:00"}`
+- `{"actor":"LEAD","event_hash":"5e5d6a51d55f810a19862eab634c743b2ebf2d6a89074e4176fcfcf4c2ae24a0","event_type":"lease.acquire","payload":{"lease_token":5,"prev_token":4,"ttl_s":600},"prev_hash":"b813cecd38ea98257040e5e7a3b14c0462a08d6e78c59024449d3fb342035bb6","timestamp":"2026-02-20T07:13:25.977420+00:00"}`
+- `{"actor":"LEAD","event_hash":"171d3a29c8163f0e83fc6ca9fc7c94240679ebd8d00200bcc7278b97cd6e0472","event_type":"boot.complete","payload":{"last_seq":87,"lease_token":5,"msgs":10},"prev_hash":"5e5d6a51d55f810a19862eab634c743b2ebf2d6a89074e4176fcfcf4c2ae24a0","timestamp":"2026-02-20T07:13:25.980993+00:00"}`
+- `{"actor":"MIKA","event_hash":"4bc2688b8b8ce6d564ac4187c3d5a8503393a8014ef0f9e9f1746794abe858db","event_type":"relay.enqueue","payload":{"msg_id":"19c79e57261-d911857f8a3b41ca903f","seq":107,"target":"LEAD"},"prev_hash":"171d3a29c8163f0e83fc6ca9fc7c94240679ebd8d00200bcc7278b97cd6e0472","timestamp":"2026-02-20T07:13:26.115312+00:00"}`
+- `{"actor":"ORION","event_hash":"c729b2c92ed704681e71580852b98ee5a674e74cb55cc62c94799c96dba299b6","event_type":"lease.acquire","payload":{"lease_token":6,"prev_token":5,"ttl_s":600},"prev_hash":"4bc2688b8b8ce6d564ac4187c3d5a8503393a8014ef0f9e9f1746794abe858db","timestamp":"2026-02-20T07:13:26.382650+00:00"}`
+- `{"actor":"ORION","event_hash":"6f519e166269d5b0c0c64b9ab583c265df1c1ecf97ddff1172f7283c9d6e4f75","event_type":"boot.complete","payload":{"last_seq":96,"lease_token":6,"msgs":0},"prev_hash":"c729b2c92ed704681e71580852b98ee5a674e74cb55cc62c94799c96dba299b6","timestamp":"2026-02-20T07:13:26.384281+00:00"}`
+- `{"actor":"MIKA","event_hash":"e2543881898c0b6e69be4a7eed29ae0796cc3a52256aa5d281758c804b75c5a0","event_type":"relay.enqueue","payload":{"msg_id":"19c79e57408-2fc2e6c235d640e58874","seq":108,"target":"ORION"},"prev_hash":"6f519e166269d5b0c0c64b9ab583c265df1c1ecf97ddff1172f7283c9d6e4f75","timestamp":"2026-02-20T07:13:26.538295+00:00"}`
+- `{"actor":"PERSONAL","event_hash":"180169f3dff4d2d59c7d7178d28008d5b759eaff3c7d8b807e6575ac4acca684","event_type":"lease.acquire","payload":{"lease_token":1,"prev_token":0,"ttl_s":600},"prev_hash":"e2543881898c0b6e69be4a7eed29ae0796cc3a52256aa5d281758c804b75c5a0","timestamp":"2026-02-20T07:13:26.840532+00:00"}`
+- `{"actor":"PERSONAL","event_hash":"9c8a1e6051a5ad9728917a37e7823a909c4f9fe213df9e200c6e88a7a7d01983","event_type":"boot.complete","payload":{"last_seq":0,"lease_token":1,"msgs":0},"prev_hash":"180169f3dff4d2d59c7d7178d28008d5b759eaff3c7d8b807e6575ac4acca684","timestamp":"2026-02-20T07:13:26.841980+00:00"}`
+- `{"actor":"MIKA","event_hash":"92d3fcedacaab5d9beba9f8faa945eefd56c27a22d127470c600ad8e8a321bf2","event_type":"relay.enqueue","payload":{"msg_id":"19c79e575c9-b54115dfd7c34639a896","seq":109,"target":"PERSONAL"},"prev_hash":"9c8a1e6051a5ad9728917a37e7823a909c4f9fe213df9e200c6e88a7a7d01983","timestamp":"2026-02-20T07:13:26.986675+00:00"}`
+- `{"actor":"REX","event_hash":"79750c146c0cf80b3586ccb65680db6d857e25e397c3def220464395fd101372","event_type":"lease.acquire","payload":{"lease_token":9,"prev_token":8,"ttl_s":600},"prev_hash":"92d3fcedacaab5d9beba9f8faa945eefd56c27a22d127470c600ad8e8a321bf2","timestamp":"2026-02-20T07:13:27.259160+00:00"}`
+- `{"actor":"REX","event_hash":"a7116534cee9eeaea6c164b37786eb9d922b76cb6b02e73fb18d750ba0c0ed93","event_type":"boot.complete","payload":{"last_seq":92,"lease_token":9,"msgs":0},"prev_hash":"79750c146c0cf80b3586ccb65680db6d857e25e397c3def220464395fd101372","timestamp":"2026-02-20T07:13:27.260992+00:00"}`
+- `{"actor":"MIKA","event_hash":"1ab3600a500377f3e310ec44f22be7b2e342eca9b11bbf0a47b499c05d3bb8df","event_type":"relay.enqueue","payload":{"msg_id":"19c79e57762-f574675389cd41cca521","seq":110,"target":"REX"},"prev_hash":"a7116534cee9eeaea6c164b37786eb9d922b76cb6b02e73fb18d750ba0c0ed93","timestamp":"2026-02-20T07:13:27.396134+00:00"}`
+- `{"actor":"SONETTE","event_hash":"1aadc46aa92721ee721b0f458ae0bae817eacad41c67a7dc8ddeff05c5a49495","event_type":"lease.acquire","payload":{"lease_token":1,"prev_token":0,"ttl_s":600},"prev_hash":"1ab3600a500377f3e310ec44f22be7b2e342eca9b11bbf0a47b499c05d3bb8df","timestamp":"2026-02-20T07:13:27.666719+00:00"}`
+- `{"actor":"SONETTE","event_hash":"eebd8d8d25112097348a71cb6fba9037a696b631aeacab21aa462a9e953e8218","event_type":"boot.complete","payload":{"last_seq":0,"lease_token":1,"msgs":0},"prev_hash":"1aadc46aa92721ee721b0f458ae0bae817eacad41c67a7dc8ddeff05c5a49495","timestamp":"2026-02-20T07:13:27.668197+00:00"}`
+- `{"actor":"MIKA","event_hash":"cb7c80d5c2bef1d1fa75cbfd6b0b8a7a6dffbe667c69bea21b7a050907e1d5bc","event_type":"relay.enqueue","payload":{"msg_id":"19c79e578fb-50f1d04560844ad1bed2","seq":111,"target":"SONETTE"},"prev_hash":"eebd8d8d25112097348a71cb6fba9037a696b631aeacab21aa462a9e953e8218","timestamp":"2026-02-20T07:13:27.804680+00:00"}`
+- `{"actor":"SONNET","event_hash":"b546c378abbda9766e6c0b091d34472cc56b7a5effe200367932b7e036723253","event_type":"lease.acquire","payload":{"lease_token":2,"prev_token":1,"ttl_s":600},"prev_hash":"cb7c80d5c2bef1d1fa75cbfd6b0b8a7a6dffbe667c69bea21b7a050907e1d5bc","timestamp":"2026-02-20T07:13:28.072289+00:00"}`
+- `{"actor":"SONNET","event_hash":"9f2199b99704d8905e7c045d1dec61028b7a1d7cce43500a4ac4f46b7465cf6a","event_type":"boot.complete","payload":{"last_seq":97,"lease_token":2,"msgs":0},"prev_hash":"b546c378abbda9766e6c0b091d34472cc56b7a5effe200367932b7e036723253","timestamp":"2026-02-20T07:13:28.074236+00:00"}`
+- `{"actor":"MIKA","event_hash":"25123820f8480cc8ccdb00729e995ba11178d71facffc5c55bd4cbe6cc204d01","event_type":"relay.enqueue","payload":{"msg_id":"19c79e57a90-78490455eb0240858b95","seq":112,"target":"SONNET"},"prev_hash":"9f2199b99704d8905e7c045d1dec61028b7a1d7cce43500a4ac4f46b7465cf6a","timestamp":"2026-02-20T07:13:28.210179+00:00"}`
+- `{"actor":"TEAMLEAD","event_hash":"6bde0941f812a37e0fe3046ef85afcb16cbcb3464831d6bc8af1d189d90e3c38","event_type":"lease.acquire","payload":{"lease_token":1,"prev_token":0,"ttl_s":600},"prev_hash":"25123820f8480cc8ccdb00729e995ba11178d71facffc5c55bd4cbe6cc204d01","timestamp":"2026-02-20T07:13:28.481357+00:00"}`
+- `{"actor":"TEAMLEAD","event_hash":"232adfbf179cab0dda5941aa6072f0f5c2e0c068878859b5f97d7caa26063046","event_type":"boot.complete","payload":{"last_seq":66,"lease_token":1,"msgs":2},"prev_hash":"6bde0941f812a37e0fe3046ef85afcb16cbcb3464831d6bc8af1d189d90e3c38","timestamp":"2026-02-20T07:13:28.483576+00:00"}`
+- `{"actor":"MIKA","event_hash":"a4ba841591190932b4c0be83137ff2270211b49de2b4e623f14975cd8d382b64","event_type":"relay.enqueue","payload":{"msg_id":"19c79e57c28-6d2c186791af4582be7b","seq":113,"target":"TEAMLEAD"},"prev_hash":"232adfbf179cab0dda5941aa6072f0f5c2e0c068878859b5f97d7caa26063046","timestamp":"2026-02-20T07:13:28.618193+00:00"}`
+- `{"actor":"MIKA","event_hash":"dacd91b0cfcef1c4be398e188fb5c3354fc0a3172e96a826a317cc6f19e3d669","event_type":"relay.enqueue","payload":{"msg_id":"19c79e834cd-49e83936c1254a06b2ee","seq":114,"target":"ORION"},"prev_hash":"a4ba841591190932b4c0be83137ff2270211b49de2b4e623f14975cd8d382b64","timestamp":"2026-02-20T07:16:26.958694+00:00"}`
+- `{"actor":"MIKA","event_hash":"085296670038927ef072333131f2c538318a004545bd6a2021bfe7876ae0389e","event_type":"relay.enqueue","payload":{"msg_id":"19c79e83552-493b299c6ebe426e883a","seq":115,"target":"CLAUDE"},"prev_hash":"dacd91b0cfcef1c4be398e188fb5c3354fc0a3172e96a826a317cc6f19e3d669","timestamp":"2026-02-20T07:16:27.091509+00:00"}`
+- `{"actor":"MIKA","event_hash":"2f1c262d6ae1be2ec7ea47201a2290385bc231f04c197cb4e10e926f32a78cc5","event_type":"relay.enqueue","payload":{"msg_id":"19c79e835da-aec54e60e4bd448d91d2","seq":116,"target":"SONNET"},"prev_hash":"085296670038927ef072333131f2c538318a004545bd6a2021bfe7876ae0389e","timestamp":"2026-02-20T07:16:27.227464+00:00"}`
+- `{"actor":"MIKA","event_hash":"e03710b18b75b381dbe6c4ea007b4e28f583c51f1f50eaef42400e8ce96c0bc1","event_type":"relay.enqueue","payload":{"msg_id":"19c79e83661-0786f189c0f94b8ba2b9","seq":117,"target":"SONETTE"},"prev_hash":"2f1c262d6ae1be2ec7ea47201a2290385bc231f04c197cb4e10e926f32a78cc5","timestamp":"2026-02-20T07:16:27.362536+00:00"}`
+- `{"actor":"MIKA","event_hash":"29f45a9406ccfbcbd36441ed52737e02004c7d44d2354678cf6f99a1a096736a","event_type":"relay.enqueue","payload":{"msg_id":"19c79e836ee-83d9879bf8014f639cd2","seq":118,"target":"GEMINI"},"prev_hash":"e03710b18b75b381dbe6c4ea007b4e28f583c51f1f50eaef42400e8ce96c0bc1","timestamp":"2026-02-20T07:16:27.503945+00:00"}`
+- `{"actor":"MIKA","event_hash":"48c33f545595f1361dd9ce545e5d4b7d42451daddfb02b9ecb6a0f922aed8931","event_type":"relay.enqueue","payload":{"msg_id":"19c79e8377e-27fc64d1fc534d7ead61","seq":119,"target":"GEMINI-PRO"},"prev_hash":"29f45a9406ccfbcbd36441ed52737e02004c7d44d2354678cf6f99a1a096736a","timestamp":"2026-02-20T07:16:27.647760+00:00"}`
+- `{"actor":"MIKA","event_hash":"65ab63e2dbe7413e5367cd1b33bca8d3d019457cd70e5c7198b4b60464e0794e","event_type":"relay.enqueue","payload":{"msg_id":"19c79e83809-e0012cf9ce71473b917a","seq":120,"target":"GEMINI-FLASH"},"prev_hash":"48c33f545595f1361dd9ce545e5d4b7d42451daddfb02b9ecb6a0f922aed8931","timestamp":"2026-02-20T07:16:27.787337+00:00"}`
+- `{"actor":"MIKA","event_hash":"70a4b838e73c8c9e0d055c2706ec0f884ee52f8e06e129cb5410c20de949ff24","event_type":"relay.enqueue","payload":{"msg_id":"19c79e83893-879e918f4e764fc6ae25","seq":121,"target":"HYPERION"},"prev_hash":"65ab63e2dbe7413e5367cd1b33bca8d3d019457cd70e5c7198b4b60464e0794e","timestamp":"2026-02-20T07:16:27.924840+00:00"}`
+- `{"actor":"ORION","event_hash":"0c60c8be288f8a94e7f2cd2ce249bc1ac71d671c0eea314964cfe0f3cd3b1382","event_type":"lease.acquire","payload":{"lease_token":7,"prev_token":6,"ttl_s":600},"prev_hash":"70a4b838e73c8c9e0d055c2706ec0f884ee52f8e06e129cb5410c20de949ff24","timestamp":"2026-02-20T07:16:43.510357+00:00"}`
+- `{"actor":"ORION","event_hash":"3daaf1962a306d9020f2251e049307bd88f0f48936f2d3d1781394eaff260631","event_type":"boot.complete","payload":{"last_seq":114,"lease_token":7,"msgs":2},"prev_hash":"0c60c8be288f8a94e7f2cd2ce249bc1ac71d671c0eea314964cfe0f3cd3b1382","timestamp":"2026-02-20T07:16:43.512876+00:00"}`
+- `{"actor":"CLAUDE","event_hash":"97de9ef446bd040e0b1e7a82a7ce014b76b7fb08f1dccd32c112fe6c600f9cf8","event_type":"lease.acquire","payload":{"lease_token":2,"prev_token":1,"ttl_s":600},"prev_hash":"3daaf1962a306d9020f2251e049307bd88f0f48936f2d3d1781394eaff260631","timestamp":"2026-02-20T07:16:43.786303+00:00"}`
+- `{"actor":"CLAUDE","event_hash":"696a27d3d14b7e0a3ea60b86c33b377fb93dac119bcbac82ac63e557665243fa","event_type":"boot.complete","payload":{"last_seq":115,"lease_token":2,"msgs":2},"prev_hash":"97de9ef446bd040e0b1e7a82a7ce014b76b7fb08f1dccd32c112fe6c600f9cf8","timestamp":"2026-02-20T07:16:43.788447+00:00"}`
+- `{"actor":"SONNET","event_hash":"f0f311c774d9d47f51ede3c41a1f32006d2b5631c9a5b129f5f423d70a5d7d8d","event_type":"lease.acquire","payload":{"lease_token":3,"prev_token":2,"ttl_s":600},"prev_hash":"696a27d3d14b7e0a3ea60b86c33b377fb93dac119bcbac82ac63e557665243fa","timestamp":"2026-02-20T07:16:44.056481+00:00"}`
+- `{"actor":"SONNET","event_hash":"3f293f4e9c7f5913bd36dee3a55877f3c68cb890a5d166f33678a6f086bccc46","event_type":"boot.complete","payload":{"last_seq":116,"lease_token":3,"msgs":2},"prev_hash":"f0f311c774d9d47f51ede3c41a1f32006d2b5631c9a5b129f5f423d70a5d7d8d","timestamp":"2026-02-20T07:16:44.058627+00:00"}`
+- `{"actor":"SONETTE","event_hash":"31e96e8f1eb32489b85413b80d91834dc9fdedb0aa5dfb8b8961bf012dddd8ec","event_type":"lease.acquire","payload":{"lease_token":2,"prev_token":1,"ttl_s":600},"prev_hash":"3f293f4e9c7f5913bd36dee3a55877f3c68cb890a5d166f33678a6f086bccc46","timestamp":"2026-02-20T07:16:44.333234+00:00"}`
+- `{"actor":"SONETTE","event_hash":"1051f0acd520932f2a3382491d9d5679dc872b123323a8b330043bcc71b0e8ff","event_type":"boot.complete","payload":{"last_seq":117,"lease_token":2,"msgs":2},"prev_hash":"31e96e8f1eb32489b85413b80d91834dc9fdedb0aa5dfb8b8961bf012dddd8ec","timestamp":"2026-02-20T07:16:44.335233+00:00"}`
+- `{"actor":"GEMINI","event_hash":"cb2af9e69af745e52437b64f217c6451b4c219e9bb6f1e6611e96c2385fcc6bd","event_type":"lease.acquire","payload":{"lease_token":2,"prev_token":1,"ttl_s":600},"prev_hash":"1051f0acd520932f2a3382491d9d5679dc872b123323a8b330043bcc71b0e8ff","timestamp":"2026-02-20T07:16:44.608801+00:00"}`
+- `{"actor":"GEMINI","event_hash":"1d1881768e7d4f2af0cb74e77eb7f60df4ca220ece1ea0f651df2ffd3f0e0551","event_type":"boot.complete","payload":{"last_seq":118,"lease_token":2,"msgs":2},"prev_hash":"cb2af9e69af745e52437b64f217c6451b4c219e9bb6f1e6611e96c2385fcc6bd","timestamp":"2026-02-20T07:16:44.610968+00:00"}`
+- `{"actor":"GEMINI-PRO","event_hash":"a37a43f4d1d023d555f506ef5f1df28a9a241dc002d020bb3bf85d6474c9552e","event_type":"lease.acquire","payload":{"lease_token":2,"prev_token":1,"ttl_s":600},"prev_hash":"1d1881768e7d4f2af0cb74e77eb7f60df4ca220ece1ea0f651df2ffd3f0e0551","timestamp":"2026-02-20T07:16:44.877182+00:00"}`
+- `{"actor":"GEMINI-PRO","event_hash":"14addf72fb3346024bbb3ec4157272274e5fa2b27a5872bc503f216eb990e783","event_type":"boot.complete","payload":{"last_seq":119,"lease_token":2,"msgs":2},"prev_hash":"a37a43f4d1d023d555f506ef5f1df28a9a241dc002d020bb3bf85d6474c9552e","timestamp":"2026-02-20T07:16:44.879496+00:00"}`
+- `{"actor":"GEMINI-FLASH","event_hash":"65a211bf816755c358923d51a2677efbe87b9d17b43e7a71e9cffcff79566ff8","event_type":"lease.acquire","payload":{"lease_token":2,"prev_token":1,"ttl_s":600},"prev_hash":"14addf72fb3346024bbb3ec4157272274e5fa2b27a5872bc503f216eb990e783","timestamp":"2026-02-20T07:16:45.143473+00:00"}`
+- `{"actor":"GEMINI-FLASH","event_hash":"388091817ecc8e5832e09e13d8c00fc86b47dce36780271547c72d43025803a2","event_type":"boot.complete","payload":{"last_seq":120,"lease_token":2,"msgs":2},"prev_hash":"65a211bf816755c358923d51a2677efbe87b9d17b43e7a71e9cffcff79566ff8","timestamp":"2026-02-20T07:16:45.145549+00:00"}`
+- `{"actor":"HYPERION","event_hash":"a138a4ab50f3b2fa4aedd1b391132854cc90734fdbc703a781e958c34f83d143","event_type":"lease.acquire","payload":{"lease_token":2,"prev_token":1,"ttl_s":600},"prev_hash":"388091817ecc8e5832e09e13d8c00fc86b47dce36780271547c72d43025803a2","timestamp":"2026-02-20T07:16:45.414526+00:00"}`
+- `{"actor":"HYPERION","event_hash":"7fe265a559de0b162cc78e74cd89ce680ddb752c1800c62cedaeb8ebe6bced01","event_type":"boot.complete","payload":{"last_seq":121,"lease_token":2,"msgs":2},"prev_hash":"a138a4ab50f3b2fa4aedd1b391132854cc90734fdbc703a781e958c34f83d143","timestamp":"2026-02-20T07:16:45.416805+00:00"}`
+- `{"actor":"MIKA","event_hash":"ba8839005a2c36b27824a5669548ee662b72e7a84571ea50b4c38c184046a26a","event_type":"relay.enqueue","payload":{"msg_id":"19c79ef5c7c-a2ce84198a4848c6bc18","seq":122,"target":"ORION"},"prev_hash":"7fe265a559de0b162cc78e74cd89ce680ddb752c1800c62cedaeb8ebe6bced01","timestamp":"2026-02-20T07:24:15.869956+00:00"}`
+- `{"actor":"MIKA","event_hash":"fde3f2249406ca726d0d7e903c2dc75b5c62e1e287b2f085e6518f8a75b48c0f","event_type":"relay.enqueue","payload":{"msg_id":"19c79ef5cff-a758ac2bc64948afa9df","seq":123,"target":"CLAUDE"},"prev_hash":"ba8839005a2c36b27824a5669548ee662b72e7a84571ea50b4c38c184046a26a","timestamp":"2026-02-20T07:24:16.000990+00:00"}`
+- `{"actor":"MIKA","event_hash":"b0d1ce37650256805bc7af276bb2e0d964ddeeb0e53b3141b65cc1b4e7c85c7a","event_type":"relay.enqueue","payload":{"msg_id":"19c79ef5d82-396d599735e14be1969d","seq":124,"target":"SONNET"},"prev_hash":"fde3f2249406ca726d0d7e903c2dc75b5c62e1e287b2f085e6518f8a75b48c0f","timestamp":"2026-02-20T07:24:16.131931+00:00"}`
+- `{"actor":"MIKA","event_hash":"edcff7473bd6b01c012038e88cae1dde8e332e35b7405d445f2d107e2f5b5164","event_type":"relay.enqueue","payload":{"msg_id":"19c79ef5e05-fdca33bc2ef84f0eb2bc","seq":125,"target":"SONETTE"},"prev_hash":"b0d1ce37650256805bc7af276bb2e0d964ddeeb0e53b3141b65cc1b4e7c85c7a","timestamp":"2026-02-20T07:24:16.262786+00:00"}`
+- `{"actor":"MIKA","event_hash":"e9686d10cbd939d94c9d434229ed459fb8f9bc78a0026adf9b841b14a4dc698a","event_type":"relay.enqueue","payload":{"msg_id":"19c79ef5e89-3415145498e24d129b4d","seq":126,"target":"GEMINI"},"prev_hash":"edcff7473bd6b01c012038e88cae1dde8e332e35b7405d445f2d107e2f5b5164","timestamp":"2026-02-20T07:24:16.395378+00:00"}`
+- `{"actor":"MIKA","event_hash":"25421ce15db84aa1ae568027b9dc955fda389ef5a7451996f7c7e470f2f9d6c2","event_type":"relay.enqueue","payload":{"msg_id":"19c79ef5f0c-c5d636228a9d40b9ac6f","seq":127,"target":"GEMINI-PRO"},"prev_hash":"e9686d10cbd939d94c9d434229ed459fb8f9bc78a0026adf9b841b14a4dc698a","timestamp":"2026-02-20T07:24:16.525532+00:00"}`
+- `{"actor":"MIKA","event_hash":"ec2de6d9cb76f8e4e04909777b189385d61c81f8305ff1ab76da79ec11a7bbbc","event_type":"relay.enqueue","payload":{"msg_id":"19c79ef5f8e-bc76e780baac4018b046","seq":128,"target":"GEMINI-FLASH"},"prev_hash":"25421ce15db84aa1ae568027b9dc955fda389ef5a7451996f7c7e470f2f9d6c2","timestamp":"2026-02-20T07:24:16.655868+00:00"}`
+- `{"actor":"MIKA","event_hash":"59a3ad58aa33147379854a8947d4950ffbd462795156bc2f686691820c39e50f","event_type":"relay.enqueue","payload":{"msg_id":"19c79ef6011-28e52491d5364095b6cc","seq":129,"target":"HYPERION"},"prev_hash":"ec2de6d9cb76f8e4e04909777b189385d61c81f8305ff1ab76da79ec11a7bbbc","timestamp":"2026-02-20T07:24:16.786443+00:00"}`
+- `{"actor":"MIKA","event_hash":"f422a05b896fed25d873491f7f0c8efb1c7f8c8ec08d700751096ea6b26f20eb","event_type":"relay.enqueue","payload":{"msg_id":"19c79ef6098-3fb9584552194fbcb368","seq":130,"target":"GPT"},"prev_hash":"59a3ad58aa33147379854a8947d4950ffbd462795156bc2f686691820c39e50f","timestamp":"2026-02-20T07:24:16.921553+00:00"}`
+- `{"actor":"MIKA","event_hash":"5b49061dd1941b6a212372614cea363866399683636aacbf8a9e893fc5485c6f","event_type":"relay.enqueue","payload":{"msg_id":"19c79ef611b-9ad6840213304adeb79a","seq":131,"target":"REX"},"prev_hash":"f422a05b896fed25d873491f7f0c8efb1c7f8c8ec08d700751096ea6b26f20eb","timestamp":"2026-02-20T07:24:17.052453+00:00"}`
+- `{"actor":"MIKA","event_hash":"de8889b1c11089ef5ed1ea3b4b17d24ec6551310c21af3b7b351621a3e883711","event_type":"relay.enqueue","payload":{"msg_id":"19c79ef619f-f7c551d8e99340a9a317","seq":132,"target":"LEAD"},"prev_hash":"5b49061dd1941b6a212372614cea363866399683636aacbf8a9e893fc5485c6f","timestamp":"2026-02-20T07:24:17.184593+00:00"}`
+- `{"actor":"MIKA","event_hash":"d46ff3af3dca62828528fd1ff9f53635e7b8bd0280350ba05a272c7f91348734","event_type":"relay.enqueue","payload":{"msg_id":"19c79ef6220-4a9da8858fe24ecc9bec","seq":133,"target":"COWORK"},"prev_hash":"de8889b1c11089ef5ed1ea3b4b17d24ec6551310c21af3b7b351621a3e883711","timestamp":"2026-02-20T07:24:17.314329+00:00"}`
+- `{"actor":"MIKA","event_hash":"35140f7ef98f5317018868773b9918423f606ddb2f2152dfe5b94ab4e2860062","event_type":"relay.enqueue","payload":{"msg_id":"19c79ef62a3-2470fae7de894fd29be1","seq":134,"target":"TEAMLEAD"},"prev_hash":"d46ff3af3dca62828528fd1ff9f53635e7b8bd0280350ba05a272c7f91348734","timestamp":"2026-02-20T07:24:17.445135+00:00"}`
+- `{"actor":"ORION","event_hash":"4e678935b3e57702cf124a9dfe2ae42d0246ae01202dfd3814cf9ff502b53cc9","event_type":"lease.acquire","payload":{"lease_token":8,"prev_token":7,"ttl_s":600},"prev_hash":"35140f7ef98f5317018868773b9918423f606ddb2f2152dfe5b94ab4e2860062","timestamp":"2026-02-20T07:24:29.495087+00:00"}`
+- `{"actor":"ORION","event_hash":"f65f45ca0821751941822ccf526c3c83eeb64c84a5eea7a4ebe4fc3e46cb19bf","event_type":"boot.complete","payload":{"last_seq":122,"lease_token":8,"msgs":1},"prev_hash":"4e678935b3e57702cf124a9dfe2ae42d0246ae01202dfd3814cf9ff502b53cc9","timestamp":"2026-02-20T07:24:29.497261+00:00"}`
+- `{"actor":"CLAUDE","event_hash":"a5e53e2c873e941dfb27c9f5e4e395b54ee42522302d07f9d03a53d9ed6647fa","event_type":"lease.acquire","payload":{"lease_token":3,"prev_token":2,"ttl_s":600},"prev_hash":"f65f45ca0821751941822ccf526c3c83eeb64c84a5eea7a4ebe4fc3e46cb19bf","timestamp":"2026-02-20T07:24:29.763764+00:00"}`
+- `{"actor":"CLAUDE","event_hash":"803b12e6b94b9b3d434ad27f16fd51930b6ef27b5ae69952ef05dd20602f1e8c","event_type":"boot.complete","payload":{"last_seq":123,"lease_token":3,"msgs":1},"prev_hash":"a5e53e2c873e941dfb27c9f5e4e395b54ee42522302d07f9d03a53d9ed6647fa","timestamp":"2026-02-20T07:24:29.765792+00:00"}`
+- `{"actor":"SONNET","event_hash":"4a6703c764b76ebc76e0dd151778878a784dd0d487760720669e54cbc5ed7cf9","event_type":"lease.acquire","payload":{"lease_token":4,"prev_token":3,"ttl_s":600},"prev_hash":"803b12e6b94b9b3d434ad27f16fd51930b6ef27b5ae69952ef05dd20602f1e8c","timestamp":"2026-02-20T07:24:30.032887+00:00"}`
+- `{"actor":"SONNET","event_hash":"db1c973b3312596d3896f14b8734c6584768c17354283aa4e9a86f53b8e3007c","event_type":"boot.complete","payload":{"last_seq":124,"lease_token":4,"msgs":1},"prev_hash":"4a6703c764b76ebc76e0dd151778878a784dd0d487760720669e54cbc5ed7cf9","timestamp":"2026-02-20T07:24:30.034854+00:00"}`
+- `{"actor":"SONETTE","event_hash":"92130cd2593dc560fd5bb2947a04dc795fe9428a87fd7ef16c10925fbe02c28d","event_type":"lease.acquire","payload":{"lease_token":3,"prev_token":2,"ttl_s":600},"prev_hash":"db1c973b3312596d3896f14b8734c6584768c17354283aa4e9a86f53b8e3007c","timestamp":"2026-02-20T07:24:30.299887+00:00"}`
+- `{"actor":"SONETTE","event_hash":"0614398d349b69e8c961b06811d5a0658cf6926c3d311a8222d393c4895ebe85","event_type":"boot.complete","payload":{"last_seq":125,"lease_token":3,"msgs":1},"prev_hash":"92130cd2593dc560fd5bb2947a04dc795fe9428a87fd7ef16c10925fbe02c28d","timestamp":"2026-02-20T07:24:30.301761+00:00"}`
+- `{"actor":"GEMINI","event_hash":"7f321502ec351e0bec759d4c1d05993fa78f4efccd8a5517a5d4319b5bbf54ed","event_type":"lease.acquire","payload":{"lease_token":3,"prev_token":2,"ttl_s":600},"prev_hash":"0614398d349b69e8c961b06811d5a0658cf6926c3d311a8222d393c4895ebe85","timestamp":"2026-02-20T07:24:30.569269+00:00"}`
+- `{"actor":"GEMINI","event_hash":"1627e5ead21518ca489a97f0a5333a6dcd543d326b25e04afbc18e780f95bcf3","event_type":"boot.complete","payload":{"last_seq":126,"lease_token":3,"msgs":1},"prev_hash":"7f321502ec351e0bec759d4c1d05993fa78f4efccd8a5517a5d4319b5bbf54ed","timestamp":"2026-02-20T07:24:30.571293+00:00"}`
+- `{"actor":"GEMINI-PRO","event_hash":"c60970d1bfd293fda191fa148a75b63c1d87c7c9d7a707bcf39f3936efd59a3d","event_type":"lease.acquire","payload":{"lease_token":3,"prev_token":2,"ttl_s":600},"prev_hash":"1627e5ead21518ca489a97f0a5333a6dcd543d326b25e04afbc18e780f95bcf3","timestamp":"2026-02-20T07:24:30.835876+00:00"}`
+- `{"actor":"GEMINI-PRO","event_hash":"2cc068d9100d5bcb8983faa98b15b68b71da2fb1e2c7ad12fcb90c0ba32c524c","event_type":"boot.complete","payload":{"last_seq":127,"lease_token":3,"msgs":1},"prev_hash":"c60970d1bfd293fda191fa148a75b63c1d87c7c9d7a707bcf39f3936efd59a3d","timestamp":"2026-02-20T07:24:30.837890+00:00"}`
+- `{"actor":"GEMINI-FLASH","event_hash":"fa616678ec7237c965ce8bf5d9a097145f1ac061c685f83ef87b952eab93bb51","event_type":"lease.acquire","payload":{"lease_token":3,"prev_token":2,"ttl_s":600},"prev_hash":"2cc068d9100d5bcb8983faa98b15b68b71da2fb1e2c7ad12fcb90c0ba32c524c","timestamp":"2026-02-20T07:24:31.100199+00:00"}`
+- `{"actor":"GEMINI-FLASH","event_hash":"6775c03c51fdacc524b6107542b7bef82e3f9e2e65714fa449a2edc753a3edb6","event_type":"boot.complete","payload":{"last_seq":128,"lease_token":3,"msgs":1},"prev_hash":"fa616678ec7237c965ce8bf5d9a097145f1ac061c685f83ef87b952eab93bb51","timestamp":"2026-02-20T07:24:31.102820+00:00"}`
+- `{"actor":"HYPERION","event_hash":"f18c49de95117123bcd993e552c8a50dcbf4ab36010f36dfc518ec9d97b94d25","event_type":"lease.acquire","payload":{"lease_token":3,"prev_token":2,"ttl_s":600},"prev_hash":"6775c03c51fdacc524b6107542b7bef82e3f9e2e65714fa449a2edc753a3edb6","timestamp":"2026-02-20T07:24:31.368169+00:00"}`
+- `{"actor":"HYPERION","event_hash":"7b446fd8a8ddfda2552dcbf91ceb843672649512064e3c9d1043b15226ad50b8","event_type":"boot.complete","payload":{"last_seq":129,"lease_token":3,"msgs":1},"prev_hash":"f18c49de95117123bcd993e552c8a50dcbf4ab36010f36dfc518ec9d97b94d25","timestamp":"2026-02-20T07:24:31.370506+00:00"}`
+- `{"actor":"GPT","event_hash":"4f9dc7d80d47505acb11319dba4a46e72357cff6c34c11f089d95694fea9c716","event_type":"lease.acquire","payload":{"lease_token":13,"prev_token":12,"ttl_s":600},"prev_hash":"7b446fd8a8ddfda2552dcbf91ceb843672649512064e3c9d1043b15226ad50b8","timestamp":"2026-02-20T07:24:31.637834+00:00"}`
+- `{"actor":"GPT","event_hash":"1cd5a01c65abb449ea97d05151673674fc4b2928abe7a1ec8520615ce2dd280e","event_type":"boot.complete","payload":{"last_seq":130,"lease_token":13,"msgs":2},"prev_hash":"4f9dc7d80d47505acb11319dba4a46e72357cff6c34c11f089d95694fea9c716","timestamp":"2026-02-20T07:24:31.640287+00:00"}`
+- `{"actor":"REX","event_hash":"65b7189770904c9c30ab6e4934d65bcf4f4c48e17489f6cabb8517c1d66f7241","event_type":"lease.acquire","payload":{"lease_token":10,"prev_token":9,"ttl_s":600},"prev_hash":"1cd5a01c65abb449ea97d05151673674fc4b2928abe7a1ec8520615ce2dd280e","timestamp":"2026-02-20T07:24:31.907035+00:00"}`
+- `{"actor":"REX","event_hash":"9084ca7e97acfb66ea54ae1d0a3d6348fba5b210a8ceb33a0034517de79fcbd8","event_type":"boot.complete","payload":{"last_seq":131,"lease_token":10,"msgs":2},"prev_hash":"65b7189770904c9c30ab6e4934d65bcf4f4c48e17489f6cabb8517c1d66f7241","timestamp":"2026-02-20T07:24:31.909351+00:00"}`
+- `{"actor":"LEAD","event_hash":"5fab74e7de9b8dbec668f0a5eadcaf30d4c9fdd58cf794a444ed3987d8057391","event_type":"lease.acquire","payload":{"lease_token":6,"prev_token":5,"ttl_s":600},"prev_hash":"9084ca7e97acfb66ea54ae1d0a3d6348fba5b210a8ceb33a0034517de79fcbd8","timestamp":"2026-02-20T07:24:32.175097+00:00"}`
+- `{"actor":"LEAD","event_hash":"53dfe3343d3d78efa8b4d2999f16b3d77457406ddc915a47e77f21c23e8e7c29","event_type":"boot.complete","payload":{"last_seq":132,"lease_token":6,"msgs":2},"prev_hash":"5fab74e7de9b8dbec668f0a5eadcaf30d4c9fdd58cf794a444ed3987d8057391","timestamp":"2026-02-20T07:24:32.177563+00:00"}`
+- `{"actor":"COWORK","event_hash":"885ba33618c5d5dd01056a01ddfa40473d6736e9ca3f1c03e9d444d4a1659035","event_type":"lease.acquire","payload":{"lease_token":14,"prev_token":13,"ttl_s":600},"prev_hash":"53dfe3343d3d78efa8b4d2999f16b3d77457406ddc915a47e77f21c23e8e7c29","timestamp":"2026-02-20T07:24:32.443441+00:00"}`
+- `{"actor":"COWORK","event_hash":"168f34e57942fc81d970bdd65f17f648137309e4d182d6c8a28ec4346157ae42","event_type":"boot.complete","payload":{"last_seq":133,"lease_token":14,"msgs":2},"prev_hash":"885ba33618c5d5dd01056a01ddfa40473d6736e9ca3f1c03e9d444d4a1659035","timestamp":"2026-02-20T07:24:32.446065+00:00"}`
+- `{"actor":"TEAMLEAD","event_hash":"e0919bd5d22de25bb4951c2826f12b184e3e9d1b1f7d00ff765cfc9ed03513e1","event_type":"lease.acquire","payload":{"lease_token":2,"prev_token":1,"ttl_s":600},"prev_hash":"168f34e57942fc81d970bdd65f17f648137309e4d182d6c8a28ec4346157ae42","timestamp":"2026-02-20T07:24:32.708409+00:00"}`
+- `{"actor":"TEAMLEAD","event_hash":"0421a08ff504427aadcd29e0d23fb8310d648a96f32f5a6b333c833192ac2b26","event_type":"boot.complete","payload":{"last_seq":134,"lease_token":2,"msgs":2},"prev_hash":"e0919bd5d22de25bb4951c2826f12b184e3e9d1b1f7d00ff765cfc9ed03513e1","timestamp":"2026-02-20T07:24:32.710747+00:00"}`
+- `{"actor":"GPT","event_hash":"9184df07764e634d21461bb984c2e86ebe46a058af6caaa8938cca686d856411","event_type":"lease.acquire","payload":{"lease_token":14,"prev_token":13,"ttl_s":600},"prev_hash":"0421a08ff504427aadcd29e0d23fb8310d648a96f32f5a6b333c833192ac2b26","timestamp":"2026-02-20T11:29:09.310181+00:00"}`
+- `{"actor":"GPT","event_hash":"ac127c8f992a10aceaf0e03d9fd06972c454447ad3def342ee03afbcbc75dec4","event_type":"boot.complete","payload":{"last_seq":130,"lease_token":14,"msgs":0},"prev_hash":"9184df07764e634d21461bb984c2e86ebe46a058af6caaa8938cca686d856411","timestamp":"2026-02-20T11:29:09.312815+00:00"}`
 
 ## 5) CHECKLIST
 - Verify stop sentinel path exists and is monitored.
