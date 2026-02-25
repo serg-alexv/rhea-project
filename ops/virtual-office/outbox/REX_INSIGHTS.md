@@ -35,3 +35,11 @@ PDFs, Excel files, PNGs, tarballs, and orphan duplicate files (state.md, archite
 
 ### Insight 10: LiteLLM Replaces 300 Lines of Provider Plumbing
 `rhea_bridge.py` has ~300 lines of hand-rolled HTTP calls across 6 providers. LiteLLM does this with one unified `completion()` call for 100+ providers. The existing `rhea-commander-stack/litellm_config.yaml` already defines 12 models — it was written but never wired in. The play: LiteLLM becomes the transport layer, bridge.py slims to a ~200-line routing+tribunal+logging wrapper. Kills the bespoke `_call_openai`, `_call_gemini`, etc. methods entirely.
+
+## 2026-02-25 Session
+
+### Insight 11: Stage 0 Triage is a Product Decision
+The Evolution Plan correctly identifies that triage is Rex's job — not A6's. Deciding which P0s are still relevant after 5 days requires understanding the project's trajectory, not just reading a checklist. 2 of 6 P0s were already resolved; the audit just hadn't tracked it. Product Owner sees the forest, engineers see the trees.
+
+### Insight 12: Nexus Genetics = First Real Science Output
+H32-02 V5 certification is the project's first output that is genuinely scientific — a multi-model audit that found and corrected Success-Blindness (seeing genes, assuming phenotype). The heme auxotrophy finding is real biology, not infrastructure. This is what Rhea was built for.

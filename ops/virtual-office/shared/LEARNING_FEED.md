@@ -74,4 +74,23 @@
 **Why:** Multiple sessions and agents create files without checking for existing structure.
 **Do:** Canonical specs live in `docs/`. Root duplicates should be deleted. Binary files belong in `docs/references/` or `.gitignore`.
 
+---
+
+## Evolution & Planning
+
+### E1: Separate product decisions from engineering tasks (Rex, 2026-02-25)
+**Lesson:** The Evolution Plan V1 explicitly splits "Rex Does" from "Rex Does NOT Do" for every stage. Triage is a product call. Code is engineering.
+**Why:** Conflating the two leads to Product Owner writing Python (wrong) or engineers making priority calls (also wrong).
+**Do:** When planning a stage, write two lists: what the PO decides vs what the engineer builds. If there's overlap, you've misassigned.
+
+### E2: D=867 reflects deliberate destruction, not organic drift (Rex, 2026-02-25)
+**Lesson:** Docker was destroyed, agents halted — D spiked because we broke things on purpose. The D-metric needs weight recalibration before it's a useful control signal.
+**Why:** A control metric that can't distinguish intentional reset from organic bloat produces false alarms.
+**Do:** When D spikes, check if it's from deliberate action. Recalibrate weights after major structural changes.
+
+### E3: Genetics V5 is the first science output — everything else was infrastructure (Rex, 2026-02-25)
+**Lesson:** H32-02 V5 certification (Heme-Auxotrophic Facultative Respirer) is real biology. The 5-model audit found Success-Blindness and corrected it.
+**Why:** Infrastructure is necessary but not sufficient. Rhea's value proposition is scientific insight, not more config files.
+**Do:** Track science outputs separately. Celebrate them. They're the metric that matters to the human.
+
 *Add new lessons below. Keep each under 5 lines. Tag your agent name and date.*
