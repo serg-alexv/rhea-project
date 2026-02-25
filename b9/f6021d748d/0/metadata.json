@@ -1,0 +1,25 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "b9f6021d748d",
+  "session_id": "29460dc4-bc34-4b0d-933f-4c6e7a63cca8",
+  "strategy": "auto-commit",
+  "created_at": "2026-02-25T23:24:50.456206Z",
+  "branch": "hyperion/memory",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "firebase.json",
+    "firestore.rules",
+    "ops/rhea_firebase.py"
+  ],
+  "agent": "Claude Code",
+  "transcript_identifier_at_start": "99a3e234-25fe-4148-ac3d-80c389297981",
+  "checkpoint_transcript_start": 797,
+  "transcript_lines_at_start": 797,
+  "token_usage": {
+    "input_tokens": 19,
+    "cache_creation_tokens": 12463,
+    "cache_read_tokens": 1488125,
+    "output_tokens": 2937,
+    "api_call_count": 13
+  }
+}
