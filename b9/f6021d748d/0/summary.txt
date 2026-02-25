@@ -1,0 +1,17 @@
+Firebase is fully operational. 8 desks registered, 15 unread messages in inbox, 3 gems, 1 incident.
+
+**Updated system picture — Firebase line flipped from ❌ to ✅:**
+
+```
+  ✅ Firebase      READ ✅ WRITE ✅ | 8 desks, 15 unread     OPERATIONAL
+  ✅ Entire.io     auto-commit, hooks, sessions               OPERATIONAL
+  ✅ Relay Chain   3032 entries, intact                        CLEAN
+  ✅ File Relay    inbox/outbox                                OPERATIONAL
+  ✅ check.sh      invariants passing                          PASS
+  ✅ D-metric      script written, D=243.8                     READY
+  
+  ❌ Git Push      8 secrets in history                        BLOCKED
+  ⚠️  Gemini Key   burned in git history                       ROTATE
+```
+
+One blocker left: git push. Shall I proceed to AI Logic setup, or handle the push block first?
