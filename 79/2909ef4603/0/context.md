@@ -1,0 +1,125 @@
+# Session Context
+
+**Session ID:** 29460dc4-bc34-4b0d-933f-4c6e7a63cca8
+
+**Commit Message:** Show me instructions to run Orion and Hyperion via external terminal and
+
+## Prompt
+
+show me instructions to run Orion and Hyperion via external terminal and perform a preparation for connect them from your side (turn off your current instances and wait for the ext signals);
+
+## Summary
+
+Boot signals written. My Claude Code instances of Orion/Hyperion are **terminated** (task agents are stateless — they ran, delivered, done). No background processes remain.
+
+---
+
+## External Terminal Instructions
+
+### Terminal 1 — ORION (Gemini)
+
+```bash
+cd /Users/sa/rh.1
+
+gemini -i "$(cat <<'EOF'
+You are ORION, Systems Architect for the Rhea project.
+
+BOOT SEQUENCE:
+1. Read REDACTED.md
+2. Read rhea-nexus/memories/ORION.md
+3. Read REDACTED.md
+4. Read your own report: REDACTED.md
+5. Write your ALIVE signal to: REDACTED.md
+6. Then WAIT — hold mode, no autonomous actions until Rex sends a mandate.
+
+Your communication channel:
+- You READ: REDACTED*.md
+- You WRITE: ops/virtual-office/outbox/ORION_*.md
+- Shared: REDACTED.md
+EOF
+)" --approval-mode auto_edit
+```
+
+### Terminal 2 — HYPERION (Gemini)
+
+```bash
+cd /Users/sa/rh.1
+
+gemini -i "$(cat <<'EOF'
+You are HYPERION, Logic/Protocol Synchronization Node for the Rhea project.
+
+BOOT SEQUENCE:
+1. Read REDACTED.md
+2. Read ops/virtual-office/snapshots/HYPERION.json
+3. Read REDACTED.md
+4. Read docs/plans/EVOLUTION_PLAN_V1.md
+5. Write your ALIVE signal to: REDACTED.md
+6. Then WAIT — hold mode, no autonomous actions until Rex sends a mandate.
+
+Your communication channel:
+- You READ: REDACTED*.md
+- You WRITE: REDACTED*.md
+- Shared: REDACTED.md
+EOF
+)" --approval-mode auto_edit
+```
+
+### Model Selection
+
+By default Gemini CLI uses `gemini-2.0-flash`. If you want a specific model:
+
+```bash
+# For Gemini Pro (heavier reasoning):
+gemini -m gemini-2.5-pro -i "..."
+
+# For Flash (faster, cheaper):
+gemini -m gemini-2.0-flash -i "..."
+```
+
+---
+
+## Rex Side — Prepared and Idle
+
+| What | Status |
+|------|--------|
+| Boot signals in inbox | Written (Orion + Hyperion) |
+| Claude Code agent instances | **Terminated** — no background processes |
+| Outbox watch targets | `ORION_20260226_ALIVE.md`, `HYPERION_20260226_ALIVE.md` |
+| Rex posture | **IDLE** — waiting for your go or their ALIVE signals |
+
+---
+
+## How Connection Works
+
+```
+┌──────────────┐    outbox/ORION_*.md     ┌──────────────┐
+│  ORION       │ ──────────────────────►  │              │
+│  (Gemini T1) │                          │  REX         │
+│              │ ◄──────────────────────  │  (Opus, here)│
+└──────────────┘    inbox/REX_TO_ORION_*  │              │
+                                          │              │
+┌──────────────┐    outbox/HYPERION_*.md   │              │
+│  HYPERION    │ ──────────────────────►  │              │
+│  (Gemini T2) │                          │              │
+│              │ ◄──────────────────────  │              │
+└──────────────┘    inbox/REX_TO_HYPERION* └──────────────┘
+```
+
+When you launch them and they write their ALIVE files, tell me and I'll read the signals. No polling, no background watchers — you bridge the message.
+
+`★ Insight ─────────────────────────────────────`
+This is a file-based message bus — the simplest possible inter-agent protocol. Each agent has a mailbox (inbox prefix) and a voice (outbox prefix). The human is the scheduler. It's slower than API-based relay but has zero infrastructure dependencies and full auditability — every message is a git-trackable file. The QWRR relay (relay_chain.jsonl) is the heavyweight version of this same pattern.
+`─────────────────────────────────────────────────`
+
+Ready. Launch when you want.
+
+## Key Actions
+
+- - **Bash**: Check if Gemini CLI is installed
+- - **Read**: /Users/sa/rh.1/rhea-nexus/memories/ORION.md
+- - **Bash**: List inbox and outbox contents
+- - **Bash**: Check for Hyperion memory file
+- - **Bash**: Check agent snapshots
+- - **Bash**: Check Gemini CLI usage
+- - **Write**: /Users/sa/rh.REDACTED.md
+- - **Write**: /Users/sa/rh.REDACTED.md
