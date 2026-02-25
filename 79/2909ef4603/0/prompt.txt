@@ -1,0 +1,1 @@
+show me instructions to run Orion and Hyperion via external terminal and perform a preparation for connect them from your side (turn off your current instances and wait for the ext signals);
