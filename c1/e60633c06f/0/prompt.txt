@@ -1,0 +1,1 @@
+I want you to use TOKEN_SAVING_FIRST policy and perform your part of job carefully without overlaps: you're a head, a comander who send a permissions, allowance actual "do this" commands to all ohers and then check all the logs for 0-truth A+B mode. Can you confirm? Show me a live example of intercom and memory fully working
