@@ -107,25 +107,44 @@ def _classify_error(code, body):
 
 _cached_token = {"token": None, "expires": 0}
 
+# Firebase Web API key (public, safe to embed — used only for anonymous auth)
+FIREBASE_API_KEY = "AIzaSyA-fMPry2gzSBdjc98StmzNz6GX9tMV_dw"
+
 def _get_auth_token():
-    """Get OAuth2 bearer token from service account (cached)."""
+    """Get auth token. Tries: 1) service account, 2) anonymous auth."""
     if _cached_token["token"] and time.time() < _cached_token["expires"] - 60:
         return _cached_token["token"]
+
+    # Try service account first
     try:
         from google.auth.transport.requests import Request
         from google.oauth2 import service_account
         creds_path = os.environ.get("GOOGLE_APPLICATION_CREDENTIALS", "")
-        if not creds_path:
-            return None
-        creds = service_account.Credentials.from_service_account_file(
-            creds_path,
-            scopes=["https://www.googleapis.com/auth/datastore"],
-        )
-        creds.refresh(Request())
-        _cached_token["token"] = creds.token
-        _cached_token["expires"] = time.time() + 3500  # tokens last ~1h
-        return creds.token
+        if creds_path:
+            creds = service_account.Credentials.from_service_account_file(
+                creds_path,
+                scopes=["https://www.googleapis.com/auth/datastore"],
+            )
+            creds.refresh(Request())
+            _cached_token["token"] = creds.token
+            _cached_token["expires"] = time.time() + 3500
+            return creds.token
     except Exception:
+        pass
+
+    # Fallback: Firebase Anonymous Auth
+    try:
+        url = f"https://identitytoolkit.googleapis.com/v1/accounts:signUp?key={FIREBASE_API_KEY}"
+        payload = json.dumps({"returnSecureToken": True}).encode()
+        req = urllib.request.Request(url, data=payload, method="POST",
+                                     headers={"Content-Type": "application/json"})
+        with urllib.request.urlopen(req, timeout=10) as r:
+            data = json.loads(r.read())
+            _cached_token["token"] = data["idToken"]
+            _cached_token["expires"] = time.time() + 3500  # anon tokens last ~1h
+            return _cached_token["token"]
+    except Exception as e:
+        print(f"[auth] Anonymous auth failed: {e}", file=sys.stderr)
         return None
 
 
