@@ -1,0 +1,44 @@
+{
+  "type": "TodoWrite",
+  "tool_use_id": "toolu_01Gy5AXehYVjCd2fJmVZkWcr",
+  "timestamp": "2026-02-25T20:24:24.38479Z",
+  "data": {
+    "todos": [
+      {
+        "content": "P0 triage review: assess which P0s are still relevant",
+        "status": "completed",
+        "activeForm": "Reviewing P0 triage status"
+      },
+      {
+        "content": "Execute P0 #4: Refresh state_full.md (stale since 2026-02-13)",
+        "status": "completed",
+        "activeForm": "Refreshing state_full.md"
+      },
+      {
+        "content": "Execute P0 #5: Refresh context-bridge.md (stale since 2026-02-16)",
+        "status": "in_progress",
+        "activeForm": "Refreshing context-bridge.md"
+      },
+      {
+        "content": "Execute P0 #6: Refresh context-state.md (stale since 2026-02-16)",
+        "status": "completed",
+        "activeForm": "Refreshing context-state.md"
+      },
+      {
+        "content": "Write TODAY_CAPSULE with Stage 0 completion",
+        "status": "pending",
+        "activeForm": "Writing TODAY_CAPSULE"
+      },
+      {
+        "content": "Update state.md with Stage 0 results",
+        "status": "pending",
+        "activeForm": "Updating state.md"
+      },
+      {
+        "content": "Commit and push all changes",
+        "status": "pending",
+        "activeForm": "Committing and pushing"
+      }
+    ]
+  }
+}
