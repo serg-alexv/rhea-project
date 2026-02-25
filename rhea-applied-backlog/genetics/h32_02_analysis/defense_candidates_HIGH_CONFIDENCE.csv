@@ -1,0 +1,91 @@
+locus_tag,function,length,contig,start,end,strand,category,defense_score,reasoning
+ACWYRP_RS02025,restriction endonuclease subunit S,549,NZ_JBSROM010000004.1,21452,22000,+,Restriction-modification (Type I),23,Contains 'restriction' keyword - likely restriction enzyme; Endonuclease - potential RM or defense system; Category: 'Restriction-modification (Type I)' - defense-related
+ACWYRP_RS02030,restriction endonuclease subunit S,609,NZ_JBSROM010000004.1,22063,22671,+,Restriction-modification (Type I),23,Contains 'restriction' keyword - likely restriction enzyme; Endonuclease - potential RM or defense system; Category: 'Restriction-modification (Type I)' - defense-related
+ACWYRP_RS02045,restriction endonuclease subunit S,1122,NZ_JBSROM010000004.1,25307,26428,-,Restriction-modification (Type I),23,Contains 'restriction' keyword - likely restriction enzyme; Endonuclease - potential RM or defense system; Category: 'Restriction-modification (Type I)' - defense-related
+ACWYRP_RS02015,type I restriction endonuclease subunit R,2862,NZ_JBSROM010000004.1,17030,19891,+,Restriction-modification (Type I),23,Contains 'restriction' keyword - likely restriction enzyme; Endonuclease - potential RM or defense system; Category: 'Restriction-modification (Type I)' - defense-related
+ACWYRP_RS01865,putative holin-like toxin,105,NZ_JBSROM010000003.1,80834,80938,+,Holin/phage defense,22,Toxin-antitoxin (TA) system component; Holin - phage lysis protein (phage defense island); Category: 'Holin/phage defense' - defense-related
+ACWYRP_RS08905,phage holin family protein,306,NZ_JBSROM010000045.1,5919,6224,+,Phage/integrase/mobile elements,21,Phage-related protein; Holin - phage lysis protein (phage defense island); Category: 'Phage/integrase/mobile elements' - defense-related
+ACWYRP_RS09070,phage holin family protein,357,NZ_JBSROM010000048.1,987,1343,-,Phage/integrase/mobile elements,21,Phage-related protein; Holin - phage lysis protein (phage defense island); Category: 'Phage/integrase/mobile elements' - defense-related
+ACWYRP_RS09180,phage holin family protein,306,NZ_JBSROM010000050.1,4463,4768,+,Phage/integrase/mobile elements,21,Phage-related protein; Holin - phage lysis protein (phage defense island); Category: 'Phage/integrase/mobile elements' - defense-related
+ACWYRP_RS09215,antirestriction protein ArdA,522,NZ_JBSROM010000051.1,2442,2963,+,Anti-restriction,15,Contains 'restriction' keyword - likely restriction enzyme; Category: 'Anti-restriction' - defense-related
+ACWYRP_RS05430,toxin-antitoxin system HicB family antitoxin,348,NZ_JBSROM010000015.1,20598,20945,+,Toxin-antitoxin systems,14,Toxin-antitoxin (TA) system component; Category: 'Toxin-antitoxin systems' - defense-related
+ACWYRP_RS07815,type II toxin-antitoxin system PemK/MazF family toxin,366,NZ_JBSROM010000030.1,4483,4848,-,Toxin-antitoxin systems,14,Toxin-antitoxin (TA) system component; Category: 'Toxin-antitoxin systems' - defense-related
+ACWYRP_RS10095,type II toxin-antitoxin system RelE family toxin,273,NZ_JBSROM010000105.1,107,379,-,Toxin-antitoxin systems,14,Toxin-antitoxin (TA) system component; Category: 'Toxin-antitoxin systems' - defense-related
+ACWYRP_RS02365,HK97-gp10 family putative phage morphogenesis protein,360,NZ_JBSROM010000005.1,8857,9216,-,Phage/integrase/mobile elements,13,Phage-related protein; Category: 'Phage/integrase/mobile elements' - defense-related
+ACWYRP_RS02400,PBSX family phage terminase large subunit,1293,NZ_JBSROM010000005.1,13978,15270,-,Phage/integrase/mobile elements,13,Phage-related protein; Category: 'Phage/integrase/mobile elements' - defense-related
+ACWYRP_RS01295,phage antirepressor,798,NZ_JBSROM010000002.1,75066,75863,+,Phage/integrase/mobile elements,13,Phage-related protein; Category: 'Phage/integrase/mobile elements' - defense-related
+ACWYRP_RS02520,phage antirepressor KilAC domain-containing protein,726,NZ_JBSROM010000005.1,28815,29540,-,Phage/integrase/mobile elements,13,Phage-related protein; Category: 'Phage/integrase/mobile elements' - defense-related
+ACWYRP_RS01500,phage distal tail protein domain-containing protein,147,NZ_JBSROM010000002.1,101540,101686,+,Phage/integrase/mobile elements,13,Phage-related protein; Category: 'Phage/integrase/mobile elements' - defense-related
+ACWYRP_RS01465,phage head closure protein,345,NZ_JBSROM010000002.1,94502,94846,+,Phage/integrase/mobile elements,13,Phage-related protein; Category: 'Phage/integrase/mobile elements' - defense-related
+ACWYRP_RS02375,phage head-tail connector protein,339,NZ_JBSROM010000005.1,9529,9867,-,Phage/integrase/mobile elements,13,Phage-related protein; Category: 'Phage/integrase/mobile elements' - defense-related
+ACWYRP_RS01455,phage major capsid protein,1200,NZ_JBSROM010000002.1,92922,94121,+,Phage/integrase/mobile elements,13,Phage-related protein; Category: 'Phage/integrase/mobile elements' - defense-related
+ACWYRP_RS02355,"phage major tail protein, TP901-1 family",582,NZ_JBSROM010000005.1,7870,8451,-,Phage/integrase/mobile elements,13,Phage-related protein; Category: 'Phage/integrase/mobile elements' - defense-related
+ACWYRP_RS01445,phage portal protein,1167,NZ_JBSROM010000002.1,91044,92210,+,Phage/integrase/mobile elements,13,Phage-related protein; Category: 'Phage/integrase/mobile elements' - defense-related
+ACWYRP_RS02395,phage portal protein,1509,NZ_JBSROM010000005.1,12459,13967,-,Phage/integrase/mobile elements,13,Phage-related protein; Category: 'Phage/integrase/mobile elements' - defense-related
+ACWYRP_RS02485,phage replisome organizer N-terminal domain-containing protein,1005,NZ_JBSROM010000005.1,25645,26649,-,Phage/integrase/mobile elements,13,Phage-related protein; Category: 'Phage/integrase/mobile elements' - defense-related
+ACWYRP_RS01480,phage tail protein,636,NZ_JBSROM010000002.1,95681,96316,+,Phage/integrase/mobile elements,13,Phage-related protein; Category: 'Phage/integrase/mobile elements' - defense-related
+ACWYRP_RS02330,phage tail spike protein,2488,NZ_JBSROM010000005.1,1,2488,-,Phage/integrase/mobile elements,13,Phage-related protein; Category: 'Phage/integrase/mobile elements' - defense-related
+ACWYRP_RS02340,phage tail tape measure protein,3723,NZ_JBSROM010000005.1,3310,7032,-,Phage/integrase/mobile elements,13,Phage-related protein; Category: 'Phage/integrase/mobile elements' - defense-related
+ACWYRP_RS01430,phage terminase small subunit P27 family,468,NZ_JBSROM010000002.1,88516,88983,+,Phage/integrase/mobile elements,13,Phage-related protein; Category: 'Phage/integrase/mobile elements' - defense-related
+ACWYRP_RS09390,"phage/plasmid primase, P4 family",1428,NZ_JBSROM010000057.1,653,2080,+,Phage/integrase/mobile elements,13,Phage-related protein; Category: 'Phage/integrase/mobile elements' - defense-related
+ACWYRP_RS06945,class I SAM-dependent DNA methyltransferase,753,NZ_JBSROM010000024.1,7543,8295,+,DNA methyltransferase,12,Non-ribosomal methyltransferase (potential RM system); Category: 'DNA methyltransferase' - defense-related
+ACWYRP_RS08910,DNA-methyltransferase,432,NZ_JBSROM010000045.1,6803,7234,+,DNA methyltransferase,12,Non-ribosomal methyltransferase (potential RM system); Category: 'DNA methyltransferase' - defense-related
+ACWYRP_RS02480,replicative DNA helicase,1320,NZ_JBSROM010000005.1,24333,25652,-,DNA replication/chromosome maintenance,10,CRISPR-Cas system component
+ACWYRP_RS08460,replicative DNA helicase,1464,NZ_JBSROM010000037.1,12266,13729,+,DNA replication/chromosome maintenance,10,CRISPR-Cas system component
+ACWYRP_RS04610,ATP-dependent DNA helicase RecG,2031,NZ_JBSROM010000011.1,29361,31391,+,Homologous recombination,10,CRISPR-Cas system component
+ACWYRP_RS08405,DNA helicase RecQ,1809,NZ_JBSROM010000037.1,553,2361,+,Homologous recombination,10,CRISPR-Cas system component
+ACWYRP_RS05800,Holliday junction branch migration DNA helicase RuvB,1056,NZ_JBSROM010000017.1,12510,13565,+,Holliday junction processing,10,CRISPR-Cas system component
+ACWYRP_RS09185,Abi family protein,930,NZ_JBSROM010000050.1,4813,5742,-,Abortive infection defense,10,Abortive infection (Abi) system component
+ACWYRP_RS00840,AbiU2 domain-containing protein,669,NZ_JBSROM010000001.1,183462,184130,-,Abortive infection defense,10,Abortive infection (Abi) system component
+ACWYRP_RS01580,alpha-L-arabinofuranosidase C-terminal domain-containing protein,1527,NZ_JBSROM010000003.1,19623,21149,+,Sugar-specific metabolism,10,Abortive infection (Abi) system component
+ACWYRP_RS00760,FtsK/SpoIIIE family DNA translocase,2367,NZ_JBSROM010000001.1,167214,169580,-,Cell division,10,CRISPR-Cas system component
+ACWYRP_RS03080,ABC-F family ATP-binding cassette domain-containing protein,1623,NZ_JBSROM010000006.1,55352,56974,-,ABC transporters,10,CRISPR-Cas system component
+ACWYRP_RS07920,ABC-F family ATP-binding cassette domain-containing protein,1878,NZ_JBSROM010000031.1,4140,6017,-,ABC transporters,10,CRISPR-Cas system component
+ACWYRP_RS08660,ABC-F family ATP-binding cassette domain-containing protein,1557,NZ_JBSROM010000041.1,965,2521,-,ABC transporters,10,CRISPR-Cas system component
+ACWYRP_RS07500,preprotein translocase subunit SecA,2412,NZ_JBSROM010000027.1,20144,22555,-,Protein secretion/translocation,10,CRISPR-Cas system component
+ACWYRP_RS03405,preprotein translocase subunit SecE,177,NZ_JBSROM010000007.1,41992,42168,-,Protein secretion/translocation,10,CRISPR-Cas system component
+ACWYRP_RS06985,preprotein translocase subunit SecG,237,NZ_JBSROM010000024.1,14078,14314,+,Protein secretion/translocation,10,CRISPR-Cas system component
+ACWYRP_RS08310,preprotein translocase subunit SecY,1335,NZ_JBSROM010000035.1,14129,15463,-,Protein secretion/translocation,10,CRISPR-Cas system component
+ACWYRP_RS03835,preprotein translocase subunit YajC,363,NZ_JBSROM010000008.1,55698,56060,+,Protein secretion/translocation,10,CRISPR-Cas system component
+ACWYRP_RS00055,ATP-binding cassette domain-containing protein,687,NZ_JBSROM010000001.1,13759,14445,-,Hypothetical/uncharacterized proteins,10,CRISPR-Cas system component
+ACWYRP_RS00240,ATP-binding cassette domain-containing protein,1374,NZ_JBSROM010000001.1,52195,53568,+,Hypothetical/uncharacterized proteins,10,CRISPR-Cas system component
+ACWYRP_RS01555,ATP-binding cassette domain-containing protein,2292,NZ_JBSROM010000003.1,13732,16023,+,Hypothetical/uncharacterized proteins,10,CRISPR-Cas system component
+ACWYRP_RS01720,ATP-binding cassette domain-containing protein,588,NZ_JBSROM010000003.1,52102,52689,+,Hypothetical/uncharacterized proteins,10,CRISPR-Cas system component
+ACWYRP_RS05610,ATP-binding cassette domain-containing protein,801,NZ_JBSROM010000016.1,13244,14044,+,Hypothetical/uncharacterized proteins,10,CRISPR-Cas system component
+ACWYRP_RS06155,ATP-binding cassette domain-containing protein,906,NZ_JBSROM010000019.1,11564,12469,+,Hypothetical/uncharacterized proteins,10,CRISPR-Cas system component
+ACWYRP_RS07270,ATP-binding cassette domain-containing protein,1404,NZ_JBSROM010000026.1,7811,9214,-,Hypothetical/uncharacterized proteins,10,CRISPR-Cas system component
+ACWYRP_RS08135,ATP-binding cassette domain-containing protein,453,NZ_JBSROM010000033.1,17842,18294,-,Hypothetical/uncharacterized proteins,10,CRISPR-Cas system component
+ACWYRP_RS09505,ATP-binding cassette domain-containing protein,445,NZ_JBSROM010000061.1,3691,4135,+,Hypothetical/uncharacterized proteins,10,CRISPR-Cas system component
+ACWYRP_RS09005,DNA/RNA helicase domain-containing protein,1737,NZ_JBSROM010000046.1,7043,8779,+,Hypothetical/uncharacterized proteins,10,CRISPR-Cas system component
+ACWYRP_RS03510,DEAD/DEAH box helicase,1281,NZ_JBSROM010000007.1,60466,61746,-,Uncategorized,10,CRISPR-Cas system component
+ACWYRP_RS04110,DEAD/DEAH box helicase,1590,NZ_JBSROM010000009.1,43160,44749,-,Uncategorized,10,CRISPR-Cas system component
+ACWYRP_RS04560,DEAD/DEAH box helicase,1296,NZ_JBSROM010000011.1,20716,22011,+,Uncategorized,10,CRISPR-Cas system component
+ACWYRP_RS06600,DEAD/DEAH box helicase,1365,NZ_JBSROM010000022.1,4317,5681,+,Uncategorized,10,CRISPR-Cas system component
+ACWYRP_RS07655,DEAD/DEAH box helicase,1158,NZ_JBSROM010000029.1,4152,5309,-,Uncategorized,10,CRISPR-Cas system component
+ACWYRP_RS05035,DNA helicase PcrA,2250,NZ_JBSROM010000013.1,23576,25825,-,Uncategorized,10,CRISPR-Cas system component
+ACWYRP_RS02250,helicase-exonuclease AddAB subunit AddA,3693,NZ_JBSROM010000004.1,68560,72252,+,Uncategorized,10,CRISPR-Cas system component
+ACWYRP_RS00585,SF1B family DNA helicase RecD2,2388,NZ_JBSROM010000001.1,126377,128764,-,Uncategorized,10,CRISPR-Cas system component
+ACWYRP_RS06645,DNA mismatch repair endonuclease MutL,1947,NZ_JBSROM010000022.1,15012,16958,+,Mismatch repair,8,DNA repair endonuclease; Generic nuclease - potential defense system nuclease
+ACWYRP_RS07035,endonuclease MutS2,2403,NZ_JBSROM010000024.1,22544,24946,+,Mismatch repair,8,DNA repair endonuclease; Generic nuclease - potential defense system nuclease
+ACWYRP_RS07130,phage tail tip lysozyme,1176,NZ_JBSROM010000025.1,10952,12127,+,Lysozyme/cell wall lytic enzymes,8,Phage-related protein
+ACWYRP_RS09880,phage tail tip lysozyme,975,NZ_JBSROM010000087.1,1,975,+,Lysozyme/cell wall lytic enzymes,8,Phage-related protein
+ACWYRP_RS01485,phage tail tube assembly chaperone,369,NZ_JBSROM010000002.1,96393,96761,+,Chaperones/protein folding,8,Phage-related protein
+ACWYRP_RS00360,DNA/RNA non-specific endonuclease,1176,NZ_JBSROM010000001.1,74189,75364,+,Uncategorized,8,Endonuclease - potential RM or defense system
+ACWYRP_RS03245,DNA/RNA non-specific endonuclease,870,NZ_JBSROM010000007.1,13718,14587,+,Uncategorized,8,Endonuclease - potential RM or defense system
+ACWYRP_RS01425,HNH endonuclease,450,NZ_JBSROM010000002.1,87687,88136,+,Uncategorized,8,Endonuclease - potential RM or defense system
+ACWYRP_RS09460,holin,474,NZ_JBSROM010000060.1,1843,2316,-,Uncategorized,8,Holin - phage lysis protein (phage defense island)
+ACWYRP_RS06300,peptide chain release factor N(5)-glutamine methyltransferase,993,NZ_JBSROM010000020.1,5180,6172,+,Translation initiation/elongation/release factors,7,Non-ribosomal methyltransferase (potential RM system)
+ACWYRP_RS04865,"bifunctional demethylmenaquinone methyltransferase/2-methoxy-6-polyprenyl-1,4-benzoquinol methylase UbiE",711,NZ_JBSROM010000012.1,33687,34397,+,Menaquinone biosynthesis,7,Non-ribosomal methyltransferase (potential RM system)
+ACWYRP_RS00135,serine hydroxymethyltransferase,1233,NZ_JBSROM010000001.1,29429,30661,-,Amino acid biosynthesis/metabolism,7,Non-ribosomal methyltransferase (potential RM system)
+ACWYRP_RS08005,5-methyltetrahydropteroyltriglutamate--homocysteine S-methyltransferase,2301,NZ_JBSROM010000032.1,5635,7935,-,General metabolism enzymes,7,Non-ribosomal methyltransferase (potential RM system)
+ACWYRP_RS08035,5-methyltetrahydropteroyltriglutamate--homocysteine S-methyltransferase,1128,NZ_JBSROM010000032.1,13417,14544,-,General metabolism enzymes,7,Non-ribosomal methyltransferase (potential RM system)
+ACWYRP_RS03375,class I SAM-dependent methyltransferase,636,NZ_JBSROM010000007.1,38186,38821,-,General metabolism enzymes,7,Non-ribosomal methyltransferase (potential RM system)
+ACWYRP_RS04045,class I SAM-dependent methyltransferase,990,NZ_JBSROM010000009.1,32608,33597,-,General metabolism enzymes,7,Non-ribosomal methyltransferase (potential RM system)
+ACWYRP_RS08145,class I SAM-dependent methyltransferase,759,NZ_JBSROM010000034.1,1037,1795,-,General metabolism enzymes,7,Non-ribosomal methyltransferase (potential RM system)
+ACWYRP_RS02255,methylated-DNA--[protein]-cysteine S-methyltransferase,483,NZ_JBSROM010000004.1,72303,72785,+,General metabolism enzymes,7,Non-ribosomal methyltransferase (potential RM system)
+ACWYRP_RS02300,methyltransferase domain-containing protein,705,NZ_JBSROM010000004.1,80311,81015,-,General metabolism enzymes,7,Non-ribosomal methyltransferase (potential RM system)
+ACWYRP_RS03090,RsmE family RNA methyltransferase,738,NZ_JBSROM010000006.1,57624,58361,-,General metabolism enzymes,7,Non-ribosomal methyltransferase (potential RM system)
+ACWYRP_RS00125,SAM-dependent methyltransferase,1197,NZ_JBSROM010000001.1,27560,28756,-,General metabolism enzymes,7,Non-ribosomal methyltransferase (potential RM system)
+ACWYRP_RS01025,THUMP domain-containing class I SAM-dependent RNA methyltransferase,1134,NZ_JBSROM010000002.1,26179,27312,+,General metabolism enzymes,7,Non-ribosomal methyltransferase (potential RM system)
+ACWYRP_RS06815,TlyA family RNA methyltransferase,837,NZ_JBSROM010000023.1,16397,17233,+,General metabolism enzymes,7,Non-ribosomal methyltransferase (potential RM system)
+ACWYRP_RS06980,TrmH family RNA methyltransferase,774,NZ_JBSROM010000024.1,13227,14000,+,General metabolism enzymes,7,Non-ribosomal methyltransferase (potential RM system)

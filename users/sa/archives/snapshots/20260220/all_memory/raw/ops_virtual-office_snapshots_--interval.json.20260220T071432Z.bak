@@ -1,0 +1,8 @@
+{
+  "agent": "--INTERVAL",
+  "last_seq_applied": 0,
+  "state_hash": "19a16499d2be1b92",
+  "saved_at": "2026-02-20T07:13:22.350130+00:00",
+  "lease_token": 9,
+  "messages_drained": 0
+}

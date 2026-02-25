@@ -1,0 +1,8 @@
+{
+  "agent": "REX",
+  "last_seq_applied": 92,
+  "state_hash": "478e66e9cefeb1a8",
+  "saved_at": "2026-02-20T07:13:27.260043+00:00",
+  "lease_token": 9,
+  "messages_drained": 0
+}

@@ -1,0 +1,1 @@
+# Plugin auto-discovery package

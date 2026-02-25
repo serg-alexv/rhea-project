@@ -1,0 +1,10 @@
+Да, Мика, вижу несколько явных дисбалансов.
+
+- Критичный: активный рантайм-профиль не тот, что ты редактируешь. Загрузка идет из `rhea-nexus/profiles/default.toml` через `src/rhea_profile_manager.py:24`, а `team/gpt/rhea_profile.toml` фактически может не применяться.
+- Критичный конфликт политик shell/write: `team/gpt/rhea_profile.toml:155-157` (`allow_shell=false`, `no_autonomous_shell=true`, scoped writes) против `team/gpt/policy.toml:14-15` (`no_autonomous_shell=false`, `writes_allowed=["*"]`).
+- Критичный конфликт “строгости”: в `team/gpt/rhea_profile.toml:42-43` и `team/gpt/rhea_profile.toml:55-56` все lock-флаги выключены (`false`), то есть строгий контракт декларативный.
+- Высокий: тестовая политика бьется сама с собой: `team/operator_profile.toml:42-43` требует compile/smoketest, но `team/gpt/rhea_profile.toml:20` (`avoid_unasked_testing=true`) и `team/gpt/rhea_profile.toml:168` (`auto_run_tests=false`) тянут в обратную сторону.
+- Средний: loop-killer включен, но `stop_after_success=false` в `team/operator_profile.toml:25`; это провоцирует “доделывания после успеха”.
+- Средний: идентичности/маппинг агентов плавают по регистру и составу (`team/gpt/policy.toml:3-10`: `Hyperion` vs `hyperion`, `Rex` vs `rex`, `Argos` в roles без явного присутствия в agents).
+- Низкий, но странный: `stop_words_reserved=[""]` в `team/gpt/rhea_profile.toml:30` — пустой токен обычно невалидный sentinel.
+

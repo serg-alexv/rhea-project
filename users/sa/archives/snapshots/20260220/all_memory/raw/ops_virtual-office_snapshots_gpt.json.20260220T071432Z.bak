@@ -1,0 +1,8 @@
+{
+  "agent": "GPT",
+  "last_seq_applied": 55,
+  "state_hash": "1cab90d267e875a0",
+  "saved_at": "2026-02-20T07:13:25.171663+00:00",
+  "lease_token": 12,
+  "messages_drained": 0
+}

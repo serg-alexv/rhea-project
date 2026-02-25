@@ -919,15 +919,12 @@ def watch_daemon(interval: int = DEFAULT_POLL_INTERVAL):
 
     state = _load_state()
     cycle = 0
-    stop_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'STOP')
-    def _stop():
-        return os.path.exists(stop_path)
+    stop_path = PROJECT_ROOT / "STOP"
 
 
     while True:
         # P0: Runtime STOP Enforcement
-        root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        if os.path.exists(os.path.join(root_dir, "STOP")):
+        if stop_path.exists():
             print(f"[{datetime.now()}] STOP sentinel detected in root. Exiting.")
             break
         cycle += 1
@@ -996,8 +993,7 @@ def watch_daemon(interval: int = DEFAULT_POLL_INTERVAL):
 
         # P0-STOP: Responsive sleep
         for _ in range(interval):
-            root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-            if os.path.exists(os.path.join(root_dir, "STOP")):
+            if stop_path.exists():
                 break
             time.sleep(1)
 

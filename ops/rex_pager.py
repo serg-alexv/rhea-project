@@ -33,6 +33,7 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import fcntl
 import subprocess
 import sys
 import time
@@ -50,6 +51,7 @@ PROJECT_ROOT = Path(__file__).parent.parent
 MAILBOX_FILE = PROJECT_ROOT / "ops" / "virtual-office" / "relay_mailbox.jsonl"
 ACKS_FILE = PROJECT_ROOT / "ops" / "virtual-office" / "relay_acks.jsonl"
 INBOX_DIR = PROJECT_ROOT / "ops" / "virtual-office" / "inbox"
+OFFICE_FILE = PROJECT_ROOT / "ops" / "virtual-office" / "OFFICE.md"
 POLL_INTERVAL = 300  # 5 min
 ANTHROPIC_HEALTH_URL = "https://api.anthropic.com/v1/messages"
 DEFAULT_TTL = 86400  # 24h
@@ -136,8 +138,6 @@ def _last_chain_hash() -> str:
 
 def chain_append(event_type: str, actor: str, payload: dict) -> dict:
     """Append a tamper-evident entry to the audit chain with exclusive locking."""
-    import fcntl
-
     CHAIN_FILE.parent.mkdir(parents=True, exist_ok=True)
     with open(CHAIN_FILE, "a+") as f:
         fcntl.flock(f, fcntl.LOCK_EX)
@@ -145,11 +145,13 @@ def chain_append(event_type: str, actor: str, payload: dict) -> dict:
             f.seek(0)
             lines = [ln for ln in f.read().splitlines() if ln.strip()]
             prev_hash = "0" * 64
-            if lines:
+            # Walk backwards until we find a valid JSON entry (robust to partial tail lines).
+            for ln in reversed(lines):
                 try:
-                    prev_hash = json.loads(lines[-1]).get("event_hash", "0" * 64)
+                    prev_hash = json.loads(ln).get("event_hash", "0" * 64)
+                    break
                 except Exception:
-                    prev_hash = "0" * 64
+                    continue
 
             entry = {
                 "timestamp": _now_iso(),
@@ -163,6 +165,7 @@ def chain_append(event_type: str, actor: str, payload: dict) -> dict:
 
             f.write(json.dumps(entry) + "\n")
             f.flush()
+            os.fsync(f.fileno())
             return entry
         finally:
             fcntl.flock(f, fcntl.LOCK_UN)
@@ -779,6 +782,7 @@ def _write_ack(message_id: str, target: str):
 def drain(target: str, lease_token: int = 0, from_seq: int = 0):
     """Drain pending messages for target, in seq order.
     I2 (ordered) + I3 (idempotent) + staleness policy + effect intents."""
+    target_norm = target.upper()
     mailbox = _read_mailbox()
     acks = _read_acks()
 
@@ -788,7 +792,7 @@ def drain(target: str, lease_token: int = 0, from_seq: int = 0):
     seen_idem_keys = set()  # I3: idempotency dedup within single drain
 
     for m in mailbox:
-        if m.get("target") != target:
+        if str(m.get("target", "")).upper() != target_norm:
             continue
         if m["id"] in acks:
             continue
@@ -797,7 +801,7 @@ def drain(target: str, lease_token: int = 0, from_seq: int = 0):
         # I3: deduplicate by idempotency key (blocks replay attacks)
         idem = m.get("idempotency_key", "")
         if idem and idem in seen_idem_keys:
-            _write_ack(m["id"], target)  # ack the duplicate
+            _write_ack(m["id"], target_norm)  # ack the duplicate
             continue
         if idem:
             seen_idem_keys.add(idem)
@@ -807,21 +811,21 @@ def drain(target: str, lease_token: int = 0, from_seq: int = 0):
 
         if action == "expire":
             expired_list.append((m, reason))
-            _write_ack(m["id"], target)
+            _write_ack(m["id"], target_norm)
             _write_incident(m, reason)
             continue
 
         if action == "reconfirm":
             reconfirm_list.append((m, reason))
             _write_incident(m, f"NEEDS RECONFIRM: {reason}")
-            _write_ack(m["id"], target)  # ack to prevent re-processing, log incident
+            _write_ack(m["id"], target_norm)  # ack to prevent re-processing, log incident
             continue
 
         # Lease gate for dangerous types (I4, I5)
         if m.get("lease_token_required", 0) > 0 and lease_token > 0:
             if m["lease_token_required"] != lease_token:
                 _write_incident(m, f"lease mismatch: msg requires {m['lease_token_required']}, current {lease_token}")
-                _write_ack(m["id"], target)
+                _write_ack(m["id"], target_norm)
                 continue
 
         # Deliver
@@ -835,7 +839,7 @@ def drain(target: str, lease_token: int = 0, from_seq: int = 0):
             intent = create_effect_intent(m, lease_token)
             print(f"  -> effect intent: {intent['intent_id']} (status: planned)")
 
-        _write_ack(m["id"], target)
+        _write_ack(m["id"], target_norm)
         delivered.append(m)
         print("-" * 60)
 
@@ -850,9 +854,9 @@ def drain(target: str, lease_token: int = 0, from_seq: int = 0):
             print(f"  seq={m['seq']} {m['source']}: {reason}")
 
     if delivered:
-        print(f"\n[relay] {len(delivered)} messages delivered + acked for {target}.")
+        print(f"\n[relay] {len(delivered)} messages delivered + acked for {target_norm}.")
     else:
-        print(f"[relay] No pending messages for {target}.")
+        print(f"[relay] No pending messages for {target_norm}.")
 
     return delivered
 
@@ -1004,18 +1008,61 @@ def check_anthropic_api() -> tuple[bool, str]:
         return False, f"unreachable: {e}"
 
 
+def _known_desks_from_office() -> list[str]:
+    if not OFFICE_FILE.exists():
+        return []
+    lines = OFFICE_FILE.read_text().splitlines()
+    start = -1
+    for i, line in enumerate(lines):
+        if line.strip().lower().startswith("| desk |") and "| model |" in line.lower():
+            start = i + 2
+            break
+    if start < 0:
+        return []
+    desks: list[str] = []
+    for line in lines[start:]:
+        row = line.strip()
+        if not row.startswith("|"):
+            break
+        cols = [c.strip() for c in row.strip("|").split("|")]
+        if len(cols) < 3:
+            continue
+        desk = cols[0].upper()
+        if not desk or desk in {"DESK", "—", "-"}:
+            continue
+        desks.append(desk)
+    return sorted(set(desks))
+
+
+def _print_launch_commands(target: str = "ALL", interval_s: int = 5, profile_path: str = ""):
+    desks = _known_desks_from_office() or ["LEAD", "B2", "GPT", "COWORK", "ORION", "REX", "SONNET", "TEAMLEAD", "HYPERION"]
+    target_norm = target.upper()
+    if target_norm != "ALL":
+        desks = [target_norm]
+    for desk in desks:
+        desk_l = desk.lower()
+        profile = profile_path or f"team/agents/{desk_l}/profile.toml"
+        print(f"[{desk}]")
+        print(f"python3 ops/rex_pager.py watch {desk} --interval {interval_s} --profile {profile}")
+        print(f"python3 ops/rex_pager.py boot {desk}")
+        print(f"python3 ops/rex_pager.py wake {desk}")
+        print(f"python3 ops/rex_pager.py send MIKA {desk} \"P1: <task>\" --priority P1 --ttl {DEFAULT_TTL}")
+        print("")
+
+
 def wake_signal(target: str):
     """Fire wake: notification + full boot protocol + wake marker."""
-    print(f"[relay] WAKE SIGNAL for {target}")
+    target_norm = target.upper()
+    print(f"[relay] WAKE SIGNAL for {target_norm}")
 
     # macOS notification
     try:
         mailbox = _read_mailbox()
         acks = _read_acks()
-        n_pending = len([m for m in mailbox if m["id"] not in acks and m.get("target") == target])
+        n_pending = len([m for m in mailbox if m["id"] not in acks and str(m.get("target", "")).upper() == target_norm])
         subprocess.run([
             "osascript", "-e",
-            f'display notification "{target} can wake. {n_pending} pending messages." '
+            f'display notification "{target_norm} can wake. {n_pending} pending messages." '
             f'with title "RHEA RELAY" sound name "Hero"'
         ], timeout=5)
     except Exception:
@@ -1024,42 +1071,45 @@ def wake_signal(target: str):
     print("\a")  # terminal bell
 
     # Full boot protocol instead of raw drain
-    token, delivered = boot(target)
+    token, delivered = boot(target_norm)
 
     # Wake marker
     INBOX_DIR.mkdir(parents=True, exist_ok=True)
     ts = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
-    wake_file = INBOX_DIR / f"RELAY_WAKE_{ts}_{target}.md"
+    wake_file = INBOX_DIR / f"RELAY_WAKE_{ts}_{target_norm}.md"
     wake_file.write_text(
-        f"# RELAY WAKE — {target}\n"
+        f"# RELAY WAKE — {target_norm}\n"
         f"**Time:** {_now_iso()}\n"
         f"**Trigger:** API availability detected by rex_pager.py\n"
         f"**Lease:** {token}\n"
         f"**Messages drained:** {len(delivered)}\n"
-        f"**Boot:** `python3 ops/rex_pager.py boot {target}`\n"
+        f"**Boot:** `python3 ops/rex_pager.py boot {target_norm}`\n"
     )
     print(f"[relay] Wake marker: {wake_file.name}")
 
 
-def watch_daemon(target: str = "LEAD"):
+def watch_daemon(target: str = "LEAD", interval_s: int = POLL_INTERVAL, profile_path: str = ""):
     """Poll API, auto-drain on wake. Section 7 of QWRR."""
-    print(f"[relay] Watching for {target} wake (poll every {POLL_INTERVAL}s)")
+    target_norm = target.upper()
+    interval_s = max(1, int(interval_s))
+    profile_note = f" profile={profile_path}" if profile_path else ""
+    print(f"[relay] Watching for {target_norm} wake (poll every {interval_s}s){profile_note}")
     print(f"[relay] Ctrl+C to stop.\n")
 
     was_blocked = True
+    stop_path = PROJECT_ROOT / "STOP"
 
     while True:
         # P0: Runtime STOP Enforcement
-        root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        if os.path.exists(os.path.join(root_dir, "STOP")):
+        if stop_path.exists():
             print(f"[{datetime.now()}] STOP sentinel detected in root. Exiting.")
             break
         available, detail = check_anthropic_api()
         now = datetime.now(timezone.utc).strftime("%H:%M:%S UTC")
 
         if available and was_blocked:
-            print(f"[{now}] QUOTA RESET DETECTED — waking {target}!")
-            wake_signal(target)
+            print(f"[{now}] QUOTA RESET DETECTED — waking {target_norm}!")
+            wake_signal(target_norm)
             was_blocked = False
         elif available:
             print(f"[{now}] API available ✓")
@@ -1068,9 +1118,8 @@ def watch_daemon(target: str = "LEAD"):
             was_blocked = True
 
         # P0-STOP: Responsive sleep
-        for _ in range(POLL_INTERVAL):
-            root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-            if os.path.exists(os.path.join(root_dir, "STOP")):
+        for _ in range(interval_s):
+            if stop_path.exists():
                 break
             time.sleep(1)
 
@@ -1091,7 +1140,7 @@ def main():
             print("Usage: rex_pager.py send <from> <to> <message> [--priority P0] [--ttl 86400]")
             sys.exit(1)
         source = sys.argv[2]
-        target = sys.argv[3]
+        target = sys.argv[3].upper()
         body = sys.argv[4]
         priority = "P1"
         ttl = DEFAULT_TTL
@@ -1109,15 +1158,15 @@ def main():
         show_status()
 
     elif cmd == "drain":
-        target = sys.argv[2] if len(sys.argv) > 2 else "LEAD"
+        target = (sys.argv[2] if len(sys.argv) > 2 else "LEAD").upper()
         drain(target)
 
     elif cmd == "boot":
-        target = sys.argv[2] if len(sys.argv) > 2 else "LEAD"
+        target = (sys.argv[2] if len(sys.argv) > 2 else "LEAD").upper()
         boot(target)
 
     elif cmd == "lease":
-        target = sys.argv[2] if len(sys.argv) > 2 else "LEAD"
+        target = (sys.argv[2] if len(sys.argv) > 2 else "LEAD").upper()
         if "--acquire" in sys.argv:
             acquire_lease(target)
         elif "--renew" in sys.argv:
@@ -1132,17 +1181,72 @@ def main():
                 print("  ⚠ LEASE EXPIRED — needs re-acquisition")
 
     elif cmd == "snapshot":
-        target = sys.argv[2] if len(sys.argv) > 2 else "LEAD"
+        target = (sys.argv[2] if len(sys.argv) > 2 else "LEAD").upper()
         snap = load_snapshot(target)
         print(json.dumps(snap, indent=2))
 
     elif cmd == "wake":
-        target = sys.argv[2] if len(sys.argv) > 2 else "LEAD"
+        target = (sys.argv[2] if len(sys.argv) > 2 else "LEAD").upper()
         wake_signal(target)
 
     elif cmd == "watch":
-        target = sys.argv[2] if len(sys.argv) > 2 else "LEAD"
-        watch_daemon(target)
+        target = "LEAD"
+        interval_s = POLL_INTERVAL
+        profile_path = ""
+        args = sys.argv[2:]
+        i = 0
+        while i < len(args):
+            arg = args[i]
+            if arg == "--interval" and i + 1 < len(args):
+                interval_s = int(args[i + 1])
+                i += 2
+                continue
+            if arg.startswith("--interval="):
+                interval_s = int(arg.split("=", 1)[1])
+                i += 1
+                continue
+            if arg == "--profile" and i + 1 < len(args):
+                profile_path = args[i + 1]
+                i += 2
+                continue
+            if arg.startswith("--profile="):
+                profile_path = arg.split("=", 1)[1]
+                i += 1
+                continue
+            if arg.startswith("--"):
+                print(f"watch: unknown option {arg}")
+                sys.exit(1)
+            target = arg.upper()
+            i += 1
+        watch_daemon(target, interval_s=interval_s, profile_path=profile_path)
+
+    elif cmd == "launch":
+        target = "ALL"
+        interval_s = 5
+        profile_path = ""
+        args = sys.argv[2:]
+        i = 0
+        while i < len(args):
+            arg = args[i]
+            if arg == "--interval" and i + 1 < len(args):
+                interval_s = int(args[i + 1])
+                i += 2
+                continue
+            if arg.startswith("--interval="):
+                interval_s = int(arg.split("=", 1)[1])
+                i += 1
+                continue
+            if arg == "--profile" and i + 1 < len(args):
+                profile_path = args[i + 1]
+                i += 2
+                continue
+            if arg.startswith("--profile="):
+                profile_path = arg.split("=", 1)[1]
+                i += 1
+                continue
+            target = arg.upper()
+            i += 1
+        _print_launch_commands(target=target, interval_s=interval_s, profile_path=profile_path)
 
     elif cmd == "verify":
         valid, count, detail = chain_verify()

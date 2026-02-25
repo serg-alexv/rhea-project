@@ -1,0 +1,487 @@
+============================================================================================================================================================================================================================
+FOCUSED DEFENSE GENE EXTRACTION - CATEGORIES YOU REQUESTED
+============================================================================================================================================================================================================================
+
+HYPOTHETICAL PROTEINS: 212
+DUF-DOMAIN PROTEINS: 59
+GENERIC METHYLTRANSFERASES: 17
+GENERIC NUCLEASES/ENDONUCLEASES: 36
+HELIX-TURN-HELIX PROTEINS (non-transcriptional): 0
+CLUSTERED DEFENSE ISLANDS: 110 genes
+
+============================================================================================================================================================================================================================
+
+
+SECTION 1: HYPOTHETICAL PROTEINS
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+LOCUS_TAG          | PGAP_PRODUCT_NAME                                       | LENGTH  | CONTIG:COORD             | HYPOTHESIS                          | CONF  | SCORE
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ACWYRP_RS00035     | hypothetical protein                                    | 1701aa  | c000001.1:7894-9594      | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS00040     | hypothetical protein                                    | 1674aa  | c000001.1:9789-11462     | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS00330     | hypothetical protein                                    | 501aa   | c000001.1:68783-69283    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS00350     | hypothetical protein                                    | 171aa   | c000001.1:73250-73420    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS00540     | hypothetical protein                                    | 294aa   | c000001.1:118177-118470  | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS00655     | hypothetical protein                                    | 498aa   | c000001.1:146974-147471  | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS00740     | hypothetical protein                                    | 546aa   | c000001.1:161850-162395  | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS00820     | hypothetical protein                                    | 171aa   | c000001.1:180080-180250  | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS00835     | hypothetical protein                                    | 1290aa  | c000001.1:182186-183475  | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS00890     | hypothetical protein                                    | 915aa   | c000001.1:194430-195344  | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS01000     | hypothetical protein                                    | 528aa   | c000002.1:22090-22617    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS01020     | hypothetical protein                                    | 282aa   | c000002.1:25875-26156    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS01215     | hypothetical protein                                    | 213aa   | c000002.1:64729-64941    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS01230     | hypothetical protein                                    | 639aa   | c000002.1:67477-68115    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS01245     | hypothetical protein                                    | 519aa   | c000002.1:70088-70606    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS01260     | hypothetical protein                                    | 252aa   | c000002.1:72124-72375    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS01265     | hypothetical protein                                    | 618aa   | c000002.1:72449-73066    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS01270     | hypothetical protein                                    | 303aa   | c000002.1:73259-73561    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS01285     | hypothetical protein                                    | 225aa   | c000002.1:74627-74851    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS01290     | hypothetical protein                                    | 195aa   | c000002.1:74866-75060    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS01300     | hypothetical protein                                    | 195aa   | c000002.1:75874-76068    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS01310     | hypothetical protein                                    | 168aa   | c000002.1:76521-76688    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS01315     | hypothetical protein                                    | 432aa   | c000002.1:76685-77116    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS01320     | hypothetical protein                                    | 225aa   | c000002.1:77118-77342    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS01330     | hypothetical protein                                    | 402aa   | c000002.1:77617-78018    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS01355     | hypothetical protein                                    | 177aa   | c000002.1:80704-80880    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS01365     | hypothetical protein                                    | 177aa   | c000002.1:81698-81874    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS01375     | hypothetical protein                                    | 444aa   | c000002.1:82303-82746    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS01380     | hypothetical protein                                    | 270aa   | c000002.1:82743-83012    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS01385     | hypothetical protein                                    | 186aa   | c000002.1:83009-83194    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS01395     | hypothetical protein                                    | 171aa   | c000002.1:84043-84213    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS01400     | hypothetical protein                                    | 978aa   | c000002.1:84200-85177    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS01405     | hypothetical protein                                    | 165aa   | c000002.1:85498-85662    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS01415     | hypothetical protein                                    | 204aa   | c000002.1:86904-87107    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS01420     | hypothetical protein                                    | 330aa   | c000002.1:87322-87651    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS01470     | hypothetical protein                                    | 468aa   | c000002.1:94839-95306    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS01490     | hypothetical protein                                    | 144aa   | c000002.1:96842-96985    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS01575     | hypothetical protein                                    | 255aa   | c000003.1:19340-19594    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS01655     | hypothetical protein                                    | 240aa   | c000003.1:38654-38893    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS01715     | hypothetical protein                                    | 762aa   | c000003.1:51324-52085    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS01925     | hypothetical protein                                    | 1347aa  | c000003.1:90407-91753    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS01940     | hypothetical protein                                    | 411aa   | c000003.1:93768-94178    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS02225     | hypothetical protein                                    | 201aa   | c000004.1:61562-61762    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS02235     | hypothetical protein                                    | 1782aa  | c000004.1:62421-64202    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS02305     | hypothetical protein                                    | 321aa   | c000004.1:80999-81319    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS02345     | hypothetical protein                                    | 333aa   | c000005.1:7033-7365      | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS02370     | hypothetical protein                                    | 312aa   | c000005.1:9209-9520      | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS02410     | hypothetical protein                                    | 630aa   | c000005.1:16029-16658    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS02415     | hypothetical protein                                    | 510aa   | c000005.1:16763-17272    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS02425     | hypothetical protein                                    | 171aa   | c000005.1:18590-18760    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS02440     | hypothetical protein                                    | 195aa   | c000005.1:20685-20879    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS02445     | hypothetical protein                                    | 558aa   | c000005.1:20879-21436    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS02450     | hypothetical protein                                    | 303aa   | c000005.1:21436-21738    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS02460     | hypothetical protein                                    | 282aa   | c000005.1:22649-22930    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS02465     | hypothetical protein                                    | 159aa   | c000005.1:22936-23094    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS02500     | hypothetical protein                                    | 402aa   | c000005.1:27655-28056    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS02505     | hypothetical protein                                    | 288aa   | c000005.1:28059-28346    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS02515     | hypothetical protein                                    | 165aa   | c000005.1:28637-28801    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS02525     | hypothetical protein                                    | 264aa   | c000005.1:29554-29817    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS02535     | hypothetical protein                                    | 192aa   | c000005.1:30180-30371    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS02585     | hypothetical protein                                    | 558aa   | c000005.1:37645-38202    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS02610     | hypothetical protein                                    | 375aa   | c000005.1:41207-41581    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS02725     | hypothetical protein                                    | 447aa   | c000005.1:68310-68756    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS02755     | hypothetical protein                                    | 258aa   | c000005.1:72279-72536    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS02760     | hypothetical protein                                    | 123aa   | c000005.1:72748-72870    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS02765     | hypothetical protein                                    | 135aa   | c000005.1:72813-72947    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS02770     | hypothetical protein                                    | 309aa   | c000005.1:73165-73473    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS02775     | hypothetical protein                                    | 315aa   | c000005.1:73488-73802    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS02780     | hypothetical protein                                    | 295aa   | c000006.1:1-295          | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS03050     | hypothetical protein                                    | 441aa   | c000006.1:50310-50750    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS03070     | hypothetical protein                                    | 636aa   | c000006.1:53395-54030    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS03085     | hypothetical protein                                    | 438aa   | c000006.1:57138-57575    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS03215     | hypothetical protein                                    | 153aa   | c000007.1:8323-8475      | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS03220     | hypothetical protein                                    | 144aa   | c000007.1:8606-8749      | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS03550     | hypothetical protein                                    | 336aa   | c000007.1:70150-70485    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS03760     | hypothetical protein                                    | 468aa   | c000008.1:43659-44126    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS03780     | hypothetical protein                                    | 306aa   | c000008.1:45026-45331    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS03895     | hypothetical protein                                    | 255aa   | c000009.1:1644-1898      | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS03995     | hypothetical protein                                    | 507aa   | c000009.1:21406-21912    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS04000     | hypothetical protein                                    | 291aa   | c000009.1:21909-22199    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS04050     | hypothetical protein                                    | 288aa   | c000009.1:33635-33922    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS04365     | hypothetical protein                                    | 543aa   | c000010.1:34622-35164    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS04380     | hypothetical protein                                    | 684aa   | c000010.1:36890-37573    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS04405     | hypothetical protein                                    | 225aa   | c000010.1:44437-44661    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS04600     | hypothetical protein                                    | 303aa   | c000011.1:28522-28824    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS04635     | hypothetical protein                                    | 207aa   | c000011.1:34332-34538    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS04700     | hypothetical protein                                    | 489aa   | c000012.1:708-1196       | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS04895     | hypothetical protein                                    | 513aa   | c000012.1:39972-40484    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS05005     | hypothetical protein                                    | 174aa   | c000013.1:16686-16859    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS05165     | hypothetical protein                                    | 441aa   | c000014.1:13131-13571    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS05315     | hypothetical protein                                    | 144aa   | c000014.1:40336-40479    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS05390     | hypothetical protein                                    | 243aa   | c000015.1:14067-14309    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS05415     | hypothetical protein                                    | 219aa   | c000015.1:17943-18161    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS05420     | hypothetical protein                                    | 360aa   | c000015.1:18730-19089    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS05450     | hypothetical protein                                    | 270aa   | c000015.1:23597-23866    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS05710     | hypothetical protein                                    | 447aa   | c000016.1:35310-35756    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS05750     | hypothetical protein                                    | 738aa   | c000017.1:3431-4168      | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS05870     | hypothetical protein                                    | 924aa   | c000017.1:25608-26531    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS05880     | hypothetical protein                                    | 135aa   | c000017.1:27927-28061    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS05905     | hypothetical protein                                    | 522aa   | c000017.1:30937-31458    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS05975     | hypothetical protein                                    | 270aa   | c000018.1:7535-7804      | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS06100     | hypothetical protein                                    | 444aa   | c000019.1:999-1442       | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS06250     | hypothetical protein                                    | 198aa   | c000019.1:27333-27530    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS06555     | hypothetical protein                                    | 1293aa  | c000021.1:26286-27578    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS06650     | hypothetical protein                                    | 144aa   | c000022.1:17121-17264    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS06790     | hypothetical protein                                    | 486aa   | c000023.1:12829-13314    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS06795     | hypothetical protein                                    | 255aa   | c000023.1:13325-13579    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS07010     | hypothetical protein                                    | 531aa   | c000024.1:19452-19982    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS07020     | hypothetical protein                                    | 378aa   | c000024.1:21090-21467    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS07040     | hypothetical protein                                    | 351aa   | c000024.1:25102-25452    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS07045     | hypothetical protein                                    | 1077aa  | c000024.1:25516-26592    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS07050     | hypothetical protein                                    | 327aa   | c000024.1:26643-26969    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS07075     | hypothetical protein                                    | 372aa   | c000024.1:29135-29506    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS07080     | hypothetical protein                                    | 1945aa  | c000025.1:1-1945         | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS07085     | hypothetical protein                                    | 783aa   | c000025.1:2039-2821      | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS07095     | hypothetical protein                                    | 213aa   | c000025.1:5242-5454      | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS07115     | hypothetical protein                                    | 369aa   | c000025.1:7736-8104      | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS07135     | hypothetical protein                                    | 525aa   | c000025.1:12147-12671    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS07140     | hypothetical protein                                    | 567aa   | c000025.1:12661-13227    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS07155     | hypothetical protein                                    | 336aa   | c000025.1:16207-16542    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS07165     | hypothetical protein                                    | 258aa   | c000025.1:16867-17124    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS07170     | hypothetical protein                                    | 315aa   | c000025.1:17146-17460    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS07195     | hypothetical protein                                    | 297aa   | c000025.1:21691-21987    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS07205     | hypothetical protein                                    | 381aa   | c000025.1:23988-24368    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS07210     | hypothetical protein                                    | 195aa   | c000025.1:24361-24555    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS07215     | hypothetical protein                                    | 261aa   | c000025.1:24642-24902    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS07230     | hypothetical protein                                    | 420aa   | c000025.1:25773-26192    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS07350     | hypothetical protein                                    | 180aa   | c000026.1:22628-22807    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS07580     | hypothetical protein                                    | 510aa   | c000028.1:10829-11338    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS07640     | hypothetical protein                                    | 480aa   | c000029.1:2220-2699      | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS07665     | hypothetical protein                                    | 216aa   | c000029.1:5589-5804      | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS07670     | hypothetical protein                                    | 204aa   | c000029.1:5855-6058      | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS07675     | hypothetical protein                                    | 168aa   | c000029.1:6048-6215      | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS07680     | hypothetical protein                                    | 234aa   | c000029.1:6202-6435      | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS07685     | hypothetical protein                                    | 243aa   | c000029.1:6603-6845      | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS07690     | hypothetical protein                                    | 210aa   | c000029.1:6914-7123      | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS07695     | hypothetical protein                                    | 147aa   | c000029.1:7101-7247      | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS07700     | hypothetical protein                                    | 216aa   | c000029.1:7264-7479      | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS07755     | hypothetical protein                                    | 828aa   | c000029.1:17346-18173    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS07910     | hypothetical protein                                    | 144aa   | c000031.1:3035-3178      | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS07940     | hypothetical protein                                    | 300aa   | c000031.1:9354-9653      | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS07985     | hypothetical protein                                    | 174aa   | c000032.1:810-983        | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS08015     | hypothetical protein                                    | 123aa   | c000032.1:9017-9139      | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS08040     | hypothetical protein                                    | 150aa   | c000032.1:14692-14841    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS08150     | hypothetical protein                                    | 372aa   | c000034.1:1776-2147      | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS08365     | hypothetical protein                                    | 123aa   | c000036.1:8057-8179      | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS08400     | hypothetical protein                                    | 459aa   | c000037.1:48-506         | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS08495     | hypothetical protein                                    | 432aa   | c000038.1:5382-5813      | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS08525     | hypothetical protein                                    | 234aa   | c000038.1:13222-13455    | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS08530     | hypothetical protein                                    | 518aa   | c000039.1:1-518          | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS08780     | hypothetical protein                                    | 339aa   | c000043.1:5795-6133      | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS08785     | hypothetical protein                                    | 318aa   | c000043.1:6327-6644      | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS08805     | hypothetical protein                                    | 264aa   | c000043.1:9849-10112     | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS08820     | hypothetical protein                                    | 252aa   | c000044.1:1652-1903      | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS08865     | hypothetical protein                                    | 1767aa  | c000045.1:1-1767         | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS08870     | hypothetical protein                                    | 156aa   | c000045.1:1786-1941      | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS08875     | hypothetical protein                                    | 240aa   | c000045.1:1944-2183      | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS08880     | hypothetical protein                                    | 426aa   | c000045.1:2234-2659      | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS08885     | hypothetical protein                                    | 1092aa  | c000045.1:2656-3747      | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS08890     | hypothetical protein                                    | 795aa   | c000045.1:3778-4572      | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS08895     | hypothetical protein                                    | 225aa   | c000045.1:4590-4814      | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS08915     | hypothetical protein                                    | 495aa   | c000045.1:7372-7866      | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS08920     | hypothetical protein                                    | 240aa   | c000045.1:7853-8092      | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS08925     | hypothetical protein                                    | 222aa   | c000045.1:8470-8691      | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS08930     | hypothetical protein                                    | 600aa   | c000045.1:8850-9449      | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS08935     | hypothetical protein                                    | 168aa   | c000045.1:9869-10036     | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS08940     | hypothetical protein                                    | 183aa   | c000046.1:159-341        | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS08945     | hypothetical protein                                    | 243aa   | c000046.1:338-580        | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS08950     | hypothetical protein                                    | 321aa   | c000046.1:583-903        | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS08955     | hypothetical protein                                    | 315aa   | c000046.1:900-1214       | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS08965     | hypothetical protein                                    | 159aa   | c000046.1:1544-1702      | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS08970     | hypothetical protein                                    | 264aa   | c000046.1:1803-2066      | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS08975     | hypothetical protein                                    | 267aa   | c000046.1:2063-2329      | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS08990     | hypothetical protein                                    | 528aa   | c000046.1:3682-4209      | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS09000     | hypothetical protein                                    | 1116aa  | c000046.1:4880-5995      | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS09010     | hypothetical protein                                    | 318aa   | c000046.1:9234-9551      | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS09030     | hypothetical protein                                    | 144aa   | c000047.1:1310-1453      | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS09155     | hypothetical protein                                    | 216aa   | c000050.1:2532-2747      | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS09160     | hypothetical protein                                    | 144aa   | c000050.1:2750-2893      | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS09165     | hypothetical protein                                    | 237aa   | c000050.1:2896-3132      | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS09170     | hypothetical protein                                    | 225aa   | c000050.1:3134-3358      | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS09240     | hypothetical protein                                    | 381aa   | c000052.1:2748-3128      | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS09245     | hypothetical protein                                    | 252aa   | c000052.1:3115-3366      | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS09315     | hypothetical protein                                    | 234aa   | c000055.1:152-385        | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS09320     | hypothetical protein                                    | 153aa   | c000055.1:498-650        | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS09335     | hypothetical protein                                    | 342aa   | c000055.1:2231-2572      | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS09355     | hypothetical protein                                    | 180aa   | c000056.1:1750-1929      | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS09370     | hypothetical protein                                    | 258aa   | c000056.1:2983-3240      | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS09395     | hypothetical protein                                    | 402aa   | c000057.1:2369-2770      | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS09400     | hypothetical protein                                    | 345aa   | c000057.1:2767-3111      | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS09455     | hypothetical protein                                    | 1623aa  | c000060.1:175-1797       | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS09470     | hypothetical protein                                    | 225aa   | c000060.1:3421-3645      | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS09475     | hypothetical protein                                    | 541aa   | c000060.1:3663-4203      | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS09480     | hypothetical protein                                    | 207aa   | c000061.1:35-241         | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS09645     | hypothetical protein                                    | 202aa   | c000070.1:1-202          | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS09655     | hypothetical protein                                    | 516aa   | c000070.1:617-1132       | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS09660     | hypothetical protein                                    | 531aa   | c000070.1:1135-1665      | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS09665     | hypothetical protein                                    | 630aa   | c000070.1:1665-2294      | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS09675     | hypothetical protein                                    | 202aa   | c000071.1:1-202          | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS09685     | hypothetical protein                                    | 507aa   | c000071.1:617-1123       | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS09690     | hypothetical protein                                    | 531aa   | c000071.1:1126-1656      | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS09695     | hypothetical protein                                    | 630aa   | c000071.1:1656-2285      | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS09700     | hypothetical protein                                    | 327aa   | c000071.1:2331-2657      | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS09760     | hypothetical protein                                    | 330aa   | c000075.1:1225-1554      | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS09780     | hypothetical protein                                    | 312aa   | c000077.1:1078-1389      | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS09790     | hypothetical protein                                    | 562aa   | c000078.1:1-562          | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS09820     | hypothetical protein                                    | 186aa   | c000081.1:579-764        | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS09850     | hypothetical protein                                    | 114aa   | c000083.1:1223-1336      | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS09860     | hypothetical protein                                    | 288aa   | c000084.1:1-288          | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS09985     | hypothetical protein                                    | 447aa   | c000092.1:119-565        | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS09990     | hypothetical protein                                    | 607aa   | c000092.1:587-1193       | Hypothetical (Context TBD)          | L     | 1    
+ACWYRP_RS10010     | hypothetical protein                                    | 300aa   | c000094.1:287-586        | Hypothetical (Context TBD)          | L     | 1    
+
+SECTION 2: DUF-DOMAIN PROTEINS (UNKNOWN FUNCTION)
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+LOCUS_TAG          | PGAP_PRODUCT_NAME                                       | LENGTH  | CONTIG:COORD             | HYPOTHESIS                          | CONF  | SCORE
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ACWYRP_RS00515     | DUF1093 domain-containing protein                       | 396aa   | c000001.1:113827-114222  | DUF Domain (Unknown)                | L     | 2    
+ACWYRP_RS00595     | DUF1831 domain-containing protein                       | 345aa   | c000001.1:129462-129806  | DUF Domain (Unknown)                | L     | 2    
+ACWYRP_RS00800     | DUF1273 domain-containing protein                       | 567aa   | c000001.1:175297-175863  | DUF Domain (Unknown)                | L     | 2    
+ACWYRP_RS00900     | DUF4422 domain-containing protein                       | 264aa   | c000002.1:1-264          | DUF Domain (Unknown)                | L     | 2    
+ACWYRP_RS00920     | DUF6020 family protein                                  | 1938aa  | c000002.1:3385-5322      | DUF Domain (Unknown)                | L     | 2    
+ACWYRP_RS01070     | DUF7671 family protein                                  | 303aa   | c000002.1:35356-35658    | DUF Domain (Unknown)                | L     | 2    
+ACWYRP_RS01305     | DUF2513 domain-containing protein                       | 381aa   | c000002.1:76054-76434    | DUF Domain (Unknown)                | L     | 2    
+ACWYRP_RS01390     | DUF722 domain-containing protein                        | 393aa   | c000002.1:83528-83920    | DUF Domain (Unknown)                | L     | 2    
+ACWYRP_RS01440     | DUF1056 family protein                                  | 198aa   | c000002.1:90844-91041    | DUF Domain (Unknown)                | L     | 2    
+ACWYRP_RS01475     | DUF806 family protein                                   | 375aa   | c000002.1:95303-95677    | DUF Domain (Unknown)                | L     | 2    
+ACWYRP_RS01895     | DUF1304 domain-containing protein                       | 360aa   | c000003.1:85207-85566    | DUF Domain (Unknown)                | L     | 2    
+ACWYRP_RS01995     | DUF2075 domain-containing protein                       | 1206aa  | c000004.1:11491-12696    | DUF Domain (Unknown)                | L     | 2    
+ACWYRP_RS02140     | DUF4044 domain-containing protein                       | 207aa   | c000004.1:44367-44573    | DUF Domain (Unknown)                | L     | 2    
+ACWYRP_RS02145     | DUF3397 family protein                                  | 342aa   | c000004.1:44674-45015    | DUF Domain (Unknown)                | L     | 2    
+ACWYRP_RS02295     | DUF368 domain-containing protein                        | 837aa   | c000004.1:79434-80270    | DUF Domain (Unknown)                | L     | 2    
+ACWYRP_RS02360     | DUF3168 domain-containing protein                       | 396aa   | c000005.1:8465-8860      | DUF Domain (Unknown)                | L     | 2    
+ACWYRP_RS02385     | DUF4355 domain-containing protein                       | 594aa   | c000005.1:10778-11371    | DUF Domain (Unknown)                | L     | 2    
+ACWYRP_RS02430     | DUF4145 domain-containing protein                       | 603aa   | c000005.1:18860-19462    | DUF Domain (Unknown)                | L     | 2    
+ACWYRP_RS02435     | DUF722 domain-containing protein                        | 417aa   | c000005.1:20255-20671    | DUF Domain (Unknown)                | L     | 2    
+ACWYRP_RS02455     | DUF4145 domain-containing protein                       | 714aa   | c000005.1:21818-22531    | DUF Domain (Unknown)                | L     | 2    
+ACWYRP_RS02530     | DUF2188 domain-containing protein                       | 225aa   | c000005.1:29959-30183    | DUF Domain (Unknown)                | L     | 2    
+ACWYRP_RS02850     | DUF2000 domain-containing protein                       | 408aa   | c000006.1:9871-10278     | DUF Domain (Unknown)                | L     | 2    
+ACWYRP_RS03130     | DUF805 domain-containing protein                        | 1113aa  | c000006.1:67472-68584    | DUF Domain (Unknown)                | L     | 2    
+ACWYRP_RS03425     | DUF2785 domain-containing protein                       | 1005aa  | c000007.1:44216-45220    | DUF Domain (Unknown)                | L     | 2    
+ACWYRP_RS03435     | DUF2969 family protein                                  | 210aa   | c000007.1:46564-46773    | DUF Domain (Unknown)                | L     | 2    
+ACWYRP_RS03445     | DUF1146 domain-containing protein                       | 222aa   | c000007.1:47915-48136    | DUF Domain (Unknown)                | L     | 2    
+ACWYRP_RS03690     | DUF951 domain-containing protein                        | 210aa   | c000008.1:29715-29924    | DUF Domain (Unknown)                | L     | 2    
+ACWYRP_RS03700     | DUF1129 domain-containing protein                       | 699aa   | c000008.1:31071-31769    | DUF Domain (Unknown)                | L     | 2    
+ACWYRP_RS03910     | DUF1054 family protein                                  | 594aa   | c000009.1:5184-5777      | DUF Domain (Unknown)                | L     | 2    
+ACWYRP_RS03945     | DUF1003 domain-containing protein                       | 744aa   | c000009.1:11614-12357    | DUF Domain (Unknown)                | L     | 2    
+ACWYRP_RS04420     | DUF1810 family protein                                  | 939aa   | c000010.1:47980-48918    | DUF Domain (Unknown)                | L     | 2    
+ACWYRP_RS04490     | DUF1934 domain-containing protein                       | 447aa   | c000011.1:4849-5295      | DUF Domain (Unknown)                | L     | 2    
+ACWYRP_RS04570     | DUF975 family protein                                   | 735aa   | c000011.1:23037-23771    | DUF Domain (Unknown)                | L     | 2    
+ACWYRP_RS04735     | DUF4097 family beta strand repeat-containing protein    | 1335aa  | c000012.1:7067-8401      | DUF Domain (Unknown)                | L     | 2    
+ACWYRP_RS04845     | DUF4097 family beta strand repeat-containing protein    | 978aa   | c000012.1:29006-29983    | DUF Domain (Unknown)                | L     | 2    
+ACWYRP_RS05070     | DUF1292 domain-containing protein                       | 300aa   | c000013.1:33424-33723    | DUF Domain (Unknown)                | L     | 2    
+ACWYRP_RS05230     | DUF4811 domain-containing protein                       | 678aa   | c000014.1:25198-25875    | DUF Domain (Unknown)                | L     | 2    
+ACWYRP_RS05625     | DUF3021 domain-containing protein                       | 411aa   | c000016.1:15201-15611    | DUF Domain (Unknown)                | L     | 2    
+ACWYRP_RS05700     | DUF2207 domain-containing protein                       | 1842aa  | c000016.1:30527-32368    | DUF Domain (Unknown)                | L     | 2    
+ACWYRP_RS06105     | DUF6681 family protein                                  | 792aa   | c000019.1:1442-2233      | DUF Domain (Unknown)                | L     | 2    
+ACWYRP_RS06390     | DUF956 family protein                                   | 360aa   | c000020.1:21883-22242    | DUF Domain (Unknown)                | L     | 2    
+ACWYRP_RS06410     | DUF2785 domain-containing protein                       | 804aa   | c000020.1:25238-26041    | DUF Domain (Unknown)                | L     | 2    
+ACWYRP_RS06420     | DUF3290 family protein                                  | 282aa   | c000020.1:27611-27892    | DUF Domain (Unknown)                | L     | 2    
+ACWYRP_RS06425     | DUF421 domain-containing protein                        | 639aa   | c000020.1:27889-28527    | DUF Domain (Unknown)                | L     | 2    
+ACWYRP_RS06905     | DUF1440 domain-containing protein                       | 504aa   | c000024.1:2524-3027      | DUF Domain (Unknown)                | L     | 2    
+ACWYRP_RS07005     | DUF948 domain-containing protein                        | 393aa   | c000024.1:19057-19449    | DUF Domain (Unknown)                | L     | 2    
+ACWYRP_RS07220     | DUF3796 domain-containing protein                       | 366aa   | c000025.1:25094-25459    | DUF Domain (Unknown)                | L     | 2    
+ACWYRP_RS07535     | DUF1361 domain-containing protein                       | 651aa   | c000028.1:3227-3877      | DUF Domain (Unknown)                | L     | 2    
+ACWYRP_RS07625     | DUF4422 domain-containing protein                       | 507aa   | c000028.1:22834-23340    | DUF Domain (Unknown)                | L     | 2    
+ACWYRP_RS07725     | DUF805 domain-containing protein                        | 390aa   | c000029.1:11000-11389    | DUF Domain (Unknown)                | L     | 2    
+ACWYRP_RS07770     | DUF3042 family protein                                  | 183aa   | c000029.1:19932-20114    | DUF Domain (Unknown)                | L     | 2    
+ACWYRP_RS08600     | DUF1694 domain-containing protein                       | 375aa   | c000040.1:1003-1377      | DUF Domain (Unknown)                | L     | 2    
+ACWYRP_RS09020     | DUF1345 domain-containing protein                       | 645aa   | c000047.1:229-873        | DUF Domain (Unknown)                | L     | 2    
+ACWYRP_RS09060     | DUF1593 domain-containing protein                       | 981aa   | c000047.1:6634-7614      | DUF Domain (Unknown)                | L     | 2    
+ACWYRP_RS09270     | DUF4298 domain-containing protein                       | 297aa   | c000053.1:1774-2070      | DUF Domain (Unknown)                | L     | 2    
+ACWYRP_RS09325     | DUF4352 domain-containing protein                       | 594aa   | c000055.1:917-1510       | DUF Domain (Unknown)                | L     | 2    
+ACWYRP_RS09345     | DUF2075 domain-containing protein                       | 1170aa  | c000055.1:3501-4670      | DUF Domain (Unknown)                | L     | 2    
+ACWYRP_RS09995     | DUF5388 domain-containing protein                       | 375aa   | c000093.1:104-478        | DUF Domain (Unknown)                | L     | 2    
+ACWYRP_RS10100     | DUF6290 family protein                                  | 216aa   | c000105.1:376-591        | DUF Domain (Unknown)                | L     | 2    
+
+SECTION 3: GENERIC METHYLTRANSFERASES (NON-RIBOSOMAL)
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+LOCUS_TAG          | PGAP_PRODUCT_NAME                                       | LENGTH  | CONTIG:COORD             | HYPOTHESIS                          | CONF  | SCORE
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ACWYRP_RS06945     | class I SAM-dependent DNA methyltransferase             | 753aa   | c000024.1:7543-8295      | RM Methyltransferase                | H     | 12   
+ACWYRP_RS08910     | DNA-methyltransferase                                   | 432aa   | c000045.1:6803-7234      | RM Methyltransferase                | H     | 12   
+ACWYRP_RS00125     | SAM-dependent methyltransferase                         | 1197aa  | c000001.1:27560-28756    | RM Methyltransferase                | H     | 7    
+ACWYRP_RS00135     | serine hydroxymethyltransferase                         | 1233aa  | c000001.1:29429-30661    | RM Methyltransferase                | H     | 7    
+ACWYRP_RS01025     | THUMP domain-containing class I SAM-dependent RNA met   | 1134aa  | c000002.1:26179-27312    | General metabolism enzymes          | H     | 7    
+ACWYRP_RS02255     | methylated-DNA--[protein]-cysteine S-methyltransferas   | 483aa   | c000004.1:72303-72785    | General metabolism enzymes          | H     | 7    
+ACWYRP_RS02300     | methyltransferase domain-containing protein             | 705aa   | c000004.1:80311-81015    | RM Methyltransferase                | H     | 7    
+ACWYRP_RS03090     | RsmE family RNA methyltransferase                       | 738aa   | c000006.1:57624-58361    | RM Methyltransferase                | H     | 7    
+ACWYRP_RS03375     | class I SAM-dependent methyltransferase                 | 636aa   | c000007.1:38186-38821    | RM Methyltransferase                | H     | 7    
+ACWYRP_RS04045     | class I SAM-dependent methyltransferase                 | 990aa   | c000009.1:32608-33597    | RM Methyltransferase                | H     | 7    
+ACWYRP_RS04865     | bifunctional demethylmenaquinone methyltransferase/2-   | 711aa   | c000012.1:33687-34397    | RM Methyltransferase                | H     | 7    
+ACWYRP_RS06300     | peptide chain release factor N(5)-glutamine methyltra   | 993aa   | c000020.1:5180-6172      | Translation initiation/elongation   | H     | 7    
+ACWYRP_RS06815     | TlyA family RNA methyltransferase                       | 837aa   | c000023.1:16397-17233    | RM Methyltransferase                | H     | 7    
+ACWYRP_RS06980     | TrmH family RNA methyltransferase                       | 774aa   | c000024.1:13227-14000    | RM Methyltransferase                | H     | 7    
+ACWYRP_RS08005     | 5-methyltetrahydropteroyltriglutamate--homocysteine S   | 2301aa  | c000032.1:5635-7935      | General metabolism enzymes          | H     | 7    
+ACWYRP_RS08035     | 5-methyltetrahydropteroyltriglutamate--homocysteine S   | 1128aa  | c000032.1:13417-14544    | General metabolism enzymes          | H     | 7    
+ACWYRP_RS08145     | class I SAM-dependent methyltransferase                 | 759aa   | c000034.1:1037-1795      | RM Methyltransferase                | H     | 7    
+
+SECTION 4: GENERIC NUCLEASES/ENDONUCLEASES
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+LOCUS_TAG          | PGAP_PRODUCT_NAME                                       | LENGTH  | CONTIG:COORD             | HYPOTHESIS                          | CONF  | SCORE
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ACWYRP_RS02015     | type I restriction endonuclease subunit R               | 2862aa  | c000004.1:17030-19891    | Nuclease/Endonuclease               | H     | 23   
+ACWYRP_RS02025     | restriction endonuclease subunit S                      | 549aa   | c000004.1:21452-22000    | Nuclease/Endonuclease               | H     | 23   
+ACWYRP_RS02030     | restriction endonuclease subunit S                      | 609aa   | c000004.1:22063-22671    | Nuclease/Endonuclease               | H     | 23   
+ACWYRP_RS02045     | restriction endonuclease subunit S                      | 1122aa  | c000004.1:25307-26428    | Nuclease/Endonuclease               | H     | 23   
+ACWYRP_RS02250     | helicase-exonuclease AddAB subunit AddA                 | 3693aa  | c000004.1:68560-72252    | Nuclease/Endonuclease               | H     | 10   
+ACWYRP_RS00360     | DNA/RNA non-specific endonuclease                       | 1176aa  | c000001.1:74189-75364    | Nuclease/Endonuclease               | H     | 8    
+ACWYRP_RS01425     | HNH endonuclease                                        | 450aa   | c000002.1:87687-88136    | Nuclease/Endonuclease               | H     | 8    
+ACWYRP_RS03245     | DNA/RNA non-specific endonuclease                       | 870aa   | c000007.1:13718-14587    | Nuclease/Endonuclease               | H     | 8    
+ACWYRP_RS06645     | DNA mismatch repair endonuclease MutL                   | 1947aa  | c000022.1:15012-16958    | Nuclease/Endonuclease               | H     | 8    
+ACWYRP_RS07035     | endonuclease MutS2                                      | 2403aa  | c000024.1:22544-24946    | Nuclease/Endonuclease               | H     | 8    
+ACWYRP_RS00250     | ribonuclease HII                                        | 762aa   | c000001.1:54190-54951    | Nuclease/Endonuclease               | M     | 6    
+ACWYRP_RS00420     | 3'-5' exoribonuclease YhaM family protein               | 951aa   | c000001.1:89841-90791    | Nuclease/Endonuclease               | M     | 6    
+ACWYRP_RS00995     | exonuclease domain-containing protein                   | 2394aa  | c000002.1:19625-22018    | Nuclease/Endonuclease               | M     | 6    
+ACWYRP_RS01040     | ribonuclease HI family protein                          | 384aa   | c000002.1:29274-29657    | Nuclease/Endonuclease               | M     | 6    
+ACWYRP_RS01360     | putative HNHc nuclease                                  | 702aa   | c000002.1:80880-81581    | Nuclease/Endonuclease               | M     | 6    
+ACWYRP_RS01370     | RusA family crossover junction endodeoxyribonuclease    | 432aa   | c000002.1:81875-82306    | Nuclease/Endonuclease               | M     | 6    
+ACWYRP_RS01980     | 3'-5' exonuclease                                       | 534aa   | c000004.1:9108-9641      | Nuclease/Endonuclease               | M     | 6    
+ACWYRP_RS01985     | exodeoxyribonuclease III                                | 819aa   | c000004.1:9677-10495     | Nuclease/Endonuclease               | M     | 6    
+ACWYRP_RS02245     | PD-(D/E)XK nuclease family protein                      | 3480aa  | c000004.1:65081-68560    | Nuclease/Endonuclease               | M     | 6    
+ACWYRP_RS02280     | ribonuclease Z                                          | 957aa   | c000004.1:75878-76834    | Nuclease/Endonuclease               | M     | 6    
+ACWYRP_RS02285     | single-stranded-DNA-specific exonuclease RecJ           | 1968aa  | c000004.1:76821-78788    | Nuclease/Endonuclease               | M     | 6    
+ACWYRP_RS02470     | RusA family crossover junction endodeoxyribonuclease    | 426aa   | c000005.1:23099-23524    | Nuclease/Endonuclease               | M     | 6    
+ACWYRP_RS02475     | putative HNHc nuclease                                  | 702aa   | c000005.1:23631-24332    | Nuclease/Endonuclease               | M     | 6    
+ACWYRP_RS03155     | GIY-YIG nuclease family protein                         | 264aa   | c000006.1:71991-72254    | Nuclease/Endonuclease               | M     | 6    
+ACWYRP_RS05865     | ribonuclease J                                          | 1830aa  | c000017.1:23673-25502    | Nuclease/Endonuclease               | M     | 6    
+ACWYRP_RS05955     | ribonuclease P protein component                        | 351aa   | c000018.1:4348-4698      | Nuclease/Endonuclease               | M     | 6    
+ACWYRP_RS06695     | ribonuclease III                                        | 711aa   | c000022.1:25427-26137    | Nuclease/Endonuclease               | M     | 6    
+ACWYRP_RS06710     | ribonuclease J1                                         | 1683aa  | c000023.1:634-2316       | Nuclease/Endonuclease               | M     | 6    
+ACWYRP_RS06750     | ribonuclease M5                                         | 570aa   | c000023.1:6214-6783      | Nuclease/Endonuclease               | M     | 6    
+ACWYRP_RS06800     | exodeoxyribonuclease VII large subunit                  | 1278aa  | c000023.1:13999-15276    | Nuclease/Endonuclease               | M     | 6    
+ACWYRP_RS06805     | exodeoxyribonuclease VII small subunit                  | 225aa   | c000023.1:15269-15493    | Nuclease/Endonuclease               | M     | 6    
+ACWYRP_RS06990     | ribonuclease R                                          | 2325aa  | c000024.1:14420-16744    | Nuclease/Endonuclease               | M     | 6    
+ACWYRP_RS07000     | ribonuclease Y                                          | 1557aa  | c000024.1:17356-18912    | Nuclease/Endonuclease               | M     | 6    
+ACWYRP_RS07015     | ribonuclease HIII                                       | 912aa   | c000024.1:20000-20911    | Nuclease/Endonuclease               | M     | 6    
+ACWYRP_RS07650     | PD-(D/E)XK nuclease family protein                      | 759aa   | c000029.1:3391-4149      | Nuclease/Endonuclease               | M     | 6    
+ACWYRP_RS07875     | Mini-ribonuclease 3                                     | 408aa   | c000030.1:14496-14903    | Nuclease/Endonuclease               | M     | 6    
+
+============================================================================================================================================================================================================================
+SECTION 6: CLUSTERED DEFENSE ISLANDS
+============================================================================================================================================================================================================================
+
+
+NZ_JBSROM010000002.1 (49 genes)
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+LOCUS_TAG          | PGAP_PRODUCT_NAME                                       | START-END       | LENGTH  | HYPOTHESIS                          | CONF 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ACWYRP_RS00900     | DUF4422 domain-containing protein                       | 1-264           | 264aa   | Hypothetical/uncharacterized prot   | L    
+ACWYRP_RS00920     | DUF6020 family protein                                  | 3385-5322       | 1938aa  | Hypothetical/uncharacterized prot   | L    
+ACWYRP_RS00995     | exonuclease domain-containing protein                   | 19625-22018     | 2394aa  | Hypothetical/uncharacterized prot   | M    
+ACWYRP_RS01000     | hypothetical protein                                    | 22090-22617     | 528aa   | Hypothetical/uncharacterized prot   | L    
+ACWYRP_RS01020     | hypothetical protein                                    | 25875-26156     | 282aa   | Hypothetical/uncharacterized prot   | L    
+ACWYRP_RS01025     | THUMP domain-containing class I SAM-dependent RNA met   | 26179-27312     | 1134aa  | General metabolism enzymes          | H    
+ACWYRP_RS01040     | ribonuclease HI family protein                          | 29274-29657     | 384aa   | Sugar-specific metabolism           | M    
+ACWYRP_RS01070     | DUF7671 family protein                                  | 35356-35658     | 303aa   | Hypothetical/uncharacterized prot   | L    
+ACWYRP_RS01215     | hypothetical protein                                    | 64729-64941     | 213aa   | Hypothetical/uncharacterized prot   | L    
+ACWYRP_RS01230     | hypothetical protein                                    | 67477-68115     | 639aa   | Hypothetical/uncharacterized prot   | L    
+ACWYRP_RS01245     | hypothetical protein                                    | 70088-70606     | 519aa   | Hypothetical/uncharacterized prot   | L    
+ACWYRP_RS01255     | site-specific integrase                                 | 70932-71999     | 1068aa  | Phage/integrase/mobile elements     | M    
+ACWYRP_RS01260     | hypothetical protein                                    | 72124-72375     | 252aa   | Hypothetical/uncharacterized prot   | L    
+ACWYRP_RS01265     | hypothetical protein                                    | 72449-73066     | 618aa   | Hypothetical/uncharacterized prot   | L    
+ACWYRP_RS01270     | hypothetical protein                                    | 73259-73561     | 303aa   | Hypothetical/uncharacterized prot   | L    
+ACWYRP_RS01285     | hypothetical protein                                    | 74627-74851     | 225aa   | Hypothetical/uncharacterized prot   | L    
+ACWYRP_RS01290     | hypothetical protein                                    | 74866-75060     | 195aa   | Hypothetical/uncharacterized prot   | L    
+ACWYRP_RS01295     | phage antirepressor                                     | 75066-75863     | 798aa   | Phage/integrase/mobile elements     | H    
+ACWYRP_RS01300     | hypothetical protein                                    | 75874-76068     | 195aa   | Hypothetical/uncharacterized prot   | L    
+ACWYRP_RS01305     | DUF2513 domain-containing protein                       | 76054-76434     | 381aa   | Hypothetical/uncharacterized prot   | L    
+ACWYRP_RS01310     | hypothetical protein                                    | 76521-76688     | 168aa   | Hypothetical/uncharacterized prot   | L    
+ACWYRP_RS01315     | hypothetical protein                                    | 76685-77116     | 432aa   | Hypothetical/uncharacterized prot   | L    
+ACWYRP_RS01320     | hypothetical protein                                    | 77118-77342     | 225aa   | Hypothetical/uncharacterized prot   | L    
+ACWYRP_RS01330     | hypothetical protein                                    | 77617-78018     | 402aa   | Hypothetical/uncharacterized prot   | L    
+ACWYRP_RS01355     | hypothetical protein                                    | 80704-80880     | 177aa   | Hypothetical/uncharacterized prot   | L    
+ACWYRP_RS01360     | putative HNHc nuclease                                  | 80880-81581     | 702aa   | Uncategorized                       | M    
+ACWYRP_RS01365     | hypothetical protein                                    | 81698-81874     | 177aa   | Hypothetical/uncharacterized prot   | L    
+ACWYRP_RS01370     | RusA family crossover junction endodeoxyribonuclease    | 81875-82306     | 432aa   | Sugar-specific metabolism           | M    
+ACWYRP_RS01375     | hypothetical protein                                    | 82303-82746     | 444aa   | Hypothetical/uncharacterized prot   | L    
+ACWYRP_RS01380     | hypothetical protein                                    | 82743-83012     | 270aa   | Hypothetical/uncharacterized prot   | L    
+ACWYRP_RS01385     | hypothetical protein                                    | 83009-83194     | 186aa   | Hypothetical/uncharacterized prot   | L    
+ACWYRP_RS01390     | DUF722 domain-containing protein                        | 83528-83920     | 393aa   | Hypothetical/uncharacterized prot   | L    
+ACWYRP_RS01395     | hypothetical protein                                    | 84043-84213     | 171aa   | Hypothetical/uncharacterized prot   | L    
+ACWYRP_RS01400     | hypothetical protein                                    | 84200-85177     | 978aa   | Hypothetical/uncharacterized prot   | L    
+ACWYRP_RS01405     | hypothetical protein                                    | 85498-85662     | 165aa   | Hypothetical/uncharacterized prot   | L    
+ACWYRP_RS01415     | hypothetical protein                                    | 86904-87107     | 204aa   | Hypothetical/uncharacterized prot   | L    
+ACWYRP_RS01420     | hypothetical protein                                    | 87322-87651     | 330aa   | Hypothetical/uncharacterized prot   | L    
+ACWYRP_RS01425     | HNH endonuclease                                        | 87687-88136     | 450aa   | Uncategorized                       | H    
+ACWYRP_RS01430     | phage terminase small subunit P27 family                | 88516-88983     | 468aa   | Phage/integrase/mobile elements     | H    
+ACWYRP_RS01440     | DUF1056 family protein                                  | 90844-91041     | 198aa   | Hypothetical/uncharacterized prot   | L    
+ACWYRP_RS01445     | phage portal protein                                    | 91044-92210     | 1167aa  | Phage/integrase/mobile elements     | H    
+ACWYRP_RS01455     | phage major capsid protein                              | 92922-94121     | 1200aa  | Phage/integrase/mobile elements     | H    
+ACWYRP_RS01465     | phage head closure protein                              | 94502-94846     | 345aa   | Phage/integrase/mobile elements     | H    
+ACWYRP_RS01470     | hypothetical protein                                    | 94839-95306     | 468aa   | Hypothetical/uncharacterized prot   | L    
+ACWYRP_RS01475     | DUF806 family protein                                   | 95303-95677     | 375aa   | Hypothetical/uncharacterized prot   | L    
+ACWYRP_RS01480     | phage tail protein                                      | 95681-96316     | 636aa   | Phage/integrase/mobile elements     | H    
+ACWYRP_RS01485     | phage tail tube assembly chaperone                      | 96393-96761     | 369aa   | Chaperones/protein folding          | H    
+ACWYRP_RS01490     | hypothetical protein                                    | 96842-96985     | 144aa   | Hypothetical/uncharacterized prot   | L    
+ACWYRP_RS01500     | phage distal tail protein domain-containing protein     | 101540-101686   | 147aa   | Phage/integrase/mobile elements     | H    
+
+NZ_JBSROM010000004.1 (19 genes)
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+LOCUS_TAG          | PGAP_PRODUCT_NAME                                       | START-END       | LENGTH  | HYPOTHESIS                          | CONF 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ACWYRP_RS01980     | 3'-5' exonuclease                                       | 9108-9641       | 534aa   | Uncategorized                       | M    
+ACWYRP_RS01985     | exodeoxyribonuclease III                                | 9677-10495      | 819aa   | Sugar-specific metabolism           | M    
+ACWYRP_RS01995     | DUF2075 domain-containing protein                       | 11491-12696     | 1206aa  | Hypothetical/uncharacterized prot   | L    
+ACWYRP_RS02015     | type I restriction endonuclease subunit R               | 17030-19891     | 2862aa  | Restriction-modification (Type I)   | H    
+ACWYRP_RS02025     | restriction endonuclease subunit S                      | 21452-22000     | 549aa   | Restriction-modification (Type I)   | H    
+ACWYRP_RS02030     | restriction endonuclease subunit S                      | 22063-22671     | 609aa   | Restriction-modification (Type I)   | H    
+ACWYRP_RS02045     | restriction endonuclease subunit S                      | 25307-26428     | 1122aa  | Restriction-modification (Type I)   | H    
+ACWYRP_RS02140     | DUF4044 domain-containing protein                       | 44367-44573     | 207aa   | Hypothetical/uncharacterized prot   | L    
+ACWYRP_RS02145     | DUF3397 family protein                                  | 44674-45015     | 342aa   | Hypothetical/uncharacterized prot   | L    
+ACWYRP_RS02225     | hypothetical protein                                    | 61562-61762     | 201aa   | Hypothetical/uncharacterized prot   | L    
+ACWYRP_RS02235     | hypothetical protein                                    | 62421-64202     | 1782aa  | Hypothetical/uncharacterized prot   | L    
+ACWYRP_RS02245     | PD-(D/E)XK nuclease family protein                      | 65081-68560     | 3480aa  | Hypothetical/uncharacterized prot   | M    
+ACWYRP_RS02250     | helicase-exonuclease AddAB subunit AddA                 | 68560-72252     | 3693aa  | Uncategorized                       | H    
+ACWYRP_RS02255     | methylated-DNA--[protein]-cysteine S-methyltransferas   | 72303-72785     | 483aa   | General metabolism enzymes          | H    
+ACWYRP_RS02280     | ribonuclease Z                                          | 75878-76834     | 957aa   | Sugar-specific metabolism           | M    
+ACWYRP_RS02285     | single-stranded-DNA-specific exonuclease RecJ           | 76821-78788     | 1968aa  | Homologous recombination            | M    
+ACWYRP_RS02295     | DUF368 domain-containing protein                        | 79434-80270     | 837aa   | Hypothetical/uncharacterized prot   | L    
+ACWYRP_RS02300     | methyltransferase domain-containing protein             | 80311-81015     | 705aa   | General metabolism enzymes          | H    
+ACWYRP_RS02305     | hypothetical protein                                    | 80999-81319     | 321aa   | Hypothetical/uncharacterized prot   | L    
+
+NZ_JBSROM010000005.1 (42 genes)
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+LOCUS_TAG          | PGAP_PRODUCT_NAME                                       | START-END       | LENGTH  | HYPOTHESIS                          | CONF 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ACWYRP_RS02330     | phage tail spike protein                                | 1-2488          | 2488aa  | Phage/integrase/mobile elements     | H    
+ACWYRP_RS02340     | phage tail tape measure protein                         | 3310-7032       | 3723aa  | Phage/integrase/mobile elements     | H    
+ACWYRP_RS02345     | hypothetical protein                                    | 7033-7365       | 333aa   | Hypothetical/uncharacterized prot   | L    
+ACWYRP_RS02355     | phage major tail protein, TP901-1 family                | 7870-8451       | 582aa   | Phage/integrase/mobile elements     | H    
+ACWYRP_RS02360     | DUF3168 domain-containing protein                       | 8465-8860       | 396aa   | Hypothetical/uncharacterized prot   | L    
+ACWYRP_RS02365     | HK97-gp10 family putative phage morphogenesis protein   | 8857-9216       | 360aa   | Phage/integrase/mobile elements     | H    
+ACWYRP_RS02370     | hypothetical protein                                    | 9209-9520       | 312aa   | Hypothetical/uncharacterized prot   | L    
+ACWYRP_RS02375     | phage head-tail connector protein                       | 9529-9867       | 339aa   | Phage/integrase/mobile elements     | H    
+ACWYRP_RS02385     | DUF4355 domain-containing protein                       | 10778-11371     | 594aa   | Hypothetical/uncharacterized prot   | L    
+ACWYRP_RS02395     | phage portal protein                                    | 12459-13967     | 1509aa  | Phage/integrase/mobile elements     | H    
+ACWYRP_RS02400     | PBSX family phage terminase large subunit               | 13978-15270     | 1293aa  | Phage/integrase/mobile elements     | H    
+ACWYRP_RS02410     | hypothetical protein                                    | 16029-16658     | 630aa   | Hypothetical/uncharacterized prot   | L    
+ACWYRP_RS02415     | hypothetical protein                                    | 16763-17272     | 510aa   | Hypothetical/uncharacterized prot   | L    
+ACWYRP_RS02425     | hypothetical protein                                    | 18590-18760     | 171aa   | Hypothetical/uncharacterized prot   | L    
+ACWYRP_RS02430     | DUF4145 domain-containing protein                       | 18860-19462     | 603aa   | Hypothetical/uncharacterized prot   | L    
+ACWYRP_RS02435     | DUF722 domain-containing protein                        | 20255-20671     | 417aa   | Hypothetical/uncharacterized prot   | L    
+ACWYRP_RS02440     | hypothetical protein                                    | 20685-20879     | 195aa   | Hypothetical/uncharacterized prot   | L    
+ACWYRP_RS02445     | hypothetical protein                                    | 20879-21436     | 558aa   | Hypothetical/uncharacterized prot   | L    
+ACWYRP_RS02450     | hypothetical protein                                    | 21436-21738     | 303aa   | Hypothetical/uncharacterized prot   | L    
+ACWYRP_RS02455     | DUF4145 domain-containing protein                       | 21818-22531     | 714aa   | Hypothetical/uncharacterized prot   | L    
+ACWYRP_RS02460     | hypothetical protein                                    | 22649-22930     | 282aa   | Hypothetical/uncharacterized prot   | L    
+ACWYRP_RS02465     | hypothetical protein                                    | 22936-23094     | 159aa   | Hypothetical/uncharacterized prot   | L    
+ACWYRP_RS02470     | RusA family crossover junction endodeoxyribonuclease    | 23099-23524     | 426aa   | Sugar-specific metabolism           | M    
+ACWYRP_RS02475     | putative HNHc nuclease                                  | 23631-24332     | 702aa   | Uncategorized                       | M    
+ACWYRP_RS02480     | replicative DNA helicase                                | 24333-25652     | 1320aa  | DNA replication/chromosome mainte   | H    
+ACWYRP_RS02485     | phage replisome organizer N-terminal domain-containin   | 25645-26649     | 1005aa  | Phage/integrase/mobile elements     | H    
+ACWYRP_RS02500     | hypothetical protein                                    | 27655-28056     | 402aa   | Hypothetical/uncharacterized prot   | L    
+ACWYRP_RS02505     | hypothetical protein                                    | 28059-28346     | 288aa   | Hypothetical/uncharacterized prot   | L    
+ACWYRP_RS02515     | hypothetical protein                                    | 28637-28801     | 165aa   | Hypothetical/uncharacterized prot   | L    
+ACWYRP_RS02520     | phage antirepressor KilAC domain-containing protein     | 28815-29540     | 726aa   | Phage/integrase/mobile elements     | H    
+ACWYRP_RS02525     | hypothetical protein                                    | 29554-29817     | 264aa   | Hypothetical/uncharacterized prot   | L    
+ACWYRP_RS02530     | DUF2188 domain-containing protein                       | 29959-30183     | 225aa   | Hypothetical/uncharacterized prot   | L    
+ACWYRP_RS02535     | hypothetical protein                                    | 30180-30371     | 192aa   | Hypothetical/uncharacterized prot   | L    
+ACWYRP_RS02560     | tyrosine-type recombinase/integrase                     | 32697-33773     | 1077aa  | Phage/integrase/mobile elements     | M    
+ACWYRP_RS02585     | hypothetical protein                                    | 37645-38202     | 558aa   | Hypothetical/uncharacterized prot   | L    
+ACWYRP_RS02610     | hypothetical protein                                    | 41207-41581     | 375aa   | Hypothetical/uncharacterized prot   | L    
+ACWYRP_RS02725     | hypothetical protein                                    | 68310-68756     | 447aa   | Hypothetical/uncharacterized prot   | L    
+ACWYRP_RS02755     | hypothetical protein                                    | 72279-72536     | 258aa   | Hypothetical/uncharacterized prot   | L    
+ACWYRP_RS02760     | hypothetical protein                                    | 72748-72870     | 123aa   | Hypothetical/uncharacterized prot   | L    
+ACWYRP_RS02765     | hypothetical protein                                    | 72813-72947     | 135aa   | Hypothetical/uncharacterized prot   | L    
+ACWYRP_RS02770     | hypothetical protein                                    | 73165-73473     | 309aa   | Hypothetical/uncharacterized prot   | L    
+ACWYRP_RS02775     | hypothetical protein                                    | 73488-73802     | 315aa   | Hypothetical/uncharacterized prot   | L    

@@ -1,0 +1,226 @@
+sa@gpro rh.1 % pip install -q -U google-generativeai
+ERROR:root:code for hash blake2b was not found.
+Traceback (most recent call last):
+  File "/Users/sa/.pyenv/versions/3.11.9/lib/python3.11/hashlib.py", line 307, in <module>
+    globals()[__func_name] = __get_hash(__func_name)
+                             ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sa/.pyenv/versions/3.11.9/lib/python3.11/hashlib.py", line 129, in __get_openssl_constructor
+    return __get_builtin_constructor(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sa/.pyenv/versions/3.11.9/lib/python3.11/hashlib.py", line 123, in __get_builtin_constructor
+    raise ValueError('unsupported hash type ' + name)
+ValueError: unsupported hash type blake2b
+ERROR:root:code for hash blake2s was not found.
+Traceback (most recent call last):
+  File "/Users/sa/.pyenv/versions/3.11.9/lib/python3.11/hashlib.py", line 307, in <module>
+    globals()[__func_name] = __get_hash(__func_name)
+                             ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sa/.pyenv/versions/3.11.9/lib/python3.11/hashlib.py", line 129, in __get_openssl_constructor
+    return __get_builtin_constructor(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sa/.pyenv/versions/3.11.9/lib/python3.11/hashlib.py", line 123, in __get_builtin_constructor
+    raise ValueError('unsupported hash type ' + name)
+ValueError: unsupported hash type blake2s
+
+[notice] A new release of pip is available: 25.3 -> 26.0.1
+[notice] To update, run: pip install --upgrade pip
+sa@gpro rh.1 % pip install --upgrade pip
+ERROR:root:code for hash blake2b was not found.
+Traceback (most recent call last):
+  File "/Users/sa/.pyenv/versions/3.11.9/lib/python3.11/hashlib.py", line 307, in <module>
+    globals()[__func_name] = __get_hash(__func_name)
+                             ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sa/.pyenv/versions/3.11.9/lib/python3.11/hashlib.py", line 129, in __get_openssl_constructor
+    return __get_builtin_constructor(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sa/.pyenv/versions/3.11.9/lib/python3.11/hashlib.py", line 123, in __get_builtin_constructor
+    raise ValueError('unsupported hash type ' + name)
+ValueError: unsupported hash type blake2b
+ERROR:root:code for hash blake2s was not found.
+Traceback (most recent call last):
+  File "/Users/sa/.pyenv/versions/3.11.9/lib/python3.11/hashlib.py", line 307, in <module>
+    globals()[__func_name] = __get_hash(__func_name)
+                             ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sa/.pyenv/versions/3.11.9/lib/python3.11/hashlib.py", line 129, in __get_openssl_constructor
+    return __get_builtin_constructor(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sa/.pyenv/versions/3.11.9/lib/python3.11/hashlib.py", line 123, in __get_builtin_constructor
+    raise ValueError('unsupported hash type ' + name)
+ValueError: unsupported hash type blake2s
+Requirement already satisfied: pip in /Users/sa/.pyenv/versions/3.11.9/lib/python3.11/site-packages (25.3)
+Collecting pip
+  Downloading pip-26.0.1-py3-none-any.whl.metadata (4.7 kB)
+Downloading pip-26.0.1-py3-none-any.whl (1.8 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.8/1.8 MB 1.3 MB/s  0:00:02
+Installing collected packages: pip
+  Attempting uninstall: pip
+    Found existing installation: pip 25.3
+    Uninstalling pip-25.3:
+      Successfully uninstalled pip-25.3
+Successfully installed pip-26.0.1
+sa@gpro rh.1 % pip install -q -U google-generativeai
+ERROR:root:code for hash blake2b was not found.
+Traceback (most recent call last):
+  File "/Users/sa/.pyenv/versions/3.11.9/lib/python3.11/hashlib.py", line 307, in <module>
+    globals()[__func_name] = __get_hash(__func_name)
+                             ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sa/.pyenv/versions/3.11.9/lib/python3.11/hashlib.py", line 129, in __get_openssl_constructor
+    return __get_builtin_constructor(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sa/.pyenv/versions/3.11.9/lib/python3.11/hashlib.py", line 123, in __get_builtin_constructor
+    raise ValueError('unsupported hash type ' + name)
+ValueError: unsupported hash type blake2b
+ERROR:root:code for hash blake2s was not found.
+Traceback (most recent call last):
+  File "/Users/sa/.pyenv/versions/3.11.9/lib/python3.11/hashlib.py", line 307, in <module>
+    globals()[__func_name] = __get_hash(__func_name)
+                             ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sa/.pyenv/versions/3.11.9/lib/python3.11/hashlib.py", line 129, in __get_openssl_constructor
+    return __get_builtin_constructor(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sa/.pyenv/versions/3.11.9/lib/python3.11/hashlib.py", line 123, in __get_builtin_constructor
+    raise ValueError('unsupported hash type ' + name)
+ValueError: unsupported hash type blake2s
+sa@gpro rh.1 % brew install google-generativeai
+==> Auto-updating Homebrew...
+Adjust how often this is run with `$HOMEBREW_AUTO_UPDATE_SECS` or disable with
+`$HOMEBREW_NO_AUTO_UPDATE=1`. Hide these hints with `$HOMEBREW_NO_ENV_HINTS=1` (see `man brew`).
+==> Auto-updated Homebrew!
+Updated 4 taps (entireio/tap, charmbracelet/tap, homebrew/core and homebrew/cask).
+==> New Formulae
+aoe: Terminal session manager for AI coding agents
+grafanactl: CLI to interact with Grafana
+rtk: CLI proxy to minimize LLM token consumption
+==> New Casks
+brewy: Native app for managing Homebrew packages
+iloader: iOS Sideloading Companion
+
+You have 2 outdated formulae and 3 outdated casks installed.
+
+Warning: No available formula with the name "google-generativeai". Did you mean google-benchmark?
+==> Searching for similarly named formulae and casks...
+==> Formulae
+google-benchmark
+
+To install google-benchmark, run:
+  brew install google-benchmark
+
+==> Casks
+google-drive
+
+To install google-drive, run:
+  brew install --cask google-drive
+sa@gpro rh.1 % brew install --cask google-drive
+==> Downloading https://dl.google.com/drive-file-stream/5-percent/GoogleDrive.dmg
+########################################################################################################## 100.0%
+==> Installing Cask google-drive
+==> Running installer for google-drive with `sudo` (which may request your password)...
+Password:
+installer: Package name is Google Drive
+installer: Upgrading at base path /
+installer: The upgrade was successful.
+🍺  google-drive was successfully installed!
+sa@gpro rh.1 % git diff main --stat > glog4.txt               
+sa@gpro rh.1 % export GOOGLE_API_KEY="AQ.Ab8RN6JyEP9MIr-HwwyjFYnDpd6QEGd-in2WsM8z3P-FbT1IaA"
+sa@gpro rh.1 % python3 rhea_audit_bridge.py > full_audit_report_v1.md
+ERROR:root:code for hash blake2b was not found.
+Traceback (most recent call last):
+  File "/Users/sa/.pyenv/versions/3.11.9/lib/python3.11/hashlib.py", line 307, in <module>
+    globals()[__func_name] = __get_hash(__func_name)
+                             ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sa/.pyenv/versions/3.11.9/lib/python3.11/hashlib.py", line 129, in __get_openssl_constructor
+    return __get_builtin_constructor(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sa/.pyenv/versions/3.11.9/lib/python3.11/hashlib.py", line 123, in __get_builtin_constructor
+    raise ValueError('unsupported hash type ' + name)
+ValueError: unsupported hash type blake2b
+ERROR:root:code for hash blake2s was not found.
+Traceback (most recent call last):
+  File "/Users/sa/.pyenv/versions/3.11.9/lib/python3.11/hashlib.py", line 307, in <module>
+    globals()[__func_name] = __get_hash(__func_name)
+                             ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sa/.pyenv/versions/3.11.9/lib/python3.11/hashlib.py", line 129, in __get_openssl_constructor
+    return __get_builtin_constructor(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sa/.pyenv/versions/3.11.9/lib/python3.11/hashlib.py", line 123, in __get_builtin_constructor
+    raise ValueError('unsupported hash type ' + name)
+ValueError: unsupported hash type blake2s
+/Users/sa/rh.1/rhea_audit_bridge.py:1: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+Traceback (most recent call last):
+  File "/Users/sa/.pyenv/versions/3.11.9/lib/python3.11/site-packages/google/api_core/grpc_helpers.py", line 55, in error_remapped_callable
+    return callable_(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sa/.pyenv/versions/3.11.9/lib/python3.11/site-packages/grpc/_interceptor.py", line 276, in __call__
+    response, ignored_call = self._with_call(
+                             ^^^^^^^^^^^^^^^^
+  File "/Users/sa/.pyenv/versions/3.11.9/lib/python3.11/site-packages/grpc/_interceptor.py", line 331, in _with_call
+    return call.result(), call
+           ^^^^^^^^^^^^^
+  File "/Users/sa/.pyenv/versions/3.11.9/lib/python3.11/site-packages/grpc/_channel.py", line 438, in result
+    raise self
+  File "/Users/sa/.pyenv/versions/3.11.9/lib/python3.11/site-packages/grpc/_interceptor.py", line 314, in continuation
+    response, call = self._thunk(new_method).with_call(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sa/.pyenv/versions/3.11.9/lib/python3.11/site-packages/grpc/_channel.py", line 1173, in with_call
+    return _end_unary_response_blocking(state, call, True, None)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sa/.pyenv/versions/3.11.9/lib/python3.11/site-packages/grpc/_channel.py", line 990, in _end_unary_response_blocking
+    raise _InactiveRpcError(state)  # pytype: disable=not-instantiable
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+grpc._channel._InactiveRpcError: <_InactiveRpcError of RPC that terminated with:
+	status = StatusCode.UNAUTHENTICATED
+	details = "API keys are not supported by this API. Expected OAuth2 access token or other authentication credentials that assert a principal. See https://cloud.google.com/docs/authentication"
+	debug_error_string = "UNKNOWN:Error received from peer ipv4:142.250.64.202:443 {grpc_status:16, grpc_message:"API keys are not supported by this API. Expected OAuth2 access token or other authentication credentials that assert a principal. See https://cloud.google.com/docs/authentication"}"
+>
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/sa/rh.1/rhea_audit_bridge.py", line 30, in <module>
+    response = model.generate_content(prompt)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sa/.pyenv/versions/3.11.9/lib/python3.11/site-packages/google/generativeai/generative_models.py", line 331, in generate_content
+    response = self._client.generate_content(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sa/.pyenv/versions/3.11.9/lib/python3.11/site-packages/google/ai/generativelanguage_v1beta/services/generative_service/client.py", line 835, in generate_content
+    response = rpc(
+               ^^^^
+  File "/Users/sa/.pyenv/versions/3.11.9/lib/python3.11/site-packages/google/api_core/gapic_v1/method.py", line 128, in __call__
+    return wrapped_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sa/.pyenv/versions/3.11.9/lib/python3.11/site-packages/google/api_core/retry/retry_unary.py", line 294, in retry_wrapped_func
+    return retry_target(
+           ^^^^^^^^^^^^^
+  File "/Users/sa/.pyenv/versions/3.11.9/lib/python3.11/site-packages/google/api_core/retry/retry_unary.py", line 156, in retry_target
+    next_sleep = _retry_error_helper(
+                 ^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sa/.pyenv/versions/3.11.9/lib/python3.11/site-packages/google/api_core/retry/retry_base.py", line 216, in _retry_error_helper
+    raise final_exc from source_exc
+  File "/Users/sa/.pyenv/versions/3.11.9/lib/python3.11/site-packages/google/api_core/retry/retry_unary.py", line 147, in retry_target
+    result = target()
+             ^^^^^^^^
+  File "/Users/sa/.pyenv/versions/3.11.9/lib/python3.11/site-packages/google/api_core/timeout.py", line 130, in func_with_timeout
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sa/.pyenv/versions/3.11.9/lib/python3.11/site-packages/google/api_core/grpc_helpers.py", line 57, in error_remapped_callable
+    raise exceptions.from_grpc_error(exc) from exc
+google.api_core.exceptions.Unauthenticated: 401 API keys are not supported by this API. Expected OAuth2 access token or other authentication credentials that assert a principal. See https://cloud.google.com/docs/authentication [reason: "CREDENTIALS_MISSING"
+domain: "googleapis.com"
+metadata {
+  key: "service"
+  value: "generativelanguage.googleapis.com"
+}
+metadata {
+  key: "method"
+  value: "google.ai.generativelanguage.v1beta.GenerativeService.GenerateContent"
+}
+]
+sa@gpro rh.1 % 

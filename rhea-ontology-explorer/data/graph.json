@@ -1,0 +1,1929 @@
+{
+  "hypotheses": {
+    "ee188b5e-125": {
+      "id": "ee188b5e-125",
+      "title": "Categorical structure of: The ontology method: cross-disciplinary mathematic",
+      "statement": "The phenomenon 'The ontology method: cross-disciplinary mathematical frameworks revealing structural invariants no single formalism captures' can be modeled as a category C where objects represent states/configurations and morphisms represent valid transitions. Composition captures sequential transitions.",
+      "domain": "category_theory",
+      "status": "proposed",
+      "parent_id": null,
+      "children": [],
+      "evidence_for": [],
+      "evidence_against": [],
+      "verification_results": {},
+      "consensus_score": 0.0,
+      "red_team_score": 0.0,
+      "formal_proof_status": "unchecked",
+      "tags": [
+        "category_theory",
+        "structural",
+        "auto_generated"
+      ],
+      "created_at": "2026-02-25T16:15:33.165446+00:00",
+      "updated_at": "2026-02-25T16:15:33.165500+00:00",
+      "meta": {}
+    },
+    "15234150-9db": {
+      "id": "15234150-9db",
+      "title": "Functorial bridge: The ontology method: cross-disciplinary  \u2192 observable",
+      "statement": "There exists a functor F: C \u2192 Meas from the category modeling 'The ontology method: cross-disciplinary mathematical frameworks revealing structural invariants no single formalism captures' to the category of measurable spaces, such that F preserves the compositional structure and maps transitions to measurable functions.",
+      "domain": "category_theory",
+      "status": "proposed",
+      "parent_id": null,
+      "children": [],
+      "evidence_for": [],
+      "evidence_against": [],
+      "verification_results": {},
+      "consensus_score": 0.0,
+      "red_team_score": 0.0,
+      "formal_proof_status": "unchecked",
+      "tags": [
+        "category_theory",
+        "functor",
+        "measurement",
+        "auto_generated"
+      ],
+      "created_at": "2026-02-25T16:15:33.166582+00:00",
+      "updated_at": "2026-02-25T16:15:33.166584+00:00",
+      "meta": {}
+    },
+    "9e90a5db-dc9": {
+      "id": "9e90a5db-dc9",
+      "title": "Adjunction in: The ontology method: cross-disciplinary ",
+      "statement": "The free-forgetful adjunction F \u22a3 U between the structured category of 'The ontology method: cross-disciplinary mathematical frameworks revealing structural invariants no single formalism captures' and its underlying set-theoretic representation reveals a canonical way to add/remove structure while preserving essential information.",
+      "domain": "category_theory",
+      "status": "proposed",
+      "parent_id": null,
+      "children": [],
+      "evidence_for": [],
+      "evidence_against": [],
+      "verification_results": {},
+      "consensus_score": 0.0,
+      "red_team_score": 0.0,
+      "formal_proof_status": "unchecked",
+      "tags": [
+        "category_theory",
+        "adjunction",
+        "auto_generated"
+      ],
+      "created_at": "2026-02-25T16:15:33.167408+00:00",
+      "updated_at": "2026-02-25T16:15:33.167409+00:00",
+      "meta": {}
+    },
+    "43a63ce1-d26": {
+      "id": "43a63ce1-d26",
+      "title": "Topos of local models for: The ontology method: cross-discipli",
+      "statement": "Local observations of 'The ontology method: cross-disciplinary mathematical frameworks revealing structural invariants no single formalism captures' form a sheaf on a suitable Grothendieck topology, and the category of all such sheaves forms a topos that serves as the 'universe of discourse' for reasoning about The ontology method: cross-disciplinary mathematical frameworks revealing structural invariants no single formalism captures.",
+      "domain": "category_theory",
+      "status": "proposed",
+      "parent_id": null,
+      "children": [],
+      "evidence_for": [],
+      "evidence_against": [],
+      "verification_results": {},
+      "consensus_score": 0.0,
+      "red_team_score": 0.0,
+      "formal_proof_status": "unchecked",
+      "tags": [
+        "category_theory",
+        "topos",
+        "sheaf",
+        "deep",
+        "auto_generated"
+      ],
+      "created_at": "2026-02-25T16:15:33.168214+00:00",
+      "updated_at": "2026-02-25T16:15:33.168215+00:00",
+      "meta": {}
+    },
+    "283bedb4-80f": {
+      "id": "283bedb4-80f",
+      "title": "Yoneda principle for: The ontology method: cross-discipli",
+      "statement": "By the Yoneda lemma, the identity of any state in the 'The ontology method: cross-disciplinary mathematical frameworks revealing structural invariants no single formalism captures' category is fully determined by its relationships (morphisms) to all other states. This implies that relational structure alone suffices for complete characterization.",
+      "domain": "category_theory",
+      "status": "proposed",
+      "parent_id": null,
+      "children": [],
+      "evidence_for": [],
+      "evidence_against": [],
+      "verification_results": {},
+      "consensus_score": 0.0,
+      "red_team_score": 0.0,
+      "formal_proof_status": "unchecked",
+      "tags": [
+        "category_theory",
+        "yoneda",
+        "representability",
+        "auto_generated"
+      ],
+      "created_at": "2026-02-25T16:15:33.169152+00:00",
+      "updated_at": "2026-02-25T16:15:33.169153+00:00",
+      "meta": {}
+    },
+    "bf22dbad-68e": {
+      "id": "bf22dbad-68e",
+      "title": "Statistical manifold of: The ontology method: cross-disciplinary mathe",
+      "statement": "The space of models/explanations for 'The ontology method: cross-disciplinary mathematical frameworks revealing structural invariants no single formalism captures' forms a statistical manifold M where each point \u03b8 represents a probability distribution P_\u03b8 over possible observations. The Fisher information matrix G(\u03b8) defines a Riemannian metric that captures the intrinsic geometry of distinguishability.",
+      "domain": "information_geometry",
+      "status": "proposed",
+      "parent_id": null,
+      "children": [],
+      "evidence_for": [],
+      "evidence_against": [],
+      "verification_results": {},
+      "consensus_score": 0.0,
+      "red_team_score": 0.0,
+      "formal_proof_status": "unchecked",
+      "tags": [
+        "information_geometry",
+        "manifold",
+        "fisher",
+        "auto_generated"
+      ],
+      "created_at": "2026-02-25T16:15:33.170160+00:00",
+      "updated_at": "2026-02-25T16:15:33.170161+00:00",
+      "meta": {}
+    },
+    "fcc071c3-0e9": {
+      "id": "fcc071c3-0e9",
+      "title": "Natural gradient descent on: The ontology method: cross-disciplinary ",
+      "statement": "Optimization in the 'The ontology method: cross-disciplinary mathematical frameworks revealing structural invariants no single formalism captures' hypothesis space is more efficient when following the natural gradient G(\u03b8)\u207b\u00b9\u2207L(\u03b8) rather than the Euclidean gradient. This accounts for the curvature of the statistical manifold and provides parameterization-invariant updates.",
+      "domain": "information_geometry",
+      "status": "proposed",
+      "parent_id": null,
+      "children": [],
+      "evidence_for": [],
+      "evidence_against": [],
+      "verification_results": {},
+      "consensus_score": 0.0,
+      "red_team_score": 0.0,
+      "formal_proof_status": "unchecked",
+      "tags": [
+        "information_geometry",
+        "natural_gradient",
+        "optimization",
+        "auto_generated"
+      ],
+      "created_at": "2026-02-25T16:15:33.171234+00:00",
+      "updated_at": "2026-02-25T16:15:33.171236+00:00",
+      "meta": {}
+    },
+    "1a974081-e05": {
+      "id": "1a974081-e05",
+      "title": "Dual structure in: The ontology method: cross-disciplinary ",
+      "statement": "The hypothesis space for 'The ontology method: cross-disciplinary mathematical frameworks revealing structural invariants no single formalism captures' admits Amari's dual connection structure: the exponential connection (\u2207\u207d\u1d49\u207e) captures maximum entropy reasoning, while the mixture connection (\u2207\u207d\u1d50\u207e) captures Bayesian updating. The Pythagorean theorem of information geometry holds for projections.",
+      "domain": "information_geometry",
+      "status": "proposed",
+      "parent_id": null,
+      "children": [],
+      "evidence_for": [],
+      "evidence_against": [],
+      "verification_results": {},
+      "consensus_score": 0.0,
+      "red_team_score": 0.0,
+      "formal_proof_status": "unchecked",
+      "tags": [
+        "information_geometry",
+        "duality",
+        "amari",
+        "auto_generated"
+      ],
+      "created_at": "2026-02-25T16:15:33.172307+00:00",
+      "updated_at": "2026-02-25T16:15:33.172309+00:00",
+      "meta": {}
+    },
+    "e9aa2473-81f": {
+      "id": "e9aa2473-81f",
+      "title": "Information-geometric phase transition in: The ontology method: cross-dis",
+      "statement": "The statistical manifold for 'The ontology method: cross-disciplinary mathematical frameworks revealing structural invariants no single formalism captures' exhibits singular points where the Fisher metric degenerates (rank drops). These singularities correspond to phase transitions or critical phenomena in the underlying system, where qualitatively different explanations become indistinguishable.",
+      "domain": "information_geometry",
+      "status": "proposed",
+      "parent_id": null,
+      "children": [],
+      "evidence_for": [],
+      "evidence_against": [],
+      "verification_results": {},
+      "consensus_score": 0.0,
+      "red_team_score": 0.0,
+      "formal_proof_status": "unchecked",
+      "tags": [
+        "information_geometry",
+        "singularity",
+        "phase_transition",
+        "deep",
+        "auto_generated"
+      ],
+      "created_at": "2026-02-25T16:15:33.173513+00:00",
+      "updated_at": "2026-02-25T16:15:33.173515+00:00",
+      "meta": {}
+    },
+    "4c801ed6-eb9": {
+      "id": "4c801ed6-eb9",
+      "title": "Phase space model of: The ontology method: cross-disciplinary mathe",
+      "statement": "The phenomenon 'The ontology method: cross-disciplinary mathematical frameworks revealing structural invariants no single formalism captures' can be modeled as a dynamical system dx/dt = f(x) on a phase space X. Key observables correspond to coordinates, and the long-term behavior is governed by attractors of the flow.",
+      "domain": "dynamical_systems",
+      "status": "proposed",
+      "parent_id": null,
+      "children": [],
+      "evidence_for": [],
+      "evidence_against": [],
+      "verification_results": {},
+      "consensus_score": 0.0,
+      "red_team_score": 0.0,
+      "formal_proof_status": "unchecked",
+      "tags": [
+        "dynamical_systems",
+        "phase_space",
+        "auto_generated"
+      ],
+      "created_at": "2026-02-25T16:15:33.175361+00:00",
+      "updated_at": "2026-02-25T16:15:33.175363+00:00",
+      "meta": {}
+    },
+    "7f2d4adf-f73": {
+      "id": "7f2d4adf-f73",
+      "title": "Bifurcation landscape of: The ontology method: cross-disciplinary ",
+      "statement": "The parameter space controlling 'The ontology method: cross-disciplinary mathematical frameworks revealing structural invariants no single formalism captures' contains bifurcation curves where qualitative behavior changes. Identifying these bifurcations reveals the 'tipping points' where the system transitions between qualitatively different regimes.",
+      "domain": "dynamical_systems",
+      "status": "proposed",
+      "parent_id": null,
+      "children": [],
+      "evidence_for": [],
+      "evidence_against": [],
+      "verification_results": {},
+      "consensus_score": 0.0,
+      "red_team_score": 0.0,
+      "formal_proof_status": "unchecked",
+      "tags": [
+        "dynamical_systems",
+        "bifurcation",
+        "auto_generated"
+      ],
+      "created_at": "2026-02-25T16:15:33.176707+00:00",
+      "updated_at": "2026-02-25T16:15:33.176709+00:00",
+      "meta": {}
+    },
+    "39211170-53e": {
+      "id": "39211170-53e",
+      "title": "Ergodic hypothesis for: The ontology method: cross-disciplinary ",
+      "statement": "Long-time averages of observables in the 'The ontology method: cross-disciplinary mathematical frameworks revealing structural invariants no single formalism captures' system equal ensemble (phase-space) averages, implying ergodicity. This would justify statistical approaches to predicting system behavior.",
+      "domain": "dynamical_systems",
+      "status": "proposed",
+      "parent_id": null,
+      "children": [],
+      "evidence_for": [],
+      "evidence_against": [],
+      "verification_results": {},
+      "consensus_score": 0.0,
+      "red_team_score": 0.0,
+      "formal_proof_status": "unchecked",
+      "tags": [
+        "dynamical_systems",
+        "ergodic",
+        "statistics",
+        "auto_generated"
+      ],
+      "created_at": "2026-02-25T16:15:33.177977+00:00",
+      "updated_at": "2026-02-25T16:15:33.177979+00:00",
+      "meta": {}
+    },
+    "d0367747-d91": {
+      "id": "d0367747-d91",
+      "title": "Strange attractor in: The ontology method: cross-discipli",
+      "statement": "The dynamics of 'The ontology method: cross-disciplinary mathematical frameworks revealing structural invariants no single formalism captures' admit a strange attractor with fractal dimension, exhibiting sensitive dependence on initial conditions while remaining globally bounded. This explains apparent unpredictability within deterministic dynamics.",
+      "domain": "dynamical_systems",
+      "status": "proposed",
+      "parent_id": null,
+      "children": [],
+      "evidence_for": [],
+      "evidence_against": [],
+      "verification_results": {},
+      "consensus_score": 0.0,
+      "red_team_score": 0.0,
+      "formal_proof_status": "unchecked",
+      "tags": [
+        "dynamical_systems",
+        "chaos",
+        "attractor",
+        "deep",
+        "auto_generated"
+      ],
+      "created_at": "2026-02-25T16:15:33.179414+00:00",
+      "updated_at": "2026-02-25T16:15:33.179415+00:00",
+      "meta": {}
+    },
+    "fbcac0ff-669": {
+      "id": "fbcac0ff-669",
+      "title": "Epistemic game for: The ontology method: cross-disciplinary mathe",
+      "statement": "The evaluation of 'The ontology method: cross-disciplinary mathematical frameworks revealing structural invariants no single formalism captures' can be modeled as a Bayesian game where each evaluator has private information (priors, expertise domain) and must choose a strategy (accept, reject, investigate). A Bayesian Nash equilibrium reveals the collectively rational assessment.",
+      "domain": "game_theory",
+      "status": "proposed",
+      "parent_id": null,
+      "children": [],
+      "evidence_for": [],
+      "evidence_against": [],
+      "verification_results": {},
+      "consensus_score": 0.0,
+      "red_team_score": 0.0,
+      "formal_proof_status": "unchecked",
+      "tags": [
+        "game_theory",
+        "bayesian",
+        "epistemic",
+        "auto_generated"
+      ],
+      "created_at": "2026-02-25T16:15:33.180787+00:00",
+      "updated_at": "2026-02-25T16:15:33.180788+00:00",
+      "meta": {}
+    },
+    "9100ebaa-9cc": {
+      "id": "9100ebaa-9cc",
+      "title": "Evolutionary fitness of: The ontology method: cross-disciplinary ",
+      "statement": "In a population of competing hypotheses about 'The ontology method: cross-disciplinary mathematical frameworks revealing structural invariants no single formalism captures', the evolutionarily stable strategy (ESS) corresponds to the hypothesis that cannot be invaded by any mutant alternative. The replicator dynamics dx_i/dt = x_i(f_i - f\u0304) governs hypothesis selection.",
+      "domain": "game_theory",
+      "status": "proposed",
+      "parent_id": null,
+      "children": [],
+      "evidence_for": [],
+      "evidence_against": [],
+      "verification_results": {},
+      "consensus_score": 0.0,
+      "red_team_score": 0.0,
+      "formal_proof_status": "unchecked",
+      "tags": [
+        "game_theory",
+        "evolutionary",
+        "ESS",
+        "auto_generated"
+      ],
+      "created_at": "2026-02-25T16:15:33.182216+00:00",
+      "updated_at": "2026-02-25T16:15:33.182218+00:00",
+      "meta": {}
+    },
+    "68b95705-b52": {
+      "id": "68b95705-b52",
+      "title": "Curry-Howard type of: The ontology method: cross-disciplinary mathe",
+      "statement": "Under the Curry-Howard correspondence, the proposition 'The ontology method: cross-disciplinary mathematical frameworks revealing structural invariants no single formalism captures' corresponds to a type T. A proof of this proposition is a program of type T. The computational content of the proof reveals the constructive information hidden in the claim.",
+      "domain": "proof_theory",
+      "status": "proposed",
+      "parent_id": null,
+      "children": [],
+      "evidence_for": [],
+      "evidence_against": [],
+      "verification_results": {},
+      "consensus_score": 0.0,
+      "red_team_score": 0.0,
+      "formal_proof_status": "unchecked",
+      "tags": [
+        "proof_theory",
+        "curry_howard",
+        "auto_generated"
+      ],
+      "created_at": "2026-02-25T16:15:33.183754+00:00",
+      "updated_at": "2026-02-25T16:15:33.183755+00:00",
+      "meta": {}
+    },
+    "7f5df804-a61": {
+      "id": "7f5df804-a61",
+      "title": "Proof complexity of: The ontology method: cross-disciplinary ",
+      "statement": "The shortest proof of 'The ontology method: cross-disciplinary mathematical frameworks revealing structural invariants no single formalism captures' in a standard proof system (resolution, Frege, bounded arithmetic) reveals the intrinsic logical difficulty of the claim. A proof complexity lower bound would show the claim is inherently hard to verify.",
+      "domain": "proof_theory",
+      "status": "proposed",
+      "parent_id": null,
+      "children": [],
+      "evidence_for": [],
+      "evidence_against": [],
+      "verification_results": {},
+      "consensus_score": 0.0,
+      "red_team_score": 0.0,
+      "formal_proof_status": "unchecked",
+      "tags": [
+        "proof_theory",
+        "complexity",
+        "auto_generated"
+      ],
+      "created_at": "2026-02-25T16:15:33.185532+00:00",
+      "updated_at": "2026-02-25T16:15:33.185533+00:00",
+      "meta": {}
+    },
+    "b5c4415a-7fd": {
+      "id": "b5c4415a-7fd",
+      "title": "Orion Principle: No single source trusted",
+      "statement": "Any claim verified through only one mathematical universe or one model is epistemically insufficient. Acceptance requires convergence across at least 3 independent formal frameworks and multi-model consensus with adversarial stress testing.",
+      "domain": "proof_theory",
+      "status": "under_review",
+      "parent_id": null,
+      "children": [],
+      "evidence_for": [
+        {
+          "id": "37d54675-e7d",
+          "source": "epistemic_logic",
+          "content": "Formally grounded in independence of evidence theorem \u2014 correlated sources provide less justification than independent ones.",
+          "evidence_type": "support",
+          "severity": "info",
+          "confidence": 0.85,
+          "provenance": {},
+          "timestamp": "2026-02-25T16:15:33.666795+00:00",
+          "verified_by": []
+        }
+      ],
+      "evidence_against": [
+        {
+          "id": "251d90c0-996",
+          "source": "red_team_auto",
+          "content": "Requiring 3 frameworks may be too strict for domains where fewer than 3 formalisms exist.",
+          "evidence_type": "attack",
+          "severity": "major",
+          "confidence": 0.7,
+          "provenance": {},
+          "timestamp": "2026-02-25T16:15:33.670152+00:00",
+          "verified_by": []
+        }
+      ],
+      "verification_results": {
+        "hypothesis_id": "b5c4415a-7fd",
+        "layers": {
+          "consensus": {
+            "layer": "multi_model_consensus",
+            "hypothesis_id": "b5c4415a-7fd",
+            "prompt": "ONTOLOGY VERIFICATION REQUEST\nDomain: proof_theory\nHypothesis: Any claim verified through only one mathematical universe or one model is epistemically insufficient. Acceptance requires convergence across at least 3 independent formal frameworks and multi-model consensus with adversarial stress testing.\n\nEvaluate this hypothesis. Consider:\n1. Is the statement well-formed within its mathematical domain?\n2. What evidence supports it? What evidence contradicts it?\n3. Are there implicit assumptions that should be made explicit?\n4. Rate your confidence (0-1) and explain.\n5. If you disagree with the hypothesis, state your strongest counterargument.",
+            "models_requested": 5,
+            "tier": "balanced",
+            "timestamp": "2026-02-25T16:15:33.676823+00:00",
+            "status": "ready_to_execute",
+            "command": "python3 src/rhea_bridge.py tribunal \"ONTOLOGY VERIFICATION REQUEST\nDomain: proof_theory\nHypothesis: Any claim verified through only one mathematical universe or one model is epistemically insufficient. Acceptance requires convergence across at least 3 independent formal frameworks and multi-model consensus with adversarial stress testing.\n\nEvaluate this hypothesis. Consider:\n1. Is the statement well-formed within its mathematical domain?\n2. What evidence supports it? What evidence contradicts it?\n3. Are there implicit assumptions that should be made explicit?\n4. Rate your confidence (0-1) and explain.\n5. If you disagree with the hypothesis, state your strongest counterargument.\" --k 5"
+          },
+          "formal": {
+            "layer": "formal_proof_check",
+            "hypothesis_id": "b5c4415a-7fd",
+            "timestamp": "2026-02-25T16:15:33.676830+00:00",
+            "status": "ready_to_execute",
+            "method": "plugin:proof_theory",
+            "formal_repr": {
+              "framework": "proof_theory",
+              "logical_form": "\u2192-statement (implication)",
+              "proof_system": "intuitionistic_type_theory",
+              "curry_howard_type": "Proposition (to be inhabited by a proof term)",
+              "raw_statement": "Any claim verified through only one mathematical universe or one model is epistemically insufficient. Acceptance requires convergence across at least 3 independent formal frameworks and multi-model consensus with adversarial stress testing."
+            }
+          },
+          "red_team": {
+            "layer": "red_team_adversarial",
+            "hypothesis_id": "b5c4415a-7fd",
+            "num_attackers": 3,
+            "strategies": [
+              "find_counterexample",
+              "attack_assumptions",
+              "boundary_stress_test",
+              "domain_mismatch_probe",
+              "logical_consistency_check",
+              "steelman_alternative"
+            ],
+            "timestamp": "2026-02-25T16:15:33.676838+00:00",
+            "status": "ready_to_execute",
+            "attack_prompts": [
+              "RED TEAM ATTACK \u2014 Strategy: find_counterexample\nTarget hypothesis: Any claim verified through only one mathematical universe or one model is epistemically insufficient. Acceptance requires convergence across at least 3 independent formal frameworks and multi-model consensus with adversarial stress testing.\nDomain: proof_theory\n\nYOUR MISSION: Find a concrete counterexample that disproves this hypothesis. Be creative \u2014 look in unusual corners of the domain.\n\nRules:\n- You MUST find a weakness. 'No issues found' is not acceptable.\n- Rate severity: critical / major / minor / info\n- Provide concrete evidence, not vague concerns.\n- If the hypothesis survives your best attack, explain exactly why it's robust and rate your attack strength (1-10).",
+              "RED TEAM ATTACK \u2014 Strategy: attack_assumptions\nTarget hypothesis: Any claim verified through only one mathematical universe or one model is epistemically insufficient. Acceptance requires convergence across at least 3 independent formal frameworks and multi-model consensus with adversarial stress testing.\nDomain: proof_theory\n\nYOUR MISSION: Identify every implicit assumption. For each, construct a scenario where that assumption fails and show the consequence.\n\nRules:\n- You MUST find a weakness. 'No issues found' is not acceptable.\n- Rate severity: critical / major / minor / info\n- Provide concrete evidence, not vague concerns.\n- If the hypothesis survives your best attack, explain exactly why it's robust and rate your attack strength (1-10).",
+              "RED TEAM ATTACK \u2014 Strategy: boundary_stress_test\nTarget hypothesis: Any claim verified through only one mathematical universe or one model is epistemically insufficient. Acceptance requires convergence across at least 3 independent formal frameworks and multi-model consensus with adversarial stress testing.\nDomain: proof_theory\n\nYOUR MISSION: Push this hypothesis to its limits. What happens at extreme values, degenerate cases, infinite limits, or dimension boundaries?\n\nRules:\n- You MUST find a weakness. 'No issues found' is not acceptable.\n- Rate severity: critical / major / minor / info\n- Provide concrete evidence, not vague concerns.\n- If the hypothesis survives your best attack, explain exactly why it's robust and rate your attack strength (1-10).",
+              "RED TEAM ATTACK \u2014 Strategy: domain_mismatch_probe\nTarget hypothesis: Any claim verified through only one mathematical universe or one model is epistemically insufficient. Acceptance requires convergence across at least 3 independent formal frameworks and multi-model consensus with adversarial stress testing.\nDomain: proof_theory\n\nYOUR MISSION: Does this hypothesis accidentally assume properties specific to one mathematical universe that don't hold in others? Find the mismatch.\n\nRules:\n- You MUST find a weakness. 'No issues found' is not acceptable.\n- Rate severity: critical / major / minor / info\n- Provide concrete evidence, not vague concerns.\n- If the hypothesis survives your best attack, explain exactly why it's robust and rate your attack strength (1-10).",
+              "RED TEAM ATTACK \u2014 Strategy: logical_consistency_check\nTarget hypothesis: Any claim verified through only one mathematical universe or one model is epistemically insufficient. Acceptance requires convergence across at least 3 independent formal frameworks and multi-model consensus with adversarial stress testing.\nDomain: proof_theory\n\nYOUR MISSION: Check for circular reasoning, undeclared axioms, scope creep, or category errors. Be ruthless.\n\nRules:\n- You MUST find a weakness. 'No issues found' is not acceptable.\n- Rate severity: critical / major / minor / info\n- Provide concrete evidence, not vague concerns.\n- If the hypothesis survives your best attack, explain exactly why it's robust and rate your attack strength (1-10).",
+              "RED TEAM ATTACK \u2014 Strategy: steelman_alternative\nTarget hypothesis: Any claim verified through only one mathematical universe or one model is epistemically insufficient. Acceptance requires convergence across at least 3 independent formal frameworks and multi-model consensus with adversarial stress testing.\nDomain: proof_theory\n\nYOUR MISSION: Construct the strongest possible ALTERNATIVE hypothesis that explains the same phenomena but contradicts this one. Which is more parsimonious?\n\nRules:\n- You MUST find a weakness. 'No issues found' is not acceptable.\n- Rate severity: critical / major / minor / info\n- Provide concrete evidence, not vague concerns.\n- If the hypothesis survives your best attack, explain exactly why it's robust and rate your attack strength (1-10)."
+            ]
+          }
+        },
+        "overall_status": "pending_execution",
+        "timestamp": "2026-02-25T16:15:33.676847+00:00"
+      },
+      "consensus_score": 0.0,
+      "red_team_score": 0.0,
+      "formal_proof_status": "unchecked",
+      "tags": [
+        "meta",
+        "orion",
+        "verification_policy"
+      ],
+      "created_at": "2026-02-25T16:15:33.412615+00:00",
+      "updated_at": "2026-02-25T16:15:33.676848+00:00",
+      "meta": {}
+    },
+    "cb9ffa6c-d28": {
+      "id": "cb9ffa6c-d28",
+      "title": "Red-team selection via game-theoretic mechanism",
+      "statement": "The optimal strategy for selecting which hypotheses to red-team is a game: the attacker chooses the weakest-looking hypothesis, the defender pre-commits to verifying the strongest. The Nash equilibrium of this meta-game determines verification priority.",
+      "domain": "game_theory",
+      "status": "under_review",
+      "parent_id": null,
+      "children": [],
+      "evidence_for": [],
+      "evidence_against": [],
+      "verification_results": {},
+      "consensus_score": 0.0,
+      "red_team_score": 0.0,
+      "formal_proof_status": "unchecked",
+      "tags": [
+        "meta",
+        "red_team",
+        "mechanism_design"
+      ],
+      "created_at": "2026-02-25T16:15:33.414743+00:00",
+      "updated_at": "2026-02-25T16:15:33.676853+00:00",
+      "meta": {}
+    },
+    "c8bc67ef-ce5": {
+      "id": "c8bc67ef-ce5",
+      "title": "Categorical structure of: consciousness as emergent property of integrated i",
+      "statement": "The phenomenon 'consciousness as emergent property of integrated information across neural substrates' can be modeled as a category C where objects represent states/configurations and morphisms represent valid transitions. Composition captures sequential transitions.",
+      "domain": "category_theory",
+      "status": "proposed",
+      "parent_id": null,
+      "children": [],
+      "evidence_for": [],
+      "evidence_against": [],
+      "verification_results": {},
+      "consensus_score": 0.0,
+      "red_team_score": 0.0,
+      "formal_proof_status": "unchecked",
+      "tags": [
+        "category_theory",
+        "structural",
+        "auto_generated"
+      ],
+      "created_at": "2026-02-25T16:15:33.417102+00:00",
+      "updated_at": "2026-02-25T16:15:33.417103+00:00",
+      "meta": {}
+    },
+    "7a07fbfa-4d2": {
+      "id": "7a07fbfa-4d2",
+      "title": "Functorial bridge: consciousness as emergent property of in \u2192 observable",
+      "statement": "There exists a functor F: C \u2192 Meas from the category modeling 'consciousness as emergent property of integrated information across neural substrates' to the category of measurable spaces, such that F preserves the compositional structure and maps transitions to measurable functions.",
+      "domain": "category_theory",
+      "status": "proposed",
+      "parent_id": null,
+      "children": [],
+      "evidence_for": [],
+      "evidence_against": [],
+      "verification_results": {},
+      "consensus_score": 0.0,
+      "red_team_score": 0.0,
+      "formal_proof_status": "unchecked",
+      "tags": [
+        "category_theory",
+        "functor",
+        "measurement",
+        "auto_generated"
+      ],
+      "created_at": "2026-02-25T16:15:33.419704+00:00",
+      "updated_at": "2026-02-25T16:15:33.419706+00:00",
+      "meta": {}
+    },
+    "a0be1633-9a0": {
+      "id": "a0be1633-9a0",
+      "title": "Adjunction in: consciousness as emergent property of in",
+      "statement": "The free-forgetful adjunction F \u22a3 U between the structured category of 'consciousness as emergent property of integrated information across neural substrates' and its underlying set-theoretic representation reveals a canonical way to add/remove structure while preserving essential information.",
+      "domain": "category_theory",
+      "status": "proposed",
+      "parent_id": null,
+      "children": [],
+      "evidence_for": [],
+      "evidence_against": [],
+      "verification_results": {},
+      "consensus_score": 0.0,
+      "red_team_score": 0.0,
+      "formal_proof_status": "unchecked",
+      "tags": [
+        "category_theory",
+        "adjunction",
+        "auto_generated"
+      ],
+      "created_at": "2026-02-25T16:15:33.422196+00:00",
+      "updated_at": "2026-02-25T16:15:33.422198+00:00",
+      "meta": {}
+    },
+    "27cf9564-66f": {
+      "id": "27cf9564-66f",
+      "title": "Statistical manifold of: consciousness as emergent property of integra",
+      "statement": "The space of models/explanations for 'consciousness as emergent property of integrated information across neural substrates' forms a statistical manifold M where each point \u03b8 represents a probability distribution P_\u03b8 over possible observations. The Fisher information matrix G(\u03b8) defines a Riemannian metric that captures the intrinsic geometry of distinguishability.",
+      "domain": "information_geometry",
+      "status": "proposed",
+      "parent_id": null,
+      "children": [],
+      "evidence_for": [],
+      "evidence_against": [],
+      "verification_results": {},
+      "consensus_score": 0.0,
+      "red_team_score": 0.0,
+      "formal_proof_status": "unchecked",
+      "tags": [
+        "information_geometry",
+        "manifold",
+        "fisher",
+        "auto_generated"
+      ],
+      "created_at": "2026-02-25T16:15:33.424878+00:00",
+      "updated_at": "2026-02-25T16:15:33.424880+00:00",
+      "meta": {}
+    },
+    "8a2dfe5b-6fc": {
+      "id": "8a2dfe5b-6fc",
+      "title": "Natural gradient descent on: consciousness as emergent property of in",
+      "statement": "Optimization in the 'consciousness as emergent property of integrated information across neural substrates' hypothesis space is more efficient when following the natural gradient G(\u03b8)\u207b\u00b9\u2207L(\u03b8) rather than the Euclidean gradient. This accounts for the curvature of the statistical manifold and provides parameterization-invariant updates.",
+      "domain": "information_geometry",
+      "status": "proposed",
+      "parent_id": null,
+      "children": [],
+      "evidence_for": [],
+      "evidence_against": [],
+      "verification_results": {},
+      "consensus_score": 0.0,
+      "red_team_score": 0.0,
+      "formal_proof_status": "unchecked",
+      "tags": [
+        "information_geometry",
+        "natural_gradient",
+        "optimization",
+        "auto_generated"
+      ],
+      "created_at": "2026-02-25T16:15:33.427645+00:00",
+      "updated_at": "2026-02-25T16:15:33.427646+00:00",
+      "meta": {}
+    },
+    "744039e1-feb": {
+      "id": "744039e1-feb",
+      "title": "Dual structure in: consciousness as emergent property of in",
+      "statement": "The hypothesis space for 'consciousness as emergent property of integrated information across neural substrates' admits Amari's dual connection structure: the exponential connection (\u2207\u207d\u1d49\u207e) captures maximum entropy reasoning, while the mixture connection (\u2207\u207d\u1d50\u207e) captures Bayesian updating. The Pythagorean theorem of information geometry holds for projections.",
+      "domain": "information_geometry",
+      "status": "proposed",
+      "parent_id": null,
+      "children": [],
+      "evidence_for": [],
+      "evidence_against": [],
+      "verification_results": {},
+      "consensus_score": 0.0,
+      "red_team_score": 0.0,
+      "formal_proof_status": "unchecked",
+      "tags": [
+        "information_geometry",
+        "duality",
+        "amari",
+        "auto_generated"
+      ],
+      "created_at": "2026-02-25T16:15:33.430216+00:00",
+      "updated_at": "2026-02-25T16:15:33.430218+00:00",
+      "meta": {}
+    },
+    "a0bc3fd4-d4b": {
+      "id": "a0bc3fd4-d4b",
+      "title": "Phase space model of: consciousness as emergent property of integra",
+      "statement": "The phenomenon 'consciousness as emergent property of integrated information across neural substrates' can be modeled as a dynamical system dx/dt = f(x) on a phase space X. Key observables correspond to coordinates, and the long-term behavior is governed by attractors of the flow.",
+      "domain": "dynamical_systems",
+      "status": "proposed",
+      "parent_id": null,
+      "children": [],
+      "evidence_for": [],
+      "evidence_against": [],
+      "verification_results": {},
+      "consensus_score": 0.0,
+      "red_team_score": 0.0,
+      "formal_proof_status": "unchecked",
+      "tags": [
+        "dynamical_systems",
+        "phase_space",
+        "auto_generated"
+      ],
+      "created_at": "2026-02-25T16:15:33.432841+00:00",
+      "updated_at": "2026-02-25T16:15:33.432842+00:00",
+      "meta": {}
+    },
+    "60ce01d3-027": {
+      "id": "60ce01d3-027",
+      "title": "Bifurcation landscape of: consciousness as emergent property of in",
+      "statement": "The parameter space controlling 'consciousness as emergent property of integrated information across neural substrates' contains bifurcation curves where qualitative behavior changes. Identifying these bifurcations reveals the 'tipping points' where the system transitions between qualitatively different regimes.",
+      "domain": "dynamical_systems",
+      "status": "proposed",
+      "parent_id": null,
+      "children": [],
+      "evidence_for": [],
+      "evidence_against": [],
+      "verification_results": {},
+      "consensus_score": 0.0,
+      "red_team_score": 0.0,
+      "formal_proof_status": "unchecked",
+      "tags": [
+        "dynamical_systems",
+        "bifurcation",
+        "auto_generated"
+      ],
+      "created_at": "2026-02-25T16:15:33.435693+00:00",
+      "updated_at": "2026-02-25T16:15:33.435694+00:00",
+      "meta": {}
+    },
+    "f4e48bf3-23e": {
+      "id": "f4e48bf3-23e",
+      "title": "Ergodic hypothesis for: consciousness as emergent property of in",
+      "statement": "Long-time averages of observables in the 'consciousness as emergent property of integrated information across neural substrates' system equal ensemble (phase-space) averages, implying ergodicity. This would justify statistical approaches to predicting system behavior.",
+      "domain": "dynamical_systems",
+      "status": "proposed",
+      "parent_id": null,
+      "children": [],
+      "evidence_for": [],
+      "evidence_against": [],
+      "verification_results": {},
+      "consensus_score": 0.0,
+      "red_team_score": 0.0,
+      "formal_proof_status": "unchecked",
+      "tags": [
+        "dynamical_systems",
+        "ergodic",
+        "statistics",
+        "auto_generated"
+      ],
+      "created_at": "2026-02-25T16:15:33.438506+00:00",
+      "updated_at": "2026-02-25T16:15:33.438507+00:00",
+      "meta": {}
+    },
+    "b36fa589-227": {
+      "id": "b36fa589-227",
+      "title": "Epistemic game for: consciousness as emergent property of integra",
+      "statement": "The evaluation of 'consciousness as emergent property of integrated information across neural substrates' can be modeled as a Bayesian game where each evaluator has private information (priors, expertise domain) and must choose a strategy (accept, reject, investigate). A Bayesian Nash equilibrium reveals the collectively rational assessment.",
+      "domain": "game_theory",
+      "status": "proposed",
+      "parent_id": null,
+      "children": [],
+      "evidence_for": [],
+      "evidence_against": [],
+      "verification_results": {},
+      "consensus_score": 0.0,
+      "red_team_score": 0.0,
+      "formal_proof_status": "unchecked",
+      "tags": [
+        "game_theory",
+        "bayesian",
+        "epistemic",
+        "auto_generated"
+      ],
+      "created_at": "2026-02-25T16:15:33.441435+00:00",
+      "updated_at": "2026-02-25T16:15:33.441437+00:00",
+      "meta": {}
+    },
+    "8357e4d4-bc6": {
+      "id": "8357e4d4-bc6",
+      "title": "Evolutionary fitness of: consciousness as emergent property of in",
+      "statement": "In a population of competing hypotheses about 'consciousness as emergent property of integrated information across neural substrates', the evolutionarily stable strategy (ESS) corresponds to the hypothesis that cannot be invaded by any mutant alternative. The replicator dynamics dx_i/dt = x_i(f_i - f\u0304) governs hypothesis selection.",
+      "domain": "game_theory",
+      "status": "proposed",
+      "parent_id": null,
+      "children": [],
+      "evidence_for": [],
+      "evidence_against": [],
+      "verification_results": {},
+      "consensus_score": 0.0,
+      "red_team_score": 0.0,
+      "formal_proof_status": "unchecked",
+      "tags": [
+        "game_theory",
+        "evolutionary",
+        "ESS",
+        "auto_generated"
+      ],
+      "created_at": "2026-02-25T16:15:33.444424+00:00",
+      "updated_at": "2026-02-25T16:15:33.444426+00:00",
+      "meta": {}
+    },
+    "b64775f3-b7a": {
+      "id": "b64775f3-b7a",
+      "title": "Curry-Howard type of: consciousness as emergent property of integra",
+      "statement": "Under the Curry-Howard correspondence, the proposition 'consciousness as emergent property of integrated information across neural substrates' corresponds to a type T. A proof of this proposition is a program of type T. The computational content of the proof reveals the constructive information hidden in the claim.",
+      "domain": "proof_theory",
+      "status": "proposed",
+      "parent_id": null,
+      "children": [],
+      "evidence_for": [],
+      "evidence_against": [],
+      "verification_results": {},
+      "consensus_score": 0.0,
+      "red_team_score": 0.0,
+      "formal_proof_status": "unchecked",
+      "tags": [
+        "proof_theory",
+        "curry_howard",
+        "auto_generated"
+      ],
+      "created_at": "2026-02-25T16:15:33.447246+00:00",
+      "updated_at": "2026-02-25T16:15:33.447248+00:00",
+      "meta": {}
+    },
+    "1afdfbc3-c7f": {
+      "id": "1afdfbc3-c7f",
+      "title": "Proof complexity of: consciousness as emergent property of in",
+      "statement": "The shortest proof of 'consciousness as emergent property of integrated information across neural substrates' in a standard proof system (resolution, Frege, bounded arithmetic) reveals the intrinsic logical difficulty of the claim. A proof complexity lower bound would show the claim is inherently hard to verify.",
+      "domain": "proof_theory",
+      "status": "proposed",
+      "parent_id": null,
+      "children": [],
+      "evidence_for": [],
+      "evidence_against": [],
+      "verification_results": {},
+      "consensus_score": 0.0,
+      "red_team_score": 0.0,
+      "formal_proof_status": "unchecked",
+      "tags": [
+        "proof_theory",
+        "complexity",
+        "auto_generated"
+      ],
+      "created_at": "2026-02-25T16:15:33.450258+00:00",
+      "updated_at": "2026-02-25T16:15:33.450260+00:00",
+      "meta": {}
+    }
+  },
+  "edges": [
+    {
+      "from": "ee188b5e-125",
+      "to": "bf22dbad-68e",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "ee188b5e-125",
+      "to": "fcc071c3-0e9",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "ee188b5e-125",
+      "to": "1a974081-e05",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "ee188b5e-125",
+      "to": "e9aa2473-81f",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "ee188b5e-125",
+      "to": "4c801ed6-eb9",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "ee188b5e-125",
+      "to": "7f2d4adf-f73",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "ee188b5e-125",
+      "to": "39211170-53e",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "ee188b5e-125",
+      "to": "d0367747-d91",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "ee188b5e-125",
+      "to": "fbcac0ff-669",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "ee188b5e-125",
+      "to": "9100ebaa-9cc",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "ee188b5e-125",
+      "to": "68b95705-b52",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "ee188b5e-125",
+      "to": "7f5df804-a61",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "15234150-9db",
+      "to": "bf22dbad-68e",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "15234150-9db",
+      "to": "fcc071c3-0e9",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "15234150-9db",
+      "to": "1a974081-e05",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "15234150-9db",
+      "to": "e9aa2473-81f",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "15234150-9db",
+      "to": "4c801ed6-eb9",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "15234150-9db",
+      "to": "7f2d4adf-f73",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "15234150-9db",
+      "to": "39211170-53e",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "15234150-9db",
+      "to": "d0367747-d91",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "15234150-9db",
+      "to": "fbcac0ff-669",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "15234150-9db",
+      "to": "9100ebaa-9cc",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "15234150-9db",
+      "to": "68b95705-b52",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "15234150-9db",
+      "to": "7f5df804-a61",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "9e90a5db-dc9",
+      "to": "bf22dbad-68e",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "9e90a5db-dc9",
+      "to": "fcc071c3-0e9",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "9e90a5db-dc9",
+      "to": "1a974081-e05",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "9e90a5db-dc9",
+      "to": "e9aa2473-81f",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "9e90a5db-dc9",
+      "to": "4c801ed6-eb9",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "9e90a5db-dc9",
+      "to": "7f2d4adf-f73",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "9e90a5db-dc9",
+      "to": "39211170-53e",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "9e90a5db-dc9",
+      "to": "d0367747-d91",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "9e90a5db-dc9",
+      "to": "fbcac0ff-669",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "9e90a5db-dc9",
+      "to": "9100ebaa-9cc",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "9e90a5db-dc9",
+      "to": "68b95705-b52",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "9e90a5db-dc9",
+      "to": "7f5df804-a61",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "43a63ce1-d26",
+      "to": "bf22dbad-68e",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "43a63ce1-d26",
+      "to": "fcc071c3-0e9",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "43a63ce1-d26",
+      "to": "1a974081-e05",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "43a63ce1-d26",
+      "to": "e9aa2473-81f",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "43a63ce1-d26",
+      "to": "4c801ed6-eb9",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "43a63ce1-d26",
+      "to": "7f2d4adf-f73",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "43a63ce1-d26",
+      "to": "39211170-53e",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "43a63ce1-d26",
+      "to": "d0367747-d91",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "43a63ce1-d26",
+      "to": "fbcac0ff-669",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "43a63ce1-d26",
+      "to": "9100ebaa-9cc",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "43a63ce1-d26",
+      "to": "68b95705-b52",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "43a63ce1-d26",
+      "to": "7f5df804-a61",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "283bedb4-80f",
+      "to": "bf22dbad-68e",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "283bedb4-80f",
+      "to": "fcc071c3-0e9",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "283bedb4-80f",
+      "to": "1a974081-e05",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "283bedb4-80f",
+      "to": "e9aa2473-81f",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "283bedb4-80f",
+      "to": "4c801ed6-eb9",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "283bedb4-80f",
+      "to": "7f2d4adf-f73",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "283bedb4-80f",
+      "to": "39211170-53e",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "283bedb4-80f",
+      "to": "d0367747-d91",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "283bedb4-80f",
+      "to": "fbcac0ff-669",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "283bedb4-80f",
+      "to": "9100ebaa-9cc",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "283bedb4-80f",
+      "to": "68b95705-b52",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "283bedb4-80f",
+      "to": "7f5df804-a61",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "bf22dbad-68e",
+      "to": "4c801ed6-eb9",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "bf22dbad-68e",
+      "to": "7f2d4adf-f73",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "bf22dbad-68e",
+      "to": "39211170-53e",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "bf22dbad-68e",
+      "to": "d0367747-d91",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "bf22dbad-68e",
+      "to": "fbcac0ff-669",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "bf22dbad-68e",
+      "to": "9100ebaa-9cc",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "bf22dbad-68e",
+      "to": "68b95705-b52",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "bf22dbad-68e",
+      "to": "7f5df804-a61",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "fcc071c3-0e9",
+      "to": "4c801ed6-eb9",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "fcc071c3-0e9",
+      "to": "7f2d4adf-f73",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "fcc071c3-0e9",
+      "to": "39211170-53e",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "fcc071c3-0e9",
+      "to": "d0367747-d91",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "fcc071c3-0e9",
+      "to": "fbcac0ff-669",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "fcc071c3-0e9",
+      "to": "9100ebaa-9cc",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "fcc071c3-0e9",
+      "to": "68b95705-b52",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "fcc071c3-0e9",
+      "to": "7f5df804-a61",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "1a974081-e05",
+      "to": "4c801ed6-eb9",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "1a974081-e05",
+      "to": "7f2d4adf-f73",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "1a974081-e05",
+      "to": "39211170-53e",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "1a974081-e05",
+      "to": "d0367747-d91",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "1a974081-e05",
+      "to": "fbcac0ff-669",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "1a974081-e05",
+      "to": "9100ebaa-9cc",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "1a974081-e05",
+      "to": "68b95705-b52",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "1a974081-e05",
+      "to": "7f5df804-a61",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "e9aa2473-81f",
+      "to": "4c801ed6-eb9",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "e9aa2473-81f",
+      "to": "7f2d4adf-f73",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "e9aa2473-81f",
+      "to": "39211170-53e",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "e9aa2473-81f",
+      "to": "d0367747-d91",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "e9aa2473-81f",
+      "to": "fbcac0ff-669",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "e9aa2473-81f",
+      "to": "9100ebaa-9cc",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "e9aa2473-81f",
+      "to": "68b95705-b52",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "e9aa2473-81f",
+      "to": "7f5df804-a61",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "4c801ed6-eb9",
+      "to": "fbcac0ff-669",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "4c801ed6-eb9",
+      "to": "9100ebaa-9cc",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "4c801ed6-eb9",
+      "to": "68b95705-b52",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "4c801ed6-eb9",
+      "to": "7f5df804-a61",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "7f2d4adf-f73",
+      "to": "fbcac0ff-669",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "7f2d4adf-f73",
+      "to": "9100ebaa-9cc",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "7f2d4adf-f73",
+      "to": "68b95705-b52",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "7f2d4adf-f73",
+      "to": "7f5df804-a61",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "39211170-53e",
+      "to": "fbcac0ff-669",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "39211170-53e",
+      "to": "9100ebaa-9cc",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "39211170-53e",
+      "to": "68b95705-b52",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "39211170-53e",
+      "to": "7f5df804-a61",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "d0367747-d91",
+      "to": "fbcac0ff-669",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "d0367747-d91",
+      "to": "9100ebaa-9cc",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "d0367747-d91",
+      "to": "68b95705-b52",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "d0367747-d91",
+      "to": "7f5df804-a61",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "fbcac0ff-669",
+      "to": "68b95705-b52",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "fbcac0ff-669",
+      "to": "7f5df804-a61",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "9100ebaa-9cc",
+      "to": "68b95705-b52",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "9100ebaa-9cc",
+      "to": "7f5df804-a61",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "c8bc67ef-ce5",
+      "to": "27cf9564-66f",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "c8bc67ef-ce5",
+      "to": "8a2dfe5b-6fc",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "c8bc67ef-ce5",
+      "to": "744039e1-feb",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "c8bc67ef-ce5",
+      "to": "a0bc3fd4-d4b",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "c8bc67ef-ce5",
+      "to": "60ce01d3-027",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "c8bc67ef-ce5",
+      "to": "f4e48bf3-23e",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "c8bc67ef-ce5",
+      "to": "b36fa589-227",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "c8bc67ef-ce5",
+      "to": "8357e4d4-bc6",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "c8bc67ef-ce5",
+      "to": "b64775f3-b7a",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "c8bc67ef-ce5",
+      "to": "1afdfbc3-c7f",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "7a07fbfa-4d2",
+      "to": "27cf9564-66f",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "7a07fbfa-4d2",
+      "to": "8a2dfe5b-6fc",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "7a07fbfa-4d2",
+      "to": "744039e1-feb",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "7a07fbfa-4d2",
+      "to": "a0bc3fd4-d4b",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "7a07fbfa-4d2",
+      "to": "60ce01d3-027",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "7a07fbfa-4d2",
+      "to": "f4e48bf3-23e",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "7a07fbfa-4d2",
+      "to": "b36fa589-227",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "7a07fbfa-4d2",
+      "to": "8357e4d4-bc6",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "7a07fbfa-4d2",
+      "to": "b64775f3-b7a",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "7a07fbfa-4d2",
+      "to": "1afdfbc3-c7f",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "a0be1633-9a0",
+      "to": "27cf9564-66f",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "a0be1633-9a0",
+      "to": "8a2dfe5b-6fc",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "a0be1633-9a0",
+      "to": "744039e1-feb",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "a0be1633-9a0",
+      "to": "a0bc3fd4-d4b",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "a0be1633-9a0",
+      "to": "60ce01d3-027",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "a0be1633-9a0",
+      "to": "f4e48bf3-23e",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "a0be1633-9a0",
+      "to": "b36fa589-227",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "a0be1633-9a0",
+      "to": "8357e4d4-bc6",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "a0be1633-9a0",
+      "to": "b64775f3-b7a",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "a0be1633-9a0",
+      "to": "1afdfbc3-c7f",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "27cf9564-66f",
+      "to": "a0bc3fd4-d4b",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "27cf9564-66f",
+      "to": "60ce01d3-027",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "27cf9564-66f",
+      "to": "f4e48bf3-23e",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "27cf9564-66f",
+      "to": "b36fa589-227",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "27cf9564-66f",
+      "to": "8357e4d4-bc6",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "27cf9564-66f",
+      "to": "b64775f3-b7a",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "27cf9564-66f",
+      "to": "1afdfbc3-c7f",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "8a2dfe5b-6fc",
+      "to": "a0bc3fd4-d4b",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "8a2dfe5b-6fc",
+      "to": "60ce01d3-027",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "8a2dfe5b-6fc",
+      "to": "f4e48bf3-23e",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "8a2dfe5b-6fc",
+      "to": "b36fa589-227",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "8a2dfe5b-6fc",
+      "to": "8357e4d4-bc6",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "8a2dfe5b-6fc",
+      "to": "b64775f3-b7a",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "8a2dfe5b-6fc",
+      "to": "1afdfbc3-c7f",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "744039e1-feb",
+      "to": "a0bc3fd4-d4b",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "744039e1-feb",
+      "to": "60ce01d3-027",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "744039e1-feb",
+      "to": "f4e48bf3-23e",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "744039e1-feb",
+      "to": "b36fa589-227",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "744039e1-feb",
+      "to": "8357e4d4-bc6",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "744039e1-feb",
+      "to": "b64775f3-b7a",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "744039e1-feb",
+      "to": "1afdfbc3-c7f",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "a0bc3fd4-d4b",
+      "to": "b36fa589-227",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "a0bc3fd4-d4b",
+      "to": "8357e4d4-bc6",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "a0bc3fd4-d4b",
+      "to": "b64775f3-b7a",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "a0bc3fd4-d4b",
+      "to": "1afdfbc3-c7f",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "60ce01d3-027",
+      "to": "b36fa589-227",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "60ce01d3-027",
+      "to": "8357e4d4-bc6",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "60ce01d3-027",
+      "to": "b64775f3-b7a",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "60ce01d3-027",
+      "to": "1afdfbc3-c7f",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "f4e48bf3-23e",
+      "to": "b36fa589-227",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "f4e48bf3-23e",
+      "to": "8357e4d4-bc6",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "f4e48bf3-23e",
+      "to": "b64775f3-b7a",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "f4e48bf3-23e",
+      "to": "1afdfbc3-c7f",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "b36fa589-227",
+      "to": "b64775f3-b7a",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "b36fa589-227",
+      "to": "1afdfbc3-c7f",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "8357e4d4-bc6",
+      "to": "b64775f3-b7a",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "8357e4d4-bc6",
+      "to": "1afdfbc3-c7f",
+      "type": "cross_domain",
+      "meta": {}
+    }
+  ],
+  "stats": {
+    "total": 32,
+    "edges": 179,
+    "by_status": {
+      "proposed": 30,
+      "under_review": 2
+    },
+    "domains": [
+      "category_theory",
+      "dynamical_systems",
+      "game_theory",
+      "information_geometry",
+      "proof_theory"
+    ]
+  }
+}

@@ -1,0 +1,91 @@
+DEFENSE SYSTEM GENE EXTRACTION - SUMMARY REPORT
+=====================================================
+
+Source File: categorized_sorted.json
+Analysis Date: 2025-02-25
+
+TOTAL RESULTS
+=============
+Total genes analyzed: 2473
+Total defense candidates identified: 417
+
+Breakdown by Confidence Level:
+- HIGH CONFIDENCE (score >= 7): 90 genes
+- MODERATE CONFIDENCE (score 3-6): 31 genes
+- LOW CONFIDENCE (score 1-2): 296 genes
+
+KEY SYSTEMS IDENTIFIED
+======================
+1. Type I Restriction-Modification (RM): 4 genes (score 23)
+   - ACWYRP_RS02015, RS02025, RS02030, RS02045
+   - Clustered on contig NZ_JBSROM010000004.1 (9.4 kb)
+
+2. Toxin-Antitoxin (TA) Systems: 3 genes (score 14)
+   - ACWYRP_RS05430 (HicB family antitoxin)
+   - ACWYRP_RS07815 (PemK/MazF family toxin)
+   - ACWYRP_RS10095 (RelE family toxin)
+
+3. Abortive Infection (Abi): 2 genes (score 10)
+   - ACWYRP_RS09185 (Abi family protein)
+   - ACWYRP_RS00840 (AbiU2 domain protein)
+
+4. Phage Holin/Defense: 4+ genes (score 21-22)
+   - ACWYRP_RS01865, RS08905, RS09070, RS09180
+
+5. Integrated Prophage: 25+ genes (score 13)
+   - Contig NZ_JBSROM010000005.1 (34 kb)
+   - Complete structural components (tail, capsid, portal, terminase)
+
+6. Anti-Restriction Protein: 1 gene (score 15)
+   - ACWYRP_RS09215 (ArdA protein)
+
+7. Generic Nucleases: 8+ genes (score 6-8)
+   - HNH endonuclease, PD-(D/E)XK nuclease, exonucleases
+
+OUTPUT FILES
+============
+CSV Files (for spreadsheet import):
+- defense_candidates_HIGH_CONFIDENCE.csv (90 records)
+- defense_candidates_MODERATE_CONFIDENCE.csv (31 records)
+
+JSON Files (structured data):
+- defense_candidates_extracted.json (complete database)
+
+Markdown Report:
+- DEFENSE_GENES_ANALYSIS.md (comprehensive analysis)
+
+TEXT Files:
+- defense_candidates_SUMMARY.txt (this file)
+
+NEXT STEPS
+==========
+1. HIGH PRIORITY: Validate Type I RM system (RS02015/25/30/45)
+   - Heterologous expression
+   - Methylation pattern analysis
+   - Recognition site identification
+
+2. MEDIUM PRIORITY: Characterize TA systems and Abi proteins
+   - Biochemical assays
+   - Phage interaction studies
+
+3. DISCOVERY: Analyze DUF domains and hypothetical proteins
+   - BLAST against defense databases
+   - Domain annotation (PFAM/InterPro)
+
+METHODOLOGY
+===========
+Scoring System (0-23 points):
+- Explicit keywords (restriction, RM, TA, Abi, phage): 10 pts
+- Molecular function (nuclease, endonuclease): 8 pts
+- Category match (defense classification): 5 pts
+- Domain analysis (DUF, HTH, nuclease folds): 2-7 pts
+- Genomic context (defense operon proximity): 1-2 pts
+
+Filtering:
+- Excluded ribosomal RNA/tRNA methyltransferases
+- Excluded standard DNA repair (unless in defense clusters)
+- Included all generic nucleases as potential defense components
+
+CONTACT
+=======
+Analysis extracted from: /sessions/stoic-gifted-davinci/mnt/rh.1/rhea-applied-backlog/genetics/h32_02_analysis/categorized_sorted.json

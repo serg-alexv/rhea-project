@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Ontology Method — Human-Friendly Explainer</title>
+<style>
+  :root { --navy: #1F3864; --blue: #2E75B6; --green: #2E7D32; --red: #C62828; --gold: #B8860B; --bg: #FAFBFD; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); color: #222; line-height: 1.6; }
+  .container { max-width: 900px; margin: 0 auto; padding: 24px; }
+  .lang-toggle { text-align: center; margin: 20px 0; }
+  .lang-toggle button { padding: 10px 28px; margin: 0 8px; border: 2px solid var(--navy); border-radius: 6px;
+    background: white; color: var(--navy); font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+  .lang-toggle button.active { background: var(--navy); color: white; }
+  .lang-toggle button:hover { opacity: 0.85; }
+  h1 { color: var(--navy); font-size: 26px; text-align: center; margin: 10px 0 6px; }
+  .subtitle { color: #666; text-align: center; font-style: italic; margin-bottom: 28px; font-size: 14px; }
+  .bridge { background: white; border-radius: 10px; padding: 20px 24px; margin-bottom: 18px;
+    border-left: 5px solid var(--blue); box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+  .bridge h2 { color: var(--blue); font-size: 18px; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
+  .bridge h2 .num { background: var(--navy); color: white; width: 28px; height: 28px; border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+  .bridge p { font-size: 14.5px; margin-bottom: 8px; }
+  .bridge .example { background: #F0F4FA; border-radius: 6px; padding: 12px 16px; margin-top: 10px; font-size: 13.5px; }
+  .bridge .example strong { color: var(--navy); }
+  .arrow-chain { display: flex; align-items: center; justify-content: center; gap: 6px; flex-wrap: wrap;
+    margin: 10px 0; font-size: 13px; font-weight: 600; }
+  .arrow-chain .node { background: var(--navy); color: white; padding: 4px 10px; border-radius: 4px; }
+  .arrow-chain .arr { color: var(--gold); font-size: 18px; }
+  .verdict { background: linear-gradient(135deg, #1F3864 0%, #2E75B6 100%); color: white;
+    border-radius: 10px; padding: 20px 24px; margin-top: 20px; }
+  .verdict h2 { color: white; margin-bottom: 10px; font-size: 18px; }
+  .verdict p { font-size: 14.5px; opacity: 0.95; }
+  .footer { text-align: center; color: #999; font-size: 12px; margin-top: 24px; }
+  .hidden { display: none; }
+  .rihc-connection { background: #FFF8E1; border-left-color: var(--gold); }
+  .rihc-connection h2 { color: var(--gold); }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="lang-toggle">
+  <button id="btn-en" class="active" onclick="showLang('en')">English</button>
+  <button id="btn-ru" onclick="showLang('ru')">Русский</button>
+</div>
+
+<!-- ===== ENGLISH ===== -->
+<div id="lang-en">
+<h1>The Ontology Method: Logical Bridges</h1>
+<div class="subtitle">How Rhea exploits the incompleteness of formal systems to discover hidden biological truths</div>
+
+<div class="bridge">
+  <h2><span class="num">1</span> The Blind Men and the Elephant</h2>
+  <p>Every biological database is like a blind man touching a different part of an elephant. PGAP feels the trunk (gene prediction). BLAST feels the leg (sequence similarity). KEGG feels the tail (metabolic pathways). UniProt feels the ear (protein function). <strong>None sees the whole animal.</strong></p>
+  <p>The ontology method = stepping back and watching <em>all the blind men at once</em>. When three of them agree that there's a leg where the fourth insists there's a wing — you've found a discovery.</p>
+</div>
+
+<div class="bridge">
+  <h2><span class="num">2</span> Maps vs. Territory</h2>
+  <p>Every annotation database is a <strong>map</strong> of biology, not biology itself. A subway map shows connections but distorts distances. A topographic map shows elevation but hides train routes. Every map lies — just about different things.</p>
+  <p>The ontology method = using ALL maps simultaneously and trusting only what appears on <strong>multiple maps from different cartographic traditions</strong>. If something shows up on the subway map, the topographic map, AND the satellite image — it's real. If it only appears on one — it might be a cartographic artifact.</p>
+</div>
+
+<div class="bridge">
+  <h2><span class="num">3</span> Lost-in-Translation Discovery</h2>
+  <p>Japanese has the word <em>komorebi</em> (木漏れ日) — sunlight filtering through leaves. English has no single word for this. If you only speak English, that concept <strong>doesn't exist for you</strong>.</p>
+  <p>The ontology method = learning to "speak" PGAP, BLAST, KEGG, and UniProt simultaneously. When PGAP says "I don't see anything here" but KEGG says "there's a complete metabolic pathway" — you've found a <em>komorebi</em>: a truth that exists in one formal language but is invisible in another.</p>
+</div>
+
+<div class="bridge">
+  <h2><span class="num">4</span> The Gödelian Breach</h2>
+  <p>In 1931, Gödel proved something shattering: <strong>any sufficiently powerful formal system contains true statements that it cannot prove.</strong> This isn't a bug — it's a mathematical law.</p>
+  <p>Applied to biology: PGAP is a formal system. It contains true biological facts that <em>it cannot annotate</em>. The ONLY way to find those facts is to step OUTSIDE PGAP into a different formal system. This is the Gödelian Breach — using the <strong>incompleteness of each system as a discovery tool</strong>.</p>
+  <div class="example">
+    <strong>Not the claim:</strong> "PGAP is broken."<br>
+    <strong>The actual claim:</strong> "PGAP is incomplete — and the gaps are <em>predictable</em> and <em>exploitable</em> because incompleteness is structured, not random."
+  </div>
+</div>
+
+<div class="bridge">
+  <h2><span class="num">5</span> The Post-Einstein Frame</h2>
+  <p>Einstein spent decades trying to build a single Theory of Everything. He failed — because no single formal framework can capture all of physics. The "post-Einstein" insight is: <strong>stop trying to extend one theory. Instead, triangulate across multiple incomplete theories.</strong></p>
+  <p>In Rhea, this means: don't trust PGAP more. Don't build a better PGAP. Instead, overlay PGAP + BLAST + KEGG + UniProt + InterPro and look at <strong>where they disagree</strong>. Disagreements aren't noise — they're signals. They mark the boundaries where each formal system's "Gödel blind spot" lives.</p>
+</div>
+
+<div class="bridge rihc-connection">
+  <h2><span class="num">★</span> Concrete Example: The ndh Gene</h2>
+  <p>Here's how it worked in practice for the <em>Leuconostoc mesenteroides</em> H32-02 genome:</p>
+  <div class="arrow-chain">
+    <span class="node">PGAP</span><span class="arr">→</span><span>says "NAD(P)H-quinone oxidoreductase subunit H"</span>
+  </div>
+  <div class="arrow-chain">
+    <span class="node">Human</span><span class="arr">→</span><span>impossible! This bacterium is anaerobic!</span>
+  </div>
+  <div class="arrow-chain">
+    <span class="node">BLAST</span><span class="arr">→</span><span>100% identity to LEUM_0224 (known Leuconostoc gene)</span>
+  </div>
+  <div class="arrow-chain">
+    <span class="node">KEGG</span><span class="arr">→</span><span>ndh — single-subunit NADH dehydrogenase, NOT Complex I</span>
+  </div>
+  <div class="arrow-chain">
+    <span class="node">UniProt</span><span class="arr">→</span><span>confirms: electron shuttle, not aerobic respiration</span>
+  </div>
+  <p style="margin-top:12px"><strong>Result:</strong> PGAP's ontology mapped the gene to the wrong functional category (aerobic respiration). Three other ontologies converge on the true function (electron redox shuttle). The biology was <em>invisible</em> within PGAP alone — it emerged only when viewed through multiple formal systems.</p>
+</div>
+
+<div class="bridge rihc-connection">
+  <h2><span class="num">★</span> Applied to This Thesis: RihC Anti-Biofilm</h2>
+  <p>The same principle applies to the RihC mechanistic puzzle. Each "ontology" sees a different piece:</p>
+  <div class="arrow-chain">
+    <span class="node">Enzymology</span><span class="arr">→</span><span>RihC hydrolyzes pyrimidine nucleosides (uridine, cytidine)</span>
+  </div>
+  <div class="arrow-chain">
+    <span class="node">Microbiology</span><span class="arr">→</span><span>no direct antibacterial effect, but anti-biofilm in Gram-negatives only</span>
+  </div>
+  <div class="arrow-chain">
+    <span class="node">Signaling</span><span class="arr">→</span><span>c-di-GMP (biofilm master switch) requires GTP from nucleotide pools</span>
+  </div>
+  <div class="arrow-chain">
+    <span class="node">Literature</span><span class="arr">→</span><span>Ravishankar 2024: pyrimidine depletion → RpoS/Fis → curli collapse</span>
+  </div>
+  <p style="margin-top:12px"><strong>The "Gödelian truth":</strong> Within enzymology alone, RihC is "just a hydrolase." Within microbiology alone, the effect is "puzzling." Only by overlaying enzymology + microbiology + signaling + literature does the full cascade appear: extracellular pyrimidine desert → salvage starvation → c-di-GMP collapse → biofilm dissolution.</p>
+</div>
+
+<div class="verdict">
+  <h2>The Core Logic</h2>
+  <p>The ontology method doesn't build a better single system. It exploits the <em>structured incompleteness</em> of all existing systems. Every formal system has Gödelian blind spots — truths it cannot see. By overlaying multiple systems, you create a composite view where each system's blind spots are illuminated by another system's strengths. The disagreements between systems are not errors to be resolved — they are <strong>discovery signals</strong> pointing to hidden biological truths.</p>
+</div>
+</div>
+
+<!-- ===== RUSSIAN ===== -->
+<div id="lang-ru" class="hidden">
+<h1>Онтологический метод: логические мосты</h1>
+<div class="subtitle">Как Rhea использует неполноту формальных систем для обнаружения скрытых биологических истин</div>
+
+<div class="bridge">
+  <h2><span class="num">1</span> Слепцы и слон</h2>
+  <p>Каждая биологическая база данных — это слепой, ощупывающий свою часть слона. PGAP щупает хобот (предсказание генов). BLAST щупает ногу (сходство последовательностей). KEGG щупает хвост (метаболические пути). UniProt щупает ухо (функция белка). <strong>Никто не видит целого животного.</strong></p>
+  <p>Онтологический метод = отойти назад и увидеть <em>всех слепцов одновременно</em>. Когда трое говорят «тут нога», а четвёртый настаивает «тут крыло» — вы нашли открытие.</p>
+</div>
+
+<div class="bridge">
+  <h2><span class="num">2</span> Карта vs. территория</h2>
+  <p>Каждая база аннотаций — это <strong>карта</strong> биологии, а не сама биология. Схема метро показывает связи, но искажает расстояния. Топографическая карта показывает высоту, но скрывает маршруты поездов. Каждая карта врёт — но о разном.</p>
+  <p>Онтологический метод = использование ВСЕХ карт одновременно, доверяя только тому, что появляется на <strong>нескольких картах из разных картографических традиций</strong>. Если объект виден и на схеме метро, и на топографии, и на спутниковом снимке — он реален. Если только на одной — возможно, это артефакт.</p>
+</div>
+
+<div class="bridge">
+  <h2><span class="num">3</span> Открытие через «потерю в переводе»</h2>
+  <p>В японском есть слово <em>комореби</em> (木漏れ日) — свет, проникающий сквозь листву. В русском нет одного слова для этого. Если вы говорите только по-русски — этого понятия <strong>для вас не существует</strong>.</p>
+  <p>Онтологический метод = научиться «говорить» на PGAP, BLAST, KEGG и UniProt одновременно. Когда PGAP говорит «тут ничего нет», а KEGG показывает полный метаболический путь — вы нашли <em>комореби</em>: истину, существующую в одном формальном языке, но невидимую в другом.</p>
+</div>
+
+<div class="bridge">
+  <h2><span class="num">4</span> Гёделевский прорыв</h2>
+  <p>В 1931 году Гёдель доказал нечто потрясающее: <strong>любая достаточно мощная формальная система содержит истинные утверждения, которые она не может доказать.</strong> Это не баг — это математический закон.</p>
+  <p>Применительно к биологии: PGAP — формальная система. Она содержит истинные биологические факты, которые <em>не может аннотировать</em>. ЕДИНСТВЕННЫЙ способ найти эти факты — выйти ЗА ПРЕДЕЛЫ PGAP в другую формальную систему. Это и есть Гёделевский прорыв — использование <strong>неполноты каждой системы как инструмента открытий</strong>.</p>
+  <div class="example">
+    <strong>Не утверждается:</strong> «PGAP сломана.»<br>
+    <strong>Утверждается:</strong> «PGAP неполна — и её пробелы <em>предсказуемы</em> и <em>эксплуатируемы</em>, потому что неполнота структурирована, а не случайна.»
+  </div>
+</div>
+
+<div class="bridge">
+  <h2><span class="num">5</span> Пост-эйнштейновская рамка</h2>
+  <p>Эйнштейн десятилетиями пытался построить единую Теорию Всего. Не удалось — потому что ни одна формальная система не может охватить всю физику. «Пост-эйнштейновское» озарение: <strong>перестаньте расширять одну теорию. Вместо этого триангулируйте по нескольким неполным теориям.</strong></p>
+  <p>В Rhea это значит: не улучшайте PGAP. Наложите PGAP + BLAST + KEGG + UniProt + InterPro и смотрите, <strong>где они расходятся</strong>. Расхождения — не шум, а сигналы. Они маркируют границы, где живут «гёделевские слепые пятна» каждой формальной системы.</p>
+</div>
+
+<div class="bridge rihc-connection">
+  <h2><span class="num">★</span> Конкретный пример: ген ndh</h2>
+  <p>Вот как это работает на практике для генома <em>Leuconostoc mesenteroides</em> H32-02:</p>
+  <div class="arrow-chain">
+    <span class="node">PGAP</span><span class="arr">→</span><span>говорит: «NAD(P)H-хиноноксидоредуктаза субъединица H»</span>
+  </div>
+  <div class="arrow-chain">
+    <span class="node">Человек</span><span class="arr">→</span><span>невозможно! Эта бактерия анаэробная!</span>
+  </div>
+  <div class="arrow-chain">
+    <span class="node">BLAST</span><span class="arr">→</span><span>100% идентичность с LEUM_0224 (известный ген Leuconostoc)</span>
+  </div>
+  <div class="arrow-chain">
+    <span class="node">KEGG</span><span class="arr">→</span><span>ndh — одиночная НАДН-дегидрогеназа, НЕ Комплекс I</span>
+  </div>
+  <div class="arrow-chain">
+    <span class="node">UniProt</span><span class="arr">→</span><span>подтверждает: электронный шаттл, не аэробное дыхание</span>
+  </div>
+  <p style="margin-top:12px"><strong>Результат:</strong> Онтология PGAP отнесла ген к неправильной функциональной категории (аэробное дыхание). Три другие онтологии сходятся на истинной функции (электронный редокс-шаттл). Биология была <em>невидима</em> внутри одной только PGAP — она проявилась только при взгляде через несколько формальных систем.</p>
+</div>
+
+<div class="bridge rihc-connection">
+  <h2><span class="num">★</span> Применение к диссертации: антибиоплёночный эффект RihC</h2>
+  <p>Тот же принцип работает для механистической загадки RihC. Каждая «онтология» видит свой фрагмент:</p>
+  <div class="arrow-chain">
+    <span class="node">Энзимология</span><span class="arr">→</span><span>RihC гидролизует пиримидиновые нуклеозиды (уридин, цитидин)</span>
+  </div>
+  <div class="arrow-chain">
+    <span class="node">Микробиология</span><span class="arr">→</span><span>нет прямого антибактериального эффекта, но антибиоплёночный только у грамотрицательных</span>
+  </div>
+  <div class="arrow-chain">
+    <span class="node">Сигналинг</span><span class="arr">→</span><span>c-di-GMP (главный переключатель биоплёнки) требует ГТФ из нуклеотидных пулов</span>
+  </div>
+  <div class="arrow-chain">
+    <span class="node">Литература</span><span class="arr">→</span><span>Ravishankar 2024: пиримидиновое голодание → RpoS/Fis → разрушение курли</span>
+  </div>
+  <p style="margin-top:12px"><strong>«Гёделевская истина»:</strong> Внутри одной энзимологии RihC — «просто гидролаза». Внутри одной микробиологии эффект «загадочен». Только при наложении энзимологии + микробиологии + сигналинга + литературы проявляется полный каскад: внеклеточная пиримидиновая пустыня → голодание пути спасения → коллапс c-di-GMP → растворение биоплёнки.</p>
+</div>
+
+<div class="verdict">
+  <h2>Суть метода</h2>
+  <p>Онтологический метод не строит лучшую единую систему. Он эксплуатирует <em>структурированную неполноту</em> всех существующих систем. У каждой формальной системы есть гёделевские слепые пятна — истины, которых она не видит. Накладывая несколько систем, мы создаём составную картину, где слепые пятна каждой системы освещены сильными сторонами другой. Расхождения между системами — не ошибки, которые надо исправить, а <strong>сигналы открытий</strong>, указывающие на скрытые биологические истины.</p>
+</div>
+</div>
+
+<div class="footer">Rhea Advisory System — Ontology Method Explainer v1.0</div>
+</div>
+
+<script>
+function showLang(lang) {
+  document.getElementById('lang-en').classList.toggle('hidden', lang !== 'en');
+  document.getElementById('lang-ru').classList.toggle('hidden', lang !== 'ru');
+  document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+  document.getElementById('btn-ru').classList.toggle('active', lang === 'ru');
+}
+</script>
+</body>
+</html>

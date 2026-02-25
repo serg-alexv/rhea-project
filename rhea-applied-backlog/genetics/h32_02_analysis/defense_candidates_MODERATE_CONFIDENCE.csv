@@ -1,0 +1,32 @@
+locus_tag,function,length,contig,start,end,strand,category,defense_score,reasoning
+ACWYRP_RS02285,single-stranded-DNA-specific exonuclease RecJ,1968,NZ_JBSROM010000004.1,76821,78788,+,Homologous recombination,6,Generic nuclease - potential defense system nuclease
+ACWYRP_RS00420,3'-5' exoribonuclease YhaM family protein,951,NZ_JBSROM010000001.1,89841,90791,-,Sugar-specific metabolism,6,Generic nuclease - potential defense system nuclease
+ACWYRP_RS01985,exodeoxyribonuclease III,819,NZ_JBSROM010000004.1,9677,10495,-,Sugar-specific metabolism,6,Generic nuclease - potential defense system nuclease
+ACWYRP_RS06800,exodeoxyribonuclease VII large subunit,1278,NZ_JBSROM010000023.1,13999,15276,+,Sugar-specific metabolism,6,Generic nuclease - potential defense system nuclease
+ACWYRP_RS06805,exodeoxyribonuclease VII small subunit,225,NZ_JBSROM010000023.1,15269,15493,+,Sugar-specific metabolism,6,Generic nuclease - potential defense system nuclease
+ACWYRP_RS07875,Mini-ribonuclease 3,408,NZ_JBSROM010000030.1,14496,14903,-,Sugar-specific metabolism,6,Generic nuclease - potential defense system nuclease
+ACWYRP_RS01040,ribonuclease HI family protein,384,NZ_JBSROM010000002.1,29274,29657,-,Sugar-specific metabolism,6,Generic nuclease - potential defense system nuclease
+ACWYRP_RS00250,ribonuclease HII,762,NZ_JBSROM010000001.1,54190,54951,-,Sugar-specific metabolism,6,Generic nuclease - potential defense system nuclease
+ACWYRP_RS07015,ribonuclease HIII,912,NZ_JBSROM010000024.1,20000,20911,-,Sugar-specific metabolism,6,Generic nuclease - potential defense system nuclease
+ACWYRP_RS06695,ribonuclease III,711,NZ_JBSROM010000022.1,25427,26137,+,Sugar-specific metabolism,6,Generic nuclease - potential defense system nuclease
+ACWYRP_RS05865,ribonuclease J,1830,NZ_JBSROM010000017.1,23673,25502,+,Sugar-specific metabolism,6,Generic nuclease - potential defense system nuclease
+ACWYRP_RS06710,ribonuclease J1,1683,NZ_JBSROM010000023.1,634,2316,-,Sugar-specific metabolism,6,Generic nuclease - potential defense system nuclease
+ACWYRP_RS06750,ribonuclease M5,570,NZ_JBSROM010000023.1,6214,6783,+,Sugar-specific metabolism,6,Generic nuclease - potential defense system nuclease
+ACWYRP_RS05955,ribonuclease P protein component,351,NZ_JBSROM010000018.1,4348,4698,-,Sugar-specific metabolism,6,Generic nuclease - potential defense system nuclease
+ACWYRP_RS06990,ribonuclease R,2325,NZ_JBSROM010000024.1,14420,16744,+,Sugar-specific metabolism,6,Generic nuclease - potential defense system nuclease
+ACWYRP_RS07000,ribonuclease Y,1557,NZ_JBSROM010000024.1,17356,18912,+,Sugar-specific metabolism,6,Generic nuclease - potential defense system nuclease
+ACWYRP_RS02280,ribonuclease Z,957,NZ_JBSROM010000004.1,75878,76834,+,Sugar-specific metabolism,6,Generic nuclease - potential defense system nuclease
+ACWYRP_RS01370,RusA family crossover junction endodeoxyribonuclease,432,NZ_JBSROM010000002.1,81875,82306,+,Sugar-specific metabolism,6,Generic nuclease - potential defense system nuclease
+ACWYRP_RS02470,RusA family crossover junction endodeoxyribonuclease,426,NZ_JBSROM010000005.1,23099,23524,-,Sugar-specific metabolism,6,Generic nuclease - potential defense system nuclease
+ACWYRP_RS00995,exonuclease domain-containing protein,2394,NZ_JBSROM010000002.1,19625,22018,+,Hypothetical/uncharacterized proteins,6,Generic nuclease - potential defense system nuclease
+ACWYRP_RS03155,GIY-YIG nuclease family protein,264,NZ_JBSROM010000006.1,71991,72254,-,Hypothetical/uncharacterized proteins,6,Generic nuclease - potential defense system nuclease
+ACWYRP_RS02245,PD-(D/E)XK nuclease family protein,3480,NZ_JBSROM010000004.1,65081,68560,+,Hypothetical/uncharacterized proteins,6,Generic nuclease - potential defense system nuclease
+ACWYRP_RS07650,PD-(D/E)XK nuclease family protein,759,NZ_JBSROM010000029.1,3391,4149,-,Hypothetical/uncharacterized proteins,6,Generic nuclease - potential defense system nuclease
+ACWYRP_RS01980,3'-5' exonuclease,534,NZ_JBSROM010000004.1,9108,9641,+,Uncategorized,6,Generic nuclease - potential defense system nuclease
+ACWYRP_RS01360,putative HNHc nuclease,702,NZ_JBSROM010000002.1,80880,81581,+,Uncategorized,6,Generic nuclease - potential defense system nuclease
+ACWYRP_RS02475,putative HNHc nuclease,702,NZ_JBSROM010000005.1,23631,24332,-,Uncategorized,6,Generic nuclease - potential defense system nuclease
+ACWYRP_RS09365,integrase core domain-containing protein,333,NZ_JBSROM010000056.1,2435,2767,+,Phage/integrase/mobile elements,5,Category: 'Phage/integrase/mobile elements' - defense-related
+ACWYRP_RS01255,site-specific integrase,1068,NZ_JBSROM010000002.1,70932,71999,-,Phage/integrase/mobile elements,5,Category: 'Phage/integrase/mobile elements' - defense-related
+ACWYRP_RS07720,site-specific integrase,1047,NZ_JBSROM010000029.1,9774,10820,+,Phage/integrase/mobile elements,5,Category: 'Phage/integrase/mobile elements' - defense-related
+ACWYRP_RS02560,tyrosine-type recombinase/integrase,1077,NZ_JBSROM010000005.1,32697,33773,+,Phage/integrase/mobile elements,5,Category: 'Phage/integrase/mobile elements' - defense-related
+ACWYRP_RS09410,tyrosine-type recombinase/integrase,875,NZ_JBSROM010000057.1,3625,4499,+,Phage/integrase/mobile elements,5,Category: 'Phage/integrase/mobile elements' - defense-related

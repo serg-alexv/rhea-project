@@ -29,6 +29,26 @@ class PulseButtonsApp:
         self._add_btn(top, "Drain LEAD", ["python3", "ops/rex_pager.py", "drain", "LEAD"])
         self._add_btn(top, "Drain REX", ["python3", "ops/rex_pager.py", "drain", "REX"])
 
+        launch = tk.Frame(root)
+        launch.pack(fill=tk.X, padx=8, pady=(0, 8))
+        tk.Label(launch, text="Launch watcher:").pack(side=tk.LEFT)
+        self.user_entry = tk.Entry(launch, width=10)
+        self.user_entry.pack(side=tk.LEFT, padx=(8, 8))
+        self.user_entry.insert(0, "mika")
+        self.agent_entry = tk.Entry(launch, width=14)
+        self.agent_entry.pack(side=tk.LEFT, padx=(8, 8))
+        self.agent_entry.insert(0, "gpt")
+        tk.Button(launch, text="Start", command=self.start_from_entry).pack(side=tk.LEFT, padx=(0, 8))
+        tk.Button(launch, text="GPT", command=lambda: self.start_agent_watch("gpt")).pack(side=tk.LEFT, padx=(0, 8))
+        tk.Button(launch, text="ORION", command=lambda: self.start_agent_watch("orion")).pack(side=tk.LEFT, padx=(0, 8))
+        tk.Button(launch, text="CLAUDE", command=lambda: self.start_agent_watch("claude")).pack(side=tk.LEFT, padx=(0, 8))
+        tk.Button(launch, text="SONNET", command=lambda: self.start_agent_watch("sonnet")).pack(side=tk.LEFT, padx=(0, 8))
+        tk.Button(launch, text="SONETTE", command=lambda: self.start_agent_watch("sonette")).pack(side=tk.LEFT, padx=(0, 8))
+        tk.Button(launch, text="GEMINI", command=lambda: self.start_agent_watch("gemini")).pack(side=tk.LEFT, padx=(0, 8))
+        tk.Button(launch, text="GEMINI-FLASH", command=lambda: self.start_agent_watch("gemini-flash")).pack(side=tk.LEFT, padx=(0, 8))
+        tk.Button(launch, text="GEMINI-PRO", command=lambda: self.start_agent_watch("gemini-pro")).pack(side=tk.LEFT, padx=(0, 8))
+        tk.Button(launch, text="HYPERION", command=lambda: self.start_agent_watch("hyperion")).pack(side=tk.LEFT, padx=(0, 8))
+
         msg = tk.Frame(root)
         msg.pack(fill=tk.X, padx=8, pady=(0, 8))
 
@@ -71,6 +91,39 @@ class PulseButtonsApp:
                 self.root.after(0, lambda: self.append(f"ERROR: {exc}"))
 
         threading.Thread(target=worker, daemon=True).start()
+
+    def start_from_entry(self) -> None:
+        agent = self.agent_entry.get().strip().lower()
+        user = self.user_entry.get().strip().lower()
+        if not user:
+            self.append("User id is empty.")
+            return
+        if not agent:
+            self.append("Agent id is empty.")
+            return
+        self.start_agent_watch(agent, user=user)
+
+    def start_agent_watch(self, agent: str, user: str = "mika") -> None:
+        run_sh = REPO / "team" / "users" / user / "agents" / agent / "run.sh"
+        if not run_sh.exists():
+            self.append(f"Missing run script: {run_sh}")
+            return
+        log_dir = REPO / "team" / "logs"
+        log_dir.mkdir(parents=True, exist_ok=True)
+        launch_log = log_dir / f"{user}.{agent}.launcher.log"
+        self.append(f"$ {run_sh}")
+        try:
+            with open(launch_log, "a", encoding="utf-8") as f:
+                proc = subprocess.Popen(
+                    [str(run_sh)],
+                    cwd=REPO,
+                    stdout=f,
+                    stderr=subprocess.STDOUT,
+                    start_new_session=True,
+                )
+            self.append(f"started {user}/{agent} watcher pid={proc.pid}")
+        except Exception as exc:
+            self.append(f"ERROR: {exc}")
 
     def send_to_rex(self) -> None:
         text = self.entry.get().strip()

@@ -13,6 +13,13 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 REPO = HERE.parents[1]
+OFFICE_CANDIDATES = (
+    HERE / "OFFICE.md",
+    REPO / "team" / "OFFICE.md",
+    REPO / "teams" / "OFFICE.md",
+)
+DEFAULT_SENDER = "MIKA"
+DEFAULT_TARGETS = ("REX", "GPT", "LEAD", "ORION", "B2", "COWORK", "TEAMLEAD")
 
 
 def safe_add(stdscr: "curses._CursesWindow", y: int, x: int, text: str) -> None:
@@ -37,6 +44,60 @@ def _ts_to_age_minutes(ts: str) -> float:
     return max(0.0, (datetime.now(timezone.utc) - dt).total_seconds() / 60.0)
 
 
+def _read_jsonl(path: Path) -> list[dict]:
+    if not path.exists():
+        return []
+    rows: list[dict] = []
+    for raw in path.read_text().splitlines():
+        line = raw.strip()
+        if not line:
+            continue
+        try:
+            obj = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        if isinstance(obj, dict):
+            rows.append(obj)
+    return rows
+
+
+def _read_model_map(path: Path) -> dict[str, str]:
+    if not path.exists():
+        return {}
+    lines = path.read_text().splitlines()
+    start = -1
+    for i, line in enumerate(lines):
+        if line.strip().lower().startswith("| desk |") and "| model |" in line.lower():
+            start = i + 2
+            break
+    if start < 0:
+        return {}
+    models: dict[str, str] = {}
+    for line in lines[start:]:
+        row = line.strip()
+        if not row.startswith("|"):
+            break
+        cols = [c.strip() for c in row.strip("|").split("|")]
+        if len(cols) < 3:
+            continue
+        desk = cols[0].upper()
+        model = cols[2]
+        if not desk or desk in {"DESK", "—", "-"}:
+            continue
+        if model:
+            models[desk] = model
+    return models
+
+
+def _read_model_map_sources(paths: tuple[Path, ...]) -> dict[str, str]:
+    # Merge model maps from all existing office files; later files override earlier.
+    merged: dict[str, str] = {}
+    for path in paths:
+        if path.exists():
+            merged.update(_read_model_map(path))
+    return merged
+
+
 def gather() -> dict:
     mailbox = HERE / "relay_mailbox.jsonl"
     acks = HERE / "relay_acks.jsonl"
@@ -45,27 +106,32 @@ def gather() -> dict:
 
     total, pending = 0, 0
     by_target: Counter[str] = Counter()
-    if mailbox.exists():
-        for line in mailbox.read_text().splitlines():
-            if not line.strip():
-                continue
-            total += 1
-            msg = json.loads(line)
-            if msg.get("status") == "pending":
-                pending += 1
-                by_target[msg.get("target", "?")] += 1
+    mailbox_rows = _read_jsonl(mailbox)
+    ack_rows = _read_jsonl(acks)
+    acked_ids = {str(row.get("message_id")) for row in ack_rows if row.get("message_id")}
 
-    acked = 0
-    if acks.exists():
-        acked = sum(1 for ln in acks.read_text().splitlines() if ln.strip())
+    total = len(mailbox_rows)
+    for msg in mailbox_rows:
+        msg_id = str(msg.get("id", ""))
+        if msg_id and msg_id in acked_ids:
+            continue
+        pending += 1
+        by_target[msg.get("target", "?")] += 1
+    acked = max(0, total - pending)
 
     last_chain = "n/a"
     if chain.exists():
-        lines = [ln for ln in chain.read_text().splitlines() if ln.strip()]
-        if lines:
-            obj = json.loads(lines[-1])
+        for line in reversed(chain.read_text().splitlines()):
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                obj = json.loads(line)
+            except json.JSONDecodeError:
+                continue
             age = _ts_to_age_minutes(obj.get("timestamp", ""))
             last_chain = f"{age:.1f}m ago" if age >= 0 else "unknown"
+            break
 
     leases = []
     now = datetime.now(timezone.utc)
@@ -80,6 +146,7 @@ def gather() -> dict:
 
     failures = sorted((HERE / "inbox").glob("WATCHER_*_REX_FAILURE.md"))
     last_failure = failures[-1].name if failures else "none"
+    model_map = _read_model_map_sources(OFFICE_CANDIDATES)
 
     return {
         "seq": seq,
@@ -90,16 +157,69 @@ def gather() -> dict:
         "last_chain": last_chain,
         "leases": leases,
         "last_failure": last_failure,
+        "model_map": model_map,
     }
 
 
-def run_action(args: list[str]) -> str:
+def run_action_detail(args: list[str]) -> tuple[int, str]:
     try:
         out = subprocess.run(args, cwd=REPO, capture_output=True, text=True, timeout=12, check=False)
         text = (out.stdout or out.stderr or "").strip().splitlines()
-        return text[0] if text else "ok"
+        return out.returncode, (text[0] if text else "ok")
     except Exception as exc:
-        return f"error: {exc}"
+        return 1, f"error: {exc}"
+
+
+def run_action(args: list[str]) -> str:
+    _code, line = run_action_detail(args)
+    return line
+
+
+def build_send_cmd(sender: str, target: str, body: str, with_params: bool) -> list[str]:
+    cmd = ["python3", "ops/rex_pager.py", "send", sender, target, body]
+    if with_params:
+        cmd.extend(["--priority", "P1", "--ttl", "86400"])
+    return cmd
+
+
+def discover_targets(data: dict, sender: str) -> list[str]:
+    targets = {t for t in DEFAULT_TARGETS}
+    for agent, _token, _secs in data.get("leases", []):
+        targets.add(str(agent).upper())
+    for target in data.get("by_target", {}):
+        targets.add(str(target).upper())
+    sender_norm = sender.upper()
+    return sorted(t for t in targets if t and t != sender_norm)
+
+
+def prompt_line(stdscr: "curses._CursesWindow", prompt: str) -> str:
+    h, w = stdscr.getmaxyx()
+    y = max(0, h - 2)
+    safe_add(stdscr, y, 0, " " * max(0, w - 1))
+    safe_add(stdscr, y, 0, prompt)
+    stdscr.refresh()
+    x = min(max(0, len(prompt)), max(0, w - 2))
+    max_len = max(1, w - x - 2)
+    try:
+        stdscr.nodelay(False)
+        curses.echo()
+        try:
+            curses.curs_set(1)
+        except curses.error:
+            pass
+        raw = stdscr.getstr(y, x, max_len)
+        text = raw.decode("utf-8", "ignore").strip() if raw else ""
+    except Exception:
+        text = ""
+    finally:
+        curses.noecho()
+        stdscr.nodelay(True)
+        try:
+            curses.curs_set(0)
+        except curses.error:
+            pass
+        safe_add(stdscr, y, 0, " " * max(0, w - 1))
+    return text
 
 
 def draw(stdscr: "curses._CursesWindow") -> None:
@@ -109,6 +229,8 @@ def draw(stdscr: "curses._CursesWindow") -> None:
         pass
     stdscr.nodelay(True)
     last_action = "ready"
+    sender = DEFAULT_SENDER
+    send_with_params = True
     while True:
         data = gather()
         stdscr.erase()
@@ -124,19 +246,28 @@ def draw(stdscr: "curses._CursesWindow") -> None:
         safe_add(stdscr, 4, 0, f"last watcher REX failure: {data['last_failure']}")
         safe_add(stdscr, 6, 0, "Pending by target:")
         row = 7
+        model_map = data.get("model_map", {})
         for target, cnt in data["by_target"].most_common(8):
-            safe_add(stdscr, row, 2, f"- {target}: {cnt}")
+            model = model_map.get(str(target).upper(), "?")
+            safe_add(stdscr, row, 2, f"- {target:8} ({model}): {cnt}")
             row += 1
         row += 1
         safe_add(stdscr, row, 0, "Leases:")
         row += 1
         for agent, token, secs in data["leases"][:8]:
             state = "OK" if secs > 0 else "EXPIRED"
-            safe_add(stdscr, row, 2, f"- {agent:8} token={token:<4} expires_in={secs:>6}s {state}")
+            model = model_map.get(str(agent).upper(), "?")
+            safe_add(stdscr, row, 2, f"- {agent:8} ({model}) token={token:<4} expires_in={secs:>6}s {state}")
             row += 1
         row += 1
-        safe_add(stdscr, row, 0, "Keys: [r] wake REX  [g] drain GPT  [s] status  [q] quit")
-        safe_add(stdscr, row + 1, 0, f"last action: {last_action}")
+        safe_add(
+            stdscr,
+            row,
+            0,
+            "Keys: [r] wake REX  [g] drain GPT  [s] status  [m] send  [b] broadcast  [u] sender  [p] params  [q] quit",
+        )
+        params_checkbox = "[x]" if send_with_params else "[ ]"
+        safe_add(stdscr, row + 1, 0, f"sender={sender}  params={params_checkbox}  last action: {last_action}")
         stdscr.refresh()
 
         key = stdscr.getch()
@@ -148,6 +279,48 @@ def draw(stdscr: "curses._CursesWindow") -> None:
             last_action = run_action(["python3", "ops/rex_pager.py", "drain", "GPT"])
         elif key in (ord("s"), ord("S")):
             last_action = run_action(["python3", "ops/rex_pager.py", "status"])
+        elif key in (ord("u"), ord("U")):
+            new_sender = prompt_line(stdscr, f"Sender [{sender}]: ")
+            if new_sender:
+                sender = new_sender.upper()
+                last_action = f"sender updated to {sender}"
+            else:
+                last_action = "sender unchanged"
+        elif key in (ord("p"), ord("P")):
+            send_with_params = not send_with_params
+            mode = "on" if send_with_params else "off"
+            last_action = f"send params {mode}"
+        elif key in (ord("m"), ord("M")):
+            hint = ",".join(discover_targets(data, sender)[:6])
+            target = prompt_line(stdscr, f"Target [{hint}]: ").upper()
+            if target:
+                body = prompt_line(stdscr, f"Message to {target}: ")
+                if body:
+                    last_action = run_action(build_send_cmd(sender, target, body, send_with_params))
+                else:
+                    last_action = "send canceled: empty message"
+            else:
+                last_action = "send canceled: no target"
+        elif key in (ord("b"), ord("B")):
+            body = prompt_line(stdscr, "Broadcast message: ")
+            if not body:
+                last_action = "broadcast canceled: empty message"
+            else:
+                targets = discover_targets(data, sender)
+                sent, failed = 0, 0
+                for target in targets:
+                    if (REPO / "STOP").exists():
+                        last_action = f"broadcast stopped by STOP ({sent}/{len(targets)})"
+                        break
+                    code, _line = run_action_detail(
+                        build_send_cmd(sender, target, body, send_with_params)
+                    )
+                    if code == 0:
+                        sent += 1
+                    else:
+                        failed += 1
+                else:
+                    last_action = f"broadcast complete: sent={sent} failed={failed}"
         time.sleep(0.75)
 
 
