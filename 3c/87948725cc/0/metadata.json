@@ -1,0 +1,43 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "3c87948725cc",
+  "session_id": "e1806a97-53e3-4181-9872-337078faef3e",
+  "strategy": "auto-commit",
+  "created_at": "2026-02-25T18:57:31.419236Z",
+  "branch": "hyperion/memory",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "TODO.md",
+    "ops/virtual-office/inbox/COWORK_20260219_genome-evidence.md",
+    "ops/virtual-office/inbox/ORION_20260220_predecessor_audit.md",
+    "ops/virtual-office/outbox/REX_INSIGHTS.md",
+    "rhea-applied-backlog/genetics/output/FULL_REPORT.md",
+    "rhea-applied-backlog/genetics/output/H32_02_ALL_GENES.fasta",
+    "rhea-applied-backlog/genetics/output/H32_02_CORRECTED_REPORT.md",
+    "rhea-applied-backlog/genetics/output/H32_02_FULL_REANALYSIS.md",
+    "rhea-applied-backlog/genetics/output/H32_02_GENE_CATALOG.md",
+    "rhea-applied-backlog/genetics/output/H32_02_SORTED_GENE_TABLE.md",
+    "rhea-applied-backlog/genetics/output/JOURNAL.md",
+    "rhea-applied-backlog/genetics/output/annotations.json",
+    "rhea-applied-backlog/genetics/output/blast_result.txt",
+    "rhea-applied-backlog/genetics/output/blast_rid.txt",
+    "rhea-applied-backlog/genetics/output/contigs_filtered.fasta",
+    "rhea-applied-backlog/genetics/output/gene_catalog.json",
+    "rhea-applied-backlog/genetics/output/master_catalog.json",
+    "rhea-applied-backlog/genetics/output/prodigal_genes.gff",
+    "rhea-applied-backlog/genetics/output/prodigal_nucleotides.fna",
+    "rhea-applied-backlog/genetics/output/prodigal_proteins.faa",
+    "rhea-applied-backlog/genetics/output/reference.gbk",
+    "rhea-applied-backlog/genetics/output/reference_genes.json"
+  ],
+  "agent": "Claude Code",
+  "checkpoint_transcript_start": 2,
+  "transcript_lines_at_start": 2,
+  "token_usage": {
+    "input_tokens": 1198,
+    "cache_creation_tokens": 38029,
+    "cache_read_tokens": 710292,
+    "output_tokens": 1008,
+    "api_call_count": 14
+  }
+}
