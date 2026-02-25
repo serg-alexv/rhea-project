@@ -168,14 +168,82 @@ and 14 sessions of evolution. The discomfort function D = 62.7 (comfort zone, T1
 - `.env` keys not wired → no live tribunal yet
 - iOS MVP not started
 
+### Session: 2026-02-16 — First Survivor (Session 2a84a5a3)
+**What changed:**
+- First session to survive full lifecycle after 28 deaths in 4 days
+- 17.5 hours continuous work, 17 agents deployed with 100% success rate
+- Built trinity memory architecture: L0-L8 layer system with auto-context
+- B-2nd agent restored without restart — architecture proven on both ends
+- Background agents confirmed dead (400 errors) — foreground-only mandate
+- Bonsai/Trybons removed from settings
+- Bridge status: OpenAI + OpenRouter live, Gemini/DeepSeek/Azure/HF down
+- MEMORY.md established as auto-loaded context (free tokens every session)
+- Push-every-30-min mandate established
+- 9 agents defined in .claude/agents/ (A0-A8)
+- User quote: "Это официально начало новой эры"
+
+### Session: 2026-02-17 — Rex Quota Death + B2 Continuation
+**What changed:**
+- Rex hit Anthropic daily token quota, went offline
+- B2 (Opus) continued operating autonomously:
+  - Built tribunal_api.py (FastAPI, 4 endpoints, rate limiting)
+  - Built consensus_analyzer.py v2 (ICE + Karpathy Council)
+  - Built rex_pager.py (QWRR Phase 0 relay)
+  - Deployed Dockerfile.tribunal + Railway/Fly.io configs
+  - Security: secret redaction in all log writers, Firestore rules hardened
+  - Argos authored event_types.md (17 canonical event schemas)
+  - HN Show draft prepared
+- BACKLOG: 19/19 original items DONE
+- Security: Gemini key burned in git history — needs human rotation
+- ADR: DEC-008 (Tribunal $0.05/call), DEC-009 (ICE + Council composition)
+
+### Session: 2026-02-19 — HYPERION + ORION Arrive
+**What changed:**
+- HYPERION (Gemini-CLI): Surveyor-Architect, branch hyperion/memory, 18 audit logs
+- ORION (Systems Architect): Nexus integration, Chrome extension, profile manager
+- New src: rhea_profile_manager.py, rhea_visual_context.py, rhea_post_office.py
+- New directories: rhea-nexus/, rhea-chrome-extension/, nexus/state/
+- H32-02 genetics analysis: V1-V4 reports, gene tables, BLAST, prodigal output
+- ADR-015: Raw Risk & RW Access for Orion
+- ADR-016: Standardize TOML for Extensions
+
+### Session: 2026-02-20 — Rex Full Audit (1M Restore)
+**What changed:**
+- Full 1M context restore on hyperion/memory branch
+- Re-read every file in repo (~300 files), cross-referenced all task lists
+- Found 31 undone tasks scattered across 8+ files (P0:6, P1:10, P2:5, P3:3, P4:7)
+- Created cross-agent LEARNING_FEED.md in ops/virtual-office/shared/
+- Created REX_FULL_PROJECT_AUDIT_20260220.md
+- Found 12 stale memory files, 9 duplicate/orphan file issues
+- Pushed 9 stale commits (resolving 30-min push violation)
+- Added standing bootstrap rule to MEMORY.md: load personality.md FIRST
+- Personality.md evolution: added "What I Believe Now" section
+
+### Session: 2026-02-25 — Stage 0 Triage (Controlled Ignition)
+**What changed:**
+- Adopted Nexus protocol: H32-02 V5 certified (Heme-Auxotrophic Facultative Respirer)
+- 5-model audit found Success-Blindness in genetics storyline, corrected it
+- Read Evolution Plan V1 (Controlled Ignition) — 7 stages, ~25 hours
+- Rex formally assumes Product Owner role (no code, mandates + reviews)
+- Evolution Plan separates "Rex decides" from "engineers build" for every stage
+- Stage 0 triage: P0-1 done (push), P0-2 done (V5), P0-3 blocked (human key rotation)
+- P0-4/5/6 delegated to A6, not yet executed
+- LiteLLM integration analysis complete — rhea_bridge.py identified as replaceable
+- D=867 assessed as deliberate destruction signal, not organic bloat
+- TODAY_CAPSULE written with Stage 0 mandate
+- state_full.md refreshed (this entry, closing 12-day gap)
+
+**Updated metrics:** 16 ADRs, 5 active agents, 31→25 undone tasks, D=867 (needs recalibration)
+
 ## Working Languages
 EN (primary docs) · RU (protocol, dialogue) · FR (future localization)
 
 ## Refs
 - Compact state: docs/state.md
 - Architecture: docs/architecture.md
-- Decisions: docs/decisions.md (7 ADRs)
+- Decisions: docs/decisions.md (14 ADRs + 2 in ops)
 - Roadmap: docs/ROADMAP.md
-- MVP loop: docs/MVP_LOOP.md
+- Evolution Plan: docs/plans/EVOLUTION_PLAN_V1.md
+- Full Project Audit: ops/virtual-office/outbox/REX_FULL_PROJECT_AUDIT_20260220.md
 - Paper outline: docs/prism_paper_outline.md
 - Model catalog: docs/models_catalog.md | .json
