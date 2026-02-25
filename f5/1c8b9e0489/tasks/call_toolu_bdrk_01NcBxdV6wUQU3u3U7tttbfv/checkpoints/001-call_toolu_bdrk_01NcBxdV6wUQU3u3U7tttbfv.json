@@ -1,0 +1,39 @@
+{
+  "type": "TodoWrite",
+  "tool_use_id": "call_toolu_bdrk_01NcBxdV6wUQU3u3U7tttbfv",
+  "timestamp": "2026-02-25T20:12:32.942571Z",
+  "data": {
+    "todos": [
+      {
+        "content": "Read REX_STATE_CAPSULE.md + Full Project Audit + drain inbox",
+        "status": "in_progress",
+        "activeForm": "Loading last known state and inbox"
+      },
+      {
+        "content": "Read EVOLUTION_PLAN_V1.md and assess Stage 0 requirements",
+        "status": "pending",
+        "activeForm": "Reading Controlled Ignition plan"
+      },
+      {
+        "content": "Read Nexus protocol and adopt storyline",
+        "status": "pending",
+        "activeForm": "Adopting Nexus protocol"
+      },
+      {
+        "content": "Execute Stage 0 of Evolution Plan",
+        "status": "pending",
+        "activeForm": "Executing Stage 0"
+      },
+      {
+        "content": "Run check.sh invariant verification",
+        "status": "pending",
+        "activeForm": "Running invariant checks"
+      },
+      {
+        "content": "Update state.md + commit + push",
+        "status": "pending",
+        "activeForm": "Updating state and pushing"
+      }
+    ]
+  }
+}
