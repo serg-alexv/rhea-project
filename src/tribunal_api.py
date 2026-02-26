@@ -460,6 +460,182 @@ async def math_verify(req: MathVerifyRequest):
 
 
 # ---------------------------------------------------------------------------
+# Demo endpoints (no auth required — first-user showcase)
+# ---------------------------------------------------------------------------
+
+# Canonical showcase hypotheses, one per plugin domain
+_DEMO_HYPOTHESES = {
+    "game_theory": (
+        "In a 2-player Prisoner's Dilemma, mutual cooperation is not a Nash equilibrium"
+    ),
+    "dynamical_systems": (
+        "The Lorenz system exhibits sensitive dependence on initial conditions"
+    ),
+    "information_geometry": (
+        "The Gaussian family forms a regular statistical manifold with positive-definite Fisher metric"
+    ),
+    "proof_theory": (
+        "If knowledge implies belief, and belief implies commitment, then knowledge implies commitment"
+    ),
+    "category_theory": (
+        "The symmetric group S3 satisfies associativity and identity axioms"
+    ),
+}
+
+_DOMAIN_ORDER = [
+    "game_theory",
+    "dynamical_systems",
+    "information_geometry",
+    "proof_theory",
+    "category_theory",
+]
+
+
+def _extract_key_values(domain: str, result: dict) -> dict:
+    """Pull 1-2 interesting computed values out of a plugin verify() result."""
+    checks = result.get("checks", [])
+
+    if domain == "game_theory":
+        mixed = next((c for c in checks if c.get("check") == "mixed_nash_equilibrium"), {})
+        pure = next((c for c in checks if c.get("check") == "pure_nash_equilibrium"), {})
+        return {
+            "game_value": mixed.get("game_value"),
+            "pure_nash_cells": pure.get("pure_nash_cells", []),
+            "mixed_nash_computed": mixed.get("exists", False),
+        }
+
+    if domain == "dynamical_systems":
+        chaos = next((c for c in checks if c.get("check") == "positive_lyapunov_exponent_proxy"), {})
+        stab = next((c for c in checks if "eigenvalue_stability" in c.get("check", "")), {})
+        return {
+            "system": result.get("system"),
+            "lambda_proxy": chaos.get("lambda_proxy"),
+            "chaos_detected": chaos.get("status") == "verified",
+            "first_equilibrium_stability": stab.get("stability_class"),
+        }
+
+    if domain == "information_geometry":
+        pd = next((c for c in checks if c.get("check") == "positive_definiteness"), {})
+        kl = next((c for c in checks if c.get("check") == "kl_divergence_sanity"), {})
+        return {
+            "fisher_min_eigenvalue": pd.get("min_eigenvalue"),
+            "fisher_is_positive_definite": pd.get("is_positive_definite"),
+            "kl_divergence": kl.get("kl_value"),
+            "kl_label": kl.get("label"),
+        }
+
+    if domain == "proof_theory":
+        taut = next((c for c in checks if c.get("check") == "tautology"), {})
+        cons = next((c for c in checks if c.get("check") == "logical_consistency"), {})
+        return {
+            "is_tautology": taut.get("status") == "tautology",
+            "is_consistent": cons.get("status") == "consistent",
+            "atoms": result.get("atoms", []),
+            "tautology_note": taut.get("note", ""),
+        }
+
+    if domain == "category_theory":
+        assoc = next((c for c in checks if c.get("check") == "associativity"), {})
+        identity = next((c for c in checks if c.get("check") == "identity"), {})
+        return {
+            "finite_model": result.get("finite_model_used"),
+            "associativity": assoc.get("status"),
+            "identity_element": identity.get("detail", ""),
+        }
+
+    return {}
+
+
+def _run_demo_domain(domain: str) -> dict:
+    """Run a single domain through the math-verify pipeline. Returns a result dict."""
+    from core.engine import Hypothesis as _Hypothesis
+    hypothesis_text = _DEMO_HYPOTHESES[domain]
+    engine = _get_engine()
+    plugin = engine.registry.get(domain)
+    if plugin is None:
+        return {
+            "domain": domain,
+            "hypothesis": hypothesis_text,
+            "verdict": "plugin_not_loaded",
+            "key_values": {},
+            "error": f"Plugin '{domain}' not registered",
+        }
+    h = _Hypothesis(
+        title=hypothesis_text[:80],
+        statement=hypothesis_text,
+        domain=domain,
+    )
+    try:
+        result = plugin.verify(h)
+        verdict = result.get("overall", "unknown")
+        key_values = _extract_key_values(domain, result)
+        return {
+            "domain": domain,
+            "hypothesis": hypothesis_text,
+            "verdict": verdict,
+            "key_values": key_values,
+        }
+    except Exception as exc:
+        return {
+            "domain": domain,
+            "hypothesis": hypothesis_text,
+            "verdict": "error",
+            "key_values": {},
+            "error": str(exc),
+        }
+
+
+@app.get("/demo/math")
+async def demo_math_all():
+    """
+    One-click demo: run all 5 Ruliad math plugins on canonical showcase hypotheses.
+    No authentication required.
+    """
+    t0 = time.time()
+    results = []
+    success_count = 0
+
+    for domain in _DOMAIN_ORDER:
+        dr = _run_demo_domain(domain)
+        results.append(dr)
+        if dr.get("verdict") not in ("error", "plugin_not_loaded"):
+            success_count += 1
+
+    elapsed = round(time.time() - t0, 3)
+    return {
+        "summary": f"{success_count}/{len(_DOMAIN_ORDER)} plugins computed real mathematical verification",
+        "elapsed_s": elapsed,
+        "plugins_run": len(_DOMAIN_ORDER),
+        "plugins_succeeded": success_count,
+        "results": results,
+    }
+
+
+@app.get("/demo/math/{domain}")
+async def demo_math_domain(domain: str):
+    """
+    Single-domain demo: run one Ruliad math plugin on its canonical showcase hypothesis.
+    Valid domains: game_theory, dynamical_systems, information_geometry, proof_theory, category_theory.
+    No authentication required.
+    """
+    if domain not in _DEMO_HYPOTHESES:
+        raise HTTPException(
+            status_code=404,
+            detail=(
+                f"Unknown domain '{domain}'. "
+                f"Valid domains: {', '.join(_DOMAIN_ORDER)}"
+            ),
+        )
+    t0 = time.time()
+    result = _run_demo_domain(domain)
+    elapsed = round(time.time() - t0, 3)
+    return {
+        "elapsed_s": elapsed,
+        **result,
+    }
+
+
+# ---------------------------------------------------------------------------
 # Startup event
 # ---------------------------------------------------------------------------
 
