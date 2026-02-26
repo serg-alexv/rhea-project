@@ -4,9 +4,9 @@
 # =============================================================================
 #
 # Removes cloud resources in reverse-deploy order:
-#   1. Vercel — list deployments for manual cleanup (CLI cannot delete prod)
+#   1. Firebase Hosting — disable hosting via firebase CLI
 #   2. Google Cloud Run — delete service + optionally clean Artifact Registry
-#   3. Oracle VM — NOT auto-deleted (it's the persistence layer; see note below)
+#   3. Oracle VM — NOT auto-deleted (backup layer; see note below)
 #
 # Usage:
 #   bash deploy/teardown.sh               # interactive, confirms before deleting
@@ -15,13 +15,14 @@
 #   bash deploy/teardown.sh --help
 #
 # Environment variables:
-#   PROJECT_ID   GCP project (default: gen-lang-client-0839944748)
-#   REGION       Cloud Run region (default: us-central1)
-#   SERVICE      Cloud Run service name (default: rhea-backend)
-#   REPO         Artifact Registry repo name (default: rhea)
+#   PROJECT_ID       GCP project (default: gen-lang-client-0839944748)
+#   REGION           Cloud Run region (default: us-central1)
+#   SERVICE          Cloud Run service name (default: rhea-backend)
+#   REPO             Artifact Registry repo name (default: rhea)
+#   FIREBASE_PROJECT Firebase project ID (default: reads from .firebaserc)
 #
 # WARNING: Cloud Run deletion is IMMEDIATE and IRREVERSIBLE.
-#          Oracle VM data (Redis AOF/RDB) is NOT touched by this script.
+#          Oracle VM data is NOT touched by this script.
 #
 # Bash 3.2 compatible (macOS default shell).
 # =============================================================================
@@ -38,6 +39,7 @@ PROJECT_ID="${PROJECT_ID:-gen-lang-client-0839944748}"
 REGION="${REGION:-us-central1}"
 SERVICE="${SERVICE:-rhea-backend}"
 REPO="${REPO:-rhea}"
+FIREBASE_PROJECT="${FIREBASE_PROJECT:-}"
 
 # ---------------------------------------------------------------------------
 # Colour palette
@@ -75,7 +77,7 @@ print_banner() {
   ╠══════════════════════════════════════════════════════════════════╣
   ║                                                                  ║
   ║  This script removes deployed cloud resources.                   ║
-  ║  Oracle VM is intentionally SKIPPED — it holds Redis data.       ║
+  ║  Oracle VM is intentionally SKIPPED (backup + monitoring layer). ║
   ║                                                                  ║
   ║  Cloud Run deletion is IMMEDIATE and IRREVERSIBLE.               ║
   ╚══════════════════════════════════════════════════════════════════╝
@@ -97,10 +99,11 @@ Options:
   --help      Show this help message
 
 Environment variables:
-  PROJECT_ID  GCP project (default: gen-lang-client-0839944748)
-  REGION      Cloud Run region (default: us-central1)
-  SERVICE     Cloud Run service name (default: rhea-backend)
-  REPO        Artifact Registry repo (default: rhea)
+  PROJECT_ID       GCP project (default: gen-lang-client-0839944748)
+  REGION           Cloud Run region (default: us-central1)
+  SERVICE          Cloud Run service name (default: rhea-backend)
+  REPO             Artifact Registry repo (default: rhea)
+  FIREBASE_PROJECT Firebase project ID (default: reads from .firebaserc)
 
 Examples:
   bash deploy/teardown.sh                   # interactive teardown
@@ -160,55 +163,64 @@ check_prereqs() {
   fi
   GCLOUD_MISSING="${GCLOUD_MISSING:-false}"
 
-  if command -v vercel >/dev/null 2>&1; then
-    ok "vercel CLI found"
+  if command -v firebase >/dev/null 2>&1; then
+    ok "firebase CLI found"
   else
-    warn "vercel CLI not found — will show manual cleanup instructions only."
-    VERCEL_MISSING=true
+    warn "firebase CLI not found — Firebase Hosting cleanup will show manual instructions."
+    warn "Install with: npm i -g firebase-tools"
+    FIREBASE_MISSING=true
   fi
-  VERCEL_MISSING="${VERCEL_MISSING:-false}"
+  FIREBASE_MISSING="${FIREBASE_MISSING:-false}"
 }
 
 # ---------------------------------------------------------------------------
-# Teardown: Vercel
+# Teardown: Firebase Hosting
 # ---------------------------------------------------------------------------
-teardown_vercel() {
-  step "Vercel Frontend Cleanup"
+teardown_firebase_hosting() {
+  step "Firebase Hosting Cleanup"
 
-  # Vercel CLI does not support deleting production aliases from the CLI
-  # in a clean, non-interactive way. The safest approach is to list deployments
-  # and let the operator delete them from the dashboard or via targeted commands.
+  # Resolve Firebase project: use env var, then fall back to .firebaserc
+  local fb_project="${FIREBASE_PROJECT:-}"
+  if [ -z "${fb_project}" ]; then
+    local firebaserc="${REPO_ROOT}/.firebaserc"
+    if [ -f "${firebaserc}" ]; then
+      fb_project="$(grep -o '"default"[[:space:]]*:[[:space:]]*"[^"]*"' "${firebaserc}" \
+        | sed 's/.*"default"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/' || true)"
+    fi
+  fi
 
-  if [ "$VERCEL_MISSING" = "true" ]; then
-    warn "vercel CLI not available — manual cleanup required."
+  if [ "$FIREBASE_MISSING" = "true" ]; then
+    warn "firebase CLI not available — manual cleanup required."
   else
-    if [ "$DRY_RUN" = "true" ]; then
-      dim "  [dry-run] Would run: vercel ls"
+    if [ -z "${fb_project}" ]; then
+      warn "Firebase project ID not found — set FIREBASE_PROJECT or ensure .firebaserc exists."
+    elif ! confirm "Disable Firebase Hosting for project '${fb_project}'?"; then
+      info "Skipping Firebase Hosting cleanup."
     else
-      info "Listing Vercel deployments for project rhea-atlas:"
-      newline
-      # `vercel ls` lists deployments; output is informational only.
-      vercel ls 2>/dev/null || warn "Could not list Vercel deployments (may need to run 'vercel login' first)."
+      if [ "$DRY_RUN" = "true" ]; then
+        dim "  [dry-run] Would run: firebase hosting:disable --project ${fb_project} --force"
+      else
+        info "Disabling Firebase Hosting for project '${fb_project}'..."
+        firebase hosting:disable --project "${fb_project}" --force \
+          || warn "Could not disable hosting — may already be inactive or need 'firebase login'."
+        ok "Firebase Hosting disabled for project '${fb_project}'."
+      fi
     fi
   fi
 
   newline
   printf "${YELLOW}"
-  cat <<'VERCEL_NOTE'
-  Vercel manual cleanup:
+  cat <<'FIREBASE_NOTE'
+  Firebase Hosting manual cleanup:
   ──────────────────────────────────────────────────────────────────────────
-  1. Go to: https://vercel.com/dashboard
-  2. Open the rhea-atlas project.
-  3. Settings → General → scroll to "Delete Project" to remove completely,
-     OR go to Deployments and promote/delete individual deployments.
+  To disable hosting via CLI:
+    firebase hosting:disable --project <project-id>
 
-  To remove a specific deployment via CLI:
-    vercel rm <deployment-url-or-id>
-
-  To remove the entire project (irreversible):
-    vercel rm rhea-atlas --safe
+  To delete the entire Firebase project (irreversible):
+    Go to: https://console.firebase.google.com
+    Project Settings → General → scroll to "Delete project"
   ──────────────────────────────────────────────────────────────────────────
-VERCEL_NOTE
+FIREBASE_NOTE
   printf "${NC}"
 }
 
@@ -306,32 +318,21 @@ teardown_cloudrun() {
 # Oracle VM reminder (never auto-delete)
 # ---------------------------------------------------------------------------
 print_oracle_reminder() {
-  step "Oracle Cloud VM — NOT deleted (persistence layer)"
+  step "Oracle Cloud VM — NOT deleted (backup + monitoring layer)"
 
   printf "${YELLOW}"
   cat <<'ORACLE'
   The Oracle Cloud VM is intentionally skipped by this teardown script.
-  It hosts Redis 7 with AOF + RDB persistence. Auto-deleting it would
-  cause permanent data loss.
+  It runs backup and monitoring tasks. Auto-deleting it would require
+  manual re-provisioning from scratch.
 
   If you truly want to decommission the Oracle VM:
   ──────────────────────────────────────────────────────────────────────────
-  1. Optional: dump Redis data before shutdown:
-       ssh ubuntu@<VM_IP> \
-         "docker exec rhea-redis redis-cli -a <REDIS_PASSWORD> BGSAVE && \
-          cp ~/rhea-data/redis/dump.rdb ~/rhea-backup-$(date +%Y%m%d).rdb"
+  1. Stop any running services:
+       ssh ubuntu@<VM_IP> "docker compose --env-file ~/.env.rhea down"
 
-  2. Stop the stack:
-       ssh ubuntu@<VM_IP> \
-         "docker compose --env-file ~/.env.rhea down"
-
-  3. Delete the instance in Oracle Cloud Console:
+  2. Delete the instance in Oracle Cloud Console:
        Compute → Instances → rhea-oracle-vm → Terminate
-
-  4. Update Cloud Run to remove REDIS_URL (or it will error on next request):
-       gcloud run services update rhea-backend \
-         --region us-central1 \
-         --remove-env-vars REDIS_URL
   ──────────────────────────────────────────────────────────────────────────
 ORACLE
   printf "${NC}"
@@ -352,10 +353,11 @@ print_summary() {
   printf "  %-28s  %s\n" "Resource" "Status"
   printf "  %-28s  %s\n" "────────────────────────────" "──────────────────────"
   printf "${NC}"
-  printf "  %-28s  %s\n" "Vercel deployments"         "Listed above (manual)"
+  printf "  %-28s  %s\n" "Firebase Hosting"            "Disabled (if confirmed)"
   printf "  %-28s  %s\n" "Google Cloud Run service"   "Deleted (if confirmed)"
   printf "  %-28s  %s\n" "Artifact Registry repo"     "Deleted (if confirmed)"
-  printf "  %-28s  %s\n" "Oracle VM + Redis data"     "NOT touched (safe)"
+  printf "  %-28s  %s\n" "Redis Cloud"                "NOT touched (managed)"
+  printf "  %-28s  %s\n" "Oracle VM"                  "NOT touched (safe)"
   newline
 }
 
@@ -370,7 +372,7 @@ main() {
   fi
 
   check_prereqs
-  teardown_vercel
+  teardown_firebase_hosting
   teardown_cloudrun
   print_oracle_reminder
   print_summary
