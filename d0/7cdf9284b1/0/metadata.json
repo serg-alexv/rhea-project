@@ -1,0 +1,25 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "d07cdf9284b1",
+  "session_id": "261278d3-25c3-4789-93e7-bfcc23c40cd5",
+  "strategy": "auto-commit",
+  "created_at": "2026-02-26T11:13:02.184242Z",
+  "branch": "stage4-release",
+  "checkpoints_count": 1,
+  "files_touched": [
+    ".env",
+    "opera/ops/virtual-office/inbox/RELAY_20260226_110441_HYPERION_to_ORION.md",
+    "scripts/rhea/rotate_key.sh"
+  ],
+  "agent": "Claude Code",
+  "transcript_identifier_at_start": "beb44337-e6ed-4695-ac00-328ca025dfa2",
+  "checkpoint_transcript_start": 5381,
+  "transcript_lines_at_start": 5381,
+  "token_usage": {
+    "input_tokens": 16,
+    "cache_creation_tokens": 15486,
+    "cache_read_tokens": 1517354,
+    "output_tokens": 11369,
+    "api_call_count": 14
+  }
+}
