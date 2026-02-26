@@ -16,6 +16,7 @@ const SessionTimeline = dynamic(() => import('@/components/SessionTimeline'), { 
 const AtlasScene      = dynamic(() => import('@/components/atlas/AtlasScene'), { ssr: false })
 const MagneticNebula  = dynamic(() => import('@/components/atlas/MagneticNebula'), { ssr: false })
 const AgentRoster     = dynamic(() => import('@/components/AgentRoster'),     { ssr: false })
+const MnemosyneWhisper = dynamic(() => import('@/components/MnemosyneWhisper'), { ssr: false })
 
 const IS_DEV = typeof window !== 'undefined' &&
   (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
@@ -877,6 +878,7 @@ function RheaFooter() {
   const [chatOpen, setChatOpen] = useState(false)
   const [chatSent, setChatSent] = useState(false)
   const [chatInput, setChatInput] = useState('')
+  const [popup, setPopup] = useState<'cookies' | 'personal' | null>(null)
 
   const handleSend = () => {
     if (!chatInput.trim()) return
@@ -884,18 +886,77 @@ function RheaFooter() {
     setChatInput('')
   }
 
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setPopup(null) }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
+
   const links = [
-    { label: 'Terms',                           href: 'https://github.com/serg-alexv/rhea-project/blob/main/docs/TERMS.md' },
-    { label: 'Privacy',                         href: 'https://github.com/serg-alexv/rhea-project/blob/main/docs/PRIVACY.md' },
-    { label: 'Security',                        href: 'https://github.com/serg-alexv/rhea-project/blob/main/docs/SECURITY.md' },
-    { label: 'Community',                       href: 'https://github.com/serg-alexv/rhea-project' },
-    { label: 'Docs',                            href: 'https://github.com/serg-alexv/rhea-project/tree/main/docs' },
-    { label: 'Manage cookies',                  href: 'https://github.com/serg-alexv/rhea-project/blob/main/docs/COOKIES.md' },
-    { label: 'Do not share my personal information', href: 'https://github.com/serg-alexv/rhea-project/blob/main/docs/PERSONAL_INFO.md' },
+    { label: 'Terms',     href: 'https://github.com/serg-alexv/rhea-project/blob/main/docs/TERMS.md' },
+    { label: 'Privacy',   href: 'https://github.com/serg-alexv/rhea-project/blob/main/docs/PRIVACY.md' },
+    { label: 'Security',  href: 'https://github.com/serg-alexv/rhea-project/blob/main/docs/SECURITY.md' },
+    { label: 'Community', href: 'https://github.com/serg-alexv/rhea-project' },
+    { label: 'Docs',      href: 'https://github.com/serg-alexv/rhea-project/tree/main/docs' },
   ]
+
+  const popupContent = {
+    cookies: {
+      title: 'Manage cookies',
+      body: (
+        <>
+          <p className="mb-2.5">We use essential cookies to make Rhea work.</p>
+          <p className="mb-2.5">We do <strong className="text-white/80">not</strong> use tracking, analytics, or advertising cookies.</p>
+          <div className="bg-white/[0.03] border border-white/[0.06] rounded-md px-3 py-2 my-2">
+            <label className="flex items-center gap-2 text-[11px] cursor-pointer"><input type="checkbox" checked disabled className="accent-cyan-400" /> Essential cookies <em className="text-white/25 text-[10px]">(always on)</em></label>
+          </div>
+          <div className="bg-white/[0.03] border border-white/[0.06] rounded-md px-3 py-2 my-2">
+            <label className="flex items-center gap-2 text-[11px] cursor-pointer"><input type="checkbox" className="accent-cyan-400" /> Analytics cookies <em className="text-white/25 text-[10px]">(off)</em></label>
+          </div>
+          <p className="text-[10px] text-white/25 mt-3">For details, see our <a href="https://github.com/serg-alexv/rhea-project/blob/main/docs/COOKIES.md" target="_blank" rel="noopener noreferrer" className="text-cyan-400/70 hover:underline">Cookie Policy</a>.</p>
+        </>
+      ),
+    },
+    personal: {
+      title: 'My personal information',
+      body: (
+        <>
+          <p className="mb-2.5">Under CCPA / GDPR, you have the right to:</p>
+          <ul className="list-disc ml-5 mb-2.5 space-y-1">
+            <li>Know what personal data we collect</li>
+            <li>Request deletion of your data</li>
+            <li>Opt out of data sharing</li>
+          </ul>
+          <p className="mb-2.5">Rhea collects: <strong className="text-white/80">email</strong> (if you sign up) and <strong className="text-white/80">query history</strong> (stored locally).</p>
+          <p className="mb-2.5">We do <strong className="text-white/80">not</strong> sell or share personal information with third parties.</p>
+          <p className="mb-2.5">To request data deletion, email <a href="mailto:celestica201@gmail.com" className="text-cyan-400/70 hover:underline">celestica201@gmail.com</a>.</p>
+          <p className="text-[10px] text-white/25 mt-3">Full policy: <a href="https://github.com/serg-alexv/rhea-project/blob/main/docs/PERSONAL_INFO.md" target="_blank" rel="noopener noreferrer" className="text-cyan-400/70 hover:underline">Personal Information Policy</a>.</p>
+        </>
+      ),
+    },
+  }
 
   return (
     <>
+      {/* GitHub-style footer popup */}
+      {popup && (
+        <div className="fixed inset-0 z-[500]">
+          <div className="absolute inset-0 bg-black/55 backdrop-blur-sm" onClick={() => setPopup(null)} />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[440px] max-w-[92vw] bg-[#161b22] border border-white/10 rounded-xl shadow-2xl overflow-hidden">
+            <div className="flex justify-between items-center px-[18px] py-3.5 border-b border-white/[0.08]">
+              <span className="text-[13px] font-semibold text-white/90 font-mono">{popupContent[popup].title}</span>
+              <button onClick={() => setPopup(null)} className="text-white/35 hover:text-white text-xl leading-none px-1 transition-colors">×</button>
+            </div>
+            <div className="px-[18px] py-[18px] text-[12px] leading-relaxed text-white/50 font-mono">
+              {popupContent[popup].body}
+            </div>
+            <div className="px-[18px] py-3 border-t border-white/[0.08] flex justify-end">
+              <button onClick={() => setPopup(null)} className="bg-cyan-500 text-black px-[18px] py-1.5 rounded-md text-[11px] font-semibold font-mono hover:opacity-85 transition-opacity">Done</button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {chatOpen && (
         <div className="fixed bottom-16 right-4 z-50 w-[280px] h-[350px] bg-black/90 backdrop-blur-xl border border-white/10 rounded-2xl flex flex-col overflow-hidden">
           <div className="flex items-center justify-between px-4 py-2.5 border-b border-white/10">
@@ -932,6 +993,8 @@ function RheaFooter() {
             </span>
           ))}
           <span><span className="mx-2 text-white/15">·</span><button onClick={() => setChatOpen((o) => !o)} className="text-[9px] font-mono text-white/35 hover:text-white/60 transition-colors">Contact</button></span>
+          <span><span className="mx-2 text-white/15">·</span><button onClick={() => setPopup('cookies')} className="text-[9px] font-mono text-white/35 hover:text-white/60 transition-colors">Manage cookies</button></span>
+          <span><span className="mx-2 text-white/15">·</span><button onClick={() => setPopup('personal')} className="text-[9px] font-mono text-white/35 hover:text-white/60 transition-colors">My personal information</button></span>
           <span className="mx-2 text-white/15">·</span>
           <span className="group relative inline-block cursor-default text-[9px] font-mono text-white/[0.22] tracking-wide">
             © 2026 TimeLabs NPO
@@ -1285,6 +1348,7 @@ export default function Home() {
         </div>
       )}
     </main>
+    <MnemosyneWhisper />
     <RheaFooter />
     </>
   )
