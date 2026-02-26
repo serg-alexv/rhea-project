@@ -1,147 +1,79 @@
 """
-aletheia_api.py — FastAPI router for the Aletheia proof verification pipeline.
+aletheia_api.py — FastAPI router for the Aletheia proof library.
+
+Thin wrapper around aletheia_pipeline.py. All storage goes to data/proof.db,
+markdown artifacts land in friends/aletheia/{proofs,hypotheses}/.
 
 Endpoints:
-  POST /submit           — submit a proof/theorem for verification
-  GET  /proofs           — list all stored proofs
-  GET  /proofs/{id}      — get a specific proof by ID
-  POST /verify/{id}      — trigger re-verification of a proof
-
-Storage: SQLite at data/aletheia.db, table `proofs`
-         (id, title, statement, proof_text, status, submitted_at, verified_at, score)
-
-Note: No LLM calls yet — pure CRUD + status tracking.
-      The aletheia_pipeline.py handles deep tribunal-integrated capture.
-      This router is the public-facing submission/retrieval API (Phase 6).
+  POST /submit           — manual proof/hypothesis submission
+  GET  /proofs           — list proofs (delegates to pipeline.get_recent)
+  GET  /proofs/{id}      — get a specific proof (delegates to pipeline.get_proof)
+  GET  /stats            — library statistics
+  GET  /search           — keyword search
+  GET  /chain/{id}       — proof chain (ancestors + descendants)
+  POST /verify           — DB/filesystem consistency check
 """
 
 import hashlib
-import sqlite3
 import time
 from datetime import datetime, timezone
-from pathlib import Path
 from typing import List, Optional
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Query
 from pydantic import BaseModel, Field
 
-# ─────────────────────────────────────────────────────────────────────────────
-# Config
-# ─────────────────────────────────────────────────────────────────────────────
-
-PROJECT_ROOT = Path(__file__).parent.parent
-ALETHEIA_DB = PROJECT_ROOT / "data" / "aletheia.db"
-
-# Valid status values
-STATUS_PENDING = "pending"
-STATUS_VERIFIED = "verified"
-STATUS_REJECTED = "rejected"
-STATUS_INCONCLUSIVE = "inconclusive"
-
-VALID_STATUSES = {STATUS_PENDING, STATUS_VERIFIED, STATUS_REJECTED, STATUS_INCONCLUSIVE}
-
+import aletheia_pipeline as pipeline
 
 # ─────────────────────────────────────────────────────────────────────────────
-# Database bootstrap
-# ─────────────────────────────────────────────────────────────────────────────
-
-_SCHEMA = """
-CREATE TABLE IF NOT EXISTS proofs (
-    id           TEXT PRIMARY KEY,
-    title        TEXT NOT NULL,
-    statement    TEXT NOT NULL,
-    proof_text   TEXT NOT NULL DEFAULT '',
-    status       TEXT NOT NULL DEFAULT 'pending',
-    submitted_at TEXT NOT NULL,
-    verified_at  TEXT,
-    score        REAL
-);
-
-CREATE INDEX IF NOT EXISTS idx_aletheia_status       ON proofs(status);
-CREATE INDEX IF NOT EXISTS idx_aletheia_submitted_at ON proofs(submitted_at);
-CREATE INDEX IF NOT EXISTS idx_aletheia_score        ON proofs(score);
-"""
-
-
-def _get_conn() -> sqlite3.Connection:
-    """Return an open SQLite connection with WAL mode and schema ensured."""
-    ALETHEIA_DB.parent.mkdir(parents=True, exist_ok=True)
-    conn = sqlite3.connect(str(ALETHEIA_DB))
-    conn.row_factory = sqlite3.Row
-    conn.execute("PRAGMA journal_mode=WAL")
-    conn.executescript(_SCHEMA)
-    return conn
-
-
-# ─────────────────────────────────────────────────────────────────────────────
-# Pydantic schemas
+# Pydantic schemas (match pipeline's ProofArtifact fields)
 # ─────────────────────────────────────────────────────────────────────────────
 
 class ProofSubmitRequest(BaseModel):
-    title: str = Field(..., min_length=1, max_length=500, description="Short title for the theorem/claim")
-    statement: str = Field(..., min_length=1, description="Formal or informal statement of what is being proved")
-    proof_text: str = Field(default="", description="The proof body (may be empty for theorems awaiting proof)")
+    prompt: str = Field(..., min_length=1, description="The claim or question being proved")
+    consensus_text: str = Field(default="", description="Proof body / consensus text")
+    ontology: str = Field(default="general", description="Ontology lens (e.g., 'chronobiology', 'math')")
+    agreement_score: float = Field(default=0.5, ge=0.0, le=1.0, description="Self-assessed agreement score")
+    confidence: float = Field(default=0.5, ge=0.0, le=1.0, description="Confidence level")
+    models: List[str] = Field(default_factory=lambda: ["manual"], description="Models used (or 'manual')")
+    mode: str = Field(default="manual", description="Capture mode")
 
 
-class ProofResponse(BaseModel):
+class ProofSummary(BaseModel):
     id: str
-    title: str
-    statement: str
-    proof_text: str
-    status: str
-    submitted_at: str
-    verified_at: Optional[str]
-    score: Optional[float]
+    type: Optional[str] = None
+    tier: str
+    prompt: str
+    ontology: Optional[str] = None
+    agreement_score: float
+    confidence: float
+    created_at: str
 
 
-class VerifyRequest(BaseModel):
-    """Optional body for POST /verify/{id} — allows passing a scorer hint."""
-    force: bool = Field(default=False, description="Re-verify even if already verified")
-    score_override: Optional[float] = Field(
-        default=None, ge=0.0, le=1.0,
-        description="Manually set score (0.0–1.0); if provided, drives status update"
-    )
-
-
-# ─────────────────────────────────────────────────────────────────────────────
-# Internal helpers
-# ─────────────────────────────────────────────────────────────────────────────
-
-def _generate_id(title: str, statement: str) -> str:
-    """Deterministic-ish ID: SHA-256 of title+statement+current nanoseconds."""
-    raw = f"{title}:{statement}:{time.time_ns()}"
-    return hashlib.sha256(raw.encode()).hexdigest()[:24]
-
-
-def _now_iso() -> str:
-    return datetime.now(timezone.utc).isoformat()
-
-
-def _row_to_proof(row: sqlite3.Row) -> dict:
-    return {
-        "id":           row["id"],
-        "title":        row["title"],
-        "statement":    row["statement"],
-        "proof_text":   row["proof_text"],
-        "status":       row["status"],
-        "submitted_at": row["submitted_at"],
-        "verified_at":  row["verified_at"],
-        "score":        row["score"],
-    }
-
-
-def _derive_status_from_score(score: float) -> str:
-    """
-    Rule-based status from score.
-    >= 0.85  → verified
-    >= 0.50  → inconclusive
-    < 0.50   → rejected
-    """
-    if score >= 0.85:
-        return STATUS_VERIFIED
-    if score >= 0.50:
-        return STATUS_INCONCLUSIVE
-    return STATUS_REJECTED
+class ProofDetail(BaseModel):
+    id: str
+    type: Optional[str] = None
+    tier: str
+    prompt: str
+    prompt_hash: Optional[str] = None
+    ontology: Optional[str] = None
+    mode: Optional[str] = None
+    consensus_text: Optional[str] = None
+    agreement_score: float
+    confidence: float
+    models: Optional[list] = None
+    agreement_points: Optional[list] = None
+    divergence_points: Optional[list] = None
+    math_verification: Optional[dict] = None
+    stance_summary: Optional[dict] = None
+    analysis_method: Optional[str] = None
+    rounds_completed: Optional[int] = None
+    convergence_achieved: Optional[bool] = None
+    parent_id: Optional[str] = None
+    session_id: Optional[str] = None
+    file_path: Optional[str] = None
+    created_at: str
+    tokens_total: Optional[int] = None
+    latency_total_s: Optional[float] = None
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -151,153 +83,144 @@ def _derive_status_from_score(score: float) -> str:
 aletheia_router = APIRouter(tags=["aletheia"])
 
 
-@aletheia_router.post("/submit", response_model=ProofResponse, status_code=201)
+@aletheia_router.post("/submit", response_model=ProofDetail, status_code=201)
 def submit_proof(body: ProofSubmitRequest):
     """
-    Submit a proof or theorem for verification.
+    Manual proof/hypothesis submission.
 
-    Returns the created proof record with status='pending'.
-    Re-verification can be triggered later via POST /verify/{id}.
+    Classifies tier via pipeline.classify_tier(), writes markdown to
+    friends/aletheia/{proofs,hypotheses}/, stores in data/proof.db.
     """
-    proof_id = _generate_id(body.title, body.statement)
-    now = _now_iso()
+    now = datetime.now(timezone.utc).isoformat()
+    proof_id = hashlib.sha256(f"{body.prompt}:{now}".encode()).hexdigest()[:24]
+    prompt_hash = hashlib.sha256(body.prompt.encode()).hexdigest()[:16]
 
-    conn = _get_conn()
-    try:
-        conn.execute(
-            "INSERT INTO proofs (id, title, statement, proof_text, status, submitted_at) "
-            "VALUES (?, ?, ?, ?, ?, ?)",
-            (proof_id, body.title, body.statement, body.proof_text, STATUS_PENDING, now),
-        )
-        conn.commit()
-        row = conn.execute("SELECT * FROM proofs WHERE id = ?", (proof_id,)).fetchone()
-    finally:
-        conn.close()
+    tier = pipeline.classify_tier(body.agreement_score, body.confidence)
 
-    return _row_to_proof(row)
+    proof_type = "consensus"
+    if body.mode == "math":
+        proof_type = "math"
+
+    artifact = pipeline.ProofArtifact(
+        id=proof_id,
+        type=proof_type,
+        tier=tier,
+        prompt=body.prompt,
+        prompt_hash=prompt_hash,
+        ontology=body.ontology,
+        mode=body.mode,
+        consensus_text=body.consensus_text,
+        agreement_score=body.agreement_score,
+        confidence=body.confidence,
+        models=body.models,
+        agreement_points=[],
+        divergence_points=[],
+        math_verification={},
+        stance_summary={},
+        pairwise_similarity={},
+        analysis_method="manual_submit",
+        rounds_completed=0,
+        convergence_achieved=False,
+        parent_id=pipeline._find_parent(prompt_hash),
+        session_id=None,
+        file_path=None,
+        created_at=now,
+        tokens_total=0,
+        latency_total_s=0.0,
+        raw_responses=[],
+    )
+
+    # Write markdown (proofs/hypotheses only, noise gets logged without file)
+    if tier != "noise":
+        artifact.file_path = pipeline._write_markdown(artifact)
+
+    # Store to DB
+    pipeline._store_to_db(artifact)
+
+    # Link to parent if found
+    if artifact.parent_id:
+        relation = "refines" if tier == "proof" else "extends"
+        pipeline.link_proofs(artifact.parent_id, artifact.id, relation)
+
+    return _artifact_to_detail(artifact)
 
 
-@aletheia_router.get("/proofs", response_model=List[ProofResponse])
+@aletheia_router.get("/proofs", response_model=List[ProofSummary])
 def list_proofs(
-    status: Optional[str] = None,
-    limit: int = 50,
-    offset: int = 0,
+    tier: Optional[str] = Query(None, description="Filter by tier: proof|hypothesis"),
+    limit: int = Query(50, ge=1, le=200),
 ):
-    """
-    List stored proofs, ordered by submitted_at descending.
-
-    Query params:
-      status  — filter by status (pending|verified|rejected|inconclusive)
-      limit   — max results (default 50, max 200)
-      offset  — pagination offset
-    """
-    if status and status not in VALID_STATUSES:
-        raise HTTPException(
-            status_code=422,
-            detail=f"Invalid status '{status}'. Valid: {sorted(VALID_STATUSES)}"
-        )
-    limit = min(limit, 200)
-
-    conn = _get_conn()
-    try:
-        if status:
-            rows = conn.execute(
-                "SELECT * FROM proofs WHERE status = ? "
-                "ORDER BY submitted_at DESC LIMIT ? OFFSET ?",
-                (status, limit, offset),
-            ).fetchall()
-        else:
-            rows = conn.execute(
-                "SELECT * FROM proofs ORDER BY submitted_at DESC LIMIT ? OFFSET ?",
-                (limit, offset),
-            ).fetchall()
-    finally:
-        conn.close()
-
-    return [_row_to_proof(r) for r in rows]
+    """List proofs from the library, ordered by recency."""
+    results = pipeline.get_recent(limit=limit, tier_filter=tier)
+    return results
 
 
-@aletheia_router.get("/proofs/{proof_id}", response_model=ProofResponse)
+@aletheia_router.get("/proofs/{proof_id}", response_model=ProofDetail)
 def get_proof(proof_id: str):
-    """
-    Retrieve a single proof by its ID.
-
-    Returns 404 if the proof does not exist.
-    """
-    conn = _get_conn()
-    try:
-        row = conn.execute(
-            "SELECT * FROM proofs WHERE id = ?", (proof_id,)
-        ).fetchone()
-    finally:
-        conn.close()
-
-    if not row:
+    """Get a single proof by ID with full detail."""
+    result = pipeline.get_proof(proof_id)
+    if not result:
         raise HTTPException(status_code=404, detail=f"Proof '{proof_id}' not found")
+    return result
 
-    return _row_to_proof(row)
+
+@aletheia_router.get("/stats")
+def get_stats():
+    """Proof library aggregate statistics."""
+    return pipeline.get_stats()
 
 
-@aletheia_router.post("/verify/{proof_id}", response_model=ProofResponse)
-def verify_proof(proof_id: str, body: VerifyRequest = VerifyRequest()):
-    """
-    Trigger (re-)verification of a stored proof.
+@aletheia_router.get("/search", response_model=List[ProofSummary])
+def search(
+    q: str = Query(..., min_length=1, description="Search query"),
+    limit: int = Query(10, ge=1, le=100),
+    tier: Optional[str] = Query(None),
+):
+    """Keyword search across proofs."""
+    return pipeline.search_proofs(query=q, k=limit, tier_filter=tier)
 
-    Current behaviour (no LLM integration yet):
-      - If score_override is provided: apply it, derive status, set verified_at.
-      - If no score_override and status is already verified: return as-is
-        (unless force=True, which resets to pending for a fresh run).
-      - If no score_override and status is pending/inconclusive: mark as
-        inconclusive (placeholder — LLM verifier will fill this in Phase 7).
 
-    When the LLM verifier is wired in (Phase 7), replace the placeholder block
-    with a call to aletheia_pipeline.capture() or a dedicated verify() function.
-    """
-    conn = _get_conn()
-    try:
-        row = conn.execute(
-            "SELECT * FROM proofs WHERE id = ?", (proof_id,)
-        ).fetchone()
+@aletheia_router.get("/chain/{proof_id}")
+def get_chain(proof_id: str):
+    """Get proof chain (ancestors + descendants)."""
+    return pipeline.get_chain(proof_id)
 
-        if not row:
-            raise HTTPException(status_code=404, detail=f"Proof '{proof_id}' not found")
 
-        current_status = row["status"]
-        now = _now_iso()
+@aletheia_router.post("/verify")
+def verify_consistency():
+    """Verify DB <-> filesystem consistency (friends/aletheia/)."""
+    return pipeline.verify()
 
-        if body.score_override is not None:
-            # Caller supplied a score — apply immediately
-            new_status = _derive_status_from_score(body.score_override)
-            conn.execute(
-                "UPDATE proofs SET status = ?, score = ?, verified_at = ? WHERE id = ?",
-                (new_status, body.score_override, now, proof_id),
-            )
-            conn.commit()
 
-        elif body.force:
-            # Force re-verification: reset to pending (LLM hook goes here in Phase 7)
-            conn.execute(
-                "UPDATE proofs SET status = ?, score = NULL, verified_at = NULL WHERE id = ?",
-                (STATUS_PENDING, proof_id),
-            )
-            conn.commit()
+# ─────────────────────────────────────────────────────────────────────────────
+# Helpers
+# ─────────────────────────────────────────────────────────────────────────────
 
-        elif current_status == STATUS_VERIFIED and not body.force:
-            # Already verified — return without modification
-            pass
-
-        else:
-            # Placeholder: no LLM yet — mark inconclusive so callers know it was attempted
-            conn.execute(
-                "UPDATE proofs SET status = ?, verified_at = ? WHERE id = ?",
-                (STATUS_INCONCLUSIVE, now, proof_id),
-            )
-            conn.commit()
-
-        updated = conn.execute(
-            "SELECT * FROM proofs WHERE id = ?", (proof_id,)
-        ).fetchone()
-    finally:
-        conn.close()
-
-    return _row_to_proof(updated)
+def _artifact_to_detail(a: pipeline.ProofArtifact) -> dict:
+    """Convert ProofArtifact dataclass to ProofDetail-compatible dict."""
+    return {
+        "id": a.id,
+        "type": a.type,
+        "tier": a.tier,
+        "prompt": a.prompt,
+        "prompt_hash": a.prompt_hash,
+        "ontology": a.ontology,
+        "mode": a.mode,
+        "consensus_text": a.consensus_text,
+        "agreement_score": a.agreement_score,
+        "confidence": a.confidence,
+        "models": a.models,
+        "agreement_points": a.agreement_points,
+        "divergence_points": a.divergence_points,
+        "math_verification": a.math_verification,
+        "stance_summary": a.stance_summary,
+        "analysis_method": a.analysis_method,
+        "rounds_completed": a.rounds_completed,
+        "convergence_achieved": a.convergence_achieved,
+        "parent_id": a.parent_id,
+        "session_id": a.session_id,
+        "file_path": a.file_path,
+        "created_at": a.created_at,
+        "tokens_total": a.tokens_total,
+        "latency_total_s": a.latency_total_s,
+    }

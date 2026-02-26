@@ -46,6 +46,11 @@ gemini/
 .idea/
 firebase-debug.log
 
+# SQLite databases (runtime data)
+*.db
+*.db-shm
+*.db-wal
+
 # local experiments
 docs/experimental/
 team/
