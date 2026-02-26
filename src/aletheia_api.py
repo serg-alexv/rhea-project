@@ -186,6 +186,24 @@ def get_chain(proof_id: str):
     return pipeline.get_chain(proof_id)
 
 
+@aletheia_router.get("/dedup")
+def dedup_check(
+    q: str = Query(..., min_length=1, description="Query to check for existing proof"),
+    threshold: float = Query(0.85, ge=0.0, le=1.0),
+):
+    """Pre-query: check if this question has already been answered."""
+    return pipeline.check_existing(q, threshold=threshold)
+
+
+@aletheia_router.get("/ontology/{ontology}", response_model=List[ProofSummary])
+def get_by_ontology(
+    ontology: str,
+    limit: int = Query(50, ge=1, le=200),
+):
+    """Get all proofs for a specific ontology."""
+    return pipeline.get_by_ontology(ontology, limit=limit)
+
+
 @aletheia_router.post("/verify")
 def verify_consistency():
     """Verify DB <-> filesystem consistency (friends/aletheia/)."""

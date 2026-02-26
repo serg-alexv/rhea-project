@@ -2393,9 +2393,36 @@ async function askQuery() {
   }
 }
 
-async function askRAG(prompt) {
-  // Search Aletheia memory + query tribunal in parallel (zero extra latency)
-  const aletheiaUrl = `${API}/api/aletheia/search?q=${encodeURIComponent(prompt)}&limit=5`;
+let _lastRAGPrompt = null;
+
+async function askRAG(prompt, forceRequery) {
+  _lastRAGPrompt = prompt;
+
+  // Step 1: Dedup check — already proven? (free, instant SQLite lookup)
+  if (!forceRequery) {
+    try {
+      const dedupRes = await fetch(`${API}/aletheia/dedup?q=${encodeURIComponent(prompt)}`);
+      if (dedupRes.ok) {
+        const dedup = await dedupRes.json();
+        if (dedup.found && dedup.recommendation === 'use_cached') {
+          document.getElementById('tribunalResults').innerHTML = `
+            <div class="consensus-box" style="border-color:var(--green)">
+              <div class="label" style="color:var(--green)">Previously Proven (${(dedup.agreement_score * 100).toFixed(0)}% agreement)</div>
+              <div style="font-size:12px;line-height:1.5;white-space:pre-wrap">${dedup.consensus_preview || 'Proof exists in library.'}</div>
+              <div style="margin-top:10px;display:flex;gap:8px;align-items:center">
+                <button onclick="reQueryRAG()" class="mode-btn" style="padding:4px 12px;font-size:10px">Re-query (uses credits)</button>
+                <span style="font-size:9px;color:var(--dim)">Proof ID: ${dedup.proof_id || '?'}</span>
+              </div>
+            </div>`;
+          log(`RAG: cached proof hit (${(dedup.agreement_score * 100).toFixed(0)}% agreement, id=${dedup.proof_id})`, 'event');
+          return;
+        }
+      }
+    } catch (_) { /* dedup unavailable — proceed to search + tribunal */ }
+  }
+
+  // Step 2: Search Aletheia memory + query tribunal in parallel (zero extra latency)
+  const aletheiaUrl = `${API}/aletheia/search?q=${encodeURIComponent(prompt)}&limit=5`;
   const [memRes, tribRes] = await Promise.allSettled([
     fetch(aletheiaUrl).then(r => r.ok ? r.json() : []),
     fetch(`${API}/api/tribunal`, {
@@ -2437,6 +2464,25 @@ async function askRAG(prompt) {
     ? `RAG: ${memories.length} memories + tribunal (${d.models_responded} models, ${((d.confidence||0)*100).toFixed(0)}%)`
     : `RAG: tribunal only (${d.models_responded} models, ${((d.confidence||0)*100).toFixed(0)}%)`;
   log(logMsg, 'event');
+}
+
+async function reQueryRAG() {
+  if (!_lastRAGPrompt) return;
+  const btn = document.getElementById('askBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>';
+  document.getElementById('tribunalStatus').textContent = 're-querying...';
+  try {
+    await askRAG(_lastRAGPrompt, true);
+    pushLocalHistory(_lastRAGPrompt);
+  } catch (e) {
+    log(`Re-query error: ${e.message}`, 'error');
+    document.getElementById('tribunalResults').innerHTML = `<div style="color:var(--red)">Error: ${e.message}</div>`;
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'ASK';
+    document.getElementById('tribunalStatus').textContent = '';
+  }
 }
 
 async function askTribunal(prompt) {
