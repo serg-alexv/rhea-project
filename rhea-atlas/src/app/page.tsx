@@ -467,6 +467,8 @@ function HudLeft({ managed }: { managed?: FloatingPanelManaged }) {
   const apiHealthy   = useAtlasStore((s: AtlasState) => s.apiHealthy)
   const providerCount = useAtlasStore((s: AtlasState) => s.providerCount)
   const redisStatus  = useAtlasStore((s: AtlasState) => s.redisStatus)
+  const showOceanusFlow = useAtlasStore((s: AtlasState) => s.showOceanusFlow)
+  const toggleOceanusFlow = useAtlasStore((s: AtlasState) => s.toggleOceanusFlow)
 
   return (
     <FloatingPanel position={managed ? 'w-72' : 'top-8 left-8 w-72'} managed={managed}>
@@ -511,6 +513,29 @@ function HudLeft({ managed }: { managed?: FloatingPanelManaged }) {
           <div className="flex items-center gap-2">
             <div className={`w-1.5 h-1.5 rounded-full ${REDIS_COLOR[redisStatus]} ${redisStatus === 'up' ? 'animate-pulse' : ''}`} />
             <span className="text-gray-400">{redisStatus}</span>
+          </div>
+        </div>
+
+        {/* Oceanus Flow toggle */}
+        <div className="pt-1 border-t border-white/5">
+          <div className="flex justify-between items-center text-[10px] font-mono">
+            <span className="opacity-40">OCEANUS</span>
+            <button
+              type="button"
+              onClick={toggleOceanusFlow}
+              className={`rounded-md border px-2 py-0.5 text-[9px] uppercase tracking-widest transition-colors ${
+                showOceanusFlow
+                  ? 'border-cyan-500/30 bg-cyan-500/10 text-cyan-300'
+                  : 'border-white/10 bg-black/20 text-gray-500 hover:text-gray-300'
+              }`}
+              aria-pressed={showOceanusFlow}
+              title={showOceanusFlow ? 'Hide Oceanus Flow' : 'Show Oceanus Flow'}
+            >
+              {showOceanusFlow ? 'On' : 'Off'}
+            </button>
+          </div>
+          <div className="mt-1 text-[8px] font-mono text-gray-600">
+            Density field + vectors {showOceanusFlow ? 'active' : 'hidden'}
           </div>
         </div>
       </div>

@@ -206,22 +206,25 @@ def ensure_index(r):
 
 def store_chunks(chunks: list[DocChunk]):
     r = _get_redis()
-    ensure_index(r)
-    pipe = r.pipeline()
-    for chunk in chunks:
-        if not chunk.embedding:
-            continue
-        vec_bytes = np.array(chunk.embedding, dtype=np.float32).tobytes()
-        pipe.hset(chunk.key, mapping={
-            "text": chunk.text.encode("utf-8"),
-            "source": chunk.source.encode("utf-8"),
-            "page": chunk.page or 0,
-            "chunk_idx": chunk.chunk_idx,
-            "doc_id": chunk.doc_id.encode("utf-8"),
-            "embedding": vec_bytes,
-        })
-    pipe.execute()
-    print(f"[ingest] Stored {len(chunks)} chunks in Redis")
+    try:
+        ensure_index(r)
+        pipe = r.pipeline()
+        for chunk in chunks:
+            if not chunk.embedding:
+                continue
+            vec_bytes = np.array(chunk.embedding, dtype=np.float32).tobytes()
+            pipe.hset(chunk.key, mapping={
+                "text": chunk.text.encode("utf-8"),
+                "source": chunk.source.encode("utf-8"),
+                "page": chunk.page or 0,
+                "chunk_idx": chunk.chunk_idx,
+                "doc_id": chunk.doc_id.encode("utf-8"),
+                "embedding": vec_bytes,
+            })
+        pipe.execute()
+        print(f"[ingest] Stored {len(chunks)} chunks in Redis")
+    finally:
+        r.close()
 
 
 # --- 5. RETRIEVE ---
@@ -230,28 +233,31 @@ def search(query: str, k: int = TOP_K_DEFAULT) -> list[SearchResult]:
     from redis.commands.search.query import Query
 
     r = _get_redis()
-    q_vec = embed_query(query)
-    vec_bytes = np.array(q_vec, dtype=np.float32).tobytes()
+    try:
+        q_vec = embed_query(query)
+        vec_bytes = np.array(q_vec, dtype=np.float32).tobytes()
 
-    q = (
-        Query(f"*=>[KNN {k} @embedding $vec AS score]")
-        .sort_by("score")
-        .return_fields("text", "source", "page", "chunk_idx", "score")
-        .dialect(2)
-    )
-
-    results = r.ft(REDIS_INDEX).search(q, query_params={"vec": vec_bytes})
-
-    return [
-        SearchResult(
-            text=doc.text.decode("utf-8") if isinstance(doc.text, bytes) else doc.text,
-            source=doc.source.decode("utf-8") if isinstance(doc.source, bytes) else doc.source,
-            score=round(1 - float(doc.score), 4),
-            page=int(doc.page) if doc.page else None,
-            chunk_idx=int(doc.chunk_idx),
+        q = (
+            Query(f"*=>[KNN {k} @embedding $vec AS score]")
+            .sort_by("score")
+            .return_fields("text", "source", "page", "chunk_idx", "score")
+            .dialect(2)
         )
-        for doc in results.docs
-    ]
+
+        results = r.ft(REDIS_INDEX).search(q, query_params={"vec": vec_bytes})
+
+        return [
+            SearchResult(
+                text=doc.text.decode("utf-8") if isinstance(doc.text, bytes) else doc.text,
+                source=doc.source.decode("utf-8") if isinstance(doc.source, bytes) else doc.source,
+                score=round(1 - float(doc.score), 4),
+                page=int(doc.page) if doc.page else None,
+                chunk_idx=int(doc.chunk_idx),
+            )
+            for doc in results.docs
+        ]
+    finally:
+        r.close()
 
 
 # --- 6. RAG ---
@@ -330,9 +336,12 @@ def ingest(filepath: str) -> dict:
 def index_status() -> dict:
     try:
         r = _get_redis()
-        info = r.ft(REDIS_INDEX).info()
-        return {"index": REDIS_INDEX, "num_docs": int(info.get("num_docs", 0)),
-                "num_records": int(info.get("num_records", 0))}
+        try:
+            info = r.ft(REDIS_INDEX).info()
+            return {"index": REDIS_INDEX, "num_docs": int(info.get("num_docs", 0)),
+                    "num_records": int(info.get("num_records", 0))}
+        finally:
+            r.close()
     except Exception as e:
         return {"index": REDIS_INDEX, "error": str(e)}
 
