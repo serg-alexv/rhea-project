@@ -534,6 +534,80 @@
   }
   .agent-act-btn:hover { background: rgba(255,255,255,0.06); color: var(--text); }
 
+  /* ── Footer Popup (GitHub-style modal) ── */
+  #footer-popup { display: none; }
+  #footer-popup.open { display: block; }
+  #footer-popup .fp-overlay {
+    position: fixed; inset: 0; z-index: 500;
+    background: rgba(0,0,0,0.55);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+  #footer-popup .fp-card {
+    position: fixed; z-index: 501;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 440px; max-width: 92vw;
+    background: #161b22;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    box-shadow: 0 16px 48px rgba(0,0,0,0.5);
+    font-family: var(--font);
+    color: var(--text);
+    overflow: hidden;
+  }
+  #footer-popup .fp-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 14px 18px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  #footer-popup .fp-title {
+    font-size: 13px; font-weight: 600; color: #e5e7eb;
+  }
+  #footer-popup .fp-close {
+    background: none; border: none; color: rgba(255,255,255,0.35);
+    font-size: 20px; cursor: pointer; line-height: 1;
+    padding: 0 4px; transition: color 0.15s;
+  }
+  #footer-popup .fp-close:hover { color: #fff; }
+  #footer-popup .fp-body {
+    padding: 18px;
+    font-size: 12px; line-height: 1.65; color: var(--dim);
+  }
+  #footer-popup .fp-body p { margin-bottom: 10px; }
+  #footer-popup .fp-body ul { margin: 8px 0 10px 18px; }
+  #footer-popup .fp-body li { margin-bottom: 4px; }
+  #footer-popup .fp-body a { color: var(--accent); text-decoration: none; }
+  #footer-popup .fp-body a:hover { text-decoration: underline; }
+  #footer-popup .fp-body strong { color: var(--text); }
+  #footer-popup .fp-toggle {
+    padding: 8px 12px; margin: 8px 0;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 6px;
+  }
+  #footer-popup .fp-toggle label {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 11px; cursor: pointer;
+  }
+  #footer-popup .fp-toggle em { color: rgba(255,255,255,0.25); font-size: 10px; }
+  #footer-popup .fp-note {
+    font-size: 10px; color: rgba(255,255,255,0.25);
+    margin-top: 12px;
+  }
+  #footer-popup .fp-footer {
+    padding: 12px 18px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    display: flex; justify-content: flex-end;
+  }
+  #footer-popup .fp-btn {
+    background: var(--accent); color: var(--bg);
+    border: none; padding: 6px 18px; border-radius: 6px;
+    font-family: var(--font); font-size: 11px; font-weight: 600;
+    cursor: pointer; transition: opacity 0.15s;
+  }
+  #footer-popup .fp-btn:hover { opacity: 0.85; }
+
   /* ── Contact Chatbox ── */
   #contact-chatbox {
     position: fixed;
@@ -810,9 +884,9 @@
     <span class="footer-sep">&middot;</span>
     <button class="footer-link" onclick="openContactChat()">Contact</button>
     <span class="footer-sep">&middot;</span>
-    <a href="https://github.com/serg-alexv/rhea-project/blob/main/docs/COOKIES.md" target="_blank" rel="noopener">Manage cookies</a>
+    <button class="footer-link" onclick="openFooterPopup('cookies')">Manage cookies</button>
     <span class="footer-sep">&middot;</span>
-    <a href="https://github.com/serg-alexv/rhea-project/blob/main/docs/PERSONAL_INFO.md" target="_blank" rel="noopener">Do not share my personal information</a>
+    <button class="footer-link" onclick="openFooterPopup('personal')">My personal information</button>
     <span class="footer-sep">&middot;</span>
     <span class="tip" data-tip="Non-Profit Samurai&#39;s Squad" style="cursor:default;color:rgba(255,255,255,0.22);letter-spacing:0.05em">&copy; 2026 TimeLabs NPO</span>
   </div>
@@ -865,6 +939,35 @@
   window.openContactChat = openContactChat;
   window.closeContactChat = closeContactChat;
   window.sendContactMsg = sendContactMsg;
+
+  // ── GitHub-style footer popups (Manage cookies / My personal information) ──
+  var _footerPopup = document.createElement('div');
+  _footerPopup.id = 'footer-popup';
+  _footerPopup.innerHTML = '<div class="fp-overlay" onclick="closeFooterPopup()"></div><div class="fp-card"><div class="fp-header"><span class="fp-title" id="fp-title"></span><button onclick="closeFooterPopup()" class="fp-close">&times;</button></div><div class="fp-body" id="fp-body"></div><div class="fp-footer"><button onclick="closeFooterPopup()" class="fp-btn">Done</button></div></div>';
+  document.body.appendChild(_footerPopup);
+
+  var _fpContent = {
+    cookies: {
+      title: 'Manage cookies',
+      body: '<p>We use essential cookies to make Rhea work.</p><p>We do <strong>not</strong> use tracking, analytics, or advertising cookies.</p><div class="fp-toggle"><label><input type="checkbox" checked disabled /> <span>Essential cookies</span> <em>(always on)</em></label></div><div class="fp-toggle"><label><input type="checkbox" id="fp-analytics" /> <span>Analytics cookies</span> <em>(off)</em></label></div><p class="fp-note">For details, see our <a href="https://github.com/serg-alexv/rhea-project/blob/main/docs/COOKIES.md" target="_blank" rel="noopener">Cookie Policy</a>.</p>'
+    },
+    personal: {
+      title: 'My personal information',
+      body: '<p>Under CCPA / GDPR, you have the right to:</p><ul><li>Know what personal data we collect</li><li>Request deletion of your data</li><li>Opt out of data sharing</li></ul><p>Rhea collects: <strong>email</strong> (if you sign up) and <strong>query history</strong> (stored locally).</p><p>We do <strong>not</strong> sell or share personal information with third parties.</p><p>To request data deletion, email <a href="mailto:celestica201@gmail.com" style="color:var(--accent)">celestica201@gmail.com</a>.</p><p class="fp-note">Full policy: <a href="https://github.com/serg-alexv/rhea-project/blob/main/docs/PERSONAL_INFO.md" target="_blank" rel="noopener">Personal Information Policy</a>.</p>'
+    }
+  };
+
+  function openFooterPopup(type) {
+    var c = _fpContent[type];
+    if (!c) return;
+    document.getElementById('fp-title').textContent = c.title;
+    document.getElementById('fp-body').innerHTML = c.body;
+    _footerPopup.classList.add('open');
+  }
+  function closeFooterPopup() { _footerPopup.classList.remove('open'); }
+  document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeFooterPopup(); });
+  window.openFooterPopup = openFooterPopup;
+  window.closeFooterPopup = closeFooterPopup;
 })();
 </script>
 
