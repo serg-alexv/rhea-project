@@ -1,0 +1,1 @@
+Got the full key from the aria-label. Updating .env with new Azure key and correct endpoint.
