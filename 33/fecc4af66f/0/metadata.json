@@ -1,0 +1,23 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "33fecc4af66f",
+  "session_id": "261278d3-25c3-4789-93e7-bfcc23c40cd5",
+  "strategy": "auto-commit",
+  "created_at": "2026-02-26T12:15:10.135838Z",
+  "branch": "stage4-release",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "opera/ops/virtual-office/inbox/REX_TO_ORION_20260226_FRONTEND_SYNC.md"
+  ],
+  "agent": "Claude Code",
+  "transcript_identifier_at_start": "9df476e7-b93b-4ad3-9ee9-00b71dddf156",
+  "checkpoint_transcript_start": 6145,
+  "transcript_lines_at_start": 6145,
+  "token_usage": {
+    "input_tokens": 8,
+    "cache_creation_tokens": 3570,
+    "cache_read_tokens": 861750,
+    "output_tokens": 2204,
+    "api_call_count": 6
+  }
+}
