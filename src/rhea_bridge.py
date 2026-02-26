@@ -129,29 +129,31 @@ MODEL_TIERS = {
     "cheap": {
         "description": "Default tier. Fast, cost-effective. Use for all routine work.",
         "candidates": [
-            "openrouter/anthropic/claude-sonnet-4",
+            "deepseek/deepseek-chat",
+            "anthropic/claude-haiku-3-5-20241022",
             "gemini/gemini-2.0-flash",
             "openai/gpt-4o-mini",
-            "deepseek/deepseek-chat",
-            "azure_ai/gpt-4o-mini",
+            "azure/gpt-4o-mini",
             "gemini/gemini-2.0-flash-lite",
             "openai/gpt-4.1-nano",
+            "openrouter/anthropic/claude-sonnet-4",
         ],
     },
     "balanced": {
         "description": "Mid-tier. For complex reasoning that cheap tier struggles with.",
         "candidates": [
+            "gemini/gemini-2.0-flash",
+            "deepseek/deepseek-chat",
             "openai/gpt-4o",
             "gemini/gemini-2.5-flash",
-            "openai/gpt-4.1",
-            "openrouter/qwen/qwen-2.5-72b-instruct",
-            "openrouter/mistralai/mistral-large-latest",
-            "azure/gpt-4o",
         ],
     },
     "expensive": {
         "description": "Use ONLY when explicitly justified. Deep reasoning, critique, research.",
         "candidates": [
+            "anthropic/claude-sonnet-4-20250514",
+            "deepseek/deepseek-chat",
+            "deepseek/deepseek-reasoner",
             "gemini/gemini-3.1-pro-preview",
             "gemini/gemini-3-pro-preview",
             "gemini/gemini-2.5-pro",
@@ -169,21 +171,21 @@ MODEL_TIERS = {
             "openai/o3-mini",
             "deepseek/deepseek-reasoner",
             "openrouter/deepseek/deepseek-r1",
-            "azure/DeepSeek-R1",
         ],
     },
     "science": {
         "description": "Science-grade models. For biology, chemistry, STEM tribunal queries.",
         "candidates": [
+            "anthropic/claude-sonnet-4-20250514",
             "gemini/gemini-3.1-pro-preview",
             "gemini/gemini-3-pro-preview",
             "gemini/gemini-2.5-pro",
+            "deepseek/deepseek-reasoner",
             "openrouter/qwen/qwen3-235b-a22b",
             "openrouter/qwen/qwen-2.5-72b-instruct",
             "openrouter/deepseek/deepseek-r1",
             "openai/o3",
             "openai/gpt-4.5-preview",
-            "azure/DeepSeek-R1",
             "openrouter/meta-llama/llama-4-behemoth",
         ],
     },
@@ -197,6 +199,9 @@ DEFAULT_TIER = "cheap"  # HARD RULE: Sonnet / cheap models by default
 # ---------------------------------------------------------------------------
 
 PRICE_TABLE = {
+    # Anthropic
+    "claude-sonnet-4-20250514": (3.00, 15.00),
+    "claude-haiku-3-5-20241022": (0.80, 4.00),
     # OpenAI
     "gpt-4o":           (2.50,  10.00),
     "gpt-4o-mini":      (0.15,   0.60),
@@ -304,7 +309,29 @@ def _log_call(
 # Provider registry
 # ---------------------------------------------------------------------------
 
+# TODO(human): Rotate dead API keys in .env file
+# Live test (2026-02-26) shows 1/7 providers alive:
+#   DeepSeek    — LIVE
+#   Anthropic   — invalid key (sk-ant-api03-... auth error)
+#   OpenAI      — invalid key (sk-proj-... "Incorrect API key")
+#   Gemini      — key flagged as leaked by Google
+#   OpenRouter   — "User not found" (account-level issue)
+#   HuggingFace — token expired ("Rhea Office 2026-02-26")
+#   Azure       — auth OK but 0 deployments (needs Azure portal deploy)
+# Action: regenerate keys at each provider's dashboard, update .env
+
 PROVIDERS = {
+    "anthropic": ProviderConfig(
+        name="anthropic",
+        display_name="Anthropic",
+        base_url="https://api.anthropic.com/v1",
+        api_key_env="ANTHROPIC_API_KEY",
+        models=[
+            "claude-sonnet-4-20250514",
+            "claude-haiku-3-5-20241022",
+        ],
+        call_method="anthropic",
+    ),
     "openai": ProviderConfig(
         name="openai",
         display_name="OpenAI",
@@ -368,28 +395,24 @@ PROVIDERS = {
         ],
         call_method="huggingface",
     ),
-    "azure_ai": ProviderConfig(
-        name="azure_ai",
-        display_name="Azure AI Foundry",
-        base_url=os.environ.get("AZURE_ENDPOINT", "https://models.inference.ai.azure.com"),
+    "azure": ProviderConfig(
+        name="azure",
+        display_name="Azure OpenAI",
+        base_url=os.environ.get("AZURE_ENDPOINT", ""),
         api_key_env="AZURE_API_KEY",
         models=[
             "gpt-4o", "gpt-4o-mini",
-            "Llama-4-Maverick-17B-128E-Instruct-FP8",
-            "DeepSeek-R1",
-            "Cohere-command-r-plus-08-2024",
         ],
-        call_method="openai_compatible",
+        call_method="azure_openai",
     ),
 }
 
-# Map env vars for LiteLLM azure_ai provider
-_azure_key = os.environ.get("AZURE_API_KEY", "")
+# Map env vars for LiteLLM Azure OpenAI provider
 _azure_base = os.environ.get("AZURE_ENDPOINT", "")
-if _azure_key and "AZURE_AI_API_KEY" not in os.environ:
-    os.environ["AZURE_AI_API_KEY"] = _azure_key
-if _azure_base and "AZURE_AI_API_BASE" not in os.environ:
-    os.environ["AZURE_AI_API_BASE"] = _azure_base
+if _azure_base and "AZURE_API_BASE" not in os.environ:
+    os.environ["AZURE_API_BASE"] = _azure_base
+if "AZURE_API_VERSION" not in os.environ:
+    os.environ["AZURE_API_VERSION"] = "2024-12-01-preview"
 
 
 # ---------------------------------------------------------------------------
@@ -708,6 +731,42 @@ class RheaBridge:
         }
         return status
 
+    def live_test(self) -> dict:
+        """Ping every provider with a real API call. Returns actual liveness, not just key presence."""
+        probe = "Reply with exactly one word: ping"
+        results = {}
+        test_models = {}
+        for name, cfg in self.providers.items():
+            key = os.environ.get(cfg.api_key_env, "")
+            if not key and name == "gemini":
+                key = os.environ.get("GEMINI_T1_API_KEY", "")
+            if not key:
+                results[name] = {"live": False, "error": "no_key", "latency_s": 0}
+                continue
+            test_models[name] = f"{name}/{cfg.models[0]}"
+
+        with ThreadPoolExecutor(max_workers=len(test_models)) as pool:
+            futures = {
+                pool.submit(self.ask, probe, model, "", 0.0, 5): prov
+                for prov, model in test_models.items()
+            }
+            for future in as_completed(futures):
+                prov = futures[future]
+                try:
+                    resp = future.result()
+                    results[prov] = {
+                        "live": not bool(resp.error),
+                        "model": test_models[prov],
+                        "latency_s": resp.latency_s,
+                        "text": resp.text[:30] if resp.text else "",
+                        "error": resp.error[:120] if resp.error else None,
+                    }
+                except Exception as e:
+                    results[prov] = {"live": False, "error": str(e)[:120], "latency_s": 0}
+
+        alive = sum(1 for r in results.values() if r.get("live"))
+        return {"providers": results, "alive": alive, "total": len(self.providers)}
+
     def tiers_info(self) -> dict:
         """Return tier configuration with availability status."""
         info = {}
@@ -793,7 +852,7 @@ class RheaBridge:
                 "gemini/gemini-2.0-flash",
                 "deepseek/deepseek-chat",
                 "openrouter/anthropic/claude-sonnet-4",
-                "azure_ai/gpt-4o-mini",
+                "azure/gpt-4o-mini",
             ]
             return defaults[:k]
 
@@ -917,6 +976,17 @@ def main():
 
     if cmd == "status":
         print(json.dumps(bridge.models_status(), indent=2))
+
+    elif cmd == "live-test":
+        print("Probing all providers (real API calls)...")
+        result = bridge.live_test()
+        for name, info in result["providers"].items():
+            status = "LIVE" if info.get("live") else "DEAD"
+            err = info.get("error", "")
+            lat = info.get("latency_s", 0)
+            txt = info.get("text", "")
+            print(f"  {name:15s} {status:4s}  {lat:.1f}s  {txt[:25] if txt else err[:60]}")
+        print(f"\nAlive: {result['alive']}/{result['total']}")
 
     elif cmd == "tiers":
         print(json.dumps(bridge.tiers_info(), indent=2))
