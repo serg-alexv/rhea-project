@@ -1211,6 +1211,17 @@ setInterval(() => {
   document.getElementById('clock').textContent = new Date().toLocaleTimeString();
 }, 1000);
 
+// ── Environment labels ──────────────────────────────────────────────────────
+(function applyEnvLabels() {
+  if (IS_DEV) {
+    document.getElementById('dev-badge').style.display = 'inline';
+    document.getElementById('cn-console-label').textContent = 'REX CONSOLE';
+    document.getElementById('cn-atlas-label').textContent = 'ORION ATLAS';
+    document.getElementById('left-panel-header').textContent = 'Agents & Providers';
+  }
+  // prod: labels already set to CONSOLE / ATLAS / Providers by default
+})();
+
 checkHealth();
 loadAgents();
 connectSSE();
