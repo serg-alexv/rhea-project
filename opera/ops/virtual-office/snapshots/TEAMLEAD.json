@@ -1,0 +1,8 @@
+{
+  "agent": "TEAMLEAD",
+  "last_seq_applied": 134,
+  "state_hash": "0339de5b6c6febcc",
+  "saved_at": "2026-02-20T07:24:32.709841+00:00",
+  "lease_token": 2,
+  "messages_drained": 2
+}

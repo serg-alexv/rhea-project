@@ -1,0 +1,8 @@
+{
+  "agent": "B2",
+  "last_seq_applied": 88,
+  "state_hash": "9171cbac697a8665",
+  "saved_at": "2026-02-20T07:13:22.756868+00:00",
+  "lease_token": 2,
+  "messages_drained": 6
+}

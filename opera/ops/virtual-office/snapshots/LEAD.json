@@ -1,0 +1,8 @@
+{
+  "agent": "LEAD",
+  "last_seq_applied": 132,
+  "state_hash": "fa95289abebe20c1",
+  "saved_at": "2026-02-20T07:24:32.176641+00:00",
+  "lease_token": 6,
+  "messages_drained": 2
+}

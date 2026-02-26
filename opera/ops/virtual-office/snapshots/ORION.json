@@ -1,0 +1,8 @@
+{
+  "agent": "ORION",
+  "last_seq_applied": 122,
+  "state_hash": "f75654504d56e6ca",
+  "saved_at": "2026-02-20T07:24:29.496347+00:00",
+  "lease_token": 8,
+  "messages_drained": 1
+}

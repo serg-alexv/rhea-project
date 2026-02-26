@@ -1,0 +1,8 @@
+{
+  "agent": "HYPERION",
+  "last_seq_applied": 129,
+  "state_hash": "1fffbf8f534542da",
+  "saved_at": "2026-02-20T07:24:31.369591+00:00",
+  "lease_token": 3,
+  "messages_drained": 1
+}

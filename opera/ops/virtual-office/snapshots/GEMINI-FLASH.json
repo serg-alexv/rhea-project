@@ -1,0 +1,8 @@
+{
+  "agent": "GEMINI-FLASH",
+  "last_seq_applied": 128,
+  "state_hash": "4d98e3abaef03cf8",
+  "saved_at": "2026-02-20T07:24:31.101827+00:00",
+  "lease_token": 3,
+  "messages_drained": 1
+}
