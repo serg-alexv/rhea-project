@@ -651,10 +651,35 @@ def make_envelope(
 # ---------------------------------------------------------------------------
 
 def _write_local(envelope: dict):
-    """Append to local JSONL (git-auditable)."""
+    """Append to local JSONL (git-auditable) with monotonicity enforcement."""
     MAILBOX_FILE.parent.mkdir(parents=True, exist_ok=True)
+    
+    # Monotonicity Hardening (Task #25)
+    last_seq = 0
+    if MAILBOX_FILE.exists():
+        try:
+            with open(MAILBOX_FILE, "rb") as f:
+                # Seek to end to read last line efficiently
+                f.seek(0, os.SEEK_END)
+                pos = f.tell()
+                while pos > 0:
+                    pos -= 1
+                    f.seek(pos)
+                    if f.read(1) == b"\n" and pos < f.tell() - 1:
+                        break
+                last_line = f.readline().decode().strip()
+                if last_line:
+                    last_seq = json.loads(last_line).get("seq", 0)
+        except Exception:
+            pass
+
+    if envelope.get("seq", 0) <= last_seq:
+        print(f"[relay] REJECTED zombie write: seq={envelope.get('seq')} (last={last_seq})")
+        return False
+
     with open(MAILBOX_FILE, "a") as f:
         f.write(json.dumps(envelope) + "\n")
+    return True
 
 
 def _write_firestore(envelope: dict):
