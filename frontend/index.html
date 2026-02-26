@@ -185,6 +185,132 @@
     color: rgba(255,255,255,0.35);
   }
 
+  /* ── Code-Worm ── */
+  @keyframes worm-flow {
+    0%   { transform: rotate(0deg) translateX(3px) rotate(0deg); opacity: 0.3; }
+    50%  { opacity: 0.8; }
+    100% { transform: rotate(360deg) translateX(3px) rotate(-360deg); opacity: 0.3; }
+  }
+  @keyframes worm-pulse {
+    0%, 100% { box-shadow: 0 0 4px rgba(52,211,153,0.15); }
+    50%       { box-shadow: 0 0 10px rgba(52,211,153,0.45); }
+  }
+  #crossnav .cn-worm {
+    position: relative;
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.03);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    margin-left: 10px;
+    transition: border-color 0.2s, background 0.2s;
+    animation: worm-pulse 3s ease-in-out infinite;
+  }
+  #crossnav .cn-worm:hover {
+    border-color: rgba(52,211,153,0.5);
+    background: rgba(52,211,153,0.06);
+    animation: worm-pulse 0.8s ease-in-out infinite;
+  }
+  #crossnav .cn-worm:hover .worm-char { animation-duration: 0.6s !important; }
+  #crossnav .cn-worm.authed { border-color: rgba(52,211,153,0.4); background: rgba(52,211,153,0.08); }
+  #crossnav .cn-worm.authed .worm-char { color: var(--green); font-weight: 700; font-size: 7px; }
+  .worm-char {
+    position: absolute;
+    font-size: 6px;
+    font-family: var(--font);
+    color: rgba(255,255,255,0.25);
+    line-height: 1;
+    animation: worm-flow 2.4s linear infinite;
+    pointer-events: none;
+  }
+  .worm-char:nth-child(1) { animation-delay: 0s; }
+  .worm-char:nth-child(2) { animation-delay: 0.6s; }
+  .worm-char:nth-child(3) { animation-delay: 1.2s; }
+  .worm-char:nth-child(4) { animation-delay: 1.8s; }
+
+  /* ── Worm Dropdown ── */
+  .worm-drop {
+    position: absolute;
+    top: 32px;
+    right: 14px;
+    width: 200px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 14px;
+    z-index: 200;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+    display: none;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 11px;
+    text-transform: none;
+    letter-spacing: 0;
+  }
+  .worm-drop.open { display: flex; }
+  .worm-drop-title {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--dim);
+    margin-bottom: 2px;
+  }
+  .worm-drop input {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 6px 8px;
+    border-radius: 4px;
+    font-family: var(--font);
+    font-size: 11px;
+    outline: none;
+  }
+  .worm-drop input:focus { border-color: var(--accent); }
+  .worm-drop-btns { display: flex; gap: 6px; margin-top: 2px; }
+  .worm-drop-btns button {
+    flex: 1;
+    padding: 5px 0;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--dim);
+    font-family: var(--font);
+    font-size: 10px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+  }
+  .worm-drop-btns button.primary { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+  .worm-drop-btns button:hover:not(.primary) { border-color: var(--accent); color: var(--accent); }
+  .worm-drop-err { color: var(--red); font-size: 10px; display: none; }
+  .worm-profile { display: flex; flex-direction: column; gap: 6px; }
+  .worm-profile-email { color: var(--text); font-size: 11px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .worm-profile-row { display: flex; align-items: center; justify-content: space-between; }
+  .worm-plan-badge {
+    font-size: 8px; font-weight: 700;
+    padding: 2px 7px; border-radius: 8px;
+    background: rgba(52,211,153,0.15);
+    color: var(--green);
+    border: 1px solid rgba(52,211,153,0.3);
+    text-transform: uppercase; letter-spacing: 0.08em;
+  }
+  .worm-usage-label { font-size: 9px; color: var(--dim); }
+  .worm-usage-bar { height: 3px; border-radius: 2px; background: var(--surface2); overflow: hidden; margin-top: 2px; }
+  .worm-usage-fill { height: 100%; border-radius: 2px; background: var(--green); transition: width 0.4s; }
+  .worm-logout {
+    margin-top: 2px; padding: 5px 0;
+    text-align: center; font-size: 10px;
+    color: var(--dim); cursor: pointer;
+    border: 1px solid var(--border); border-radius: 4px;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .worm-logout:hover { color: var(--red); border-color: var(--red); }
+
   .rag-answer { background: var(--bg); border: 1px solid var(--green); border-radius: 6px; padding: 12px; margin-bottom: 12px; }
   .rag-answer .label { font-size: 10px; color: var(--green); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
   .rag-answer .answer-text { color: var(--text); font-size: 12px; line-height: 1.6; white-space: pre-wrap; }

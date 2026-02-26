@@ -37,6 +37,10 @@ try:
 except ImportError:
     pass
 
+# Mount auth router
+from auth_api import auth_router
+app.include_router(auth_router, prefix="/auth")
+
 # Mount frontend
 _FRONTEND_DIR = PROJECT_ROOT / "frontend"
 if _FRONTEND_DIR.exists():
