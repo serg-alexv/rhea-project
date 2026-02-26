@@ -1,0 +1,1 @@
+Edit the weights in `scripts/d_metric_comparison.py` (look for `TODO(human)`), then re-run `python3 scripts/d_metric_comparison.py` to see how your tuning changes the scenarios. Once you're happy with the numbers, I'll port them into the real `compute_d_metric.py`.
