@@ -311,6 +311,17 @@
   }
   .worm-logout:hover { color: var(--red); border-color: var(--red); }
 
+  /* ── Paid-action toast ── */
+  #paidToast {
+    position: fixed; bottom: 20px; right: 20px;
+    background: var(--surface2); border: 1px solid var(--amber);
+    border-radius: 8px; padding: 8px 16px;
+    font-size: 11px; color: var(--amber);
+    z-index: 200; pointer-events: none;
+    opacity: 0; transition: opacity 0.25s ease;
+  }
+  #paidToast.show { opacity: 1; }
+
   .rag-answer { background: var(--bg); border: 1px solid var(--green); border-radius: 6px; padding: 12px; margin-bottom: 12px; }
   .rag-answer .label { font-size: 10px; color: var(--green); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
   .rag-answer .answer-text { color: var(--text); font-size: 12px; line-height: 1.6; white-space: pre-wrap; }
@@ -509,6 +520,7 @@
     <span class="status" id="componentStatus"></span>
     <span class="status" id="ragStatus" style="color:var(--green)"></span>
     <span style="flex:1"></span>
+    <span class="status" style="color:var(--dim);font-size:9px;letter-spacing:0.04em">All features unlocked &bull; Some actions use AI credits</span>
     <span class="status" id="clock"></span>
   </div>
 
@@ -911,6 +923,15 @@ async function askQuery() {
   const prompt = input.value.trim();
   if (!prompt) return;
 
+  // Paid-action warning
+  const _toastMsg = {
+    rag:      '⚡ Search uses AI credits (~$0.001)',
+    tribunal: '⚡ Tribunal query uses AI credits (~$0.002)',
+    sceptic:  '⚡ Sceptic analysis uses AI credits (~$0.004)',
+    ice:      '⚡ Deep analysis uses AI credits (~$0.01)',
+  }[currentMode] || '⚡ This action uses AI credits';
+  showPaidToast(_toastMsg);
+
   btn.disabled = true;
   btn.innerHTML = '<span class="spinner"></span>';
   document.getElementById('tribunalStatus').textContent = 'querying...';
@@ -1233,6 +1254,21 @@ syncCrossnavOntology();
 log('Rhea Scientific Gem v0.4.0 initialized', 'event');
 log('RAG pipeline: 76 docs / 250 chunks indexed in Redis', 'event');
 log('New: Ontology Switcher | Sceptic Mode | Session Rewind', 'event');
+
+// ── Paid-action toast ────────────────────────────────────────────────────────
+(function() {
+  const el = document.createElement('div');
+  el.id = 'paidToast';
+  document.body.appendChild(el);
+
+  let _timer = null;
+  window.showPaidToast = function(msg) {
+    el.textContent = msg;
+    el.classList.add('show');
+    if (_timer) clearTimeout(_timer);
+    _timer = setTimeout(() => el.classList.remove('show'), 4000);
+  };
+})();
 </script>
 </body>
 </html>
