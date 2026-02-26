@@ -460,6 +460,43 @@
     <span id="cn-onto-badge" class="cn-badge">General</span>
     <span id="cn-providers">—</span>
   </div>
+  <!-- Code-Worm auth element -->
+  <div class="cn-worm" id="cnWorm" onclick="toggleAuth(event)" title="Login / Profile">
+    <span class="worm-char" id="wc0">{</span>
+    <span class="worm-char" id="wc1">}</span>
+    <span class="worm-char" id="wc2">;</span>
+    <span class="worm-char" id="wc3">=</span>
+  </div>
+  <div class="worm-drop" id="wormDrop">
+    <!-- auth form (default) -->
+    <div id="wormAuth">
+      <div class="worm-drop-title" id="wormDropTitle">Login</div>
+      <input type="email" id="wormEmail" placeholder="email" autocomplete="username" />
+      <input type="password" id="wormPass" placeholder="password" autocomplete="current-password" />
+      <div class="worm-drop-btns">
+        <button class="primary" onclick="doLogin()">Login</button>
+        <button onclick="doSignup()">Sign up</button>
+      </div>
+      <div class="worm-drop-err" id="wormErr"></div>
+    </div>
+    <!-- profile card (when authed) -->
+    <div id="wormProfileCard" class="worm-profile" style="display:none">
+      <div class="worm-drop-title">Profile</div>
+      <div class="worm-profile-email" id="wormProfileEmail">—</div>
+      <div class="worm-profile-row">
+        <span class="worm-usage-label">Plan</span>
+        <span class="worm-plan-badge">FREE</span>
+      </div>
+      <div>
+        <div class="worm-profile-row">
+          <span class="worm-usage-label">Queries</span>
+          <span class="worm-usage-label" id="wormUsageText">0/100</span>
+        </div>
+        <div class="worm-usage-bar"><div class="worm-usage-fill" id="wormUsageFill" style="width:0%"></div></div>
+      </div>
+      <div class="worm-logout" onclick="doLogout()">Logout</div>
+    </div>
+  </div>
 </nav>
 
 <div class="grid">
@@ -566,6 +603,114 @@ let eventCount = 0;
 let currentMode = 'rag';
 let currentOntology = 'general';
 let historyCollapsed = true;
+
+// ── Code-Worm Auth ─────────────────────────────────────────────────────────
+
+const WORM_CHARS_IDLE = ['{','}',';','=','=>','()','::', '&&'];
+let _wormCycle = 0;
+const _wormEls = [
+  document.getElementById('wc0'), document.getElementById('wc1'),
+  document.getElementById('wc2'), document.getElementById('wc3')
+];
+setInterval(() => {
+  _wormCycle++;
+  _wormEls.forEach((el, i) => {
+    if (el && !document.getElementById('cnWorm').classList.contains('authed')) {
+      el.textContent = WORM_CHARS_IDLE[(_wormCycle + i * 2) % WORM_CHARS_IDLE.length];
+    }
+  });
+}, 900);
+
+function toggleAuth(e) {
+  e.stopPropagation();
+  document.getElementById('wormDrop').classList.toggle('open');
+}
+document.addEventListener('click', e => {
+  if (!e.target.closest('#cnWorm') && !e.target.closest('#wormDrop')) {
+    document.getElementById('wormDrop').classList.remove('open');
+  }
+});
+
+function _wormErr(msg) {
+  const el = document.getElementById('wormErr');
+  el.textContent = msg; el.style.display = msg ? 'block' : 'none';
+}
+
+async function doLogin() {
+  const email = document.getElementById('wormEmail').value.trim();
+  const pass  = document.getElementById('wormPass').value;
+  if (!email || !pass) { _wormErr('Email and password required'); return; }
+  try {
+    const r = await fetch(`${API}/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password: pass })
+    });
+    const d = await r.json();
+    if (!r.ok) { _wormErr(d.error || 'Login failed'); return; }
+    localStorage.setItem('rhea_token', d.token);
+    _wormErr('');
+    loadProfile();
+  } catch(e) { _wormErr('Network error'); }
+}
+
+async function doSignup() {
+  const email = document.getElementById('wormEmail').value.trim();
+  const pass  = document.getElementById('wormPass').value;
+  if (!email || !pass) { _wormErr('Email and password required'); return; }
+  try {
+    const r = await fetch(`${API}/auth/signup`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password: pass })
+    });
+    const d = await r.json();
+    if (!r.ok) { _wormErr(d.error || 'Signup failed'); return; }
+    localStorage.setItem('rhea_token', d.token);
+    _wormErr('');
+    loadProfile();
+  } catch(e) { _wormErr('Network error'); }
+}
+
+async function loadProfile() {
+  const token = localStorage.getItem('rhea_token');
+  if (!token) return;
+  try {
+    const r = await fetch(`${API}/auth/profile`, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    if (!r.ok) { localStorage.removeItem('rhea_token'); return; }
+    const d = await r.json();
+    const worm = document.getElementById('cnWorm');
+    worm.classList.add('authed');
+    const initials = (d.email || '').slice(0, 2).toUpperCase();
+    _wormEls.forEach((el, i) => { if (el) el.textContent = i < 2 ? initials[i] || '' : ''; });
+    _wormEls[2] && (_wormEls[2].style.display = 'none');
+    _wormEls[3] && (_wormEls[3].style.display = 'none');
+    document.getElementById('wormAuth').style.display = 'none';
+    document.getElementById('wormProfileCard').style.display = 'flex';
+    document.getElementById('wormProfileEmail').textContent = d.email || '';
+    const used = d.queries_used || 0, limit = d.queries_limit || 100;
+    document.getElementById('wormUsageText').textContent = `${used}/${limit}`;
+    document.getElementById('wormUsageFill').style.width = `${Math.min(100, (used/limit)*100)}%`;
+  } catch(e) { /* silent */ }
+}
+
+function doLogout() {
+  localStorage.removeItem('rhea_token');
+  const worm = document.getElementById('cnWorm');
+  worm.classList.remove('authed');
+  _wormEls.forEach((el, i) => {
+    if (el) { el.textContent = WORM_CHARS_IDLE[i]; el.style.display = ''; }
+  });
+  document.getElementById('wormAuth').style.display = '';
+  document.getElementById('wormProfileCard').style.display = 'none';
+  document.getElementById('wormDrop').classList.remove('open');
+  _wormErr('');
+}
+
+// Bootstrap: check token on load
+if (localStorage.getItem('rhea_token')) loadProfile();
 
 // ── Logging ────────────────────────────────────────────────────────────────
 
