@@ -58,3 +58,11 @@ rhea-atlas/.next/
 
 # SQLite databases (runtime data, not source)
 *.db
+
+# Entire.io session metadata (may contain transcripts with secrets)
+.entire/metadata/
+??/
+
+# Archive files with session transcripts
+archive/gemini-audit-*/
+archive/platform-dialogues/
