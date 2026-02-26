@@ -1,0 +1,13 @@
+---
+
+**Learn by Doing**
+
+**Context:** Redis is fully wired — rate limiting, pub/sub, KV, and tribunal caching all work on Redis Cloud. The current cache key is `sha256(prompt|k|tier|mode)[:16]` — a 16-char hex prefix. This determines when two tribunal queries are "the same" and when a cached result gets served vs. a fresh query fires.
+
+**Your Task:** In `src/rhea_bus.py`, redesign the `cache_tribunal()` and `get_cached_tribunal()` methods. Look for `TODO(human)`. The key design questions: Should the cache key include more parameters (system prompt, timestamp bucket)? Should TTL vary by tier (expensive queries cached longer)? Should high-confidence results live longer than low-confidence ones?
+
+**Guidance:** Trade-offs to consider:
+- **16-char hash prefix** = ~2^64 collision space, enough for this scale. But shorter = more collisions on a busy system. Full hex = 64 chars, wasteful for Redis memory.
+- **Including `system` prompt**: If two users send the same question but with different system prompts, should they get different cached results? (Yes, probably.)
+- **Dynamic TTL**: A 95% confidence result is more "stable" than a 60% one. Cache the certain answers longer? Or does that hide drift in model behavior?
+- **Tier-based TTL**: Expensive queries cost real money — caching them for 30 min instead of 5 min saves significant cost. But stale expensive results could be worse than stale cheap ones.

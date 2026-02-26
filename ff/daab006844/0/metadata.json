@@ -1,0 +1,26 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "ffdaab006844",
+  "session_id": "261278d3-25c3-4789-93e7-bfcc23c40cd5",
+  "strategy": "auto-commit",
+  "created_at": "2026-02-26T07:29:27.22021Z",
+  "branch": "hyperion/memory",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "config/requirements.txt",
+    "src/rhea_bus.py",
+    "src/tribunal_api.py",
+    "tests/test_rhead_basics.py"
+  ],
+  "agent": "Claude Code",
+  "transcript_identifier_at_start": "52ddb529-0ecb-491d-8bee-eb4b930172a8",
+  "checkpoint_transcript_start": 2671,
+  "transcript_lines_at_start": 2671,
+  "token_usage": {
+    "input_tokens": 32,
+    "cache_creation_tokens": 39294,
+    "cache_read_tokens": 1633647,
+    "output_tokens": 9999,
+    "api_call_count": 28
+  }
+}
