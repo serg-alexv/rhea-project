@@ -20,12 +20,17 @@ import os
 import re
 import time
 import uuid
+import litellm
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass, field, asdict
 from datetime import datetime, timezone
 from pathlib import Path
 from statistics import median
 from typing import Optional
+
+# Disable litellm logging to keep dashboard clean
+litellm.set_verbose = False
+litellm.telemetry = False
 
 try:
     from dotenv import load_dotenv
@@ -380,14 +385,6 @@ PROVIDERS = {
 # Bridge
 # ---------------------------------------------------------------------------
 
-class RheaBridge:
-    """Multi-provider LLM bridge with tiered cost-aware routing and tribunal support."""
-
-    def __init__(self):
-        self.providers = PROVIDERS
-        self.tiers = MODEL_TIERS
-        self.default_tier = DEFAULT_TIER
-
 from rhea_profile_manager import profile_manager
 from rhea_visual_context import get_context_block
 
@@ -468,7 +465,7 @@ class RheaBridge:
         max_tokens: int = 2048,
         mode: Optional[str] = None,
     ) -> ModelResponse:
-        """Send a prompt to a specific model. Format: 'provider/model'."""
+        """Send a prompt to a specific model via LiteLLM. Format: 'provider/model'."""
         
         # --- Nexus/GPT-Profiler & Visual Context Injection ---
         constraints = profile_manager.get_constraints(mode)
@@ -489,59 +486,34 @@ class RheaBridge:
         # ----------------------------------------------------
 
         provider_name, model_id = self._resolve_model(model)
-        cfg = self.providers.get(provider_name)
-        if not cfg:
-            return ModelResponse(
-                provider=provider_name, model=model_id,
-                text="", latency_s=0, error=f"Unknown provider: {provider_name}",
-            )
-
-        api_key = os.environ.get(cfg.api_key_env, "")
-        # Gemini fallback: try T1 key if main key unavailable or rate-limited
-        if not api_key and cfg.name == "gemini":
-            api_key = os.environ.get("GEMINI_T1_API_KEY", "")
-        if not api_key:
-            return ModelResponse(
-                provider=provider_name, model=model_id,
-                text="", latency_s=0,
-                error=f"No API key: set {cfg.api_key_env}",
-            )
-
         t0 = time.time()
-        token_info = {"prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0}
+        
         try:
-            if cfg.call_method == "openai_compatible":
-                text, token_info = self._call_openai_compatible(
-                    cfg, api_key, model_id, prompt, system, temperature, max_tokens
-                )
-            elif cfg.call_method == "gemini":
-                try:
-                    text, token_info = self._call_gemini(
-                        cfg, api_key, model_id, prompt, system, temperature, max_tokens
-                    )
-                except Exception as gemini_err:
-                    # Retry with T1 key on rate limit
-                    t1_key = os.environ.get("GEMINI_T1_API_KEY", "")
-                    if t1_key and t1_key != api_key and "429" in str(gemini_err):
-                        text, token_info = self._call_gemini(
-                            cfg, t1_key, model_id, prompt, system, temperature, max_tokens
-                        )
-                    else:
-                        raise
-            elif cfg.call_method == "huggingface":
-                text, token_info = self._call_huggingface(
-                    cfg, api_key, model_id, prompt, system, temperature, max_tokens
-                )
-            else:
-                resp_err = ModelResponse(
-                    provider=provider_name, model=model_id,
-                    text="", latency_s=0,
-                    error=f"Unknown call method: {cfg.call_method}",
-                )
-                _log_call(provider_name, model_id, 0, 0, 0, 0, resp_err.error)
-                return resp_err
+            # Prepare messages for LiteLLM
+            messages = []
+            if system:
+                messages.append({"role": "system", "content": system})
+            messages.append({"role": "user", "content": prompt})
+
+            # Call LiteLLM
+            response = litellm.completion(
+                model=model,
+                messages=messages,
+                temperature=temperature,
+                max_tokens=max_tokens,
+            )
+
+            text = response.choices[0].message.content
+            usage = getattr(response, 'usage', {})
+            token_info = {
+                "prompt_tokens": getattr(usage, 'prompt_tokens', 0),
+                "completion_tokens": getattr(usage, 'completion_tokens', 0),
+                "total_tokens": getattr(usage, 'total_tokens', 0),
+            }
+
             elapsed = time.time() - t0
             latency_ms = elapsed * 1000
+            
             _log_call(
                 provider_name, model_id,
                 token_info["prompt_tokens"],
@@ -549,21 +521,17 @@ class RheaBridge:
                 token_info["total_tokens"],
                 latency_ms, None,
             )
+
             return ModelResponse(
                 provider=provider_name, model=model_id,
                 text=text, latency_s=round(elapsed, 2),
                 tokens_used=token_info["total_tokens"],
             )
+
         except Exception as e:
             elapsed = time.time() - t0
             latency_ms = elapsed * 1000
-            _log_call(
-                provider_name, model_id,
-                token_info["prompt_tokens"],
-                token_info["completion_tokens"],
-                token_info["total_tokens"],
-                latency_ms, str(e),
-            )
+            _log_call(provider_name, model_id, 0, 0, 0, latency_ms, str(e))
             return ModelResponse(
                 provider=provider_name, model=model_id,
                 text="", latency_s=round(elapsed, 2), error=str(e),
@@ -742,110 +710,6 @@ class RheaBridge:
                 "available_count": sum(1 for c in candidates_status if c["available"]),
             }
         return info
-
-    # --- private: provider-specific call methods ---
-
-    def _call_openai_compatible(self, cfg, api_key, model, prompt, system, temperature, max_tokens):
-        import requests
-        headers = {
-            "Authorization": f"Bearer {api_key}",
-            "Content-Type": "application/json",
-        }
-        if cfg.name == "openrouter":
-            headers["HTTP-Referer"] = "https://github.com/serg-alexv/rhea-project"
-            headers["X-Title"] = "Rhea"
-        if cfg.name == "azure":
-            # Azure AI Foundry uses api-key header, not Bearer token
-            headers = {
-                "api-key": api_key,
-                "Content-Type": "application/json",
-            }
-
-        messages = []
-        if system:
-            messages.append({"role": "system", "content": system})
-        messages.append({"role": "user", "content": prompt})
-
-        body = {
-            "model": model,
-            "messages": messages,
-            "temperature": temperature,
-            "max_tokens": max_tokens,
-        }
-
-        if cfg.name == "azure" and "AZURE_ENDPOINT" in os.environ:
-            # Azure OpenAI Service: /openai/deployments/{model}/chat/completions
-            url = f"{cfg.base_url}/openai/deployments/{model}/chat/completions?api-version=2024-10-21"
-        else:
-            url = f"{cfg.base_url}/chat/completions"
-
-        resp = requests.post(
-            url,
-            headers=headers, json=body, timeout=60,
-        )
-        resp.raise_for_status()
-        data = resp.json()
-        text = data["choices"][0]["message"]["content"]
-        usage = data.get("usage", {})
-        token_info = {
-            "prompt_tokens": usage.get("prompt_tokens", 0),
-            "completion_tokens": usage.get("completion_tokens", 0),
-            "total_tokens": usage.get("total_tokens", 0),
-        }
-        return text, token_info
-
-    def _call_gemini(self, cfg, api_key, model, prompt, system, temperature, max_tokens):
-        import requests
-        url = f"{cfg.base_url}/models/{model}:generateContent?key={api_key}"
-        contents = []
-        if system:
-            contents.append({"role": "user", "parts": [{"text": system}]})
-            contents.append({"role": "model", "parts": [{"text": "Understood."}]})
-        contents.append({"role": "user", "parts": [{"text": prompt}]})
-
-        body = {
-            "contents": contents,
-            "generationConfig": {
-                "temperature": temperature,
-                "maxOutputTokens": max_tokens,
-            },
-        }
-        resp = requests.post(url, json=body, timeout=60)
-        resp.raise_for_status()
-        data = resp.json()
-        text = data["candidates"][0]["content"]["parts"][0]["text"]
-        usage = data.get("usageMetadata", {})
-        token_info = {
-            "prompt_tokens": usage.get("promptTokenCount", 0),
-            "completion_tokens": usage.get("candidatesTokenCount", 0),
-            "total_tokens": usage.get("totalTokenCount", 0),
-        }
-        return text, token_info
-
-    def _call_huggingface(self, cfg, api_key, model, prompt, system, temperature, max_tokens):
-        import requests
-        headers = {"Authorization": f"Bearer {api_key}"}
-        full_prompt = f"{system}\n\n{prompt}" if system else prompt
-        body = {
-            "inputs": full_prompt,
-            "parameters": {
-                "temperature": temperature,
-                "max_new_tokens": max_tokens,
-                "return_full_text": False,
-            },
-        }
-        resp = requests.post(
-            f"{cfg.base_url}/{model}",
-            headers=headers, json=body, timeout=60,
-        )
-        resp.raise_for_status()
-        data = resp.json()
-        if isinstance(data, list) and len(data) > 0:
-            text = data[0].get("generated_text", "")
-        else:
-            text = str(data)
-        token_info = {"prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0}
-        return text, token_info
 
     # --- private: model resolution ---
 
