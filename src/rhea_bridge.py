@@ -31,6 +31,15 @@ from typing import Optional
 # Disable litellm logging to keep dashboard clean
 litellm.set_verbose = False
 litellm.telemetry = False
+
+# Enable Redis Caching if available (Task #22)
+if os.environ.get("REDIS_URL"):
+    try:
+        from litellm.caching import Cache
+        litellm.cache = Cache(type="redis", url=os.environ.get("REDIS_URL"))
+        print("[bridge] Redis STM layer active.")
+    except Exception as e:
+        print(f"[bridge] Redis init failed: {e}")
 litellm.suppress_debug_info = True
 import logging
 logging.getLogger("LiteLLM").setLevel(logging.CRITICAL)
