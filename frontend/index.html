@@ -861,6 +861,7 @@ async function loadAgents() {
     let agentHtml = '';
     if (IS_DEV) {
       agentHtml = '<div style="font-size:10px;color:var(--accent);text-transform:uppercase;margin-bottom:6px">Agents / Relay Geometry</div>';
+      agentHtml += '<div style="color:var(--dim);font-size:10px;margin-bottom:8px">Shows live agents when available; otherwise last 6 relay events (refreshes every 10s).</div>';
       if (!names.length) {
         try {
           const rs = await fetch(`${API}/ui/atlas`);
