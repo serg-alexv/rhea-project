@@ -15,7 +15,7 @@
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { background: var(--bg); color: var(--text); font-family: var(--font); font-size: 13px; }
 
-  .grid { display: grid; grid-template-columns: 280px 1fr 320px; grid-template-rows: 48px 1fr 200px; height: 100vh; gap: 1px; background: var(--border); }
+  .grid { display: grid; grid-template-columns: 280px 1fr 320px; grid-template-rows: 48px 1fr 200px; height: calc(100vh - 30px); margin-top: 30px; gap: 1px; background: var(--border); }
   .panel { background: var(--surface); overflow: hidden; display: flex; flex-direction: column; }
   .panel-header { padding: 8px 12px; background: var(--surface2); border-bottom: 1px solid var(--border); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--dim); display: flex; justify-content: space-between; align-items: center; }
   .panel-body { flex: 1; overflow-y: auto; padding: 12px; }
@@ -104,6 +104,86 @@
 
   .spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; }
   @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── Cross-nav bar ── */
+  #crossnav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 30px;
+    z-index: 100;
+    background: rgba(0, 0, 0, 0.82);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    display: flex;
+    align-items: center;
+    padding: 0 14px;
+    gap: 0;
+    font-family: var(--font);
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    user-select: none;
+  }
+  #crossnav .cn-logo {
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    margin-right: 14px;
+  }
+  #crossnav .cn-sep {
+    width: 1px;
+    height: 14px;
+    background: rgba(255,255,255,0.1);
+    margin: 0 12px;
+  }
+  #crossnav .cn-link {
+    color: rgba(255, 255, 255, 0.38);
+    text-decoration: none;
+    padding: 3px 8px;
+    border-radius: 3px;
+    transition: color 0.15s, background 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  #crossnav .cn-link:hover { color: rgba(255, 255, 255, 0.72); background: rgba(255,255,255,0.05); }
+  #crossnav .cn-link.active { color: var(--accent); }
+  #crossnav .cn-link.active::after {
+    content: '';
+    display: block;
+    position: absolute;
+    bottom: 0;
+    left: 0; right: 0;
+    height: 2px;
+    background: var(--accent);
+    border-radius: 1px 1px 0 0;
+  }
+  #crossnav .cn-link { position: relative; }
+  #crossnav .cn-dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 5px var(--green);
+    flex-shrink: 0;
+  }
+  #crossnav .cn-meta {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: rgba(255, 255, 255, 0.22);
+    font-size: 9px;
+  }
+  #crossnav .cn-badge {
+    padding: 1px 6px;
+    border-radius: 8px;
+    font-size: 8px;
+    font-weight: 600;
+    border: 1px solid rgba(255,255,255,0.1);
+    color: rgba(255,255,255,0.35);
+  }
 
   .rag-answer { background: var(--bg); border: 1px solid var(--green); border-radius: 6px; padding: 12px; margin-bottom: 12px; }
   .rag-answer .label { font-size: 10px; color: var(--green); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
@@ -238,6 +318,23 @@
 </style>
 </head>
 <body>
+
+<!-- ── Cross-navigation bar ── -->
+<nav id="crossnav">
+  <span class="cn-logo">RHEA</span>
+  <div class="cn-sep"></div>
+  <a class="cn-link active" href="#">
+    <span class="cn-dot"></span>
+    REX CONSOLE
+  </a>
+  <a class="cn-link" href="http://localhost:3000" target="_blank" rel="noopener">
+    ORION ATLAS &rarr;
+  </a>
+  <div class="cn-meta">
+    <span id="cn-onto-badge" class="cn-badge">General</span>
+    <span id="cn-providers">—</span>
+  </div>
+</nav>
 
 <div class="grid">
   <div class="topbar">
@@ -391,6 +488,7 @@ async function switchOntology(value) {
   const badge = document.getElementById('ontologyBadge');
   badge.textContent = meta.label;
   badge.className = 'ontology-badge ' + meta.cls;
+  syncCrossnavOntology();
 
   log(`Switching ontology to: ${meta.label}`);
   try {
@@ -419,11 +517,20 @@ async function checkHealth() {
     const r2 = await fetch(`${API}/api/health`);
     const d2 = await r2.json();
     document.getElementById('providerCount').textContent = `Providers: ${d2.providers_available}/${d2.providers_total} | Models: ${d2.total_models}`;
+    // Mirror into crossnav
+    document.getElementById('cn-providers').textContent = `${d2.providers_available}/${d2.providers_total} providers`;
   } catch(e) {
     document.getElementById('statusDot').className = 'dot dead';
     document.getElementById('statusText').textContent = 'offline';
     log(`Health check failed: ${e.message}`, 'error');
   }
+}
+
+// Keep crossnav ontology badge in sync with the main badge
+function syncCrossnavOntology() {
+  const src = document.getElementById('ontologyBadge');
+  const dst = document.getElementById('cn-onto-badge');
+  if (src && dst) dst.textContent = src.textContent;
 }
 
 // ── Agents Panel ───────────────────────────────────────────────────────────
@@ -796,6 +903,7 @@ setInterval(checkHealth, 15000);
 setInterval(loadAgents, 10000);
 
 document.getElementById('ragStatus').textContent = 'RAG: 250 chunks';
+syncCrossnavOntology();
 log('Rhea Scientific Gem v0.4.0 initialized', 'event');
 log('RAG pipeline: 76 docs / 250 chunks indexed in Redis', 'event');
 log('New: Ontology Switcher | Sceptic Mode | Session Rewind', 'event');
