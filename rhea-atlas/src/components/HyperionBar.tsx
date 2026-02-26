@@ -20,7 +20,7 @@ const VIEW_TABS: ViewTab[] = [
     label: 'CONSOLE',
     devLabel: "THEMIS CONSOLE",
     tooltip: 'Rex Console — System Controls',
-    external: `${API_BASE}/app`,
+    external: `${API_BASE}/app/`,
   },
   {
     id: 'atlas-prime',

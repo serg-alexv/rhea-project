@@ -292,7 +292,7 @@
 const IS_DEV_HOST = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
 const API_BASE = IS_DEV_HOST ? 'http://localhost:8000' : location.origin;
 const cnConsoleLink = document.getElementById('cn-console-link');
-if (cnConsoleLink && IS_DEV_HOST) cnConsoleLink.href = 'http://localhost:8000/app';
+if (cnConsoleLink && IS_DEV_HOST) cnConsoleLink.href = 'http://localhost:8000/app/';
 const ONTOLOGIES = ['General','Pharmacology','Biochemistry','Logic','Topology','Systems Biology'];
 
 // ── Semantic corpus (research topics to collect) ─────────────────────
