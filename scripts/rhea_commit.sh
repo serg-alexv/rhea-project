@@ -127,6 +127,13 @@ else
     warn "Ensure 'entire' CLI is properly configured and session was started."
 fi
 
+# Step 5.6: Email Audit Layer (Task #23 - Developer Mode)
+if [ "${RHEA_MODE:-}" = "developer" ]; then
+    log "Developer Mode active. Sending 4th-layer email audit signal..."
+    COMMIT_MSG=$(git log -1 --pretty=%B)
+    python3 src/email_bridge.py "Commit ${COMMIT_SHA}" "Agent: ${RHEA_AGENT_ID:-UNKNOWN}\nMessage: ${COMMIT_MSG}" || warn "Email signal failed."
+fi
+
 # Step 6: D-metric check
 log "Running D-metric check..."
 if python3 scripts/compute_d_metric.py; then
