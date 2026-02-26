@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useCallback, useEffect, useRef } from 'react';
-import { animate, motion, useMotionValue, AnimatePresence } from 'framer-motion';
+import { useState, useCallback, useEffect, useRef, useMemo } from 'react';
+import { motion, useMotionValue, AnimatePresence, useDragControls, useReducedMotion } from 'framer-motion';
 import { useAtlasStore, AtlasState, SessionEntry } from '@/store/useAtlasStore';
 import { useWhisperStore } from '@/store/useWhisperStore';
 import { TRIBUNAL_API } from '@/lib/config';
@@ -24,6 +24,49 @@ function PaidToast({ message, visible }: { message: string; visible: boolean }) 
       )}
     </AnimatePresence>
   );
+}
+
+function useVisibleScrollAreaProps() {
+  return useMemo(
+    () => ({
+      className: 'pretty-scroll pr-1',
+      style: { scrollbarGutter: 'stable' as const },
+    }),
+    [],
+  );
+}
+
+function usePanelAmbientMotion(opts: { managed: boolean; minimized: boolean; reducedMotion: boolean }) {
+  const { managed, minimized, reducedMotion } = opts;
+
+  return useMemo(() => {
+    if (reducedMotion || minimized) {
+      return {
+        shellAnimate: undefined,
+        shellTransition: undefined,
+        innerAnimate: undefined,
+        innerTransition: undefined,
+      };
+    }
+
+    return {
+      shellAnimate: { rotate: [0, 0.12, -0.08, 0] },
+      shellTransition: {
+        duration: managed ? 18 : 14,
+        repeat: Infinity,
+        ease: 'easeInOut' as const,
+      },
+      innerAnimate: {
+        x: [0, 0.7, -0.45, 0],
+        y: [0, -1.25, 0.65, 0],
+      },
+      innerTransition: {
+        duration: managed ? 20 : 16,
+        repeat: Infinity,
+        ease: 'easeInOut' as const,
+      },
+    };
+  }, [managed, minimized, reducedMotion]);
 }
 
 const ONTOLOGIES = [
@@ -80,6 +123,7 @@ type ManagedResearchPanel = {
   onFocus: () => void;
   onToggleMin: () => void;
   onCycleSlot: (dir: -1 | 1) => void;
+  onDropAtPoint?: (point: { x: number; y: number }) => void;
 };
 
 export default function ResearchPanel({ managed }: { managed?: ManagedResearchPanel } = {}) {
@@ -108,9 +152,18 @@ export default function ResearchPanel({ managed }: { managed?: ManagedResearchPa
   const recordWhisperModeSwitch = useWhisperStore((s) => s.recordModeSwitch);
   const x = useMotionValue(0);
   const y = useMotionValue(0);
+  const dragControls = useDragControls();
+  const prefersReducedMotion = useReducedMotion();
   const [zIndex, setZIndex] = useState(++PANEL_Z);
   const [localMinimized, setLocalMinimized] = useState(false);
   const isMinimized = managed?.minimized ?? localMinimized;
+  const resultScrollArea = useVisibleScrollAreaProps();
+  const managedTransformPrefix = managed?.slotClass.includes('-translate-x-1/2') ? 'translateX(-50%)' : '';
+  const ambientMotion = usePanelAmbientMotion({
+    managed: !!managed,
+    minimized: isMinimized,
+    reducedMotion: !!prefersReducedMotion,
+  });
   const toggleMinimized = () => {
     if (managed) managed.onToggleMin();
     else setLocalMinimized((v) => !v);
@@ -221,10 +274,12 @@ export default function ResearchPanel({ managed }: { managed?: ManagedResearchPa
   return (
     <>
     <motion.div
-      drag={managed ? false : true}
-      dragMomentum={managed ? undefined : false}
-      dragConstraints={managed ? undefined : { left: 0, right: 0, top: 0, bottom: 0 }}
-      dragElastic={managed ? undefined : 0.1}
+      drag={!!managed}
+      dragControls={dragControls}
+      dragListener={!managed}
+      dragMomentum={false}
+      dragElastic={managed ? 0.08 : 0.12}
+      dragSnapToOrigin={!!managed}
       style={managed ? { zIndex: managed.focused ? 120 : 80 } : { x, y, zIndex }}
       onPointerDown={() => {
         if (managed) managed.onFocus();
@@ -234,19 +289,34 @@ export default function ResearchPanel({ managed }: { managed?: ManagedResearchPa
         if (managed) managed.onFocus();
         else setZIndex(++PANEL_Z);
       }}
-      onDragStart={managed ? undefined : () => setZIndex(++PANEL_Z)}
-      onDragEnd={managed ? undefined : () => {
-        const step = 24;
-        animate(x, Math.round(x.get() / step) * step, { type: 'spring', stiffness: 500, damping: 34 });
-        animate(y, Math.round(y.get() / step) * step, { type: 'spring', stiffness: 500, damping: 34 });
+      onDragStart={() => {
+        if (managed) managed.onFocus();
+      }}
+      onDragEnd={(_, info) => {
+        if (!managed) return;
+        managed.onDropAtPoint?.({ x: info.point.x, y: info.point.y });
       }}
       whileHover={managed ? { scale: 1 } : { scale: 1.01 }}
-      whileDrag={managed ? undefined : { scale: 1.01 }}
+      whileDrag={managed ? { scale: 1.008 } : { scale: 1.015 }}
+      animate={ambientMotion.shellAnimate}
+      transition={ambientMotion.shellTransition}
+      transformTemplate={managedTransformPrefix
+        ? (_, generated) => (generated && generated !== 'none'
+          ? `${managedTransformPrefix} ${generated}`
+          : managedTransformPrefix)
+        : undefined}
       tabIndex={0}
-      className={`${managed ? `absolute ${managed.slotClass}` : 'absolute bottom-8 right-8'} z-20 w-80 p-6 rounded-3xl border ${panelTone} backdrop-blur-2xl shadow-[0_0_50px_rgba(0,0,0,0.5)] ${managed ? 'outline-none transition-opacity duration-200' : 'cursor-grab active:cursor-grabbing'}`}
+      className={`${managed ? `absolute ${managed.slotClass}` : 'absolute bottom-8 right-8'} z-20 w-80 p-6 rounded-3xl border ${panelTone} backdrop-blur-2xl shadow-[0_0_50px_rgba(0,0,0,0.5)] ${managed ? 'outline-none transition-opacity duration-200' : ''}`}
     >
+      <motion.div
+        animate={ambientMotion.innerAnimate}
+        transition={ambientMotion.innerTransition}
+      >
       {/* Header */}
-      <div className="mb-4 flex items-center justify-between gap-2">
+      <div
+        className={`mb-4 flex items-center justify-between gap-2 ${managed ? 'cursor-grab active:cursor-grabbing' : ''}`}
+        onPointerDown={managed ? (e) => dragControls.start(e) : undefined}
+      >
         <h2 className="text-[10px] font-bold uppercase tracking-widest text-gray-500">
           Research Query
         </h2>
@@ -393,10 +463,10 @@ export default function ResearchPanel({ managed }: { managed?: ManagedResearchPa
               <div
                 className={`
                   rounded-xl border border-white/5 bg-black/30 p-3
-                  text-[10px] font-mono leading-relaxed max-h-40 overflow-y-auto
+                  text-[10px] font-mono leading-relaxed max-h-40 overflow-y-auto ${resultScrollArea.className}
                   ${error ? 'text-red-400/70' : 'text-cyan-200/60'}
                 `}
-                style={{ scrollbarWidth: 'none' }}
+                style={resultScrollArea.style}
               >
                 {error || result}
               </div>
@@ -404,6 +474,7 @@ export default function ResearchPanel({ managed }: { managed?: ManagedResearchPa
           )}
         </>
       )}
+      </motion.div>
     </motion.div>
 
     {/* Paid-action toast — rendered outside the draggable panel so it stays fixed */}

@@ -1,4 +1,240 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-body { background: #050505; color: white; margin: 0; padding: 0; }
+
+:root {
+  --atlas-scroll-size: 10px;
+  --atlas-scroll-radius: 999px;
+  --atlas-scroll-track: rgba(255, 255, 255, 0.05);
+  --atlas-scroll-track-hi: rgba(255, 255, 255, 0.08);
+  --atlas-scroll-thumb-a: rgba(34, 211, 238, 0.42);
+  --atlas-scroll-thumb-b: rgba(34, 197, 94, 0.24);
+  --atlas-scroll-thumb-hover-a: rgba(34, 211, 238, 0.56);
+  --atlas-scroll-thumb-hover-b: rgba(34, 197, 94, 0.34);
+  --atlas-scroll-thumb-active-a: rgba(34, 211, 238, 0.64);
+  --atlas-scroll-thumb-active-b: rgba(59, 130, 246, 0.34);
+  --atlas-scroll-border: rgba(255, 255, 255, 0.22);
+  --atlas-scroll-glow: rgba(34, 211, 238, 0.12);
+
+  --atlas-panel-fx-inset: 1px;
+  --atlas-panel-flow-opacity: 0.15;
+  --atlas-panel-scanline-opacity: 0.028;
+  --atlas-panel-sheen-opacity: 0.18;
+  --atlas-panel-liquid-opacity: 0.11;
+  --atlas-panel-flow-duration: 18s;
+  --atlas-panel-sheen-duration: 13s;
+  --atlas-panel-liquid-duration: 17s;
+}
+
+html, body {
+  background: #050505;
+  color: white;
+  margin: 0;
+  padding: 0;
+}
+
+.pretty-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(34, 211, 238, 0.5) var(--atlas-scroll-track);
+  scrollbar-gutter: stable;
+}
+
+.pretty-scroll::-webkit-scrollbar {
+  width: var(--atlas-scroll-size);
+  height: var(--atlas-scroll-size);
+}
+
+.pretty-scroll::-webkit-scrollbar-track {
+  border-radius: var(--atlas-scroll-radius);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.018),
+    var(--atlas-scroll-track-hi)
+  );
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.18);
+}
+
+.pretty-scroll::-webkit-scrollbar-thumb {
+  min-height: 28px;
+  background:
+    linear-gradient(180deg, var(--atlas-scroll-thumb-a), var(--atlas-scroll-thumb-b));
+  border-radius: var(--atlas-scroll-radius);
+  border: 1px solid var(--atlas-scroll-border);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.06),
+    0 0 10px var(--atlas-scroll-glow);
+  transition:
+    background 140ms ease,
+    border-color 140ms ease,
+    box-shadow 140ms ease;
+}
+
+.pretty-scroll::-webkit-scrollbar-thumb:hover {
+  background:
+    linear-gradient(
+      180deg,
+      var(--atlas-scroll-thumb-hover-a),
+      var(--atlas-scroll-thumb-hover-b)
+    );
+  border-color: rgba(255, 255, 255, 0.34);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.08),
+    0 0 12px rgba(34, 211, 238, 0.16);
+}
+
+.pretty-scroll::-webkit-scrollbar-thumb:active {
+  background:
+    linear-gradient(
+      180deg,
+      var(--atlas-scroll-thumb-active-a),
+      var(--atlas-scroll-thumb-active-b)
+    );
+  border-color: rgba(255, 255, 255, 0.42);
+}
+
+.pretty-scroll::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+.atlas-panel-live,
+.atlas-panel-flow,
+.atlas-panel-sheen,
+.atlas-panel-scan,
+.atlas-liquid-tile-shimmer {
+  position: relative;
+  isolation: isolate;
+}
+
+.atlas-panel-live {
+  --atlas-panel-flow-opacity: 0.14;
+  --atlas-panel-scanline-opacity: 0.024;
+  --atlas-panel-sheen-opacity: 0.2;
+}
+
+.atlas-panel-flow {
+  --atlas-panel-flow-opacity: 0.14;
+  --atlas-panel-scanline-opacity: 0.02;
+}
+
+.atlas-panel-scan {
+  --atlas-panel-flow-opacity: 0.11;
+  --atlas-panel-scanline-opacity: 0.042;
+  --atlas-panel-flow-duration: 12s;
+}
+
+.atlas-panel-live::before,
+.atlas-panel-flow::before,
+.atlas-panel-scan::before {
+  content: '';
+  position: absolute;
+  inset: var(--atlas-panel-fx-inset);
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: var(--atlas-panel-flow-opacity);
+  background:
+    radial-gradient(120% 80% at 12% 14%, rgba(34, 211, 238, 0.14), transparent 50%),
+    radial-gradient(90% 70% at 86% 78%, rgba(96, 165, 250, 0.12), transparent 55%),
+    linear-gradient(180deg, transparent 0%, rgba(255, 255, 255, 0.035) 48%, transparent 56%),
+    repeating-linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0) 0 3px,
+      rgba(255, 255, 255, var(--atlas-panel-scanline-opacity)) 3px 4px,
+      rgba(255, 255, 255, 0) 4px 9px
+    );
+  background-size: 100% 100%, 100% 100%, 160% 170%, 100% 14px;
+  background-position: 0% 0%, 0% 0%, 0% -25%, 0 0;
+  animation: atlas-panel-flow var(--atlas-panel-flow-duration) ease-in-out infinite;
+  mix-blend-mode: screen;
+}
+
+.atlas-panel-live::after,
+.atlas-panel-sheen::after {
+  content: '';
+  position: absolute;
+  inset: var(--atlas-panel-fx-inset);
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: var(--atlas-panel-sheen-opacity);
+  background:
+    linear-gradient(
+      120deg,
+      transparent 8%,
+      rgba(255, 255, 255, 0.018) 34%,
+      rgba(255, 255, 255, 0.06) 46%,
+      rgba(255, 255, 255, 0.022) 56%,
+      transparent 74%
+    ),
+    radial-gradient(90% 70% at 18% 18%, rgba(34, 211, 238, 0.08), transparent 60%);
+  background-size: 220% 220%, 100% 100%;
+  background-position: -12% 0%, 0% 0%;
+  animation: atlas-panel-sheen var(--atlas-panel-sheen-duration) ease-in-out infinite;
+  mix-blend-mode: screen;
+}
+
+.atlas-liquid-tile-shimmer::after {
+  content: '';
+  position: absolute;
+  inset: var(--atlas-panel-fx-inset);
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: var(--atlas-panel-liquid-opacity);
+  background:
+    radial-gradient(120% 95% at 15% 20%, rgba(34, 211, 238, 0.16), transparent 50%),
+    radial-gradient(115% 95% at 82% 72%, rgba(34, 197, 94, 0.12), transparent 56%),
+    linear-gradient(115deg, transparent 18%, rgba(255, 255, 255, 0.055) 44%, transparent 70%);
+  background-size: 150% 150%, 150% 150%, 230% 230%;
+  background-position: 0% 0%, 100% 100%, -20% 60%;
+  animation: atlas-liquid-tile-shimmer var(--atlas-panel-liquid-duration) ease-in-out infinite;
+  mix-blend-mode: screen;
+}
+
+@keyframes atlas-panel-flow {
+  0% { background-position: 0% 0%, 0% 0%, 0% -25%, 0 0; }
+  35% { background-position: 0% 0%, 0% 0%, 45% 35%, 0 6px; }
+  70% { background-position: 0% 0%, 0% 0%, 100% 85%, 0 12px; }
+  100% { background-position: 0% 0%, 0% 0%, 0% -25%, 0 18px; }
+}
+
+@keyframes atlas-panel-sheen {
+  0% { background-position: -12% 0%, 0% 0%; }
+  50% { background-position: 86% 58%, 0% 0%; }
+  100% { background-position: -12% 0%, 0% 0%; }
+}
+
+@keyframes atlas-liquid-tile-shimmer {
+  0% { background-position: 0% 0%, 100% 100%, -20% 60%; }
+  40% { background-position: 20% 10%, 80% 88%, 45% 48%; }
+  75% { background-position: 100% 100%, 0% 0%, 100% 38%; }
+  100% { background-position: 0% 0%, 100% 100%, -20% 60%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pretty-scroll::-webkit-scrollbar-thumb {
+    transition: none;
+  }
+
+  .atlas-panel-live::before,
+  .atlas-panel-live::after,
+  .atlas-panel-flow::before,
+  .atlas-panel-scan::before,
+  .atlas-panel-sheen::after,
+  .atlas-liquid-tile-shimmer::after {
+    animation: none;
+  }
+
+  .atlas-panel-live::before,
+  .atlas-panel-flow::before,
+  .atlas-panel-scan::before {
+    background-position: 0% 0%, 0% 0%, 40% 40%, 0 0;
+  }
+
+  .atlas-panel-live::after,
+  .atlas-panel-sheen::after {
+    background-position: 24% 18%, 0% 0%;
+  }
+
+  .atlas-liquid-tile-shimmer::after {
+    background-position: 22% 28%, 78% 72%, 36% 54%;
+  }
+}

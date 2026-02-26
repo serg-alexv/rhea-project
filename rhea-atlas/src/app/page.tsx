@@ -4,7 +4,7 @@ import { Suspense, useEffect, useMemo, useState } from 'react'
 import { API_BASE } from '@/lib/config'
 import { Canvas } from '@react-three/fiber'
 import { OrbitControls, Environment, Stars, Float } from '@react-three/drei'
-import { animate, motion, AnimatePresence, useMotionValue } from 'framer-motion'
+import { motion, AnimatePresence, useMotionValue } from 'framer-motion'
 import * as THREE from 'three'
 import { getLastHealth, useAtlasSync } from '@/hooks/useAtlasSync'
 import { useAtlasStore, AtlasState } from '@/store/useAtlasStore'
@@ -45,6 +45,7 @@ type FloatingPanelManaged = {
   onFocus: () => void
   onToggleMin: () => void
   onCycleSlot: (dir: -1 | 1) => void
+  onDropAtPoint?: (point: { x: number; y: number }) => void
 }
 
 const DOCK_SLOT_ORDER: DockSlot[] = ['tl', 'tc', 'tr', 'ml', 'mc', 'mr', 'bl', 'bc', 'br']
@@ -119,11 +120,12 @@ function FloatingPanel({
   const x = useMotionValue(0)
   const y = useMotionValue(0)
   const [zIndex, setZIndex] = useState(++PANEL_Z)
-  const snap = () => {
-    const step = 24
-    animate(x, Math.round(x.get() / step) * step, { type: 'spring', stiffness: 500, damping: 34 })
-    animate(y, Math.round(y.get() / step) * step, { type: 'spring', stiffness: 500, damping: 34 })
-  }
+  const managedSlot = managed?.slot
+  useEffect(() => {
+    if (!managedSlot) return
+    x.set(0)
+    y.set(0)
+  }, [managedSlot, x, y])
   const shellTone = managed
     ? managed.focused
       ? 'border-cyan-500/20 bg-black/55 opacity-100 shadow-[0_0_55px_rgba(34,211,238,0.08)]'
@@ -133,15 +135,14 @@ function FloatingPanel({
     : 'border-white/5 bg-white/5 opacity-100 shadow-[0_0_50px_rgba(0,0,0,0.5)]'
   const panelClass = managed
     ? `absolute ${DOCK_SLOT_CLASS[managed.slot]} ${position} z-20 rounded-3xl border backdrop-blur-2xl transition-opacity duration-200`
-    : `absolute ${position} z-20 p-6 rounded-3xl border backdrop-blur-2xl cursor-grab active:cursor-grabbing`
+    : `absolute ${position} z-20 p-6 rounded-3xl border backdrop-blur-2xl`
   return (
     <motion.div
       data-panel={panelId ?? managed?.id}
-      drag={managed ? false : true}
-      dragMomentum={managed ? undefined : false}
-      dragConstraints={managed ? undefined : { left: 0, right: 0, top: 0, bottom: 0 }}
-      dragElastic={managed ? undefined : 0.1}
-      style={managed ? { zIndex: managed.focused ? 120 : 80 } : { x, y, zIndex }}
+      drag={Boolean(managed?.onDropAtPoint)}
+      dragMomentum={false}
+      dragElastic={0.08}
+      style={managed ? { x, y, zIndex: managed.focused ? 120 : 80 } : { x, y, zIndex }}
       onPointerDown={() => {
         if (managed) managed.onFocus()
         else setZIndex(++PANEL_Z)
@@ -150,16 +151,20 @@ function FloatingPanel({
         if (managed) managed.onFocus()
         else setZIndex(++PANEL_Z)
       }}
-      onDragStart={managed ? undefined : () => setZIndex(++PANEL_Z)}
-      onDragEnd={managed ? undefined : snap}
+      onDragStart={managed ? () => managed.onFocus() : undefined}
+      onDragEnd={managed?.onDropAtPoint ? (_event, info) => {
+        managed.onDropAtPoint?.({ x: info.point.x, y: info.point.y })
+        x.set(0)
+        y.set(0)
+      } : undefined}
       whileHover={managed ? { scale: 1 } : { scale: 1.02 }}
-      whileDrag={managed ? undefined : { scale: 1.015 }}
+      whileDrag={managed ? { scale: 1.01 } : undefined}
       tabIndex={0}
       className={`${panelClass} ${shellTone} ${managed ? 'outline-none' : ''}`}
     >
       <div className={managed ? 'p-3' : 'p-6'}>
         {managed && (
-          <div className={`mb-2 flex items-center gap-2 ${managed.focused ? 'opacity-100' : 'opacity-70'} transition-opacity`}>
+          <div className={`mb-2 flex items-center gap-2 ${managed.focused ? 'opacity-100' : 'opacity-70'} transition-opacity ${managed.onDropAtPoint ? 'cursor-grab active:cursor-grabbing touch-none' : ''}`}>
             <button
               type="button"
               onPointerDown={(e) => e.stopPropagation()}
@@ -574,29 +579,29 @@ function MemoryMapZone({
   managed?: FloatingPanelManaged
 }) {
   const sessionHistory = useAtlasStore((s: AtlasState) => s.sessionHistory)
-  const consensusScore = useAtlasStore((s: AtlasState) => s.consensusScore)
-  const dMetric = useAtlasStore((s: AtlasState) => s.dMetric)
   const [randomSalt, setRandomSalt] = useState(0)
 
   const sourceText = useMemo(() => {
-    const joined = sessionHistory
+    return sessionHistory
       .slice(0, 8)
       .map((s: AtlasState['sessionHistory'][number]) => `${s.query}\n${s.result}`)
       .join('\n')
       .trim()
-    return joined || `${selectedNode}\nconsensus:${consensusScore}\ndrift:${dMetric}`
-  }, [sessionHistory, selectedNode, consensusScore, dMetric])
+  }, [sessionHistory])
 
   const tiles = useMemo(() => {
     const rows = 6
     const cols = 8
+    if (!sourceText) {
+      return Array.from({ length: rows * cols }, () => null as string | null)
+    }
     const chunk = Math.max(12, Math.ceil(sourceText.length / (rows * cols)))
     return Array.from({ length: rows * cols }, (_, i) => {
-      const segment = sourceText.slice(i * chunk, (i + 1) * chunk) || `${selectedNode}:${i}`
+      const segment = sourceText.slice(i * chunk, (i + 1) * chunk) || `memo:${i}`
       const hex = new THREE.Color(colorFromHash(segment, profile, randomSalt + i)).getHexString()
       return `#${hex}`
     })
-  }, [sourceText, selectedNode, profile, randomSalt])
+  }, [sourceText, profile, randomSalt])
 
   return (
     <FloatingPanel panelId="memory-map" position={managed ? 'w-80' : 'top-32 right-80 w-80'} managed={managed}>
@@ -625,24 +630,70 @@ function MemoryMapZone({
         </button>
       </div>
 
-      <div className="grid grid-cols-8 gap-1 rounded-xl border border-white/5 bg-black/25 p-2">
+      <div className="grid grid-cols-8 gap-1 rounded-2xl border border-white/5 bg-gradient-to-b from-white/[0.035] to-black/35 p-2">
         {tiles.map((hex, i) => (
           <div
-            key={`${hex}-${i}`}
-            title={`cell:${i} ${hex}`}
-            className="h-6 rounded-sm border border-black/20"
-            style={{ background: hex }}
-          />
+            key={`${hex ?? 'transparent'}-${i}`}
+            title={hex ? `cell:${i} ${hex}` : `cell:${i} transparent`}
+            className="relative h-6 overflow-hidden rounded-[0.7rem] border"
+            style={{
+              background: hex ? `${hex}12` : 'transparent',
+              borderColor: hex ? `${hex}B3` : 'transparent',
+              boxShadow: hex ? `inset 0 0 0 1px ${hex}26, 0 0 12px ${hex}22` : 'none',
+            }}
+          >
+            {hex && (
+              <>
+                <div
+                  className="absolute inset-[1px] rounded-[0.62rem]"
+                  style={{
+                    background: `linear-gradient(145deg, ${hex}F2 0%, ${hex}DB 58%, ${hex}C9 100%)`,
+                    opacity: 0.9,
+                  }}
+                />
+                <motion.div
+                  className="pointer-events-none absolute inset-[1px] rounded-[0.62rem] mix-blend-screen"
+                  style={{
+                    background: `radial-gradient(95% 80% at 22% 18%, rgba(255,255,255,0.52) 0%, transparent 62%), radial-gradient(85% 85% at 78% 78%, ${hex}8C 0%, transparent 72%)`,
+                    opacity: 0.45,
+                  }}
+                  animate={{
+                    x: [-1.5, 1.5, -0.5, -1.5],
+                    y: [0.5, -0.75, 0.75, 0.5],
+                    scale: [1, 1.03, 0.99, 1],
+                  }}
+                  transition={{
+                    duration: 5.2 + (i % 5) * 0.7,
+                    repeat: Infinity,
+                    ease: 'easeInOut',
+                    delay: (i % 8) * 0.08,
+                  }}
+                />
+              </>
+            )}
+          </div>
         ))}
       </div>
 
       <div className="mt-2 rounded-xl border border-white/5 bg-black/20 p-2 text-[9px] font-mono text-gray-400">
-        source_bytes={sourceText.length} :: deterministic_hashmap={randomSalt === 0 ? 'on' : 'offset'}
+        source_bytes={sourceText.length} :: deterministic_hashmap={sourceText ? (randomSalt === 0 ? 'on' : 'offset') : 'off'}
       </div>
 
       <div className="mt-2 flex flex-wrap gap-1">
-        {tiles.slice(0, 6).map((hex) => (
-          <span key={`${hex}-legend`} className="rounded-md border border-white/5 bg-black/30 px-2 py-1 text-[9px] font-mono text-gray-300/70">
+        {tiles.filter((tile): tile is string => Boolean(tile)).slice(0, 6).map((hex, i) => (
+          <span
+            key={`${hex}-legend-${i}`}
+            className="inline-flex items-center gap-1.5 rounded-lg border bg-black/45 px-2 py-1 text-[9px] font-mono text-white/80"
+            style={{
+              borderColor: `${hex}66`,
+              boxShadow: `inset 0 0 0 1px ${hex}22`,
+            }}
+          >
+            <span
+              aria-hidden
+              className="h-2 w-2 rounded-full"
+              style={{ background: hex, boxShadow: `0 0 10px ${hex}55` }}
+            />
             {hex}
           </span>
         ))}
@@ -670,11 +721,14 @@ function RheaFooter() {
   }, [])
 
   const links = [
-    { label: 'Terms',     href: 'https://github.com/serg-alexv/rhea-project/blob/main/docs/TERMS.md' },
-    { label: 'Privacy',   href: 'https://github.com/serg-alexv/rhea-project/blob/main/docs/PRIVACY.md' },
-    { label: 'Security',  href: 'https://github.com/serg-alexv/rhea-project/blob/main/docs/SECURITY.md' },
-    { label: 'Community', href: 'https://github.com/serg-alexv/rhea-project' },
-    { label: 'Docs',      href: 'https://github.com/serg-alexv/rhea-project/tree/main/docs' },
+    { label: 'Terms',     href: '/legal/terms.html' },
+    { label: 'Privacy',   href: '/legal/privacy.html' },
+    { label: 'Security',  href: '/legal/security.html' },
+    { label: 'Community', href: '/community/' },
+    { label: 'Docs',      href: '/docs/' },
+    { label: 'Contact',   href: '/contact/' },
+    { label: 'Manage cookies', href: '/legal/cookies.html' },
+    { label: 'My personal information', href: '/legal/personal-info.html' },
   ]
 
   const popupContent = {
@@ -690,7 +744,7 @@ function RheaFooter() {
           <div className="bg-white/[0.03] border border-white/[0.06] rounded-md px-3 py-2 my-2">
             <label className="flex items-center gap-2 text-[11px] cursor-pointer"><input type="checkbox" className="accent-cyan-400" /> Analytics cookies <em className="text-white/25 text-[10px]">(off)</em></label>
           </div>
-          <p className="text-[10px] text-white/25 mt-3">For details, see our <a href="https://github.com/serg-alexv/rhea-project/blob/main/docs/COOKIES.md" target="_blank" rel="noopener noreferrer" className="text-cyan-400/70 hover:underline">Cookie Policy</a>.</p>
+          <p className="text-[10px] text-white/25 mt-3">For details, see our <a href="/legal/cookies.html" className="text-cyan-400/70 hover:underline">Cookie Policy</a>.</p>
         </>
       ),
     },
@@ -707,7 +761,7 @@ function RheaFooter() {
           <p className="mb-2.5">Rhea collects: <strong className="text-white/80">email</strong> (if you sign up) and <strong className="text-white/80">query history</strong> (stored locally).</p>
           <p className="mb-2.5">We do <strong className="text-white/80">not</strong> sell or share personal information with third parties.</p>
           <p className="mb-2.5">To request data deletion, email <a href="mailto:celestica201@gmail.com" className="text-cyan-400/70 hover:underline">celestica201@gmail.com</a>.</p>
-          <p className="text-[10px] text-white/25 mt-3">Full policy: <a href="https://github.com/serg-alexv/rhea-project/blob/main/docs/PERSONAL_INFO.md" target="_blank" rel="noopener noreferrer" className="text-cyan-400/70 hover:underline">Personal Information Policy</a>.</p>
+          <p className="text-[10px] text-white/25 mt-3">Full policy: <a href="/legal/personal-info.html" className="text-cyan-400/70 hover:underline">Personal Information Policy</a>.</p>
         </>
       ),
     },
@@ -766,12 +820,9 @@ function RheaFooter() {
           {links.map((link, i) => (
             <span key={link.label}>
               {i > 0 && <span className="mx-2 text-white/15">·</span>}
-              <a href={link.href} target="_blank" rel="noopener noreferrer" className="text-[9px] font-mono text-white/35 hover:text-white/60 transition-colors">{link.label}</a>
+              <a href={link.href} className="text-[9px] font-mono text-white/35 hover:text-white/60 transition-colors">{link.label}</a>
             </span>
           ))}
-          <span><span className="mx-2 text-white/15">·</span><button onClick={() => setChatOpen((o) => !o)} className="text-[9px] font-mono text-white/35 hover:text-white/60 transition-colors">Contact</button></span>
-          <span><span className="mx-2 text-white/15">·</span><button onClick={() => setPopup('cookies')} className="text-[9px] font-mono text-white/35 hover:text-white/60 transition-colors">Manage cookies</button></span>
-          <span><span className="mx-2 text-white/15">·</span><button onClick={() => setPopup('personal')} className="text-[9px] font-mono text-white/35 hover:text-white/60 transition-colors">My personal information</button></span>
           <span className="mx-2 text-white/15">·</span>
           <span className="group relative inline-block cursor-default text-[9px] font-mono text-white/[0.22] tracking-wide">
             © 2026 TimeLabs NPO
@@ -835,6 +886,36 @@ export default function Home() {
     movePanelToSlot(panelId, nextSlot(dockLayout[panelId].slot, dir))
   }
 
+  const nearestDockSlotForPoint = (point: { x: number; y: number }): DockSlot => {
+    if (typeof window === 'undefined') return dockLayout.hud.slot
+
+    const viewportW = Math.max(window.innerWidth, 1)
+    const viewportH = Math.max(window.innerHeight, 1)
+    const topRowY = 62
+    const middleRowY = 350
+    const bottomRowY = Math.max(middleRowY + 160, viewportH - 72)
+
+    const anchors: Array<{ slot: DockSlot; x: number; y: number }> = [
+      { slot: 'tl', x: 40, y: topRowY },
+      { slot: 'tc', x: viewportW / 2, y: topRowY },
+      { slot: 'tr', x: viewportW - 40, y: topRowY },
+      { slot: 'ml', x: 40, y: middleRowY },
+      { slot: 'mc', x: viewportW / 2, y: middleRowY },
+      { slot: 'mr', x: viewportW - 40, y: middleRowY },
+      { slot: 'bl', x: 40, y: bottomRowY },
+      { slot: 'bc', x: viewportW / 2, y: bottomRowY },
+      { slot: 'br', x: viewportW - 40, y: bottomRowY },
+    ]
+
+    return anchors.reduce((best, anchor) => {
+      const bestDx = point.x - best.x
+      const bestDy = point.y - best.y
+      const nextDx = point.x - anchor.x
+      const nextDy = point.y - anchor.y
+      return (nextDx * nextDx + nextDy * nextDy) < (bestDx * bestDx + bestDy * bestDy) ? anchor : best
+    }, anchors[0]).slot
+  }
+
   const togglePanelMin = (panelId: ManagedPanelId) => {
     setDockLayout((prev) => ({
       ...prev,
@@ -864,6 +945,11 @@ export default function Home() {
       markUiActive()
       setFocusedPanel(panelId)
       cyclePanelSlot(panelId, dir)
+    },
+    onDropAtPoint: (point) => {
+      markUiActive()
+      setFocusedPanel(panelId)
+      movePanelToSlot(panelId, nearestDockSlotForPoint(point))
     },
   })
 
