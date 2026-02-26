@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-02-26T00:00:00Z",
+  "current_D": 0.12,
+  "T1_threshold": 0.5,
+  "T2_threshold": 0.8,
+  "qualitative_level": "GREEN",
+  "w1": 0.25,
+  "w2": 0.25,
+  "w3": 0.20,
+  "w4": 0.15,
+  "w5": 0.15,
+  "core_docs_kb": 34,
+  "core_docs_target_kb": 200,
+  "repo_size_mb": 1106,
+  "snapshots_retention_policy": "keep-all-named,prune-auto-after-30d",
+  "commits_on_main": 0,
+  "notes": "Discomfort D = w1*(core_docs/T1_kb) + w2*(repo_mb/T1_mb) + w3*(stale_sessions) + w4*(missing_milestones) + w5*(pending_adrs)"
+}
