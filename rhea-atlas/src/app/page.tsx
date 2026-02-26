@@ -1,84 +1,84 @@
-'use client';
+'use client'
+import dynamic from 'next/dynamic'
+import { Suspense, useState, useRef } from 'react'
+import { Canvas, useFrame } from '@react-three/fiber'
+import { OrbitControls, Environment, Stars, Float } from '@react-three/drei'
+import { motion, AnimatePresence } from 'framer-motion'
+import * as THREE from 'three'
 
-import dynamic from 'next/dynamic';
-import { motion } from 'framer-motion';
-import { useAtlasStore } from '@/store/useAtlasStore';
-import { useAtlasSync } from '@/hooks/useAtlasSync';
+const RuliadicIsland = dynamic(() => import('@/components/RuliadicIsland'), { ssr: false })
+const IsomorphismBeam = dynamic(() => import('@/components/IsomorphismBeam'), { ssr: false })
 
-// Dynamic import for Three.js scene to avoid SSR issues
-const AtlasScene = dynamic(() => import('@/components/atlas/AtlasScene'), { ssr: false });
+function FloatingPanel({ children, position }: { children: React.ReactNode, position: string }) {
+  return (
+    <motion.div 
+      drag
+      dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
+      dragElastic={0.1}
+      whileHover={{ scale: 1.02 }}
+      className={`absolute ${position} z-20 p-6 rounded-3xl border border-white/5 bg-white/5 backdrop-blur-2xl shadow-[0_0_50px_rgba(0,0,0,0.5)] cursor-grab active:cursor-grabbing`}
+    >
+      {children}
+    </motion.div>
+  )
+}
 
 export default function Home() {
-  useAtlasSync(); // Start real-time sync
-  const { dMetric, consensusScore, activeIslandId } = useAtlasStore();
+  const [selectedNode, setSelectedNode] = useState('Ruliadic Core')
+  const [dMetric] = useState(282.4)
 
   return (
-    <main className="relative w-full h-screen overflow-hidden font-sans">
-      {/* 3D Visual Surface */}
-      <AtlasScene />
-
-      {/* Top HUD */}
-      <motion.div 
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="absolute top-8 left-8 z-10 p-6 rounded-xl border border-white/10 bg-black/40 backdrop-blur-md w-80 shadow-2xl"
-      >
-        <h1 className="text-cyan-400 font-bold text-xl tracking-tight mb-1">RULIADIC ATLAS v5.0</h1>
-        <p className="text-[10px] text-gray-500 uppercase tracking-[0.2em] mb-6">Scientific High-Density Cockpit</p>
-        
-        <div className="space-y-4">
-          <div className="flex justify-between items-end">
-            <span className="text-xs text-gray-400 uppercase">D-Metric Drift</span>
-            <span className="text-sm font-mono text-cyan-400 font-bold">{dMetric}</span>
+    <main className="h-screen w-full bg-[#030303] overflow-hidden relative">
+      {/* 1. FLOATING HUD: The Meditative Panels */}
+      <AnimatePresence>
+        <FloatingPanel position="top-8 left-8 w-72">
+          <h1 className="text-lg font-bold tracking-tighter text-cyan-400/80 mb-1">RHEA ATLAS</h1>
+          <p className="text-[9px] uppercase tracking-[0.4em] opacity-30 mb-6 font-mono font-bold">Zen Garden Mode</p>
+          <div className="space-y-4">
+            <div className="flex justify-between text-[10px] font-mono"><span className="opacity-40">DRIFT</span><span className="text-cyan-400">{dMetric}</span></div>
+            <div className="w-full bg-white/5 h-[1px] rounded-full overflow-hidden">
+              <motion.div initial={{ width: 0 }} animate={{ width: '70%' }} className="bg-cyan-500/30 h-full" />
+            </div>
           </div>
-          <div className="w-full bg-white/5 h-[2px] overflow-hidden rounded-full">
-            <motion.div 
-              initial={{ width: 0 }}
-              animate={{ width: '70%' }}
-              className="bg-cyan-500/50 h-full"
-            />
-          </div>
-          
-          <div className="flex justify-between items-end">
-            <span className="text-xs text-gray-400 uppercase">Council Confidence</span>
-            <span className="text-sm font-mono text-green-400 font-bold">{consensusScore}%</span>
-          </div>
-        </div>
+        </FloatingPanel>
 
-        <div className="mt-8 pt-4 border-t border-white/5 text-[10px] text-cyan-300/60 font-mono animate-pulse">
-          📡 PULSE: MONITORING RELAY CHAIN...
-        </div>
-      </motion.div>
-
-      {/* Bottom HUD: Tokenmeter */}
-      <motion.div 
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ opacity: 1, scale: 1 }}
-        className="absolute bottom-8 right-8 z-10 w-24 h-24 rounded-full border border-cyan-500/20 bg-black/40 backdrop-blur-md flex items-center justify-center flex-col shadow-[0_0_30px_rgba(6,182,212,0.1)]"
-      >
-        <span className="text-[10px] font-bold text-cyan-400/80">FREE TIER</span>
-        <span className="text-[8px] text-gray-500 mt-1 uppercase tracking-tighter">9router</span>
-      </motion.div>
-
-      {/* Interaction Indicator */}
-      {activeIslandId && (
-        <motion.div 
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          className="absolute top-8 right-8 z-10 p-6 rounded-xl border border-white/10 bg-black/40 backdrop-blur-md w-96"
-        >
-          <h2 className="text-white font-medium mb-4 text-sm uppercase tracking-widest border-b border-white/5 pb-2">Island Interrogation</h2>
-          <div className="text-[11px] font-mono text-gray-400 space-y-2">
-            <p>NAME: {activeIslandId === '1' ? 'BIOLOGY' : 'MATHEMATICS'}</p>
-            <p>COORD: [0.24, -1.98, 0.05]</p>
-            <p>SEEDER: GEMINI-2.0-PRO-EXP</p>
-            <p>STATUS: UNTAMPERED (SHA-256 MATCH)</p>
+        <FloatingPanel position="bottom-8 left-8 w-80">
+          <div className="text-[10px] text-gray-500 uppercase tracking-widest mb-2 font-bold italic">Active Intent</div>
+          <div className="text-xs font-mono text-cyan-200/60 leading-relaxed capitalize">
+            {selectedNode} :: Isomorphic Search Active
           </div>
-          <button className="mt-6 w-full py-2 bg-white/5 hover:bg-white/10 border border-white/10 text-[10px] uppercase tracking-[0.2em] transition-colors">
-            Trigger Isomorphic Audit
-          </button>
-        </motion.div>
-      )}
+        </FloatingPanel>
+
+        <FloatingPanel position="top-8 right-8 w-64">
+          <h2 className="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-4">Council Pulse</h2>
+          <div className="flex items-center gap-3">
+            <div className="w-2 h-2 rounded-full bg-green-500 animate-ping" />
+            <span className="text-[10px] font-mono text-gray-400">GEMINI 3.1 :: SYNC</span>
+          </div>
+        </FloatingPanel>
+      </AnimatePresence>
+
+      {/* 2. CENTER: The Ruliadic Space */}
+      <div className="absolute inset-0 z-0 cursor-crosshair">
+        <Canvas camera={{ position: [0, 0, 10], fov: 40 }}>
+          <Suspense fallback={null}>
+            <Stars radius={100} depth={50} count={7000} factor={4} saturation={0} fade speed={0.5} />
+            <ambientLight intensity={0.2} />
+            <pointLight position={[10, 10, 10]} intensity={1} color="#00ffff" />
+            
+            <Float speed={1.5} rotationIntensity={0.2} floatIntensity={0.5}>
+              <RuliadicIsland position={[-3, 1, 0]} color="#4f46e5" onClick={() => setSelectedNode('Topological Logic')} />
+              <RuliadicIsland position={[3, -1, 0]} color="#10b981" onClick={() => setSelectedNode('Metabolic Flow')} />
+              <RuliadicIsland position={[0, -3, -2]} color="#f59e0b" onClick={() => setSelectedNode('Quantum Consensus')} />
+            </Float>
+
+            <IsomorphismBeam start={new THREE.Vector3(-3, 1, 0)} end={new THREE.Vector3(3, -1, 0)} color="#00ffff" speed={0.5} />
+            
+            <OrbitControls enablePan={false} rotateSpeed={0.3} zoomSpeed={0.5} />
+            <Environment preset="night" />
+          </Suspense>
+        </Canvas>
+      </div>
     </main>
-  );
+  )
 }
