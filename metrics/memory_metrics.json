@@ -1,18 +1,18 @@
 {
-  "timestamp": "2026-02-25T00:00:00Z",
-  "git_commits": 217,
-  "repo_size_mb": 522,
-  "core_docs_kb": 2692,
-  "open_todo_count": 0,
-  "snapshots_count": 1,
+  "timestamp": "2026-02-26T01:16:34.521294Z",
+  "git_commits": 245,
+  "repo_size_mb": 188,
+  "core_docs_kb": 2840,
+  "open_todo_count": 208,
+  "snapshots_count": 242,
   "insights_per_request": 3.2,
   "avg_context_tokens_estimate": 4500,
-  "discomfort_metric_d": 867.425,
+  "discomfort_metric_d": 1086.42,
   "calculation_components": {
-    "docs_component": 807.6,
-    "repo_size_component": 52.2,
-    "todo_component": 0.0,
-    "insights_component": 3.125,
+    "docs_component": 852.0,
+    "repo_size_component": 18.8,
+    "todo_component": 208.0,
+    "insights_component": 3.12,
     "context_tokens_component": 4.5
   }
 }
