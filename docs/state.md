@@ -1,9 +1,9 @@
-# RHEA ACTIVE STATE (v2.7)
+# RHEA ACTIVE STATE (v2.8)
 > Date: 2026-02-26 | Agent: REX (Opus 4.6) | Mode: DISPERSED-CLOUD-DEPLOY
 
 ## System Invariants (Verified)
 - **CHECK:** `bash scripts/rhea/check.sh` → OK.
-- **GIT:** `main` — 32 files pending commit+push.
+- **GIT:** `main` — pending commit+push.
 - **D-METRIC:** Target < 2KB. **STATUS: HEALTHY**.
 
 ## Architecture
@@ -14,12 +14,25 @@
 - **Prod/dev mode gating:** implemented. Footer popups (GitHub-style).
 
 ## Team Status
-- **Rex:** Footer popups, deploy configs, auth, health probes — done.
-- **Orion:** DensityField, OceanusFlow, MnemosyneWhisper — merged clean.
-- **Hyperion:** Security remediation done. 3 keys need manual revoke.
+- **Rex (Opus):** HEAD. Footer popups, deploy, auth, health — done.
+- **Orion (GPT-5.3):** DensityField, OceanusFlow, MnemosyneWhisper — merged.
+- **Hyperion (Gemini 3.1):** Security done. Quota exhausted (6h reset).
+
+## Specs Ready for Implementation
+- **IMPLEMENTATION_SPEC.md** — 6 phases:
+  1. Store foundations (ViewId, ContextDensity)
+  2. Hyperion Bar (unified navbar) → assign to Hyperion
+  3. Mnemosyne Whispers (mood popups) → done by Orion
+  4. Oceanus Flow (density viz) → done by Orion
+  5. Krikoi Titanon (planetary rings) → Rex
+  6. Aletheia Pipeline (proof library) → Rex
+- **NAMING_TRIBUNAL.md** — Titan naming taxonomy (3 layers)
+- **QUICK_IMPROVEMENTS.md** — 16 items, 3 applied
 
 ## Next Tasks
-- Commit + push 32 files.
+- Commit + push all pending files.
+- Hyperion Bar → Gemini when quota resets.
+- Krikoi Titanon (rings) → Rex implements.
+- Aletheia Pipeline → Rex implements.
 - Deploy to production (deploy-all.sh).
 - Revoke leaked keys (Google AI Studio).
-- Legal docs (TERMS, PRIVACY, SECURITY, COOKIES).

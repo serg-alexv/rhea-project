@@ -688,6 +688,90 @@ MODIFY:
 
 ---
 
+## 6. ALETHEIA PIPELINE — "The Proof Library"
+
+**Problem:** `friends/aletheia/` has the structure (`proofs/`, `hypotheses/`,
+`community/`) but every directory contains only `.gitkeep`. `data/proof.db`
+has a `logic_audit` table with zero rows. Tribunal results vanish on reload.
+
+### Architecture
+
+```
+src/aletheia_pipeline.py              ← NEW: proof capture daemon
+friends/aletheia/proofs/{ontology}/   ← populated by pipeline
+friends/aletheia/hypotheses/{ontology}/ ← populated by pipeline
+data/proof.db                         ← schema upgrade: proofs + hypotheses tables
+```
+
+### Proof capture flow
+
+```
+tribunal API returns result
+  → consensus_score >= 85%  → write to friends/aletheia/proofs/{ontology}/{hash}.md
+  → consensus_score 50–84%  → write to friends/aletheia/hypotheses/{ontology}/{hash}.md
+  → consensus_score < 50%   → discard (noise)
+  → log ALL to data/proof.db (regardless of score)
+```
+
+### Proof document format (markdown)
+
+```markdown
+# {claim_title}
+> Ontology: {ontology} | Consensus: {score}% | Date: {timestamp}
+> Models: {model_list} | Mode: {tribunal|sceptic|ice}
+
+## Claim
+{synthesized_answer}
+
+## Evidence
+- Model A ({provider}): {key_point}
+- Model B ({provider}): {key_point}
+
+## Dissent
+{minority_opinions_if_any}
+
+## Links
+- Parent: {previous_proof_hash_if_chained}
+- Session: {session_id}
+```
+
+### SQLite schema (data/proof.db)
+
+```sql
+CREATE TABLE IF NOT EXISTS proofs (
+  id TEXT PRIMARY KEY,          -- hash of claim
+  ontology TEXT NOT NULL,
+  claim TEXT NOT NULL,
+  consensus_score REAL NOT NULL,
+  mode TEXT NOT NULL,
+  models TEXT NOT NULL,          -- JSON array
+  query TEXT NOT NULL,
+  result TEXT NOT NULL,
+  parent_id TEXT,                -- chain to previous proof
+  file_path TEXT NOT NULL,       -- relative path in friends/aletheia/
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX idx_proofs_ontology ON proofs(ontology);
+CREATE INDEX idx_proofs_score ON proofs(consensus_score);
+```
+
+### Integration points
+
+- **tribunal_api.py**: After returning response, call `aletheia_pipeline.capture(result)`
+- **useAtlasSync.ts**: Poll `/api/aletheia/stats` for proof count → display in HudLeft
+- **OceanusFlow**: Proofs = high-density spheres, hypotheses = nebulae (natural mapping)
+- **Pre-query check**: Before new tribunal query, search proof.db for existing answers
+
+### Reuse as professional knowledge base
+
+- `python3 src/aletheia_pipeline.py search "cancer resistance"` — CLI search
+- `/api/aletheia/search?q=...` — REST endpoint for UI integration
+- Export: `python3 src/aletheia_pipeline.py export --format=json` for external tools
+- Cross-reference graph: each proof links to parent → builds DAG of knowledge
+
+---
+
 *"From Chaos, through the Titans, truth emerges."*
 
 *Head and final decision — Rex.*
