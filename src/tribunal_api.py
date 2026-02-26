@@ -35,6 +35,7 @@ from rhea_bridge import RheaBridge
 from consensus_analyzer import ConsensusAnalyzer
 from rhea_profile_manager import profile_manager
 from rhea_visual_context import update_state, get_health_history
+from rhea_bus import RheaBus
 
 # ---------------------------------------------------------------------------
 # App setup
@@ -58,6 +59,19 @@ _bridge = None
 _analyzer = None
 _command_queue: list[dict] = []
 _receipts: dict[str, dict] = {}
+_bus: Optional[RheaBus] = None
+
+
+def get_bus() -> Optional[RheaBus]:
+    global _bus
+    if _bus is None:
+        try:
+            _bus = RheaBus("tribunal-api")
+            if not _bus.ping():
+                _bus = None
+        except Exception:
+            _bus = None
+    return _bus
 
 
 def get_bridge() -> RheaBridge:
@@ -98,7 +112,7 @@ async def verify_api_key(x_api_key: str = Header(None, alias="X-API-Key")):
 
 
 # ---------------------------------------------------------------------------
-# Rate limiting (in-memory token bucket, per API key)
+# Rate limiting (Redis-backed, falls back to in-memory)
 # ---------------------------------------------------------------------------
 
 RATE_LIMIT_PER_MINUTE = int(os.environ.get("TRIBUNAL_RATE_LIMIT", "30"))
@@ -109,22 +123,30 @@ _rate_buckets: dict[str, list[float]] = {}
 
 async def check_rate_limit(x_api_key: str = Header(None, alias="X-API-Key")):
     key = x_api_key or "anonymous"
+    bus = get_bus()
+
+    # Try Redis first
+    if bus is not None:
+        try:
+            ok, reason = bus.check_rate(key, RATE_LIMIT_PER_MINUTE, RATE_LIMIT_DAILY)
+            if not ok:
+                raise HTTPException(status_code=429, detail=reason)
+            return
+        except HTTPException:
+            raise
+        except Exception:
+            pass  # Redis down — fall through to in-memory
+
+    # In-memory fallback
     now = time.time()
     if key not in _rate_buckets:
         _rate_buckets[key] = []
-
-    # Prune entries older than 24h
     _rate_buckets[key] = [t for t in _rate_buckets[key] if now - t < 86400]
-
-    # Daily check
     if len(_rate_buckets[key]) >= RATE_LIMIT_DAILY:
-        raise HTTPException(status_code=429, detail=f"Daily limit ({RATE_LIMIT_DAILY} calls) exceeded")
-
-    # Per-minute check
+        raise HTTPException(status_code=429, detail=f"Daily limit ({RATE_LIMIT_DAILY}) exceeded")
     recent = sum(1 for t in _rate_buckets[key] if now - t < 60)
     if recent >= RATE_LIMIT_PER_MINUTE:
         raise HTTPException(status_code=429, detail=f"Rate limit ({RATE_LIMIT_PER_MINUTE}/min) exceeded")
-
     _rate_buckets[key].append(now)
 
 
@@ -246,6 +268,8 @@ def _log_api_call(endpoint: str, request_data: dict, elapsed_s: float, status: s
 async def health():
     bridge = get_bridge()
     status = bridge.models_status()
+    bus = get_bus()
+    redis_ok = bus.ping() if bus else False
     return {
         "status": "ok",
         "providers_available": status["summary"]["available_providers"],
@@ -253,6 +277,7 @@ async def health():
         "total_models": status["summary"]["total_models"],
         "analyzer_version": "v2-ice-council",
         "profile_mode": profile_manager.get_active_mode(),
+        "redis": "connected" if redis_ok else "unavailable",
     }
 
 
@@ -329,6 +354,21 @@ async def set_mode(req: SetModeRequest):
 @app.post("/tribunal", response_model=TribunalResponse, dependencies=[Depends(verify_api_key), Depends(check_rate_limit)])
 async def tribunal(req: TribunalRequest):
     t0 = time.time()
+
+    # Check Redis cache
+    bus = get_bus()
+    if bus is not None:
+        try:
+            cached = bus.get_cached_tribunal(req.prompt, req.k, req.tier, req.mode)
+            if cached:
+                cached["meta"] = cached.get("meta", {})
+                cached["meta"]["cache_hit"] = True
+                cached["elapsed_s"] = round(time.time() - t0, 2)
+                _log_api_call("/tribunal", req.dict(), cached["elapsed_s"], "cache_hit")
+                return TribunalResponse(**cached)
+        except Exception:
+            pass  # Cache miss or Redis error — proceed normally
+
     bridge = get_bridge()
 
     result = bridge.tribunal(
@@ -355,7 +395,7 @@ async def tribunal(req: TribunalRequest):
 
     _log_api_call("/tribunal", req.dict(), elapsed, "ok")
 
-    return TribunalResponse(
+    resp = TribunalResponse(
         prompt=req.prompt,
         k=req.k,
         mode=req.mode,
@@ -372,6 +412,16 @@ async def tribunal(req: TribunalRequest):
         responses=response_models,
         meta=report.get("meta", {}),
     )
+
+    # Cache result in Redis (5 min TTL)
+    if bus is not None:
+        try:
+            bus.cache_tribunal(req.prompt, req.k, req.tier, req.mode,
+                               resp.dict(), ttl=300)
+        except Exception:
+            pass
+
+    return resp
 
 
 @app.post("/tribunal/ice", response_model=TribunalICEResponse, dependencies=[Depends(verify_api_key), Depends(check_rate_limit)])
