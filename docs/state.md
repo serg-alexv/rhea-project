@@ -10,8 +10,12 @@
 
 ## Architecture (3.1 Sync)
 - **Protocol:** **Chronos Protocol v3.1** (Updated: resilience + fencing).
-- **Holography:** 3-layer consistency (Git / Local / Cloud) prioritized for auditability.
-- **Sovereign Services:** Common Email, Firebase, Cloud Run, 0-tier Redis active.
+- **Holography:** 4-layer consistency (Git / Local / Cloud / Email).
+- **Sovereign Services:** 
+    - **Archive (RO):** timelabs.ad@gmail.com
+    - **Coordination:** atomicmail.io (Task Management)
+    - **Scheduling:** Google Calendar (timelabs.ad)
+    - **Infrastructure:** Firebase, Cloud Run, 0-tier Redis.
 - **Premium Model:** **Gemini 3.1 Pro Preview** (New Premium standard).
 - **Audit:** Full hash-chain integrity via `relay_chain.jsonl`.
 
