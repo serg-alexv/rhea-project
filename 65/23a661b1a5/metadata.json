@@ -1,0 +1,27 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "6523a661b1a5",
+  "strategy": "auto-commit",
+  "branch": "stage4-hardened",
+  "checkpoints_count": 1,
+  "files_touched": [
+    ".env",
+    "src/rhea_bridge.py"
+  ],
+  "sessions": [
+    {
+      "metadata": "/65/23a661b1a5/0/metadata.json",
+      "transcript": "/65/23a661b1a5/0/full.jsonl",
+      "context": "",
+      "content_hash": "/65/23a661b1a5/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 178,
+    "cache_creation_tokens": 121753,
+    "cache_read_tokens": 8041409,
+    "output_tokens": 19917,
+    "api_call_count": 94
+  }
+}

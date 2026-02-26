@@ -1,0 +1,44 @@
+**5/7 LIVE!** Here's the final status:
+
+| Provider | Status | Note |
+|----------|--------|------|
+| OpenAI | LIVE | Key rotated (rhea-bridge-v2) |
+| Gemini | LIVE | New key via gcloud (v3) |
+| DeepSeek | LIVE | Original key still good |
+| HuggingFace | LIVE | Token from prev session |
+| OpenRouter | LIVE | New key just created (rhea-bridge-v3) |
+| Anthropic | DEAD | Key valid, **no credits** on account |
+| Azure | DEAD | **No deployments** created |
+
+---
+
+Now to your actual question: **"are we ready to be deployed as a service layer, like NotebookLM?"**
+
+`★ Insight ─────────────────────────────────────`
+**NotebookLM vs Rhea — architectural comparison:**
+- NotebookLM = document ingestion + single-model Q&A + audio synthesis
+- Rhea = **multi-model tribunal consensus** + agent bus + SSE events + math verification
+- Rhea is actually *more ambitious* — it's a multi-model consensus engine, not a single-model wrapper
+`─────────────────────────────────────────────────`
+
+**Deployment readiness: ~60%**
+
+**What's ready:**
+- FastAPI daemon (`rhead.py`) — serves API, SSE, frontend on one port
+- Tribunal API with consensus analysis (L1/L2/L3 ICE)
+- Docker config exists (`config/docker/Dockerfile.tribunal`)
+- Fly.io + Railway deploy configs exist
+- Redis Cloud connected for caching + event bus
+- Frontend dashboard (Scientific Gem UI)
+- 5/7 LLM providers operational
+
+**What's missing for production NotebookLM-style service:**
+1. **Document ingestion pipeline** — NotebookLM's core: upload PDFs/docs, chunk, embed, retrieve
+2. **CI/CD** — no GitHub Actions, no auto-deploy
+3. **Auth for users** — only dev-bypass key exists, no real user auth
+4. **Anthropic credits** — need $5+ to activate that provider
+5. **Azure deployments** — need to create gpt-4o-mini deployment in portal
+
+The fastest path to a NotebookLM-like service would be adding a RAG (Retrieval-Augmented Generation) layer on top of what exists. The tribunal infrastructure is the hard part — and it's already built.
+
+Want me to start building the document ingestion + RAG layer, or focus on fixing the remaining 2 providers first?
