@@ -1,0 +1,11 @@
+Both done.
+
+**OpenAI** — live, 28 models including **GPT-5**, **GPT-5-mini**, **o3**, **o4-mini**. Confirmed with gpt-4.1-mini → "OK".
+
+**Anthropic** — key set in `.env`.
+
+`★ Insight ─────────────────────────────────────`
+The previous session's 401 was from a bad key extraction via Chrome automation. This new key works but has a quirk: the project restricts `gpt-4o-mini` (bare name) while `gpt-4o-mini-2024-07-18` (dated) is available. The bridge's model list should use dated variants as fallbacks — or just use `gpt-4.1-mini` which works clean.
+`─────────────────────────────────────────────────`
+
+`.env` is gitignored and untracked — these keys won't leak.

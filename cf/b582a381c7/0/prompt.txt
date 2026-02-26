@@ -1,0 +1,1 @@
+set a new system OPENAI key="REDACTED"; check it;
