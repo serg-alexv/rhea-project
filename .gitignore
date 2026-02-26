@@ -52,3 +52,4 @@ team/
 alpha2-*.sh
 alpha2-*.py
 rhea-project/docs/*.audit
+service-account.json
