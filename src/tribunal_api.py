@@ -31,6 +31,8 @@ from pydantic import BaseModel, Field
 
 # Ensure src/ is importable
 sys.path.insert(0, str(Path(__file__).parent))
+RULIAD_ROOT = Path(__file__).parent.parent / "friends" / "ruliad" / "explorer"
+sys.path.insert(0, str(RULIAD_ROOT))
 from rhea_bridge import RheaBridge
 from consensus_analyzer import ConsensusAnalyzer
 from rhea_profile_manager import profile_manager
@@ -58,6 +60,29 @@ _bridge = None
 _analyzer = None
 _command_queue: list[dict] = []
 _receipts: dict[str, dict] = {}
+
+# ---------------------------------------------------------------------------
+# Ruliad math engine (lazy-loaded, plugin auto-discovery)
+# ---------------------------------------------------------------------------
+
+_ont_engine = None
+
+
+def _get_engine():
+    global _ont_engine
+    if _ont_engine is None:
+        from core.engine import OntologyEngine
+        _ont_engine = OntologyEngine(project_root=Path(__file__).parent.parent)
+        for pf in sorted((RULIAD_ROOT / "plugins").glob("*.py")):
+            if not pf.name.startswith("_"):
+                try:
+                    g = {"__file__": str(pf)}
+                    exec(pf.read_text(), g)
+                    if "register_plugin" in g:
+                        g["register_plugin"](_ont_engine)
+                except Exception as e:
+                    print(f"[math-verify] plugin load failed: {pf.stem}: {e}")
+    return _ont_engine
 
 
 def get_bridge() -> RheaBridge:
@@ -167,6 +192,12 @@ class ActuatorReceipt(BaseModel):
     command_id: str
     status: str
     error: Optional[str] = None
+
+
+class MathVerifyRequest(BaseModel):
+    hypothesis: str
+    domain: str = "general"
+    skip_tribunal: bool = False
 
 
 class ModelInfo(BaseModel):
@@ -409,6 +440,23 @@ async def tribunal_ice(req: TribunalICERequest):
         stance_summary=rd.get("stance_summary", {}),
         meta=rd.get("meta", {}),
     )
+
+
+@app.post("/tribunal/math-verify", dependencies=[Depends(verify_api_key)])
+async def math_verify(req: MathVerifyRequest):
+    from core.engine import Hypothesis
+    engine = _get_engine()
+    h = Hypothesis(title=req.hypothesis[:80], statement=req.hypothesis, domain=req.domain)
+    results = {}
+    for name in engine.registry.list_plugins():
+        p = engine.registry.get(name)
+        if p and p.verify:
+            try:
+                results[name] = p.verify(h)
+            except Exception as e:
+                results[name] = {"error": str(e)}
+    verdicts = {k: v.get("overall", "unknown") for k, v in results.items() if isinstance(v, dict)}
+    return {"hypothesis": req.hypothesis, "plugin_results": results, "verdicts": verdicts}
 
 
 # ---------------------------------------------------------------------------

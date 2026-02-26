@@ -49,8 +49,10 @@ def collect_raw():
     """Gather raw measurements from the repository."""
     raw = {}
 
-    # TODO count (grep across codebase)
-    todo_out = _run("grep -r 'TODO' --include='*.py' --include='*.md' --include='*.sh' -l . 2>/dev/null | wc -l", "0")
+    # TODO count (grep across codebase, excluding archive/ and cache/)
+    exclude_args = "--exclude-dir=archive --exclude-dir=opera/cache --exclude-dir=.entire --exclude-dir=.git --exclude-dir=.venv --exclude-dir=node_modules"
+    todo_cmd = f"grep -r 'TODO' {exclude_args} --include='*.py' --include='*.md' --include='*.sh' -l . 2>/dev/null | wc -l"
+    todo_out = _run(todo_cmd, "0")
     raw["open_todo_count"] = int(todo_out.strip())
 
     # Docs size (KB)

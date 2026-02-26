@@ -1,68 +1,52 @@
 {
-  "timestamp": "2026-02-26T02:43:56.654925+00:00",
+  "timestamp": "2026-02-26T06:27:59.962874+00:00",
   "metrics": {
     "d_metric": {
-      "value": 351.7,
+      "value": 269.0,
       "components": {
-        "docs": 98.0,
-        "repo": 51.5,
-        "todos": 141.6,
+        "docs": 84.1,
+        "repo": 44.9,
+        "todos": 79.4,
         "insights": 15.6,
         "tokens": 45.0
       }
     },
     "debt_velocity": {
-      "value": 116,
+      "value": 180,
       "direction": "shrinking"
     },
     "doc_staleness": {
-      "value": 7.5
+      "value": 3.1
     },
     "commit_frequency": {
-      "value": 14.4,
-      "last_24h": 33
+      "value": 16.9,
+      "last_24h": 50
     },
     "todo_load": {
-      "value": 0.31,
-      "open_todos": 92,
+      "value": 0.09,
+      "open_todos": 28,
       "max_sustainable": 300
     },
     "insight_density": {
       "value": 3.2
     },
     "repo_entropy": {
-      "value": 0.24,
-      "root_files": 5,
-      "root_items": 21
+      "value": 0.25,
+      "root_files": 8,
+      "root_items": 32
     }
   },
-  "composite_health": 0.58,
-  "wake_up_triggers": [
-    {
-      "condition": "d_metric_overload",
-      "value": 351.7,
-      "threshold": 300,
-      "reset_at": 270,
-      "chain": {
-        "diagnose": "python3 scripts/live_metrics.py --json",
-        "actions": [
-          "grep -rn 'TODO' --include='*.md' docs/ | wc -l",
-          "find docs -name '*.md' -size +100k -exec ls -lh {} \\;",
-          "python3 scripts/compute_d_metric.py"
-        ],
-        "escalation": "Log to outbox + notify human if D > 400 after action"
-      }
-    }
-  ],
+  "composite_health": 0.78,
+  "wake_up_triggers": [],
   "raw_measurements": {
-    "open_todo_count": 92,
-    "core_docs_kb": 1845,
-    "repo_size_mb": 375,
-    "commits_24h": 33,
-    "commits_per_day_7d": 14.428571428571429,
-    "avg_doc_staleness_days": 7.506738668517192,
+    "open_todo_count": 28,
+    "core_docs_kb": 637,
+    "repo_size_mb": 174,
+    "commits_24h": 50,
+    "commits_per_day_7d": 16.857142857142858,
+    "avg_doc_staleness_days": 3.0592032505816134,
     "insights_per_request": 3.2,
-    "root_files": 5,
-    "root_items": 21
+    "root_files": 8,
+    "root_items": 32
   }
 }
