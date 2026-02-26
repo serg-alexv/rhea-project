@@ -79,18 +79,14 @@ if [ ! -f "${APP_DIR}/package.json" ]; then
 fi
 
 # ---------------------------------------------------------------------------
-# Copy firebase.json to repo root (firebase CLI expects it at project root)
+# Use an isolated temp firebase config so we don't collide with repo-root
+# firebase.json (which may belong to a different Firebase app setup).
 # ---------------------------------------------------------------------------
 FIREBASE_JSON_SRC="${SCRIPT_DIR}/firebase.json"
-FIREBASE_JSON_DST="${REPO_ROOT}/firebase.json"
-
-if [ ! -f "${FIREBASE_JSON_DST}" ]; then
-  info "Copying firebase.json to repo root..."
-  cp "${FIREBASE_JSON_SRC}" "${FIREBASE_JSON_DST}"
-  ok "firebase.json placed at ${FIREBASE_JSON_DST}"
-else
-  info "firebase.json already exists at repo root — using existing file."
-fi
+FIREBASE_JSON_TMP="${REPO_ROOT}/.firebase.rhea-hosting.json"
+cp "${FIREBASE_JSON_SRC}" "${FIREBASE_JSON_TMP}"
+trap 'rm -f "${FIREBASE_JSON_TMP}"' EXIT
+info "Using isolated hosting config: ${FIREBASE_JSON_TMP}"
 
 # ---------------------------------------------------------------------------
 # Build: static export
@@ -103,11 +99,18 @@ cd "${APP_DIR}"
 # Export env vars so next build can embed them
 export NEXT_PUBLIC_RHEA_API="${NEXT_PUBLIC_RHEA_API}"
 export NEXT_PUBLIC_TRIBUNAL_API="${NEXT_PUBLIC_TRIBUNAL_API}"
+export RHEA_STATIC_EXPORT=1
 
 npx next build
-npx next export
 
 ok "Static export complete — output at: ${APP_DIR}/out"
+
+# Bundle Themis console into the same hosting output so Atlas cross-nav
+# can open /app/ in production without a separate backend-hosted console page.
+info "Embedding Themis console at /app/..."
+mkdir -p "${APP_DIR}/out/app"
+cp "${REPO_ROOT}/frontend/index.html" "${APP_DIR}/out/app/index.html"
+ok "Console bundled at: ${APP_DIR}/out/app/index.html"
 
 # ---------------------------------------------------------------------------
 # Deploy to Firebase Hosting
@@ -122,7 +125,7 @@ if [ -n "${FIREBASE_PROJECT:-}" ]; then
   FIREBASE_ARGS="${FIREBASE_ARGS} --project ${FIREBASE_PROJECT}"
 fi
 
-firebase deploy ${FIREBASE_ARGS}
+firebase deploy ${FIREBASE_ARGS} --config "${FIREBASE_JSON_TMP}"
 
 # ---------------------------------------------------------------------------
 # Extract and print the hosting URL
