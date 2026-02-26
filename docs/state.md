@@ -1,37 +1,33 @@
-# RHEA ACTIVE STATE (v2.9)
-> Date: 2026-02-26 | Agent: REX (Opus 4.6) | Mode: DISPERSED-CLOUD-DEPLOY
+# RHEA ACTIVE STATE (v3.1)
+> Date: 2026-02-26 | Agent: REX (Opus 4.6) | Mode: ALETHEIA-WIRED
 
 ## System Invariants (Verified)
 - **CHECK:** `bash scripts/rhea/check.sh` → OK.
-- **GIT:** `stage4-release` — clean after latest push.
+- **GIT:** `stage4-release` — Aletheia wiring + dedup done.
 - **D-METRIC:** 268.98 — HEALTHY.
 
 ## Architecture
 - **Cloud:** Google Cloud Run + Firebase Hosting + Redis Cloud + Oracle Always Free.
-- **Auth:** JWT + SQLite — live. Code-worm profile in both UIs.
 - **Bridge:** src/rhea_bridge.py — 6 providers, 31 models, 4 tiers.
-- **Frontends:** Rex Console :8000 + Orion Atlas :3000 — live.
-- **Prod/dev mode gating:** implemented. Footer popups (GitHub-style).
+- **Themis Console (:8000):** rhead.py → mounts aletheia_router at /aletheia/*
+- **Tribunal API (:8400):** tribunal_api.py → capture hooks only, no read dupes
+- **Atlas Prime (:3000):** Next.js frontend — live.
 
-## Team Status
-- **Rex (Opus):** HEAD. All UI done: footer popups, code-worm, tooltips, agent buttons.
-- **Orion (GPT-5.3):** DensityField, OceanusFlow, MnemosyneWhisper — merged. Rate-limited on 5.3; may fall back to 5.1.
-- **Hyperion (Gemini 3.1):** Unblocked — fresh Gemini key (AIzaSyCP..., created today). Standing by for Stage 2.
+## Aletheia Architecture (CLEAN)
+- **Capture:** tribunal_api.py calls aletheia.capture() after /tribunal, /ice, /sceptic
+- **Read API:** aletheia_api.py via rhead.py → /aletheia/{stats,proofs,search,chain,verify,submit}
+- **Storage:** data/proof.db (shared SQLite) + friends/aletheia/{proofs,hypotheses}/ (markdown)
+- **No duplication:** removed 7 duplicate read endpoints from tribunal_api.py
 
-## Specs Ready / In Progress
-- **IMPLEMENTATION_SPEC.md** — 6 phases:
-  1. Store foundations (ViewId, ContextDensity) — done
-  2. Hyperion Bar (unified navbar) → Hyperion (waiting on Hyperion)
-  3. Mnemosyne Whispers (mood popups) → done by Orion
-  4. Oceanus Flow (density viz) → done by Orion
-  5. Krikoi Titanon (planetary rings) → IN PROGRESS
-  6. Aletheia Pipeline (proof library) → IN PROGRESS
-- **NAMING_TRIBUNAL.md** — Titan naming taxonomy (3 layers)
-- **QUICK_IMPROVEMENTS.md** — 16 items, 3 applied
+## IMPLEMENTATION_SPEC.md — 6 phases:
+1. Store foundations — **done**
+2. Hyperion Bar → **waiting** (Hyperion unblocked)
+3. Mnemosyne Whispers → **done** (Orion)
+4. Oceanus Flow → **done** (Orion)
+5. Krikoi Titanon → **IN PROGRESS**
+6. Aletheia Pipeline → **WIRED** (capture + API + submit)
 
-## Next Tasks
-- Legal docs → in progress.
-- Krikoi rings → in progress.
-- Aletheia pipeline → in progress.
-- Hyperion Bar → Hyperion implements (key live, unblocked).
-- Deploy to production (deploy-all.sh).
+## Next
+- Restart uvicorn to activate captures
+- ChatGPT Apps SDK evaluated (see state_full.md)
+- Krikoi rings + Hyperion Bar remain

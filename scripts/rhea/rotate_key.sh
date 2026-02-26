@@ -305,12 +305,53 @@ cmd_wipe() {
   green "Trace wipe complete."
 }
 
+# ─── USAGE: OpenAI org usage + costs ───
+cmd_usage() {
+  local provider="${1:-openai}"
+  case "$provider" in
+    openai)
+      source "$ENV_FILE" 2>/dev/null
+      local key="${OPENAI_API_KEY:-}"
+      if [ -z "$key" ]; then
+        red "No OPENAI_API_KEY in .env"
+        exit 1
+      fi
+
+      local start_1h start_24h
+      start_1h=$(python3 -c "import time; print(int(time.time()) - 3600)")
+      start_24h=$(python3 -c "import time; print(int(time.time()) - 86400)")
+
+      echo "=== OpenAI Usage (last 1h) ==="
+      curl -s https://api.openai.com/v1/organization/usage/completions \
+        -H "Authorization: Bearer $key" \
+        -G \
+        --data-urlencode "start_time=$start_1h" \
+        --data-urlencode "bucket_width=1h" \
+        --data-urlencode "group_by[]=project_id" \
+        --data-urlencode "group_by[]=model" 2>/dev/null \
+        | python3 -m json.tool 2>/dev/null || red "Failed (need admin/org key)"
+
+      echo ""
+      echo "=== OpenAI Costs (last 24h) ==="
+      curl -s https://api.openai.com/v1/organization/costs \
+        -H "Authorization: Bearer $key" \
+        -G \
+        --data-urlencode "start_time=$start_24h" 2>/dev/null \
+        | python3 -m json.tool 2>/dev/null || red "Failed (need admin/org key)"
+      ;;
+    *)
+      red "Usage monitoring supported for: openai"
+      ;;
+  esac
+}
+
 # ─── MAIN ───
 case "${1:-help}" in
   paste)  shift; cmd_paste "$@" ;;
   create) shift; cmd_create "$@" ;;
   audit)  cmd_audit ;;
   test)   cmd_test ;;
+  usage)  shift; cmd_usage "$@" ;;
   wipe)   cmd_wipe ;;
   *)
     cat <<'HELP'
@@ -321,6 +362,7 @@ Commands:
   create gemini      Auto-create Gemini key via gcloud.
   audit              Scan git + shell history for exposed keys.
   test               Test all provider keys via bridge.
+  usage [openai]     Show API usage (last 1h) and costs (last 24h).
   wipe               Clean clipboard, history, temp files.
 
 Providers: openai anthropic gemini openrouter deepseek redis_password azure hf firebase
