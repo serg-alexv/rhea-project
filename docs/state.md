@@ -1,22 +1,30 @@
-# RHEA ACTIVE STATE (v2.1)
-> Date: 2026-02-19 | Agent: HYPERION | Mode: ARCHITECT
+# RHEA ACTIVE STATE (v2.3)
+> Date: 2026-02-26 | Agent: REX | Mode: SHIP
 
-## 🏛️ System Invariants (Verified)
-- **STOP:** Sentinel logic responsive (1s latency).
-- **LEDGER:** Atomic concurrency safety active (fcntl).
-- **D-METRIC:** Target < 2KB (Current: ~500B).
-- **OFFICE:** Inbox/Outbox protocol enforced.
+## System Invariants (Verified)
+- **CHECK:** `bash scripts/rhea/check.sh` → OK
+- **BRIDGE:** src/rhea_bridge.py — 6 providers, 32 models, 4 cost tiers
+- **ORCHESTRATION:** scripts/rhea_orchestrate.py — Chronos Protocol v3, 8 agents
+- **COMMIT:** auto-commit via Entire.io (ADR-014)
+- **OFFICE:** Inbox/Outbox protocol enforced
 
-## 🎯 Current Focal Point
-- **Objective:** Initialize Phase 2 (Blueprint Factory).
-- **Active Task:** Genetics Tribunal (Claim 2: Aerobic Metabolism).
-- **Waiting for:** Argos evidence (`inbox/COWORK_20260219_genome-evidence.md`).
+## Current Focal Point
+- **Plan:** Ship First (Task Bankruptcy complete — 4 lists → 1)
+- **Stage:** Revenue — Tribunal API deploy + first external call
+- **Active:** Deploy Tribunal API to Fly.io → get public URL
 
-## 🌿 Personal Memory (Hyperion)
-- **Branch:** `hyperion/memory` (Checkpoints synced).
-- **Logic:** Surveyor-Architect mode engaged.
+## P0 Status
+- [x] Push stale commits
+- [x] H32-02 V5 certified
+- [x] Key rotation 7/7
+- [x] Firebase operational
+- [x] Tribunal API code complete (TRIBUNAL-001 through 007)
+- [ ] Fly.io deploy (next)
+- [ ] Stripe billing
 
-## 🔗 Related Files
-- `.idea` (Structural Declaration)
-- `docs/state_full.md` (Historical Narrative)
-- `logs/hyperion/identity.md` (Role Definition)
+## Blocked (human)
+- [ ] Install Entire GitHub App (https://github.com/apps/entire)
+
+## Related
+- docs/state_full.md | docs/decisions.md (14 ADRs)
+- archive/frozen-tasks/ (4 frozen task lists)
