@@ -1,12 +1,12 @@
 {
-  "timestamp": "2026-02-26T02:29:21.973788+00:00",
+  "timestamp": "2026-02-26T02:43:56.654925+00:00",
   "metrics": {
     "d_metric": {
-      "value": 351.5,
+      "value": 351.7,
       "components": {
         "docs": 98.0,
-        "repo": 51.4,
-        "todos": 141.5,
+        "repo": 51.5,
+        "todos": 141.6,
         "insights": 15.6,
         "tokens": 45.0
       }
@@ -19,8 +19,8 @@
       "value": 7.5
     },
     "commit_frequency": {
-      "value": 14.3,
-      "last_24h": 32
+      "value": 14.4,
+      "last_24h": 33
     },
     "todo_load": {
       "value": 0.31,
@@ -40,17 +40,27 @@
   "wake_up_triggers": [
     {
       "condition": "d_metric_overload",
-      "value": 351.5,
-      "action": "SPRINT_NEEDED"
+      "value": 351.7,
+      "threshold": 300,
+      "reset_at": 270,
+      "chain": {
+        "diagnose": "python3 scripts/live_metrics.py --json",
+        "actions": [
+          "grep -rn 'TODO' --include='*.md' docs/ | wc -l",
+          "find docs -name '*.md' -size +100k -exec ls -lh {} \\;",
+          "python3 scripts/compute_d_metric.py"
+        ],
+        "escalation": "Log to outbox + notify human if D > 400 after action"
+      }
     }
   ],
   "raw_measurements": {
     "open_todo_count": 92,
     "core_docs_kb": 1845,
-    "repo_size_mb": 370,
-    "commits_24h": 32,
-    "commits_per_day_7d": 14.285714285714286,
-    "avg_doc_staleness_days": 7.496614967071162,
+    "repo_size_mb": 375,
+    "commits_24h": 33,
+    "commits_per_day_7d": 14.428571428571429,
+    "avg_doc_staleness_days": 7.506738668517192,
     "insights_per_request": 3.2,
     "root_files": 5,
     "root_items": 21

@@ -237,57 +237,129 @@ def composite_health(metrics):
     return round(score, 2)
 
 
-# ── Wake-Up Protocol ────────────────────────────────────────────
+# ── Wake-Up Protocol (Enhanced Circle) ──────────────────────────
+# Loop: Detect → Classify → Predict → Diagnose → Select → Act → Verify → Learn → Log
+#
+# Control theory additions from tribunal (DeepSeek + Gemini consensus):
+#   - Hysteresis: trigger at threshold, reset at threshold - 10%
+#   - Rate limiting: max 3 interventions/hour per metric
+#   - Escalation: least invasive first, human after 3 auto-cycles
+
+HYSTERESIS = {
+    "d_metric_overload":    (300, 270),   # trigger at 300, reset at 270
+    "todo_crisis":          (0.7, 0.6),
+    "dev_stalled":          (1.0, 1.5),   # inverted: trigger below 1.0, reset above 1.5
+    "knowledge_stagnant":   (1.0, 1.5),   # inverted
+    "health_critical":      (0.3, 0.4),   # inverted: trigger below 0.3, reset above 0.4
+}
+
+# Concrete action chains: detect → diagnose → act
+# Each action is a real command Rex can execute
+ACTION_CHAINS = {
+    "d_metric_overload": {
+        "diagnose": "python3 scripts/live_metrics.py --json",
+        "actions": [
+            "grep -rn 'TODO' --include='*.md' docs/ | wc -l",           # count doc TODOs
+            "find docs -name '*.md' -size +100k -exec ls -lh {} \\;",    # find bloated docs
+            "python3 scripts/compute_d_metric.py",                       # recompute baseline
+        ],
+        "escalation": "Log to outbox + notify human if D > 400 after action",
+    },
+    "todo_crisis": {
+        "diagnose": "grep -rn 'TODO' --include='*.py' --include='*.md' --include='*.sh' . | sort",
+        "actions": [
+            "grep -rn 'TODO' --include='*.md' docs/ | head -20",        # surface top TODOs
+            # consolidate duplicate TODOs, archive resolved ones
+        ],
+        "escalation": "Create sprint plan at opera/metrics/todo_sprint.md",
+    },
+    "dev_stalled": {
+        "diagnose": "git log --oneline --since='7 days ago' --format='%h %s (%cr)'",
+        "actions": [
+            "bash scripts/rhea/check.sh",                               # health probe
+            # log stall event for human review
+        ],
+        "escalation": "ALWAYS notify human — stall may be intentional",
+    },
+    "knowledge_stagnant": {
+        "diagnose": "find emergentia -name '*.pdf' -o -name '*.md' -newer opera/metrics/live_dashboard.json 2>/dev/null",
+        "actions": [
+            # trigger exploratory agent to process new documents in emergentia/
+        ],
+        "escalation": "Deploy exploration agent after 7 days of stagnation",
+    },
+    "health_critical": {
+        "diagnose": "python3 scripts/live_metrics.py --json",
+        "actions": [
+            "bash scripts/rhea/check.sh",                               # system invariants
+            "git status",                                                # uncommitted work?
+        ],
+        "escalation": "IMMEDIATE human alert — multiple systems failing",
+    },
+}
+
 
 def check_wakeup(metrics, health):
     """
-    Determine if Rex should self-activate.
-    Returns list of triggered wake-up conditions.
+    Enhanced wake-up protocol with hysteresis and concrete action chains.
+    Returns list of triggered wake-up conditions with full action context.
 
-    TODO(human): Define what Rex should DO for each wake-up trigger.
-    Current triggers fire but actions are placeholders.
-    For each trigger below, define the concrete response:
-      - "d_metric_overload": D > 300 → what action? (e.g., "run TODO audit + compress docs")
-      - "todo_crisis":       load > 0.7 → what action? (e.g., "auto-close stale TODOs older than 30d")
-      - "dev_stalled":       < 1 commit/day → what action? (e.g., "alert human + run probe")
-      - "knowledge_stagnant": insight < 1.0 → what action? (e.g., "trigger exploratory agent")
-      - "health_critical":   composite < 0.3 → what action? (e.g., "emergency sprint protocol")
+    TODO(human): Review and tune the hysteresis bands.
+    Current design: trigger at threshold, reset 10% below.
+    If oscillation occurs (trigger → fix → trigger → fix repeating),
+    widen the hysteresis gap. If response feels too slow, narrow it.
+    Also: add any project-specific actions to ACTION_CHAINS above.
     """
     triggers = []
 
-    if metrics["d_metric"]["value"] > 300:
+    # 1. D-Metric overload (higher = worse)
+    if metrics["d_metric"]["value"] > HYSTERESIS["d_metric_overload"][0]:
         triggers.append({
             "condition": "d_metric_overload",
             "value": metrics["d_metric"]["value"],
-            "action": "SPRINT_NEEDED",  # TODO(human): define concrete action
+            "threshold": HYSTERESIS["d_metric_overload"][0],
+            "reset_at": HYSTERESIS["d_metric_overload"][1],
+            "chain": ACTION_CHAINS["d_metric_overload"],
         })
 
-    if metrics["todo_load"]["value"] > 0.7:
+    # 2. TODO crisis (higher = worse)
+    if metrics["todo_load"]["value"] > HYSTERESIS["todo_crisis"][0]:
         triggers.append({
             "condition": "todo_crisis",
             "value": metrics["todo_load"]["value"],
-            "action": "TRIAGE_TODOS",
+            "threshold": HYSTERESIS["todo_crisis"][0],
+            "reset_at": HYSTERESIS["todo_crisis"][1],
+            "chain": ACTION_CHAINS["todo_crisis"],
         })
 
-    if metrics["commit_frequency"]["value"] < 1.0:
+    # 3. Dev stalled (lower = worse, inverted)
+    if metrics["commit_frequency"]["value"] < HYSTERESIS["dev_stalled"][0]:
         triggers.append({
             "condition": "dev_stalled",
             "value": metrics["commit_frequency"]["value"],
-            "action": "ALERT_HUMAN",
+            "threshold": HYSTERESIS["dev_stalled"][0],
+            "reset_at": HYSTERESIS["dev_stalled"][1],
+            "chain": ACTION_CHAINS["dev_stalled"],
         })
 
-    if metrics["insight_density"]["value"] < 1.0:
+    # 4. Knowledge stagnant (lower = worse, inverted)
+    if metrics["insight_density"]["value"] < HYSTERESIS["knowledge_stagnant"][0]:
         triggers.append({
             "condition": "knowledge_stagnant",
             "value": metrics["insight_density"]["value"],
-            "action": "TRIGGER_EXPLORATION",
+            "threshold": HYSTERESIS["knowledge_stagnant"][0],
+            "reset_at": HYSTERESIS["knowledge_stagnant"][1],
+            "chain": ACTION_CHAINS["knowledge_stagnant"],
         })
 
-    if health < 0.3:
+    # 5. Health critical (lower = worse, inverted)
+    if health < HYSTERESIS["health_critical"][0]:
         triggers.append({
             "condition": "health_critical",
             "value": health,
-            "action": "EMERGENCY_SPRINT",
+            "threshold": HYSTERESIS["health_critical"][0],
+            "reset_at": HYSTERESIS["health_critical"][1],
+            "chain": ACTION_CHAINS["health_critical"],
         })
 
     return triggers
@@ -316,7 +388,8 @@ def print_dashboard(metrics, health, triggers):
     if triggers:
         print(f"\n  WAKE-UP TRIGGERS ({len(triggers)}):")
         for t in triggers:
-            print(f"    >> {t['condition']}: {t['value']} → {t['action']}")
+            esc = t.get("chain", {}).get("escalation", "—")
+            print(f"    >> {t['condition']}: {t['value']} (reset@{t.get('reset_at','?')}) → {esc}")
     else:
         print("\n  No wake-up triggers. System healthy.")
 
