@@ -1,0 +1,3 @@
+
+
+Gemini API enabled. Now typing the key name and testing Gemini simultaneously.

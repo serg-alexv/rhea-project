@@ -1,0 +1,26 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "c61d3bc4746e",
+  "strategy": "auto-commit",
+  "branch": "hyperion/memory",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "rhea-atlas/src/components/RuliadicIsland.tsx"
+  ],
+  "sessions": [
+    {
+      "metadata": "/c6/1d3bc4746e/0/metadata.json",
+      "transcript": "/c6/1d3bc4746e/0/full.jsonl",
+      "context": "",
+      "content_hash": "/c6/1d3bc4746e/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 28,
+    "cache_creation_tokens": 124593,
+    "cache_read_tokens": 1195818,
+    "output_tokens": 4084,
+    "api_call_count": 10
+  }
+}
