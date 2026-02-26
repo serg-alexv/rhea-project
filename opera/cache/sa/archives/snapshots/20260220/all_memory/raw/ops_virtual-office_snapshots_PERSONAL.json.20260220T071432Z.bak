@@ -1,8 +1,0 @@
-{
-  "agent": "PERSONAL",
-  "last_seq_applied": 0,
-  "state_hash": "ee4b17986a7a9471",
-  "saved_at": "2026-02-20T07:13:26.841181+00:00",
-  "lease_token": 1,
-  "messages_drained": 0
-}

@@ -1,5 +1,0 @@
-=== PROVE CHAIN RACE (STRESS) 2026-02-19T09:33:10Z ===
-8c43532135c49135981657cc15254aaeed2f7f82
-Chain integrity: BROKEN
-  Entries: 288
-  Detail: entry 288: prev_hash mismatch (truncation/reorder)

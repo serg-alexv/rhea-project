@@ -66,3 +66,6 @@ rhea-atlas/.next/
 # Archive files with session transcripts
 archive/gemini-audit-*/
 archive/platform-dialogues/
+
+# Opera cache (may contain snapshots with secrets)
+opera/cache/
