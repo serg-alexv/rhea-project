@@ -2092,7 +2092,7 @@ function setMode(mode) {
   if (btn) btn.classList.add('active');
 
   const input = document.getElementById('promptInput');
-  if (mode === 'rag')      input.placeholder = 'Ask your documents...';
+  if (mode === 'rag')      input.placeholder = 'Search memory + ask tribunal...';
   else if (mode === 'tribunal') input.placeholder = 'Ask the tribunal...';
   else if (mode === 'sceptic')  input.placeholder = 'Ask for critical analysis...';
   else                     input.placeholder = 'ICE iterative consensus...';
@@ -2359,7 +2359,7 @@ async function askQuery() {
 
   // Paid-action warning
   const _toastMsg = {
-    rag:      '⚡ Search uses AI credits (~$0.001)',
+    rag:      '⚡ Memory search free + tribunal uses AI credits (~$0.001)',
     tribunal: '⚡ Tribunal query uses AI credits (~$0.002)',
     sceptic:  '⚡ Sceptic analysis uses AI credits (~$0.004)',
     ice:      '⚡ Deep analysis uses AI credits (~$0.01)',
@@ -2394,14 +2394,49 @@ async function askQuery() {
 }
 
 async function askRAG(prompt) {
-  const r = await fetch(`${API}/api/tribunal`, {
-    method: 'POST',
-    headers: authHeaders(),
-    body: JSON.stringify({prompt, k: 3, tier: 'cheap', mode: 'local'}),
-  });
-  if (!r.ok) throw new Error(`HTTP ${r.status}: ${await r.text()}`);
-  const d = await r.json();
-  renderTribunalResult(d);
+  // Search Aletheia memory + query tribunal in parallel (zero extra latency)
+  const aletheiaUrl = `${API}/api/aletheia/search?q=${encodeURIComponent(prompt)}&limit=5`;
+  const [memRes, tribRes] = await Promise.allSettled([
+    fetch(aletheiaUrl).then(r => r.ok ? r.json() : []),
+    fetch(`${API}/api/tribunal`, {
+      method: 'POST',
+      headers: authHeaders(),
+      body: JSON.stringify({prompt, k: 3, tier: 'cheap', mode: 'local'}),
+    }).then(async r => {
+      if (!r.ok) throw new Error(`HTTP ${r.status}: ${await r.text()}`);
+      return r.json();
+    }),
+  ]);
+
+  const memories = memRes.status === 'fulfilled' ? (memRes.value || []) : [];
+  if (tribRes.status === 'rejected') throw tribRes.reason;
+  const d = tribRes.value;
+
+  // Render: memory recall above tribunal consensus
+  let memoryHtml = '';
+  if (memories.length > 0) {
+    const cards = memories.map(m => {
+      const tierColor = m.tier === 'proof' ? 'green' : 'amber';
+      const score = m.agreement_score ? `${(m.agreement_score * 100).toFixed(0)}% agreement` : '';
+      return `<div class="result-card" style="border-left:2px solid var(--${tierColor})">
+        <div class="header">
+          <span class="model" style="color:var(--${tierColor})">${(m.tier || 'memory').toUpperCase()}</span>
+          <span style="font-size:10px;color:var(--dim)">${score}</span>
+        </div>
+        <div class="text" style="font-size:11px">${(m.prompt || '').slice(0, 200)}</div>
+      </div>`;
+    }).join('');
+    memoryHtml = `<div class="consensus-box" style="border-color:var(--green);margin-bottom:12px">
+      <div class="label" style="color:var(--green)">Memory Recall (${memories.length} match${memories.length !== 1 ? 'es' : ''})</div>
+      ${cards}
+    </div>`;
+  }
+
+  document.getElementById('tribunalResults').innerHTML = memoryHtml + _tribunalResultHtml(d);
+  const logMsg = memories.length
+    ? `RAG: ${memories.length} memories + tribunal (${d.models_responded} models, ${((d.confidence||0)*100).toFixed(0)}%)`
+    : `RAG: tribunal only (${d.models_responded} models, ${((d.confidence||0)*100).toFixed(0)}%)`;
+  log(logMsg, 'event');
 }
 
 async function askTribunal(prompt) {
@@ -2495,7 +2530,7 @@ function renderScepticResult(d) {
 
 // ── Standard Tribunal Render ───────────────────────────────────────────────
 
-function renderTribunalResult(d) {
+function _tribunalResultHtml(d) {
   const mathDomains = Object.keys(d.math_verification || {});
   const mathHtml = mathDomains.length ?
     `<div style="margin-top:8px">${mathDomains.map(dom => {
@@ -2513,7 +2548,7 @@ function renderTribunalResult(d) {
     </div>
   `).join('');
 
-  document.getElementById('tribunalResults').innerHTML = `
+  return `
     <div class="consensus-box">
       <div class="label">Consensus (${d.mode || 'local'} | ${d.analysis_method || 'n/a'})</div>
       <div style="font-size:12px;line-height:1.5;white-space:pre-wrap">${(d.consensus || 'No consensus').slice(0, 600)}</div>
@@ -2539,6 +2574,10 @@ function renderTribunalResult(d) {
     </div>
     ${responsesHtml}
   `;
+}
+
+function renderTribunalResult(d) {
+  document.getElementById('tribunalResults').innerHTML = _tribunalResultHtml(d);
   log(`Result: ${d.models_responded} models, confidence ${((d.confidence||0)*100).toFixed(0)}%, ${d.elapsed_s}s`, 'event');
 }
 
