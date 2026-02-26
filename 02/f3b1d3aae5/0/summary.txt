@@ -1,0 +1,33 @@
+Here's where we stand and the logical next moves:
+
+## Today's Output (massive session)
+
+| Done | What |
+|------|------|
+| ✓ | Credential rotation (OpenAI, Anthropic, Gemini) + rotate_key.sh tool |
+| ✓ | Dispersed cloud deploy configs (Cloud Run + Firebase + Redis Cloud + Oracle) |
+| ✓ | Auth system (signup/login/profile, JWT + SQLite) |
+| ✓ | Code-worm profile element (both UIs) |
+| ✓ | Distributed health endpoint (6-component parallel probe) |
+| ✓ | Prod/dev mode gating (strips agent names, internal labels) |
+| ✓ | Paid-action toasts, footer, contact chatbox, tooltips |
+| ✓ | 8-agent action buttons (24 tribunal shortcuts) |
+| ✓ | .env 4-layer defense (permanently solved) |
+| ✓ | Frontend production-ready (env-aware config, SSR audit, cold-start UX) |
+
+## What's Left (ranked by impact)
+
+| # | Task | Effort | Impact |
+|---|------|--------|--------|
+| **1** | **Commit + push** — 21 files sitting unstaged | 2 min | Critical — all work is local-only |
+| **2** | **Deploy to prod** — run `deploy-all.sh` | 15 min | The whole point — goes live |
+| **3** | **GitHub legal docs** — TERMS.md, PRIVACY.md, etc. | 10 min | Footer links 404 without these |
+| **4** | **Public repo** — `serg-alexv/rhea-project` on GitHub | 5 min | Community/Docs links need it |
+| **5** | **Firebase Auth** — replace SQLite JWT with real auth | 30 min | Production-grade login |
+| **6** | **Redis Cloud password rotation** | Manual | Needs your browser (Okta SSO) |
+| **7** | **Wire `logic_audit`** — log every tribunal query to SQLite | 15 min | Usage tracking for billing card |
+| **8** | **Orion's TODO Crisis Panel** (P0) | 1 hr | Standing directive, unstarted |
+
+**My recommendation:** #1 first (commit), then #3 (legal docs so footer works), then #2 (deploy). That gets you from "running on localhost" to "live on the internet" in under 30 minutes.
+
+What do you want to hit?
