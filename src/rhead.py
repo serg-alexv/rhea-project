@@ -80,12 +80,14 @@ r = redis.from_url(REDIS_URL) if REDIS_URL else None
 
 @app.get("/")
 def read_root():
-    return {
+    payload = {
         "status": "ALIVE",
-        "node": "ORION-NODE-02",
         "version": "4.1.0-STM",
         "message": "Welcome to the Rhea Council Chamber. STM Layer is ACTIVE."
     }
+    if not IS_PRODUCTION:
+        payload["node"] = "ORION-NODE-02"
+    return payload
 
 from fastapi.responses import StreamingResponse
 import asyncio
@@ -117,13 +119,19 @@ def get_atlas_state():
     """Fetch current system state for Three.js projection."""
     if not r:
         raise HTTPException(status_code=503, detail="Redis STM not available")
-    
+
     dashboard = r.get("ui:dashboard")
     relay = r.get("ui:relay_recent")
-    
+    geometry = json.loads(relay) if relay else []
+
+    if IS_PRODUCTION and isinstance(geometry, list):
+        for item in geometry:
+            if isinstance(item, dict):
+                item.pop("actor", None)
+
     return {
         "metrics": json.loads(dashboard) if dashboard else {},
-        "geometry": json.loads(relay) if relay else [],
+        "geometry": geometry,
         "ts": time.time()
     }
 
@@ -233,7 +241,7 @@ def health_check():
     bridge = next((c for c in components if c["name"] == "llm_bridge"), None)
     providers_str = bridge["detail"] if bridge and bridge["status"] == "online" else "0/?"
 
-    return {
+    payload = {
         "status": "ok" if online >= 2 else "degraded",
         "environment": ENVIRONMENT,
         "version": VERSION,
@@ -242,8 +250,10 @@ def health_check():
         "components_online": f"{online}/{total}",
         "providers": providers_str,
         "components": components,
-        "active_council": ["ORION", "HYPERION", "B2", "REX", "A1", "A8"],
     }
+    if not IS_PRODUCTION:
+        payload["active_council"] = ["ORION", "HYPERION", "B2", "REX", "A1", "A8"]
+    return payload
 
 
 @app.get("/ready")
