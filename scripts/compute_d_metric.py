@@ -52,6 +52,11 @@ def collect_raw():
     repo_size = _run("du -sm .git 2>/dev/null | cut -f1")
     raw["repo_size_mb"] = int(repo_size)
     
+    # Entropy (Task #20): Hash of core logic/docs
+    # Calculate a combined hash of all critical files to detect semantic drift
+    hash_cmd = "find src scripts docs -type f ( -name '*.py' -o -name '*.sh' -o -name '*.md' ) -exec sha256sum {} + | sort | sha256sum | cut -d' ' -f1"
+    raw["system_hash"] = _run(hash_cmd)
+
     # Defaults for metrics that require history
     raw["insights_per_request"] = 3.2
     raw["avg_context_tokens_estimate"] = 4500
@@ -64,6 +69,7 @@ def collect_raw():
                 stored = json.load(f)
             raw["insights_per_request"] = stored.get("insights_per_request", 3.2)
             raw["avg_context_tokens_estimate"] = stored.get("avg_context_tokens_estimate", 4500)
+            raw["prev_hash"] = stored.get("system_hash", "")
         except:
             pass
             
@@ -72,12 +78,19 @@ def collect_raw():
 def compute_d_metric(raw, weights):
     """Calculates D using the official weighted formula."""
     w = weights
+    
+    # Entropy Penalty: If hash changed, add a small friction constant
+    entropy_penalty = 0
+    if raw.get("prev_hash") and raw.get("system_hash") != raw.get("prev_hash"):
+        entropy_penalty = w.get("entropy", 5.0)
+
     components = {
         "docs":     w["docs_kb"]      * math.log10(1 + raw["core_docs_kb"]),
         "repo":     w["repo_mb"]      * math.log10(1 + raw["repo_size_mb"]),
         "todos":    w["todos"]        * math.sqrt(raw["open_todo_count"]),
         "insights": w["inv_insights"] * (1.0 / max(raw["insights_per_request"], 0.01)),
         "tokens":   w["tokens"]       * (raw["avg_context_tokens_estimate"] / 1000.0),
+        "entropy":  entropy_penalty,
     }
     
     # Apply 40% component cap to prevent any single factor from dominating D
