@@ -313,7 +313,7 @@ PROVIDERS = {
     "gemini": ProviderConfig(
         name="gemini",
         display_name="Google Gemini",
-        base_url="https://generativelanguage.googleapis.com/v1beta",
+        base_url="https://generativelanguage.googleapis.com/v1",
         api_key_env="GEMINI_API_KEY",
         models=[
             "gemini-3.1-pro-preview", "gemini-3-pro-preview",

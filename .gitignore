@@ -55,3 +55,6 @@ rhea-project/docs/*.audit
 service-account.json
 rhea-atlas/node_modules/
 rhea-atlas/.next/
+
+# SQLite databases (runtime data, not source)
+*.db
