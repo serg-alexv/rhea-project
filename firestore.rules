@@ -1,11 +1,43 @@
-// Rhea Office — Firestore Security Rules
-// Allow reads and writes for authenticated users.
-// Temporary rule valid until 2026-02-27. Replace with proper user-based rules after auth setup.
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
+    // Default: deny all
     match /{document=**} {
-      allow read, write: if request.auth != null && request.time < timestamp.date(2026, 2, 27);
+      allow read, write: if false;
+    }
+
+    // Office collections — require authenticated service account
+    match /inbox/{messageId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null;
+    }
+    match /outbox/{taskId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null;
+    }
+    match /gems/{gemId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null;
+    }
+    match /incidents/{incId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null;
+    }
+    match /decisions/{decId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null;
+    }
+    match /capsule/{docId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null;
+    }
+    match /agents/{agentId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null;
+    }
+    match /_health/{docId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null;
     }
   }
 }
