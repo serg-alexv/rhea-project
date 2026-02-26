@@ -31,6 +31,7 @@ from typing import Optional
 # Disable litellm logging to keep dashboard clean
 litellm.set_verbose = False
 litellm.telemetry = False
+litellm.drop_params = True
 
 # Enable Redis Caching if available (Task #22)
 if os.environ.get("REDIS_URL"):
