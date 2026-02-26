@@ -1,0 +1,17 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "dfbeda2bc119",
+  "strategy": "auto-commit",
+  "branch": "hyperion/memory",
+  "checkpoints_count": 0,
+  "files_touched": null,
+  "sessions": [
+    {
+      "metadata": "/df/beda2bc119/0/metadata.json",
+      "transcript": "/df/beda2bc119/0/full.jsonl",
+      "context": "",
+      "content_hash": "/df/beda2bc119/0/content_hash.txt",
+      "prompt": ""
+    }
+  ]
+}
