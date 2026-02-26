@@ -21,6 +21,13 @@ if not os.environ.get("TRIBUNAL_API_KEYS"):
 import sys
 sys.path.insert(0, str(Path(__file__).parent))
 
+# ---------------------------------------------------------------------------
+# Environment detection
+# ---------------------------------------------------------------------------
+ENVIRONMENT = os.environ.get("ENVIRONMENT", "development").lower()
+IS_PRODUCTION = ENVIRONMENT == "production"
+VERSION = os.environ.get("VERSION", "dev")
+
 app = FastAPI(title="Rhea rhead Daemon (v4.1)")
 
 # Mount Tribunal API under /api
@@ -35,12 +42,32 @@ _FRONTEND_DIR = PROJECT_ROOT / "frontend"
 if _FRONTEND_DIR.exists():
     app.mount("/app", StaticFiles(directory=str(_FRONTEND_DIR), html=True), name="frontend")
 
-# Enable CORS for the Atlas Frontend
+# ---------------------------------------------------------------------------
+# CORS — strict in production, permissive in dev
+# ---------------------------------------------------------------------------
+if IS_PRODUCTION:
+    _allowed_origins_env = os.environ.get("ALLOWED_ORIGINS", "")
+    _cors_origins = [o.strip() for o in _allowed_origins_env.split(",") if o.strip()]
+    if not _cors_origins:
+        # Fallback: deny all cross-origin requests if ALLOWED_ORIGINS is not set in prod
+        _cors_origins = []
+    _allow_all = False
+else:
+    # Dev: allow common local frontend ports
+    _cors_origins = [
+        "http://localhost:3000",
+        "http://localhost:8000",
+        "http://127.0.0.1:3000",
+        "http://127.0.0.1:8000",
+    ]
+    _allow_all = False
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["*"] if not IS_PRODUCTION else _cors_origins,
     allow_methods=["*"],
     allow_headers=["*"],
+    allow_credentials=not IS_PRODUCTION,
 )
 
 # Redis Connection
@@ -96,26 +123,58 @@ def get_atlas_state():
         "ts": time.time()
     }
 
+_START_TIME = time.time()
+
+
 @app.get("/health")
 def health_check():
-    # Check SQL and Redis
+    """Production health endpoint — includes environment, version, uptime, provider count."""
+    # Check SQL
     try:
-        db = sqlite3.connect("data/proof.db")
+        db_path = str(PROJECT_ROOT / "data" / "proof.db")
+        db = sqlite3.connect(db_path)
         res = db.execute("SELECT count(*) FROM logic_audit").fetchone()
         audit_count = res[0]
-    except:
+        db.close()
+    except Exception:
         audit_count = 0
-        
-    redis_alive = r.ping() if r else False
-    
+
+    redis_alive = False
+    try:
+        redis_alive = r.ping() if r else False
+    except Exception:
+        pass
+
+    # Count available providers from bridge (lazy — don't import at module level)
+    providers_available = 0
+    try:
+        sys.path.insert(0, str(PROJECT_ROOT / "src"))
+        from rhea_bridge import RheaBridge
+        _b = RheaBridge()
+        status = _b.models_status()
+        providers_available = status["summary"]["available_providers"]
+    except Exception:
+        pass
+
     return {
-        "status": "healthy" if redis_alive else "degraded",
-        "uptime": time.time(),
+        "status": "ok",
+        "environment": ENVIRONMENT,
+        "version": VERSION,
+        "uptime": round(time.time() - _START_TIME, 1),
+        "providers_available": providers_available,
         "audit_records": audit_count,
         "redis_stm": "online" if redis_alive else "offline",
-        "active_council": ["ORION", "HYPERION", "B2", "REX", "A1", "A8"]
+        "active_council": ["ORION", "HYPERION", "B2", "REX", "A1", "A8"],
     }
 
+
+@app.get("/ready")
+def readiness_probe():
+    """Cloud Run startup/readiness probe — returns 200 as soon as the app is up."""
+    return {"status": "ready", "environment": ENVIRONMENT, "version": VERSION}
+
+
 if __name__ == "__main__":
-    print("💠 Starting Rhea Daemon (STM-Ready) on http://localhost:8000")
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    port = int(os.environ.get("PORT", "8000"))
+    print(f"Starting Rhea Daemon (STM-Ready) on 0.0.0.0:{port} [{ENVIRONMENT}]")
+    uvicorn.run(app, host="0.0.0.0", port=port)
