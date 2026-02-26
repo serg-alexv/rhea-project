@@ -447,14 +447,17 @@
 
 <!-- ── Cross-navigation bar ── -->
 <nav id="crossnav">
-  <span class="cn-logo">RHEA</span>
+  <span class="cn-logo">RHEA</span><span id="dev-badge" style="display:none;color:#f87171;font-size:7px;text-transform:uppercase;letter-spacing:1px;margin-left:5px;vertical-align:middle">DEV</span>
   <div class="cn-sep"></div>
   <a class="cn-link active" href="#">
     <span class="cn-dot"></span>
-    REX CONSOLE
+    <span id="cn-console-label">CONSOLE</span>
   </a>
-  <a class="cn-link" href="http://localhost:3000/?schema=prime" target="_blank" rel="noopener">
-    ORION ATLAS &rarr;
+  <a class="cn-link" href="http://localhost:3000/?schema=prime">
+    <span id="cn-atlas-label">ATLAS</span> &rarr;
+  </a>
+  <a class="cn-link" href="http://localhost:3000/semantic-drift.html">
+    SEMANTIC DRIFT &rarr;
   </a>
   <div class="cn-meta">
     <span id="cn-onto-badge" class="cn-badge">General</span>
@@ -511,7 +514,7 @@
 
   <!-- LEFT PANEL: Agents & Providers + Ontology Switcher -->
   <div class="panel">
-    <div class="panel-header">Agents &amp; Providers</div>
+    <div class="panel-header" id="left-panel-header">Providers</div>
 
     <!-- Ontology Switcher -->
     <div class="ontology-section">
@@ -591,6 +594,7 @@
 </div>
 
 <script>
+const IS_DEV = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
 const API = location.origin;
 const API_KEY = 'dev-bypass';
 
@@ -842,31 +846,34 @@ async function loadAgents() {
     } catch(e) {}
     provHtml += '</div>';
 
-    let agentHtml = '<div style="font-size:10px;color:var(--accent);text-transform:uppercase;margin-bottom:6px">Agents / Relay Geometry</div>';
-    if (!names.length) {
-      try {
-        const rs = await fetch(`${API}/ui/atlas`);
-        const atlas = await rs.json();
-        const geom = Array.isArray(atlas.geometry) ? atlas.geometry.slice(-6).reverse() : [];
-        if (geom.length) {
-          agentHtml += geom.map(g => `
-            <div class="agent-card">
-              <div class="name">${(g.actor || 'relay').toString()}</div>
-              <div class="meta">${(g.event_type || 'event').toString()} | ${(g.timestamp || '').toString().slice(11,19)}</div>
-            </div>
-          `).join('');
-        } else {
-          agentHtml += '<div style="color:var(--dim);font-size:11px">No relay geometry yet</div>';
+    let agentHtml = '';
+    if (IS_DEV) {
+      agentHtml = '<div style="font-size:10px;color:var(--accent);text-transform:uppercase;margin-bottom:6px">Agents / Relay Geometry</div>';
+      if (!names.length) {
+        try {
+          const rs = await fetch(`${API}/ui/atlas`);
+          const atlas = await rs.json();
+          const geom = Array.isArray(atlas.geometry) ? atlas.geometry.slice(-6).reverse() : [];
+          if (geom.length) {
+            agentHtml += geom.map(g => `
+              <div class="agent-card">
+                <div class="name">${(g.actor || 'relay').toString()}</div>
+                <div class="meta">${(g.event_type || 'event').toString()} | ${(g.timestamp || '').toString().slice(11,19)}</div>
+              </div>
+            `).join('');
+          } else {
+            agentHtml += '<div style="color:var(--dim);font-size:11px">No relay geometry yet</div>';
+          }
+        } catch (e) {
+          agentHtml += '<div style="color:var(--dim);font-size:11px">No live agents</div>';
         }
-      } catch (e) {
-        agentHtml += '<div style="color:var(--dim);font-size:11px">No live agents</div>';
+      } else {
+        agentHtml += names.map(name => {
+          const a = agents[name];
+          const age = Math.round(Date.now()/1000 - a.ts);
+          return `<div class="agent-card"><div class="name">${a.agent}</div><div class="meta">Status: ${a.status} | ${age}s ago</div></div>`;
+        }).join('');
       }
-    } else {
-      agentHtml += names.map(name => {
-        const a = agents[name];
-        const age = Math.round(Date.now()/1000 - a.ts);
-        return `<div class="agent-card"><div class="name">${a.agent}</div><div class="meta">Status: ${a.status} | ${age}s ago</div></div>`;
-      }).join('');
     }
 
     el.innerHTML = provHtml + agentHtml;
