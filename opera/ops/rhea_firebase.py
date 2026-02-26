@@ -107,8 +107,8 @@ def _classify_error(code, body):
 
 _cached_token = {"token": None, "expires": 0}
 
-# Firebase Web API key (public, safe to embed — used only for anonymous auth)
-FIREBASE_API_KEY = "AIzaSyA-fMPry2gzSBdjc98StmzNz6GX9tMV_dw"
+# Firebase Web API key — loaded from environment
+FIREBASE_API_KEY = os.environ.get("FIREBASE_API_KEY", "")
 
 def _get_auth_token():
     """Get auth token. Tries: 1) service account, 2) anonymous auth."""
