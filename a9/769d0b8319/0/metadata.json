@@ -1,0 +1,23 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "a9769d0b8319",
+  "session_id": "29460dc4-bc34-4b0d-933f-4c6e7a63cca8",
+  "strategy": "auto-commit",
+  "created_at": "2026-02-26T00:09:34.110062Z",
+  "branch": "hyperion/memory",
+  "checkpoints_count": 1,
+  "files_touched": [
+    ".env"
+  ],
+  "agent": "Claude Code",
+  "transcript_identifier_at_start": "f9ffc120-11a4-4eaa-a38e-f2d827b262af",
+  "checkpoint_transcript_start": 1321,
+  "transcript_lines_at_start": 1321,
+  "token_usage": {
+    "input_tokens": 120,
+    "cache_creation_tokens": 30191,
+    "cache_read_tokens": 2785807,
+    "output_tokens": 1477,
+    "api_call_count": 40
+  }
+}
