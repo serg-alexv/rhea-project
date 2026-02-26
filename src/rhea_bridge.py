@@ -140,10 +140,10 @@ MODEL_TIERS = {
         "candidates": [
             "deepseek/deepseek-chat",
             "anthropic/claude-haiku-3-5-20241022",
-            "gemini/gemini-2.0-flash",
+            "gemini/gemini-2.5-flash",
             "openai/gpt-4o-mini",
             "azure/gpt-4o-mini",
-            "gemini/gemini-2.0-flash-lite",
+            "gemini/gemini-2.5-flash-8b",
             "openai/gpt-4.1-nano",
             "openrouter/anthropic/claude-sonnet-4",
         ],
@@ -151,7 +151,7 @@ MODEL_TIERS = {
     "balanced": {
         "description": "Mid-tier. For complex reasoning that cheap tier struggles with.",
         "candidates": [
-            "gemini/gemini-2.0-flash",
+            "gemini/gemini-2.5-flash",
             "deepseek/deepseek-chat",
             "openai/gpt-4o",
             "gemini/gemini-2.5-flash",
@@ -245,9 +245,9 @@ PRICE_TABLE = {
     "DeepSeek-R1":                       (0.55, 2.19),
     "Cohere-command-r-plus-08-2024":     (2.50, 10.00),
     # HuggingFace (free/cheap inference)
-    "core42/jais-adaptive-7b-chat":      (0.00, 0.00),
-    "mistralai/Mistral-7B-Instruct-v0.3": (0.00, 0.00),
-    "HuggingFaceH4/zephyr-7b-beta":     (0.00, 0.00),
+    "meta-llama/Llama-3.2-3B-Instruct":      (0.00, 0.00),
+    "microsoft/Phi-3-mini-4k-instruct": (0.00, 0.00),
+    "Qwen/Qwen2.5-1.5B-Instruct":     (0.00, 0.00),
 }
 
 PRICE_DEFAULT = (1.00, 3.00)  # fallback for unknown models
@@ -398,9 +398,9 @@ PROVIDERS = {
         base_url="https://router.huggingface.co/models",
         api_key_env="HF_TOKEN",
         models=[
-            "core42/jais-adaptive-7b-chat",
-            "mistralai/Mistral-7B-Instruct-v0.3",
-            "HuggingFaceH4/zephyr-7b-beta",
+            "meta-llama/Llama-3.2-3B-Instruct",
+            "microsoft/Phi-3-mini-4k-instruct",
+            "Qwen/Qwen2.5-1.5B-Instruct",
         ],
         call_method="huggingface",
     ),
@@ -858,7 +858,7 @@ class RheaBridge:
             # Fallback defaults (will fail gracefully if no keys)
             defaults = [
                 "openai/gpt-4o-mini",
-                "gemini/gemini-2.0-flash",
+                "gemini/gemini-2.5-flash",
                 "deepseek/deepseek-chat",
                 "openrouter/anthropic/claude-sonnet-4",
                 "azure/gpt-4o-mini",
