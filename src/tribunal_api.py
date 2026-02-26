@@ -32,7 +32,7 @@ from pydantic import BaseModel, Field
 # Ensure src/ is importable
 sys.path.insert(0, str(Path(__file__).parent))
 from rhea_bridge import RheaBridge
-from consensus_analyzer import ConsensusAnalyzer
+from consensus_analyzer import ConsensusAnalyzer, math_augment, detect_math_domains
 from rhea_profile_manager import profile_manager
 from rhea_visual_context import update_state, get_health_history
 from rhea_bus import RheaBus
@@ -215,6 +215,7 @@ class TribunalResponse(BaseModel):
     divergence_points: list
     stance_summary: dict
     responses: list[ModelInfo]
+    math_verification: dict = {}
     meta: dict = {}
 
 
@@ -233,6 +234,7 @@ class TribunalICEResponse(BaseModel):
     agreement_points: list
     divergence_points: list
     stance_summary: dict
+    math_verification: dict = {}
     meta: dict = {}
 
 
@@ -395,21 +397,39 @@ async def tribunal(req: TribunalRequest):
 
     _log_api_call("/tribunal", req.dict(), elapsed, "ok")
 
+    # Math augmentation — run Ruliad plugins if prompt has math content
+    math_ver = {}
+    confidence = report.get("confidence", 0.0)
+    agreement = report.get("agreement_score", 0.0)
+    method = report.get("analysis_method", "unknown")
+    if detect_math_domains(req.prompt):
+        try:
+            from consensus_analyzer import run_math_verification, adjust_confidence_with_math
+            math_results = run_math_verification(req.prompt)
+            confidence, agreement, math_method = adjust_confidence_with_math(
+                confidence, agreement, math_results
+            )
+            method = f"{method}+{math_method}"
+            math_ver = math_results
+        except Exception as e:
+            math_ver = {"error": str(e)}
+
     resp = TribunalResponse(
         prompt=req.prompt,
         k=req.k,
         mode=req.mode,
         elapsed_s=round(elapsed, 2),
         consensus=report.get("consensus_text", result.consensus),
-        agreement_score=report.get("agreement_score", 0.0),
-        confidence=report.get("confidence", 0.0),
+        agreement_score=agreement,
+        confidence=confidence,
         models_responded=report.get("successful_count", len([r for r in result.responses if not r.error])),
         models_queried=report.get("model_count", len(result.responses)),
-        analysis_method=report.get("analysis_method", "unknown"),
+        analysis_method=method,
         agreement_points=report.get("agreement_points", []),
         divergence_points=report.get("divergence_points", []),
         stance_summary=report.get("stance_summary", {}),
         responses=response_models,
+        math_verification=math_ver,
         meta=report.get("meta", {}),
     )
 
