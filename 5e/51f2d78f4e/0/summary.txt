@@ -1,0 +1,11 @@
+Pushed. Now for the key design decision — the heart of the Ruliad-Tribunal integration:
+
+---
+
+**Learn by Doing**
+
+**Context:** The wiring is complete — when a prompt hits `/tribunal` or `/tribunal/ice`, the system auto-detects which math domains are relevant (game theory, dynamical systems, etc.), runs those Ruliad plugins, and passes the verdicts to `adjust_confidence_with_math()`. The function receives the base confidence/agreement scores from TF-IDF + stance analysis plus the math verdicts (`"verified"`, `"refuted"`, `"requires_proof"`, `"consistent_requires_deeper_proof"`, `"error"`, `"unknown"`). Right now the function is a pass-through — it returns the original values unchanged.
+
+**Your Task:** In `src/consensus_analyzer.py`, implement the `adjust_confidence_with_math()` function. Look for `TODO(human)`. It should take `base_confidence`, `base_agreement`, and `math_results` dict, and return `(adjusted_confidence, adjusted_agreement, reason_string)`. Both scores are 0.0-1.0 floats.
+
+**Guidance:** Consider how much authority math should have over LLM text consensus. A "verified" from 3 plugins is very different from 1 plugin saying "requires_proof". Should a single "refuted" override 5 LLMs agreeing? Think about the asymmetry: mathematical proof is stronger than opinion consensus, but only in domains where it applies. The reason string should explain what happened (e.g., `"3/3 verified → confidence boosted +0.15"`).

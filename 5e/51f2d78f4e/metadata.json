@@ -1,0 +1,31 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "5e51f2d78f4e",
+  "strategy": "auto-commit",
+  "branch": "main",
+  "checkpoints_count": 1,
+  "files_touched": [
+    ".gitignore",
+    "opera/__init__.py",
+    "opera/ops/__init__.py",
+    "opera/ops/virtual-office/inbox/RELAY_20260226_065110_A1_to_HYPERION.md",
+    "src/consensus_analyzer.py",
+    "src/tribunal_api.py"
+  ],
+  "sessions": [
+    {
+      "metadata": "/5e/51f2d78f4e/0/metadata.json",
+      "transcript": "/5e/51f2d78f4e/0/full.jsonl",
+      "context": "",
+      "content_hash": "/5e/51f2d78f4e/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 43,
+    "cache_creation_tokens": 88157,
+    "cache_read_tokens": 2665095,
+    "output_tokens": 17375,
+    "api_call_count": 37
+  }
+}
