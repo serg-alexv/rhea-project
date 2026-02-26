@@ -1,0 +1,58 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: rhea-backend
+  labels:
+    cloud.googleapis.com/location: us-central1
+  annotations:
+    run.googleapis.com/ingress: all
+spec:
+  template:
+    metadata:
+      annotations:
+        # Scale to zero; cap at 1 instance for free-tier safety
+        autoscaling.knative.dev/minScale: "0"
+        autoscaling.knative.dev/maxScale: "1"
+        # Cold-start timeout (seconds)
+        run.googleapis.com/startup-cpu-boost: "true"
+    spec:
+      containerConcurrency: 80
+      timeoutSeconds: 300
+      containers:
+        - image: us-central1-docker.pkg.dev/gen-lang-client-0839944748/rhea/rhea-backend:latest
+          ports:
+            - name: http1
+              containerPort: 8000
+          resources:
+            limits:
+              memory: 512Mi
+              cpu: "1"
+          env:
+            # These are placeholders — deploy.sh injects real values via
+            # `gcloud run deploy --set-env-vars` at deploy time.
+            # Only commit this file with placeholder values; never real secrets.
+            - name: OPENAI_API_KEY
+              value: "INJECT_AT_DEPLOY"
+            - name: ANTHROPIC_API_KEY
+              value: "INJECT_AT_DEPLOY"
+            - name: GEMINI_API_KEY
+              value: "INJECT_AT_DEPLOY"
+            - name: OPENROUTER_API_KEY
+              value: "INJECT_AT_DEPLOY"
+            - name: REDIS_URL
+              value: "INJECT_AT_DEPLOY"
+          livenessProbe:
+            httpGet:
+              path: /health
+            initialDelaySeconds: 10
+            periodSeconds: 30
+            failureThreshold: 3
+          startupProbe:
+            httpGet:
+              path: /health
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            failureThreshold: 12
+  traffic:
+    - percent: 100
+      latestRevision: true
