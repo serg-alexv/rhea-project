@@ -31,6 +31,9 @@ from typing import Optional
 # Disable litellm logging to keep dashboard clean
 litellm.set_verbose = False
 litellm.telemetry = False
+litellm.suppress_debug_info = True
+import logging
+logging.getLogger("LiteLLM").setLevel(logging.CRITICAL)
 
 try:
     from dotenv import load_dotenv
@@ -130,7 +133,7 @@ MODEL_TIERS = {
             "gemini/gemini-2.0-flash",
             "openai/gpt-4o-mini",
             "deepseek/deepseek-chat",
-            "azure/gpt-4o-mini",
+            "azure_ai/gpt-4o-mini",
             "gemini/gemini-2.0-flash-lite",
             "openai/gpt-4.1-nano",
         ],
@@ -365,8 +368,8 @@ PROVIDERS = {
         ],
         call_method="huggingface",
     ),
-    "azure": ProviderConfig(
-        name="azure",
+    "azure_ai": ProviderConfig(
+        name="azure_ai",
         display_name="Azure AI Foundry",
         base_url=os.environ.get("AZURE_ENDPOINT", "https://models.inference.ai.azure.com"),
         api_key_env="AZURE_API_KEY",
@@ -380,13 +383,32 @@ PROVIDERS = {
     ),
 }
 
+# Map env vars for LiteLLM azure_ai provider
+_azure_key = os.environ.get("AZURE_API_KEY", "")
+_azure_base = os.environ.get("AZURE_ENDPOINT", "")
+if _azure_key and "AZURE_AI_API_KEY" not in os.environ:
+    os.environ["AZURE_AI_API_KEY"] = _azure_key
+if _azure_base and "AZURE_AI_API_BASE" not in os.environ:
+    os.environ["AZURE_AI_API_BASE"] = _azure_base
+
 
 # ---------------------------------------------------------------------------
 # Bridge
 # ---------------------------------------------------------------------------
 
-from rhea_profile_manager import profile_manager
-from rhea_visual_context import get_context_block
+try:
+    from rhea_profile_manager import profile_manager
+    _HAS_PROFILE = True
+except ImportError:
+    profile_manager = None
+    _HAS_PROFILE = False
+
+try:
+    from rhea_visual_context import get_context_block
+    _HAS_VISUAL = True
+except ImportError:
+    get_context_block = None
+    _HAS_VISUAL = False
 
 # ---------------------------------------------------------------------------
 # Bridge
@@ -468,21 +490,17 @@ class RheaBridge:
         """Send a prompt to a specific model via LiteLLM. Format: 'provider/model'."""
         
         # --- Nexus/GPT-Profiler & Visual Context Injection ---
-        constraints = profile_manager.get_constraints(mode)
-        visual_context = get_context_block()
-        
-        # Merge system prompt with constraints and visual context
         injected = ""
-        if constraints:
-            injected += constraints
-        if visual_context:
-            injected += f"\n{visual_context}"
-            
+        if _HAS_PROFILE and profile_manager:
+            constraints = profile_manager.get_constraints(mode)
+            if constraints:
+                injected += constraints
+        if _HAS_VISUAL and get_context_block:
+            visual_context = get_context_block()
+            if visual_context:
+                injected += f"\n{visual_context}"
         if injected:
-            if system:
-                system = f"{system}\n\n{injected}"
-            else:
-                system = injected
+            system = f"{system}\n\n{injected}" if system else injected
         # ----------------------------------------------------
 
         provider_name, model_id = self._resolve_model(model)
@@ -775,7 +793,7 @@ class RheaBridge:
                 "gemini/gemini-2.0-flash",
                 "deepseek/deepseek-chat",
                 "openrouter/anthropic/claude-sonnet-4",
-                "azure/gpt-4o-mini",
+                "azure_ai/gpt-4o-mini",
             ]
             return defaults[:k]
 
