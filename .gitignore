@@ -53,3 +53,4 @@ alpha2-*.sh
 alpha2-*.py
 rhea-project/docs/*.audit
 service-account.json
+\n# Junk\nnode_modules/\ndist/\n*.log\n*.bak\n.env\n
