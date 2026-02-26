@@ -1,0 +1,17 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "5cd1fd4b31fc",
+  "strategy": "auto-commit",
+  "branch": "hyperion/memory",
+  "checkpoints_count": 0,
+  "files_touched": null,
+  "sessions": [
+    {
+      "metadata": "/5c/d1fd4b31fc/0/metadata.json",
+      "transcript": "/5c/d1fd4b31fc/0/full.jsonl",
+      "context": "",
+      "content_hash": "/5c/d1fd4b31fc/0/content_hash.txt",
+      "prompt": ""
+    }
+  ]
+}
