@@ -1101,7 +1101,7 @@ export default function Home() {
           </div>
           <div className="mt-2 grid grid-cols-2 gap-1">
             <a
-              href={`${API_BASE}/app`}
+              href={`${API_BASE}/app/`}
               className="rounded-lg px-2 py-1 text-[9px] font-mono uppercase tracking-widest border border-white/5 bg-black/20 text-gray-400 hover:text-white/70"
             >
               {IS_DEV ? <>System&apos;s P&amp;W</> : 'Console'}
