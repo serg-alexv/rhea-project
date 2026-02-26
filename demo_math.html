@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RHEA TRIBUNAL — Mathematical Verification Engine</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+    :root {
+      --accent-green: #22d3a5;
+      --accent-blue: #38bdf8;
+      --accent-purple: #a78bfa;
+      --accent-amber: #fbbf24;
+      --accent-rose: #fb7185;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0a0f1a;
+      color: #e2e8f0;
+      min-height: 100vh;
+    }
+
+    .mono { font-family: 'JetBrains Mono', monospace; }
+
+    /* Animated gradient background */
+    .hero-bg {
+      background: radial-gradient(ellipse 80% 60% at 50% -20%, rgba(56,189,248,0.12) 0%, transparent 60%),
+                  radial-gradient(ellipse 60% 40% at 80% 80%, rgba(167,139,250,0.08) 0%, transparent 50%),
+                  radial-gradient(ellipse 50% 50% at 20% 70%, rgba(34,211,165,0.06) 0%, transparent 50%),
+                  #0a0f1a;
+    }
+
+    /* Glowing card border */
+    .card-glow {
+      position: relative;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 16px;
+      transition: border-color 0.3s, box-shadow 0.3s, transform 0.2s;
+      backdrop-filter: blur(8px);
+    }
+    .card-glow:hover {
+      transform: translateY(-2px);
+    }
+
+    .card-game-theory:hover   { border-color: rgba(34,211,165,0.4); box-shadow: 0 0 32px rgba(34,211,165,0.12); }
+    .card-dynamical:hover     { border-color: rgba(56,189,248,0.4); box-shadow: 0 0 32px rgba(56,189,248,0.12); }
+    .card-info-geo:hover      { border-color: rgba(167,139,250,0.4); box-shadow: 0 0 32px rgba(167,139,250,0.12); }
+    .card-proof:hover         { border-color: rgba(251,191,36,0.4); box-shadow: 0 0 32px rgba(251,191,36,0.12); }
+    .card-category:hover      { border-color: rgba(251,113,133,0.4); box-shadow: 0 0 32px rgba(251,113,133,0.12); }
+
+    .card-game-theory.active  { border-color: rgba(34,211,165,0.6);  box-shadow: 0 0 48px rgba(34,211,165,0.2); }
+    .card-dynamical.active    { border-color: rgba(56,189,248,0.6);  box-shadow: 0 0 48px rgba(56,189,248,0.2); }
+    .card-info-geo.active     { border-color: rgba(167,139,250,0.6); box-shadow: 0 0 48px rgba(167,139,250,0.2); }
+    .card-proof.active        { border-color: rgba(251,191,36,0.6);  box-shadow: 0 0 48px rgba(251,191,36,0.2); }
+    .card-category.active     { border-color: rgba(251,113,133,0.6); box-shadow: 0 0 48px rgba(251,113,133,0.2); }
+
+    /* Icon badge */
+    .icon-badge {
+      width: 48px; height: 48px;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+
+    .badge-green  { background: rgba(34,211,165,0.15);  color: #22d3a5; }
+    .badge-blue   { background: rgba(56,189,248,0.15);  color: #38bdf8; }
+    .badge-purple { background: rgba(167,139,250,0.15); color: #a78bfa; }
+    .badge-amber  { background: rgba(251,191,36,0.15);  color: #fbbf24; }
+    .badge-rose   { background: rgba(251,113,133,0.15); color: #fb7185; }
+
+    /* Textarea */
+    .hypothesis-input {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 8px;
+      color: #cbd5e1;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      line-height: 1.6;
+      resize: vertical;
+      transition: border-color 0.2s, background 0.2s;
+      width: 100%;
+      padding: 10px 12px;
+      outline: none;
+    }
+    .hypothesis-input:focus {
+      border-color: rgba(255,255,255,0.2);
+      background: rgba(255,255,255,0.05);
+    }
+
+    /* Verify button */
+    .btn-verify {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
+      border: none;
+      outline: none;
+    }
+    .btn-verify:hover  { opacity: 0.88; transform: translateY(-1px); }
+    .btn-verify:active { transform: translateY(0); }
+    .btn-verify:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+    .btn-green  { background: linear-gradient(135deg,#22d3a5,#059669); color: #0a0f1a; box-shadow: 0 4px 16px rgba(34,211,165,0.25); }
+    .btn-blue   { background: linear-gradient(135deg,#38bdf8,#0284c7); color: #0a0f1a; box-shadow: 0 4px 16px rgba(56,189,248,0.25); }
+    .btn-purple { background: linear-gradient(135deg,#a78bfa,#7c3aed); color: #fff;    box-shadow: 0 4px 16px rgba(167,139,250,0.25); }
+    .btn-amber  { background: linear-gradient(135deg,#fbbf24,#d97706); color: #0a0f1a; box-shadow: 0 4px 16px rgba(251,191,36,0.25); }
+    .btn-rose   { background: linear-gradient(135deg,#fb7185,#e11d48); color: #fff;    box-shadow: 0 4px 16px rgba(251,113,133,0.25); }
+
+    /* Run All button */
+    .btn-run-all {
+      background: linear-gradient(135deg, #38bdf8, #a78bfa, #22d3a5);
+      background-size: 200% 200%;
+      animation: gradientShift 4s ease infinite;
+      color: #0a0f1a;
+      font-weight: 700;
+      font-size: 15px;
+      padding: 12px 36px;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
+      box-shadow: 0 8px 32px rgba(56,189,248,0.3);
+    }
+    .btn-run-all:hover  { opacity: 0.9; transform: translateY(-2px); box-shadow: 0 12px 40px rgba(56,189,248,0.4); }
+    .btn-run-all:active { transform: translateY(0); }
+    .btn-run-all:disabled { opacity: 0.4; cursor: not-allowed; transform: none; animation: none; }
+
+    @keyframes gradientShift {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Spinner */
+    .spinner {
+      width: 16px; height: 16px;
+      border: 2px solid rgba(255,255,255,0.2);
+      border-top-color: currentColor;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      display: inline-block;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Results area */
+    .results-area {
+      display: none;
+      margin-top: 12px;
+      border-radius: 10px;
+      background: rgba(0,0,0,0.3);
+      border: 1px solid rgba(255,255,255,0.06);
+      overflow: hidden;
+    }
+    .results-area.visible { display: block; }
+
+    .verdict-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .verdict-verified        { background: rgba(34,211,165,0.15); color: #22d3a5; border: 1px solid rgba(34,211,165,0.3); }
+    .verdict-requires_proof  { background: rgba(251,191,36,0.15); color: #fbbf24; border: 1px solid rgba(251,191,36,0.3); }
+    .verdict-refuted         { background: rgba(251,113,133,0.15); color: #fb7185; border: 1px solid rgba(251,113,133,0.3); }
+    .verdict-indeterminate   { background: rgba(148,163,184,0.15); color: #94a3b8; border: 1px solid rgba(148,163,184,0.3); }
+    .verdict-error           { background: rgba(251,113,133,0.15); color: #fb7185; border: 1px solid rgba(251,113,133,0.3); }
+    .verdict-demo            { background: rgba(167,139,250,0.15); color: #a78bfa; border: 1px solid rgba(167,139,250,0.3); }
+
+    .kv-row {
+      display: flex; align-items: flex-start; gap: 8px;
+      padding: 6px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      font-size: 12px;
+    }
+    .kv-row:last-child { border-bottom: none; }
+    .kv-key   { color: #64748b; font-family: 'JetBrains Mono', monospace; min-width: 130px; flex-shrink: 0; }
+    .kv-value { color: #cbd5e1; font-family: 'JetBrains Mono', monospace; word-break: break-all; }
+
+    /* Note banner */
+    .note-banner {
+      background: rgba(56,189,248,0.06);
+      border: 1px solid rgba(56,189,248,0.18);
+      border-radius: 10px;
+      padding: 12px 18px;
+      display: flex; align-items: flex-start; gap: 12px;
+    }
+
+    /* Divider */
+    .gradient-divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(56,189,248,0.3), rgba(167,139,250,0.3), transparent);
+      margin: 0;
+    }
+
+    /* Pulse dot */
+    .pulse-dot {
+      width: 8px; height: 8px; border-radius: 50%; background: #22d3a5;
+      box-shadow: 0 0 0 0 rgba(34,211,165,0.4);
+      animation: pulse 2s infinite;
+      display: inline-block; flex-shrink: 0; margin-top: 2px;
+    }
+    @keyframes pulse {
+      0%   { box-shadow: 0 0 0 0 rgba(34,211,165,0.4); }
+      70%  { box-shadow: 0 0 0 6px rgba(34,211,165,0); }
+      100% { box-shadow: 0 0 0 0 rgba(34,211,165,0); }
+    }
+
+    /* Status indicator bar */
+    .status-bar {
+      background: rgba(0,0,0,0.25);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 8px;
+      padding: 8px 16px;
+      display: flex; align-items: center; gap: 10px;
+      font-size: 12px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Global results summary */
+    .global-results {
+      display: none;
+    }
+    .global-results.visible { display: block; }
+
+    .progress-bar-track {
+      background: rgba(255,255,255,0.06);
+      border-radius: 999px;
+      height: 6px;
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #22d3a5, #38bdf8);
+      transition: width 0.4s ease;
+    }
+
+    /* Fade-in animation */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .fade-in { animation: fadeInUp 0.4s ease both; }
+
+    /* Glow line separator */
+    .glow-sep {
+      height: 2px;
+      border-radius: 1px;
+      margin: 0 0 0 0;
+    }
+    .glow-sep-green  { background: linear-gradient(90deg, #22d3a5, transparent); }
+    .glow-sep-blue   { background: linear-gradient(90deg, #38bdf8, transparent); }
+    .glow-sep-purple { background: linear-gradient(90deg, #a78bfa, transparent); }
+    .glow-sep-amber  { background: linear-gradient(90deg, #fbbf24, transparent); }
+    .glow-sep-rose   { background: linear-gradient(90deg, #fb7185, transparent); }
+  </style>
+</head>
+<body class="hero-bg">
+
+  <!-- ═══════════════════════ HEADER ═══════════════════════ -->
+  <header class="sticky top-0 z-50" style="background: rgba(10,15,26,0.85); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(255,255,255,0.06);">
+    <div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div style="font-size: 22px; line-height:1;">⚖️</div>
+        <span class="mono font-bold text-sm tracking-widest" style="color:#38bdf8; letter-spacing:0.15em;">RHEA TRIBUNAL</span>
+        <span class="text-xs px-2 py-0.5 rounded-full mono" style="background:rgba(34,211,165,0.12); color:#22d3a5; border:1px solid rgba(34,211,165,0.25);">v1.0</span>
+      </div>
+      <div class="status-bar" id="api-status">
+        <div class="pulse-dot" id="status-dot" style="background:#64748b; box-shadow:none; animation:none;"></div>
+        <span id="status-text" style="color:#64748b;">API not connected</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ═══════════════════════ HERO ═══════════════════════ -->
+  <section class="max-w-7xl mx-auto px-6 pt-16 pb-10 text-center">
+    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full mb-6 mono text-xs tracking-widest"
+         style="background:rgba(56,189,248,0.08); border:1px solid rgba(56,189,248,0.2); color:#38bdf8;">
+      ◈ MATHEMATICAL VERIFICATION ENGINE
+    </div>
+
+    <h1 class="font-extrabold mb-4 leading-tight" style="font-size: clamp(28px,5vw,52px); letter-spacing:-0.02em;">
+      <span style="color:#e2e8f0;">RHEA TRIBUNAL</span><br/>
+      <span style="background: linear-gradient(135deg, #38bdf8, #a78bfa, #22d3a5); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+        Mathematical Verification Engine
+      </span>
+    </h1>
+
+    <p class="text-lg mb-10" style="color:#94a3b8; max-width:580px; margin-left:auto; margin-right:auto;">
+      5 mathematical universes. Real computation. Zero hallucination.
+    </p>
+
+    <!-- Note banner -->
+    <div class="note-banner max-w-2xl mx-auto mb-10 text-left">
+      <span style="font-size:18px; flex-shrink:0;">💡</span>
+      <div>
+        <div class="text-xs font-semibold mb-1" style="color:#38bdf8; letter-spacing:0.08em; text-transform:uppercase;">Start the Tribunal API</div>
+        <code class="mono text-xs" style="color:#cbd5e1;">uvicorn src.tribunal_api:app --host 0.0.0.0 --port 8400</code>
+        <div class="text-xs mt-1" style="color:#64748b;">Then click Verify on any card, or use Run All to compute all 5 domains simultaneously.</div>
+      </div>
+    </div>
+
+    <!-- Run All button + progress -->
+    <div class="flex flex-col items-center gap-4">
+      <button class="btn-run-all" id="run-all-btn" onclick="runAll()">
+        ▶ Run All Verifications
+      </button>
+
+      <!-- Global progress (hidden until Run All clicked) -->
+      <div class="global-results max-w-2xl w-full" id="global-results">
+        <div class="flex justify-between text-xs mb-2 mono" style="color:#64748b;">
+          <span id="global-status-text">Verifying…</span>
+          <span id="global-count">0 / 5</span>
+        </div>
+        <div class="progress-bar-track">
+          <div class="progress-bar-fill" id="global-progress" style="width:0%"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="gradient-divider max-w-7xl mx-auto mb-12" style="margin-left:auto; margin-right:auto;"></div>
+
+  <!-- ═══════════════════════ CARDS ═══════════════════════ -->
+  <main class="max-w-7xl mx-auto px-6 pb-20">
+    <div class="grid gap-6" style="grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));">
+
+      <!-- ─── CARD 1: Game Theory ─── -->
+      <div class="card-glow card-game-theory p-6" id="card-game-theory">
+        <div class="glow-sep glow-sep-green mb-5"></div>
+        <div class="flex items-start gap-4 mb-5">
+          <div class="icon-badge badge-green">♟</div>
+          <div>
+            <div class="text-xs mono mb-1 font-semibold tracking-widest" style="color:#22d3a5; text-transform:uppercase;">Game Theory</div>
+            <div class="font-bold text-base" style="color:#f1f5f9;">Nash Equilibrium Analysis</div>
+          </div>
+        </div>
+
+        <div class="text-xs mb-2 font-medium" style="color:#64748b;">Hypothesis</div>
+        <textarea class="hypothesis-input mb-4" id="hyp-game-theory" rows="4">In a 2-player zero-sum game with payoff matrix [[3,-3],[-1,1]], the Nash equilibrium exists and results in a mixed strategy where player 1 plays row 1 with probability 1/2.</textarea>
+
+        <div class="flex items-center gap-3">
+          <button class="btn-verify btn-green" id="btn-game-theory" onclick="verify('game-theory')">
+            <span class="verify-label">Verify</span>
+          </button>
+          <span class="text-xs mono" style="color:#475569;">POST /tribunal/math-verify</span>
+        </div>
+
+        <div class="results-area" id="results-game-theory">
+          <div class="p-4">
+            <div class="flex items-center justify-between mb-3">
+              <div class="text-xs font-semibold mono" style="color:#64748b;">RESULT</div>
+              <div id="verdict-game-theory" class="verdict-badge"></div>
+            </div>
+            <div id="kvs-game-theory"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── CARD 2: Dynamical Systems ─── -->
+      <div class="card-glow card-dynamical p-6" id="card-dynamical">
+        <div class="glow-sep glow-sep-blue mb-5"></div>
+        <div class="flex items-start gap-4 mb-5">
+          <div class="icon-badge badge-blue">◎</div>
+          <div>
+            <div class="text-xs mono mb-1 font-semibold tracking-widest" style="color:#38bdf8; text-transform:uppercase;">Dynamical Systems</div>
+            <div class="font-bold text-base" style="color:#f1f5f9;">Stability & Chaos Detection</div>
+          </div>
+        </div>
+
+        <div class="text-xs mb-2 font-medium" style="color:#64748b;">Hypothesis</div>
+        <textarea class="hypothesis-input mb-4" id="hyp-dynamical" rows="4">The Lorenz system with parameters σ=10, ρ=28, β=8/3 exhibits chaotic behavior. The largest Lyapunov exponent is positive (~0.906), confirming sensitive dependence on initial conditions.</textarea>
+
+        <div class="flex items-center gap-3">
+          <button class="btn-verify btn-blue" id="btn-dynamical" onclick="verify('dynamical')">
+            <span class="verify-label">Verify</span>
+          </button>
+          <span class="text-xs mono" style="color:#475569;">POST /tribunal/math-verify</span>
+        </div>
+
+        <div class="results-area" id="results-dynamical">
+          <div class="p-4">
+            <div class="flex items-center justify-between mb-3">
+              <div class="text-xs font-semibold mono" style="color:#64748b;">RESULT</div>
+              <div id="verdict-dynamical" class="verdict-badge"></div>
+            </div>
+            <div id="kvs-dynamical"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── CARD 3: Information Geometry ─── -->
+      <div class="card-glow card-info-geo p-6" id="card-info-geo">
+        <div class="glow-sep glow-sep-purple mb-5"></div>
+        <div class="flex items-start gap-4 mb-5">
+          <div class="icon-badge badge-purple">∿</div>
+          <div>
+            <div class="text-xs mono mb-1 font-semibold tracking-widest" style="color:#a78bfa; text-transform:uppercase;">Information Geometry</div>
+            <div class="font-bold text-base" style="color:#f1f5f9;">Statistical Manifold Verification</div>
+          </div>
+        </div>
+
+        <div class="text-xs mb-2 font-medium" style="color:#64748b;">Hypothesis</div>
+        <textarea class="hypothesis-input mb-4" id="hyp-info-geo" rows="4">The Fisher information metric on the manifold of Gaussian distributions N(μ,σ²) gives geodesic distance equivalent to the KL-divergence upper bound. The scalar curvature of this manifold is -1/2.</textarea>
+
+        <div class="flex items-center gap-3">
+          <button class="btn-verify btn-purple" id="btn-info-geo" onclick="verify('info-geo')">
+            <span class="verify-label">Verify</span>
+          </button>
+          <span class="text-xs mono" style="color:#475569;">POST /tribunal/math-verify</span>
+        </div>
+
+        <div class="results-area" id="results-info-geo">
+          <div class="p-4">
+            <div class="flex items-center justify-between mb-3">
+              <div class="text-xs font-semibold mono" style="color:#64748b;">RESULT</div>
+              <div id="verdict-info-geo" class="verdict-badge"></div>
+            </div>
+            <div id="kvs-info-geo"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── CARD 4: Proof Theory ─── -->
+      <div class="card-glow card-proof p-6" id="card-proof">
+        <div class="glow-sep glow-sep-amber mb-5"></div>
+        <div class="flex items-start gap-4 mb-5">
+          <div class="icon-badge badge-amber">⊢</div>
+          <div>
+            <div class="text-xs mono mb-1 font-semibold tracking-widest" style="color:#fbbf24; text-transform:uppercase;">Proof Theory</div>
+            <div class="font-bold text-base" style="color:#f1f5f9;">Logical Consistency & Tautology</div>
+          </div>
+        </div>
+
+        <div class="text-xs mb-2 font-medium" style="color:#64748b;">Hypothesis</div>
+        <textarea class="hypothesis-input mb-4" id="hyp-proof" rows="4">The formula (P → Q) ∧ (Q → R) → (P → R) is a tautology in propositional logic. Proof by truth table: all 8 valuations yield TRUE for the implication. This is the law of hypothetical syllogism.</textarea>
+
+        <div class="flex items-center gap-3">
+          <button class="btn-verify btn-amber" id="btn-proof" onclick="verify('proof')">
+            <span class="verify-label">Verify</span>
+          </button>
+          <span class="text-xs mono" style="color:#475569;">POST /tribunal/math-verify</span>
+        </div>
+
+        <div class="results-area" id="results-proof">
+          <div class="p-4">
+            <div class="flex items-center justify-between mb-3">
+              <div class="text-xs font-semibold mono" style="color:#64748b;">RESULT</div>
+              <div id="verdict-proof" class="verdict-badge"></div>
+            </div>
+            <div id="kvs-proof"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── CARD 5: Category Theory ─── -->
+      <div class="card-glow card-category p-6" id="card-category">
+        <div class="glow-sep glow-sep-rose mb-5"></div>
+        <div class="flex items-start gap-4 mb-5">
+          <div class="icon-badge badge-rose">→</div>
+          <div>
+            <div class="text-xs mono mb-1 font-semibold tracking-widest" style="color:#fb7185; text-transform:uppercase;">Category Theory</div>
+            <div class="font-bold text-base" style="color:#f1f5f9;">Axiom Verification</div>
+          </div>
+        </div>
+
+        <div class="text-xs mb-2 font-medium" style="color:#64748b;">Hypothesis</div>
+        <textarea class="hypothesis-input mb-4" id="hyp-category" rows="4">In the category Set, the functor F: Set → Set defined by F(X) = X × {0,1} is naturally isomorphic to the coproduct functor G(X) = X ⊔ X. The natural isomorphism η_X: X × {0,1} → X ⊔ X satisfies all coherence conditions.</textarea>
+
+        <div class="flex items-center gap-3">
+          <button class="btn-verify btn-rose" id="btn-category" onclick="verify('category')">
+            <span class="verify-label">Verify</span>
+          </button>
+          <span class="text-xs mono" style="color:#475569;">POST /tribunal/math-verify</span>
+        </div>
+
+        <div class="results-area" id="results-category">
+          <div class="p-4">
+            <div class="flex items-center justify-between mb-3">
+              <div class="text-xs font-semibold mono" style="color:#64748b;">RESULT</div>
+              <div id="verdict-category" class="verdict-badge"></div>
+            </div>
+            <div id="kvs-category"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ═══════════════════════ FOOTER ═══════════════════════ -->
+  <div class="gradient-divider" style="max-width:100%;"></div>
+  <footer style="background:rgba(0,0,0,0.3);">
+    <div class="max-w-7xl mx-auto px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div style="font-size:18px;">⚖️</div>
+        <div>
+          <div class="text-sm font-bold" style="color:#e2e8f0;">RHEA TRIBUNAL</div>
+          <div class="text-xs mono" style="color:#475569;">Mathematical Verification Engine</div>
+        </div>
+      </div>
+      <div class="text-xs mono text-center" style="color:#475569;">
+        Powered by Rhea Bridge — 6 providers, 35 models &nbsp;|&nbsp; Tribunal API v1.0
+      </div>
+      <div class="text-xs mono" style="color:#334155;">
+        Zero hallucination guarantee
+      </div>
+    </div>
+  </footer>
+
+  <!-- ═══════════════════════ SCRIPT ═══════════════════════ -->
+  <script>
+    const API_BASE = 'http://localhost:8400';
+
+    // Domain metadata
+    const DOMAINS = {
+      'game-theory': { label: 'Game Theory',         domain: 'game_theory' },
+      'dynamical':   { label: 'Dynamical Systems',   domain: 'dynamical_systems' },
+      'info-geo':    { label: 'Information Geometry', domain: 'information_geometry' },
+      'proof':       { label: 'Proof Theory',         domain: 'proof_theory' },
+      'category':    { label: 'Category Theory',      domain: 'category_theory' },
+    };
+
+    // ── API status probe ──────────────────────────────────────────
+    async function probeAPI() {
+      try {
+        const ctrl = new AbortController();
+        setTimeout(() => ctrl.abort(), 3000);
+        const res = await fetch(`${API_BASE}/health`, { signal: ctrl.signal });
+        if (res.ok) {
+          setStatus(true, 'API connected — localhost:8400');
+        } else {
+          setStatus(false, `API error ${res.status}`);
+        }
+      } catch (e) {
+        setStatus(false, 'API not connected');
+      }
+    }
+
+    function setStatus(ok, msg) {
+      const dot  = document.getElementById('status-dot');
+      const text = document.getElementById('status-text');
+      if (ok) {
+        dot.style.background   = '#22d3a5';
+        dot.style.boxShadow    = '';
+        dot.style.animation    = '';
+        text.style.color       = '#22d3a5';
+      } else {
+        dot.style.background   = '#64748b';
+        dot.style.boxShadow    = 'none';
+        dot.style.animation    = 'none';
+        text.style.color       = '#64748b';
+      }
+      text.textContent = msg;
+    }
+
+    probeAPI();
+    setInterval(probeAPI, 15000);
+
+    // ── Render key-value pairs from response ──────────────────────
+    function pickDisplayValues(id, data) {
+      // Try to extract meaningful fields regardless of API response shape
+      const pairs = [];
+
+      const interesting = [
+        'nash_equilibrium','mixed_strategy','expected_payoff','saddle_point',
+        'lyapunov_exponent','attractor_type','largest_lyapunov','bifurcation_point',
+        'fisher_metric','geodesic_distance','scalar_curvature','kl_bound',
+        'tautology','truth_table_rows','sat_result','proof_steps','formula',
+        'natural_isomorphism','coherence_check','functor_type','axioms_satisfied',
+        'confidence','computation_time_ms','model_used','verification_method',
+        'domain','hypothesis_length','error','detail','message',
+      ];
+
+      // Walk interesting keys first
+      for (const k of interesting) {
+        if (data[k] !== undefined) pairs.push([k, data[k]]);
+        if (pairs.length >= 4) break;
+      }
+
+      // Fallback: top-level keys
+      if (pairs.length === 0) {
+        for (const [k, v] of Object.entries(data)) {
+          if (k === 'verdict') continue;
+          pairs.push([k, v]);
+          if (pairs.length >= 4) break;
+        }
+      }
+
+      return pairs.slice(0, 4);
+    }
+
+    function renderKVs(containerId, data) {
+      const el = document.getElementById(containerId);
+      const pairs = pickDisplayValues(containerId, data);
+      if (pairs.length === 0) {
+        el.innerHTML = '<div class="kv-row"><span class="kv-value" style="color:#475569;">No additional data returned.</span></div>';
+        return;
+      }
+      el.innerHTML = pairs.map(([k, v]) => {
+        const display = typeof v === 'object' ? JSON.stringify(v) : String(v);
+        return `<div class="kv-row">
+          <span class="kv-key">${escapeHtml(k)}</span>
+          <span class="kv-value">${escapeHtml(display)}</span>
+        </div>`;
+      }).join('');
+    }
+
+    function escapeHtml(s) {
+      return String(s)
+        .replace(/&/g,'&amp;')
+        .replace(/</g,'&lt;')
+        .replace(/>/g,'&gt;')
+        .replace(/"/g,'&quot;');
+    }
+
+    // ── Verdict display ───────────────────────────────────────────
+    const VERDICT_ICONS = {
+      verified:        '✓ VERIFIED',
+      requires_proof:  '⚠ REQUIRES PROOF',
+      refuted:         '✗ REFUTED',
+      indeterminate:   '~ INDETERMINATE',
+      error:           '! ERROR',
+    };
+
+    function setVerdict(id, verdict) {
+      const el = document.getElementById(`verdict-${id}`);
+      const key = (verdict || 'indeterminate').toLowerCase().replace(/\s+/,'_');
+      const cls = `verdict-${key}`;
+      const text = VERDICT_ICONS[key] || verdict.toUpperCase();
+      el.className = `verdict-badge ${cls}`;
+      el.textContent = text;
+    }
+
+    // ── Demo fallback data (shown when API is unreachable) ────────
+    const DEMO_RESPONSES = {
+      'game-theory': {
+        verdict: 'requires_proof',
+        nash_equilibrium: [0.5, 0.5],
+        expected_payoff: 0.0,
+        saddle_point: false,
+        computation_time_ms: 12,
+        verification_method: 'linear_program',
+        note: 'Demo mode — start API for real computation',
+      },
+      'dynamical': {
+        verdict: 'verified',
+        lyapunov_exponent: 0.9056,
+        attractor_type: 'strange_attractor',
+        bifurcation_point: 'ρ ≈ 24.74',
+        computation_time_ms: 38,
+        verification_method: 'numerical_ode',
+        note: 'Demo mode — start API for real computation',
+      },
+      'info-geo': {
+        verdict: 'verified',
+        fisher_metric: '[[1/σ², 0], [0, 1/(2σ⁴)]]',
+        scalar_curvature: -0.5,
+        geodesic_distance: 'Rao distance',
+        computation_time_ms: 21,
+        verification_method: 'symbolic_diff_geometry',
+        note: 'Demo mode — start API for real computation',
+      },
+      'proof': {
+        verdict: 'verified',
+        tautology: true,
+        truth_table_rows: 8,
+        sat_result: 'UNSAT (negation)',
+        proof_steps: 'P→Q, Q→R ⊢ P→R (HS)',
+        computation_time_ms: 5,
+        verification_method: 'truth_table + sat_solver',
+        note: 'Demo mode — start API for real computation',
+      },
+      'category': {
+        verdict: 'verified',
+        natural_isomorphism: 'η_X(x,b) = inl(x) if b=0, inr(x) if b=1',
+        coherence_check: true,
+        axioms_satisfied: ['identity', 'composition', 'naturality'],
+        computation_time_ms: 9,
+        verification_method: 'categorical_proof_assistant',
+        note: 'Demo mode — start API for real computation',
+      },
+    };
+
+    // ── Core verify function ──────────────────────────────────────
+    async function verify(id, silent = false) {
+      const hypothesis = document.getElementById(`hyp-${id}`).value.trim();
+      if (!hypothesis) return;
+
+      const btn   = document.getElementById(`btn-${id}`);
+      const card  = document.getElementById(`card-${id}`);
+      const resEl = document.getElementById(`results-${id}`);
+
+      // Button loading state
+      btn.disabled = true;
+      btn.innerHTML = `<span class="spinner"></span><span class="verify-label">Verifying…</span>`;
+
+      // Activate card glow
+      card.classList.add('active');
+
+      let data;
+      let usedDemo = false;
+
+      try {
+        const ctrl   = new AbortController();
+        const timer  = setTimeout(() => ctrl.abort(), 15000);
+
+        const res = await fetch(`${API_BASE}/tribunal/math-verify`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            hypothesis,
+            domain: DOMAINS[id].domain,
+          }),
+          signal: ctrl.signal,
+        });
+
+        clearTimeout(timer);
+
+        if (!res.ok) {
+          const errText = await res.text().catch(() => res.statusText);
+          let errData;
+          try { errData = JSON.parse(errText); } catch { errData = { detail: errText }; }
+          data = { verdict: 'error', ...errData };
+        } else {
+          data = await res.json();
+        }
+      } catch (e) {
+        // API unreachable → show demo data with note
+        data = { verdict: 'demo', ...DEMO_RESPONSES[id] };
+        usedDemo = true;
+        setStatus(false, 'API not connected — showing demo');
+      }
+
+      // Restore button
+      btn.disabled = false;
+      btn.innerHTML = `<span class="verify-label">Re-verify</span>`;
+
+      // Show results
+      resEl.classList.add('visible', 'fade-in');
+
+      const verdict = data.verdict || 'indeterminate';
+      if (usedDemo) {
+        const vEl = document.getElementById(`verdict-${id}`);
+        vEl.className = 'verdict-badge verdict-demo';
+        vEl.textContent = '◈ DEMO MODE';
+      } else {
+        setVerdict(id, verdict);
+      }
+
+      renderKVs(`kvs-${id}`, data);
+
+      return { id, verdict, usedDemo };
+    }
+
+    // ── Run All ───────────────────────────────────────────────────
+    async function runAll() {
+      const btn      = document.getElementById('run-all-btn');
+      const gResults = document.getElementById('global-results');
+      const gText    = document.getElementById('global-status-text');
+      const gCount   = document.getElementById('global-count');
+      const gBar     = document.getElementById('global-progress');
+
+      btn.disabled = true;
+      btn.textContent = '⏳ Running all verifications…';
+      gResults.classList.add('visible');
+      gText.textContent = 'Verifying…';
+      gCount.textContent = '0 / 5';
+      gBar.style.width = '0%';
+
+      const ids = Object.keys(DOMAINS);
+      let done = 0;
+      let verified = 0;
+
+      const promises = ids.map(id =>
+        verify(id, true).then(result => {
+          done++;
+          if (result && (result.verdict === 'verified' || result.verdict === 'demo')) verified++;
+          gCount.textContent = `${done} / 5`;
+          gBar.style.width   = `${(done / 5) * 100}%`;
+        }).catch(() => {
+          done++;
+          gCount.textContent = `${done} / 5`;
+          gBar.style.width   = `${(done / 5) * 100}%`;
+        })
+      );
+
+      await Promise.all(promises);
+
+      gText.textContent = `Complete — ${done} domains checked`;
+      gBar.style.background = 'linear-gradient(90deg, #22d3a5, #38bdf8)';
+
+      btn.disabled = false;
+      btn.innerHTML = '▶ Run All Again';
+    }
+  </script>
+</body>
+</html>
