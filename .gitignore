@@ -52,3 +52,6 @@ team/
 alpha2-*.sh
 alpha2-*.py
 rhea-project/docs/*.audit
+.env*
+logs/*.log
+*.bak
