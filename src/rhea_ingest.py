@@ -27,8 +27,8 @@ import numpy as np
 
 # Config
 REDIS_INDEX = "rhea:docs"
-EMBEDDING_MODEL = "text-embedding-3-small"
-EMBEDDING_DIM = 1536
+EMBEDDING_MODEL = "google/text-embedding-004"
+EMBEDDING_DIM = 768
 MAX_CHUNK_TOKENS = 512
 CHUNK_OVERLAP_TOKENS = 50
 TOP_K_DEFAULT = 5
