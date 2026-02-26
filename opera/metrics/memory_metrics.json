@@ -1,13 +1,13 @@
 {
-  "timestamp": "2026-02-26T09:38:19.628946+00:00",
+  "timestamp": "2026-02-26T10:02:23.102668+00:00",
   "git_commits": 245,
   "repo_size_mb": 188,
   "core_docs_kb": 637,
-  "open_todo_count": 28,
+  "open_todo_count": 27,
   "snapshots_count": 242,
   "insights_per_request": 3.2,
   "avg_context_tokens_estimate": 4500,
-  "discomfort_metric_d": 277.87,
+  "discomfort_metric_d": 276.59,
   "calculation_components": {
     "docs_component": 852.0,
     "repo_size_component": 18.8,
