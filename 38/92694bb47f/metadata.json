@@ -1,0 +1,27 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "3892694bb47f",
+  "strategy": "auto-commit",
+  "branch": "stage4-release",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "frontend/index.html",
+    "rhea-atlas/src/app/page.tsx"
+  ],
+  "sessions": [
+    {
+      "metadata": "/38/92694bb47f/0/metadata.json",
+      "transcript": "/38/92694bb47f/0/full.jsonl",
+      "context": "",
+      "content_hash": "/38/92694bb47f/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 54,
+    "cache_creation_tokens": 43511,
+    "cache_read_tokens": 1656031,
+    "output_tokens": 10373,
+    "api_call_count": 18
+  }
+}
