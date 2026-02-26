@@ -39,6 +39,17 @@ function executeActuation(command) {
       el.value = command.text;
       el.dispatchEvent(new Event('input', { bubbles: true }));
     }
+    if (command.action === "SCROLL") {
+      const scrollAmount = parseInt(command.text) || 200; // Default scroll by 200px
+      const scrollTarget = command.elementId !== undefined ? el : window;
+      const scrollDirection = command.text.toLowerCase().includes("up") ? -1 : 1;
+      
+      if (scrollTarget === window) {
+        window.scrollBy(0, scrollDirection * scrollAmount);
+      } else {
+        scrollTarget.scrollBy(0, scrollDirection * scrollAmount);
+      }
+    }
     return { status: "SUCCESS" };
   } catch (e) {
     console.error("[Rhea-VAL] Actuation failed:", e);
