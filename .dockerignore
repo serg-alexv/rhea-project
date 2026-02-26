@@ -1,0 +1,77 @@
+# Secrets — never bake into image
+.env
+.env.*
+*.pem
+*.key
+
+# Git & CI
+.git/
+.github/
+.gitignore
+
+# Editor / IDE
+.claude/
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Python artifacts
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+.venv/
+venv/
+dist/
+build/
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+
+# Node / frontend build artifacts
+node_modules/
+rhea-atlas/
+frontend/dist/
+
+# Large data / atlas dirs (not needed at runtime)
+rhea-atlas/
+archive/
+apparatus/
+emergentia/
+eval/
+assets/
+rhea-applied-backlog/
+rhea-elementary/
+
+# Docs & notebooks (not needed at runtime)
+docs/
+*.md
+*.ipynb
+
+# Test files
+tests/
+
+# Logs & local databases
+logs/
+data/
+*.db
+*.db-wal
+*.db-shm
+*.jsonl
+
+# Firebase config & rules (runtime config via env vars / Cloud secrets)
+firebase.json
+firestore.rules
+firebase-debug.log
+.firebaserc
+
+# Config subdir (local dev only; secrets go via env vars in production)
+config/
+
+# Scripts (not needed inside the container)
+scripts/
+
+# Entire.io / local tooling
+.entire/
