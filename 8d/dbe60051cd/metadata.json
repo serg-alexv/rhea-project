@@ -1,0 +1,32 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "8ddbe60051cd",
+  "strategy": "auto-commit",
+  "branch": "stage4-release",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "frontend/index.html",
+    "opera/ops/virtual-office/inbox/RELAY_20260226_101918_HYPERION_to_ALL.md",
+    "opera/ops/virtual-office/inbox/RELAY_20260226_102454_HYPERION_to_ALL.md",
+    "opera/ops/virtual-office/inbox/RELAY_20260226_103041_HYPERION_to_ORION.md",
+    "src/rhea_ingest.py",
+    "src/rhead.py",
+    "src/ui_sync.py"
+  ],
+  "sessions": [
+    {
+      "metadata": "/8d/dbe60051cd/0/metadata.json",
+      "transcript": "/8d/dbe60051cd/0/full.jsonl",
+      "context": "",
+      "content_hash": "/8d/dbe60051cd/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 111,
+    "cache_creation_tokens": 41406,
+    "cache_read_tokens": 8402013,
+    "output_tokens": 18460,
+    "api_call_count": 61
+  }
+}
