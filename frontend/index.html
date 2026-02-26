@@ -1096,10 +1096,10 @@
     <span class="cn-dot"></span>
     <span id="cn-console-label">CONSOLE</span>
   </a>
-  <a class="cn-link" href="http://localhost:3000/?schema=prime">
+  <a class="cn-link" id="cn-atlas-link" href="/?schema=prime">
     <span id="cn-atlas-label">ATLAS</span> &rarr;
   </a>
-  <a class="cn-link" href="http://localhost:3000/semantic-drift.html">
+  <a class="cn-link" id="cn-theia-link" href="/semantic-drift.html">
     THEIA DRIFT &rarr;
   </a>
   <div class="cn-meta">
@@ -2673,6 +2673,10 @@ setInterval(() => {
     document.getElementById('cn-console-label').textContent = 'THEMIS CONSOLE';
     document.getElementById('cn-atlas-label').textContent = 'ATLAS PRIME';
     document.getElementById('left-panel-header').textContent = 'Agents & Providers';
+    const atlasLink = document.getElementById('cn-atlas-link');
+    const theiaLink = document.getElementById('cn-theia-link');
+    if (atlasLink) atlasLink.href = 'http://localhost:3000/?schema=prime';
+    if (theiaLink) theiaLink.href = 'http://localhost:3000/semantic-drift.html';
   }
   // prod: labels already set to CONSOLE / ATLAS / Providers by default
 })();
