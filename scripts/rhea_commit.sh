@@ -129,9 +129,10 @@ fi
 
 # Step 5.6: Email Audit Layer (Task #23 - Developer Mode)
 if [ "${RHEA_MODE:-}" = "developer" ]; then
-    log "Developer Mode active. Sending 4th-layer email audit signal..."
+    log "Developer Mode active. Sending coordination signal to AtomicMail..."
     COMMIT_MSG=$(git log -1 --pretty=%B)
-    python3 src/email_bridge.py "Commit ${COMMIT_SHA}" "Agent: ${RHEA_AGENT_ID:-UNKNOWN}\nMessage: ${COMMIT_MSG}" || warn "Email signal failed."
+    # Using python3 -c to call specific function
+    python3 -c "from src.email_bridge import send_coordination_signal; send_coordination_signal('Commit ${COMMIT_SHA}', 'Agent: ${RHEA_AGENT_ID:-UNKNOWN}\nMessage: ${COMMIT_MSG}')" || warn "Coordination signal failed."
 fi
 
 # Step 6: D-metric check
