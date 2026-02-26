@@ -1,0 +1,103 @@
+# Session Context
+
+**Session ID:** 261278d3-25c3-4789-93e7-bfcc23c40cd5
+
+**Commit Message:** Show leftovers task; ask for Orion and others progress/tasks; make your
+
+## Prompt
+
+show leftovers task; ask for Orion and others progress/tasks; make your proposals;
+
+## Summary
+
+All 3 substantive responses in (o3 returned empty text — known issue, model sometimes returns empty on structured prompts). Here's the full picture:
+
+---
+
+## LEFTOVERS TASK — Full Inventory
+
+### CORE (3,085 lines, working)
+| File | Lines | Status |
+|------|-------|--------|
+| `src/rhea_bridge.py` | 1,044 | 3/6 providers live (OpenAI, Gemini, DeepSeek) |
+| `src/consensus_analyzer.py` | 849 | L1/L2/L3 + math plugins |
+| `src/tribunal_api.py` | 487 | FastAPI :8400, Redis cache+rate |
+| `src/rhea_profile_manager.py` | 233 | Cognitive stances |
+| `src/rhea_post_office.py` | 135 | Agent messaging |
+| `src/rhea_overwatcher.py` | 120 | Watchdog |
+| `src/rhea_bus.py` | 108 | Redis Cloud (just wired) |
+| `src/rhea_visual_context.py` | 61 | MRI heatmap |
+| `src/rhead.py` | 47 | Daemon scaffold |
+
+### DEBRIS (410MB+ on disk, zero runtime value)
+| Dir | Size | Verdict |
+|-----|------|---------|
+| `node_modules/` | 325MB | Rhea-atlas leftover, no JS runtime |
+| `apparatus/` | 43MB | Old framework skeleton, README only |
+| `emergentia/` | 4KB | Empty experiment stubs |
+| `rhea-atlas/` | 256KB | Dead React app |
+| `plugins/` | ~0 | Empty subdirs |
+| `05/ 27/ 61/ 9e/ a0/ d0/` | ~6MB | Entire.io metadata (untracked now) |
+| `src/rhea_swarm.py` + `src/operators/bonsai_node.py` | - | ZMQ swarm — meeting consensus: kill it |
+
+### BROKEN (not functional)
+| Component | Error | Impact |
+|-----------|-------|--------|
+| Firebase | 403 anonymous auth | No real-time sync |
+| OpenRouter | 401 user not found | Lost Qwen3, Mistral-Large |
+| GPT-5 model | 400 bad request | Falls back to GPT-4.1 |
+| `adjust_confidence_with_math()` | TODO stub | Math doesn't affect confidence score yet |
+
+---
+
+## MODEL CONSENSUS (3/3 responded)
+
+| Question | ORION (Gemini) | GPT-4.1 | DeepSeek |
+|----------|---------------|---------|----------|
+| **Health** | **4/10** — critical providers down | **6/10** — core up, auth broken | **4/10** — operational but fragile |
+| **Priority #1** | Restore API connections | Restore provider auth | Restore Firebase |
+| **Priority #2** | Expand bridge to 6/6 | Clean disk debris | Clear 400MB debris |
+| **Priority #3** | Purge debris | Harden Redis caching | Diagnose OpenRouter |
+| **Delete** | apparatus, emergentia, rhea-atlas, node_modules, plugins, ZMQ | Same + hex dirs | Logs + caches + debris |
+| **Next integration** | PostgreSQL (data sovereignty) | Provider failover/auto-recovery | Fix external services first |
+
+**Unanimous**: delete debris, restore broken providers. Split on what's *next* — Orion wants Postgres, GPT wants failover logic, DeepSeek wants stabilization first.
+
+---
+
+## MY PROPOSALS (Rex)
+
+`★ Insight ─────────────────────────────────────`
+**The models are right about health (4-6/10)** but wrong about priorities. Restoring Firebase/OpenRouter requires *external* action (Firebase console config, new OpenRouter account) — we can't code our way to a fix. The highest-impact *codeable* action is different.
+`─────────────────────────────────────────────────`
+
+### Proposal 1: DELETE DEBRIS NOW (5 min, frees 410MB)
+```
+rm -rf apparatus/ emergentia/ rhea-atlas/ node_modules/ plugins/
+rm -rf 05/ 27/ 61/ 9e/ a0/ d0/
+rm -f src/rhea_swarm.py src/operators/bonsai_node.py
+```
+Zero risk. Everything is either untracked or already removed from git. Pure waste.
+
+### Proposal 2: IMPLEMENT `adjust_confidence_with_math()` (the TODO(human) from last session)
+This is the only thing blocking math plugins from actually *changing* tribunal verdicts. Right now Ruliad plugins run but their output is decorative. The confidence formula is the missing link.
+
+### Proposal 3: PUBLIC DEPLOY (Tribunal API on a real URL)
+The API works locally. Redis Cloud is live. The system is usable — but only from localhost. One `uvicorn` behind a tunnel or a simple cloud deploy makes it real.
+
+**My recommended order**: 1 → 2 → 3. Cleanup first (unblocks clean deploys), then make math real, then ship it.
+
+Want me to execute Proposal 1 (debris deletion)?
+
+## Key Actions
+
+- - **Read**: /Users/sa/rh.1/docs/state.md
+- - **Read**: /Users/sa/rh.1/docs/NOW.md
+- - **Bash**: List top-level directories
+- - **Bash**: Directory sizes sorted by size
+- - **Bash**: Check hex directory contents
+- - **Bash**: Check debris directories
+- - **Bash**: List core source files
+- - **Task**: Ask Orion (Gemini) for status
+- - **Task**: Ask GPT for status
+- - **Task**: Ask DeepSeek for status
