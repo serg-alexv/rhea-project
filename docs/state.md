@@ -18,7 +18,8 @@
 ## Current Focal Point
 - **Branch:** `hyperion/memory` (Active session).
 - **Stage:** 2 — A1 Restart Under Chain Verification.
-- **Reflexive Sprint:** COMPLETE. D dropped from 1086 to 270.
+- **Reflexive Sprint:** COMPLETE. D dropped from 1086 to 267.43.
+- **Tasks Done:** #14 (CHRONOS), #10 (Tribunal Triggers), #15 (Leases/Fencing), #16 (CI Enforcement), #17 (Bridge-QWRR Integration).
 - **Next Task:** Task #11 (LiteLLM Integration) or Stage 3 (Tribunal Expansion).
 
 ## Related Files

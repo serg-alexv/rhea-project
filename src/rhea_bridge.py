@@ -313,12 +313,12 @@ PROVIDERS = {
     "gemini": ProviderConfig(
         name="gemini",
         display_name="Google Gemini",
-        base_url="https://generativelanguage.googleapis.com/v1",
+        base_url="https://generativelanguage.googleapis.com/v1beta",
         api_key_env="GEMINI_API_KEY",
         models=[
             "gemini-3.1-pro-preview", "gemini-3-pro-preview",
             "gemini-2.5-pro", "gemini-2.5-flash",
-            "gemini-2.0-flash", "gemini-2.0-flash-lite",
+            "gemini-2.5-flash", "gemini-2.0-flash", "gemini-2.0-flash-lite",
             "gemini-1.5-pro", "gemini-1.5-flash",
         ],
         call_method="gemini",
@@ -638,17 +638,53 @@ class RheaBridge:
         )
 
     def send_chronos(self, message: ChronosMessage) -> bool:
-        """Log and relay a CHRONOS inter-agent message."""
-        self._log_chronos(message)
-        
-        # Relay to Firebase if possible
+        """Log and relay a CHRONOS inter-agent message using QWRR relay."""
         try:
-            from opera.ops import rhea_firebase
-            # Format message for firebase send command
-            formatted = f"TASK:{message.task_id} TYPE:{message.msg_type} PRIO:{message.priority} PAYLOAD:{json.dumps(message.payload)}"
-            rhea_firebase.cmd_send(message.sender, message.receiver, formatted)
+            # Ensure project root is in path for opera.ops import
+            import sys
+            root = str(Path(__file__).resolve().parent.parent)
+            if root not in sys.path:
+                sys.path.append(root)
+                
+            from opera.ops import rex_pager
+            
+            # Map Chronos priority to QWRR priority (P0, P1, P2)
+            prio_map = {"critical": "P0", "high": "P1", "normal": "P2", "low": "P3"}
+            qwr_priority = prio_map.get(message.priority, "P1")
+            
+            # Convert ChronosMessage to QWRR-compatible envelope
+            # We use the full message dict as the payload for the relay
+            payload = asdict(message)
+            msg_type = f"chronos.{message.msg_type}"
+            
+            # Use rex_pager.make_envelope directly to avoid double-wrapping the payload
+            envelope = rex_pager.make_envelope(
+                source=message.sender,
+                target=message.receiver,
+                msg_type=msg_type,
+                payload=payload,
+                priority=qwr_priority
+            )
+            
+            # Triple-write: local JSONL + Firestore + inbox markdown
+            rex_pager._write_local(envelope)
+            rex_pager._write_firestore(envelope)
+            rex_pager._write_inbox_backup(envelope)
+            
+            # Append to the audit chain
+            rex_pager.chain_append("chronos.relay", message.sender, {
+                "msg_id": envelope["id"],
+                "task_id": message.task_id,
+                "target": message.receiver
+            })
+            
+            print(f"[bridge] CHRONOS relayed via QWRR: {message.sender}→{message.receiver} (seq={envelope['seq']})")
             return True
-        except Exception:
+            
+        except Exception as e:
+            print(f"[bridge] Chronos relay failed: {e}")
+            # Fallback to simple logging if QWRR fails
+            self._log_chronos(message)
             return False
 
     def _log_chronos(self, message: ChronosMessage):
