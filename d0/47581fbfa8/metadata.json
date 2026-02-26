@@ -1,0 +1,27 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "d047581fbfa8",
+  "strategy": "auto-commit",
+  "branch": "main",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "docs/plans/EVOLUTION_PLAN_V1.md",
+    "rhea-atlas/package-lock.json"
+  ],
+  "sessions": [
+    {
+      "metadata": "/d0/47581fbfa8/0/metadata.json",
+      "transcript": "/d0/47581fbfa8/0/full.jsonl",
+      "context": "",
+      "content_hash": "/d0/47581fbfa8/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 8,
+    "cache_creation_tokens": 6693,
+    "cache_read_tokens": 841995,
+    "output_tokens": 1697,
+    "api_call_count": 6
+  }
+}
