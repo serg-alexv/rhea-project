@@ -1,0 +1,24 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "3b969fadfc78",
+  "session_id": "261278d3-25c3-4789-93e7-bfcc23c40cd5",
+  "strategy": "auto-commit",
+  "created_at": "2026-02-26T15:47:21.398575Z",
+  "branch": "stage4-release",
+  "checkpoints_count": 1,
+  "files_touched": [
+    ".codex/AGENTS.md",
+    "rhea-atlas/CODEX.md"
+  ],
+  "agent": "Claude Code",
+  "transcript_identifier_at_start": "a634a2cb-721a-4dd5-9088-47395ab21980",
+  "checkpoint_transcript_start": 8761,
+  "transcript_lines_at_start": 8761,
+  "token_usage": {
+    "input_tokens": 19,
+    "cache_creation_tokens": 9793,
+    "cache_read_tokens": 2130405,
+    "output_tokens": 4149,
+    "api_call_count": 17
+  }
+}

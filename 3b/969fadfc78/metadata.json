@@ -1,0 +1,27 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "3b969fadfc78",
+  "strategy": "auto-commit",
+  "branch": "stage4-release",
+  "checkpoints_count": 1,
+  "files_touched": [
+    ".codex/AGENTS.md",
+    "rhea-atlas/CODEX.md"
+  ],
+  "sessions": [
+    {
+      "metadata": "/3b/969fadfc78/0/metadata.json",
+      "transcript": "/3b/969fadfc78/0/full.jsonl",
+      "context": "",
+      "content_hash": "/3b/969fadfc78/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 19,
+    "cache_creation_tokens": 9793,
+    "cache_read_tokens": 2130405,
+    "output_tokens": 4149,
+    "api_call_count": 17
+  }
+}
