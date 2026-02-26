@@ -109,7 +109,10 @@ async def event_stream():
                 if message['type'] == 'message':
                     yield f"data: {message['data']}\n\n"
         finally:
-            pubsub.unsubscribe()
+            try:
+                pubsub.unsubscribe("ui:update")
+            finally:
+                pubsub.close()
             print("[rhead] SSE Stream Closed.")
 
     return StreamingResponse(generator(), media_type="text/event-stream")
