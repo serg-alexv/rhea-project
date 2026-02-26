@@ -490,6 +490,50 @@
   #rhea-footer .footer-sep { margin: 0 8px; opacity: 0.4; }
   #rhea-footer .footer-copy { margin-top: 3px; letter-spacing: 0.05em; }
 
+  /* ── Tooltip System ── */
+  .tip { position: relative; cursor: help; }
+  .tip::after {
+    content: attr(data-tip);
+    position: absolute;
+    bottom: calc(100% + 6px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--dim);
+    font-size: 10px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s;
+    z-index: 300;
+    max-width: 250px;
+    white-space: normal;
+    text-transform: none;
+    letter-spacing: normal;
+    font-weight: 400;
+  }
+  .tip:hover::after,
+  .tip.tip-open::after { opacity: 1; }
+
+  /* ── Agent Action Buttons ── */
+  .agent-actions { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+  .agent-act-btn {
+    font-size: 9px;
+    padding: 2px 6px;
+    border-radius: 3px;
+    background: transparent;
+    color: var(--dim);
+    font-family: var(--font);
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: background 0.15s, color 0.15s;
+  }
+  .agent-act-btn:hover { background: rgba(255,255,255,0.06); color: var(--text); }
+
   /* ── Contact Chatbox ── */
   #contact-chatbox {
     position: fixed;
@@ -604,7 +648,7 @@
 
 <!-- ── Cross-navigation bar ── -->
 <nav id="crossnav">
-  <span class="cn-logo">RHEA</span><span id="dev-badge" style="display:none;color:#f87171;font-size:7px;text-transform:uppercase;letter-spacing:1px;margin-left:5px;vertical-align:middle">DEV</span>
+  <span class="cn-logo tip" data-tip="Rhythmic Homeostasis Engine for Adaptation" style="cursor:default">RHEA</span><span id="dev-badge" style="display:none;color:#f87171;font-size:7px;text-transform:uppercase;letter-spacing:1px;margin-left:5px;vertical-align:middle">DEV</span>
   <div class="cn-sep"></div>
   <a class="cn-link active" href="#">
     <span class="cn-dot"></span>
@@ -621,7 +665,7 @@
     <span id="cn-providers">—</span>
   </div>
   <!-- Code-Worm auth element -->
-  <div class="cn-worm" id="cnWorm" onclick="toggleAuth(event)" title="Login / Profile">
+  <div class="cn-worm tip" id="cnWorm" onclick="toggleAuth(event)" data-tip="Login to track your research sessions" style="cursor:pointer">
     <span class="worm-char" id="wc0">{</span>
     <span class="worm-char" id="wc1">}</span>
     <span class="worm-char" id="wc2">;</span>
@@ -678,7 +722,7 @@
     <div class="ontology-section">
       <div class="onto-label">Research Ontology</div>
       <div class="ontology-row">
-        <select class="ontology-select" id="ontologySelect" onchange="switchOntology(this.value)">
+        <select class="ontology-select tip" data-tip="Switch scientific lens — changes how the Tribunal interprets your queries" id="ontologySelect" onchange="switchOntology(this.value)">
           <option value="general">General</option>
           <option value="pharmacology">Pharmacology</option>
           <option value="biochemistry">Biochemistry</option>
@@ -702,10 +746,10 @@
       <span id="tribunalStatus"></span>
     </div>
     <div class="mode-toggle">
-      <button class="mode-btn active" onclick="setMode('rag')" id="modeRag">RAG Search</button>
-      <button class="mode-btn" onclick="setMode('tribunal')" id="modeTribunal">Tribunal</button>
-      <button class="mode-btn" onclick="setMode('ice')" id="modeIce">ICE L3</button>
-      <button class="mode-btn sceptic-btn" onclick="setMode('sceptic')" id="modeSceptic">Sceptic</button>
+      <button class="mode-btn active tip" onclick="setMode('rag')" id="modeRag" data-tip="Search 250+ indexed research chunks">RAG Search</button>
+      <button class="mode-btn tip" onclick="setMode('tribunal')" id="modeTribunal" data-tip="Multi-model consensus — 3 AI models debate your question">Tribunal</button>
+      <button class="mode-btn tip" onclick="setMode('ice')" id="modeIce" data-tip="Deep analysis — uses the most powerful model (costs more)">ICE L3</button>
+      <button class="mode-btn sceptic-btn tip" onclick="setMode('sceptic')" id="modeSceptic" data-tip="Devil&#39;s advocate — AI actively finds counterarguments">Sceptic</button>
     </div>
     <div class="tribunal-input">
       <input id="promptInput" placeholder="Ask your documents..." autofocus>
@@ -741,7 +785,7 @@
 <div class="history-panel collapsed" id="historyPanel">
   <div class="history-header" onclick="toggleHistory()">
     <div class="history-header-left">
-      <span>Session Rewind</span>
+      <span class="tip" data-tip="Rewind to any previous query — click a step to restore context">Session Rewind</span>
       <button class="history-refresh-btn" onclick="event.stopPropagation(); refreshHistory()">Refresh</button>
     </div>
     <span class="history-toggle-icon" id="historyToggleIcon">&#9650;</span>
@@ -770,7 +814,7 @@
     <span class="footer-sep">&middot;</span>
     <a href="https://github.com/serg-alexv/rhea-project/blob/main/docs/PERSONAL_INFO.md" target="_blank" rel="noopener">Do not share my personal information</a>
   </div>
-  <div class="footer-copy">&copy; 2026 TimeLabs Non-Profit Samurai's Squad</div>
+  <div class="footer-copy">&copy; 2026 <span class="tip" data-tip="Non-Profit Samurai&#39;s Squad" style="cursor:default">TimeLabs NPO</span></div>
 </footer>
 
 <!-- ── Contact Chatbox ── -->
@@ -1051,17 +1095,76 @@ function syncCrossnavOntology() {
 
 // ── Agents Panel ───────────────────────────────────────────────────────────
 
+const STATIC_ROSTER = [
+  { id:'A1', name:'Quantitative Scientist', color:'var(--accent)',
+    actions:[['Validate Model','Validate the current mathematical model for correctness and consistency'],['Run Fourier','Perform Fourier analysis on the current research context'],['Bayesian Check','Apply Bayesian inference to assess probability estimates in the current context']] },
+  { id:'A2', name:'Life Sciences Integrator', color:'var(--green)',
+    actions:[['HRV Analysis','Analyze heart rate variability patterns and their biological significance'],['Chrono Query','Query chronobiology data for circadian rhythm insights'],['Sleep Science','Analyze sleep architecture and sleep-wake cycle dynamics']] },
+  { id:'A3', name:'Psychologist', color:'var(--purple)',
+    actions:[['Profile Check','Run a behavioral profile assessment on the current research subject'],['ADHD Optimize','Suggest ADHD-optimized workflow and cognitive load strategies'],['Behavioral Scan','Perform a behavioral pattern scan across the current dataset']] },
+  { id:'A4', name:'Linguist-Culturologist', color:'var(--amber)',
+    actions:[['Calendar Systems','Compare historical and cultural calendar systems for chronobiology relevance'],['Symbolic Analysis','Perform symbolic and semiotic analysis of current domain terms'],['Cultural Map','Map cultural variations in time perception and biological rhythms']] },
+  { id:'A5', name:'Product Architect', color:'#38bdf8',
+    actions:[['UI Prototype','Generate a UI prototype concept for the current feature'],['UX Review','Review current UX flows for friction and improvement opportunities'],['HealthKit Query','Query HealthKit integration patterns for biosignal capture']] },
+  { id:'A6', name:'Tech Lead', color:'#fb923c',
+    actions:[['Bridge Status','Check the status and health of all LLM bridge providers'],['API Audit','Audit current API endpoints for correctness and coverage'],['Infra Check','Run an infrastructure and dependency check']] },
+  { id:'A7', name:'Growth Strategist', color:'#f472b6',
+    actions:[['Market Scan','Scan the current market landscape for chronobiology and wellness tools'],['Monetize Check','Evaluate monetization strategies for the current product stage'],['Growth Plan','Generate a growth plan based on current traction and goals']] },
+  { id:'A8', name:'Critical Reviewer', color:'var(--red)',
+    actions:[['Quality Gate','Run quality gate checks on the current output or model'],['Gap Analysis','Identify gaps and blind spots in the current research or design'],['Challenge This','Challenge the current consensus with the strongest counterarguments']] },
+];
+
+function agentActionBtn(label, query, color) {
+  const safe = query.replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  return `<button class="agent-act-btn" style="border:1px solid ${color}" onclick="sendAgentAction(&#39;${safe}&#39;)">${label}</button>`;
+}
+
+function renderAgentCard(id, name, color, status, age, actions) {
+  const btns = actions.map(([label, query]) => agentActionBtn(label, query, color)).join('');
+  const statusLine = status ? `Status: ${status} | ${age}s ago` : 'ready';
+  return `<div class="agent-card" style="border-color:${color}20">
+    <div class="name" style="color:${color}">${id} ${name}</div>
+    <div class="meta">${statusLine}</div>
+    <div class="agent-actions">${btns}</div>
+  </div>`;
+}
+
+async function sendAgentAction(query) {
+  const btn = document.getElementById('askBtn');
+  const statusEl = document.getElementById('tribunalStatus');
+  statusEl.textContent = 'agent query...';
+  btn.disabled = true;
+  log(`Agent action: "${query.slice(0,60)}"`);
+  try {
+    const r = await fetch(`${API}/api/tribunal`, {
+      method: 'POST',
+      headers: authHeaders(),
+      body: JSON.stringify({ query, ontology: currentOntology, k: 3, tier: 'cheap', mode: 'local' }),
+    });
+    if (!r.ok) throw new Error(`HTTP ${r.status}: ${await r.text()}`);
+    const d = await r.json();
+    renderTribunalResult(d);
+    pushLocalHistory(query);
+  } catch(e) {
+    log(`Agent action failed: ${e.message}`, 'error');
+    document.getElementById('tribunalResults').innerHTML = `<div style="color:var(--red)">Error: ${e.message}</div>`;
+  } finally {
+    btn.disabled = false;
+    statusEl.textContent = '';
+  }
+}
+
 async function loadAgents() {
   try {
     const el = document.getElementById('agentsPanel');
-    let agents = {};
-    let names = [];
+    let liveAgents = {};
+    let liveNames = [];
     try {
       const r = await fetch(`${API}/agents`);
       if (r.ok) {
         const d = await r.json();
-        agents = d.agents || {};
-        names = Object.keys(agents);
+        liveAgents = d.agents || {};
+        liveNames = Object.keys(liveAgents);
       }
     } catch (e) {}
 
@@ -1076,38 +1179,18 @@ async function loadAgents() {
     } catch(e) {}
     provHtml += '</div>';
 
-    let agentHtml = '';
-    if (IS_DEV) {
-      agentHtml = '<div style="font-size:10px;color:var(--accent);text-transform:uppercase;margin-bottom:6px">Agents / Relay Geometry</div>';
-      agentHtml += '<div style="color:var(--dim);font-size:10px;margin-bottom:8px">Shows live agents when available; otherwise last 6 relay events (refreshes every 10s).</div>';
-      if (!names.length) {
-        try {
-          const rs = await fetch(`${API}/ui/atlas`);
-          const atlas = await rs.json();
-          const geom = Array.isArray(atlas.geometry) ? atlas.geometry.slice(-6).reverse() : [];
-          if (geom.length) {
-            agentHtml += geom.map(g => `
-              <div class="agent-card">
-                <div class="name">${(g.actor || 'relay').toString()}</div>
-                <div class="meta">${(g.event_type || 'event').toString()} | ${(g.timestamp || '').toString().slice(11,19)}</div>
-              </div>
-            `).join('');
-          } else {
-            agentHtml += '<div style="color:var(--dim);font-size:11px">No relay geometry yet</div>';
-          }
-        } catch (e) {
-          agentHtml += '<div style="color:var(--dim);font-size:11px">No live agents</div>';
-        }
-      } else {
-        agentHtml += names.map(name => {
-          const a = agents[name];
-          const age = Math.round(Date.now()/1000 - a.ts);
-          return `<div class="agent-card"><div class="name">${a.agent}</div><div class="meta">Status: ${a.status} | ${age}s ago</div></div>`;
-        }).join('');
-      }
-    }
+    // Build agent roster: merge live status into static roster
+    const agentHeader = '<div style="font-size:10px;color:var(--accent);text-transform:uppercase;margin-bottom:6px">Agents</div>';
+    const agentCards = STATIC_ROSTER.map(spec => {
+      // Try to find a matching live agent by id prefix
+      const liveKey = liveNames.find(k => liveAgents[k]?.agent?.includes(spec.id) || k === spec.id);
+      const live = liveKey ? liveAgents[liveKey] : null;
+      const status = live ? live.status : null;
+      const age = live ? Math.round(Date.now()/1000 - live.ts) : null;
+      return renderAgentCard(spec.id, spec.name, spec.color, status, age, spec.actions);
+    }).join('');
 
-    el.innerHTML = provHtml + agentHtml;
+    el.innerHTML = provHtml + agentHeader + agentCards;
   } catch(e) {}
 }
 
@@ -1473,6 +1556,19 @@ syncCrossnavOntology();
 log('Rhea Scientific Gem v0.4.0 initialized', 'event');
 log('RAG pipeline: 76 docs / 250 chunks indexed in Redis', 'event');
 log('New: Ontology Switcher | Sceptic Mode | Session Rewind', 'event');
+
+// ── Mobile tooltip tap support ────────────────────────────────────────────────
+(function() {
+  document.addEventListener('touchstart', function(e) {
+    const tip = e.target.closest('.tip');
+    // Hide any open tips first
+    document.querySelectorAll('.tip.tip-open').forEach(el => {
+      if (el !== tip) el.classList.remove('tip-open');
+    });
+    if (!tip) return;
+    tip.classList.toggle('tip-open');
+  }, { passive: true });
+})();
 
 // ── Paid-action toast ────────────────────────────────────────────────────────
 (function() {
