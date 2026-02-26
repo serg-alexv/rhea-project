@@ -716,6 +716,68 @@
     pointer-events: none;
   }
   #chatbox-toast.show { opacity: 1; }
+
+  /* ── Krikoi Titanon — Planetary Ring Visualization ── */
+  .krikoi-ring {
+    position: relative;
+    width: 38px;
+    height: 38px;
+    flex-shrink: 0;
+    margin: 0 4px;
+    cursor: default;
+  }
+  /* The orbit track — faint ellipse to give depth illusion */
+  .krikoi-ring::before {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 34px; height: 34px;
+    margin: -17px 0 0 -17px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.07);
+    pointer-events: none;
+  }
+  /* Central nucleus dot */
+  .krikoi-ring::after {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 4px; height: 4px;
+    margin: -2px 0 0 -2px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.18);
+    pointer-events: none;
+  }
+  /* Each agent dot orbits the ring center */
+  @keyframes krikoi-orbit {
+    from { transform: rotate(var(--orbit-start)) translateX(17px) rotate(calc(-1 * var(--orbit-start))); }
+    to   { transform: rotate(calc(var(--orbit-start) + 360deg)) translateX(17px) rotate(calc(-1 * (var(--orbit-start) + 360deg))); }
+  }
+  .krikoi-dot {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 6px; height: 6px;
+    margin: -3px 0 0 -3px;
+    border-radius: 50%;
+    cursor: pointer;
+    animation: krikoi-orbit 12s linear infinite;
+    animation-delay: var(--orbit-delay, 0s);
+    transition: box-shadow 0.15s, width 0.15s, height 0.15s, margin 0.15s;
+    z-index: 1;
+  }
+  .krikoi-dot:hover {
+    width: 9px; height: 9px;
+    margin: -4.5px 0 0 -4.5px;
+    box-shadow: 0 0 8px var(--dot-color, #fff);
+    z-index: 2;
+  }
+  /* Pause entire ring on hover over the container — feels intentional */
+  .krikoi-ring:hover .krikoi-dot {
+    animation-play-state: paused;
+  }
+  .krikoi-ring:hover .krikoi-dot:hover {
+    animation-play-state: paused;
+  }
 </style>
 </head>
 <body>
@@ -783,6 +845,8 @@
     <span class="status"><span class="dot" id="statusDot"></span> <span id="statusText">connecting...</span></span>
     <span class="status" id="componentStatus"></span>
     <span class="status" id="ragStatus" style="color:var(--green)"></span>
+    <!-- ── Krikoi Titanon ring: 8 agent dots orbiting the topbar ── -->
+    <div class="krikoi-ring tip" id="krikoiRing" data-tip="8 Chronos agents — click a dot to jump to agent"></div>
     <span style="flex:1"></span>
     <span class="status" style="color:var(--dim);font-size:9px;letter-spacing:0.04em">All features unlocked &bull; Some actions use AI credits</span>
     <span class="status" id="clock"></span>
@@ -1660,6 +1724,60 @@ syncCrossnavOntology();
 log('Rhea Scientific Gem v0.4.0 initialized', 'event');
 log('RAG pipeline: 76 docs / 250 chunks indexed in Redis', 'event');
 log('New: Ontology Switcher | Sceptic Mode | Session Rewind', 'event');
+
+// ── Krikoi Titanon — planetary ring initialization ──────────────────────────
+(function() {
+  // Each agent in STATIC_ROSTER gets one orbiting dot.
+  // Dots are evenly spaced around the ring (360/8 = 45° apart).
+  // Clicking a dot scrolls to the matching agent card in #agentsPanel.
+  // The orbit-start CSS custom property staggers each dot's starting position
+  // so they don't all line up at 12 o'clock on load.
+  const ring = document.getElementById('krikoiRing');
+  if (!ring) return;
+
+  const count = STATIC_ROSTER.length; // 8
+  const periodS = 12; // full orbit period in seconds
+
+  STATIC_ROSTER.forEach(function(spec, i) {
+    const angleDeg = (360 / count) * i; // evenly space starting positions
+    // Delay = (angle / 360) * period — so each dot begins at its offset angle
+    const delayS = -((angleDeg / 360) * periodS); // negative = pre-start into animation
+
+    const dot = document.createElement('div');
+    dot.className = 'krikoi-dot';
+    dot.title = spec.id + ' ' + spec.name;
+    dot.style.setProperty('--orbit-start', angleDeg + 'deg');
+    dot.style.setProperty('--orbit-delay', delayS + 's');
+    dot.style.setProperty('--dot-color', spec.color);
+    dot.style.background = spec.color;
+    // Slight glow matching the agent color at rest
+    dot.style.boxShadow = '0 0 3px ' + spec.color;
+
+    dot.addEventListener('click', function(e) {
+      e.stopPropagation();
+      // Find the agent card in the left panel by scanning for a card whose
+      // .name text starts with the agent id (e.g. "A1 Quantitative Scientist")
+      const panel = document.getElementById('agentsPanel');
+      if (!panel) return;
+      const cards = panel.querySelectorAll('.agent-card');
+      for (var c = 0; c < cards.length; c++) {
+        const nameEl = cards[c].querySelector('.name');
+        if (nameEl && nameEl.textContent.startsWith(spec.id + ' ')) {
+          cards[c].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          // Briefly highlight the card so the user sees it
+          cards[c].style.transition = 'box-shadow 0.2s';
+          cards[c].style.boxShadow = '0 0 0 2px ' + spec.color;
+          setTimeout(function(card) {
+            card.style.boxShadow = '';
+          }, 1200, cards[c]);
+          break;
+        }
+      }
+    });
+
+    ring.appendChild(dot);
+  });
+})();
 
 // ── Mobile tooltip tap support ────────────────────────────────────────────────
 (function() {

@@ -41,6 +41,10 @@ except ImportError:
 from auth_api import auth_router
 app.include_router(auth_router, prefix="/auth")
 
+# Mount Aletheia proof pipeline router
+from aletheia_api import aletheia_router
+app.include_router(aletheia_router, prefix="/aletheia")
+
 # Mount frontend
 _FRONTEND_DIR = PROJECT_ROOT / "frontend"
 if _FRONTEND_DIR.exists():
