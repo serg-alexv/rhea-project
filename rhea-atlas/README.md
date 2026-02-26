@@ -1,36 +1,32 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# RHEA ATLAS UI (The Glass)
+> Version: 8.0 | License: Sovereign Logic | Influence: LobeUI / Linear
 
-## Getting Started
+## 1. Overview
+The Rhea Atlas is a high-density logical observer built with **Next.js 14**, **React Three Fiber**, and **Framer Motion**. It is designed to visualize the **Ruliadic Manifold** and provide a "Scientific Jewelry" interface for high-stakes research.
 
-First, run the development server:
+## 2. Design Tokens
+- **Primary Background:** `#050505` (Deep Obsidian)
+- **Accent Color:** `#00FFFF` (Cyan Logic)
+- **Glassmorphism:** `backdrop-blur-xl` + `border-white/10`
+- **Typography:** `Geist Sans` (Vercel) for headers, `Geist Mono` for logical data.
 
+## 3. Core Components
+### `<RuliadicIsland />`
+The primary unit of knowledge.
+- **Props:** `position`, `color`, `complexity (D-Metric)`, `onClick`.
+- **Interaction:** Pulses on logic-events; clickable for Interrogation.
+
+### `<MagneticNebula />`
+The background substrate. Reacts to cursor movement via Magnetic Field Shaders.
+
+### `<CouncilTheatre />` (Coming Soon)
+A high-end panel for parallel Tribunal streams.
+
+## 4. Extensibility (The Plugin Hook)
+To add a new visualization layer, register a component in `src/components/plugins/`. All plugins must accept the `RelayChain` stream via the `useAtlasStore`.
+
+## 5. Development
 ```bash
+cd rhea-atlas
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.

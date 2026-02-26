@@ -53,19 +53,5 @@ alpha2-*.sh
 alpha2-*.py
 rhea-project/docs/*.audit
 service-account.json
-rhea-atlas/node_modules/
-rhea-atlas/.next/
-
-# SQLite databases (runtime data, not source)
-*.db
-
-# Entire.io session metadata (may contain transcripts with secrets)
-.entire/metadata/
-??/
-
-# Archive files with session transcripts
-archive/gemini-audit-*/
-archive/platform-dialogues/
-
-# Opera cache (may contain snapshots with secrets)
-opera/cache/
+\n# Junk\nnode_modules/\ndist/\n*.log\n*.bak\n.env\n
+.env

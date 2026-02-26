@@ -20,6 +20,7 @@ import os
 import re
 import time
 import uuid
+import litellm
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass, field, asdict
 from datetime import datetime, timezone
@@ -27,9 +28,25 @@ from pathlib import Path
 from statistics import median
 from typing import Optional
 
+# Disable litellm logging to keep dashboard clean
+litellm.set_verbose = False
+litellm.telemetry = False
+
+# Enable Redis Caching if available (Task #22)
+if os.environ.get("REDIS_URL"):
+    try:
+        from litellm.caching import Cache
+        litellm.cache = Cache(type="redis", url=os.environ.get("REDIS_URL"))
+        print("[bridge] Redis STM layer active.")
+    except Exception as e:
+        print(f"[bridge] Redis init failed: {e}")
+litellm.suppress_debug_info = True
+import logging
+logging.getLogger("LiteLLM").setLevel(logging.CRITICAL)
+
 try:
     from dotenv import load_dotenv
-    load_dotenv()
+    load_dotenv(override=True)
 except ImportError:
     pass  # dotenv optional — env vars can be set directly
 
@@ -121,29 +138,31 @@ MODEL_TIERS = {
     "cheap": {
         "description": "Default tier. Fast, cost-effective. Use for all routine work.",
         "candidates": [
-            "openrouter/anthropic/claude-sonnet-4",
-            "gemini/gemini-2.0-flash",
-            "openai/gpt-4o-mini",
             "deepseek/deepseek-chat",
+            "anthropic/claude-haiku-3-5-20241022",
+            "gemini/gemini-2.5-flash",
+            "openai/gpt-4o-mini",
             "azure/gpt-4o-mini",
-            "gemini/gemini-2.0-flash-lite",
+            "gemini/gemini-2.5-flash-8b",
             "openai/gpt-4.1-nano",
+            "openrouter/anthropic/claude-sonnet-4",
         ],
     },
     "balanced": {
         "description": "Mid-tier. For complex reasoning that cheap tier struggles with.",
         "candidates": [
+            "gemini/gemini-2.5-flash",
+            "deepseek/deepseek-chat",
             "openai/gpt-4o",
             "gemini/gemini-2.5-flash",
-            "openai/gpt-4.1",
-            "openrouter/qwen/qwen-2.5-72b-instruct",
-            "openrouter/mistralai/mistral-large-latest",
-            "azure/gpt-4o",
         ],
     },
     "expensive": {
         "description": "Use ONLY when explicitly justified. Deep reasoning, critique, research.",
         "candidates": [
+            "anthropic/claude-sonnet-4-20250514",
+            "deepseek/deepseek-chat",
+            "deepseek/deepseek-reasoner",
             "gemini/gemini-3.1-pro-preview",
             "gemini/gemini-3-pro-preview",
             "gemini/gemini-2.5-pro",
@@ -161,21 +180,21 @@ MODEL_TIERS = {
             "openai/o3-mini",
             "deepseek/deepseek-reasoner",
             "openrouter/deepseek/deepseek-r1",
-            "azure/DeepSeek-R1",
         ],
     },
     "science": {
         "description": "Science-grade models. For biology, chemistry, STEM tribunal queries.",
         "candidates": [
+            "anthropic/claude-sonnet-4-20250514",
             "gemini/gemini-3.1-pro-preview",
             "gemini/gemini-3-pro-preview",
             "gemini/gemini-2.5-pro",
+            "deepseek/deepseek-reasoner",
             "openrouter/qwen/qwen3-235b-a22b",
             "openrouter/qwen/qwen-2.5-72b-instruct",
             "openrouter/deepseek/deepseek-r1",
             "openai/o3",
             "openai/gpt-4.5-preview",
-            "azure/DeepSeek-R1",
             "openrouter/meta-llama/llama-4-behemoth",
         ],
     },
@@ -189,6 +208,9 @@ DEFAULT_TIER = "cheap"  # HARD RULE: Sonnet / cheap models by default
 # ---------------------------------------------------------------------------
 
 PRICE_TABLE = {
+    # Anthropic
+    "claude-sonnet-4-20250514": (3.00, 15.00),
+    "claude-haiku-3-5-20241022": (0.80, 4.00),
     # OpenAI
     "gpt-4o":           (2.50,  10.00),
     "gpt-4o-mini":      (0.15,   0.60),
@@ -223,9 +245,9 @@ PRICE_TABLE = {
     "DeepSeek-R1":                       (0.55, 2.19),
     "Cohere-command-r-plus-08-2024":     (2.50, 10.00),
     # HuggingFace (free/cheap inference)
-    "core42/jais-adaptive-7b-chat":      (0.00, 0.00),
-    "mistralai/Mistral-7B-Instruct-v0.3": (0.00, 0.00),
-    "HuggingFaceH4/zephyr-7b-beta":     (0.00, 0.00),
+    "meta-llama/Llama-3.2-3B-Instruct":      (0.00, 0.00),
+    "microsoft/Phi-3-mini-4k-instruct": (0.00, 0.00),
+    "Qwen/Qwen2.5-1.5B-Instruct":     (0.00, 0.00),
 }
 
 PRICE_DEFAULT = (1.00, 3.00)  # fallback for unknown models
@@ -296,7 +318,29 @@ def _log_call(
 # Provider registry
 # ---------------------------------------------------------------------------
 
+# TODO(human): Rotate dead API keys in .env file
+# Live test (2026-02-26) shows 1/7 providers alive:
+#   DeepSeek    — LIVE
+#   Anthropic   — invalid key (sk-ant-api03-... auth error)
+#   OpenAI      — invalid key (sk-proj-... "Incorrect API key")
+#   Gemini      — key flagged as leaked by Google
+#   OpenRouter   — "User not found" (account-level issue)
+#   HuggingFace — token expired ("Rhea Office 2026-02-26")
+#   Azure       — auth OK but 0 deployments (needs Azure portal deploy)
+# Action: regenerate keys at each provider's dashboard, update .env
+
 PROVIDERS = {
+    "anthropic": ProviderConfig(
+        name="anthropic",
+        display_name="Anthropic",
+        base_url="https://api.anthropic.com/v1",
+        api_key_env="ANTHROPIC_API_KEY",
+        models=[
+            "claude-sonnet-4-20250514",
+            "claude-haiku-3-5-20241022",
+        ],
+        call_method="anthropic",
+    ),
     "openai": ProviderConfig(
         name="openai",
         display_name="OpenAI",
@@ -316,10 +360,9 @@ PROVIDERS = {
         base_url="https://generativelanguage.googleapis.com/v1beta",
         api_key_env="GEMINI_API_KEY",
         models=[
-            "gemini-3.1-pro-preview", "gemini-3-pro-preview",
-            "gemini-2.5-pro", "gemini-2.5-flash",
-            "gemini-2.5-flash", "gemini-2.0-flash", "gemini-2.0-flash-lite",
-            "gemini-1.5-pro", "gemini-1.5-flash",
+            "gemini-2.5-flash", "gemini-2.5-pro",
+            "gemini-2.0-flash", "gemini-1.5-flash",
+            "gemini-1.5-pro",
         ],
         call_method="gemini",
     ),
@@ -354,42 +397,49 @@ PROVIDERS = {
         base_url="https://router.huggingface.co/models",
         api_key_env="HF_TOKEN",
         models=[
-            "core42/jais-adaptive-7b-chat",
-            "mistralai/Mistral-7B-Instruct-v0.3",
-            "HuggingFaceH4/zephyr-7b-beta",
+            "meta-llama/Llama-3.2-3B-Instruct",
+            "microsoft/Phi-3-mini-4k-instruct",
+            "Qwen/Qwen2.5-1.5B-Instruct",
         ],
         call_method="huggingface",
     ),
     "azure": ProviderConfig(
         name="azure",
-        display_name="Azure AI Foundry",
-        base_url=os.environ.get("AZURE_ENDPOINT", "https://models.inference.ai.azure.com"),
+        display_name="Azure OpenAI",
+        base_url=os.environ.get("AZURE_ENDPOINT", ""),
         api_key_env="AZURE_API_KEY",
         models=[
             "gpt-4o", "gpt-4o-mini",
-            "Llama-4-Maverick-17B-128E-Instruct-FP8",
-            "DeepSeek-R1",
-            "Cohere-command-r-plus-08-2024",
         ],
-        call_method="openai_compatible",
+        call_method="azure_openai",
     ),
 }
+
+# Map env vars for LiteLLM Azure OpenAI provider
+_azure_base = os.environ.get("AZURE_ENDPOINT", "")
+if _azure_base and "AZURE_API_BASE" not in os.environ:
+    os.environ["AZURE_API_BASE"] = _azure_base
+if "AZURE_API_VERSION" not in os.environ:
+    os.environ["AZURE_API_VERSION"] = "2024-12-01-preview"
 
 
 # ---------------------------------------------------------------------------
 # Bridge
 # ---------------------------------------------------------------------------
 
-class RheaBridge:
-    """Multi-provider LLM bridge with tiered cost-aware routing and tribunal support."""
+try:
+    from rhea_profile_manager import profile_manager
+    _HAS_PROFILE = True
+except ImportError:
+    profile_manager = None
+    _HAS_PROFILE = False
 
-    def __init__(self):
-        self.providers = PROVIDERS
-        self.tiers = MODEL_TIERS
-        self.default_tier = DEFAULT_TIER
-
-from rhea_profile_manager import profile_manager
-from rhea_visual_context import get_context_block
+try:
+    from rhea_visual_context import get_context_block
+    _HAS_VISUAL = True
+except ImportError:
+    get_context_block = None
+    _HAS_VISUAL = False
 
 # ---------------------------------------------------------------------------
 # Bridge
@@ -468,80 +518,51 @@ class RheaBridge:
         max_tokens: int = 2048,
         mode: Optional[str] = None,
     ) -> ModelResponse:
-        """Send a prompt to a specific model. Format: 'provider/model'."""
+        """Send a prompt to a specific model via LiteLLM. Format: 'provider/model'."""
         
         # --- Nexus/GPT-Profiler & Visual Context Injection ---
-        constraints = profile_manager.get_constraints(mode)
-        visual_context = get_context_block()
-        
-        # Merge system prompt with constraints and visual context
         injected = ""
-        if constraints:
-            injected += constraints
-        if visual_context:
-            injected += f"\n{visual_context}"
-            
+        if _HAS_PROFILE and profile_manager:
+            constraints = profile_manager.get_constraints(mode)
+            if constraints:
+                injected += constraints
+        if _HAS_VISUAL and get_context_block:
+            visual_context = get_context_block()
+            if visual_context:
+                injected += f"\n{visual_context}"
         if injected:
-            if system:
-                system = f"{system}\n\n{injected}"
-            else:
-                system = injected
+            system = f"{system}\n\n{injected}" if system else injected
         # ----------------------------------------------------
 
         provider_name, model_id = self._resolve_model(model)
-        cfg = self.providers.get(provider_name)
-        if not cfg:
-            return ModelResponse(
-                provider=provider_name, model=model_id,
-                text="", latency_s=0, error=f"Unknown provider: {provider_name}",
-            )
-
-        api_key = os.environ.get(cfg.api_key_env, "")
-        # Gemini fallback: try T1 key if main key unavailable or rate-limited
-        if not api_key and cfg.name == "gemini":
-            api_key = os.environ.get("GEMINI_T1_API_KEY", "")
-        if not api_key:
-            return ModelResponse(
-                provider=provider_name, model=model_id,
-                text="", latency_s=0,
-                error=f"No API key: set {cfg.api_key_env}",
-            )
-
         t0 = time.time()
-        token_info = {"prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0}
+        
         try:
-            if cfg.call_method == "openai_compatible":
-                text, token_info = self._call_openai_compatible(
-                    cfg, api_key, model_id, prompt, system, temperature, max_tokens
-                )
-            elif cfg.call_method == "gemini":
-                try:
-                    text, token_info = self._call_gemini(
-                        cfg, api_key, model_id, prompt, system, temperature, max_tokens
-                    )
-                except Exception as gemini_err:
-                    # Retry with T1 key on rate limit
-                    t1_key = os.environ.get("GEMINI_T1_API_KEY", "")
-                    if t1_key and t1_key != api_key and "429" in str(gemini_err):
-                        text, token_info = self._call_gemini(
-                            cfg, t1_key, model_id, prompt, system, temperature, max_tokens
-                        )
-                    else:
-                        raise
-            elif cfg.call_method == "huggingface":
-                text, token_info = self._call_huggingface(
-                    cfg, api_key, model_id, prompt, system, temperature, max_tokens
-                )
-            else:
-                resp_err = ModelResponse(
-                    provider=provider_name, model=model_id,
-                    text="", latency_s=0,
-                    error=f"Unknown call method: {cfg.call_method}",
-                )
-                _log_call(provider_name, model_id, 0, 0, 0, 0, resp_err.error)
-                return resp_err
+            # Prepare messages for LiteLLM
+            messages = []
+            if system:
+                messages.append({"role": "system", "content": system})
+            messages.append({"role": "user", "content": prompt})
+
+            # Call LiteLLM
+            response = litellm.completion(
+                model=model,
+                messages=messages,
+                temperature=temperature,
+                max_tokens=max_tokens,
+            )
+
+            text = response.choices[0].message.content
+            usage = getattr(response, 'usage', {})
+            token_info = {
+                "prompt_tokens": getattr(usage, 'prompt_tokens', 0),
+                "completion_tokens": getattr(usage, 'completion_tokens', 0),
+                "total_tokens": getattr(usage, 'total_tokens', 0),
+            }
+
             elapsed = time.time() - t0
             latency_ms = elapsed * 1000
+            
             _log_call(
                 provider_name, model_id,
                 token_info["prompt_tokens"],
@@ -549,21 +570,17 @@ class RheaBridge:
                 token_info["total_tokens"],
                 latency_ms, None,
             )
+
             return ModelResponse(
                 provider=provider_name, model=model_id,
                 text=text, latency_s=round(elapsed, 2),
                 tokens_used=token_info["total_tokens"],
             )
+
         except Exception as e:
             elapsed = time.time() - t0
             latency_ms = elapsed * 1000
-            _log_call(
-                provider_name, model_id,
-                token_info["prompt_tokens"],
-                token_info["completion_tokens"],
-                token_info["total_tokens"],
-                latency_ms, str(e),
-            )
+            _log_call(provider_name, model_id, 0, 0, 0, latency_ms, str(e))
             return ModelResponse(
                 provider=provider_name, model=model_id,
                 text="", latency_s=round(elapsed, 2), error=str(e),
@@ -653,11 +670,9 @@ class RheaBridge:
             qwr_priority = prio_map.get(message.priority, "P1")
             
             # Convert ChronosMessage to QWRR-compatible envelope
-            # We use the full message dict as the payload for the relay
             payload = asdict(message)
             msg_type = f"chronos.{message.msg_type}"
             
-            # Use rex_pager.make_envelope directly to avoid double-wrapping the payload
             envelope = rex_pager.make_envelope(
                 source=message.sender,
                 target=message.receiver,
@@ -683,7 +698,7 @@ class RheaBridge:
             
         except Exception as e:
             print(f"[bridge] Chronos relay failed: {e}")
-            # Fallback to simple logging if QWRR fails
+            # Fallback to simple logging
             self._log_chronos(message)
             return False
 
@@ -724,6 +739,42 @@ class RheaBridge:
         }
         return status
 
+    def live_test(self) -> dict:
+        """Ping every provider with a real API call. Returns actual liveness, not just key presence."""
+        probe = "Reply with exactly one word: ping"
+        results = {}
+        test_models = {}
+        for name, cfg in self.providers.items():
+            key = os.environ.get(cfg.api_key_env, "")
+            if not key and name == "gemini":
+                key = os.environ.get("GEMINI_T1_API_KEY", "")
+            if not key:
+                results[name] = {"live": False, "error": "no_key", "latency_s": 0}
+                continue
+            test_models[name] = f"{name}/{cfg.models[0]}"
+
+        with ThreadPoolExecutor(max_workers=len(test_models)) as pool:
+            futures = {
+                pool.submit(self.ask, probe, model, "", 0.0, 5): prov
+                for prov, model in test_models.items()
+            }
+            for future in as_completed(futures):
+                prov = futures[future]
+                try:
+                    resp = future.result()
+                    results[prov] = {
+                        "live": not bool(resp.error),
+                        "model": test_models[prov],
+                        "latency_s": resp.latency_s,
+                        "text": resp.text[:30] if resp.text else "",
+                        "error": resp.error[:120] if resp.error else None,
+                    }
+                except Exception as e:
+                    results[prov] = {"live": False, "error": str(e)[:120], "latency_s": 0}
+
+        alive = sum(1 for r in results.values() if r.get("live"))
+        return {"providers": results, "alive": alive, "total": len(self.providers)}
+
     def tiers_info(self) -> dict:
         """Return tier configuration with availability status."""
         info = {}
@@ -744,110 +795,6 @@ class RheaBridge:
                 "available_count": sum(1 for c in candidates_status if c["available"]),
             }
         return info
-
-    # --- private: provider-specific call methods ---
-
-    def _call_openai_compatible(self, cfg, api_key, model, prompt, system, temperature, max_tokens):
-        import requests
-        headers = {
-            "Authorization": f"Bearer {api_key}",
-            "Content-Type": "application/json",
-        }
-        if cfg.name == "openrouter":
-            headers["HTTP-Referer"] = "https://github.com/serg-alexv/rhea-project"
-            headers["X-Title"] = "Rhea"
-        if cfg.name == "azure":
-            # Azure AI Foundry uses api-key header, not Bearer token
-            headers = {
-                "api-key": api_key,
-                "Content-Type": "application/json",
-            }
-
-        messages = []
-        if system:
-            messages.append({"role": "system", "content": system})
-        messages.append({"role": "user", "content": prompt})
-
-        body = {
-            "model": model,
-            "messages": messages,
-            "temperature": temperature,
-            "max_tokens": max_tokens,
-        }
-
-        if cfg.name == "azure" and "AZURE_ENDPOINT" in os.environ:
-            # Azure OpenAI Service: /openai/deployments/{model}/chat/completions
-            url = f"{cfg.base_url}/openai/deployments/{model}/chat/completions?api-version=2024-10-21"
-        else:
-            url = f"{cfg.base_url}/chat/completions"
-
-        resp = requests.post(
-            url,
-            headers=headers, json=body, timeout=60,
-        )
-        resp.raise_for_status()
-        data = resp.json()
-        text = data["choices"][0]["message"]["content"]
-        usage = data.get("usage", {})
-        token_info = {
-            "prompt_tokens": usage.get("prompt_tokens", 0),
-            "completion_tokens": usage.get("completion_tokens", 0),
-            "total_tokens": usage.get("total_tokens", 0),
-        }
-        return text, token_info
-
-    def _call_gemini(self, cfg, api_key, model, prompt, system, temperature, max_tokens):
-        import requests
-        url = f"{cfg.base_url}/models/{model}:generateContent?key={api_key}"
-        contents = []
-        if system:
-            contents.append({"role": "user", "parts": [{"text": system}]})
-            contents.append({"role": "model", "parts": [{"text": "Understood."}]})
-        contents.append({"role": "user", "parts": [{"text": prompt}]})
-
-        body = {
-            "contents": contents,
-            "generationConfig": {
-                "temperature": temperature,
-                "maxOutputTokens": max_tokens,
-            },
-        }
-        resp = requests.post(url, json=body, timeout=60)
-        resp.raise_for_status()
-        data = resp.json()
-        text = data["candidates"][0]["content"]["parts"][0]["text"]
-        usage = data.get("usageMetadata", {})
-        token_info = {
-            "prompt_tokens": usage.get("promptTokenCount", 0),
-            "completion_tokens": usage.get("candidatesTokenCount", 0),
-            "total_tokens": usage.get("totalTokenCount", 0),
-        }
-        return text, token_info
-
-    def _call_huggingface(self, cfg, api_key, model, prompt, system, temperature, max_tokens):
-        import requests
-        headers = {"Authorization": f"Bearer {api_key}"}
-        full_prompt = f"{system}\n\n{prompt}" if system else prompt
-        body = {
-            "inputs": full_prompt,
-            "parameters": {
-                "temperature": temperature,
-                "max_new_tokens": max_tokens,
-                "return_full_text": False,
-            },
-        }
-        resp = requests.post(
-            f"{cfg.base_url}/{model}",
-            headers=headers, json=body, timeout=60,
-        )
-        resp.raise_for_status()
-        data = resp.json()
-        if isinstance(data, list) and len(data) > 0:
-            text = data[0].get("generated_text", "")
-        else:
-            text = str(data)
-        token_info = {"prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0}
-        return text, token_info
 
     # --- private: model resolution ---
 
@@ -910,7 +857,7 @@ class RheaBridge:
             # Fallback defaults (will fail gracefully if no keys)
             defaults = [
                 "openai/gpt-4o-mini",
-                "gemini/gemini-2.0-flash",
+                "gemini/gemini-2.5-flash",
                 "deepseek/deepseek-chat",
                 "openrouter/anthropic/claude-sonnet-4",
                 "azure/gpt-4o-mini",
@@ -1037,6 +984,18 @@ def main():
 
     if cmd == "status":
         print(json.dumps(bridge.models_status(), indent=2))
+
+    elif cmd == "live-test":
+        print("Probing all providers (real API calls)...")
+        result = bridge.live_test()
+        for name, info in result["providers"].items():
+            status = "LIVE" if info.get("live") else "DEAD"
+            err = info.get("error", "")
+            lat = info.get("latency_s", 0)
+            txt = info.get("text", "")
+            detail = (txt or "")[:25] if txt else (err or "unknown")[:60]
+            print(f"  {name:15s} {status:4s}  {lat:.1f}s  {detail}")
+        print(f"\nAlive: {result['alive']}/{result['total']}")
 
     elif cmd == "tiers":
         print(json.dumps(bridge.tiers_info(), indent=2))
