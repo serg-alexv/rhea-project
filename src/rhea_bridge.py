@@ -131,16 +131,19 @@ MODEL_TIERS = {
     "expensive": {
         "description": "Use ONLY when explicitly justified. Deep reasoning, critique, research.",
         "candidates": [
+            "gemini/gemini-3.1-pro-preview",
+            "gemini/gemini-3-pro-preview",
             "gemini/gemini-2.5-pro",
             "openai/gpt-4.5-preview",
             "openai/o3",
-            "openrouter/google/gemini-2.5-pro-preview",
             "openrouter/qwen/qwen3-235b-a22b",
         ],
     },
     "reasoning": {
         "description": "Specialized reasoning models. For chain-of-thought / math / logic.",
         "candidates": [
+            "gemini/gemini-3.1-pro-preview",
+            "gemini/gemini-3-pro-preview",
             "openai/o4-mini",
             "openai/o3-mini",
             "deepseek/deepseek-reasoner",
@@ -151,12 +154,13 @@ MODEL_TIERS = {
     "science": {
         "description": "Science-grade models. For biology, chemistry, STEM tribunal queries.",
         "candidates": [
+            "gemini/gemini-3.1-pro-preview",
+            "gemini/gemini-3-pro-preview",
             "gemini/gemini-2.5-pro",
             "openrouter/qwen/qwen3-235b-a22b",
             "openrouter/qwen/qwen-2.5-72b-instruct",
             "openrouter/deepseek/deepseek-r1",
             "openai/o3",
-            "openrouter/google/gemini-2.5-pro-preview",
             "openai/gpt-4.5-preview",
             "azure/DeepSeek-R1",
             "openrouter/meta-llama/llama-4-behemoth",
@@ -298,6 +302,7 @@ PROVIDERS = {
         base_url="https://generativelanguage.googleapis.com/v1beta",
         api_key_env="GEMINI_API_KEY",
         models=[
+            "gemini-3.1-pro-preview", "gemini-3-pro-preview",
             "gemini-2.5-pro", "gemini-2.5-flash",
             "gemini-2.0-flash", "gemini-2.0-flash-lite",
             "gemini-1.5-pro", "gemini-1.5-flash",
