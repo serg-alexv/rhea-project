@@ -1,0 +1,29 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "2493de8db8a9",
+  "strategy": "auto-commit",
+  "branch": "stage4-release",
+  "checkpoints_count": 1,
+  "files_touched": [
+    ".env",
+    "rhea-atlas/.env.local",
+    "rhea-atlas/src/components/RuliadicIsland.tsx",
+    "src/rhea_bridge.py"
+  ],
+  "sessions": [
+    {
+      "metadata": "/24/93de8db8a9/0/metadata.json",
+      "transcript": "/24/93de8db8a9/0/full.jsonl",
+      "context": "",
+      "content_hash": "/24/93de8db8a9/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 51,
+    "cache_creation_tokens": 26316,
+    "cache_read_tokens": 4990159,
+    "output_tokens": 9535,
+    "api_call_count": 39
+  }
+}
