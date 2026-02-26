@@ -122,30 +122,78 @@ def _parse_pdf(path: Path, source: str) -> list[dict]:
 # ---------------------------------------------------------------------------
 
 def chunk_document(pages: list[dict]) -> list[DocChunk]:
-    """
-    TODO(human): Implement the chunking strategy.
+    """Recursive chunking: try paragraphs first, then sentences, then hard split.
+    Preserves natural boundaries with configurable overlap."""
+    if not pages:
+        return []
 
-    Split parsed document pages into DocChunk objects for embedding.
+    source = pages[0]["source"]
+    doc_id = hashlib.md5(source.encode()).hexdigest()[:12]
+    max_chars = MAX_CHUNK_TOKENS * 4
+    overlap_chars = CHUNK_OVERLAP_TOKENS * 4
 
-    Input: list of {"text": str, "page": int|None, "source": str}
-    Output: list of DocChunk objects
+    chunks = []
+    idx = 0
 
-    Requirements:
-    - Each chunk should be roughly MAX_CHUNK_TOKENS tokens (use ~4 chars/token approx)
-    - Chunks should overlap by CHUNK_OVERLAP_TOKENS to preserve context across boundaries
-    - Preserve paragraph boundaries when possible (don't split mid-sentence)
-    - Set doc_id = hashlib.md5(source.encode()).hexdigest()[:12]
-    - Set chunk_idx incrementally starting from 0
-    - Carry over the source and page fields from the input
+    for page_info in pages:
+        text = page_info["text"].strip()
+        page = page_info.get("page")
+        if not text:
+            continue
 
-    Available constants: MAX_CHUNK_TOKENS, CHUNK_OVERLAP_TOKENS
+        # Split into paragraphs first
+        paragraphs = re.split(r'\n\s*\n', text)
+        current = ""
 
-    Example chunk:
-        DocChunk(doc_id="a1b2c3d4e5f6", chunk_idx=0,
-                 text="First 512 tokens of text...",
-                 source="paper.pdf", page=1)
-    """
-    raise NotImplementedError("Implement chunk_document — see TODO(human) above")
+        for para in paragraphs:
+            para = para.strip()
+            if not para:
+                continue
+
+            # If adding this paragraph stays within limit, accumulate
+            if len(current) + len(para) + 1 <= max_chars:
+                current = f"{current}\n\n{para}" if current else para
+                continue
+
+            # Current chunk is full — emit it
+            if current:
+                chunks.append(DocChunk(
+                    doc_id=doc_id, chunk_idx=idx,
+                    text=current.strip(), source=source, page=page,
+                ))
+                idx += 1
+                # Overlap: keep tail of current chunk
+                if overlap_chars > 0 and len(current) > overlap_chars:
+                    current = current[-overlap_chars:] + "\n\n" + para
+                else:
+                    current = para
+            else:
+                # Single paragraph exceeds max — split by sentences
+                sentences = re.split(r'(?<=[.!?])\s+', para)
+                sub = ""
+                for sent in sentences:
+                    if len(sub) + len(sent) + 1 <= max_chars:
+                        sub = f"{sub} {sent}" if sub else sent
+                    else:
+                        if sub:
+                            chunks.append(DocChunk(
+                                doc_id=doc_id, chunk_idx=idx,
+                                text=sub.strip(), source=source, page=page,
+                            ))
+                            idx += 1
+                        sub = sent
+                current = sub
+
+        # Emit remaining text for this page
+        if current.strip():
+            chunks.append(DocChunk(
+                doc_id=doc_id, chunk_idx=idx,
+                text=current.strip(), source=source, page=page,
+            ))
+            idx += 1
+            current = ""
+
+    return chunks
 
 
 # ---------------------------------------------------------------------------
