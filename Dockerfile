@@ -1,26 +1,33 @@
-# Rhea Tribunal API — Docker Container
+# Rhea FastAPI Backend — Production Image
 FROM python:3.11-slim
 
 WORKDIR /app
 
-# Install dependencies
+# Install system deps needed by some Python packages (e.g. libzmq for pyzmq)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        libzmq3-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Python dependencies first (layer cache friendly)
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy source code and necessary modules
+# Copy application source
 COPY src/ ./src/
 COPY opera/ ./opera/
 COPY prompts/ ./prompts/
-COPY docs/ ./docs/
-COPY config/ ./config/
 COPY friends/ ./friends/
 
-# Set environment variables
+# Optional: copy rhea-nexus profiles (used by rhea_profile_manager.py at runtime)
+# These are loaded lazily, so the app starts fine without them.
+# COPY rhea-nexus/ ./rhea-nexus/
+
+# Ensure all internal modules are importable
 ENV PYTHONPATH="/app/src:/app/friends/ruliad/explorer:/app"
-ENV TRIBUNAL_PORT=8080
 
-# Expose port 8080 for Cloud Run
-EXPOSE 8080
+# Create writable directories the app needs at runtime
+RUN mkdir -p /app/logs /app/data
 
-# Run the API
-CMD ["uvicorn", "src.tribunal_api:app", "--host", "0.0.0.0", "--port", "8080"]
+EXPOSE 8000
+
+CMD ["python3", "src/rhead.py"]

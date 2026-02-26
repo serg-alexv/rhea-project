@@ -1,28 +1,25 @@
-# RHEA ACTIVE STATE (v2.5)
-> Date: 2026-02-26 | Agent: HYPERION | Mode: PROTOCOL-SYNC
+# RHEA ACTIVE STATE (v2.7)
+> Date: 2026-02-26 | Agent: REX (Opus 4.6) | Mode: DISPERSED-CLOUD-DEPLOY
 
 ## System Invariants (Verified)
-- **STOP:** Sentinel logic responsive (1s latency).
-- **LEDGER:** Atomic concurrency safety active (fcntl).
-- **D-METRIC:** Target < 2KB. **STATUS: HEALTHY (270.46)**.
-- **OFFICE:** Inbox/Outbox broadcast COMPLETE.
 - **CHECK:** `bash scripts/rhea/check.sh` → OK.
-- **GIT:** `hyperion/memory` cleaned, synced, and compacted.
+- **GIT:** `main` — 32 files pending commit+push.
+- **D-METRIC:** Target < 2KB. **STATUS: HEALTHY**.
 
 ## Architecture
-- **Orchestration:** Chronos Protocol v3 — A1 ALIVE.
-- **Bridge:** src/rhea_bridge.py — CHRONOS relay + Gemini Fallback stable.
-- **Commit Strategy:** auto-commit via Entire.io + D-Metric Loop.
-- **Cost Policy:** cheap tier default (ADR-008).
+- **Cloud:** Google Cloud Run + Firebase Hosting + Redis Cloud + Oracle Always Free.
+- **Auth:** JWT + SQLite — live. Code-worm profile in both UIs.
+- **Bridge:** src/rhea_bridge.py — 6 providers, 31 models, 4 tiers.
+- **Frontends:** Rex Console :8000 + Orion Atlas :3000 — live.
+- **Prod/dev mode gating:** implemented. Footer popups (GitHub-style).
 
-## Current Focal Point
-- **Branch:** `hyperion/memory` (Active session).
-- **Stage:** 2 — A1 Restart Under Chain Verification.
-- **Reflexive Sprint:** COMPLETE. D dropped from 1086 to 267.43.
-- **Tasks Done:** #14 (CHRONOS), #10 (Tribunal Triggers), #15 (Leases/Fencing), #16 (CI Enforcement), #17 (Bridge-QWRR Integration).
-- **Next Task:** Task #11 (LiteLLM Integration) or Stage 3 (Tribunal Expansion).
+## Team Status
+- **Rex:** Footer popups, deploy configs, auth, health probes — done.
+- **Orion:** DensityField, OceanusFlow, MnemosyneWhisper — merged clean.
+- **Hyperion:** Security remediation done. 3 keys need manual revoke.
 
-## Related Files
-- `docs/state_full.md` (Historical Narrative)
-- `scripts/compute_d_metric.py` (Fixed calculation)
-- `archive/` (Major document compaction target)
+## Next Tasks
+- Commit + push 32 files.
+- Deploy to production (deploy-all.sh).
+- Revoke leaked keys (Google AI Studio).
+- Legal docs (TERMS, PRIVACY, SECURITY, COOKIES).

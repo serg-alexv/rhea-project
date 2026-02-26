@@ -4,26 +4,25 @@
 # =============================================================================
 #
 # Architecture:
-#   [Oracle Cloud VM]  ← Redis 7 (persistence, always-free, ARM A1)
-#         |
-#   [Google Cloud Run] ← rhea-backend FastAPI (serverless, free tier)
-#         |
-#   [Vercel]           ← rhea-atlas Next.js UI (edge CDN, free tier)
+#   GOOGLE (Cloud Run + Firebase Hosting)
+#        ↕
+#   REDIS CLOUD (30MB free)
+#        ↕
+#   ORACLE (ARM VM: backup + monitoring)
 #
 # Usage:
 #   bash deploy/deploy-all.sh                  # full deploy
 #   bash deploy/deploy-all.sh --backend-only   # Cloud Run only
-#   bash deploy/deploy-all.sh --frontend-only  # Vercel only (needs RHEA_API_URL)
+#   bash deploy/deploy-all.sh --frontend-only  # Firebase Hosting only (needs RHEA_API_URL)
 #   bash deploy/deploy-all.sh --dry-run        # print plan, no execution
 #   bash deploy/deploy-all.sh --help           # this help
 #
 # Environment variables (all optional — sensible defaults apply):
-#   PROJECT_ID      GCP project ID          (default: gen-lang-client-0839944748)
-#   REGION          Cloud Run region         (default: us-central1)
-#   SERVICE         Cloud Run service name   (default: rhea-backend)
-#   RHEA_API_URL    Override Cloud Run URL   (required for --frontend-only)
-#   VERCEL_TOKEN    Vercel auth token (CI)
-#   VERCEL_ORG_ID   Vercel org ID (CI)
+#   PROJECT_ID           GCP project ID          (default: gen-lang-client-0839944748)
+#   REGION               Cloud Run region         (default: us-central1)
+#   SERVICE              Cloud Run service name   (default: rhea-backend)
+#   RHEA_API_URL         Override Cloud Run URL   (required for --frontend-only)
+#   FIREBASE_PROJECT     Firebase project ID      (default: reads from .firebaserc)
 #
 # Bash 3.2 compatible (macOS default shell).
 # =============================================================================
@@ -37,7 +36,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 
 CLOUDRUN_DEPLOY="${SCRIPT_DIR}/cloudrun/deploy.sh"
-VERCEL_DEPLOY="${SCRIPT_DIR}/vercel/deploy.sh"
+FIREBASE_DEPLOY="${SCRIPT_DIR}/firebase/deploy.sh"
 
 # Cloud Run defaults (mirror cloudrun/deploy.sh so we can query service URL)
 PROJECT_ID="${PROJECT_ID:-gen-lang-client-0839944748}"
@@ -79,14 +78,14 @@ print_banner() {
   ║          RHEA  —  Dispersed Cloud Deployment Orchestrator        ║
   ╠══════════════════════════════════════════════════════════════════╣
   ║                                                                  ║
-  ║   Oracle Cloud  ──  Redis 7 on A1.Flex VM  (persistence)        ║
-  ║        │              4 OCPU · 24 GB RAM · $0/mo                ║
-  ║        ▼                                                         ║
-  ║   Google Cloud Run  ──  rhea-backend FastAPI  (compute)         ║
-  ║        │                 512 MB · scale-to-zero · $0/mo         ║
-  ║        ▼                                                         ║
-  ║   Vercel Edge CDN  ──  rhea-atlas Next.js  (UI)                 ║
-  ║                           global CDN · hobby plan · $0/mo       ║
+  ║   GOOGLE  ──  Cloud Run (backend)  +  Firebase Hosting (UI)     ║
+  ║        │        512 MB · scale-to-zero · global CDN · $0/mo     ║
+  ║        ↕                                                         ║
+  ║   REDIS CLOUD  ──  Managed Redis  (cache / sessions)            ║
+  ║        │              30 MB free tier · $0/mo                   ║
+  ║        ↕                                                         ║
+  ║   ORACLE  ──  ARM A1.Flex VM  (backup + monitoring)             ║
+  ║                  4 OCPU · 24 GB RAM · Always Free · $0/mo       ║
   ╚══════════════════════════════════════════════════════════════════╝
 
 BANNER
@@ -102,7 +101,7 @@ Usage: bash deploy/deploy-all.sh [OPTIONS]
 
 Options:
   --backend-only    Deploy Cloud Run backend only
-  --frontend-only   Deploy Vercel frontend only (requires RHEA_API_URL env var)
+  --frontend-only   Deploy Firebase Hosting frontend only (requires RHEA_API_URL env var)
   --dry-run         Print what would be executed; make no changes
   --help            Show this help message
 
@@ -111,8 +110,7 @@ Environment variables:
   REGION            Cloud Run region (default: us-central1)
   SERVICE           Cloud Run service name (default: rhea-backend)
   RHEA_API_URL      Override Cloud Run URL (required for --frontend-only)
-  VERCEL_TOKEN      Vercel auth token for CI / non-interactive auth
-  VERCEL_ORG_ID     Vercel org / team ID for CI use
+  FIREBASE_PROJECT  Firebase project ID (default: reads from .firebaserc)
 
 Examples:
   bash deploy/deploy-all.sh
@@ -143,10 +141,11 @@ for arg in "$@"; do
   esac
 done
 
-# Guard: --frontend-only needs RHEA_API_URL
+# Guard: --frontend-only needs RHEA_API_URL (passed as NEXT_PUBLIC_RHEA_API to Firebase deploy)
 if [ "$DEPLOY_BACKEND" = "false" ] && [ "$DEPLOY_FRONTEND" = "true" ]; then
   if [ -z "${RHEA_API_URL:-}" ]; then
-    die "--frontend-only requires RHEA_API_URL to be set.\n  Example: RHEA_API_URL=https://rhea-abc.a.run.app bash deploy/deploy-all.sh --frontend-only"
+    die "--frontend-only requires RHEA_API_URL to be set.
+  Example: RHEA_API_URL=https://rhea-abc.a.run.app bash deploy/deploy-all.sh --frontend-only"
   fi
 fi
 
@@ -176,14 +175,16 @@ check_prereqs() {
     check_cmd docker  "Docker"     "install from https://docs.docker.com/get-docker/"
   fi
 
-  # vercel — required for frontend deploy
+  # firebase — required for frontend deploy
   if [ "$DEPLOY_FRONTEND" = "true" ]; then
-    if command -v vercel >/dev/null 2>&1; then
-      ok "vercel CLI found: $(command -v vercel)"
+    if command -v firebase >/dev/null 2>&1; then
+      ok "firebase CLI found: $(command -v firebase)"
     else
-      warn "vercel CLI not found — deploy/vercel/deploy.sh will install it via npm"
-      check_cmd npm "npm (for vercel install)" "install Node.js from https://nodejs.org/"
+      err "firebase CLI not found — install with: npm i -g firebase-tools"
+      err "Then authenticate: firebase login"
+      missing=$((missing + 1))
     fi
+    check_cmd npm "npm (for Next.js build)" "install Node.js from https://nodejs.org/"
   fi
 
   # SSH key — optional, but needed for Oracle VM work
@@ -264,49 +265,74 @@ deploy_backend() {
 }
 
 # ---------------------------------------------------------------------------
-# Deploy: Vercel frontend
+# Deploy: Firebase Hosting frontend
 # ---------------------------------------------------------------------------
 deploy_frontend() {
-  step "Deploying frontend to Vercel"
+  step "Deploying frontend to Firebase Hosting"
 
-  if [ ! -f "${VERCEL_DEPLOY}" ]; then
-    die "Vercel deploy script not found: ${VERCEL_DEPLOY}"
+  if [ ! -f "${FIREBASE_DEPLOY}" ]; then
+    die "Firebase deploy script not found: ${FIREBASE_DEPLOY}"
   fi
 
   if [ -z "${CLOUDRUN_URL:-}" ]; then
-    die "CLOUDRUN_URL is empty — cannot pass RHEA_API_URL to Vercel deploy."
+    die "CLOUDRUN_URL is empty — cannot pass NEXT_PUBLIC_RHEA_API to Firebase deploy."
   fi
 
   if [ "$DRY_RUN" = "true" ]; then
-    dim "  [dry-run] Would execute: bash ${VERCEL_DEPLOY}"
-    dim "  [dry-run]   RHEA_API_URL=${CLOUDRUN_URL}"
-    VERCEL_URL="https://rhea-atlas-DRY-RUN.vercel.app"
+    dim "  [dry-run] Would execute: bash ${FIREBASE_DEPLOY}"
+    dim "  [dry-run]   NEXT_PUBLIC_RHEA_API=${CLOUDRUN_URL}"
+    FIREBASE_URL="https://rhea-DRY-RUN.web.app"
     return 0
   fi
 
-  info "Running: RHEA_API_URL=${CLOUDRUN_URL} bash ${VERCEL_DEPLOY}"
+  info "Running: NEXT_PUBLIC_RHEA_API=${CLOUDRUN_URL} bash ${FIREBASE_DEPLOY}"
   newline
 
-  VERCEL_RAW_OUTPUT="$(RHEA_API_URL="${CLOUDRUN_URL}" \
-    VERCEL_TOKEN="${VERCEL_TOKEN:-}" \
-    VERCEL_ORG_ID="${VERCEL_ORG_ID:-}" \
-    bash "${VERCEL_DEPLOY}" 2>&1 | tee /dev/stderr)" || die "Vercel deploy failed — see output above."
+  FIREBASE_RAW_OUTPUT="$(NEXT_PUBLIC_RHEA_API="${CLOUDRUN_URL}" \
+    FIREBASE_PROJECT="${FIREBASE_PROJECT:-}" \
+    bash "${FIREBASE_DEPLOY}" 2>&1 | tee /dev/stderr)" || die "Firebase Hosting deploy failed — see output above."
 
-  VERCEL_URL="$(printf '%s' "${VERCEL_RAW_OUTPUT}" | grep -E '^https://' | tail -1 || true)"
+  FIREBASE_URL="$(printf '%s' "${FIREBASE_RAW_OUTPUT}" | grep -E '^https://' | tail -1 || true)"
 
-  if [ -z "${VERCEL_URL}" ]; then
-    warn "Could not parse Vercel deployment URL from output — check Vercel dashboard."
-    VERCEL_URL="(check vercel.com/dashboard)"
+  if [ -z "${FIREBASE_URL}" ]; then
+    warn "Could not parse Firebase Hosting URL from output — check Firebase Console."
+    FIREBASE_URL="(check console.firebase.google.com)"
   fi
 
-  ok "Vercel deployment URL: ${VERCEL_URL}"
+  ok "Firebase Hosting URL: ${FIREBASE_URL}"
 }
 
 # ---------------------------------------------------------------------------
-# Oracle: print manual instructions (cannot auto-deploy)
+# Redis Cloud: print setup instructions (managed, no VM required)
+# ---------------------------------------------------------------------------
+print_redis_cloud_instructions() {
+  step "Redis Cloud (cache / session layer)"
+
+  printf "${YELLOW}"
+  cat <<'REDIS_CLOUD'
+  Redis Cloud free tier provides 30 MB of managed Redis — no VM to provision.
+
+  Quick-start:
+  ─────────────────────────────────────────────────────────────────────────────
+  1. Sign up at: https://redis.com/try-free/
+  2. Create a free database (30 MB, no credit card required).
+  3. Copy the Redis URL from the dashboard (format: redis://:<password>@<host>:<port>)
+  4. Inject the URL into Cloud Run:
+       gcloud run services update rhea-backend \
+           --region us-central1 \
+           --set-env-vars "REDIS_URL=redis://:<password>@<host>:<port>"
+  ─────────────────────────────────────────────────────────────────────────────
+
+  Redis Cloud handles persistence, replication, and TLS automatically.
+REDIS_CLOUD
+  printf "${NC}"
+}
+
+# ---------------------------------------------------------------------------
+# Oracle: print manual instructions (backup + monitoring layer)
 # ---------------------------------------------------------------------------
 print_oracle_instructions() {
-  step "Oracle Cloud VM (persistence layer)"
+  step "Oracle Cloud VM (backup + monitoring layer)"
 
   printf "${YELLOW}"
   cat <<'ORACLE'
@@ -321,16 +347,10 @@ print_oracle_instructions() {
   # Upload scripts and run setup:
   scp deploy/oracle/setup-vm.sh deploy/oracle/docker-compose.yml \
       ${VM_USER}@${VM_IP}:~/
-  ssh ${VM_USER}@${VM_IP} \
-      "REDIS_PASSWORD='your-strong-secret-32plus-chars' bash setup-vm.sh"
-
-  # Then update Cloud Run env:
-  gcloud run services update rhea-backend \
-      --region us-central1 \
-      --set-env-vars "REDIS_URL=redis://:your-secret@${VM_IP}:6379"
-  ─────────────────────────────────────────────────────────────────────────────
+  ssh ${VM_USER}@${VM_IP} "bash setup-vm.sh"
 
   Full instructions: deploy/oracle/README.md
+  ─────────────────────────────────────────────────────────────────────────────
 ORACLE
   printf "${NC}"
 }
@@ -370,12 +390,12 @@ run_health_checks() {
     health_check_url "Cloud Run health" "${CLOUDRUN_URL}" "/health"
   fi
 
-  if [ "$DEPLOY_FRONTEND" = "true" ] && [ -n "${VERCEL_URL:-}" ]; then
-    # Vercel dashboard URL falls back message — skip health check in that case
-    if printf '%s' "${VERCEL_URL}" | grep -q '^https://'; then
-      health_check_url "Vercel UI       " "${VERCEL_URL}" "/"
+  if [ "$DEPLOY_FRONTEND" = "true" ] && [ -n "${FIREBASE_URL:-}" ]; then
+    # Firebase Console URL falls back message — skip health check in that case
+    if printf '%s' "${FIREBASE_URL}" | grep -q '^https://'; then
+      health_check_url "Firebase UI     " "${FIREBASE_URL}" "/"
     else
-      warn "Skipping Vercel health check — URL not available (check dashboard)."
+      warn "Skipping Firebase health check — URL not available (check Firebase Console)."
     fi
   fi
 }
@@ -390,12 +410,6 @@ print_summary() {
   printf "  %-24s  %-52s  %s\n" "Layer" "URL" "Cost"
   printf "  %-24s  %-52s  %s\n" "────────────────────────" "────────────────────────────────────────────────────" "──────"
   printf "${NC}"
-
-  # Oracle VM row — always shown as manual
-  printf "  %-24s  %-52s  %s\n" \
-    "Oracle VM (Redis 7)" \
-    "(manual — see deploy/oracle/README.md)" \
-    "\$0/mo"
 
   # Cloud Run row
   if [ "$DEPLOY_BACKEND" = "true" ]; then
@@ -412,14 +426,26 @@ print_summary() {
     fi
   fi
 
-  # Vercel row
+  # Firebase Hosting row
   if [ "$DEPLOY_FRONTEND" = "true" ]; then
-    local vc_url="${VERCEL_URL:-not deployed}"
+    local fb_url="${FIREBASE_URL:-not deployed}"
     printf "  %-24s  %-52s  %s\n" \
-      "Vercel (Next.js UI)" \
-      "${vc_url}" \
+      "Firebase Hosting (UI)" \
+      "${fb_url}" \
       "\$0/mo"
   fi
+
+  # Redis Cloud row — always shown as manual
+  printf "  %-24s  %-52s  %s\n" \
+    "Redis Cloud" \
+    "(manual — see redis.com/try-free)" \
+    "\$0/mo"
+
+  # Oracle VM row — always shown as manual
+  printf "  %-24s  %-52s  %s\n" \
+    "Oracle VM (backup)" \
+    "(manual — see deploy/oracle/README.md)" \
+    "\$0/mo"
 
   newline
   printf "${BOLD}${GREEN}"
@@ -428,10 +454,11 @@ print_summary() {
 
   newline
   printf "${DIM}  Cost breakdown:\n"
-  printf "    Oracle A1.Flex VM   — Always Free (permanent, no expiry)\n"
-  printf "    Cloud Run           — Free tier: 2M requests/mo, 360K GB-s/mo, 180K vCPU-s/mo\n"
-  printf "    Vercel Hobby        — Free tier: 100 deployments/day, 100 GB bandwidth/mo\n"
-  printf "    GCP Artifact Reg.   — First 0.5 GB/month free; minimal Docker image storage\n"
+  printf "    Google Cloud Run      — Free tier: 2M requests/mo, 360K GB-s/mo, 180K vCPU-s/mo\n"
+  printf "    Firebase Hosting      — Free tier: 10 GB storage, 360 MB/day transfer, global CDN\n"
+  printf "    Redis Cloud           — Free tier: 30 MB managed Redis (no VM, no ops)\n"
+  printf "    Oracle A1.Flex VM     — Always Free: 4 OCPU, 24 GB RAM (backup + monitoring)\n"
+  printf "    GCP Artifact Registry — First 0.5 GB/month free; minimal Docker image storage\n"
   printf "${NC}"
 }
 
@@ -448,14 +475,15 @@ main() {
 
   # Show deploy plan
   info "Deploy plan:"
-  if [ "$DEPLOY_BACKEND" = "true" ];  then dim "  - Cloud Run backend (deploy/cloudrun/deploy.sh)"; fi
-  if [ "$DEPLOY_FRONTEND" = "true" ]; then dim "  - Vercel frontend   (deploy/vercel/deploy.sh)"; fi
-  dim "  - Oracle VM: instructions only (manual step)"
+  if [ "$DEPLOY_BACKEND" = "true" ];  then dim "  - Cloud Run backend      (deploy/cloudrun/deploy.sh)"; fi
+  if [ "$DEPLOY_FRONTEND" = "true" ]; then dim "  - Firebase Hosting UI    (deploy/firebase/deploy.sh)"; fi
+  dim "  - Redis Cloud: instructions only (managed service)"
+  dim "  - Oracle VM:   instructions only (manual step)"
   newline
 
   # Initialize URL variables (may or may not be populated depending on flags)
   CLOUDRUN_URL="${RHEA_API_URL:-}"
-  VERCEL_URL=""
+  FIREBASE_URL=""
 
   check_prereqs
 
@@ -464,20 +492,21 @@ main() {
     deploy_backend
   else
     info "Skipping Cloud Run deploy (--frontend-only)"
-    if [ -z "${CLOUDRUN_URL}" ]; then
+    if [ -z "${CLOUDRUN_URL:-}" ]; then
       die "RHEA_API_URL must be set when skipping the backend deploy."
     fi
     info "Using provided RHEA_API_URL: ${CLOUDRUN_URL}"
   fi
 
-  # ── Step 2: Vercel frontend ────────────────────────────────────────────────
+  # ── Step 2: Firebase Hosting frontend ─────────────────────────────────────
   if [ "$DEPLOY_FRONTEND" = "true" ]; then
     deploy_frontend
   else
-    info "Skipping Vercel deploy (--backend-only)"
+    info "Skipping Firebase Hosting deploy (--backend-only)"
   fi
 
-  # ── Step 3: Oracle instructions ────────────────────────────────────────────
+  # ── Step 3: Redis Cloud + Oracle instructions ──────────────────────────────
+  print_redis_cloud_instructions
   print_oracle_instructions
 
   # ── Step 4: Health checks ──────────────────────────────────────────────────
