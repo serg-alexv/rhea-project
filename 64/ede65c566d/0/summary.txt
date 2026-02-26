@@ -1,0 +1,36 @@
+No PR exists for `entire/checkpoints/v1`. The branch exists both locally and on remote. To pull it:
+
+```
+git checkout entire/checkpoints/v1
+git pull origin entire/checkpoints/v1
+```
+
+Or if you want to merge it into main:
+```
+git checkout main
+git merge entire/checkpoints/v1
+```
+
+---
+
+## Session Status
+
+| Task | Status |
+|------|--------|
+| **Secret scanning** | **FIXED** — 14/14 alerts resolved as revoked, 0 open |
+| **Hardcoded Firebase key** | **FIXED** — moved to env var in rhea_firebase.py |
+| **5 stale remote branches** | **DELETED** — GC triggered |
+| **Orion (Gemini)** | **FIXED** — dead key in .env replaced with working system env key |
+| **Ruliad plugins** | **DONE** — 5 plugins with real math backends, 3159 lines |
+| **Tribunal math-verify** | **WIRED** — `/tribunal/math-verify` endpoint added |
+| **Benchmark** | **55/60 → 142/144 (98%)** |
+| **Git state** | **Clean** — main pushed, 0 open alerts |
+
+**Model responses from the meeting:**
+- **Orion**: Target a tangible data problem, chain the plugins, record the demo
+- **DeepSeek**: Pick a concrete visualizable problem, build a single clean pipeline, show before/after vs plain LLM
+- **GPT-4o**: Key dead (needs rotation — `sk-proj-tqhut...` is invalid)
+
+`★ Insight ─────────────────────────────────────`
+The orphaned commit problem is a subtle git security issue — `git filter-branch` and `git filter-repo` only rewrite commits reachable from branches, but GitHub stores ALL objects (including from force-pushed or deleted branches). The only way to truly purge orphaned objects from GitHub is to contact GitHub support, or mark alerts as "revoked" and rotate the compromised keys. Key rotation is always the right answer — purging history is defense-in-depth, not a substitute.
+`─────────────────────────────────────────────────`

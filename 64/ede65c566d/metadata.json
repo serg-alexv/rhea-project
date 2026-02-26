@@ -1,0 +1,28 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "64ede65c566d",
+  "strategy": "auto-commit",
+  "branch": "main",
+  "checkpoints_count": 1,
+  "files_touched": [
+    ".env",
+    ".rhea/backups/env.bak",
+    "opera/ops/rhea_firebase.py"
+  ],
+  "sessions": [
+    {
+      "metadata": "/64/ede65c566d/0/metadata.json",
+      "transcript": "/64/ede65c566d/0/full.jsonl",
+      "context": "",
+      "content_hash": "/64/ede65c566d/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 57,
+    "cache_creation_tokens": 45444,
+    "cache_read_tokens": 7097872,
+    "output_tokens": 21073,
+    "api_call_count": 51
+  }
+}
