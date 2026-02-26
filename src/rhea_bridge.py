@@ -166,6 +166,7 @@ MODEL_TIERS = {
             "gemini/gemini-3.1-pro-preview",
             "gemini/gemini-3-pro-preview",
             "gemini/gemini-2.5-pro",
+            "openai/gpt-5",
             "openai/gpt-4.5-preview",
             "openai/o3",
             "openrouter/qwen/qwen3-235b-a22b",
@@ -194,6 +195,7 @@ MODEL_TIERS = {
             "openrouter/qwen/qwen-2.5-72b-instruct",
             "openrouter/deepseek/deepseek-r1",
             "openai/o3",
+            "openai/gpt-5",
             "openai/gpt-4.5-preview",
             "openrouter/meta-llama/llama-4-behemoth",
         ],
@@ -347,7 +349,7 @@ PROVIDERS = {
         base_url="https://api.openai.com/v1",
         api_key_env="OPENAI_API_KEY",
         models=[
-            "gpt-4o", "gpt-4o-mini",
+            "gpt-4o", "gpt-4o-mini", "gpt-5",
             "gpt-4.1", "gpt-4.1-mini", "gpt-4.1-nano",
             "o3", "o3-mini", "o4-mini",
             "gpt-4.5-preview",
@@ -409,7 +411,7 @@ PROVIDERS = {
         base_url=os.environ.get("AZURE_ENDPOINT", ""),
         api_key_env="AZURE_API_KEY",
         models=[
-            "gpt-4o", "gpt-4o-mini",
+            "gpt-4o", "gpt-4o-mini", "gpt-5",
         ],
         call_method="azure_openai",
     ),
