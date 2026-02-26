@@ -1,0 +1,26 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "6e8a728e1e17",
+  "strategy": "auto-commit",
+  "branch": "hyperion/memory",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "ops/virtual-office/inbox/REX_TO_ORION_20260226_RISK_ANSWERS.md"
+  ],
+  "sessions": [
+    {
+      "metadata": "/6e/8a728e1e17/0/metadata.json",
+      "transcript": "/6e/8a728e1e17/0/full.jsonl",
+      "context": "",
+      "content_hash": "/6e/8a728e1e17/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 30,
+    "cache_creation_tokens": 19090,
+    "cache_read_tokens": 1612218,
+    "output_tokens": 2590,
+    "api_call_count": 12
+  }
+}
