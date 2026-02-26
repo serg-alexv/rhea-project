@@ -6,6 +6,11 @@ import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { ContextDensity } from '@/store/useAtlasStore';
 import DensityField from '@/components/DensityField';
+import ErebusRing from '@/components/rings/ErebusRing';
+import ChronosRing from '@/components/rings/ChronosRing';
+import ErosRing from '@/components/rings/ErosRing';
+import TethysRing from '@/components/rings/TethysRing';
+import PhoebeRing from '@/components/rings/PhoebeRing';
 
 function hexToRgb(hex: string): [number, number, number] {
   const clean = hex.replace('#', '');
@@ -35,6 +40,46 @@ function hashText(input: string): number {
     h = Math.imul(h, 16777619);
   }
   return h >>> 0;
+}
+
+function averageMagnitude(vectors: ContextDensity['vectorField']): number {
+  if (!vectors.length) return 0.2;
+  return vectors.reduce((sum, v) => sum + v.magnitude, 0) / vectors.length;
+}
+
+function buildTethysDots(density: ContextDensity): Array<{ ontology: string; count: number; color?: string }> {
+  const dots: Array<{ ontology: string; count: number; color?: string }> = [
+    {
+      ontology: density.ontology || density.label || 'general',
+      count: Math.max(1, density.sampleCount),
+      color: density.color,
+    },
+  ];
+
+  const motion = Math.round(Math.max(1, density.vectorField.length / 3));
+  dots.push({
+    ontology: density.consistency >= 0.75 ? 'aligned' : 'cross-check',
+    count: motion,
+    color: density.consistency >= 0.75 ? '#22d3ee' : '#fb7185',
+  });
+
+  if (density.sampleCount >= 4) {
+    dots.push({
+      ontology: 'archive',
+      count: Math.max(1, Math.round(density.sampleCount / 2)),
+      color: '#c4b5fd',
+    });
+  }
+
+  if (density.consistency < 0.6) {
+    dots.push({
+      ontology: 'skeptic',
+      count: Math.max(1, Math.round((1 - density.consistency) * 6)),
+      color: '#f59e0b',
+    });
+  }
+
+  return dots.slice(0, 5);
 }
 
 function DensityLabel({ density }: { density: ContextDensity }) {
@@ -157,6 +202,11 @@ function SphereField({ density }: { density: ContextDensity }) {
   const ringRef = useRef<THREE.Mesh>(null);
   const seed = useMemo(() => hashText(`${density.id}:sphere`), [density.id]);
   const radius = 0.5 + density.density * 1.5;
+  const meanFlow = useMemo(() => averageMagnitude(density.vectorField), [density.vectorField]);
+  const tethysDots = useMemo(() => buildTethysDots(density), [density]);
+  const showErebus = density.density > 0.7;
+  const showMidRings = density.density > 0.8;
+  const showFullRings = density.density > 0.9;
 
   useFrame((state) => {
     if (meshRef.current) {
@@ -184,9 +234,26 @@ function SphereField({ density }: { density: ContextDensity }) {
         />
       </mesh>
       <mesh ref={ringRef} rotation={[Math.PI / 2, 0, 0]}>
-        <ringGeometry args={[radius * 1.12, radius * 1.18, 64]} />
+        <ringGeometry args={[radius * 1.03, radius * 1.07, 64]} />
         <meshBasicMaterial color={density.color} transparent opacity={0.12 + density.consistency * 0.35} side={THREE.DoubleSide} />
       </mesh>
+      {showErebus && (
+        <group>
+          <ErebusRing radius={radius} auditCount={density.sampleCount + density.vectorField.length} />
+          {showMidRings && (
+            <>
+              <ChronosRing radius={radius} count={density.sampleCount} recencyBias={1.05 + (1 - density.consistency) * 0.5} />
+              <ErosRing radius={radius} agreement={density.consistency} />
+            </>
+          )}
+          {showFullRings && (
+            <>
+              <TethysRing radius={radius} dots={tethysDots} />
+              <PhoebeRing radius={radius} confidence={density.consistency} changeRate={meanFlow * 2} />
+            </>
+          )}
+        </group>
+      )}
       <DensityField vectors={density.vectorField} color={shade(density.color, 1.2, 1)} maxArrows={18} />
       <DensityLabel density={density} />
     </group>
@@ -219,4 +286,3 @@ export default function OceanusFlow({ densities }: { densities: ContextDensity[]
     </group>
   );
 }
-

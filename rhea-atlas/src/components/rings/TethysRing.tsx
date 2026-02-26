@@ -17,7 +17,10 @@ export default function TethysRing({
   radius: number;
   dots: TethysDot[];
 }) {
-  const safeDots = dots.length ? dots : [{ ontology: 'general', count: 1, color: '#67e8f9' }];
+  const safeDots = useMemo(
+    () => (dots.length ? dots : [{ ontology: 'general', count: 1, color: '#67e8f9' }]),
+    [dots],
+  );
 
   const placements = useMemo(() => {
     const step = (Math.PI * 2) / safeDots.length;
@@ -55,4 +58,3 @@ export default function TethysRing({
 function toRad(deg: number): number {
   return (deg * Math.PI) / 180;
 }
-
