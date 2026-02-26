@@ -62,13 +62,16 @@ Constraints:   HC-1..HC-5 above
 
 ## 7. Tribunal Rules
 
-Triggered for any of:
-- Memory policy change
-- Checkpoint policy change
-- Self-upgrade that increases permissions
-- Build system or Xcode project modifications
+Auto-Tribunal is triggered for any of the following high-stakes events:
+1. **Policy Shifts:** Any change to Memory (pruning/storage) or Checkpoint (audit trail) protocols.
+2. **Permission Escalation:** Self-upgrades or configuration changes that increase agent access to host system, network, or secrets.
+3. **Core Infrastructure:** Modifications to Build Systems (Xcode, Makefile), Docker/Fly configs, or core routing (`rhea_bridge.py`).
+4. **Low Confidence:** Any P0 implementation task where the primary agent's confidence score is < 70%.
+5. **Cost Threshold:** Any single autonomous operation with an estimated cost > $2.00 USD.
+6. **Dependency Injection:** Introduction of new third-party libraries, external APIs, or MCP servers.
+7. **Architectural Drift:** Any session that results in a D-metric increase of > 50 points.
 
-Procedure: 3-5 diverse models/providers, consensus threshold, produce options A/B/C with risks + verdict.
+Procedure: 3-5 diverse models/providers (Science Tier), consensus threshold (≥60%), produce options A/B/C with risks + verdict.
 
 ## 8. Required Artifacts
 

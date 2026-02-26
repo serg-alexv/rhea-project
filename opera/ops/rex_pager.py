@@ -1174,6 +1174,20 @@ def main():
             token = lease.get("lease_token", 0)
             ok = renew_lease(target, token)
             print(f"[lease] {target} renew: {'OK' if ok else 'FAILED (expired or stale)'}")
+        elif "--verify" in sys.argv:
+            idx = sys.argv.index("--verify")
+            if idx + 1 < len(sys.argv):
+                try:
+                    token = int(sys.argv[idx + 1])
+                    if verify_lease(target, token):
+                        print(f"OK: Lease {token} for {target} is valid")
+                        sys.exit(0)
+                    else:
+                        print(f"FAIL: Lease {token} for {target} is invalid or expired")
+                        sys.exit(1)
+                except ValueError:
+                    print(f"ERROR: Invalid token '{sys.argv[idx+1]}'")
+                    sys.exit(1)
         else:
             lease = get_lease(target)
             print(json.dumps(lease, indent=2))

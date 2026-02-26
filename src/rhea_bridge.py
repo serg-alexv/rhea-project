@@ -67,6 +67,19 @@ def redact_secrets(text: str) -> str:
 # ---------------------------------------------------------------------------
 
 @dataclass
+class ChronosMessage:
+    sender: str
+    receiver: str
+    task_id: str
+    msg_type: str  # request, response, escalation, review
+    priority: str  # critical, high, normal, low
+    payload: dict
+    dependencies: list = field(default_factory=list)
+    deadline: Optional[str] = None
+    timestamp: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+
+
+@dataclass
 class ModelResponse:
     provider: str
     model: str
@@ -217,9 +230,10 @@ PRICE_TABLE = {
 
 PRICE_DEFAULT = (1.00, 3.00)  # fallback for unknown models
 
-# Log file path (relative to project root)
+# Log file paths (relative to project root)
 _PROJECT_ROOT = Path(__file__).resolve().parent.parent
 CALL_LOG_PATH = _PROJECT_ROOT / "logs" / "bridge_calls.jsonl"
+CHRONOS_LOG_PATH = _PROJECT_ROOT / "logs" / "chronos_relay.jsonl"
 
 
 # ---------------------------------------------------------------------------
@@ -622,6 +636,30 @@ class RheaBridge:
             k=k,
             elapsed_s=round(elapsed, 2),
         )
+
+    def send_chronos(self, message: ChronosMessage) -> bool:
+        """Log and relay a CHRONOS inter-agent message."""
+        self._log_chronos(message)
+        
+        # Relay to Firebase if possible
+        try:
+            from opera.ops import rhea_firebase
+            # Format message for firebase send command
+            formatted = f"TASK:{message.task_id} TYPE:{message.msg_type} PRIO:{message.priority} PAYLOAD:{json.dumps(message.payload)}"
+            rhea_firebase.cmd_send(message.sender, message.receiver, formatted)
+            return True
+        except Exception:
+            return False
+
+    def _log_chronos(self, message: ChronosMessage):
+        """Append a CHRONOS message to the relay ledger."""
+        CHRONOS_LOG_PATH.parent.mkdir(parents=True, exist_ok=True)
+        record = asdict(message)
+        try:
+            with open(CHRONOS_LOG_PATH, "a") as f:
+                f.write(redact_secrets(json.dumps(record)) + "\n")
+        except OSError:
+            pass
 
     def models_status(self) -> dict:
         """Return provider availability and model counts."""
@@ -1071,6 +1109,27 @@ def main():
         analyzer = ConsensusAnalyzer(bridge=bridge)
         report = analyzer.analyze_ice(prompt, k=k, rounds=rounds, tier=tier)
         print(json.dumps(report.to_dict(), indent=2))
+
+    elif cmd == "send-chronos":
+        if len(sys.argv) < 7:
+            print("Usage: rhea_bridge.py send-chronos <sender> <receiver> <task_id> <type> <priority> <payload_json>")
+            sys.exit(1)
+        try:
+            payload = json.loads(sys.argv[7])
+        except json.JSONDecodeError:
+            print("ERROR: Invalid JSON for payload")
+            sys.exit(1)
+            
+        msg = ChronosMessage(
+            sender=sys.argv[2],
+            receiver=sys.argv[3],
+            task_id=sys.argv[4],
+            msg_type=sys.argv[5],
+            priority=sys.argv[6],
+            payload=payload
+        )
+        success = bridge.send_chronos(msg)
+        print(json.dumps({"success": success, "message": "CHRONOS message logged and relayed"}, indent=2))
 
     elif cmd == "daily-summary":
         date_arg = None

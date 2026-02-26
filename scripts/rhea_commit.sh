@@ -43,6 +43,17 @@ fi
 
 # Step 1: Start Entire.io session
 log "Starting Entire.io session..."
+
+# QWRR Lease Fencing (I5: No zombie effects)
+if [ -n "${RHEA_AGENT_ID:-}" ] && [ -n "${RHEA_LEASE_TOKEN:-}" ]; then
+    log "Verifying lease for $RHEA_AGENT_ID (token: $RHEA_LEASE_TOKEN)..."
+    if ! python3 opera/ops/rex_pager.py lease "$RHEA_AGENT_ID" --verify "$RHEA_LEASE_TOKEN" >/dev/null 2>&1; then
+        err "Lease verification FAILED. Fencing token stale or expired. [ZOMBIE PREVENTION]"
+        exit 1
+    fi
+    log "Lease valid."
+fi
+
 if entire hooks git session-start 2>/dev/null; then
     SESSION_STARTED=true
     log "Session started"
@@ -100,6 +111,15 @@ fi
 
 COMMIT_SHA=$(git rev-parse --short HEAD)
 log "Done! Commit ${COMMIT_SHA} with Entire.io checkpoint pipeline"
+
+# Step 5.5: CI Enforcement (Task #16)
+log "Running CI enforcement check..."
+if git log -1 --pretty=%B | grep -q "Entire-Checkpoint:"; then
+    log "CI enforcement: Checkpoint trailer found. [PASS]"
+else
+    warn "CI enforcement: Checkpoint trailer MISSING. This commit violates protocol HC-4."
+    warn "Ensure 'entire' CLI is properly configured and session was started."
+fi
 
 # Step 6: D-metric check
 log "Running D-metric check..."
