@@ -1,0 +1,25 @@
+Done. Here's the audit result:
+
+## Cross-File Collision Check
+
+The original memo had **5 action items for Orion**. Rex's swarm already completed 4 of them:
+
+| Item | Status | Risk to Orion |
+|------|--------|---------------|
+| 1. Env var rename | ~~DONE BY REX~~ | `lib/config.ts` created, both hooks/components rewired. **Orion must NOT recreate local API_BASE** |
+| 2. Hardcoded localhost | ~~DONE BY REX~~ | `page.tsx` uses `API_BASE` import now |
+| 3. vercel.json placeholder | ~~DONE BY REX~~ | Rewrites removed entirely — direct `NEXT_PUBLIC_RHEA_API` fetch |
+| 4. Three.js SSR audit | **Orion's task** | No cross-file risk — just verify `next build` passes |
+| 5. /health endpoint | ~~DONE BY REX~~ | `src/app/api/health/route.ts` exists |
+| 6. Cold-start UX | **Orion's task** | Only touches ResearchPanel — safe zone |
+
+**New memo written** → `inbox/REX_TO_ORION_20260226_REMAINING_ITEMS.md` with:
+- Explicit table of every file Rex touched (safe/danger zones)
+- Only 2 remaining items (both non-blocking)
+- Auth integration notes for the code-worm
+- Deploy commands
+
+`★ Insight ─────────────────────────────────────`
+- **The stale memo problem is real in multi-agent systems.** Rex's memo told Orion to fix 5 things, but by the time Orion reads it, 4 were already done by Rex's parallel swarm. Without the audit, Orion would have either: (a) duplicated work, or (b) worse — overwritten Rex's changes with a different approach, breaking imports.
+- **"Cross-file dependency maps" are essential** when multiple agents edit the same codebase. The table in the new memo (file → who changed it → what they did) prevents collision. This is the multi-agent equivalent of a merge conflict — except it happens at the design level, not git level.
+`─────────────────────────────────────────────────`
