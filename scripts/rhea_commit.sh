@@ -100,3 +100,13 @@ fi
 
 COMMIT_SHA=$(git rev-parse --short HEAD)
 log "Done! Commit ${COMMIT_SHA} with Entire.io checkpoint pipeline"
+
+# Step 6: D-metric check
+log "Running D-metric check..."
+if python3 scripts/compute_d_metric.py; then
+    log "D-metric is within threshold."
+else
+    warn "D-metric exceeds threshold T2. [SPRINT NEEDED]"
+    warn "D=$(python3 scripts/compute_d_metric.py 2>/dev/null || echo '?') — consider running Reflexive Sprint."
+fi
+
