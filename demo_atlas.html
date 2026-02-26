@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rhea Ruliadic Atlas - Concept Proof</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        body { margin: 0; background: #050505; color: white; font-family: 'Inter', sans-serif; overflow: hidden; }
+        canvas { display: block; }
+        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .hud { position: absolute; top: 20px; left: 20px; z-index: 10; }
+        .tokenmeter { position: absolute; bottom: 20px; right: 20px; width: 100px; height: 100px; border-radius: 50%; border: 2px solid #00FFFF; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 20px #00FFFF; }
+    </style>
+</head>
+<body>
+    <div class="hud glass p-6 rounded-xl w-80">
+        <h1 class="text-cyan-400 font-bold text-xl mb-2">RULIADIC ATLAS v5.0</h1>
+        <p class="text-xs text-gray-400 uppercase tracking-widest mb-4">Node: ORION-02 | Sector: Science</p>
+        <div class="space-y-3">
+            <div class="flex justify-between text-sm"><span>D-Metric</span><span class="text-cyan-400">243.8</span></div>
+            <div class="w-full bg-gray-800 h-1 rounded-full"><div class="bg-cyan-400 h-1 rounded-full" style="width: 70%"></div></div>
+            <div class="flex justify-between text-sm"><span>Consensus</span><span class="text-green-400">94%</span></div>
+        </div>
+        <hr class="my-4 border-gray-800">
+        <div class="text-xs text-cyan-300 animate-pulse">📡 BROADCASTING: Paxos-Vagal Isomorphism...</div>
+    </div>
+
+    <div class="tokenmeter">
+        <span class="text-xs font-bold text-cyan-400">FREE TIER</span>
+    </div>
+
+    <script>
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // Starfield
+        const starGeo = new THREE.BufferGeometry();
+        const starCount = 5000;
+        const posArray = new Float32Array(starCount * 3);
+        for(let i=0; i<starCount*3; i++) { posArray[i] = (Math.random() - 0.5) * 100; }
+        starGeo.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+        const starMat = new THREE.PointsMaterial({ size: 0.05, color: 0x444444 });
+        const stars = new THREE.Points(starGeo, starMat);
+        scene.add(stars);
+
+        // Islands (Procedural Logic Mountains)
+        function createIsland(x, z, color) {
+            const geo = new THREE.IcosahedronGeometry(1, 4);
+            const mat = new THREE.MeshPhongMaterial({ color: color, wireframe: true, transparent: true, opacity: 0.6 });
+            const mesh = new THREE.Mesh(geo, mat);
+            mesh.position.set(x, 0, z);
+            scene.add(mesh);
+            return mesh;
+        }
+
+        const bio = createIsland(-3, 0, 0x00ff00);
+        const math = createIsland(3, 0, 0x00ffff);
+
+        // The Isomorphic Beam (The Wow)
+        const lineMat = new THREE.LineBasicMaterial({ color: 0x00ffff });
+        const points = [];
+        points.push(new THREE.Vector3(-3, 0, 0));
+        points.push(new THREE.Vector3(3, 0, 0));
+        const lineGeo = new THREE.BufferGeometry().setFromPoints(points);
+        const line = new THREE.Line(lineGeo, lineMat);
+        scene.add(line);
+
+        const light = new THREE.PointLight(0xffffff, 1, 100);
+        light.position.set(0, 10, 10);
+        scene.add(light);
+        scene.add(new THREE.AmbientLight(0x222222));
+
+        camera.position.z = 8;
+
+        function animate() {
+            requestAnimationFrame(animate);
+            bio.rotation.y += 0.01;
+            math.rotation.y += 0.01;
+            stars.rotation.y += 0.0005;
+            // Pulsing logic
+            const s = 1 + Math.sin(Date.now() * 0.002) * 0.1;
+            bio.scale.set(s,s,s);
+            math.scale.set(s,s,s);
+            renderer.render(scene, camera);
+        }
+        animate();
+    </script>
+</body>
+</html>
