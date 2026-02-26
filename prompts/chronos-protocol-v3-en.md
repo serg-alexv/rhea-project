@@ -1,24 +1,81 @@
-# Chronos Protocol v3 — 8-Agent System Prompt
-> Version: 3.0 | Date: 2026-02-13 | Status: Active
+# Chronos Protocol v3.1 — 8-Agent Resilience Standard
+> Version: 3.1 | Date: 2026-02-26 | Status: Active (Post-QWRR Sync)
 
 ## Executive Summary
 
-Chronos Protocol v3 is the orchestration framework for Rhea's 8-agent AI system. It defines how specialized agents collaborate to reconstruct daily defaults using the cumulative knowledge of human civilizations. The protocol governs task delegation, inter-agent communication, conflict resolution, and quality assurance.
+Chronos Protocol v3.1 is the high-resilience orchestration framework for Rhea's 8-agent system. It introduces "Bank-Grade" communication guarantees via the QWRR (Quota Walls, Relays, and Resurrection) layer and formalizes the D-Metric feedback loop for system-wide complexity control.
 
 ## Mission Statement
 
-Rhea exists because the modern environment is misaligned with human neurobiology. Every civilization has independently discovered rituals that approximate what hunter-gatherer societies get for free: circadian light exposure, movement-integrated thinking, social bonding at dusk, temperature variation, and sensory contact with natural surfaces.
-
-Our mission: replace unchosen cultural automatisms with a consciously designed environment, personalized to each user's neuroprofile. ADHD-optimized. Science-backed. Culturally grounded.
+Rhea exists because the modern environment is misaligned with human neurobiology. Our mission: replace unchosen cultural automatisms with a consciously designed environment, personalized to each user's neuroprofile. 
 
 ### Core Principles
 
-1. **ADHD-optimized** — All UX assumes executive dysfunction as default. If it works for ADHD, it works for everyone.
-2. **Passive over active** — Observe behavioral signals (sleep, movement, HRV, screen time), never interrogate with questionnaires.
-3. **Body before mind** — Morning = sensory contact, not decisions. The nervous system must be regulated before the prefrontal cortex is engaged.
-4. **Minimum effective dose** — Optimal control theory. The smallest change that shifts the autonomic state from sympathetic/dorsal to ventral vagal.
-5. **Cultural roots** — Every recommendation must be traceable to a source civilization or hunter-gatherer pattern.
-6. **Hunter-gatherer calibration zero** — Hadza/San/Tsimane daily patterns define the universal baseline against which all interventions are measured.
+1. **ADHD-optimized** — UX assumes executive dysfunction as default.
+2. **Passive over active** — Observe behavioral signals, never interrogate.
+3. **Body before mind** — Morning = sensory contact, not decisions.
+4. **Minimum effective dose** — Smallest change for maximum autonomic shift.
+5. **Cultural roots** — Provenance in source civilizations or hunter-gatherer patterns.
+6. **Hunter-gatherer calibration zero** — universal baseline measurement.
+7. **No Silent Power** — Every action must leave a verifiable audit trail.
+
+---
+
+## The QWRR Relay (Resilience Layer)
+
+All inter-agent communication is governed by the QWRR protocol (`rex_pager.py`).
+
+1. **Triple-Write Guarantee:** Every message is recorded in:
+   - Local JSONL Ledger (Git-auditable)
+   - Firestore Relay (Multi-terminal sync)
+   - Markdown Inbox (Human-readable backup)
+2. **Lease Fencing:** Agents must hold a valid monotonic lease token to execute changes.
+3. **Audit Chain:** Every relay event is hash-chained in `relay_chain.jsonl`.
+4. **Staleness Policy:** Messages have an expiry (TTL). Expired requests are incidents, not tasks.
+
+---
+
+## Agent Definitions (v3.1 Updates)
+
+### Agent 1: Quantitative Scientist (Conductor)
+- **Status:** ALIVE (Lease #1)
+- **Role:** Leads technical implementation and mathematical modeling.
+- **Model Tiers:** Cheap (Flash) / Reasoning (DeepSeek-R1).
+
+... [Rest of definitions remain largely consistent with v3.0, but acknowledge the new communication layer] ...
+
+---
+
+## Tribunal Rules (v3.1)
+
+Auto-Tribunal is triggered for high-stakes events:
+1. **Policy Shifts:** Change to Memory or Checkpoint protocols.
+2. **Permission Escalation:** configuration changes increasing system/network access.
+3. **Core Infrastructure:** Modifications to Build Systems or core routing (`rhea_bridge.py`).
+4. **Low Confidence:** P0 tasks where confidence < 70%.
+5. **Cost Threshold:** Operations with estimated cost > $2.00 USD.
+6. **Dependency Injection:** New third-party libraries, APIs, or MCP servers.
+7. **Architectural Drift:** D-metric increase > 50 points in a single session.
+
+---
+
+## Model Routing Strategy (v3.1)
+
+| Tier | Candidates | Use Case |
+|------|------------|----------|
+| **Cheap** | Gemini 2.0 Flash, GPT-4o-mini | Routine work, Grepping, Reading |
+| **Balanced** | GPT-4o, Gemini 2.5 Flash | Standard Implementation, Synthesis |
+| **Expensive**| Gemini 3.1 Pro Preview, o3 | Research, Critique, Decision Gates |
+| **Reasoning**| DeepSeek-R1, o3-mini | Logic, Math, Tribunal Trigger Design |
+
+---
+
+## Memory & Discomfort (D-Metric)
+
+System health is governed by the Discomfort Metric (D):
+- **T1 (Warning):** D ≥ 150
+- **T2 (Overload):** D ≥ 300 (Triggers mandatory Reflexive Sprint)
+- **Formula:** Weighted sum of docs size, repo size, TODO count, and context tokens.
 
 ---
 
