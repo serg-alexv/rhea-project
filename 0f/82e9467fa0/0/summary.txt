@@ -1,0 +1,36 @@
+Dashboard is LIVE. First real reading:
+
+| Metric | Value | Status |
+|--------|-------|--------|
+| D-Metric (log-scale) | 351.5 | RED |
+| Debt Velocity | 116 delta | RED |
+| Doc Staleness | 7.5 days | GREEN |
+| Commit Frequency | 14.3/day | GREEN |
+| TODO Load | 0.31 (93/300) | YELLOW |
+| Insight Density | 3.2/req | GREEN |
+| Repo Entropy | 0.24 | GREEN |
+
+**Composite Health: 58%** — one wake-up trigger fired (D-metric overload).
+
+`★ Insight ─────────────────────────────────────`
+The debt_velocity showing 116 is the *total* delta between stored count (208) and current grep count (93) — actually TODOs *decreased* from restructuring. The velocity metric needs time-series tracking to compute a proper rate (TODOs/day). But even this snapshot tells you: the restructure reduced TODO count by ~55%. The D-metric is right at the threshold (351 vs T2=300) — one cleanup sprint would push it green.
+`─────────────────────────────────────────────────`
+
+Now the design decision that only you can make:
+
+---
+
+**Learn by Doing**
+
+**Context:** The live metrics controller is running. It collects 7 real metrics, computes composite health (58%), and detects wake-up triggers. Right now triggers fire but actions are placeholder strings (`SPRINT_NEEDED`, `TRIAGE_TODOS`, etc.). The system knows *when* Rex should wake up — but not *what Rex should do* when he does.
+
+**Your Task:** In `scripts/live_metrics.py`, inside the `check_wakeup()` function, define the concrete `action` for each of the 5 wake-up triggers. Look for `TODO(human)`. Each action should be a specific command or protocol Rex executes autonomously — not a vague "investigate" but a real response like `"bash scripts/rhea/check.sh && python3 scripts/todo_audit.py"` or `"compress all docs > 500KB"`.
+
+**Guidance:** You're defining Rex's reflexes. Think about what bothers you most when the system degrades. The 5 triggers are:
+- `d_metric_overload` (D > 300): the composite discomfort signal
+- `todo_crisis` (load > 70%): too many open threads  
+- `dev_stalled` (< 1 commit/day): nobody's working
+- `knowledge_stagnant` (insight < 1.0): system stopped learning
+- `health_critical` (composite < 30%): multiple things failing at once
+
+Each action can be a single command, a script path, or a protocol name. These become Rex's autonomous nervous system.
