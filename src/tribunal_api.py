@@ -37,6 +37,7 @@ from rhea_bridge import RheaBridge
 from consensus_analyzer import ConsensusAnalyzer, math_augment, detect_math_domains
 from rhea_profile_manager import profile_manager
 from rhea_visual_context import update_state, get_health_history
+import aletheia_pipeline as aletheia
 
 # ---------------------------------------------------------------------------
 # App setup
@@ -518,6 +519,20 @@ async def tribunal(req: TribunalRequest):
         "response": tribunal_response.dict(),
     })
 
+    # ── Aletheia capture: persist as proof/hypothesis ──
+    try:
+        aletheia.capture(
+            tribunal_response=tribunal_response.dict(),
+            consensus_report=report,
+            raw_responses=[r.dict() for r in response_models],
+            request_meta={
+                "prompt": req.prompt, "k": req.k, "mode": req.mode,
+                "ontology": _active_ontology, "session_id": None,
+            },
+        )
+    except Exception as e:
+        print(f"[aletheia] capture error: {e}")
+
     return tribunal_response
 
 
@@ -550,7 +565,7 @@ async def tribunal_ice(req: TribunalICERequest):
 
     _log_api_call("/tribunal/ice", req.dict(), elapsed, "ok")
 
-    return TribunalICEResponse(
+    ice_response = TribunalICEResponse(
         prompt=req.prompt,
         k=req.k,
         rounds_completed=rd.get("rounds_completed", 0),
@@ -568,6 +583,22 @@ async def tribunal_ice(req: TribunalICERequest):
         math_verification=math_ver,
         meta=rd.get("meta", {}),
     )
+
+    # ── Aletheia capture: ICE results ──
+    try:
+        aletheia.capture(
+            tribunal_response=ice_response.dict(),
+            consensus_report=rd,
+            raw_responses=rd.get("round_history", [{}])[-1].get("responses", []) if rd.get("round_history") else [],
+            request_meta={
+                "prompt": req.prompt, "k": req.k, "mode": "ice",
+                "ontology": _active_ontology, "session_id": None,
+            },
+        )
+    except Exception as e:
+        print(f"[aletheia] ICE capture error: {e}")
+
+    return ice_response
 
 
 @app.post("/tribunal/math-verify", dependencies=[Depends(verify_api_key)])
@@ -704,6 +735,20 @@ async def tribunal_sceptic(req: TribunalScepticRequest):
         "response": sceptic_response.dict(),
     })
 
+    # ── Aletheia capture: sceptic results ──
+    try:
+        aletheia.capture(
+            tribunal_response=sceptic_response.dict(),
+            consensus_report=report,
+            raw_responses=[r.dict() for r in response_models],
+            request_meta={
+                "prompt": req.prompt, "k": req.k, "mode": "sceptic",
+                "ontology": _active_ontology, "session_id": None,
+            },
+        )
+    except Exception as e:
+        print(f"[aletheia] sceptic capture error: {e}")
+
     return sceptic_response
 
 
@@ -795,6 +840,9 @@ async def ontology_switch(req: OntologySwitchRequest):
         "prompt_prefix": ONTOLOGY_PROMPTS[_active_ontology],
     }
 
+
+# NOTE: Aletheia READ endpoints live in aletheia_api.py (mounted by rhead.py at :8000/aletheia/).
+# tribunal_api.py only handles CAPTURE (hooks above). No duplicate read endpoints here.
 
 # ---------------------------------------------------------------------------
 # Demo endpoints (no auth required — first-user showcase)
