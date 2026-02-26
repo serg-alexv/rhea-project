@@ -1,0 +1,1 @@
+Zero overlaps found. Relay posted with clear zone boundaries so Orion knows what moved. His Three.js work (rings, density, whispers) is fully safe — all inside `<Canvas>`, no interaction with the navbar extraction.
