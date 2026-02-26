@@ -1,5 +1,7 @@
 import create from 'zustand';
 
+export type ViewId = 'atlas-prime' | 'atlas-mesh' | 'theia-drift' | 'system-pw';
+
 export interface Island {
   id: string;
   name: string;
@@ -47,6 +49,7 @@ export interface AtlasState {
   activeSessionId: string | null;
   contextDensities: ContextDensity[];
   showOceanusFlow: boolean;
+  activeView: ViewId;
   setIslands: (islands: Island[]) => void;
   updateIsland: (id: string, delta: Partial<Island>) => void;
   setDMetric: (d: number) => void;
@@ -58,6 +61,7 @@ export interface AtlasState {
   setActiveSession: (id: string | null) => void;
   setContextDensities: (densities: ContextDensity[]) => void;
   toggleOceanusFlow: () => void;
+  setActiveView: (v: ViewId) => void;
 }
 
 export const useAtlasStore = create<AtlasState>((set) => ({
@@ -75,6 +79,7 @@ export const useAtlasStore = create<AtlasState>((set) => ({
   activeSessionId: null,
   contextDensities: [],
   showOceanusFlow: true,
+  activeView: 'atlas-prime',
   setIslands: (islands) => set({ islands }),
   updateIsland: (id, delta) => set((state) => ({
     islands: state.islands.map((is) => is.id === id ? { ...is, ...delta } : is)
@@ -91,4 +96,5 @@ export const useAtlasStore = create<AtlasState>((set) => ({
   setActiveSession: (id) => set({ activeSessionId: id }),
   setContextDensities: (densities) => set({ contextDensities: densities }),
   toggleOceanusFlow: () => set((state) => ({ showOceanusFlow: !state.showOceanusFlow })),
+  setActiveView: (v) => set({ activeView: v }),
 }));
