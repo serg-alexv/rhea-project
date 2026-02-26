@@ -327,7 +327,7 @@
     <span class="cn-dot"></span>
     REX CONSOLE
   </a>
-  <a class="cn-link" href="http://localhost:3000" target="_blank" rel="noopener">
+  <a class="cn-link" href="http://localhost:3000/?schema=prime" target="_blank" rel="noopener">
     ORION ATLAS &rarr;
   </a>
   <div class="cn-meta">
@@ -340,8 +340,7 @@
   <div class="topbar">
     <h1>RHEA</h1>
     <span class="status"><span class="dot" id="statusDot"></span> <span id="statusText">connecting...</span></span>
-    <span class="status" id="redisStatus"></span>
-    <span class="status" id="providerCount"></span>
+    <span class="status" id="componentStatus"></span>
     <span class="status" id="ragStatus" style="color:var(--green)"></span>
     <span style="flex:1"></span>
     <span class="status" id="clock"></span>
@@ -510,18 +509,30 @@ async function checkHealth() {
   try {
     const r = await fetch(`${API}/health`);
     const d = await r.json();
-    document.getElementById('statusDot').className = 'dot live';
-    document.getElementById('statusText').textContent = 'online';
-    document.getElementById('redisStatus').textContent = `Redis: ${d.redis || '?'}`;
+    document.getElementById('statusDot').className = d.status === 'ok' ? 'dot live' : 'dot dead';
+    document.getElementById('statusText').textContent = d.status === 'ok' ? 'online' : 'degraded';
 
-    const r2 = await fetch(`${API}/api/health`);
-    const d2 = await r2.json();
-    document.getElementById('providerCount').textContent = `Providers: ${d2.providers_available}/${d2.providers_total} | Models: ${d2.total_models}`;
-    // Mirror into crossnav
-    document.getElementById('cn-providers').textContent = `${d2.providers_available}/${d2.providers_total} providers`;
+    // Build component status chips from distributed probe results
+    const cs = document.getElementById('componentStatus');
+    if (d.components && Array.isArray(d.components)) {
+      cs.innerHTML = d.components.map(c => {
+        const on = c.status === 'online';
+        const color = on ? 'var(--green)' : 'var(--dim)';
+        const icon = on ? '\u25cf' : '\u25cb';
+        const ms = c.latency_ms !== null ? ` ${c.latency_ms}ms` : '';
+        const label = c.name.replace(/_/g,' ').replace(/\b\w/g, l => l.toUpperCase());
+        const detail = c.detail ? ` (${c.detail})` : '';
+        return `<span style="color:${color};margin-right:10px;font-size:10px" title="${label}: ${c.status}${detail}">${icon} ${label}${ms}</span>`;
+      }).join('');
+    }
+
+    // Mirror to crossnav
+    document.getElementById('cn-providers').textContent = d.providers || '\u2014';
   } catch(e) {
     document.getElementById('statusDot').className = 'dot dead';
     document.getElementById('statusText').textContent = 'offline';
+    const cs = document.getElementById('componentStatus');
+    if (cs) cs.innerHTML = '<span style="color:var(--red);font-size:10px">All probes failed</span>';
     log(`Health check failed: ${e.message}`, 'error');
   }
 }
@@ -537,11 +548,17 @@ function syncCrossnavOntology() {
 
 async function loadAgents() {
   try {
-    const r = await fetch(`${API}/agents`);
-    const d = await r.json();
     const el = document.getElementById('agentsPanel');
-    const agents = d.agents || {};
-    const names = Object.keys(agents);
+    let agents = {};
+    let names = [];
+    try {
+      const r = await fetch(`${API}/agents`);
+      if (r.ok) {
+        const d = await r.json();
+        agents = d.agents || {};
+        names = Object.keys(agents);
+      }
+    } catch (e) {}
 
     let provHtml = '<div style="margin-bottom:12px"><div style="font-size:10px;color:var(--accent);text-transform:uppercase;margin-bottom:6px">Providers</div>';
     try {
@@ -554,9 +571,25 @@ async function loadAgents() {
     } catch(e) {}
     provHtml += '</div>';
 
-    let agentHtml = '<div style="font-size:10px;color:var(--accent);text-transform:uppercase;margin-bottom:6px">Agents</div>';
+    let agentHtml = '<div style="font-size:10px;color:var(--accent);text-transform:uppercase;margin-bottom:6px">Agents / Relay Geometry</div>';
     if (!names.length) {
-      agentHtml += '<div style="color:var(--dim);font-size:11px">No live agents</div>';
+      try {
+        const rs = await fetch(`${API}/ui/atlas`);
+        const atlas = await rs.json();
+        const geom = Array.isArray(atlas.geometry) ? atlas.geometry.slice(-6).reverse() : [];
+        if (geom.length) {
+          agentHtml += geom.map(g => `
+            <div class="agent-card">
+              <div class="name">${(g.actor || 'relay').toString()}</div>
+              <div class="meta">${(g.event_type || 'event').toString()} | ${(g.timestamp || '').toString().slice(11,19)}</div>
+            </div>
+          `).join('');
+        } else {
+          agentHtml += '<div style="color:var(--dim);font-size:11px">No relay geometry yet</div>';
+        }
+      } catch (e) {
+        agentHtml += '<div style="color:var(--dim);font-size:11px">No live agents</div>';
+      }
     } else {
       agentHtml += names.map(name => {
         const a = agents[name];
@@ -573,15 +606,19 @@ async function loadAgents() {
 
 function connectSSE() {
   log('Connecting to SSE stream...');
-  const es = new EventSource(`${API}/events`);
+  const es = new EventSource(`${API}/ui/events`);
   es.onmessage = (e) => {
     try {
-      const evt = JSON.parse(e.data);
+      let evt = {};
+      try { evt = JSON.parse(e.data); } catch (_) { evt = { raw: e.data }; }
       eventCount++;
       document.getElementById('eventCount').textContent = eventCount;
       const panel = document.getElementById('eventsPanel');
-      const ts = new Date(evt.ts * 1000).toLocaleTimeString();
-      panel.innerHTML = `<div class="event-item"><span class="time">${ts}</span> <span class="type">${evt.type}</span> ${evt.agent || ''}</div>` + panel.innerHTML;
+      const tsSource = evt.ts || evt.timestamp || Date.now()/1000;
+      const ts = new Date(tsSource > 1e12 ? tsSource : tsSource * 1000).toLocaleTimeString();
+      const type = evt.type || evt.event_type || 'ui:update';
+      const actor = evt.agent || evt.actor || '';
+      panel.innerHTML = `<div class="event-item"><span class="time">${ts}</span> <span class="type">${type}</span> ${actor}</div>` + panel.innerHTML;
       if (panel.children.length > 100) panel.lastChild.remove();
     } catch(e2) {}
   };
