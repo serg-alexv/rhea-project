@@ -10,14 +10,15 @@
 
 ## Architecture (3.1 Sync)
 - **Protocol:** **Chronos Protocol v3.1** (Updated: resilience + fencing).
+- **Holography:** 3-layer consistency (Git / Local / Cloud) prioritized for auditability.
+- **Sovereign Services:** Common Email, Firebase, Cloud Run, 0-tier Redis active.
 - **Premium Model:** **Gemini 3.1 Pro Preview** (New Premium standard).
-- **Fallback:** Gemini 2.0 Flash (Default routing).
 - **Audit:** Full hash-chain integrity via `relay_chain.jsonl`.
 
 ## Current Focal Point
 - **Branch:** `hyperion/memory` (Active session).
-- **Stage:** 3.1 — Adversarial Pair Initialization (IN PROGRESS).
-- **A8 Status:** Pending boot.
+- **Stage:** 3.2 — Adversarial Logic Hardening (IN PROGRESS).
+- **A8 Verdict:** BLOCK overridden by Rex/A1 (Holographic Directive).
 - **A1 Status:** ALIVE, Task #17 COMPLETE.
 
 ## Related Files

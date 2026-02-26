@@ -41,6 +41,12 @@ if ! command -v entire &>/dev/null; then
     exit $?
 fi
 
+# Step 0: Sync with remote (Global Rule: Collective Intelligence)
+log "Syncing with remote branch..."
+if ! git pull --rebase origin $(git rev-parse --abbrev-ref HEAD) 2>/dev/null; then
+    warn "Git pull failed. Proceeding with local state, but check for conflicts."
+fi
+
 # Step 1: Start Entire.io session
 log "Starting Entire.io session..."
 
