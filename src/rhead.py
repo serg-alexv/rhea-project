@@ -1,5 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 import uvicorn
 import sqlite3
 import json
@@ -11,9 +12,28 @@ from pathlib import Path
 
 # Load env
 PROJECT_ROOT = Path(__file__).parent.parent
-load_dotenv(PROJECT_ROOT / ".env")
+load_dotenv(PROJECT_ROOT / ".env", override=True)
+
+# Set dev API key for local frontend
+if not os.environ.get("TRIBUNAL_API_KEYS"):
+    os.environ["TRIBUNAL_API_KEYS"] = "dev-bypass"
+
+import sys
+sys.path.insert(0, str(Path(__file__).parent))
 
 app = FastAPI(title="Rhea rhead Daemon (v4.1)")
+
+# Mount Tribunal API under /api
+try:
+    from tribunal_api import app as tribunal_app
+    app.mount("/api", tribunal_app)
+except ImportError:
+    pass
+
+# Mount frontend
+_FRONTEND_DIR = PROJECT_ROOT / "frontend"
+if _FRONTEND_DIR.exists():
+    app.mount("/app", StaticFiles(directory=str(_FRONTEND_DIR), html=True), name="frontend")
 
 # Enable CORS for the Atlas Frontend
 app.add_middleware(
