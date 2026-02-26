@@ -1,0 +1,67 @@
+# Session Context
+
+**Session ID:** 261278d3-25c3-4789-93e7-bfcc23c40cd5
+
+**Commit Message:** Be a wise head and proactive teamlead; go next;
+
+## Prompt
+
+be a wise head and proactive teamlead; go next;
+
+## Summary
+
+Pushed clean. Here's the Stage 2 report:
+
+---
+
+## Stage 2 — COMPLETE
+
+### Move 1: Debris Purge
+- **196 files deleted**, 489K lines removed from git
+- Dirs purged: `apparatus/` (43MB), `emergentia/`, `rhea-atlas/`, `plugins/`, 6 hex dirs, `src/operators/`
+- D-metric: 273.36 (healthy)
+
+### Move 2: Math→Consensus Pipeline (the big one)
+Built and tested 5 new functions in `consensus_analyzer.py`:
+
+| Function | What it does |
+|----------|-------------|
+| `detect_math_domains(prompt)` | Keyword scan → returns relevant Ruliad domains |
+| `run_math_verification(prompt)` | Loads Ruliad plugins, creates hypothesis, runs `verify()` |
+| `adjust_confidence_with_math()` | Weighted blend formula: `(1-w)*base + w*(base*mult)` |
+| `math_augment(report, prompt)` | One-call enrichment of any ConsensusReport |
+
+Formula details:
+- Weight: 15% for 1 domain, +8% per additional, capped at 40%
+- Multipliers: `verified`=1.2, `tautology`=1.25, `consistent`=1.05, `rejected`=0.6
+- Wired into `/api/tribunal` endpoint — math-heavy prompts get auto-verified
+
+### Move 3: Single Daemon (`rhead.py`)
+- `rhead.py` now mounts `tribunal_api.py` under `/api`
+- One port (default 8000), 17 endpoints
+- `/` = root info, `/health` = liveness, `/api/*` = full tribunal API
+
+### Move 4: Bug Fix
+- Removed duplicate `RheaBridge` class definition in `rhea_bridge.py` (dead code, 7 lines)
+
+### Move 5: Orion Deals Closed
+- 5 decision documents written to virtual office inbox
+- Stage 2 mandate issued to both Orion and Hyperion
+- Orion snapshot updated (seq 137, pending_decisions=0)
+
+`★ Insight ─────────────────────────────────────`
+**The confidence formula reflects a real epistemological principle**: math verification can *strengthen* a high-agreement consensus (verified → 1.2x boost) or *weaken* a false consensus (rejected → 0.6x penalty). But it never overrides — max 40% weight means the tribunal's human-language deliberation always dominates. This mirrors how peer review works: formal proofs validate or invalidate, but the scientific community's judgment is the final word.
+`─────────────────────────────────────────────────`
+
+## Key Actions
+
+- - **Bash**: Measure debris before deletion
+- - **Bash**: Check ZMQ files exist
+- - **Bash**: Check operators dir contents
+- - **Glob**: src/rhea_swarm.py
+- - **Glob**: src/operators/bonsai_node.py
+- - **Bash**: Delete all debris directories
+- - **Read**: /Users/sa/rh.1/src/consensus_analyzer.py
+- - **Grep**: def adjust_confidence_with_math|def run_math_verification|def math_augment|def detect_math_domains
+- - **Grep**: math_augment|adjust_confidence|_MATH_DOMAIN|detect_math|run_math_ver
+- - **Grep**: math|TODO|adjust_confidence

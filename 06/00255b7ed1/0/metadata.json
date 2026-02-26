@@ -1,0 +1,28 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "0600255b7ed1",
+  "session_id": "261278d3-25c3-4789-93e7-bfcc23c40cd5",
+  "strategy": "auto-commit",
+  "created_at": "2026-02-26T07:55:47.356734Z",
+  "branch": "hyperion/memory",
+  "checkpoints_count": 1,
+  "files_touched": [
+    ".gcloudignore",
+    "opera/ops/virtual-office/inbox/RELAY_20260226_075321_HYPERION_to_A8.md",
+    "src/consensus_analyzer.py",
+    "src/rhea_bus.py",
+    "src/rhead.py",
+    "src/tribunal_api.py"
+  ],
+  "agent": "Claude Code",
+  "transcript_identifier_at_start": "61f233e9-4565-43ba-aa85-c68b4c68ea58",
+  "checkpoint_transcript_start": 3013,
+  "transcript_lines_at_start": 3013,
+  "token_usage": {
+    "input_tokens": 38,
+    "cache_creation_tokens": 58397,
+    "cache_read_tokens": 3994554,
+    "output_tokens": 9876,
+    "api_call_count": 36
+  }
+}
