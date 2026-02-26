@@ -226,6 +226,7 @@ function HudLeft({ managed }: { managed?: FloatingPanelManaged }) {
   const redisStatus  = useAtlasStore((s: AtlasState) => s.redisStatus)
   const showOceanusFlow = useAtlasStore((s: AtlasState) => s.showOceanusFlow)
   const toggleOceanusFlow = useAtlasStore((s: AtlasState) => s.toggleOceanusFlow)
+  const aletheiaStats = useAtlasStore((s: AtlasState) => s.aletheiaStats)
 
   return (
     <FloatingPanel position={managed ? 'w-72' : 'top-8 left-8 w-72'} managed={managed}>
@@ -272,6 +273,17 @@ function HudLeft({ managed }: { managed?: FloatingPanelManaged }) {
             <span className="text-gray-400">{redisStatus}</span>
           </div>
         </div>
+
+        {/* Aletheia proof count */}
+        {aletheiaStats.totalArtifacts > 0 && (
+          <div className="flex justify-between items-center text-[10px] font-mono">
+            <span className="opacity-40">PROOFS</span>
+            <div className="flex items-center gap-1.5">
+              <span className="text-emerald-400 font-bold">{aletheiaStats.proofCount}</span>
+              <span className="text-white/20 text-[8px]">/ {aletheiaStats.hypothesisCount} hyp</span>
+            </div>
+          </div>
+        )}
 
         {/* Oceanus Flow toggle */}
         <div className="pt-1 border-t border-white/5">

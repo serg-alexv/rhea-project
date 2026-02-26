@@ -26,7 +26,7 @@ export function getLastHealth(): HealthState {
 }
 
 export function useAtlasSync() {
-  const { setDMetric, updateIsland, setProviderCount, setRedisStatus, setApiHealthy } = useAtlasStore();
+  const { setDMetric, updateIsland, setProviderCount, setRedisStatus, setApiHealthy, setAletheiaStats } = useAtlasStore();
 
   useEffect(() => {
     const fetchHealth = async () => {
@@ -150,12 +150,34 @@ export function useAtlasSync() {
       // SSE unsupported/unavailable — polling remains active
     }
 
+    // Aletheia stats polling (30s — less critical than health)
+    const fetchAletheia = async () => {
+      try {
+        const res = await fetch(`${API_BASE}/aletheia/stats`);
+        if (res.ok) {
+          const s = await res.json();
+          setAletheiaStats({
+            proofCount: s.proof_count ?? 0,
+            hypothesisCount: s.hypothesis_count ?? 0,
+            totalArtifacts: s.total_artifacts ?? 0,
+            avgAgreement: s.avg_agreement ?? 0,
+            lastCapture: s.last_capture ?? null,
+            ontologyCount: s.ontology_count ?? 0,
+            uniqueQueries: s.unique_queries ?? 0,
+          });
+        }
+      } catch { /* Aletheia unavailable — silent */ }
+    };
+
     // Immediate first call, then every 5 s polling fallback
     fetchHealth();
+    fetchAletheia();
     const interval = setInterval(fetchHealth, 5000);
+    const aletheiaInterval = setInterval(fetchAletheia, 30000);
     return () => {
       clearInterval(interval);
+      clearInterval(aletheiaInterval);
       es?.close();
     };
-  }, [setDMetric, updateIsland, setProviderCount, setRedisStatus, setApiHealthy]);
+  }, [setDMetric, updateIsland, setProviderCount, setRedisStatus, setApiHealthy, setAletheiaStats]);
 }
