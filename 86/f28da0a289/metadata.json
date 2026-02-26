@@ -1,0 +1,26 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "86f28da0a289",
+  "strategy": "auto-commit",
+  "branch": "hyperion/memory",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "rhea-atlas/src/hooks/useAtlasSync.ts"
+  ],
+  "sessions": [
+    {
+      "metadata": "/86/f28da0a289/0/metadata.json",
+      "transcript": "/86/f28da0a289/0/full.jsonl",
+      "context": "",
+      "content_hash": "/86/f28da0a289/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 18,
+    "cache_creation_tokens": 38108,
+    "cache_read_tokens": 1438215,
+    "output_tokens": 8489,
+    "api_call_count": 14
+  }
+}

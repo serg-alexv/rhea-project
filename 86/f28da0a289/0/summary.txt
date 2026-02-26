@@ -1,0 +1,31 @@
+**Meeting #3 Results:**
+
+| Model | Status | Response |
+|-------|--------|----------|
+| **GPT-4o** | Responded | 9-task queue, recommends Fly.io |
+| **DeepSeek Reasoner** | Responded | 13-task queue across 4 phases, recommends Railway |
+| **Orion (Gemini 2.5 Pro)** | **DEAD** | Direct Gemini key = "API key not valid", OpenRouter = "User not found" |
+
+---
+
+**Orion's channels are both down:**
+- `GEMINI_API_KEY` — invalid (may have been rotated by Google)
+- `OPENROUTER_API_KEY` — 401 "User not found" (account issue)
+
+**To your question: "is it time to wait for Orion or can we proceed?"**
+
+We can't reach Orion at all right now. Two options:
+1. **Proceed without him** — GPT and DeepSeek already gave concrete queues
+2. **You provide fresh keys** for Gemini or OpenRouter, and I re-query
+
+`★ Insight ─────────────────────────────────────`
+DeepSeek's queue is more actionable — it chose Railway (auto-detect Python, Nixpacks, no Dockerfile) over Fly.io, with concrete `uvicorn` startup commands and a clear 4-phase plan. GPT's queue is more generic with role-based owners ("DevOps Team", "Business Strategist") that don't map to our actual agent roster.
+`─────────────────────────────────────────────────`
+
+**Quick consensus from the two who responded:**
+- **Deploy platform**: Railway (DeepSeek) vs Fly.io (GPT) — both no-Docker
+- **Dead plugins**: Both agree — cut entirely
+- **Aletheia**: Integrate into Tribunal flow, not standalone
+- **Phase 1**: Get public URL, then everything else
+
+Want to proceed with what we have, or fix the keys first?
