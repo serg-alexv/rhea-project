@@ -1,0 +1,31 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "8f9413694b58",
+  "session_id": "261278d3-25c3-4789-93e7-bfcc23c40cd5",
+  "strategy": "auto-commit",
+  "created_at": "2026-02-26T09:39:54.398937Z",
+  "branch": "stage4-hardened",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "opera/ops/virtual-office/inbox/REX_TO_ORION_20260226_RAG_UPDATE.md",
+    "src/rhea_ingest.py"
+  ],
+  "agent": "Claude Code",
+  "transcript_identifier_at_start": "071f936e-3d5b-4aa3-9594-596c96163112",
+  "checkpoint_transcript_start": 4456,
+  "transcript_lines_at_start": 4456,
+  "token_usage": {
+    "input_tokens": 8,
+    "cache_creation_tokens": 5157,
+    "cache_read_tokens": 678115,
+    "output_tokens": 2649,
+    "api_call_count": 7,
+    "subagent_tokens": {
+      "input_tokens": 38,
+      "cache_creation_tokens": 19676,
+      "cache_read_tokens": 336301,
+      "output_tokens": 2609,
+      "api_call_count": 6
+    }
+  }
+}
