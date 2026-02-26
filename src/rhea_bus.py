@@ -65,7 +65,6 @@ class RheaBus:
 
     def cache_tribunal(self, prompt: str, k: int, tier: str, mode: str,
                        result: dict, ttl: int = 300):
-        # TODO(human): Design the cache key strategy for tribunal results
         key = "tribunal:" + hashlib.sha256(
             f"{prompt}|{k}|{tier}|{mode}".encode()
         ).hexdigest()[:16]

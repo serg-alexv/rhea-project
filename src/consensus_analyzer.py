@@ -741,6 +741,180 @@ class ConsensusAnalyzer:
 
 
 # ---------------------------------------------------------------------------
+# Math verification bridge (Ruliad plugins → consensus augmentation)
+# ---------------------------------------------------------------------------
+
+import sys
+from pathlib import Path as _Path
+
+_MATH_DOMAIN_HINTS = {
+    "game_theory": ["nash", "equilibrium", "payoff", "dominant strategy",
+                     "pareto", "auction", "mechanism design", "evolutionary",
+                     "prisoner", "cooperative", "shapley"],
+    "dynamical_systems": ["lorenz", "chaos", "attractor", "lyapunov",
+                          "bifurcation", "orbit", "stability", "phase space",
+                          "trajectory", "differential equation", "eigenvalue"],
+    "information_geometry": ["fisher", "metric", "manifold", "cramer-rao",
+                             "divergence", "geodesic", "curvature",
+                             "statistical manifold", "exponential family"],
+    "proof_theory": ["tautology", "consistent", "implies", "logical",
+                     "axiom", "theorem", "proof", "contradiction",
+                     "deduction", "horn clause", "satisfiable"],
+    "category_theory": ["functor", "morphism", "associativ", "identity element",
+                        "commutative diagram", "adjoint", "monad", "topos",
+                        "natural transformation", "isomorphism"],
+}
+
+
+def detect_math_domains(prompt: str) -> list[str]:
+    """Detect which Ruliad math domains are relevant to a prompt."""
+    lower = prompt.lower()
+    hits = {}
+    for domain, keywords in _MATH_DOMAIN_HINTS.items():
+        count = sum(1 for kw in keywords if kw in lower)
+        if count > 0:
+            hits[domain] = count
+    return sorted(hits, key=hits.get, reverse=True)
+
+
+def run_math_verification(prompt: str, domains: list[str] = None) -> dict:
+    """Run Ruliad plugin verify() hooks for detected domains."""
+    if domains is None:
+        domains = detect_math_domains(prompt)
+    if not domains:
+        return {}
+
+    # Lazy-load the Ruliad engine
+    ruliad_root = _Path(__file__).parent.parent / "friends" / "ruliad" / "explorer"
+    if not ruliad_root.exists():
+        return {"error": "ruliad explorer not found"}
+
+    sys.path.insert(0, str(ruliad_root))
+    try:
+        from core.engine import OntologyEngine, Hypothesis
+        engine = OntologyEngine(project_root=_Path(__file__).parent.parent)
+
+        # Register only requested plugins
+        for domain in domains:
+            plugin_path = ruliad_root / "plugins" / f"{domain}.py"
+            if plugin_path.exists():
+                import importlib.util
+                spec = importlib.util.spec_from_file_location(domain, plugin_path)
+                mod = importlib.util.module_from_spec(spec)
+                spec.loader.exec_module(mod)
+                if hasattr(mod, "register_plugin"):
+                    mod.register_plugin(engine)
+
+        # Create a hypothesis from the prompt and run verification
+        h = Hypothesis(
+            title=prompt[:60],
+            statement=prompt,
+            domain=domains[0],
+        )
+
+        results = {}
+        for domain in domains:
+            plugin = engine.registry.get(domain)
+            if plugin and plugin.verify:
+                try:
+                    verdict = plugin.verify(h)
+                    results[domain] = verdict
+                except Exception as e:
+                    results[domain] = {"error": str(e), "overall": "error"}
+            else:
+                results[domain] = {"overall": "no_verify_hook"}
+
+        return results
+    except Exception as e:
+        return {"error": str(e)}
+    finally:
+        if str(ruliad_root) in sys.path:
+            sys.path.remove(str(ruliad_root))
+
+
+def adjust_confidence_with_math(
+    base_confidence: float,
+    base_agreement: float,
+    math_results: dict,
+) -> tuple[float, float, str]:
+    """
+    Adjust tribunal confidence based on math verification verdicts.
+
+    Formula: weighted blend of base consensus score and math signal.
+    - Each plugin verdict maps to a multiplier (verified=1.2, consistent=1.05,
+      failed/rejected=0.7, error/no_hook=neutral 1.0)
+    - Math weight scales with number of domains that fired (more domains = more
+      influence, capped at 40%)
+    - Final confidence = (1 - math_weight) * base + math_weight * math_signal
+    """
+    if not math_results or "error" in math_results:
+        return base_confidence, base_agreement, "no_math_data"
+
+    VERDICT_MULTIPLIERS = {
+        "verified": 1.20,
+        "tautology_verified": 1.25,
+        "consistent_requires_deeper_proof": 1.05,
+        "consistent": 1.05,
+        "not_tautology": 1.0,
+        "requires_proof": 1.0,
+        "no_equilibrium_found": 0.85,
+        "rejected_inconsistent": 0.60,
+        "computation_failed": 1.0,     # neutral — don't punish for infra issues
+        "error": 1.0,
+        "no_verify_hook": 1.0,
+        "parse_failed": 1.0,
+    }
+
+    multipliers = []
+    for domain, result in math_results.items():
+        if isinstance(result, dict):
+            overall = result.get("overall", "unknown")
+            mult = VERDICT_MULTIPLIERS.get(overall, 1.0)
+            multipliers.append(mult)
+
+    if not multipliers:
+        return base_confidence, base_agreement, "no_verdicts"
+
+    # Average math multiplier
+    avg_mult = sum(multipliers) / len(multipliers)
+
+    # Math weight: 15% base + 8% per additional domain, capped at 40%
+    math_weight = min(0.40, 0.15 + 0.08 * (len(multipliers) - 1))
+
+    # Blend: base score weighted with math signal
+    math_signal = base_confidence * avg_mult
+    new_confidence = (1 - math_weight) * base_confidence + math_weight * math_signal
+    new_confidence = max(0.0, min(1.0, new_confidence))
+
+    # Agreement gets a smaller nudge (math can't create agreement, only validate it)
+    agreement_nudge = (avg_mult - 1.0) * 0.5 * math_weight
+    new_agreement = max(0.0, min(1.0, base_agreement + agreement_nudge))
+
+    method = f"math_blend(w={math_weight:.2f},mult={avg_mult:.3f},domains={len(multipliers)})"
+    return new_confidence, new_agreement, method
+
+
+def math_augment(report: ConsensusReport, prompt: str) -> ConsensusReport:
+    """Enrich a ConsensusReport with Ruliad math verification."""
+    domains = detect_math_domains(prompt)
+    if not domains:
+        return report
+
+    math_results = run_math_verification(prompt, domains)
+
+    new_conf, new_agree, method = adjust_confidence_with_math(
+        report.confidence, report.agreement_score, math_results
+    )
+
+    report.confidence = new_conf
+    report.agreement_score = new_agree
+    report.analysis_method = f"{report.analysis_method}+{method}"
+    report.meta["math_verification"] = math_results
+    report.meta["math_domains_detected"] = domains
+    return report
+
+
+# ---------------------------------------------------------------------------
 # Bridge integration convenience
 # ---------------------------------------------------------------------------
 
