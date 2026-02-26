@@ -1,0 +1,36 @@
+All 5 tiers now cascade to DeepSeek successfully. Code fixes complete.
+
+`★ Insight ─────────────────────────────────────`
+**Why the tier fallback design matters:** Each tier has an ordered candidate list. `ask_tier()` walks through candidates — skips providers with no keys, then tries the actual API call. If it gets an error, it moves to the next candidate. This means even with 6/7 providers dead, every tier still works because DeepSeek is reachable somewhere in each chain. The cascade is linear O(n) through candidates until one responds — no parallel waste on broken providers.
+
+The `deepseek-reasoner` returning empty text is a quirk of R1-class models: they produce `reasoning_content` (chain-of-thought) separately from `content` (final answer). For simple prompts the CoT IS the answer and `content` is empty. LiteLLM doesn't merge these by default.
+`─────────────────────────────────────────────────`
+
+---
+
+**Bridge Fix Summary:**
+
+| What | Status |
+|---|---|
+| Broken syntax in balanced tier (your edit) | Fixed |
+| Anthropic provider added (key in .env) | Added, but key invalid |
+| litellm logging noise suppressed | Fixed |
+| Profile/visual imports hardened (try/except) | Fixed |
+| Azure env var mapping (AZURE_API_BASE) | Fixed |
+| Azure models cleaned (removed non-OpenAI) | Fixed |
+| `live_test()` method + `live-test` CLI | Added |
+| DeepSeek in all tiers as fallback | Added |
+| All 5 tiers cascade successfully | Verified |
+
+**What needs you (key rotation in `.env`):**
+
+| Provider | Action | URL |
+|---|---|---|
+| **Gemini** | Generate new key (old one flagged as leaked) | `console.cloud.google.com/apis/credentials` |
+| **OpenAI** | Rotate key | `platform.openai.com/api-keys` |
+| **Anthropic** | Rotate key (current one invalid) | `console.anthropic.com/settings/keys` |
+| **OpenRouter** | New account or new key | `openrouter.ai/settings/keys` |
+| **HuggingFace** | Refresh expired token | `huggingface.co/settings/tokens` |
+| **Azure** | Create a deployment (gpt-4o-mini) | Azure Portal → OpenAI resource |
+
+Once you rotate even 2-3 keys, the tribunal goes from 1-model consensus to real multi-model diversity.
