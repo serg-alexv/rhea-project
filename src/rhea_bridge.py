@@ -123,6 +123,7 @@ MODEL_TIERS = {
             "openai/gpt-4o",
             "gemini/gemini-2.5-flash",
             "openai/gpt-4.1",
+            "openrouter/qwen/qwen-2.5-72b-instruct",
             "openrouter/mistralai/mistral-large-latest",
             "azure/gpt-4o",
         ],
@@ -152,6 +153,7 @@ MODEL_TIERS = {
         "candidates": [
             "gemini/gemini-2.5-pro",
             "openrouter/qwen/qwen3-235b-a22b",
+            "openrouter/qwen/qwen-2.5-72b-instruct",
             "openrouter/deepseek/deepseek-r1",
             "openai/o3",
             "openrouter/google/gemini-2.5-pro-preview",
@@ -193,6 +195,7 @@ PRICE_TABLE = {
     # OpenRouter (use the model-id part after /)
     "deepseek/deepseek-r1":              (0.55, 2.19),
     "qwen/qwen3-235b-a22b":             (0.30, 1.20),
+    "qwen/qwen-2.5-72b-instruct":       (0.36, 0.36),
     "mistralai/mistral-large-latest":    (2.00, 6.00),
     "meta-llama/llama-4-maverick":       (0.50, 1.50),
     "meta-llama/llama-4-behemoth":       (2.00, 6.00),
@@ -317,6 +320,7 @@ PROVIDERS = {
         models=[
             "deepseek/deepseek-r1",
             "qwen/qwen3-235b-a22b",
+            "qwen/qwen-2.5-72b-instruct",
             "mistralai/mistral-large-latest",
             "meta-llama/llama-4-maverick",
             "meta-llama/llama-4-behemoth",
