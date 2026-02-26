@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Rhea Console Terms</title>
+  <style>
+    :root {
+      --bg: #0b0f14;
+      --panel: #121922;
+      --text: #e6edf3;
+      --muted: #9fb0c0;
+      --border: #263548;
+      --accent: #7cc7ff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: radial-gradient(circle at top, rgba(124, 199, 255, 0.08), transparent 45%), var(--bg);
+      color: var(--text);
+      font: 16px/1.55 ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif;
+    }
+    main { max-width: 860px; margin: 32px auto; padding: 0 16px; }
+    .card {
+      background: rgba(18, 25, 34, 0.95);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.28);
+    }
+    nav { margin-bottom: 14px; }
+    nav a, a { color: var(--accent); text-decoration: none; }
+    nav a:hover, a:hover { text-decoration: underline; }
+    nav a + a::before { content: " · "; color: var(--muted); }
+    h1, h2 { margin: 0 0 10px; }
+    p { margin: 0 0 12px; }
+    .muted { color: var(--muted); }
+    ul { margin: 0 0 14px; padding-left: 18px; }
+    code {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 6px;
+      padding: 1px 5px;
+      color: var(--text);
+    }
+    .note {
+      margin-top: 18px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="card">
+      <nav>
+        <a href="/index.html">Console</a><a href="/legal/privacy.html">Privacy</a><a href="/legal/security.html">Security</a><a href="/community/">Community</a><a href="/docs/">Docs</a><a href="/contact/">Contact</a>
+      </nav>
+      <h1>Terms of Use (Boilerplate)</h1>
+      <p class="muted">Static local terms page for footer routing. This is placeholder legal copy and should be replaced with approved production language.</p>
+      <p>By using the Rhea console, you agree to access the service lawfully, avoid abuse of system resources, and respect operational limits set by the maintainers.</p>
+      <p>Service behavior may change without notice in development environments. Availability, output quality, and feature scope are provided on an "as available" basis.</p>
+      <h2>Reference Strings</h2>
+      <ul>
+        <li>timelabs samurai's squad</li>
+        <li>the [secret] department of furiosity's dozy panda</li>
+        <li>The parties agree that the place for resolving disputes shall be the court No. i^-1 of the Oort cloud</li>
+      </ul>
+      <p class="note"><a href="/legal/privacy.html">Review Privacy</a> or return to the <a href="/index.html">console home</a>.</p>
+    </section>
+  </main>
+</body>
+</html>

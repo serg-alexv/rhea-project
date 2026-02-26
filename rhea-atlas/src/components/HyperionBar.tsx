@@ -3,9 +3,6 @@ import { useEffect, useState } from 'react'
 import { API_BASE } from '@/lib/config'
 import { useAtlasStore, AtlasState, ViewId } from '@/store/useAtlasStore'
 
-const IS_DEV = typeof window !== 'undefined' &&
-  (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
-
 const FONT_MONO = '"SF Mono","Fira Code","JetBrains Mono",monospace'
 
 // ── View tabs config ──────────────────────────────────────────────────────
@@ -35,6 +32,7 @@ const VIEW_TABS: ViewTab[] = [
     id: 'theia-drift',
     label: 'THEIA DRIFT',
     tooltip: 'Ambient Research Observation',
+    external: '/semantic-drift.html',
   },
 ]
 
@@ -213,6 +211,12 @@ export default function HyperionBar() {
   const redisStatus   = useAtlasStore((s: AtlasState) => s.redisStatus)
   const activeView    = useAtlasStore((s: AtlasState) => s.activeView)
   const setActiveView = useAtlasStore((s: AtlasState) => s.setActiveView)
+  const [isDevHost, setIsDevHost] = useState(false)
+
+  useEffect(() => {
+    const host = window.location.hostname
+    setIsDevHost(host === 'localhost' || host === '127.0.0.1')
+  }, [])
 
   return (
     <div
@@ -229,7 +233,7 @@ export default function HyperionBar() {
       {/* Logo */}
       <span className="group relative text-cyan-400 font-bold text-[10px] tracking-[0.18em] uppercase mr-3.5 flex items-center gap-1 cursor-default">
         RHEA
-        {IS_DEV && (
+        {isDevHost && (
           <span className="text-red-500 text-[7px] uppercase font-bold tracking-widest">DEV</span>
         )}
         <span className="pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 bg-black/90 border border-white/10 text-white/60 text-[9px] px-2.5 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-[300]">
@@ -243,7 +247,7 @@ export default function HyperionBar() {
       {/* View tabs */}
       {VIEW_TABS.map((tab) => {
         const isActive = tab.id === activeView && !tab.external
-        const label = IS_DEV ? (tab.devLabel ?? tab.label) : tab.label
+        const label = isDevHost ? (tab.devLabel ?? tab.label) : tab.label
 
         if (tab.external) {
           return (

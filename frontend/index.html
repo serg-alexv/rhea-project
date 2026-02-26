@@ -3,7 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rhea Scientific Gem</title>
+<title>Themis Console — Rhea</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg: #0a0e17; --surface: #111827; --surface2: #1f2937;
@@ -11,17 +14,177 @@
     --accent: #60a5fa; --green: #34d399; --red: #f87171;
     --amber: #fbbf24; --purple: #a78bfa;
     --font: 'SF Mono', 'Fira Code', 'JetBrains Mono', monospace;
+    --font-ui: 'Oxanium', 'Eurostile', 'Trebuchet MS', sans-serif;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { background: var(--bg); color: var(--text); font-family: var(--font); font-size: 13px; }
 
   .grid { display: grid; grid-template-columns: 280px 1fr 320px; grid-template-rows: 48px 1fr 200px; height: calc(100vh - 66px); margin-top: 30px; gap: 1px; background: var(--border); }
   .panel { background: var(--surface); overflow: hidden; display: flex; flex-direction: column; }
-  .panel-header { padding: 8px 12px; background: var(--surface2); border-bottom: 1px solid var(--border); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--dim); display: flex; justify-content: space-between; align-items: center; }
+  .panel-header { padding: 8px 12px; background: var(--surface2); border-bottom: 1px solid var(--border); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--dim); display: flex; justify-content: space-between; align-items: center; font-family: var(--font-ui); }
   .panel-body { flex: 1; overflow-y: auto; padding: 12px; }
+  /* Console scrollbar skin (Chrome/Firefox) */
+  body,
+  .panel-body,
+  .history-body,
+  .chatbox-messages {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(160, 207, 255, 0.62) rgba(255,255,255,0.06);
+    scrollbar-gutter: stable;
+  }
+  body::-webkit-scrollbar,
+  .panel-body::-webkit-scrollbar,
+  .history-body::-webkit-scrollbar,
+  .chatbox-messages::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  body::-webkit-scrollbar-track,
+  .panel-body::-webkit-scrollbar-track,
+  .history-body::-webkit-scrollbar-track,
+  .chatbox-messages::-webkit-scrollbar-track {
+    background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+    border-left: 1px solid rgba(255,255,255,0.04);
+  }
+  body::-webkit-scrollbar-thumb,
+  .panel-body::-webkit-scrollbar-thumb,
+  .history-body::-webkit-scrollbar-thumb,
+  .chatbox-messages::-webkit-scrollbar-thumb {
+    background:
+      linear-gradient(180deg, rgba(189, 232, 255, 0.85), rgba(96, 165, 250, 0.55));
+    border: 2px solid transparent;
+    border-radius: 999px;
+    background-clip: padding-box;
+    box-shadow:
+      inset 0 0 0 1px rgba(255,255,255,0.18),
+      0 0 14px rgba(96,165,250,0.16);
+  }
+  body::-webkit-scrollbar-thumb:hover,
+  .panel-body::-webkit-scrollbar-thumb:hover,
+  .history-body::-webkit-scrollbar-thumb:hover,
+  .chatbox-messages::-webkit-scrollbar-thumb:hover {
+    background:
+      linear-gradient(180deg, rgba(220, 243, 255, 0.95), rgba(96, 165, 250, 0.68));
+    background-clip: padding-box;
+    box-shadow:
+      inset 0 0 0 1px rgba(255,255,255,0.24),
+      0 0 18px rgba(96,165,250,0.22);
+  }
+  /* ── Quick Tour Overlay ── */
+  #quickTourOverlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1800;
+    display: none;
+    pointer-events: auto;
+  }
+  #quickTourOverlay.active { display: block; }
+  #quickTourSpotlight {
+    position: fixed;
+    top: 0; left: 0;
+    width: 10px; height: 10px;
+    border-radius: 12px;
+    border: 1px solid rgba(160, 223, 255, 0.9);
+    background: rgba(96, 165, 250, 0.06);
+    box-shadow:
+      0 0 0 9999px rgba(3, 6, 12, 0.72),
+      0 0 0 1px rgba(255,255,255,0.12) inset,
+      0 0 24px rgba(96,165,250,0.28);
+    pointer-events: none;
+    transition: top 220ms ease, left 220ms ease, width 220ms ease, height 220ms ease, border-radius 220ms ease;
+  }
+  #quickTourCard {
+    position: fixed;
+    width: min(380px, calc(100vw - 20px));
+    background:
+      radial-gradient(140% 120% at 10% 0%, rgba(96,165,250,0.12), transparent 60%),
+      rgba(10, 14, 23, 0.97);
+    border: 1px solid rgba(160, 223, 255, 0.25);
+    border-radius: 14px;
+    box-shadow:
+      0 18px 60px rgba(0,0,0,0.56),
+      inset 0 1px 0 rgba(255,255,255,0.05);
+    padding: 12px 12px 10px;
+    pointer-events: auto;
+    transition: top 220ms ease, left 220ms ease, opacity 180ms ease;
+  }
+  .qt-kicker {
+    color: rgba(160, 223, 255, 0.9);
+    font-family: var(--font-ui);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  #quickTourTitle {
+    color: #eef6ff;
+    font-family: var(--font-ui);
+    font-size: 16px;
+    letter-spacing: 0.03em;
+    margin-bottom: 6px;
+    line-height: 1.2;
+  }
+  #quickTourText {
+    color: rgba(229,231,235,0.88);
+    font-size: 12px;
+    line-height: 1.5;
+    white-space: pre-wrap;
+  }
+  .qt-footer {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  #quickTourProgress {
+    color: rgba(156,163,175,0.9);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-family: var(--font-ui);
+  }
+  .qt-actions {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    justify-content: flex-end;
+  }
+  .qt-btn {
+    border: 1px solid rgba(255,255,255,0.12);
+    background: rgba(255,255,255,0.03);
+    color: rgba(229,231,235,0.9);
+    font-family: var(--font-ui);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-radius: 8px;
+    padding: 6px 10px;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+  }
+  .qt-btn:hover { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.18); }
+  .qt-btn.primary {
+    background: rgba(96,165,250,0.12);
+    border-color: rgba(96,165,250,0.35);
+    color: rgba(225,240,255,0.98);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
+  }
+  .qt-btn.primary:hover {
+    background: rgba(96,165,250,0.18);
+    border-color: rgba(96,165,250,0.48);
+  }
+  .qt-btn[disabled] {
+    opacity: 0.45;
+    cursor: default;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    #quickTourSpotlight,
+    #quickTourCard { transition: none; }
+  }
 
   .topbar { grid-column: 1 / -1; background: var(--surface2); display: flex; align-items: center; padding: 0 16px; gap: 16px; }
-  .topbar h1 { font-size: 14px; color: var(--accent); font-weight: 600; }
+  .topbar h1 { font-size: 14px; color: var(--accent); font-weight: 600; font-family: var(--font-ui); letter-spacing: 0.08em; text-transform: uppercase; }
   .topbar .status { font-size: 11px; color: var(--dim); }
   .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
   .dot.live { background: var(--green); box-shadow: 0 0 6px var(--green); }
@@ -37,9 +200,54 @@
   .tribunal-input button { background: var(--accent); color: var(--bg); border: none; padding: 8px 16px; border-radius: 4px; font-family: var(--font); font-weight: 600; cursor: pointer; }
   .tribunal-input button:hover { opacity: 0.9; }
   .tribunal-input button:disabled { opacity: 0.4; cursor: not-allowed; }
+  .example-prompts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 8px 12px 10px;
+    background: rgba(17, 24, 39, 0.55);
+    border-bottom: 1px solid var(--border);
+    align-items: center;
+    position: relative;
+    z-index: 3;
+    overflow: visible;
+  }
+  .example-prompts .ex-label {
+    color: var(--dim);
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-right: 2px;
+    white-space: nowrap;
+    font-family: var(--font-ui);
+  }
+  .example-prompts .ex-chip {
+    border: 1px solid rgba(96,165,250,0.18);
+    background: rgba(96,165,250,0.05);
+    color: rgba(229,231,235,0.85);
+    font-family: var(--font-ui);
+    font-size: 10px;
+    border-radius: 999px;
+    padding: 4px 9px;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+    letter-spacing: 0.05em;
+  }
+  .example-prompts .ex-chip:hover {
+    background: rgba(96,165,250,0.12);
+    border-color: rgba(96,165,250,0.35);
+    color: #fff;
+  }
+  .example-prompts .ex-note {
+    color: rgba(156,163,175,0.75);
+    font-size: 9px;
+    margin-left: auto;
+    white-space: nowrap;
+    font-family: var(--font-ui);
+  }
 
-  .mode-toggle { display: flex; gap: 4px; padding: 8px 12px; background: var(--surface2); border-bottom: 1px solid var(--border); flex-wrap: wrap; }
-  .mode-btn { padding: 4px 10px; border: 1px solid var(--border); border-radius: 3px; background: transparent; color: var(--dim); font-family: var(--font); font-size: 10px; cursor: pointer; text-transform: uppercase; }
+  .mode-toggle { display: flex; gap: 4px; padding: 8px 12px; background: var(--surface2); border-bottom: 1px solid var(--border); flex-wrap: wrap; position: relative; z-index: 2; overflow: visible; }
+  .mode-btn { padding: 4px 10px; border: 1px solid var(--border); border-radius: 3px; background: transparent; color: var(--dim); font-family: var(--font-ui); font-size: 10px; cursor: pointer; text-transform: uppercase; letter-spacing: 0.08em; }
   .mode-btn.active { background: var(--accent); color: var(--bg); border-color: var(--accent); }
   .mode-btn.sceptic-btn.active { background: var(--red); border-color: var(--red); color: #fff; }
 
@@ -457,27 +665,35 @@
   #rhea-footer {
     position: fixed;
     bottom: 0; left: 0; right: 0;
-    height: 36px;
+    min-height: 40px;
     z-index: 99;
     background: rgba(0, 0, 0, 0.82);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border-top: 1px solid rgba(255,255,255,0.06);
-    padding: 0 20px;
+    padding: 6px 14px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     font-family: var(--font);
-    font-size: 9px;
-    color: rgba(255,255,255,0.22);
+    font-size: 11px;
+    color: rgba(255,255,255,0.52);
+    text-align: center;
+  }
+  #rhea-footer .footer-links {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    max-width: 100%;
   }
   #rhea-footer a {
-    color: rgba(255,255,255,0.35);
+    color: rgba(255,255,255,0.62);
     text-decoration: none;
     transition: color 0.15s;
   }
-  #rhea-footer a:hover { color: rgba(255,255,255,0.6); }
+  #rhea-footer a:hover { color: rgba(255,255,255,0.9); }
   #rhea-footer button.footer-link {
     background: none; border: none; padding: 0; margin: 0;
     color: rgba(255,255,255,0.35);
@@ -487,7 +703,7 @@
     transition: color 0.15s;
   }
   #rhea-footer button.footer-link:hover { color: rgba(255,255,255,0.6); }
-  #rhea-footer .footer-sep { margin: 0 8px; opacity: 0.4; }
+  #rhea-footer .footer-sep { margin: 0 6px; opacity: 0.45; }
   /* footer-copy removed — copyright is inline with links */
 
   /* ── Tooltip System ── */
@@ -502,21 +718,111 @@
     border: 1px solid var(--border);
     color: var(--dim);
     font-size: 10px;
-    padding: 4px 10px;
-    border-radius: 4px;
-    white-space: nowrap;
+    padding: 6px 10px;
+    border-radius: 6px;
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.15s;
     z-index: 300;
-    max-width: 250px;
+    width: max-content;
+    max-width: min(360px, calc(100vw - 24px));
     white-space: normal;
     text-transform: none;
     letter-spacing: normal;
     font-weight: 400;
+    line-height: 1.35;
+    text-align: left;
+    box-shadow: 0 8px 22px rgba(0,0,0,0.35);
+    font-family: var(--font-ui);
   }
   .tip:hover::after,
   .tip.tip-open::after { opacity: 1; }
+  /* Mode bar tooltips render downward to stay inside the panel (panel clips overflow upward). */
+  .mode-toggle .tip::after {
+    top: calc(100% + 6px);
+    bottom: auto;
+    z-index: 1200;
+  }
+  .mode-toggle .tip:hover,
+  .mode-toggle .tip.tip-open {
+    z-index: 1201;
+  }
+  .example-prompts .tip::after {
+    top: calc(100% + 8px);
+    bottom: auto;
+    z-index: 1200;
+    min-width: 220px;
+    max-width: min(420px, calc(100vw - 24px));
+  }
+  .example-prompts .tip:hover,
+  .example-prompts .tip.tip-open {
+    z-index: 1201;
+  }
+
+  /* ── Chrome progressive enhancement ("CSS5"/draft-ish features) ──
+     Uses Houdini @property + color-mix()/oklch + text-wrap when available.
+     Fallbacks above remain active in non-supporting browsers. */
+  @property --rhea-sheen-angle {
+    syntax: '<angle>';
+    inherits: false;
+    initial-value: 0deg;
+  }
+  @property --rhea-sheen-alpha {
+    syntax: '<number>';
+    inherits: false;
+    initial-value: 0.18;
+  }
+  @keyframes rhea-sheen-spin {
+    from { --rhea-sheen-angle: 0deg; --rhea-sheen-alpha: 0.10; }
+    50%  { --rhea-sheen-alpha: 0.22; }
+    to   { --rhea-sheen-angle: 360deg; --rhea-sheen-alpha: 0.10; }
+  }
+
+  @supports (background: color-mix(in oklab, white 50%, black)) {
+    .example-prompts .ex-chip,
+    #demoDataBtn {
+      border-color: color-mix(in oklab, var(--border) 62%, oklch(0.78 0.09 240) 38%);
+      background:
+        linear-gradient(180deg,
+          color-mix(in oklab, rgba(96,165,250,0.08) 70%, transparent),
+          rgba(17,24,39,0.22)),
+        conic-gradient(
+          from var(--rhea-sheen-angle) at 50% 50%,
+          transparent 0deg,
+          color-mix(in oklab, oklch(0.82 0.09 235) calc(var(--rhea-sheen-alpha) * 100%), transparent) 48deg,
+          transparent 110deg,
+          color-mix(in oklab, oklch(0.85 0.06 180) calc((var(--rhea-sheen-alpha) - 0.04) * 100%), transparent) 190deg,
+          transparent 280deg,
+          color-mix(in oklab, oklch(0.88 0.04 260) calc((var(--rhea-sheen-alpha) - 0.07) * 100%), transparent) 330deg,
+          transparent 360deg
+        );
+      animation: rhea-sheen-spin 8s linear infinite;
+      box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,0.04),
+        0 0 0 1px rgba(0,0,0,0.18);
+    }
+    .example-prompts .ex-chip:hover,
+    #demoDataBtn:hover {
+      border-color: color-mix(in oklab, rgba(96,165,250,0.65) 65%, rgba(255,255,255,0.2));
+      color: color-mix(in oklab, #fff 88%, oklch(0.9 0.03 230));
+      box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,0.06),
+        0 0 16px rgba(96,165,250,0.12);
+    }
+  }
+
+  @supports (text-wrap: balance) {
+    .tip::after { text-wrap: pretty; }
+    .example-prompts .tip::after { text-wrap: balance; }
+  }
+
+  @supports selector(.example-prompts:has(.ex-chip:hover)) {
+    .example-prompts:has(.ex-chip:hover) {
+      background:
+        linear-gradient(90deg, rgba(17,24,39,0.7), rgba(17,24,39,0.4), rgba(17,24,39,0.7)),
+        rgba(17,24,39,0.55);
+    }
+  }
 
   /* ── Agent Action Buttons ── */
   .agent-actions { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
@@ -841,12 +1147,13 @@
 
 <div class="grid">
   <div class="topbar">
-    <h1>RHEA</h1>
     <span class="status"><span class="dot" id="statusDot"></span> <span id="statusText">connecting...</span></span>
     <span class="status" id="componentStatus"></span>
     <span class="status" id="ragStatus" style="color:var(--green)"></span>
     <!-- ── Krikoi Titanon ring: 8 agent dots orbiting the topbar ── -->
     <div class="krikoi-ring tip" id="krikoiRing" data-tip="8 Chronos agents — click a dot to jump to agent"></div>
+    <button class="mode-btn tip" id="demoDataBtn" onclick="toggleDemoData()" data-tip="Load demo data snapshot and pause live polling" style="padding:3px 8px;font-size:9px;margin-left:2px">DEMO DATA</button>
+    <button class="mode-btn tip" id="tourBtn" onclick="startQuickTour(true)" data-tip="Guided quick tour (demo-friendly)" style="padding:3px 8px;font-size:9px">QUICK TOUR</button>
     <span style="flex:1"></span>
     <span class="status" style="color:var(--dim);font-size:9px;letter-spacing:0.04em">All features unlocked &bull; Some actions use AI credits</span>
     <span class="status" id="clock"></span>
@@ -884,7 +1191,7 @@
       <span id="tribunalStatus"></span>
     </div>
     <div class="mode-toggle">
-      <button class="mode-btn active tip" onclick="setMode('rag')" id="modeRag" data-tip="Search 250+ indexed research chunks">RAG Search</button>
+      <button class="mode-btn active tip" onclick="setMode('rag')" id="modeRag" data-tip="Search indexed research memory (live stats loading...)">RAG Search</button>
       <button class="mode-btn tip" onclick="setMode('tribunal')" id="modeTribunal" data-tip="Multi-model consensus — 3 AI models debate your question">Tribunal</button>
       <button class="mode-btn tip" onclick="setMode('ice')" id="modeIce" data-tip="Deep analysis — uses the most powerful model (costs more)">ICE L3</button>
       <button class="mode-btn sceptic-btn tip" onclick="setMode('sceptic')" id="modeSceptic" data-tip="Devil&#39;s advocate — AI actively finds counterarguments">Sceptic</button>
@@ -893,9 +1200,13 @@
       <input id="promptInput" placeholder="Ask your documents..." autofocus>
       <button id="askBtn" onclick="askQuery()">ASK</button>
     </div>
+    <div class="example-prompts" id="examplePrompts">
+      <span class="ex-label">Examples</span>
+      <span class="ex-note">fills input only · no spend until ASK</span>
+    </div>
     <div class="panel-body" id="tribunalResults">
       <div style="color:var(--dim);text-align:center;margin-top:40px">
-        <strong>RAG Mode</strong>: queries 250 indexed document chunks via vector search<br>
+        <strong>RAG Mode</strong>: <span id="ragModeHint">queries indexed research memory via vector search (live stats loading...)</span><br>
         <strong>Tribunal</strong>: multi-model consensus (5 models deliberate independently)<br>
         <strong>ICE L3</strong>: iterative consensus with debate rounds<br>
         <strong>Sceptic</strong>: consensus + devil's advocate counterarguments
@@ -936,23 +1247,23 @@
 <!-- ── Footer ── -->
 <footer id="rhea-footer">
   <div class="footer-links">
-    <a href="https://github.com/serg-alexv/rhea-project/blob/main/docs/TERMS.md" target="_blank" rel="noopener">Terms</a>
+    <a href="/legal/terms.html">Terms</a>
     <span class="footer-sep">&middot;</span>
-    <a href="https://github.com/serg-alexv/rhea-project/blob/main/docs/PRIVACY.md" target="_blank" rel="noopener">Privacy</a>
+    <a href="/legal/privacy.html">Privacy</a>
     <span class="footer-sep">&middot;</span>
-    <a href="https://github.com/serg-alexv/rhea-project/blob/main/docs/SECURITY.md" target="_blank" rel="noopener">Security</a>
+    <a href="/legal/security.html">Security</a>
     <span class="footer-sep">&middot;</span>
-    <a href="https://github.com/serg-alexv/rhea-project" target="_blank" rel="noopener">Community</a>
+    <a href="/community/">Community</a>
     <span class="footer-sep">&middot;</span>
-    <a href="https://github.com/serg-alexv/rhea-project/tree/main/docs" target="_blank" rel="noopener">Docs</a>
+    <a href="/docs/">Docs</a>
     <span class="footer-sep">&middot;</span>
-    <button class="footer-link" onclick="openContactChat()">Contact</button>
+    <a href="/contact/">Contact</a>
     <span class="footer-sep">&middot;</span>
-    <button class="footer-link" onclick="openFooterPopup('cookies')">Manage cookies</button>
+    <a href="/legal/cookies.html">Manage cookies</a>
     <span class="footer-sep">&middot;</span>
-    <button class="footer-link" onclick="openFooterPopup('personal')">My personal information</button>
+    <a href="/legal/personal-info.html">My personal information</a>
     <span class="footer-sep">&middot;</span>
-    <span class="tip" data-tip="Non-Profit Samurai&#39;s Squad" style="cursor:default;color:rgba(255,255,255,0.22);letter-spacing:0.05em">&copy; 2026 TimeLabs NPO</span>
+    <span class="tip" data-tip="Non-Profit Samurai&#39;s Squad" style="cursor:default;color:rgba(255,255,255,0.5);letter-spacing:0.05em">&copy; 2026 TimeLabs NPO</span>
   </div>
 </footer>
 
@@ -972,6 +1283,24 @@
   </div>
 </div>
 <div id="chatbox-toast">Thanks! We'll get back to you.</div>
+
+<!-- ── Quick Tour Overlay ── -->
+<div id="quickTourOverlay" aria-hidden="true">
+  <div id="quickTourSpotlight"></div>
+  <div id="quickTourCard" role="dialog" aria-modal="true" aria-labelledby="quickTourTitle">
+    <div class="qt-kicker">Quick Start</div>
+    <div id="quickTourTitle">The Path to Flow</div>
+    <div id="quickTourText"></div>
+    <div class="qt-footer">
+      <span id="quickTourProgress">Step 1/1</span>
+      <div class="qt-actions">
+        <button class="qt-btn" id="qtSkipBtn" onclick="skipQuickTour()">Skip</button>
+        <button class="qt-btn" id="qtBackBtn" onclick="prevQuickTour()">Back</button>
+        <button class="qt-btn primary" id="qtNextBtn" onclick="nextQuickTour()">Next</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <script>
 // ── Contact chatbox logic ──────────────────────────────────────────────────
@@ -1013,11 +1342,11 @@
   var _fpContent = {
     cookies: {
       title: 'Manage cookies',
-      body: '<p>We use essential cookies to make Rhea work.</p><p>We do <strong>not</strong> use tracking, analytics, or advertising cookies.</p><div class="fp-toggle"><label><input type="checkbox" checked disabled /> <span>Essential cookies</span> <em>(always on)</em></label></div><div class="fp-toggle"><label><input type="checkbox" id="fp-analytics" /> <span>Analytics cookies</span> <em>(off)</em></label></div><p class="fp-note">For details, see our <a href="https://github.com/serg-alexv/rhea-project/blob/main/docs/COOKIES.md" target="_blank" rel="noopener">Cookie Policy</a>.</p>'
+      body: '<p>We use essential cookies to make Rhea work.</p><p>We do <strong>not</strong> use tracking, analytics, or advertising cookies.</p><div class="fp-toggle"><label><input type="checkbox" checked disabled /> <span>Essential cookies</span> <em>(always on)</em></label></div><div class="fp-toggle"><label><input type="checkbox" id="fp-analytics" /> <span>Analytics cookies</span> <em>(off)</em></label></div><p class="fp-note">For details, see our <a href="/legal/cookies.html">Cookie Policy</a>.</p>'
     },
     personal: {
       title: 'My personal information',
-      body: '<p>Under CCPA / GDPR, you have the right to:</p><ul><li>Know what personal data we collect</li><li>Request deletion of your data</li><li>Opt out of data sharing</li></ul><p>Rhea collects: <strong>email</strong> (if you sign up) and <strong>query history</strong> (stored locally).</p><p>We do <strong>not</strong> sell or share personal information with third parties.</p><p>To request data deletion, email <a href="mailto:celestica201@gmail.com" style="color:var(--accent)">celestica201@gmail.com</a>.</p><p class="fp-note">Full policy: <a href="https://github.com/serg-alexv/rhea-project/blob/main/docs/PERSONAL_INFO.md" target="_blank" rel="noopener">Personal Information Policy</a>.</p>'
+      body: '<p>Under CCPA / GDPR, you have the right to:</p><ul><li>Know what personal data we collect</li><li>Request deletion of your data</li><li>Opt out of data sharing</li></ul><p>Rhea collects: <strong>email</strong> (if you sign up) and <strong>query history</strong> (stored locally).</p><p>We do <strong>not</strong> sell or share personal information with third parties.</p><p>To request data deletion, email <a href="mailto:celestica201@gmail.com" style="color:var(--accent)">celestica201@gmail.com</a>.</p><p class="fp-note">Full policy: <a href="/legal/personal-info.html">Personal Information Policy</a>.</p>'
     }
   };
 
@@ -1049,6 +1378,37 @@ let eventCount = 0;
 let currentMode = 'rag';
 let currentOntology = 'general';
 let historyCollapsed = true;
+let _ragStatsLastSig = '';
+let _ragStatsLoggedOnce = false;
+let _ragStatsFailedOnce = false;
+let demoMode = false;
+const DEMO_BOOT = new URLSearchParams(window.location.search).get('demo') === '1';
+const EXAMPLE_PROMPTS = [
+  {
+    label: 'quick summary',
+    prompt: 'Summarize the main claims in the indexed documents in 5 bullet points, then list 3 unknowns.',
+  },
+  {
+    label: 'evidence map',
+    prompt: 'Build an evidence map: claim -> supporting artifacts -> confidence gaps. Keep it compact.',
+  },
+  {
+    label: 'counterexample hunt',
+    prompt: 'Find contradictions, edge cases, or failure modes in the current research memory for this topic.',
+  },
+  {
+    label: 'timeline view',
+    prompt: 'Extract a timeline of events/observations from the indexed notes with dates if present.',
+  },
+  {
+    label: 'terminology decode',
+    prompt: 'List specialized terms used in the documents and explain each in plain language for a new teammate.',
+  },
+  {
+    label: 'next experiments',
+    prompt: 'Propose 5 next experiments based on the current evidence, ranked by expected information gain.',
+  },
+];
 
 // ── Code-Worm Auth ─────────────────────────────────────────────────────────
 
@@ -1076,6 +1436,32 @@ document.addEventListener('click', e => {
     document.getElementById('wormDrop').classList.remove('open');
   }
 });
+
+function loadPromptExample(prompt) {
+  const input = document.getElementById('promptInput');
+  if (!input) return;
+  input.value = prompt;
+  input.focus();
+  if (typeof input.setSelectionRange === 'function') {
+    input.setSelectionRange(input.value.length, input.value.length);
+  }
+  log(`Loaded example prompt (${Math.min(prompt.length, 60)} chars)`);
+}
+
+function renderPromptExamples() {
+  const host = document.getElementById('examplePrompts');
+  if (!host) return;
+  const note = host.querySelector('.ex-note');
+  EXAMPLE_PROMPTS.forEach((item) => {
+    const btn = document.createElement('button');
+    btn.className = 'ex-chip tip';
+    btn.type = 'button';
+    btn.textContent = item.label;
+    btn.dataset.tip = item.prompt;
+    btn.addEventListener('click', () => loadPromptExample(item.prompt));
+    host.insertBefore(btn, note);
+  });
+}
 
 function _wormErr(msg) {
   const el = document.getElementById('wormErr');
@@ -1169,6 +1555,533 @@ function log(msg, cls = '') {
 
 function barColor(val) { return val >= 0.7 ? 'green' : val >= 0.4 ? 'amber' : 'red'; }
 
+function _fmtCount(n) {
+  const v = Number(n);
+  if (!Number.isFinite(v)) return '?';
+  return new Intl.NumberFormat().format(v);
+}
+
+function setRagStatsFallback(reason) {
+  const statusEl = document.getElementById('ragStatus');
+  const modeBtn = document.getElementById('modeRag');
+  const hintEl = document.getElementById('ragModeHint');
+  if (statusEl) {
+    statusEl.style.color = 'var(--amber)';
+    statusEl.textContent = 'Aletheia: stats unavailable';
+    statusEl.title = reason || '';
+  }
+  if (modeBtn) {
+    modeBtn.dataset.tip = 'Search indexed research memory (Aletheia stats unavailable)';
+  }
+  if (hintEl) {
+    hintEl.textContent = 'queries indexed research memory via vector search (Aletheia stats unavailable)';
+  }
+}
+
+function applyRagStats(stats) {
+  const total = Number(stats?.total_artifacts ?? 0);
+  const proofs = Number(stats?.proof_count ?? 0);
+  const hypotheses = Number(stats?.hypothesis_count ?? 0);
+  const statusEl = document.getElementById('ragStatus');
+  const modeBtn = document.getElementById('modeRag');
+  const hintEl = document.getElementById('ragModeHint');
+
+  if (statusEl) {
+    statusEl.style.color = 'var(--green)';
+    statusEl.textContent = `Aletheia: ${_fmtCount(total)} artifacts`;
+    statusEl.title = `${_fmtCount(proofs)} proofs • ${_fmtCount(hypotheses)} hypotheses`;
+  }
+  if (modeBtn) {
+    modeBtn.dataset.tip = `Search Aletheia memory (${_fmtCount(total)} artifacts: ${_fmtCount(proofs)} proofs / ${_fmtCount(hypotheses)} hypotheses)`;
+  }
+  if (hintEl) {
+    hintEl.textContent = `queries Aletheia memory via vector search (${_fmtCount(proofs)} proofs / ${_fmtCount(hypotheses)} hypotheses; ${_fmtCount(total)} total)`;
+  }
+
+  const sig = `${total}|${proofs}|${hypotheses}`;
+  if (!_ragStatsLoggedOnce || _ragStatsLastSig !== sig) {
+    log(`Aletheia memory: ${_fmtCount(proofs)} proofs / ${_fmtCount(hypotheses)} hypotheses (${_fmtCount(total)} total)`, 'event');
+    _ragStatsLoggedOnce = true;
+    _ragStatsLastSig = sig;
+  }
+  _ragStatsFailedOnce = false;
+}
+
+async function refreshRagStats() {
+  if (demoMode) return;
+  const endpoints = [`${API}/api/aletheia/stats`, `${API}/aletheia/stats`];
+  try {
+    let lastErr = null;
+    for (const url of endpoints) {
+      try {
+        const r = await fetch(url);
+        if (!r.ok) {
+          lastErr = new Error(`HTTP ${r.status}`);
+          continue;
+        }
+        const stats = await r.json();
+        applyRagStats(stats || {});
+        return;
+      } catch (e) {
+        lastErr = e;
+      }
+    }
+    throw (lastErr || new Error('stats endpoint unavailable'));
+  } catch (e) {
+    setRagStatsFallback(e.message || 'fetch failed');
+    if (!_ragStatsFailedOnce) {
+      log(`Aletheia stats endpoint unavailable: ${e.message || 'fetch failed'}`, 'error');
+      _ragStatsFailedOnce = true;
+    }
+  }
+}
+
+function _demoStatusChip(label, ok, ms, detail) {
+  const color = ok ? 'var(--green)' : 'var(--amber)';
+  const icon = ok ? '\u25cf' : '\u25cb';
+  const extra = ms !== undefined ? ` ${ms}ms` : '';
+  const note = detail ? ` (${detail})` : '';
+  return `<span style="color:${color};margin-right:10px;font-size:10px" title="${label}${note}">${icon} ${label}${extra}</span>`;
+}
+
+function _providerCatalogFromPayload(raw) {
+  if (!raw || typeof raw !== 'object') return {};
+  const root = (raw.providers && typeof raw.providers === 'object' && !Array.isArray(raw.providers))
+    ? raw.providers
+    : raw;
+  const out = {};
+  for (const [name, info] of Object.entries(root)) {
+    if (!info || typeof info !== 'object' || Array.isArray(info)) continue;
+    if (name === 'providers' || name === 'summary' || name === 'meta' || name === 'totals') continue;
+    const hasProviderShape = ('available' in info) || ('models' in info) || ('status' in info) || ('count' in info);
+    if (!hasProviderShape) continue;
+    out[name] = info;
+  }
+  return out;
+}
+
+function _renderProvidersHtml(providerMap) {
+  let html = '<div style="margin-bottom:12px"><div style="font-size:10px;color:var(--accent);text-transform:uppercase;margin-bottom:6px">Providers</div>';
+  const entries = Object.entries(providerMap || {});
+  if (!entries.length) {
+    html += '<div style="font-size:11px;color:var(--dim)">provider catalog unavailable</div>';
+    html += '</div>';
+    return html;
+  }
+  for (const [prov, info] of entries) {
+    const count = Array.isArray(info?.models)
+      ? info.models.length
+      : (Number.isFinite(Number(info?.count)) ? Number(info.count) : 0);
+    const available = (typeof info?.available === 'boolean')
+      ? info.available
+      : (String(info?.status || '').toLowerCase() === 'ok' || count > 0);
+    const dot = available
+      ? '<span class="dot live" style="width:6px;height:6px"></span>'
+      : '<span class="dot dead" style="width:6px;height:6px"></span>';
+    html += `<div style="font-size:11px;margin:3px 0">${dot} ${prov} <span style="color:var(--dim)">(${count})</span></div>`;
+  }
+  html += '</div>';
+  return html;
+}
+
+function _renderDemoDatasetCatalogHtml() {
+  const demoDatasets = [
+    { name: 'Topology Claims Corpus', tag: 'tribunal', items: 312, note: 'claims, supports, contradictions' },
+    { name: 'Sleep + HRV Cohort Notes', tag: 'life-science', items: 188, note: 'sessions, biomarkers, interventions' },
+    { name: 'Method Fragments / Protocols', tag: 'ops-lab', items: 94, note: 'steps, parameters, failure modes' },
+  ];
+  let html = '<div style="margin-bottom:12px"><div style="font-size:10px;color:var(--amber);text-transform:uppercase;margin-bottom:6px;letter-spacing:0.08em">Datasets (demo)</div>';
+  demoDatasets.forEach((ds, i) => {
+    const hue = i === 0 ? '96,165,250' : (i === 1 ? '52,211,153' : '167,139,250');
+    html += `
+      <div style="
+        margin: 0 0 6px 0;
+        padding: 7px 8px;
+        border: 1px solid rgba(${hue},0.32);
+        border-radius: 8px;
+        background:
+          linear-gradient(135deg, rgba(${hue},0.08), rgba(255,255,255,0.01));
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.03);
+      ">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+          <div style="font-family:var(--font-ui);font-size:10px;color:#eaf3ff;letter-spacing:0.05em">${ds.name}</div>
+          <span style="font-size:9px;color:rgba(255,255,255,0.62)">${ds.items} items</span>
+        </div>
+        <div style="margin-top:4px;font-size:10px;color:var(--dim);line-height:1.35">${ds.note}</div>
+        <div style="margin-top:5px;font-size:9px;color:rgba(255,255,255,0.58);text-transform:uppercase;letter-spacing:0.08em">${ds.tag}</div>
+      </div>`;
+  });
+  html += '</div>';
+  return html;
+}
+
+function setDemoDataEnabled(next) {
+  demoMode = !!next;
+  const btn = document.getElementById('demoDataBtn');
+  if (btn) {
+    btn.classList.toggle('active', demoMode);
+    btn.textContent = demoMode ? 'DEMO ON' : 'DEMO DATA';
+    btn.dataset.tip = demoMode
+      ? 'Demo dataset active (live polling paused)'
+      : 'Load demo data snapshot and pause live polling';
+  }
+}
+
+function applyDemoData() {
+  setDemoDataEnabled(true);
+  if (_sseSource) {
+    try { _sseSource.close(); } catch (_) {}
+    _sseSource = null;
+  }
+  if (_sseTimer) {
+    clearTimeout(_sseTimer);
+    _sseTimer = null;
+  }
+  currentOntology = 'topology';
+  const ontologySelect = document.getElementById('ontologySelect');
+  const ontologyBadge = document.getElementById('ontologyBadge');
+  if (ontologySelect) ontologySelect.value = 'topology';
+  if (ontologyBadge) {
+    ontologyBadge.textContent = 'Topology';
+    ontologyBadge.className = 'ontology-badge onto-topology';
+  }
+  syncCrossnavOntology();
+
+  document.getElementById('statusDot').className = 'dot live';
+  document.getElementById('statusText').textContent = 'demo-online';
+  const cs = document.getElementById('componentStatus');
+  if (cs) {
+    cs.innerHTML = [
+      _demoStatusChip('Tribunal API', true, 42),
+      _demoStatusChip('Aletheia', true, 61),
+      _demoStatusChip('Redis', true, 2),
+      _demoStatusChip('SSE', false, undefined, 'simulated'),
+    ].join('');
+  }
+  const cnProviders = document.getElementById('cn-providers');
+  if (cnProviders) cnProviders.textContent = '7/7 providers';
+  applyRagStats({ total_artifacts: 1842, proof_count: 612, hypothesis_count: 1230 });
+
+  const agentsPanel = document.getElementById('agentsPanel');
+  if (agentsPanel) {
+    const providerMap = {};
+    [
+      ['openai', true, 4],
+      ['anthropic', true, 3],
+      ['google', true, 2],
+      ['groq', true, 4],
+      ['together', true, 6],
+      ['mistral', true, 2],
+      ['ollama', true, 12],
+    ].forEach(([prov, ok, models]) => {
+      providerMap[prov] = { available: ok, count: models };
+    });
+    const provHtml = _renderProvidersHtml(providerMap);
+    const datasetHtml = _renderDemoDatasetCatalogHtml();
+    const agentHeader = '<div style="font-size:10px;color:var(--accent);text-transform:uppercase;margin-bottom:6px">Agents</div>';
+    const nowSec = Math.round(Date.now() / 1000);
+    const statuses = ['ready', 'analyzing', 'idle', 'routing', 'observing', 'syncing', 'planning', 'challenging'];
+    const cards = STATIC_ROSTER.map((spec, i) => renderAgentCard(spec.id, spec.name, spec.color, statuses[i], (nowSec - (nowSec - (i + 1) * 3)), spec.actions)).join('');
+    agentsPanel.innerHTML = provHtml + datasetHtml + agentHeader + cards;
+  }
+
+  eventCount = 8;
+  document.getElementById('eventCount').textContent = String(eventCount);
+  const eventsPanel = document.getElementById('eventsPanel');
+  if (eventsPanel) {
+    const base = Date.now();
+    const demoEvents = [
+      ['aletheia:indexed', 'A6'],
+      ['tribunal:consensus', 'A1'],
+      ['ontology:switch', 'UI'],
+      ['session:rewind', 'A8'],
+      ['rag:search', 'A2'],
+      ['sceptic:counterarguments', 'A8'],
+      ['providers:health', 'A6'],
+      ['memory:map_refresh', 'A4'],
+    ];
+    eventsPanel.innerHTML = demoEvents.map((row, i) => {
+      const ts = new Date(base - i * 9000).toLocaleTimeString();
+      return `<div class="event-item"><span class="time">${ts}</span> <span class="type">${row[0]}</span> ${row[1]}</div>`;
+    }).join('');
+  }
+
+  localHistory = [
+    { step: 1, query: 'Summarize contradictions in the indexed notes about dosage-response behavior.', ts: Date.now() - 240000 },
+    { step: 2, query: 'Map evidence clusters by ontology and list confidence gaps.', ts: Date.now() - 170000 },
+    { step: 3, query: 'Generate a sceptic review of the strongest consensus claim.', ts: Date.now() - 110000 },
+    { step: 4, query: 'Propose next experiments ranked by information gain.', ts: Date.now() - 45000 },
+  ];
+  renderHistory(localHistory);
+  if (historyCollapsed) toggleHistory();
+
+  document.getElementById('promptInput').value = 'Build an evidence map for topology-related claims and identify weak support regions.';
+  setMode('tribunal');
+  renderTribunalResult({
+    mode: 'demo',
+    analysis_method: 'seeded_snapshot',
+    consensus: 'Topology-related claims cluster into two strong groups (graph invariants and continuity arguments) and one weak group (causal extrapolations from sparse examples). The weak region lacks independent replication and relies on shared assumptions about sampling stability.',
+    confidence: 0.82,
+    agreement_score: 0.74,
+    models_responded: 5,
+    models_queried: 5,
+    elapsed_s: 1.8,
+    math_verification: {
+      topology: { overall: 'partial-pass' },
+      logic: { overall: 'pass' },
+    },
+    responses: [
+      { provider: 'openai', model: 'gpt-4.1-mini', latency_s: 0.8, text: 'Evidence clusters are coherent, but the causal chain is under-supported where examples are re-used across sections.' },
+      { provider: 'anthropic', model: 'claude-3.5-sonnet', latency_s: 1.1, text: 'Consensus: strongest support is in invariants/persistence framing. Weak support appears in claims that infer mechanism from observational symmetry alone.' },
+      { provider: 'google', model: 'gemini-2.0-flash', latency_s: 0.9, text: 'I would separate descriptive topology findings from predictive claims; the latter need more direct tests.' },
+      { provider: 'groq', model: 'llama-3.3-70b', latency_s: 0.6, text: 'Key gap: no explicit falsification threshold for the weakest cluster.' },
+      { provider: 'mistral', model: 'large-latest', latency_s: 1.3, text: 'Recommend a confidence ladder and explicit provenance tags for each supporting artifact.' },
+    ],
+  });
+
+  log('Demo data mode enabled (live polling paused)', 'event');
+  log('Seeded providers, agents, events, rewind history, Aletheia stats, and tribunal result', 'event');
+}
+
+function disableDemoData() {
+  setDemoDataEnabled(false);
+  log('Demo data mode disabled (live polling resumed)', 'event');
+  checkHealth();
+  loadAgents();
+  refreshRagStats();
+  connectSSE();
+}
+
+function toggleDemoData() {
+  if (demoMode) disableDemoData();
+  else applyDemoData();
+}
+
+// ── Quick Tour (beta MVP) ──────────────────────────────────────────────────
+
+const QUICK_TOUR_KEY = 'themis_quick_tour_seen_v1';
+let _quickTourActive = false;
+let _quickTourIndex = 0;
+
+const QUICK_TOUR_STEPS = [
+  {
+    target: '#demoDataBtn',
+    title: 'Demo Data First',
+    text: 'Start here for a safe walkthrough.\nThis loads a seeded snapshot, pauses live polling, and makes the UI teachable without backend noise.',
+    onEnter: function() {
+      if (!demoMode) applyDemoData();
+    },
+  },
+  {
+    target: '#agentsPanel',
+    title: 'Providers + Datasets',
+    text: 'Top rows show provider health.\nIn demo mode, a separate titled DATASETS block appears so users can learn what they are querying before asking anything.',
+  },
+  {
+    target: '.mode-toggle',
+    title: 'Modes = Different Behaviors',
+    text: 'RAG = memory lookup.\nTribunal = multi-model consensus.\nICE = deeper pass.\nSceptic = counterarguments and pressure-testing.',
+    onEnter: function() {
+      setMode('tribunal');
+    },
+  },
+  {
+    target: '#examplePrompts',
+    title: 'Zero-Spend Examples',
+    text: 'These chips fill the input only.\nNo AI credits are used until the ASK button is pressed.',
+  },
+  {
+    target: '#promptInput',
+    title: 'Prompt + Ask',
+    text: 'Use this for your research question.\nFor beta demos, keep prompts concrete and compare one mode at a time.',
+  },
+  {
+    target: '#tribunalResults',
+    title: 'Results Surface',
+    text: 'This panel packages outputs (consensus, evidence, model responses).\nDemo mode seeds a result immediately so new users see the shape of an answer.',
+  },
+  {
+    target: '#eventsPanel',
+    title: 'Live Events',
+    text: 'Operational telemetry stream.\nIf the backend SSE is unstable, the console now backs off and avoids log spam.',
+  },
+  {
+    target: '#historyPanel',
+    title: 'Session Rewind',
+    text: 'Reopen earlier queries and restore context.\nThis is useful for demos because it shows continuity, not one-off prompts.',
+    onEnter: function() {
+      const panel = document.getElementById('historyPanel');
+      if (panel && panel.classList.contains('collapsed') && typeof toggleHistory === 'function') {
+        toggleHistory();
+      }
+    },
+  },
+  {
+    target: '#rhea-footer',
+    title: 'Trust Surface',
+    text: 'Footer links now resolve locally (Terms / Privacy / Security / Docs / Contact / cookies / personal info).\nThis is part of beta packaging quality.',
+  },
+];
+
+function _tourEls() {
+  return {
+    overlay: document.getElementById('quickTourOverlay'),
+    spotlight: document.getElementById('quickTourSpotlight'),
+    card: document.getElementById('quickTourCard'),
+    title: document.getElementById('quickTourTitle'),
+    text: document.getElementById('quickTourText'),
+    progress: document.getElementById('quickTourProgress'),
+    back: document.getElementById('qtBackBtn'),
+    next: document.getElementById('qtNextBtn'),
+    skip: document.getElementById('qtSkipBtn'),
+  };
+}
+
+function _tourTargetFor(step) {
+  if (!step || !step.target) return null;
+  return document.querySelector(step.target);
+}
+
+function _positionQuickTourCard(rect) {
+  const { card } = _tourEls();
+  if (!card) return;
+  const vw = window.innerWidth;
+  const vh = window.innerHeight;
+  const margin = 12;
+  const cardW = Math.min(380, Math.max(260, vw - 20));
+  const cardH = card.offsetHeight || 190;
+
+  let left = rect ? rect.right + 12 : vw - cardW - margin;
+  let top = rect ? rect.top : margin;
+
+  if (!rect) {
+    top = Math.max(margin, vh - cardH - 74);
+  } else {
+    if (left + cardW > vw - margin) left = rect.left - cardW - 12;
+    if (left < margin) left = Math.max(margin, Math.min(vw - cardW - margin, rect.left));
+    if (top + cardH > vh - margin) top = Math.max(margin, vh - cardH - margin);
+    if (rect.height > 160 && top < rect.top + 8) top = Math.max(margin, rect.top + 8);
+  }
+
+  card.style.left = Math.round(left) + 'px';
+  card.style.top = Math.round(top) + 'px';
+}
+
+function _updateQuickTourSpotlight(target) {
+  const { spotlight } = _tourEls();
+  if (!spotlight) return;
+  if (!target) {
+    spotlight.style.left = '8px';
+    spotlight.style.top = '8px';
+    spotlight.style.width = Math.max(220, window.innerWidth - 16) + 'px';
+    spotlight.style.height = Math.max(100, window.innerHeight - 16) + 'px';
+    spotlight.style.borderRadius = '14px';
+    _positionQuickTourCard(null);
+    return;
+  }
+
+  try { target.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' }); } catch (_) {}
+  const r = target.getBoundingClientRect();
+  const pad = 6;
+  const left = Math.max(6, r.left - pad);
+  const top = Math.max(6, r.top - pad);
+  const width = Math.max(24, Math.min(window.innerWidth - left - 6, r.width + pad * 2));
+  const height = Math.max(24, Math.min(window.innerHeight - top - 6, r.height + pad * 2));
+
+  spotlight.style.left = Math.round(left) + 'px';
+  spotlight.style.top = Math.round(top) + 'px';
+  spotlight.style.width = Math.round(width) + 'px';
+  spotlight.style.height = Math.round(height) + 'px';
+  spotlight.style.borderRadius = (target.id === 'rhea-footer' ? 10 : 12) + 'px';
+
+  _positionQuickTourCard({ left, top, right: left + width, bottom: top + height, width, height });
+}
+
+function renderQuickTourStep() {
+  const els = _tourEls();
+  const step = QUICK_TOUR_STEPS[_quickTourIndex];
+  if (!els.overlay || !step) return;
+  els.title.textContent = step.title;
+  els.text.textContent = step.text;
+  els.progress.textContent = `Step ${_quickTourIndex + 1}/${QUICK_TOUR_STEPS.length}`;
+  els.back.disabled = _quickTourIndex === 0;
+  els.next.textContent = (_quickTourIndex === QUICK_TOUR_STEPS.length - 1) ? 'Finish' : 'Next';
+
+  if (typeof step.onEnter === 'function') {
+    try { step.onEnter(); } catch (_) {}
+  }
+
+  const target = _tourTargetFor(step);
+  _updateQuickTourSpotlight(target);
+  setTimeout(function() {
+    if (_quickTourActive && _quickTourIndex < QUICK_TOUR_STEPS.length) {
+      _updateQuickTourSpotlight(_tourTargetFor(QUICK_TOUR_STEPS[_quickTourIndex]));
+    }
+  }, 180);
+}
+
+function startQuickTour(force) {
+  const els = _tourEls();
+  if (!els.overlay) return;
+  if (!force && localStorage.getItem(QUICK_TOUR_KEY) === '1') return;
+  _quickTourActive = true;
+  _quickTourIndex = 0;
+  els.overlay.classList.add('active');
+  els.overlay.setAttribute('aria-hidden', 'false');
+  document.body.style.overflow = 'hidden';
+  renderQuickTourStep();
+}
+
+function closeQuickTour(markSeen) {
+  const els = _tourEls();
+  if (!els.overlay) return;
+  _quickTourActive = false;
+  els.overlay.classList.remove('active');
+  els.overlay.setAttribute('aria-hidden', 'true');
+  document.body.style.overflow = '';
+  if (markSeen) localStorage.setItem(QUICK_TOUR_KEY, '1');
+}
+
+function nextQuickTour() {
+  if (!_quickTourActive) return;
+  if (_quickTourIndex >= QUICK_TOUR_STEPS.length - 1) {
+    closeQuickTour(true);
+    log('Quick tour completed', 'event');
+    return;
+  }
+  _quickTourIndex += 1;
+  renderQuickTourStep();
+}
+
+function prevQuickTour() {
+  if (!_quickTourActive) return;
+  _quickTourIndex = Math.max(0, _quickTourIndex - 1);
+  renderQuickTourStep();
+}
+
+function skipQuickTour() {
+  if (!_quickTourActive) return;
+  closeQuickTour(true);
+  log('Quick tour skipped', 'event');
+}
+
+window.startQuickTour = startQuickTour;
+window.nextQuickTour = nextQuickTour;
+window.prevQuickTour = prevQuickTour;
+window.skipQuickTour = skipQuickTour;
+
+window.addEventListener('resize', function() {
+  if (!_quickTourActive) return;
+  renderQuickTourStep();
+});
+
+document.addEventListener('keydown', function(e) {
+  if (!_quickTourActive) return;
+  if (e.key === 'Escape') { e.preventDefault(); skipQuickTour(); return; }
+  if (e.key === 'ArrowRight' || e.key === 'Enter') { e.preventDefault(); nextQuickTour(); return; }
+  if (e.key === 'ArrowLeft') { e.preventDefault(); prevQuickTour(); return; }
+});
+
 // ── Mode Toggle ────────────────────────────────────────────────────────────
 
 function setMode(mode) {
@@ -1223,6 +2136,7 @@ async function switchOntology(value) {
 // ── Health ─────────────────────────────────────────────────────────────────
 
 async function checkHealth() {
+  if (demoMode) return;
   try {
     const r = await fetch(`${API}/health`);
     const d = await r.json();
@@ -1323,6 +2237,7 @@ async function sendAgentAction(query) {
 }
 
 async function loadAgents() {
+  if (demoMode) return;
   try {
     const el = document.getElementById('agentsPanel');
     let liveAgents = {};
@@ -1336,16 +2251,14 @@ async function loadAgents() {
       }
     } catch (e) {}
 
-    let provHtml = '<div style="margin-bottom:12px"><div style="font-size:10px;color:var(--accent);text-transform:uppercase;margin-bottom:6px">Providers</div>';
+    let provHtml = _renderProvidersHtml({});
     try {
       const r2 = await fetch(`${API}/api/models`);
-      const models = await r2.json();
-      for (const [prov, info] of Object.entries(models)) {
-        const dot = info.available ? '<span class="dot live" style="width:6px;height:6px"></span>' : '<span class="dot dead" style="width:6px;height:6px"></span>';
-        provHtml += `<div style="font-size:11px;margin:3px 0">${dot} ${prov} <span style="color:var(--dim)">(${info.models?.length || 0})</span></div>`;
+      if (r2.ok) {
+        const models = await r2.json();
+        provHtml = _renderProvidersHtml(_providerCatalogFromPayload(models));
       }
     } catch(e) {}
-    provHtml += '</div>';
 
     // Build agent roster: merge live status into static roster
     const agentHeader = '<div style="font-size:10px;color:var(--accent);text-transform:uppercase;margin-bottom:6px">Agents</div>';
@@ -1364,10 +2277,39 @@ async function loadAgents() {
 
 // ── SSE Events ─────────────────────────────────────────────────────────────
 
+let _sseRetry = 1000;
+let _sseTimer = null;
+let _sseLastError = 0;
+let _sseSource = null;
+let _sseConnecting = false;
+let _sseEverConnected = false;
+let _sseLastConnectLog = 0;
+let _sseLastOpenLog = 0;
+let _sseLastUnavailableLog = 0;
+
 function connectSSE() {
-  log('Connecting to SSE stream...');
+  if (demoMode) return;
+  if (_sseSource || _sseConnecting) return;
+  const now = Date.now();
+  if (now - _sseLastConnectLog > (_sseEverConnected ? 60000 : 15000)) {
+    log(_sseEverConnected ? 'Reconnecting SSE stream...' : 'Connecting to SSE stream...');
+    _sseLastConnectLog = now;
+  }
+  _sseConnecting = true;
   const es = new EventSource(`${API}/ui/events`);
+  _sseSource = es;
+  es.onopen = () => {
+    _sseConnecting = false;
+    _sseRetry = 1000; // reset backoff on success
+    const openNow = Date.now();
+    if (!_sseEverConnected || openNow - _sseLastOpenLog > 60000) {
+      log(_sseEverConnected ? 'SSE reconnected' : 'SSE connected', 'event');
+      _sseLastOpenLog = openNow;
+    }
+    _sseEverConnected = true;
+  };
   es.onmessage = (e) => {
+    _sseRetry = 1000; // reset on any message
     try {
       let evt = {};
       try { evt = JSON.parse(e.data); } catch (_) { evt = { raw: e.data }; }
@@ -1382,7 +2324,29 @@ function connectSSE() {
       if (panel.children.length > 100) panel.lastChild.remove();
     } catch(e2) {}
   };
-  es.onerror = () => { log('SSE reconnecting...', 'error'); };
+  es.onerror = () => {
+    _sseConnecting = false;
+    es.close();
+    if (_sseSource === es) _sseSource = null;
+    const now = Date.now();
+    const retryMs = _sseRetry;
+    if (_sseEverConnected) {
+      if (now - _sseLastError > 30000) { // only log once per 30s
+        log(`SSE disconnected — retrying in ${Math.round(retryMs / 1000)}s`, 'error');
+      }
+      _sseLastError = now;
+    } else if (now - _sseLastUnavailableLog > 30000) {
+      // Before the first successful connection, keep the status feed quiet.
+      log(`SSE unavailable — retrying in ${Math.round(retryMs / 1000)}s`, 'error');
+      _sseLastUnavailableLog = now;
+    }
+    clearTimeout(_sseTimer);
+    _sseTimer = setTimeout(() => {
+      _sseTimer = null;
+      connectSSE();
+    }, retryMs + Math.floor(Math.random() * 250));
+    _sseRetry = Math.min(_sseRetry * 2, 30000); // max 30s backoff
+  };
 }
 
 // ── Query Dispatch ─────────────────────────────────────────────────────────
@@ -1713,17 +2677,28 @@ setInterval(() => {
   // prod: labels already set to CONSOLE / ATLAS / Providers by default
 })();
 
-checkHealth();
-loadAgents();
-connectSSE();
+if (!DEMO_BOOT) {
+  checkHealth();
+  loadAgents();
+  connectSSE();
+}
 setInterval(checkHealth, 15000);
 setInterval(loadAgents, 10000);
 
-document.getElementById('ragStatus').textContent = 'RAG: 250 chunks';
+document.getElementById('ragStatus').textContent = 'Aletheia: loading...';
 syncCrossnavOntology();
-log('Rhea Scientific Gem v0.4.0 initialized', 'event');
-log('RAG pipeline: 76 docs / 250 chunks indexed in Redis', 'event');
+renderPromptExamples();
+log('Themis Console v0.5.0 initialized', 'event');
+if (DEMO_BOOT) {
+  applyDemoData();
+} else {
+  refreshRagStats();
+}
+setInterval(refreshRagStats, 30000);
 log('New: Ontology Switcher | Sceptic Mode | Session Rewind', 'event');
+setTimeout(function() {
+  startQuickTour(false);
+}, 850);
 
 // ── Krikoi Titanon — planetary ring initialization ──────────────────────────
 (function() {
