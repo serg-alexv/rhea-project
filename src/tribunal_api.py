@@ -62,6 +62,42 @@ _command_queue: list[dict] = []
 _receipts: dict[str, dict] = {}
 
 # ---------------------------------------------------------------------------
+# Session history (in-memory, reset on process restart)
+# ---------------------------------------------------------------------------
+
+_session_history: list[dict] = []
+
+# ---------------------------------------------------------------------------
+# Ontology state
+# ---------------------------------------------------------------------------
+
+_active_ontology: str = "general"
+
+ONTOLOGY_PROMPTS: dict[str, str] = {
+    "general": "",
+    "pharmacology": (
+        "You are analyzing this from a pharmacological perspective. "
+        "Consider drug interactions, receptor binding, dose-response relationships, and ADME properties."
+    ),
+    "biochemistry": (
+        "You are analyzing this from a biochemistry perspective. "
+        "Consider molecular mechanisms, enzyme kinetics, metabolic pathways, and protein structure-function."
+    ),
+    "logic": (
+        "You are analyzing this from a formal logic perspective. "
+        "Consider logical consistency, proof structure, axiom systems, and inference rules."
+    ),
+    "topology": (
+        "You are analyzing this from a topological perspective. "
+        "Consider continuity, connectedness, compactness, and homeomorphic invariants."
+    ),
+    "systems_biology": (
+        "You are analyzing this from a systems biology perspective. "
+        "Consider network dynamics, feedback loops, emergent properties, and multi-scale interactions."
+    ),
+}
+
+# ---------------------------------------------------------------------------
 # Ruliad math engine (lazy-loaded, plugin auto-discovery)
 # ---------------------------------------------------------------------------
 
@@ -198,6 +234,45 @@ class MathVerifyRequest(BaseModel):
     hypothesis: str
     domain: str = "general"
     skip_tribunal: bool = False
+
+
+# ---------------------------------------------------------------------------
+# New request/response models — sceptic, session rewind, ontology switch
+# ---------------------------------------------------------------------------
+
+class TribunalScepticRequest(BaseModel):
+    prompt: str = Field(..., min_length=1, max_length=10000, description="The question to send to the sceptic tribunal")
+    k: int = Field(default=5, ge=2, le=10, description="Number of models to query (2-10)")
+    tier: str = Field(default="cheap", description="Cost tier: cheap, balanced, expensive")
+    system: str = Field(default="", max_length=2000, description="Optional system prompt")
+    devil_advocate: bool = Field(default=True, description="When True, models actively critique the consensus answer")
+
+
+class TribunalScepticResponse(BaseModel):
+    prompt: str
+    k: int
+    elapsed_s: float
+    consensus: str
+    agreement_score: float
+    confidence: float
+    models_responded: int
+    models_queried: int
+    counterarguments: list[str]
+    strongest_challenge: str
+    responses: list  # list[ModelInfo] — reuse existing model
+    meta: dict = {}
+
+
+class SessionRewindRequest(BaseModel):
+    step: int = Field(..., ge=0, description="Zero-based index of the history step to rewind to")
+
+
+class OntologySwitchRequest(BaseModel):
+    ontology: str = Field(
+        ...,
+        description="Ontology lens to apply to all subsequent tribunal calls. "
+                    "Valid values: general, pharmacology, biochemistry, logic, topology, systems_biology",
+    )
 
 
 class ModelInfo(BaseModel):
@@ -364,12 +439,19 @@ async def tribunal(req: TribunalRequest):
     t0 = time.time()
     bridge = get_bridge()
 
+    # Prepend active ontology prompt when a non-default ontology is selected
+    effective_system = req.system
+    if _active_ontology != "general":
+        ontology_prefix = ONTOLOGY_PROMPTS.get(_active_ontology, "")
+        if ontology_prefix:
+            effective_system = (ontology_prefix + "\n\n" + req.system).strip()
+
     result = bridge.tribunal(
         prompt=req.prompt,
         k=req.k,
         tier=req.tier,
         mode=req.mode,
-        system=req.system,
+        system=effective_system,
     )
 
     elapsed = time.time() - t0
@@ -407,7 +489,7 @@ async def tribunal(req: TribunalRequest):
 
     _log_api_call("/tribunal", req.dict(), elapsed, "ok")
 
-    return TribunalResponse(
+    tribunal_response = TribunalResponse(
         prompt=req.prompt,
         k=req.k,
         mode=req.mode,
@@ -425,6 +507,18 @@ async def tribunal(req: TribunalRequest):
         math_verification=math_ver,
         meta=report.get("meta", {}),
     )
+
+    # Append to session history for rewind support
+    _session_history.append({
+        "step": len(_session_history),
+        "endpoint": "/tribunal",
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "request": req.dict(),
+        "ontology": _active_ontology,
+        "response": tribunal_response.dict(),
+    })
+
+    return tribunal_response
 
 
 @app.post("/tribunal/ice", response_model=TribunalICEResponse, dependencies=[Depends(verify_api_key), Depends(check_rate_limit)])
@@ -491,6 +585,215 @@ async def math_verify(req: MathVerifyRequest):
                 results[name] = {"error": str(e)}
     verdicts = {k: v.get("overall", "unknown") for k, v in results.items() if isinstance(v, dict)}
     return {"hypothesis": req.hypothesis, "plugin_results": results, "verdicts": verdicts}
+
+
+# ---------------------------------------------------------------------------
+# POST /tribunal/sceptic — Adversarial / Devil's-Advocate Tribunal
+# ---------------------------------------------------------------------------
+
+@app.post("/tribunal/sceptic", response_model=TribunalScepticResponse, dependencies=[Depends(verify_api_key), Depends(check_rate_limit)])
+async def tribunal_sceptic(req: TribunalScepticRequest):
+    """
+    Adversarial tribunal: query k models for an initial answer, then have each
+    model actively critique the best (consensus) answer.  Returns both the
+    consensus position AND the strongest counterarguments found.
+    """
+    t0 = time.time()
+    bridge = get_bridge()
+
+    # Prepend active ontology prefix (same logic as /tribunal)
+    effective_system = req.system
+    if _active_ontology != "general":
+        ontology_prefix = ONTOLOGY_PROMPTS.get(_active_ontology, "")
+        if ontology_prefix:
+            effective_system = (ontology_prefix + "\n\n" + req.system).strip()
+
+    # Step 1: initial tribunal pass for consensus
+    result = bridge.tribunal(
+        prompt=req.prompt,
+        k=req.k,
+        tier=req.tier,
+        mode="local",
+        system=effective_system,
+    )
+    report = result.consensus_report
+    consensus_text = report.get("consensus_text", result.consensus)
+
+    # Step 2: each model critiques the consensus (devil's advocate mode)
+    counterarguments: list[str] = []
+    if req.devil_advocate:
+        critique_prompt = (
+            f"The following answer was produced by an AI consensus panel:\n\n"
+            f"\"\"\"\n{consensus_text}\n\"\"\"\n\n"
+            f"Original question: {req.prompt}\n\n"
+            f"Your task: identify the strongest flaw, gap, or counterargument against this consensus answer. "
+            f"Be specific and adversarial. Do NOT simply agree with the consensus."
+        )
+        for r in result.responses:
+            if r.error:
+                continue
+            try:
+                critique_result = bridge.ask(
+                    prompt=critique_prompt,
+                    model=r.model,
+                    system="You are a critical adversary. Your job is to find flaws, not to agree.",
+                    tier=req.tier,
+                )
+                critique_text = critique_result.text.strip() if hasattr(critique_result, "text") else str(critique_result).strip()
+                if critique_text:
+                    counterarguments.append(critique_text)
+            except Exception as exc:
+                counterarguments.append(f"[critique error from {r.model}: {exc}]")
+
+    # Step 3: determine the strongest single challenge
+    strongest_challenge = ""
+    if counterarguments:
+        if len(counterarguments) == 1:
+            strongest_challenge = counterarguments[0]
+        else:
+            # Ask a cheap model to synthesise the most potent challenge
+            try:
+                synthesis_prompt = (
+                    f"Below are {len(counterarguments)} critiques of a consensus answer.\n\n"
+                    + "\n\n---\n\n".join(f"Critique {i+1}:\n{c}" for i, c in enumerate(counterarguments))
+                    + "\n\nSynthesize these into a single, maximally powerful counterargument in 3-5 sentences."
+                )
+                synth = bridge.ask(prompt=synthesis_prompt, tier=req.tier)
+                strongest_challenge = synth.text.strip() if hasattr(synth, "text") else str(synth).strip()
+            except Exception:
+                strongest_challenge = counterarguments[0]
+
+    elapsed = time.time() - t0
+
+    response_models = [
+        ModelInfo(
+            model=r.model,
+            provider=r.provider,
+            text=r.text,
+            latency_s=r.latency_s,
+            tokens_used=r.tokens_used,
+            error=r.error,
+        )
+        for r in result.responses
+    ]
+
+    _log_api_call("/tribunal/sceptic", req.dict(), elapsed, "ok")
+
+    sceptic_response = TribunalScepticResponse(
+        prompt=req.prompt,
+        k=req.k,
+        elapsed_s=round(elapsed, 2),
+        consensus=consensus_text,
+        agreement_score=report.get("agreement_score", 0.0),
+        confidence=report.get("confidence", 0.0),
+        models_responded=report.get("successful_count", len([r for r in result.responses if not r.error])),
+        models_queried=report.get("model_count", len(result.responses)),
+        counterarguments=counterarguments,
+        strongest_challenge=strongest_challenge,
+        responses=response_models,
+        meta=report.get("meta", {}),
+    )
+
+    # Append to session history
+    _session_history.append({
+        "step": len(_session_history),
+        "endpoint": "/tribunal/sceptic",
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "request": req.dict(),
+        "ontology": _active_ontology,
+        "response": sceptic_response.dict(),
+    })
+
+    return sceptic_response
+
+
+# ---------------------------------------------------------------------------
+# GET /session/history  +  POST /session/rewind
+# ---------------------------------------------------------------------------
+
+@app.get("/session/history", dependencies=[Depends(verify_api_key)])
+async def session_history():
+    """Return the list of all tribunal calls made in this session (in order)."""
+    return {
+        "session_length": len(_session_history),
+        "history": [
+            {
+                "step": entry["step"],
+                "endpoint": entry["endpoint"],
+                "timestamp": entry["timestamp"],
+                "ontology": entry.get("ontology", "general"),
+                "prompt": entry["request"].get("prompt", ""),
+                "consensus": entry["response"].get("consensus", ""),
+            }
+            for entry in _session_history
+        ],
+    }
+
+
+@app.post("/session/rewind", dependencies=[Depends(verify_api_key)])
+async def session_rewind(req: SessionRewindRequest):
+    """
+    Rewind session context to step N.  Returns the full request+response state
+    recorded at that step so callers can restore their own context to that point.
+    The in-memory history is NOT truncated — rewind is non-destructive.
+    """
+    if not _session_history:
+        raise HTTPException(status_code=404, detail="Session history is empty — no steps to rewind to")
+    if req.step >= len(_session_history):
+        raise HTTPException(
+            status_code=400,
+            detail=f"Step {req.step} does not exist. History has {len(_session_history)} step(s) (0-indexed).",
+        )
+    entry = _session_history[req.step]
+    return {
+        "rewound_to_step": req.step,
+        "total_steps": len(_session_history),
+        "endpoint": entry["endpoint"],
+        "timestamp": entry["timestamp"],
+        "ontology": entry.get("ontology", "general"),
+        "request": entry["request"],
+        "response": entry["response"],
+    }
+
+
+# ---------------------------------------------------------------------------
+# POST /ontology/switch  +  GET /ontology
+# ---------------------------------------------------------------------------
+
+@app.get("/ontology", dependencies=[Depends(verify_api_key)])
+async def get_ontology():
+    """Return the currently active ontology and all available options."""
+    return {
+        "active": _active_ontology,
+        "available": list(ONTOLOGY_PROMPTS.keys()),
+        "active_prompt": ONTOLOGY_PROMPTS.get(_active_ontology, ""),
+    }
+
+
+@app.post("/ontology/switch", dependencies=[Depends(verify_api_key)])
+async def ontology_switch(req: OntologySwitchRequest):
+    """
+    Switch the active research ontology lens.  All subsequent /tribunal calls
+    will have the chosen ontology's system-prompt prefix prepended to their
+    system field until a new ontology is selected.
+    """
+    global _active_ontology
+    if req.ontology not in ONTOLOGY_PROMPTS:
+        raise HTTPException(
+            status_code=400,
+            detail=(
+                f"Unknown ontology '{req.ontology}'. "
+                f"Valid values: {', '.join(ONTOLOGY_PROMPTS.keys())}"
+            ),
+        )
+    previous = _active_ontology
+    _active_ontology = req.ontology
+    return {
+        "status": "ok",
+        "previous": previous,
+        "active": _active_ontology,
+        "prompt_prefix": ONTOLOGY_PROMPTS[_active_ontology],
+    }
 
 
 # ---------------------------------------------------------------------------
