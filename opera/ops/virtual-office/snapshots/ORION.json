@@ -1,8 +1,11 @@
 {
   "agent": "ORION",
-  "last_seq_applied": 122,
-  "state_hash": "f75654504d56e6ca",
-  "saved_at": "2026-02-20T07:24:29.496347+00:00",
+  "last_seq_applied": 137,
+  "state_hash": "decisions_closed_20260226",
+  "saved_at": "2026-02-26T10:45:00.000000+00:00",
   "lease_token": 8,
-  "messages_drained": 1
+  "messages_drained": 6,
+  "pending_decisions": 0,
+  "stage": "2",
+  "notes": "All 5 pending items closed by Rex. Architecture v4.1 partially approved. Stage 2 mandate issued. Waiting for agent wake to acknowledge."
 }
