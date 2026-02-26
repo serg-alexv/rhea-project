@@ -1,0 +1,7 @@
+Done. Both footers now render as a single line:
+
+```
+Terms · Privacy · Security · Community · Docs · Contact · Manage cookies · Do not share my personal information · © 2026 TimeLabs NPO
+```
+
+Copyright sits inline with the links, separated by the same `·` dot. "Non-Profit Samurai's Squad" appears as a tooltip on hover over "TimeLabs NPO".
