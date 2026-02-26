@@ -1,29 +1,30 @@
-# RHEA ACTIVE STATE (v2.2)
-> Date: 2026-02-25 | Agent: REX | Mode: PRODUCT OWNER
+# RHEA ACTIVE STATE (v2.3)
+> Date: 2026-02-26 | Agent: REX | Mode: SHIP
 
 ## System Invariants (Verified)
 - **CHECK:** `bash scripts/rhea/check.sh` → OK
-- **D-METRIC:** Last known D=867 (needs recompute)
-- **OFFICE:** Inbox drained, TODAY_CAPSULE updated
+- **BRIDGE:** src/rhea_bridge.py — 6 providers, 32 models, 4 cost tiers
+- **ORCHESTRATION:** scripts/rhea_orchestrate.py — Chronos Protocol v3, 8 agents
+- **COMMIT:** auto-commit via Entire.io (ADR-014)
+- **OFFICE:** Inbox/Outbox protocol enforced
 
 ## Current Focal Point
-- **Plan:** Controlled Ignition (EVOLUTION_PLAN_V1)
-- **Stage:** 0 — Triage (P0 debt clearance)
-- **Progress:** 2/6 P0 resolved, 1 blocked (human), 3 delegated to A6
+- **Plan:** Ship First (Task Bankruptcy complete — 4 lists → 1)
+- **Stage:** Revenue — Tribunal API deploy + first external call
+- **Active:** Deploy Tribunal API to Fly.io → get public URL
 
 ## P0 Status
 - [x] Push stale commits
-- [x] H32-02 V5 certified (Heme-Auxotrophic Facultative Respirer)
-- [ ] Rotate Gemini key (HUMAN)
-- [ ] state_full.md refresh (A6)
-- [ ] context-bridge.md refresh (A6)
-- [ ] context-state.md refresh (A6)
+- [x] H32-02 V5 certified
+- [x] Key rotation 7/7
+- [x] Firebase operational
+- [x] Tribunal API code complete (TRIBUNAL-001 through 007)
+- [ ] Fly.io deploy (next)
+- [ ] Stripe billing
 
-## Nexus
-- H32-02: V5 CERTIFIED. Genetics resolved.
-- Ontology explorer: built, not yet wired to relay (Stage 4)
+## Blocked (human)
+- [ ] Install Entire GitHub App (https://github.com/apps/entire)
 
-## Next
-- A6 executes Stage 0 tasks
-- Rex reviews A6 output
-- Stage 1: Close D-metric loop
+## Related
+- docs/state_full.md | docs/decisions.md (14 ADRs)
+- archive/frozen-tasks/ (4 frozen task lists)
