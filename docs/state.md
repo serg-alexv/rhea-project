@@ -1,10 +1,10 @@
-# RHEA ACTIVE STATE (v2.8)
+# RHEA ACTIVE STATE (v2.9)
 > Date: 2026-02-26 | Agent: REX (Opus 4.6) | Mode: DISPERSED-CLOUD-DEPLOY
 
 ## System Invariants (Verified)
 - **CHECK:** `bash scripts/rhea/check.sh` → OK.
-- **GIT:** `main` — pending commit+push.
-- **D-METRIC:** Target < 2KB. **STATUS: HEALTHY**.
+- **GIT:** `stage4-release` — clean after latest push.
+- **D-METRIC:** 268.98 — HEALTHY.
 
 ## Architecture
 - **Cloud:** Google Cloud Run + Firebase Hosting + Redis Cloud + Oracle Always Free.
@@ -14,25 +14,24 @@
 - **Prod/dev mode gating:** implemented. Footer popups (GitHub-style).
 
 ## Team Status
-- **Rex (Opus):** HEAD. Footer popups, deploy, auth, health — done.
-- **Orion (GPT-5.3):** DensityField, OceanusFlow, MnemosyneWhisper — merged.
-- **Hyperion (Gemini 3.1):** Security done. Quota exhausted (6h reset).
+- **Rex (Opus):** HEAD. All UI done: footer popups, code-worm, tooltips, agent buttons.
+- **Orion (GPT-5.3):** DensityField, OceanusFlow, MnemosyneWhisper — merged. Rate-limited on 5.3; may fall back to 5.1.
+- **Hyperion (Gemini 3.1):** Unblocked — fresh Gemini key (AIzaSyCP..., created today). Standing by for Stage 2.
 
-## Specs Ready for Implementation
+## Specs Ready / In Progress
 - **IMPLEMENTATION_SPEC.md** — 6 phases:
-  1. Store foundations (ViewId, ContextDensity)
-  2. Hyperion Bar (unified navbar) → assign to Hyperion
+  1. Store foundations (ViewId, ContextDensity) — done
+  2. Hyperion Bar (unified navbar) → Hyperion (waiting on Hyperion)
   3. Mnemosyne Whispers (mood popups) → done by Orion
   4. Oceanus Flow (density viz) → done by Orion
-  5. Krikoi Titanon (planetary rings) → Rex
-  6. Aletheia Pipeline (proof library) → Rex
+  5. Krikoi Titanon (planetary rings) → IN PROGRESS
+  6. Aletheia Pipeline (proof library) → IN PROGRESS
 - **NAMING_TRIBUNAL.md** — Titan naming taxonomy (3 layers)
 - **QUICK_IMPROVEMENTS.md** — 16 items, 3 applied
 
 ## Next Tasks
-- Commit + push all pending files.
-- Hyperion Bar → Gemini when quota resets.
-- Krikoi Titanon (rings) → Rex implements.
-- Aletheia Pipeline → Rex implements.
+- Legal docs → in progress.
+- Krikoi rings → in progress.
+- Aletheia pipeline → in progress.
+- Hyperion Bar → Hyperion implements (key live, unblocked).
 - Deploy to production (deploy-all.sh).
-- Revoke leaked keys (Google AI Studio).
