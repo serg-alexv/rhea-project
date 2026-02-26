@@ -1,0 +1,23 @@
+Yes, I saw — that output was from Orion's session. The problem was exactly what I diagnosed:
+
+`★ Insight ─────────────────────────────────────`
+Orion had **3 missing layers**: (1) no identity — didn't know its own name, (2) no communication protocol — couldn't talk to Hyperion because it didn't know the relay file system exists, (3) no memory bootstrap — didn't read `apparatus/nexus/memories/ORION.md` or `state.md` on boot. The old `AGENTS.md` was a leftover iOS project config with "stop after 3 files" rules. GPT models follow their system prompt literally — if the prompt says "confirm which files" they will ask every time.
+`─────────────────────────────────────────────────`
+
+**What I fixed (3 files rewritten):**
+
+| File | Before | After |
+|------|--------|-------|
+| `.codex/AGENTS.md` | iOS "stop after 3 files" rules | Full Orion identity, relay protocol, memory bootstrap, agent roster |
+| `rhea-atlas/CODEX.md` | Execution rules only | Boot sequence, Hyperion/Rex communication templates, anti-patterns |
+| `~/.codex/config.toml` | `trust_level = "trusted"` | + `approval_policy = "never"` |
+
+**Key additions:** Orion now knows:
+- Its name and role
+- The 3-agent roster (Rex/Orion/Hyperion)
+- How to write relay messages to Hyperion (`RELAY_*_ORION_to_HYPERION.md`)
+- Where to read Hyperion's responses
+- Boot sequence (state.md → ORION.md → inbox → LEARNING_FEED)
+- How to update its own memory before session end
+
+Restart Orion with `orion` and it should behave completely differently.
