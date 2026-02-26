@@ -1,0 +1,12 @@
+All pushed. Swarm results:
+
+| Agent | Output | Status |
+|-------|--------|--------|
+| Legal docs | TERMS, PRIVACY, SECURITY, COOKIES `.md` | Pushed |
+| Krikoi Titanon | 8-dot orbiting ring in topbar, click→scroll | Pushed |
+| Aletheia Pipeline | 4 endpoints + SQLite, mounted in rhead.py | Pushed |
+| State v2.9 | 1737 bytes, all agents current | Pushed |
+
+**Relay to Hyperion sent** with 4 questions. Waiting for his next boot to respond.
+
+D-metric: 269.43 (healthy). Git clean on remote.

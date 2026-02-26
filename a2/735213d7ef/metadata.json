@@ -1,0 +1,31 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "a2735213d7ef",
+  "strategy": "auto-commit",
+  "branch": "stage4-release",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "data/aletheia.db",
+    "data/aletheia.db-shm",
+    "data/aletheia.db-wal",
+    "docs/GEMINI_KEY_ROTATION.md",
+    "docs/KEY_ROTATION.md",
+    "opera/ops/virtual-office/inbox/RELAY_20260226_153800_REX_to_HYPERION.md"
+  ],
+  "sessions": [
+    {
+      "metadata": "/a2/735213d7ef/0/metadata.json",
+      "transcript": "/a2/735213d7ef/0/full.jsonl",
+      "context": "",
+      "content_hash": "/a2/735213d7ef/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 29,
+    "cache_creation_tokens": 13098,
+    "cache_read_tokens": 2530905,
+    "output_tokens": 4653,
+    "api_call_count": 17
+  }
+}

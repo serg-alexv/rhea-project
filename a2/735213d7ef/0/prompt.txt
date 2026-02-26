@@ -1,0 +1,136 @@
+check leftovers tasks =. discuss w Hyperion
+
+---
+
+<task-notification>
+<task-id>a9a84e7f3e524bb7f</task-id>
+<tool-use-id>toolu_01DCQuabMoeusDcGRLxAcuny</tool-use-id>
+<status>completed</status>
+<summary>Agent "State.md update + Hyperion relay" completed</summary>
+<result>`docs/state.md` updated to v2.9. Size: 1737 bytes (well under the 2048 limit).
+
+Key changes from v2.8:
+- Branch updated to `stage4-release` (clean after push)
+- D-Metric pinned at 268.98 (HEALTHY)
+- Hyperion unblocked: fresh Gemini key noted, standing by for Stage 2
+- Orion: rate-limit context on 5.3 / 5.1 fallback noted
+- Rex UI work marked complete (footer popups, code-worm, tooltips, agent buttons)
+- Hyperion Bar explicitly marked as "waiting on Hyperion" rather than a pending assignment
+- Krikoi rings and Aletheia pipeline both marked "IN PROGRESS"
+- Legal docs added to Next Tasks
+- Removed stale entries (revoke leaked keys, pending commit+push)</result>
+<usage><total_tokens>14393</total_tokens><tool_uses>3</tool_uses><duration_ms>20019</duration_ms></usage>
+</task-notification>
+Full transcript available at: REDACTED.output
+
+---
+
+<task-notification>
+<task-id>ae9ed4947450a6f8d</task-id>
+<tool-use-id>REDACTED</tool-use-id>
+<status>completed</status>
+<summary>Agent "Aletheia pipeline backend" completed</summary>
+<result>Everything is clean. Here is a summary of what was done.
+
+---
+
+## Implementation Summary
+
+### New file: `/Users/sa/rh.1/src/aletheia_api.py`
+
+A self-contained FastAPI `APIRouter` (tag: `aletheia`) with four endpoints:
+
+| Method | Path | Description |
+|--------|------|-------------|
+| `POST` | `/aletheia/submit` | Submit a proof/theorem. Returns 201 with the created record (`status=pending`). |
+| `GET` | `/aletheia/proofs` | List proofs, ordered by `submitted_at` DESC. Query params: `status`, `limit` (max 200), `offset`. |
+| `GET` | `/aletheia/proofs/{proof_id}` | Fetch one proof by ID. 404 if missing. |
+| `POST` | `/aletheia/verify/{proof_id}` | Trigger re-verification. Three modes: apply `score_override` (derives status from score: ≥0.85→verified, ≥0.50→inconclusive, <0.50→rejected), `force=true` (reset to pending for future LLM hook), or default placeholder (marks inconclusive). |
+
+**Storage:** SQLite at `data/aletheia.db`, table `proofs` with columns `id TEXT PK`, `title`, `statement`, `proof_text`, `status`, `submitted_at`, `verified_at`, `score`. WAL mode, three indexes (status, submitted_at, score).
+
+The `score_override` / status derivation rules mirror `aletheia_pipeline.py`'s `classify_tier()` thresholds (0.85/0.50) for consistency. A Phase 7 comment marks where the LLM verifier (`aletheia_pipeline.capture()`) should be wired in.
+
+### Modified file: `/Users/sa/rh.1/src/rhead.py`
+
+Two lines added after the `auth_router` mount:
+
+```python
+# Mount Aletheia proof pipeline router
+from aletheia_api import aletheia_router
+app.include_router(aletheia_router, prefix="/aletheia")
+```
+
+The existing `aletheia_pipeline.py` (tribunal-integrated deep capture, markdown files, `data/proof.db`) is untouched — `aletheia_api.py` is the separate public-facing submission API backed by its own `data/aletheia.db`.</result>
+<usage><total_tokens>47607</total_tokens><tool_uses>12</tool_uses><duration_ms>86968</duration_ms></usage>
+</task-notification>
+Full transcript available at: /private/tmp/claude-501/-Users-sa-rh-1/tasks/ae9ed4947450a6f8d.output
+
+---
+
+<task-notification>
+<task-id>ae97c566105e07b6b</task-id>
+<tool-use-id>toolu_01CPieCnAzC6x2zWjMjkdieG</tool-use-id>
+<status>completed</status>
+<summary>Agent "Legal docs for footer links" completed</summary>
+<result>All 4 files are created. Here is a summary:
+
+---
+
+**Files created:**
+
+`/Users/sa/rh.1/docs/TERMS.md` (11 sections, ~90 lines)
+Covers: acceptance, platform description, permitted use + prohibited use, no-warranties disclaimer, liability limitation, IP ownership, open-source contributions, account rules, governing law. Explicitly calls out that AI outputs are informational only and not medical/legal/clinical advice.
+
+`/Users/sa/rh.1/docs/PRIVACY.md` (12 sections, ~130 lines)
+Covers: minimal data collection philosophy, breakdown of data collected with/without account, what is explicitly NOT collected, data use table with retention periods, third-party AI provider disclosure (OpenAI/Anthropic/Google/OpenRouter with their privacy URLs), full GDPR rights enumeration, CCPA rights, children's privacy, 30-day log retention, breach notification within 72 hours per GDPR Art. 33.
+
+`/Users/sa/rh.1/docs/SECURITY.md` (10 sections, ~120 lines)
+Covers: scope definition (in and out of scope), supported versions table, private disclosure via email with structured report format, 5-step responsible disclosure process, severity/timeline table (Critical=48h, High=7d, Medium=30d, Low=90d), non-monetary bounty (credit + gratitude), current known security practices (Firestore rules, gitignored secrets, Dependabot, TLS, least privilege), acknowledgments placeholder.
+
+`/Users/sa/rh.1/docs/COOKIES.md` (10 sections, ~110 lines)
+Covers: essential-only stance (no analytics, no ads, no social pixels, no fingerprinting), cookie inventory table (session, CSRF, theme), localStorage inventory (query history, model prefs), explicit list of what is NOT used, no-third-party-scripts statement, GDPR/ePrivacy consent rationale (no banner needed since only essential cookies), browser management instructions for Chrome/Firefox/Safari/Edge, DNT header respect.</result>
+<usage><total_tokens>17623</total_tokens><tool_uses>4</tool_uses><duration_ms>116957</duration_ms></usage>
+</task-notification>
+Full transcript available at: /private/tmp/claude-501/-Users-sa-rh-1/tasks/ae97c566105e07b6b.output
+
+---
+
+<task-notification>
+<task-id>a4f34891d604b255b</task-id>
+<tool-use-id>REDACTED</tool-use-id>
+<status>completed</status>
+<summary>Agent "Krikoi Titanon ring components" completed</summary>
+<result>The file closes cleanly. Here is a complete summary of what was implemented:
+
+---
+
+## Krikoi Titanon — Implementation Summary
+
+### What was added to `/Users/sa/rh.1/frontend/index.html`
+
+**CSS (lines 720-780)** — `.krikoi-ring` and `.krikoi-dot` classes:
+
+- `.krikoi-ring` — 38x38px relative-positioned container that fits inline in the topbar flex row
+- `::before` pseudo — a faint circular orbit track (1px border, 7% white opacity) giving the ring its visual identity without noise
+- `::after` pseudo — a 4px central nucleus dot (18% white opacity) to anchor the visual center
+- `@keyframes krikoi-orbit` — rotates each dot around the center using the triple-transform trick: `rotate(angle) translateX(radius) rotate(-angle)`. Each dot's `--orbit-start` CSS custom property encodes its phase offset, so a single `@keyframes` definition drives all 8 dots with different starting positions
+- `.krikoi-dot` — 6px circle, absolutely centered at the ring's midpoint, animated with a 12-second linear infinite orbit. Uses `--orbit-delay` to pre-phase each dot to its initial position (negative delay = skip ahead into the animation timeline)
+- Hover state: dot grows to 9px with a color-matched glow (`--dot-color`). Hovering the ring container pauses all dots so the user can read labels and click precisely
+
+**HTML (line 849)** — Inserted in the topbar between `#ragStatus` and the flex spacer:
+
+```html
+<div class="krikoi-ring tip" id="krikoiRing" data-tip="8 Chronos agents — click a dot to jump to agent"></div>
+```
+
+**JS (lines 1728-1780)** — IIFE runs after `STATIC_ROSTER` is defined:
+
+- Iterates `STATIC_ROSTER` (8 agents A1-A8)
+- Computes each dot's `--orbit-start` as `(360/8) * i` degrees — evenly distributes the 8 dots around the full circle
+- Computes `--orbit-delay` as `-(angleDeg/360) * 12s` — negative delay pre-phases each dot so they are already spread out at page load (not all stacked at 12 o'clock)
+- Sets `background` and `box-shadow` from `spec.color` (pulling directly from `STATIC_ROSTER`, no hardcoding)
+- Click handler: scans `#agentsPanel .agent-card` elements, finds the one whose `.name` text starts with `spec.id + ' '`, calls `scrollIntoView({ behavior: 'smooth', block: 'nearest' })`, then applies a 1.2-second colored border highlight (`box-shadow: 0 0 0 2px <agent-color>`) and removes it via `setTimeout`</result>
+<usage><total_tokens>51259</total_tokens><tool_uses>19</tool_uses><duration_ms>109858</duration_ms></usage>
+</task-notification>
+Full transcript available at: REDACTED.output
