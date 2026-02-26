@@ -1,47 +1,37 @@
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-import uvicorn
+from fastapi import FastAPI, UploadFile, File
 import sqlite3
-import json
+import hashlib
 import time
 
-app = FastAPI(title="Rhea rhead Daemon")
+app = FastAPI()
 
-# Enable CORS for the future Atlas Frontend
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+# DATABASE: The Hard Audit for Scientific Sources
+def setup_db():
+    db = sqlite3.connect("data/sources.db")
+    db.execute("CREATE TABLE IF NOT EXISTS sources (id TEXT PRIMARY KEY, filename TEXT, hash TEXT, processed_at REAL)")
+    db.execute("CREATE TABLE IF NOT EXISTS conversation_history (id TEXT PRIMARY KEY, step_index INTEGER, prompt TEXT, result TEXT, rigor_score REAL)")
+    db.commit()
+    return db
 
-@app.get("/")
-def read_root():
-    return {
-        "status": "ALIVE",
-        "node": "ORION-NODE-02",
-        "engine": "High-Density Logic",
-        "message": "Welcome to the Rhea Council Chamber. The Atlas is being scaffolded."
-    }
+@app.post("/upload")
+async def upload_source(file: UploadFile = File(...)):
+    content = await file.read()
+    file_hash = hashlib.sha256(content).hexdigest()
+    
+    # Store source metadata
+    db = setup_db()
+    db.execute("INSERT OR REPLACE INTO sources VALUES (?, ?, ?, ?)", 
+               (str(time.time()), file.filename, file_hash, time.time()))
+    db.commit()
+    
+    return {"status": "ingested", "filename": file.filename, "hash": file_hash}
 
-@app.get("/health")
-def health_check():
-    # Real-time data from our SQLite Hard Audit
-    try:
-        db = sqlite3.connect("data/proof.db")
-        res = db.execute("SELECT count(*) FROM logic_audit").fetchone()
-        audit_count = res[0]
-    except:
-        audit_count = 0
-        
-    return {
-        "status": "healthy",
-        "uptime": time.time(),
-        "audit_records": audit_count,
-        "d_metric": 243.8,
-        "active_council": ["ORION", "HYPERION", "B2", "REX", "GPT-5"]
-    }
+@app.get("/history/undo")
+def undo_step():
+    db = setup_db()
+    # Simple logic to drop the latest step
+    db.execute("DELETE FROM conversation_history WHERE id = (SELECT max(id) FROM conversation_history)")
+    db.commit()
+    return {"status": "rewound"}
 
-if __name__ == "__main__":
-    print("💠 Starting Rhea Daemon on http://localhost:8000")
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+# Add health and other endpoints...
