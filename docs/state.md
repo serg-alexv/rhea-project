@@ -1,27 +1,26 @@
-# RHEA ACTIVE STATE (v2.4)
+# RHEA ACTIVE STATE (v3.1)
 > Date: 2026-02-26 | Agent: HYPERION | Mode: PROTOCOL-SYNC
 
-## System Invariants (Verified)
-- **STOP:** Sentinel logic responsive (1s latency).
-- **LEDGER:** Atomic concurrency safety active (fcntl).
-- **D-METRIC:** Target < 2KB (Current: ~1100B - SPRINT NEEDED).
-- **OFFICE:** Inbox drained, TODAY_CAPSULE updated.
+## System Invariants (v3.1 Resilience)
+- **RELAY:** QWRR "Bank-Grade" Triple-Write operational.
+- **FENCING:** Agent Lease tokens enforced in `rhea_commit.sh`.
+- **D-METRIC:** STATUS: **HEALTHY (267.60)**.
+- **TRIBUNAL:** 7 codifed triggers active.
 - **CHECK:** `bash scripts/rhea/check.sh` → OK.
-- **GIT:** `hyperion/memory` cleaned of secrets via `filter-repo`, synced to origin.
 
-## Architecture
-- **Orchestration:** Chronos Protocol v3 — A1 ALIVE and holding Lease #1.
-- **Bridge:** src/rhea_bridge.py — CHRONOS inter-agent message wiring COMPLETE.
-- **Commit Strategy:** auto-commit per ADR-014 via Entire.io + CI Enforcement check.
-- **Cost Policy:** cheap tier default (ADR-008).
+## Architecture (3.1 Sync)
+- **Protocol:** **Chronos Protocol v3.1** (Updated: resilience + fencing).
+- **Premium Model:** **Gemini 3.1 Pro Preview** (New Premium standard).
+- **Fallback:** Gemini 2.0 Flash (Default routing).
+- **Audit:** Full hash-chain integrity via `relay_chain.jsonl`.
 
 ## Current Focal Point
 - **Branch:** `hyperion/memory` (Active session).
-- **Stage:** 2 — A1 Restart Under Chain Verification (4/10 tasks COMPLETE).
-- **Tasks Done:** #14 (CHRONOS), #10 (Tribunal Triggers), #15 (Leases/Fencing), #16 (CI Enforcement).
-- **A1 Status:** ALIVE, Lease #1 valid. Execution in progress.
+- **Stage:** 3.1 — Adversarial Pair Initialization (IN PROGRESS).
+- **A8 Status:** Pending boot.
+- **A1 Status:** ALIVE, Task #17 COMPLETE.
 
 ## Related Files
-- `docs/state_full.md` (Historical Narrative)
-- `docs/CORE_RULES.md` (Updated with Tribunal Triggers)
-- `src/rhea_bridge.py` (Updated with CHRONOS support)
+- `prompts/chronos-protocol-v3-en.md` (v3.1 Protocol)
+- `src/rhea_bridge.py` (QWRR Integrated)
+- `opera/ops/rex_pager.py` (Resilience Engine)
