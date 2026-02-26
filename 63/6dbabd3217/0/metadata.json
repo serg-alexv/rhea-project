@@ -1,0 +1,24 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "636dbabd3217",
+  "session_id": "29460dc4-bc34-4b0d-933f-4c6e7a63cca8",
+  "strategy": "auto-commit",
+  "created_at": "2026-02-26T00:01:18.359957Z",
+  "branch": "hyperion/memory",
+  "checkpoints_count": 1,
+  "files_touched": [
+    ".env",
+    "scripts/rhea_commit.sh"
+  ],
+  "agent": "Claude Code",
+  "transcript_identifier_at_start": "a76ddf38-551e-4bfd-bb0a-f5ef617a6de1",
+  "checkpoint_transcript_start": 1096,
+  "transcript_lines_at_start": 1096,
+  "token_usage": {
+    "input_tokens": 122,
+    "cache_creation_tokens": 75633,
+    "cache_read_tokens": 4636889,
+    "output_tokens": 4559,
+    "api_call_count": 44
+  }
+}
