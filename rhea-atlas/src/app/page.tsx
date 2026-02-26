@@ -320,7 +320,7 @@ function CrossNav() {
       {/* Atlas label — active */}
       <div className="group relative flex items-center gap-1.5 px-2 py-0.5 rounded text-[9px] font-mono uppercase tracking-widest text-cyan-400 cursor-default">
         <span className="w-1.5 h-1.5 rounded-full bg-green-500 shadow-[0_0_5px_#22c55e] flex-shrink-0" />
-        {IS_DEV ? 'ORION ATLAS' : 'ATLAS'}
+        {IS_DEV ? 'ATLAS PRIME' : 'ATLAS'}
         {/* active underline */}
         <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-cyan-400 rounded-t" />
         <span className="pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 bg-black/90 border border-white/10 text-white/60 text-[9px] px-2.5 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-[300]">
