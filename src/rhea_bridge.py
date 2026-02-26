@@ -225,12 +225,12 @@ PRICE_TABLE = {
     "o3-mini":          (1.10,   4.40),
     "o4-mini":          (1.10,   4.40),
     # Gemini
+    "gemini-3.1-pro-preview": (2.50, 15.00),
+    "gemini-3-pro-preview":   (2.00, 12.00),
+    "gemini-3-flash-preview": (0.20,  0.80),
     "gemini-2.5-pro":   (1.25,  10.00),
     "gemini-2.5-flash": (0.15,   0.60),
     "gemini-2.0-flash": (0.10,   0.40),
-    "gemini-2.0-flash-lite": (0.075, 0.30),
-    "gemini-1.5-pro":   (1.25,   5.00),
-    "gemini-1.5-flash":  (0.075, 0.30),
     # DeepSeek
     "deepseek-chat":     (0.14,  0.28),
     "deepseek-reasoner": (0.55,  2.19),
@@ -363,9 +363,9 @@ PROVIDERS = {
         base_url="https://generativelanguage.googleapis.com/v1beta",
         api_key_env="GEMINI_API_KEY",
         models=[
-            "gemini-2.5-flash", "gemini-2.5-pro",
-            "gemini-2.0-flash", "gemini-1.5-flash",
-            "gemini-1.5-pro",
+            "gemini-3.1-pro-preview", "gemini-3-pro-preview",
+            "gemini-3-flash-preview", "gemini-2.5-flash",
+            "gemini-2.5-pro", "gemini-2.0-flash",
         ],
         call_method="gemini",
     ),

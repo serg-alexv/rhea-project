@@ -23,6 +23,13 @@ from pathlib import Path
 
 import re
 
+# Force load .env from project root
+try:
+    from dotenv import load_dotenv
+    load_dotenv(Path(__file__).parent.parent.parent / ".env")
+except ImportError:
+    pass
+
 PROJ = "rhea-office-sync"
 BASE = f"https://firestore.googleapis.com/v1/projects/{PROJ}/databases/(default)/documents"
 LOG_PATH = Path(__file__).parent.parent / "logs" / "firebase_calls.jsonl"
