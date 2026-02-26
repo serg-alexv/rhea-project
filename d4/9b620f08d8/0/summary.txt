@@ -1,0 +1,28 @@
+Full pipeline works. Submit → classify (0.88 = "proof" tier) → markdown written to `friends/aletheia/proofs/chronobiology/` → stored in `proof.db` → verification healthy.
+
+`★ Insight ─────────────────────────────────────`
+**Dual-persistence pattern**: The proof library has two complementary storage layers. SQLite (`proof.db`) gives you fast queries, search, aggregation, chains — the engine. Markdown files (`friends/aletheia/`) give you human-readable, git-diffable, browseable copies — the archive. Neither replaces the other. The DB can be rebuilt from markdown if lost; the markdown is regenerated from DB on each capture. This is the "local-first" pattern — zero cloud dependency, your data, your machine.
+`─────────────────────────────────────────────────`
+
+Your Aletheia library is fully local and free to use:
+
+```
+# CLI
+python3 src/aletheia_pipeline.py stats          # library overview
+python3 src/aletheia_pipeline.py search "cortisol"  # keyword search
+python3 src/aletheia_pipeline.py recent          # latest proofs
+python3 src/aletheia_pipeline.py export          # dump to JSON
+python3 src/aletheia_pipeline.py verify          # DB ↔ files check
+
+# API (when rhead is running on :8000)
+GET  /aletheia/stats
+GET  /aletheia/proofs
+GET  /aletheia/proofs/{id}
+GET  /aletheia/search?q=keyword
+POST /aletheia/submit          # manual entry
+POST /aletheia/verify
+
+# Browse directly
+ls friends/aletheia/proofs/     # by ontology folders
+ls friends/aletheia/hypotheses/
+```

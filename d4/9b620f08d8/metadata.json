@@ -1,0 +1,26 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "d49b620f08d8",
+  "strategy": "auto-commit",
+  "branch": "stage4-release",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "friends/aletheia/proofs/chronobiology/0650a31a247b77e6a719f701.md"
+  ],
+  "sessions": [
+    {
+      "metadata": "/d4/9b620f08d8/0/metadata.json",
+      "transcript": "/d4/9b620f08d8/0/full.jsonl",
+      "context": "",
+      "content_hash": "/d4/9b620f08d8/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 7,
+    "cache_creation_tokens": 73643,
+    "cache_read_tokens": 354708,
+    "output_tokens": 2870,
+    "api_call_count": 5
+  }
+}
