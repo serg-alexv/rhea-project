@@ -33,6 +33,7 @@ import re
 import string
 from collections import Counter
 from dataclasses import dataclass, field, asdict
+from pathlib import Path
 from typing import Optional
 
 
@@ -56,6 +57,7 @@ class ConsensusReport:
     convergence_achieved: bool = False # ICE: did responses stabilize?
     chairman_model: str = ""          # Council: which model synthesized
     round_history: list = field(default_factory=list)  # ICE: per-round snapshots
+    math_verification: dict = field(default_factory=dict)  # Ruliad plugin verdicts
     meta: dict = field(default_factory=dict)
 
     def to_dict(self) -> dict:
@@ -738,6 +740,140 @@ class ConsensusAnalyzer:
             )
 
         return report
+
+
+# ---------------------------------------------------------------------------
+# Math verification augmentation (Ruliad → Tribunal bridge)
+# ---------------------------------------------------------------------------
+
+# Keywords that suggest a claim might be verifiable by math plugins
+_MATH_DOMAIN_HINTS = {
+    "game_theory": [
+        "nash", "equilibrium", "payoff", "dominant strategy", "prisoner",
+        "zero-sum", "pareto", "game theory", "cooperative", "auction",
+    ],
+    "dynamical_systems": [
+        "lorenz", "chaos", "attractor", "lyapunov", "bifurcation",
+        "stability", "oscillat", "differential equation", "dynamical",
+        "eigenvalue", "equilibrium point", "phase space",
+    ],
+    "information_geometry": [
+        "fisher", "metric", "manifold", "cramer-rao", "kl divergence",
+        "kullback", "statistical", "gaussian", "distribution family",
+        "information geometry", "riemannian",
+    ],
+    "proof_theory": [
+        "tautology", "consistent", "implies", "logical", "horn clause",
+        "satisfiab", "propositional", "proof", "theorem", "axiom",
+        "deduction", "inference",
+    ],
+    "category_theory": [
+        "functor", "morphism", "associativ", "identity element",
+        "category", "group", "monoid", "composit", "S3", "symmetric group",
+    ],
+}
+
+
+def detect_math_domains(prompt: str) -> list[str]:
+    """Detect which Ruliad math domains a prompt might be verifiable by.
+
+    Returns list of domain names sorted by relevance (hit count).
+    """
+    prompt_lower = prompt.lower()
+    hits: dict[str, int] = {}
+    for domain, keywords in _MATH_DOMAIN_HINTS.items():
+        count = sum(1 for kw in keywords if kw in prompt_lower)
+        if count > 0:
+            hits[domain] = count
+    return sorted(hits, key=hits.get, reverse=True)
+
+
+def run_math_verification(prompt: str, engine, domains: list[str] = None) -> dict:
+    """Run Ruliad math plugins on a hypothesis. Returns {domain: result_dict}.
+
+    If domains is None, auto-detects from prompt. If no domains detected,
+    runs all plugins (belt-and-suspenders).
+    """
+    if domains is None:
+        domains = detect_math_domains(prompt)
+    if not domains:
+        domains = list(engine.registry.list_plugins())
+
+    from core.engine import Hypothesis
+    h = Hypothesis(title=prompt[:80], statement=prompt, domain="general")
+    results = {}
+    for domain in domains:
+        plugin = engine.registry.get(domain)
+        if plugin and plugin.verify:
+            try:
+                results[domain] = plugin.verify(h)
+            except Exception as e:
+                results[domain] = {"overall": "error", "error": str(e)}
+    return results
+
+
+def adjust_confidence_with_math(
+    base_confidence: float,
+    base_agreement: float,
+    math_results: dict,
+) -> tuple[float, float, str]:
+    """TODO(human): Adjust tribunal confidence based on math verification verdicts.
+
+    Args:
+        base_confidence: Original confidence from TF-IDF + stance analysis (0.0-1.0)
+        base_agreement: Original agreement score from text similarity (0.0-1.0)
+        math_results: Dict of {domain: result_dict} from Ruliad plugins.
+            Each result has an "overall" key with values like:
+            "verified", "requires_proof", "consistent_requires_deeper_proof",
+            "refuted", "error", "unknown"
+
+    Returns:
+        (adjusted_confidence, adjusted_agreement, reason_string)
+
+    Design considerations:
+    - A math "verified" verdict should boost confidence — but by how much?
+    - A "refuted" verdict should tank confidence regardless of LLM consensus
+    - "requires_proof" is ambiguous — should it be neutral or slightly negative?
+    - If ALL math domains agree, that's stronger signal than just one
+    - What if math says "verified" but LLMs disagree? (math wins? weighted blend?)
+    """
+    # TODO(human): Implement the confidence adjustment logic
+    return base_confidence, base_agreement, "math_augmentation_not_implemented"
+
+
+def math_augment(report: ConsensusReport, prompt: str, engine) -> ConsensusReport:
+    """Enrich a ConsensusReport with Ruliad math verification.
+
+    Detects math-relevant domains in the prompt, runs plugins,
+    adjusts confidence, and stores results in report.math_verification.
+    """
+    domains = detect_math_domains(prompt)
+    if not domains and not report.meta.get("force_math"):
+        return report
+
+    math_results = run_math_verification(prompt, engine, domains)
+    if not math_results:
+        return report
+
+    verdicts = {k: v.get("overall", "unknown") for k, v in math_results.items()
+                if isinstance(v, dict)}
+
+    new_conf, new_agree, reason = adjust_confidence_with_math(
+        report.confidence, report.agreement_score, math_results,
+    )
+
+    report.math_verification = {
+        "domains_tested": list(math_results.keys()),
+        "verdicts": verdicts,
+        "confidence_adjustment": reason,
+        "pre_math_confidence": report.confidence,
+        "pre_math_agreement": report.agreement_score,
+    }
+    report.confidence = new_conf
+    report.agreement_score = new_agree
+    report.analysis_method += " + ruliad_math"
+
+    return report
 
 
 # ---------------------------------------------------------------------------

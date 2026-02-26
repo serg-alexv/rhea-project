@@ -34,7 +34,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 RULIAD_ROOT = Path(__file__).parent.parent / "friends" / "ruliad" / "explorer"
 sys.path.insert(0, str(RULIAD_ROOT))
 from rhea_bridge import RheaBridge
-from consensus_analyzer import ConsensusAnalyzer
+from consensus_analyzer import ConsensusAnalyzer, math_augment, detect_math_domains
 from rhea_profile_manager import profile_manager
 from rhea_visual_context import update_state, get_health_history
 
@@ -224,6 +224,7 @@ class TribunalResponse(BaseModel):
     divergence_points: list
     stance_summary: dict
     responses: list[ModelInfo]
+    math_verification: dict = {}
     meta: dict = {}
 
 
@@ -242,6 +243,7 @@ class TribunalICEResponse(BaseModel):
     agreement_points: list
     divergence_points: list
     stance_summary: dict
+    math_verification: dict = {}
     meta: dict = {}
 
 
@@ -384,6 +386,25 @@ async def tribunal(req: TribunalRequest):
             error=r.error,
         ))
 
+    # --- Math augmentation: if prompt touches math domains, enrich with Ruliad ---
+    math_ver = {}
+    if detect_math_domains(req.prompt):
+        try:
+            from consensus_analyzer import ConsensusReport as _CR, run_math_verification
+            engine = _get_engine()
+            _tmp = _CR(
+                confidence=report.get("confidence", 0.0),
+                agreement_score=report.get("agreement_score", 0.0),
+                analysis_method=report.get("analysis_method", "unknown"),
+            )
+            _tmp = math_augment(_tmp, req.prompt, engine)
+            math_ver = _tmp.math_verification
+            report["confidence"] = _tmp.confidence
+            report["agreement_score"] = _tmp.agreement_score
+            report["analysis_method"] = _tmp.analysis_method
+        except Exception as e:
+            math_ver = {"error": str(e)}
+
     _log_api_call("/tribunal", req.dict(), elapsed, "ok")
 
     return TribunalResponse(
@@ -401,6 +422,7 @@ async def tribunal(req: TribunalRequest):
         divergence_points=report.get("divergence_points", []),
         stance_summary=report.get("stance_summary", {}),
         responses=response_models,
+        math_verification=math_ver,
         meta=report.get("meta", {}),
     )
 
@@ -421,6 +443,17 @@ async def tribunal_ice(req: TribunalICERequest):
     elapsed = time.time() - t0
     rd = report.to_dict()
 
+    # --- Math augmentation for ICE ---
+    math_ver = {}
+    if detect_math_domains(req.prompt):
+        try:
+            engine = _get_engine()
+            report = math_augment(report, req.prompt, engine)
+            math_ver = report.math_verification
+            rd = report.to_dict()  # refresh dict from augmented report
+        except Exception as e:
+            math_ver = {"error": str(e)}
+
     _log_api_call("/tribunal/ice", req.dict(), elapsed, "ok")
 
     return TribunalICEResponse(
@@ -438,6 +471,7 @@ async def tribunal_ice(req: TribunalICERequest):
         agreement_points=rd.get("agreement_points", []),
         divergence_points=rd.get("divergence_points", []),
         stance_summary=rd.get("stance_summary", {}),
+        math_verification=math_ver,
         meta=rd.get("meta", {}),
     )
 
