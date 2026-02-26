@@ -2,7 +2,7 @@
 import json
 import sys
 
-METRICS_FILE = "metrics/memory_metrics.json"
+METRICS_FILE = "opera/metrics/memory_metrics.json"
 T2_THRESHOLD = 300.0
 
 def main():

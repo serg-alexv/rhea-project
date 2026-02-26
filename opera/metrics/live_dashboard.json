@@ -1,0 +1,58 @@
+{
+  "timestamp": "2026-02-26T02:29:21.973788+00:00",
+  "metrics": {
+    "d_metric": {
+      "value": 351.5,
+      "components": {
+        "docs": 98.0,
+        "repo": 51.4,
+        "todos": 141.5,
+        "insights": 15.6,
+        "tokens": 45.0
+      }
+    },
+    "debt_velocity": {
+      "value": 116,
+      "direction": "shrinking"
+    },
+    "doc_staleness": {
+      "value": 7.5
+    },
+    "commit_frequency": {
+      "value": 14.3,
+      "last_24h": 32
+    },
+    "todo_load": {
+      "value": 0.31,
+      "open_todos": 92,
+      "max_sustainable": 300
+    },
+    "insight_density": {
+      "value": 3.2
+    },
+    "repo_entropy": {
+      "value": 0.24,
+      "root_files": 5,
+      "root_items": 21
+    }
+  },
+  "composite_health": 0.58,
+  "wake_up_triggers": [
+    {
+      "condition": "d_metric_overload",
+      "value": 351.5,
+      "action": "SPRINT_NEEDED"
+    }
+  ],
+  "raw_measurements": {
+    "open_todo_count": 92,
+    "core_docs_kb": 1845,
+    "repo_size_mb": 370,
+    "commits_24h": 32,
+    "commits_per_day_7d": 14.285714285714286,
+    "avg_doc_staleness_days": 7.496614967071162,
+    "insights_per_request": 3.2,
+    "root_files": 5,
+    "root_items": 21
+  }
+}

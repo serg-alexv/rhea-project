@@ -8,7 +8,7 @@ Run: python3 scripts/d_metric_comparison.py
 import json
 import math
 
-METRICS_FILE = "metrics/memory_metrics.json"
+METRICS_FILE = "opera/metrics/memory_metrics.json"
 T1 = 150.0
 T2 = 300.0
 
@@ -29,13 +29,8 @@ OLD_WEIGHTS = {
 #
 # Weights calibrated so a "healthy but growing" project → D ≈ 100-200
 # Cap: no single component > 40% of total
-# TODO(human): Tune these weights and thresholds based on your gut feel.
-# Current state (2692 KB docs, 522 MB repo, 0 todos) → D ≈ 202 with these defaults.
-# Questions to ask yourself:
-#   - Is 202 the right "feel" for current state? (mid-warning)
-#   - If 25 open TODOs appeared, should that alone push you to OVERLOAD?
-#   - Which input bothers you most: bloated docs, big repo, stale todos, or token burn?
-# The ratio between weights matters more than absolute values.
+# Weight tuning: ratio between weights matters more than absolute values.
+# Current state (2840 KB docs, 188 MB repo, 208 todos) → D ≈ 380 with log-scale.
 NEW_WEIGHTS = {
     "docs_kb":    30.0,   # 30 * log10(2693) ≈ 103
     "repo_mb":    20.0,   # 20 * log10(523)  ≈ 54
