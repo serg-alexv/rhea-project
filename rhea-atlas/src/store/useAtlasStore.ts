@@ -37,6 +37,16 @@ export interface ContextDensity {
   sampleCount: number;
 }
 
+export interface AletheiaStats {
+  proofCount: number;
+  hypothesisCount: number;
+  totalArtifacts: number;
+  avgAgreement: number;
+  lastCapture: string | null;
+  ontologyCount: number;
+  uniqueQueries: number;
+}
+
 export interface AtlasState {
   islands: Island[];
   consensusScore: number;
@@ -50,6 +60,7 @@ export interface AtlasState {
   contextDensities: ContextDensity[];
   showOceanusFlow: boolean;
   activeView: ViewId;
+  aletheiaStats: AletheiaStats;
   setIslands: (islands: Island[]) => void;
   updateIsland: (id: string, delta: Partial<Island>) => void;
   setDMetric: (d: number) => void;
@@ -62,6 +73,7 @@ export interface AtlasState {
   setContextDensities: (densities: ContextDensity[]) => void;
   toggleOceanusFlow: () => void;
   setActiveView: (v: ViewId) => void;
+  setAletheiaStats: (stats: AletheiaStats) => void;
 }
 
 export const useAtlasStore = create<AtlasState>((set) => ({
@@ -80,6 +92,7 @@ export const useAtlasStore = create<AtlasState>((set) => ({
   contextDensities: [],
   showOceanusFlow: true,
   activeView: 'atlas-prime',
+  aletheiaStats: { proofCount: 0, hypothesisCount: 0, totalArtifacts: 0, avgAgreement: 0, lastCapture: null, ontologyCount: 0, uniqueQueries: 0 },
   setIslands: (islands) => set({ islands }),
   updateIsland: (id, delta) => set((state) => ({
     islands: state.islands.map((is) => is.id === id ? { ...is, ...delta } : is)
@@ -97,4 +110,5 @@ export const useAtlasStore = create<AtlasState>((set) => ({
   setContextDensities: (densities) => set({ contextDensities: densities }),
   toggleOceanusFlow: () => set((state) => ({ showOceanusFlow: !state.showOceanusFlow })),
   setActiveView: (v) => set({ activeView: v }),
+  setAletheiaStats: (stats) => set({ aletheiaStats: stats }),
 }));
