@@ -1,0 +1,26 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "2fca8d92cc5b",
+  "strategy": "auto-commit",
+  "branch": "hyperion/memory",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "opera/ops/virtual-office/inbox/RELAY_20260226_083626_HYPERION_to_ORION.md"
+  ],
+  "sessions": [
+    {
+      "metadata": "/2f/ca8d92cc5b/0/metadata.json",
+      "transcript": "/2f/ca8d92cc5b/0/full.jsonl",
+      "context": "",
+      "content_hash": "/2f/ca8d92cc5b/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 3,
+    "cache_creation_tokens": 704,
+    "cache_read_tokens": 137610,
+    "output_tokens": 702,
+    "api_call_count": 1
+  }
+}
