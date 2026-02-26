@@ -1,8 +1,0 @@
-{
-  "agent": "COWORK",
-  "last_seq_applied": 90,
-  "state_hash": "ad90b9510c9478e4",
-  "saved_at": "2026-02-20T07:13:23.559385+00:00",
-  "lease_token": 13,
-  "messages_drained": 3
-}

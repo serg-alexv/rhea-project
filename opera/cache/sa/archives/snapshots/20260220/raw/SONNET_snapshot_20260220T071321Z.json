@@ -1,8 +1,0 @@
-{
-  "agent": "SONNET",
-  "last_seq_applied": 97,
-  "state_hash": "063c5da0e3327b42",
-  "saved_at": "2026-02-20T07:13:28.073202+00:00",
-  "lease_token": 2,
-  "messages_drained": 0
-}
