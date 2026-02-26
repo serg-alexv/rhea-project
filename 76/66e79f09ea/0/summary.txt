@@ -1,0 +1,23 @@
+That key (`AQ.Ab...`) is a different format — likely an OAuth/Application Default credential, not an API key. Both are dead for direct API key access.
+
+`★ Insight ─────────────────────────────────────`
+Two different key formats: `AIzaSy...` (Google API key format, expired) and `AQ.Ab...` (OAuth refresh token format, wrong auth type for REST API). The rotation system needs a fresh API key from Google AI Studio. The shell functions are installed and ready — just needs a valid key to activate.
+`─────────────────────────────────────────────────`
+
+Here's the situation:
+
+**Installed and working:**
+- `gemini_a`, `gemini_b`, `gemini_vertex`, `gemini_who`, `gemini_rotate` — all in `~/.zshrc`
+- Aliases: `hyperion`, `hyperion-a`, `hyperion-b`, `hyperion-v`
+- `.env.*` added to `.gitignore`
+
+**Needs your action:**
+1. **Key A expired** (`AIzaSyA72pih...`) — go to [AI Studio](https://aistudio.google.com/app/apikey), create a new key
+2. **Key from .env** (`AQ.Ab...`) is an OAuth token, not an API key — wrong format for `GOOGLE_API_KEY`
+3. After getting a fresh key, update `.env`:
+   ```
+   GEMINI_API_KEY=AIzaSy_YOUR_NEW_KEY_HERE
+   ```
+4. Then run: `source ~/.zshrc && gemini_a && gemini_who`
+
+The rotation cascade is ready: A → B → Vertex → wait 6h → hand to Orion. Just needs live keys.

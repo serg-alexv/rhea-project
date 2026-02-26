@@ -1,0 +1,23 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "7666e79f09ea",
+  "session_id": "261278d3-25c3-4789-93e7-bfcc23c40cd5",
+  "strategy": "auto-commit",
+  "created_at": "2026-02-26T15:32:03.818363Z",
+  "branch": "stage4-release",
+  "checkpoints_count": 1,
+  "files_touched": [
+    ".gitignore"
+  ],
+  "agent": "Claude Code",
+  "transcript_identifier_at_start": "9a69637d-0b14-4089-83be-f87ac1d9f0a4",
+  "checkpoint_transcript_start": 8647,
+  "transcript_lines_at_start": 8647,
+  "token_usage": {
+    "input_tokens": 22,
+    "cache_creation_tokens": 8840,
+    "cache_read_tokens": 2196696,
+    "output_tokens": 4011,
+    "api_call_count": 20
+  }
+}
