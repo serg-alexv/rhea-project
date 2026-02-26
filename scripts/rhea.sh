@@ -32,7 +32,19 @@ case "$sub" in
              log_info "Recent Audit Reports:"
              ls -lt docs/audit/ | head -n 3
              ;;
-  stop)      
+    # Safety
+    mode)
+               m="${1:-show}"
+               if [ "$m" = "developer" ]; then
+                   log_info "Mode: DEVELOPER (4-layer Holography Active)."
+               elif [ "$m" = "user" ]; then
+                   log_info "Mode: USER (Space Odyssey Active)."
+               else
+                   log_info "Usage: rhea mode [developer|user]"
+               fi
+               ;;
+    stop)
+        
              touch "$REPO_ROOT/STOP"
              log_err "STOP sentinel created. Daemons will exit on next poll."
              ;;
