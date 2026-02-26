@@ -1,0 +1,9 @@
+diff --git a/.watcher/watcher.log b/.watcher/watcher.log
+index d8ec804..5f246c5 100644
+--- a/.watcher/watcher.log
++++ b/.watcher/watcher.log
+@@ -1,2 +1,4 @@
+ [2026-02-16 07:18:40] Watcher started (PID 21700)
+ [2026-02-16 07:18:40] Claude session detected — monitoring
++[2026-02-17 21:51:54] DEATH DETECTED — Claude process gone
++[2026-02-17 21:51:54] Death state saved to /Users/sa/rh.1/.watcher/last-death.md

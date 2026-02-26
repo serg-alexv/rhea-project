@@ -1,0 +1,11 @@
+=== PROVE STOP 2026-02-19T09:32:05Z ===
+  PID TTY           TIME CMD
+11741 ttys022    0:00.06 /Users/sa/.pyenv/versions/3.11.9/bin/python3 ops/argos_pager.py watch --interval 1
+Chain integrity: VALID
+  Entries: 165
+  Detail: chain valid
+{"timestamp": "2026-02-19T09:31:54.974196+00:00", "event_type": "test.concurrent", "actor": "R1", "payload": {"i": 47}, "prev_hash": "364ecfb876173bfec6a8b887e277f89142a02203838d8a8459400db2d4ef2b6d", "event_hash": "611e67045c824c1dbdfa3cb6f423fab41c295fa61f199acff59f2f7819cc7c30"}
+{"timestamp": "2026-02-19T09:31:54.974336+00:00", "event_type": "test.concurrent", "actor": "R1", "payload": {"i": 48}, "prev_hash": "611e67045c824c1dbdfa3cb6f423fab41c295fa61f199acff59f2f7819cc7c30", "event_hash": "0174fb2f0b0a235910c5d6c4cc862844e84a88375ea9db79bfdac20339958df6"}
+{"timestamp": "2026-02-19T09:31:54.974440+00:00", "event_type": "test.concurrent", "actor": "R1", "payload": {"i": 49}, "prev_hash": "0174fb2f0b0a235910c5d6c4cc862844e84a88375ea9db79bfdac20339958df6", "event_hash": "3b81e7a3be1cfee6441cc426a19cebdc93954306bab94c8e7db5e371e3ee9138"}
+{"timestamp": "2026-02-19T09:32:09.217224+00:00", "event_type": "heartbeat", "actor": "COWORK", "payload": {"lease_token": 2, "status": "ALIVE"}, "prev_hash": "3b81e7a3be1cfee6441cc426a19cebdc93954306bab94c8e7db5e371e3ee9138", "event_hash": "b28385a25a074639a20c56695a08aab681cc48187bf1bafb1a8e9a010cbd1b1c"}
+{"timestamp": "2026-02-19T09:32:09.220786+00:00", "event_type": "boot.complete", "actor": "COWORK", "payload": {"lease_token": 2, "git_sha": "8c435321", "pending": 1}, "prev_hash": "b28385a25a074639a20c56695a08aab681cc48187bf1bafb1a8e9a010cbd1b1c", "event_hash": "18c978a3a051b30c30bcb23ef21957df9def22c6026f1cde73b4d3e520d9083a"}

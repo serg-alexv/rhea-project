@@ -1,0 +1,146 @@
+=== REX CHAIN IMPL 2026-02-19T09:27:40Z ===
+8c43532135c49135981657cc15254aaeed2f7f82
+ops/rex_pager.py:119:def _canonical_json(obj: dict) -> str:
+ops/rex_pager.py:134:    return json.loads(last_line).get("event_hash", "0" * 64)
+ops/rex_pager.py:137:def chain_append(event_type: str, actor: str, payload: dict) -> dict:
+ops/rex_pager.py:139:    prev_hash = _last_chain_hash()
+ops/rex_pager.py:145:        "prev_hash": prev_hash,
+ops/rex_pager.py:147:    canonical = _canonical_json(entry)
+ops/rex_pager.py:148:    entry["event_hash"] = hashlib.sha256(canonical.encode()).hexdigest()
+ops/rex_pager.py:155:def chain_verify() -> tuple[bool, int, str]:
+ops/rex_pager.py:159:    prev_hash = "0" * 64
+ops/rex_pager.py:166:        if entry.get("prev_hash") != prev_hash:
+ops/rex_pager.py:167:            return False, count, f"entry {count}: prev_hash mismatch (truncation/reorder)"
+ops/rex_pager.py:169:        stored_hash = check.pop("event_hash")
+ops/rex_pager.py:170:        canonical = _canonical_json(check)
+ops/rex_pager.py:171:        expected = hashlib.sha256(canonical.encode()).hexdigest()
+ops/rex_pager.py:173:            return False, count, f"entry {count}: event_hash mismatch (tampered)"
+ops/rex_pager.py:174:        prev_hash = stored_hash
+ops/rex_pager.py:781:        # I3: deduplicate by idempotency key (blocks replay attacks)
+ops/rex_pager.py:985:            return True, "API reachable (auth rejected = not quota-blocked)"
+ops/rex_pager.py:1033:    was_blocked = True
+ops/rex_pager.py:1039:        if available and was_blocked:
+ops/rex_pager.py:1042:            was_blocked = False
+ops/rex_pager.py:1046:            print(f"[{now}] blocked: {detail}")
+ops/rex_pager.py:1047:            was_blocked = True
+    if SEQ_FILE.exists():
+        try:
+            seq = int(SEQ_FILE.read_text().strip())
+        except ValueError:
+            seq = 0
+    seq += 1
+    SEQ_FILE.write_text(str(seq))
+    return seq
+
+
+def _idempotency_key(source: str, body: str, ts: str) -> str:
+    """Deterministic key: same source+body+second = same key (dedup retries)."""
+    raw = f"{source}:{body}:{ts[:19]}"
+    return hashlib.sha256(raw.encode()).hexdigest()[:16]
+
+
+def _uuidv7_ish() -> str:
+    """UUID with timestamp prefix for natural ordering."""
+    ts_hex = hex(int(time.time() * 1000))[2:]
+    rand = uuid.uuid4().hex[:20]
+    return f"{ts_hex}-{rand}"
+
+
+# ---------------------------------------------------------------------------
+# Hash-chained audit log (rhea-advanced lesson 12)
+# Tamper-evident: each entry contains hash of previous entry.
+# Threats mitigated: truncation, reordering, replay, silent edit.
+# ---------------------------------------------------------------------------
+
+def _canonical_json(obj: dict) -> str:
+    """Stable JSON encoding: sorted keys, no whitespace, ensure reproducibility."""
+    return json.dumps(obj, sort_keys=True, separators=(",", ":"))
+
+
+def _last_chain_hash() -> str:
+    """Read the hash of the last entry in the chain. Genesis = '0'*64."""
+    if not CHAIN_FILE.exists():
+        return "0" * 64
+    last_line = ""
+    for line in CHAIN_FILE.read_text().strip().split("\n"):
+        if line.strip():
+            last_line = line
+    if not last_line:
+        return "0" * 64
+    return json.loads(last_line).get("event_hash", "0" * 64)
+
+
+def chain_append(event_type: str, actor: str, payload: dict) -> dict:
+    """Append a tamper-evident entry to the audit chain."""
+    prev_hash = _last_chain_hash()
+    entry = {
+        "timestamp": _now_iso(),
+        "event_type": event_type,
+        "actor": actor,
+        "payload": payload,
+        "prev_hash": prev_hash,
+    }
+    canonical = _canonical_json(entry)
+    entry["event_hash"] = hashlib.sha256(canonical.encode()).hexdigest()
+    CHAIN_FILE.parent.mkdir(parents=True, exist_ok=True)
+    with open(CHAIN_FILE, "a") as f:
+        f.write(json.dumps(entry) + "\n")
+    return entry
+
+
+def chain_verify() -> tuple[bool, int, str]:
+    """Verify chain integrity. Returns (valid, entries_checked, error_or_ok)."""
+    if not CHAIN_FILE.exists():
+        return True, 0, "empty chain"
+    prev_hash = "0" * 64
+    count = 0
+    for line in CHAIN_FILE.read_text().strip().split("\n"):
+        if not line.strip():
+            continue
+        entry = json.loads(line)
+        count += 1
+        if entry.get("prev_hash") != prev_hash:
+            return False, count, f"entry {count}: prev_hash mismatch (truncation/reorder)"
+        check = dict(entry)
+        stored_hash = check.pop("event_hash")
+        canonical = _canonical_json(check)
+        expected = hashlib.sha256(canonical.encode()).hexdigest()
+        if stored_hash != expected:
+            return False, count, f"entry {count}: event_hash mismatch (tampered)"
+        prev_hash = stored_hash
+    return True, count, "chain valid"
+
+
+# ---------------------------------------------------------------------------
+# Leases (QWRR section 8 step 1, invariants I4 + I5)
+# ---------------------------------------------------------------------------
+
+def _lease_file(agent: str) -> Path:
+    return LEASES_DIR / f"{agent}.json"
+
+
+LEASE_TTL_S = 600  # 10 minutes — lease expires if not renewed
+
+
+def acquire_lease(agent: str, ttl_s: int = LEASE_TTL_S) -> int:
+    """Acquire monotonic lease with TTL. Old lease holders are fenced out.
+
+    Network partition safety:
+    - Lease has expires_at timestamp
+    - verify_lease() rejects expired leases
+    - Holder must call renew_lease() before expiry (heartbeat)
+    - If two agents both think they hold the lease, the one whose lease
+      expired first is automatically fenced out on next verify_lease() call
+    """
+    LEASES_DIR.mkdir(parents=True, exist_ok=True)
+    f = _lease_file(agent)
+    prev_token = 0
+    if f.exists():
+        try:
+            prev = json.loads(f.read_text())
+            prev_token = prev.get("lease_token", 0)
+        except (json.JSONDecodeError, ValueError):
+            pass
+    new_token = prev_token + 1
+    now = _now_iso()
+    lease = {

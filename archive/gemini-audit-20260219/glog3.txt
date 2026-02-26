@@ -1,0 +1,63 @@
+[branch "main"]
+	remote = origin
+	merge = refs/heads/main
+[branch "feature/mvp-loop"]
+	remote = origin
+	merge = refs/heads/feature/mvp-loop
+[user]
+	email = timelabs.ad@gmail.com
+	name = Your Majesties
+[branch "feature/history-ingest"]
+	remote = origin
+	merge = refs/heads/feature/history-ingest
+[branch "checkpoints/pr-from-main"]
+	remote = origin
+	merge = refs/heads/checkpoints/pr-from-main
+[branch "archive/entire-checkpoints-v1"]
+	remote = origin
+	merge = refs/heads/archive/entire-checkpoints-v1
+[branch "feat/chronos-agents-and-bridge"]
+	remote = origin
+	merge = refs/heads/feat/chronos-agents-and-bridge
+[branch "main"]
+	remote = origin
+	merge = refs/heads/main
+[branch "feature/mvp-loop"]
+	remote = origin
+	merge = refs/heads/feature/mvp-loop
+[user]
+	email = timelabs.ad@gmail.com
+	name = Your Majesties
+[branch "feature/history-ingest"]
+	remote = origin
+	merge = refs/heads/feature/history-ingest
+[branch "checkpoints/pr-from-main"]
+	remote = origin
+	merge = refs/heads/checkpoints/pr-from-main
+[branch "archive/entire-checkpoints-v1"]
+	remote = origin
+	merge = refs/heads/archive/entire-checkpoints-v1
+[branch "feat/chronos-agents-and-bridge"]
+	remote = origin
+	merge = refs/heads/feat/chronos-agents-and-bridge
+
+drwxr-xr-x  20 sa  staff   640 Feb 13 20:08 .
+drwxr-xr-x  21 sa  staff   672 Feb 17 21:51 ..
+-rwxr-xr-x   1 sa  staff   478 Feb 13 11:59 applypatch-msg.sample
+-rwx--x--x@  1 sa  staff   156 Feb 13 19:12 commit-msg
+-rwxr-xr-x   1 sa  staff   896 Feb 13 11:59 commit-msg.sample
+-rwxr-xr-x   1 sa  staff  4726 Feb 13 11:59 fsmonitor-watchman.sample
+-rwx--x--x@  1 sa  staff   384 Feb 13 20:08 post-commit
+-rwxr-xr-x   1 sa  staff   189 Feb 13 11:59 post-update.sample
+-rwxr-xr-x   1 sa  staff   424 Feb 13 11:59 pre-applypatch.sample
+-rwxr-xr-x   1 sa  staff  1649 Feb 13 11:59 pre-commit.sample
+-rwxr-xr-x   1 sa  staff   416 Feb 13 11:59 pre-merge-commit.sample
+-rwxr-xr-x   1 sa  staff   166 Feb 13 19:12 pre-push
+-rwxr-xr-x   1 sa  staff  1374 Feb 13 11:59 pre-push.sample
+-rwxr-xr-x   1 sa  staff  4898 Feb 13 11:59 pre-rebase.sample
+-rwxr-xr-x   1 sa  staff   544 Feb 13 11:59 pre-receive.sample
+-rwxr-xr-x   1 sa  staff    95 Feb 13 19:12 prepare-commit-msg
+-rwxr-xr-x   1 sa  staff  1492 Feb 13 11:59 prepare-commit-msg.sample
+-rwxr-xr-x   1 sa  staff  2783 Feb 13 11:59 push-to-checkout.sample
+-rwxr-xr-x   1 sa  staff  2308 Feb 13 11:59 sendemail-validate.sample
+-rwxr-xr-x   1 sa  staff  3650 Feb 13 11:59 update.sample

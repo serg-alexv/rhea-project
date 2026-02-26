@@ -1,0 +1,10 @@
+=== LOOPS SURFACE 2026-02-19T09:31:46Z ===
+8c43532135c49135981657cc15254aaeed2f7f82
+ops/argos_pager.py:76:DEFAULT_POLL_INTERVAL = 120  # 2 min for observation
+ops/argos_pager.py:906:def watch_daemon(interval: int = DEFAULT_POLL_INTERVAL):
+ops/argos_pager.py:919:    while True:
+ops/argos_pager.py:984:        time.sleep(interval)
+ops/argos_pager.py:999:        interval = DEFAULT_POLL_INTERVAL
+ops/rex_pager.py:1028:def watch_daemon(target: str = "LEAD"):
+ops/rex_pager.py:1035:    while True:
+ops/rex_pager.py:1049:        time.sleep(POLL_INTERVAL)
