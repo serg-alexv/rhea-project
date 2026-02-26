@@ -1,0 +1,52 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "0f82e9467fa0",
+  "strategy": "auto-commit",
+  "branch": "hyperion/memory",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "friends/ruliad/references/ADR-015_AXIOMATIC_0TRUST.md",
+    "friends/ruliad/references/CHAT_SYNTHESIS_INDEX.md",
+    "friends/ruliad/references/CHAT_SYNTHESIS_QUICK_REF.md",
+    "friends/ruliad/references/CHAT_SYNTHESIS_REPORT.md",
+    "friends/ruliad/references/DECON-REL-BIO-2026-X.md",
+    "friends/ruliad/references/EVOLUTION_PLAN_V1.md",
+    "friends/ruliad/references/INDEX.md",
+    "friends/ruliad/references/METHODOLOGY.md",
+    "friends/ruliad/references/ONTOLOGY_BRIDGE_VALIDATION.md",
+    "friends/ruliad/references/PERELMAN_RICCI_FLOW_RESEARCH.md",
+    "friends/ruliad/references/RHEA_VS_RULIAD.md",
+    "friends/ruliad/references/The_Einstein_Hallucination.yaml",
+    "friends/ruliad/references/category_theory.py",
+    "friends/ruliad/references/dynamical_systems.py",
+    "friends/ruliad/references/engine.py",
+    "friends/ruliad/references/game_theory.py",
+    "friends/ruliad/references/information_geometry.py",
+    "friends/ruliad/references/prism_paper_outline.md",
+    "friends/ruliad/references/proof_theory.py",
+    "friends/ruliad/references/sema_meta_export_2026-02-24.md",
+    "opera/metrics/live_dashboard.json",
+    "scripts/compute_d_metric.py",
+    "scripts/d_metric_comparison.py",
+    "scripts/live_metrics.py",
+    "src/operators/bonsai_mock.py",
+    "src/rhea_bus.py",
+    "tests/test_rhead_basics.py"
+  ],
+  "sessions": [
+    {
+      "metadata": "/0f/82e9467fa0/0/metadata.json",
+      "transcript": "/0f/82e9467fa0/0/full.jsonl",
+      "context": "",
+      "content_hash": "/0f/82e9467fa0/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 56,
+    "cache_creation_tokens": 225748,
+    "cache_read_tokens": 2840605,
+    "output_tokens": 8657,
+    "api_call_count": 34
+  }
+}
