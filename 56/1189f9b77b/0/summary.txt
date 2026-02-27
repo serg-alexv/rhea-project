@@ -1,0 +1,16 @@
+Now the key decision point — `_relay` routing logic. This is where each agent maps to a model, and where the conversation context gets injected. This is a design decision with multiple valid approaches.
+
+---
+
+**Learn by Doing**
+
+**Context:** Office communicator is built. Bridge handles raw LLM calls. The gate (Sonnet) compresses messages into compact AI-dialect. Now `_relay()` needs to route the compressed message to the right agent's model and get a response. The mapping isn't just model selection — it defines how each agent "thinks" when receiving inter-office messages.
+
+**Your Task:** In `src/office.py`, implement the `_relay()` method. Look for `TODO(human)`. This method receives `sender`, `receiver`, `compressed_msg`, and optional `reply_to`, and must return `(response_text, tokens_used, cost_usd)`.
+
+**Guidance:** Consider these trade-offs:
+- **Agent→Model mapping**: `orion` → `openai/gpt-4o` or `gpt-5`? `gemini` → `gemini/gemini-2.5-flash` or `2.5-pro`? `rex` → should Rex even relay through Bridge or is Rex local? `human` → no model call, just persist.
+- **System prompt per agent**: each agent has a personality/role. Should `_relay` inject a brief agent-identity system prompt, or keep it bare?
+- **Cost**: every relay = LLM call. Cheap tier (`deepseek-chat`, `gemini-flash`) vs balanced? The user said Sonnet gates the entry, so the relay itself could be cheap.
+- **Reply context**: if `reply_to` is set, should the relay include the original message as context?
+- Return `(response_text, tokens_used, cost_usd)` — cost can be estimated from Bridge's price table or from the ModelResponse.
