@@ -1,0 +1,23 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "05d64428955c",
+  "session_id": "94aabe90-9b2d-48e7-be8c-6bf820a0b6a9",
+  "strategy": "auto-commit",
+  "created_at": "2026-02-27T12:05:54.566175Z",
+  "branch": "stage4-release",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "docs/CONTRACTS.md"
+  ],
+  "agent": "Claude Code",
+  "transcript_identifier_at_start": "179a7b03-a078-4b44-8d0e-c942f3954cc7",
+  "checkpoint_transcript_start": 4551,
+  "transcript_lines_at_start": 4551,
+  "token_usage": {
+    "input_tokens": 4,
+    "cache_creation_tokens": 1595,
+    "cache_read_tokens": 232107,
+    "output_tokens": 892,
+    "api_call_count": 2
+  }
+}

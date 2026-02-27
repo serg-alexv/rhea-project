@@ -1,0 +1,26 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "05d64428955c",
+  "strategy": "auto-commit",
+  "branch": "stage4-release",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "docs/CONTRACTS.md"
+  ],
+  "sessions": [
+    {
+      "metadata": "/05/d64428955c/0/metadata.json",
+      "transcript": "/05/d64428955c/0/full.jsonl",
+      "context": "",
+      "content_hash": "/05/d64428955c/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 4,
+    "cache_creation_tokens": 1595,
+    "cache_read_tokens": 232107,
+    "output_tokens": 892,
+    "api_call_count": 2
+  }
+}
