@@ -1,0 +1,25 @@
+Now — what's the current situation:
+
+**Done this session:**
+- E2E test: 7/7 passing (fixed ConsensusReport access, stance detection word boundaries)
+- Stance detection: removed "no" substring false positive, added word boundary matching for short signals, expanded affirmative signals
+- Skills directory: `.claude/skills/` created, existing skill moved from `skills/` to official location
+
+**The skills directory:**
+```
+.claude/
+├── agents/          ← 9 Chronos Protocol agents (A0-A8)
+├── skills/          ← project skills (NEW official location)
+│   └── rhea-atlas-future-finisher/
+│       ├── SKILL.md
+│       └── agents/openai.yaml
+├── settings.json
+└── settings.local.json
+```
+
+About "evolve in our action protocols" — could you clarify what "PUR" refers to? Is that "our" (наш) or an acronym? I want to build the right thing here. The current action protocols are:
+- 9 agents in `.claude/agents/` (Chronos Protocol v3)
+- 1 skill in `.claude/skills/`
+- Hooks in `settings.json` routing through Entire.io
+
+What protocols should evolve?

@@ -1,0 +1,30 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "223ad702e944",
+  "strategy": "auto-commit",
+  "branch": "stage4-release",
+  "checkpoints_count": 1,
+  "files_touched": [
+    ".claude/skills/rhea-atlas-future-finisher/SKILL.md",
+    ".claude/skills/rhea-atlas-future-finisher/agents/openai.yaml",
+    "scripts/demo.sh",
+    "src/consensus_analyzer.py",
+    "tests/test_pipeline_e2e.py"
+  ],
+  "sessions": [
+    {
+      "metadata": "/22/3ad702e944/0/metadata.json",
+      "transcript": "/22/3ad702e944/0/full.jsonl",
+      "context": "",
+      "content_hash": "/22/3ad702e944/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 36,
+    "cache_creation_tokens": 76094,
+    "cache_read_tokens": 2975204,
+    "output_tokens": 26350,
+    "api_call_count": 32
+  }
+}
