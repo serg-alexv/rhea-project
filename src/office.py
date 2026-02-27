@@ -36,15 +36,22 @@ OFFICE_MEMORY = _PROJECT_ROOT / "opera" / "memory" / "office"
 GATE_MODEL = "anthropic/claude-sonnet-4-20250514"
 GATE_FALLBACK = "gemini/gemini-2.5-flash"
 
-# Compact dialect system prompt for the gate
-GATE_SYSTEM = """You are a message compressor for an AI agent network.
-Rewrite the message in maximum-density AI shorthand:
-- Drop articles, filler, politeness
-- Use symbols: → (leads to), ∴ (therefore), Δ (change), ≈ (approximately), ✓/✗ (pass/fail)
-- Abbreviate known entities: RB=RheaBridge, CA=ConsensusAnalyzer, AL=Aletheia, TB=Tribunal
-- Keep technical terms, numbers, file paths exact
-- Max 3 sentences. If the message is already compact, return as-is.
-Output ONLY the compressed message, nothing else."""
+# Load AI Compact Language spec as gate system prompt
+_LANG_SPEC_PATH = _PROJECT_ROOT / "docs" / "AI_COMPACT_LANG.md"
+
+def _load_gate_system() -> str:
+    """Load formal language spec. Falls back to minimal rules if file missing."""
+    try:
+        spec = _LANG_SPEC_PATH.read_text()
+        return f"You are the Sonnet Gate. Compress messages using this protocol:\n\n{spec}\n\nOutput ONLY the compressed message. No explanation."
+    except FileNotFoundError:
+        return (
+            "Compress to AI shorthand. Symbols: →∴Δ≈✓✗⊕⊖. "
+            "Entities: RB=RheaBridge CA=ConsensusAnalyzer AL=Aletheia TB=Tribunal OF=Office. "
+            "Max 5 lines. No articles/filler. Numbers+paths exact. Output ONLY compressed message."
+        )
+
+GATE_SYSTEM = _load_gate_system()
 
 
 @dataclass
@@ -52,8 +59,7 @@ class OfficeMessage:
     id: str
     sender: str         # rex | orion | gemini | human | system
     receiver: str       # agent name or "all" for broadcast
-    text: str           # original message
-    compressed: str     # gate-compressed version
+    compressed: str     # gate-compressed — the ONLY representation stored
     ts: str = ""
     reply_to: Optional[str] = None
     response: Optional[str] = None
@@ -108,7 +114,6 @@ class Office:
             id=msg_id,
             sender=sender,
             receiver=receiver,
-            text=text,
             compressed=compressed,
             ts=ts,
             reply_to=reply_to,
