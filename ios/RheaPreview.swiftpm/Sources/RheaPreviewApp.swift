@@ -14,6 +14,7 @@ struct RheaPreviewApp: App {
                 TasksView()
                     .tabItem { Label("Tasks", systemImage: "checklist") }
             }
+            .preferredColorScheme(.dark)
         }
     }
 }

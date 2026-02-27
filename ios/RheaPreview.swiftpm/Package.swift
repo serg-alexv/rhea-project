@@ -1,13 +1,33 @@
 // swift-tools-version: 5.9
 import PackageDescription
+import AppleProductTypes
 
 let package = Package(
     name: "RheaPreview",
-    platforms: [.iOS(.v17), .macOS(.v14)],
+    platforms: [.iOS("17.0")],
     products: [
-        .library(name: "RheaPreview", targets: ["RheaPreview"])
+        .iOSApplication(
+            name: "RheaPreview",
+            targets: ["RheaPreview"],
+            bundleIdentifier: "com.rhea.preview",
+            displayVersion: "1.0",
+            bundleVersion: "1",
+            supportedDeviceFamilies: [.phone, .pad],
+            supportedInterfaceOrientations: [
+                .portrait,
+                .landscapeRight,
+                .landscapeLeft
+            ]
+        )
+    ],
+    dependencies: [
+        .package(url: "https://github.com/EmergeTools/Pow", from: "1.0.0")
     ],
     targets: [
-        .target(name: "RheaPreview", path: "Sources")
+        .executableTarget(
+            name: "RheaPreview",
+            dependencies: ["Pow"],
+            path: "Sources"
+        )
     ]
 )
