@@ -1,0 +1,26 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "7c0569ce78cb",
+  "strategy": "auto-commit",
+  "branch": "stage4-release",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "src/consensus_analyzer.py"
+  ],
+  "sessions": [
+    {
+      "metadata": "/7c/0569ce78cb/0/metadata.json",
+      "transcript": "/7c/0569ce78cb/0/full.jsonl",
+      "context": "",
+      "content_hash": "/7c/0569ce78cb/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 7,
+    "cache_creation_tokens": 19511,
+    "cache_read_tokens": 523131,
+    "output_tokens": 4437,
+    "api_call_count": 5
+  }
+}
