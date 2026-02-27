@@ -1,0 +1,26 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "f78b0ad20577",
+  "strategy": "auto-commit",
+  "branch": "stage4-release",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "docs/ui/ai-research-ux-benchmark-2026-02-27.md"
+  ],
+  "sessions": [
+    {
+      "metadata": "/f7/8b0ad20577/0/metadata.json",
+      "transcript": "/f7/8b0ad20577/0/full.jsonl",
+      "context": "",
+      "content_hash": "/f7/8b0ad20577/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 3,
+    "cache_creation_tokens": 1221,
+    "cache_read_tokens": 91816,
+    "output_tokens": 9,
+    "api_call_count": 1
+  }
+}
