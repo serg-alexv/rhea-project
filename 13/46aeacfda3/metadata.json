@@ -1,0 +1,17 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "1346aeacfda3",
+  "strategy": "auto-commit",
+  "branch": "stage4-release",
+  "checkpoints_count": 0,
+  "files_touched": null,
+  "sessions": [
+    {
+      "metadata": "/13/46aeacfda3/0/metadata.json",
+      "transcript": "/13/46aeacfda3/0/full.jsonl",
+      "context": "",
+      "content_hash": "/13/46aeacfda3/0/content_hash.txt",
+      "prompt": ""
+    }
+  ]
+}
