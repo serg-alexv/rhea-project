@@ -1,0 +1,26 @@
+# Session Context
+
+**Session ID:** 94aabe90-9b2d-48e7-be8c-6bf820a0b6a9
+
+**Commit Message:** :/
+
+## Prompt
+
+:/
+
+## Summary
+
+`★ Insight ─────────────────────────────────────`
+**`AppleProductTypes`** is a special module that Xcode injects when opening `.swiftpm` packages — it's not available to the regular Swift CLI toolchain. So `swift build` from terminal will fail with "No such module", but Xcode will resolve it fine. This is Apple's way of separating "buildable library" (CLI) from "runnable iOS app" (Xcode only). The SourceKit diagnostic is a false alarm — Xcode handles it internally.
+`─────────────────────────────────────────────────`
+
+Xcode should now show RheaPreview as a runnable iOS app. Select **iPhone 17 Pro** simulator in the top bar, then **Cmd+R**.
+
+Note: `swift build` from terminal won't work anymore with `AppleProductTypes` — that's expected. The app lives in Xcode now.
+
+## Key Actions
+
+- - **Bash**: Check Xcode project structure
+- - **Bash**: List available simulators
+- - **Write**: /Users/sa/rh.1/ios/RheaPreview.swiftpm/Package.swift
+- - **Bash**: Reopen in Xcode with app target

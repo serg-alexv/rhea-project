@@ -1,0 +1,23 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "9ce1cc465f49",
+  "session_id": "94aabe90-9b2d-48e7-be8c-6bf820a0b6a9",
+  "strategy": "auto-commit",
+  "created_at": "2026-02-27T17:02:24.30988Z",
+  "branch": "stage4-release",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "ios/RheaPreview.swiftpm/Package.swift"
+  ],
+  "agent": "Claude Code",
+  "transcript_identifier_at_start": "4e200066-e6c3-48fb-9d87-32743f8fde1a",
+  "checkpoint_transcript_start": 6819,
+  "transcript_lines_at_start": 6819,
+  "token_usage": {
+    "input_tokens": 6,
+    "cache_creation_tokens": 2791,
+    "cache_read_tokens": 369020,
+    "output_tokens": 1802,
+    "api_call_count": 4
+  }
+}
