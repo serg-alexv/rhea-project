@@ -1648,6 +1648,7 @@ async def get_outbox(agent: Optional[str] = None, limit: int = 20):
 # ---------------------------------------------------------------------------
 
 from token_governor import Governor, all_governors
+from task_queue import TaskQueue
 
 @app.get("/governor")
 async def governor_all():
@@ -1659,6 +1660,70 @@ async def governor_agent(agent: str):
     """Dual-rail token governor — single agent check + enforce."""
     gov = Governor(agent)
     return gov.enforce()
+
+# ---------------------------------------------------------------------------
+# Task Queue
+# ---------------------------------------------------------------------------
+
+@app.get("/tasks")
+async def tasks_list(status: Optional[str] = None, agent: Optional[str] = None):
+    """List tasks with optional filters."""
+    q = TaskQueue()
+    return {"tasks": q.list_tasks(status=status, agent=agent)}
+
+@app.get("/tasks/summary")
+async def tasks_summary():
+    """Task queue health for dashboard."""
+    q = TaskQueue()
+    return q.summary()
+
+@app.post("/tasks")
+async def tasks_add(title: str, priority: str = "P1", agent: str = "any",
+                    tags: str = ""):
+    """Add a task to the queue."""
+    q = TaskQueue()
+    tag_list = [t.strip() for t in tags.split(",") if t.strip()] if tags else []
+    return q.add(title, priority=priority, agent=agent, tags=tag_list)
+
+@app.post("/tasks/{task_id}/claim")
+async def tasks_claim(task_id: str, agent: str = "rex"):
+    """Claim a specific task or next available (task_id='next')."""
+    q = TaskQueue()
+    if task_id == "next":
+        task = q.claim(agent)
+    else:
+        t = q.tasks.get(task_id)
+        if t and t["status"] == "open":
+            t["status"] = "claimed"
+            t["claimed_by"] = agent
+            from datetime import datetime, timezone
+            t["updated"] = datetime.now(timezone.utc).isoformat()
+            q._append_log("claim", {"id": task_id, "agent": agent})
+            q._save_state()
+            task = t
+        else:
+            task = None
+    if not task:
+        raise HTTPException(status_code=404, detail="No available task")
+    return task
+
+@app.post("/tasks/{task_id}/complete")
+async def tasks_complete(task_id: str, result: str = ""):
+    """Mark task as done."""
+    q = TaskQueue()
+    task = q.complete(task_id, result)
+    if not task:
+        raise HTTPException(status_code=404, detail="Task not found")
+    return task
+
+@app.post("/tasks/{task_id}/block")
+async def tasks_block(task_id: str, reason: str = ""):
+    """Block a task."""
+    q = TaskQueue()
+    task = q.block(task_id, reason)
+    if not task:
+        raise HTTPException(status_code=404, detail="Task not found")
+    return task
 
 
 def _read_jsonl_tail(path: Path, limit: int, agent_filter: Optional[str] = None) -> dict:
