@@ -1,0 +1,27 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "7e9dba147378",
+  "strategy": "auto-commit",
+  "branch": "stage4-release",
+  "checkpoints_count": 1,
+  "files_touched": [
+    ".firecrawl/volovik-page.md",
+    ".firecrawl/volovik-planckons.md"
+  ],
+  "sessions": [
+    {
+      "metadata": "/7e/9dba147378/0/metadata.json",
+      "transcript": "/7e/9dba147378/0/full.jsonl",
+      "context": "",
+      "content_hash": "/7e/9dba147378/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 8,
+    "cache_creation_tokens": 7056,
+    "cache_read_tokens": 857442,
+    "output_tokens": 1112,
+    "api_call_count": 6
+  }
+}
