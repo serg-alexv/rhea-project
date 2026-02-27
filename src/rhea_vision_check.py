@@ -15,10 +15,20 @@ import litellm
 sys.path.insert(0, str(Path(__file__).parent))
 from rhea_bridge import RheaBridge
 
-INVARIANCE_PROMPT = (
-    "Опиши этот скриншот так, чтобы Opus (текстовая LLM без зрения) "
-    "мог работать с ним дальше. Минимум токенов, максимум точности."
-)
+RECIPIENT_CAPABILITY = {
+    "opus": "Opus — frontier LLM, понимает с полуслова. Будь максимально краток.",
+    "pro": "Gemini Pro — сильная модель, но не знает контекста проекта. Дай ключевые детали.",
+    "flash": "Gemini Flash — быстрая но поверхностная. Опиши явно, без намёков.",
+    "lite": "Слабая модель без CLI-опыта. Опиши как для человека, который никогда не видел терминал.",
+}
+
+
+def build_vision_prompt(recipient_tier: str = "opus") -> str:
+    cap = RECIPIENT_CAPABILITY.get(recipient_tier, RECIPIENT_CAPABILITY["flash"])
+    return (
+        f"Опиши этот скриншот для текстовой LLM без зрения. "
+        f"{cap} Минимум токенов, максимум точности."
+    )
 
 
 def _encode_image(image_path: str) -> tuple[str, str]:
