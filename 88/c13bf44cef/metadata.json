@@ -1,0 +1,30 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "88c13bf44cef",
+  "strategy": "auto-commit",
+  "branch": "stage4-release",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "contracts/__init__.py",
+    "contracts/backend_to_remote.py",
+    "contracts/consensus_to_aletheia.py",
+    "contracts/consensus_to_ruliad.py",
+    "contracts/test_contracts.py"
+  ],
+  "sessions": [
+    {
+      "metadata": "/88/c13bf44cef/0/metadata.json",
+      "transcript": "/88/c13bf44cef/0/full.jsonl",
+      "context": "",
+      "content_hash": "/88/c13bf44cef/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 9,
+    "cache_creation_tokens": 4517,
+    "cache_read_tokens": 831313,
+    "output_tokens": 3014,
+    "api_call_count": 7
+  }
+}
