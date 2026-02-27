@@ -1,0 +1,26 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "88b377409358",
+  "strategy": "auto-commit",
+  "branch": "stage4-release",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "contracts/SOBER_CHECK.md"
+  ],
+  "sessions": [
+    {
+      "metadata": "/88/b377409358/0/metadata.json",
+      "transcript": "/88/b377409358/0/full.jsonl",
+      "context": "",
+      "content_hash": "/88/b377409358/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 5,
+    "cache_creation_tokens": 1393,
+    "cache_read_tokens": 417609,
+    "output_tokens": 861,
+    "api_call_count": 3
+  }
+}
