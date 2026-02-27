@@ -1,0 +1,565 @@
+{
+  "hypotheses": {
+    "a30ecac0-152": {
+      "id": "a30ecac0-152",
+      "title": "Phase space model of: Circadian disruption amplifies neuroinflammat",
+      "statement": "The phenomenon 'Circadian disruption amplifies neuroinflammatory cascades via IL-6/CRP crosstalk' can be modeled as a dynamical system dx/dt = f(x) on a phase space X. Key observables correspond to coordinates, and the long-term behavior is governed by attractors of the flow.",
+      "domain": "dynamical_systems",
+      "status": "proposed",
+      "parent_id": null,
+      "children": [],
+      "evidence_for": [],
+      "evidence_against": [],
+      "verification_results": {},
+      "consensus_score": 0.0,
+      "red_team_score": 0.0,
+      "formal_proof_status": "unchecked",
+      "tags": [
+        "dynamical_systems",
+        "phase_space",
+        "auto_generated"
+      ],
+      "created_at": "2026-02-27T11:37:54.110450+00:00",
+      "updated_at": "2026-02-27T11:37:54.110458+00:00",
+      "meta": {}
+    },
+    "71c549eb-ebe": {
+      "id": "71c549eb-ebe",
+      "title": "Bifurcation landscape of: Circadian disruption amplifies neuroinfl",
+      "statement": "The parameter space controlling 'Circadian disruption amplifies neuroinflammatory cascades via IL-6/CRP crosstalk' contains bifurcation curves where qualitative behavior changes. Identifying these bifurcations reveals the 'tipping points' where the system transitions between qualitatively different regimes.",
+      "domain": "dynamical_systems",
+      "status": "proposed",
+      "parent_id": null,
+      "children": [],
+      "evidence_for": [],
+      "evidence_against": [],
+      "verification_results": {},
+      "consensus_score": 0.0,
+      "red_team_score": 0.0,
+      "formal_proof_status": "unchecked",
+      "tags": [
+        "dynamical_systems",
+        "bifurcation",
+        "auto_generated"
+      ],
+      "created_at": "2026-02-27T11:37:54.110829+00:00",
+      "updated_at": "2026-02-27T11:37:54.110831+00:00",
+      "meta": {}
+    },
+    "171b3154-7e1": {
+      "id": "171b3154-7e1",
+      "title": "Ergodic hypothesis for: Circadian disruption amplifies neuroinfl",
+      "statement": "Long-time averages of observables in the 'Circadian disruption amplifies neuroinflammatory cascades via IL-6/CRP crosstalk' system equal ensemble (phase-space) averages, implying ergodicity. This would justify statistical approaches to predicting system behavior.",
+      "domain": "dynamical_systems",
+      "status": "proposed",
+      "parent_id": null,
+      "children": [],
+      "evidence_for": [],
+      "evidence_against": [],
+      "verification_results": {},
+      "consensus_score": 0.0,
+      "red_team_score": 0.0,
+      "formal_proof_status": "unchecked",
+      "tags": [
+        "dynamical_systems",
+        "ergodic",
+        "statistics",
+        "auto_generated"
+      ],
+      "created_at": "2026-02-27T11:37:54.111023+00:00",
+      "updated_at": "2026-02-27T11:37:54.111025+00:00",
+      "meta": {}
+    },
+    "5ca22fcc-7db": {
+      "id": "5ca22fcc-7db",
+      "title": "Statistical manifold of: Circadian disruption amplifies neuroinflammat",
+      "statement": "The space of models/explanations for 'Circadian disruption amplifies neuroinflammatory cascades via IL-6/CRP crosstalk' forms a statistical manifold M where each point \u03b8 represents a probability distribution P_\u03b8 over possible observations. The Fisher information matrix G(\u03b8) defines a Riemannian metric that captures the intrinsic geometry of distinguishability.",
+      "domain": "information_geometry",
+      "status": "proposed",
+      "parent_id": null,
+      "children": [],
+      "evidence_for": [],
+      "evidence_against": [],
+      "verification_results": {},
+      "consensus_score": 0.0,
+      "red_team_score": 0.0,
+      "formal_proof_status": "unchecked",
+      "tags": [
+        "information_geometry",
+        "manifold",
+        "fisher",
+        "auto_generated"
+      ],
+      "created_at": "2026-02-27T11:37:54.111307+00:00",
+      "updated_at": "2026-02-27T11:37:54.111308+00:00",
+      "meta": {}
+    },
+    "24821799-320": {
+      "id": "24821799-320",
+      "title": "Natural gradient descent on: Circadian disruption amplifies neuroinfl",
+      "statement": "Optimization in the 'Circadian disruption amplifies neuroinflammatory cascades via IL-6/CRP crosstalk' hypothesis space is more efficient when following the natural gradient G(\u03b8)\u207b\u00b9\u2207L(\u03b8) rather than the Euclidean gradient. This accounts for the curvature of the statistical manifold and provides parameterization-invariant updates.",
+      "domain": "information_geometry",
+      "status": "proposed",
+      "parent_id": null,
+      "children": [],
+      "evidence_for": [],
+      "evidence_against": [],
+      "verification_results": {},
+      "consensus_score": 0.0,
+      "red_team_score": 0.0,
+      "formal_proof_status": "unchecked",
+      "tags": [
+        "information_geometry",
+        "natural_gradient",
+        "optimization",
+        "auto_generated"
+      ],
+      "created_at": "2026-02-27T11:37:54.111559+00:00",
+      "updated_at": "2026-02-27T11:37:54.111560+00:00",
+      "meta": {}
+    },
+    "43e38c97-51c": {
+      "id": "43e38c97-51c",
+      "title": "Dual structure in: Circadian disruption amplifies neuroinfl",
+      "statement": "The hypothesis space for 'Circadian disruption amplifies neuroinflammatory cascades via IL-6/CRP crosstalk' admits Amari's dual connection structure: the exponential connection (\u2207\u207d\u1d49\u207e) captures maximum entropy reasoning, while the mixture connection (\u2207\u207d\u1d50\u207e) captures Bayesian updating. The Pythagorean theorem of information geometry holds for projections.",
+      "domain": "information_geometry",
+      "status": "proposed",
+      "parent_id": null,
+      "children": [],
+      "evidence_for": [],
+      "evidence_against": [],
+      "verification_results": {},
+      "consensus_score": 0.0,
+      "red_team_score": 0.0,
+      "formal_proof_status": "unchecked",
+      "tags": [
+        "information_geometry",
+        "duality",
+        "amari",
+        "auto_generated"
+      ],
+      "created_at": "2026-02-27T11:37:54.111822+00:00",
+      "updated_at": "2026-02-27T11:37:54.111824+00:00",
+      "meta": {}
+    },
+    "5d6180ed-f8d": {
+      "id": "5d6180ed-f8d",
+      "title": "Statistical manifold of: Allosteric communication in GPCRs follows inf",
+      "statement": "The space of models/explanations for 'Allosteric communication in GPCRs follows information-geometric geodesics' forms a statistical manifold M where each point \u03b8 represents a probability distribution P_\u03b8 over possible observations. The Fisher information matrix G(\u03b8) defines a Riemannian metric that captures the intrinsic geometry of distinguishability.",
+      "domain": "information_geometry",
+      "status": "proposed",
+      "parent_id": null,
+      "children": [],
+      "evidence_for": [],
+      "evidence_against": [],
+      "verification_results": {},
+      "consensus_score": 0.0,
+      "red_team_score": 0.0,
+      "formal_proof_status": "unchecked",
+      "tags": [
+        "information_geometry",
+        "manifold",
+        "fisher",
+        "auto_generated"
+      ],
+      "created_at": "2026-02-27T11:37:54.114493+00:00",
+      "updated_at": "2026-02-27T11:37:54.114495+00:00",
+      "meta": {}
+    },
+    "886d9906-251": {
+      "id": "886d9906-251",
+      "title": "Natural gradient descent on: Allosteric communication in GPCRs follow",
+      "statement": "Optimization in the 'Allosteric communication in GPCRs follows information-geometric geodesics' hypothesis space is more efficient when following the natural gradient G(\u03b8)\u207b\u00b9\u2207L(\u03b8) rather than the Euclidean gradient. This accounts for the curvature of the statistical manifold and provides parameterization-invariant updates.",
+      "domain": "information_geometry",
+      "status": "proposed",
+      "parent_id": null,
+      "children": [],
+      "evidence_for": [],
+      "evidence_against": [],
+      "verification_results": {},
+      "consensus_score": 0.0,
+      "red_team_score": 0.0,
+      "formal_proof_status": "unchecked",
+      "tags": [
+        "information_geometry",
+        "natural_gradient",
+        "optimization",
+        "auto_generated"
+      ],
+      "created_at": "2026-02-27T11:37:54.114845+00:00",
+      "updated_at": "2026-02-27T11:37:54.114846+00:00",
+      "meta": {}
+    },
+    "f8ef6d21-cb6": {
+      "id": "f8ef6d21-cb6",
+      "title": "Dual structure in: Allosteric communication in GPCRs follow",
+      "statement": "The hypothesis space for 'Allosteric communication in GPCRs follows information-geometric geodesics' admits Amari's dual connection structure: the exponential connection (\u2207\u207d\u1d49\u207e) captures maximum entropy reasoning, while the mixture connection (\u2207\u207d\u1d50\u207e) captures Bayesian updating. The Pythagorean theorem of information geometry holds for projections.",
+      "domain": "information_geometry",
+      "status": "proposed",
+      "parent_id": null,
+      "children": [],
+      "evidence_for": [],
+      "evidence_against": [],
+      "verification_results": {},
+      "consensus_score": 0.0,
+      "red_team_score": 0.0,
+      "formal_proof_status": "unchecked",
+      "tags": [
+        "information_geometry",
+        "duality",
+        "amari",
+        "auto_generated"
+      ],
+      "created_at": "2026-02-27T11:37:54.115197+00:00",
+      "updated_at": "2026-02-27T11:37:54.115198+00:00",
+      "meta": {}
+    },
+    "96bf9a4d-b45": {
+      "id": "96bf9a4d-b45",
+      "title": "Categorical structure of: Allosteric communication in GPCRs follows informat",
+      "statement": "The phenomenon 'Allosteric communication in GPCRs follows information-geometric geodesics' can be modeled as a category C where objects represent states/configurations and morphisms represent valid transitions. Composition captures sequential transitions.",
+      "domain": "category_theory",
+      "status": "proposed",
+      "parent_id": null,
+      "children": [],
+      "evidence_for": [],
+      "evidence_against": [],
+      "verification_results": {},
+      "consensus_score": 0.0,
+      "red_team_score": 0.0,
+      "formal_proof_status": "unchecked",
+      "tags": [
+        "category_theory",
+        "structural",
+        "auto_generated"
+      ],
+      "created_at": "2026-02-27T11:37:54.115614+00:00",
+      "updated_at": "2026-02-27T11:37:54.115615+00:00",
+      "meta": {}
+    },
+    "d9cf30b9-916": {
+      "id": "d9cf30b9-916",
+      "title": "Functorial bridge: Allosteric communication in GPCRs follow \u2192 observable",
+      "statement": "There exists a functor F: C \u2192 Meas from the category modeling 'Allosteric communication in GPCRs follows information-geometric geodesics' to the category of measurable spaces, such that F preserves the compositional structure and maps transitions to measurable functions.",
+      "domain": "category_theory",
+      "status": "proposed",
+      "parent_id": null,
+      "children": [],
+      "evidence_for": [],
+      "evidence_against": [],
+      "verification_results": {},
+      "consensus_score": 0.0,
+      "red_team_score": 0.0,
+      "formal_proof_status": "unchecked",
+      "tags": [
+        "category_theory",
+        "functor",
+        "measurement",
+        "auto_generated"
+      ],
+      "created_at": "2026-02-27T11:37:54.116025+00:00",
+      "updated_at": "2026-02-27T11:37:54.116026+00:00",
+      "meta": {}
+    },
+    "d4997521-043": {
+      "id": "d4997521-043",
+      "title": "Adjunction in: Allosteric communication in GPCRs follow",
+      "statement": "The free-forgetful adjunction F \u22a3 U between the structured category of 'Allosteric communication in GPCRs follows information-geometric geodesics' and its underlying set-theoretic representation reveals a canonical way to add/remove structure while preserving essential information.",
+      "domain": "category_theory",
+      "status": "proposed",
+      "parent_id": null,
+      "children": [],
+      "evidence_for": [],
+      "evidence_against": [],
+      "verification_results": {},
+      "consensus_score": 0.0,
+      "red_team_score": 0.0,
+      "formal_proof_status": "unchecked",
+      "tags": [
+        "category_theory",
+        "adjunction",
+        "auto_generated"
+      ],
+      "created_at": "2026-02-27T11:37:54.116472+00:00",
+      "updated_at": "2026-02-27T11:37:54.116473+00:00",
+      "meta": {}
+    },
+    "7058ec30-6b1": {
+      "id": "7058ec30-6b1",
+      "title": "Epistemic game for: Antibiotic resistance emergence follows evolu",
+      "statement": "The evaluation of 'Antibiotic resistance emergence follows evolutionary game dynamics with spatial structure' can be modeled as a Bayesian game where each evaluator has private information (priors, expertise domain) and must choose a strategy (accept, reject, investigate). A Bayesian Nash equilibrium reveals the collectively rational assessment.",
+      "domain": "game_theory",
+      "status": "proposed",
+      "parent_id": null,
+      "children": [],
+      "evidence_for": [],
+      "evidence_against": [],
+      "verification_results": {},
+      "consensus_score": 0.0,
+      "red_team_score": 0.0,
+      "formal_proof_status": "unchecked",
+      "tags": [
+        "game_theory",
+        "bayesian",
+        "epistemic",
+        "auto_generated"
+      ],
+      "created_at": "2026-02-27T11:37:54.121125+00:00",
+      "updated_at": "2026-02-27T11:37:54.121127+00:00",
+      "meta": {}
+    },
+    "e3dc3c13-af3": {
+      "id": "e3dc3c13-af3",
+      "title": "Evolutionary fitness of: Antibiotic resistance emergence follows ",
+      "statement": "In a population of competing hypotheses about 'Antibiotic resistance emergence follows evolutionary game dynamics with spatial structure', the evolutionarily stable strategy (ESS) corresponds to the hypothesis that cannot be invaded by any mutant alternative. The replicator dynamics dx_i/dt = x_i(f_i - f\u0304) governs hypothesis selection.",
+      "domain": "game_theory",
+      "status": "proposed",
+      "parent_id": null,
+      "children": [],
+      "evidence_for": [],
+      "evidence_against": [],
+      "verification_results": {},
+      "consensus_score": 0.0,
+      "red_team_score": 0.0,
+      "formal_proof_status": "unchecked",
+      "tags": [
+        "game_theory",
+        "evolutionary",
+        "ESS",
+        "auto_generated"
+      ],
+      "created_at": "2026-02-27T11:37:54.121679+00:00",
+      "updated_at": "2026-02-27T11:37:54.121680+00:00",
+      "meta": {}
+    },
+    "3bdf44bb-a9e": {
+      "id": "3bdf44bb-a9e",
+      "title": "Phase space model of: Antibiotic resistance emergence follows evolu",
+      "statement": "The phenomenon 'Antibiotic resistance emergence follows evolutionary game dynamics with spatial structure' can be modeled as a dynamical system dx/dt = f(x) on a phase space X. Key observables correspond to coordinates, and the long-term behavior is governed by attractors of the flow.",
+      "domain": "dynamical_systems",
+      "status": "proposed",
+      "parent_id": null,
+      "children": [],
+      "evidence_for": [],
+      "evidence_against": [],
+      "verification_results": {},
+      "consensus_score": 0.0,
+      "red_team_score": 0.0,
+      "formal_proof_status": "unchecked",
+      "tags": [
+        "dynamical_systems",
+        "phase_space",
+        "auto_generated"
+      ],
+      "created_at": "2026-02-27T11:37:54.122286+00:00",
+      "updated_at": "2026-02-27T11:37:54.122287+00:00",
+      "meta": {}
+    },
+    "69b7a6a0-687": {
+      "id": "69b7a6a0-687",
+      "title": "Bifurcation landscape of: Antibiotic resistance emergence follows ",
+      "statement": "The parameter space controlling 'Antibiotic resistance emergence follows evolutionary game dynamics with spatial structure' contains bifurcation curves where qualitative behavior changes. Identifying these bifurcations reveals the 'tipping points' where the system transitions between qualitatively different regimes.",
+      "domain": "dynamical_systems",
+      "status": "proposed",
+      "parent_id": null,
+      "children": [],
+      "evidence_for": [],
+      "evidence_against": [],
+      "verification_results": {},
+      "consensus_score": 0.0,
+      "red_team_score": 0.0,
+      "formal_proof_status": "unchecked",
+      "tags": [
+        "dynamical_systems",
+        "bifurcation",
+        "auto_generated"
+      ],
+      "created_at": "2026-02-27T11:37:54.122856+00:00",
+      "updated_at": "2026-02-27T11:37:54.122857+00:00",
+      "meta": {}
+    },
+    "8ff01ac4-e9e": {
+      "id": "8ff01ac4-e9e",
+      "title": "Ergodic hypothesis for: Antibiotic resistance emergence follows ",
+      "statement": "Long-time averages of observables in the 'Antibiotic resistance emergence follows evolutionary game dynamics with spatial structure' system equal ensemble (phase-space) averages, implying ergodicity. This would justify statistical approaches to predicting system behavior.",
+      "domain": "dynamical_systems",
+      "status": "proposed",
+      "parent_id": null,
+      "children": [],
+      "evidence_for": [],
+      "evidence_against": [],
+      "verification_results": {},
+      "consensus_score": 0.0,
+      "red_team_score": 0.0,
+      "formal_proof_status": "unchecked",
+      "tags": [
+        "dynamical_systems",
+        "ergodic",
+        "statistics",
+        "auto_generated"
+      ],
+      "created_at": "2026-02-27T11:37:54.123434+00:00",
+      "updated_at": "2026-02-27T11:37:54.123436+00:00",
+      "meta": {}
+    }
+  },
+  "edges": [
+    {
+      "from": "a30ecac0-152",
+      "to": "5ca22fcc-7db",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "a30ecac0-152",
+      "to": "24821799-320",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "a30ecac0-152",
+      "to": "43e38c97-51c",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "71c549eb-ebe",
+      "to": "5ca22fcc-7db",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "71c549eb-ebe",
+      "to": "24821799-320",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "71c549eb-ebe",
+      "to": "43e38c97-51c",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "171b3154-7e1",
+      "to": "5ca22fcc-7db",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "171b3154-7e1",
+      "to": "24821799-320",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "171b3154-7e1",
+      "to": "43e38c97-51c",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "5d6180ed-f8d",
+      "to": "96bf9a4d-b45",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "5d6180ed-f8d",
+      "to": "d9cf30b9-916",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "5d6180ed-f8d",
+      "to": "d4997521-043",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "886d9906-251",
+      "to": "96bf9a4d-b45",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "886d9906-251",
+      "to": "d9cf30b9-916",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "886d9906-251",
+      "to": "d4997521-043",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "f8ef6d21-cb6",
+      "to": "96bf9a4d-b45",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "f8ef6d21-cb6",
+      "to": "d9cf30b9-916",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "f8ef6d21-cb6",
+      "to": "d4997521-043",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "7058ec30-6b1",
+      "to": "3bdf44bb-a9e",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "7058ec30-6b1",
+      "to": "69b7a6a0-687",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "7058ec30-6b1",
+      "to": "8ff01ac4-e9e",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "e3dc3c13-af3",
+      "to": "3bdf44bb-a9e",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "e3dc3c13-af3",
+      "to": "69b7a6a0-687",
+      "type": "cross_domain",
+      "meta": {}
+    },
+    {
+      "from": "e3dc3c13-af3",
+      "to": "8ff01ac4-e9e",
+      "type": "cross_domain",
+      "meta": {}
+    }
+  ],
+  "stats": {
+    "total": 17,
+    "edges": 24,
+    "by_status": {
+      "proposed": 17
+    },
+    "domains": [
+      "category_theory",
+      "dynamical_systems",
+      "information_geometry",
+      "game_theory"
+    ]
+  }
+}
