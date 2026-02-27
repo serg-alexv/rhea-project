@@ -1,0 +1,26 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "c17739aad003",
+  "strategy": "auto-commit",
+  "branch": "stage4-release",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "contracts/dispatch.py"
+  ],
+  "sessions": [
+    {
+      "metadata": "/c1/7739aad003/0/metadata.json",
+      "transcript": "/c1/7739aad003/0/full.jsonl",
+      "context": "",
+      "content_hash": "/c1/7739aad003/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 5,
+    "cache_creation_tokens": 3793,
+    "cache_read_tokens": 407027,
+    "output_tokens": 3140,
+    "api_call_count": 3
+  }
+}

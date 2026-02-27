@@ -1,0 +1,23 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "c17739aad003",
+  "session_id": "94aabe90-9b2d-48e7-be8c-6bf820a0b6a9",
+  "strategy": "auto-commit",
+  "created_at": "2026-02-27T12:13:14.170613Z",
+  "branch": "stage4-release",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "contracts/dispatch.py"
+  ],
+  "agent": "Claude Code",
+  "transcript_identifier_at_start": "61883283-bc07-49c7-b60d-a2fc71266b5f",
+  "checkpoint_transcript_start": 4657,
+  "transcript_lines_at_start": 4657,
+  "token_usage": {
+    "input_tokens": 5,
+    "cache_creation_tokens": 3793,
+    "cache_read_tokens": 407027,
+    "output_tokens": 3140,
+    "api_call_count": 3
+  }
+}
