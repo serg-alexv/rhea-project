@@ -1,0 +1,59 @@
+{
+  "generated": "2026-02-27T16:23:29.135748",
+  "pricing": {
+    "input_per_M": 15.0,
+    "output_per_M": 75.0,
+    "model": "claude-opus-4-6"
+  },
+  "sessions": [
+    {
+      "session_id": "94aabe90-9b2d-48e7-be8c-6bf820a0b6a9",
+      "file": "/Users/sa/.claude/projects/-Users-sa-rh-1/94aabe90-9b2d-48e7-be8c-6bf820a0b6a9.jsonl",
+      "file_size_mb": 22.76,
+      "started": "2026-02-26T22:15:26.793Z",
+      "last_activity": "2026-02-27T13:23:28.563Z",
+      "records": 5263,
+      "user_chars": 14083888,
+      "assistant_chars": 2162455,
+      "tool_result_chars": 305466,
+      "system_chars": 0,
+      "user_messages": 824,
+      "assistant_messages": 1180,
+      "tool_calls": 482,
+      "est_input_tokens": 3597338,
+      "est_output_tokens": 540613,
+      "est_total_tokens": 4137951,
+      "est_cost_usd": 94.506,
+      "duration_min": 908.0,
+      "burn_rate_tok_per_hour": 273424,
+      "burn_rate_usd_per_hour": 6.2447
+    },
+    {
+      "session_id": "261278d3-25c3-4789-93e7-bfcc23c40cd5",
+      "file": "/Users/sa/.claude/projects/-Users-sa-rh-1/261278d3-25c3-4789-93e7-bfcc23c40cd5.jsonl",
+      "file_size_mb": 32.19,
+      "started": "2026-02-26T04:16:33.837Z",
+      "last_activity": "2026-02-26T22:14:42.140Z",
+      "records": 9857,
+      "user_chars": 6331479,
+      "assistant_chars": 1826243,
+      "tool_result_chars": 4189359,
+      "system_chars": 0,
+      "user_messages": 1607,
+      "assistant_messages": 2546,
+      "tool_calls": 1488,
+      "est_input_tokens": 2630209,
+      "est_output_tokens": 456560,
+      "est_total_tokens": 3086769,
+      "est_cost_usd": 73.6951,
+      "duration_min": 1078.1,
+      "burn_rate_tok_per_hour": 171783,
+      "burn_rate_usd_per_hour": 4.1012
+    }
+  ],
+  "totals": {
+    "est_tokens": 7224720,
+    "est_cost_usd": 168.2011,
+    "sessions": 2
+  }
+}
