@@ -1,0 +1,28 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "115d860fd373",
+  "strategy": "auto-commit",
+  "branch": "stage4-release",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "diagnostics/screen-flicker-live-test.log",
+    "diagnostics/trace_screen_flicker.sh",
+    "src/memory_feed.py"
+  ],
+  "sessions": [
+    {
+      "metadata": "/11/5d860fd373/0/metadata.json",
+      "transcript": "/11/5d860fd373/0/full.jsonl",
+      "context": "",
+      "content_hash": "/11/5d860fd373/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 5,
+    "cache_creation_tokens": 2135,
+    "cache_read_tokens": 390564,
+    "output_tokens": 1341,
+    "api_call_count": 3
+  }
+}

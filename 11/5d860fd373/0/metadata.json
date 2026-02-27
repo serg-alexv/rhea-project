@@ -1,0 +1,25 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "115d860fd373",
+  "session_id": "94aabe90-9b2d-48e7-be8c-6bf820a0b6a9",
+  "strategy": "auto-commit",
+  "created_at": "2026-02-27T14:49:01.256511Z",
+  "branch": "stage4-release",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "diagnostics/screen-flicker-live-test.log",
+    "diagnostics/trace_screen_flicker.sh",
+    "src/memory_feed.py"
+  ],
+  "agent": "Claude Code",
+  "transcript_identifier_at_start": "1ccbd92e-4c12-44f2-928d-b8f37c9a9f5c",
+  "checkpoint_transcript_start": 6290,
+  "transcript_lines_at_start": 6290,
+  "token_usage": {
+    "input_tokens": 5,
+    "cache_creation_tokens": 2135,
+    "cache_read_tokens": 390564,
+    "output_tokens": 1341,
+    "api_call_count": 3
+  }
+}
