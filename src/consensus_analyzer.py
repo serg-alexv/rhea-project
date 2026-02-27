@@ -157,25 +157,47 @@ def _blended_similarity(cosine: float, jaccard: float, w: float = 0.6) -> float:
 # ---------------------------------------------------------------------------
 
 AFFIRMATIVE_SIGNALS = [
-    "yes", "agree", "recommend", "should", "correct", "true",
+    "yes", "agree", "recommend", "correct", "true",
     "support", "beneficial", "effective", "absolutely", "definitely",
     "indeed", "certainly", "strongly recommend", "best practice",
     "evidence supports", "research shows", "studies confirm",
+    "well-established", "well-supported", "well established", "well supported",
+    "strong evidence", "substantial evidence", "confirms", "consistent with",
+    "is strong", "is clear", "is well", "is robust",
 ]
 
 NEGATIVE_SIGNALS = [
-    "no", "disagree", "should not", "shouldn't", "avoid", "incorrect",
+    "disagree", "should not", "shouldn't", "avoid", "incorrect",
     "false", "not recommend", "against", "harmful", "ineffective",
     "don't", "do not", "risky", "dangerous", "caution against",
-    "evidence against", "not supported",
+    "evidence against", "not supported", "no evidence", "no support",
+    "lacks evidence", "unsupported", "refuted",
 ]
 
 QUALIFIED_SIGNALS = [
     "however", "depends", "it depends", "context", "nuanced",
     "on one hand", "on the other", "with caveats", "conditionally",
     "in some cases", "not always", "varies", "mixed evidence",
-    "both", "trade-off", "tradeoff", "pros and cons",
+    "trade-off", "tradeoff", "pros and cons",
 ]
+
+# Compiled word-boundary patterns for signals that risk substring false positives
+_WORD_BOUNDARY_RE = {}
+
+def _count_signals(text_lower: str, signals: list[str]) -> int:
+    """Count signal matches using word boundaries for short signals, substring for phrases."""
+    count = 0
+    for s in signals:
+        if len(s) <= 5:
+            # Short signals need word boundary to avoid matching inside words
+            if s not in _WORD_BOUNDARY_RE:
+                _WORD_BOUNDARY_RE[s] = re.compile(r'\b' + re.escape(s) + r'\b')
+            if _WORD_BOUNDARY_RE[s].search(text_lower):
+                count += 1
+        else:
+            if s in text_lower:
+                count += 1
+    return count
 
 
 def _detect_stance(text: str) -> dict:
@@ -183,9 +205,9 @@ def _detect_stance(text: str) -> dict:
     word_count = len(text_lower.split())
     if word_count == 0:
         return {"stance": "empty", "affirmative": 0, "negative": 0, "qualified": 0}
-    aff = sum(1 for s in AFFIRMATIVE_SIGNALS if s in text_lower)
-    neg = sum(1 for s in NEGATIVE_SIGNALS if s in text_lower)
-    qual = sum(1 for s in QUALIFIED_SIGNALS if s in text_lower)
+    aff = _count_signals(text_lower, AFFIRMATIVE_SIGNALS)
+    neg = _count_signals(text_lower, NEGATIVE_SIGNALS)
+    qual = _count_signals(text_lower, QUALIFIED_SIGNALS)
     lf = min(word_count / 200, 3.0)
     if lf > 0:
         aff, neg, qual = aff / lf, neg / lf, qual / lf
@@ -513,7 +535,7 @@ def _core_analysis(
     total_pts = len(agreement_pts) + len(divergence_pts)
     claim_overlap = len(agreement_pts) / total_pts if total_pts > 0 else 0.5
 
-    calibrated_text = min(max((raw_text_sim - 0.03) / 0.25, 0.0), 1.0)
+    calibrated_text = min(max((raw_text_sim - 0.02) / 0.40, 0.0), 1.0)
     agreement_score = round(0.35 * calibrated_text + 0.40 * stance_alignment + 0.25 * claim_overlap, 4)
 
     n = len(model_ids)
