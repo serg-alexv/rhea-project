@@ -31,12 +31,17 @@ REX_SESSIONS = Path.home() / ".claude" / "projects" / "-Users-sa-rh-1"
 GOVERNOR_STATE = _PROJECT_ROOT / "opera" / "metrics" / "governor_state.json"
 
 # --- Budget caps per agent (USD/day) ---
+# Rex = subscription (Anthropic Max), cost tracking = shadow only, no real billing.
+# Upper rail disabled for subscription agents — only lower rail (floor) matters.
 BUDGET_CAPS = {
-    "rex":    30.0,    # Opus 4.6 — heavy strategic work, delegate mechanical to @rex.sonnet
-    "orion":   5.0,    # GPT-5.3 moderate
-    "gemini":  2.0,    # Flash is cheap
+    "rex":    0.0,     # Subscription — no per-token billing. Upper rail OFF.
+    "orion":   5.0,    # GPT-5.3 API-billed
+    "gemini":  2.0,    # Flash API-billed
     "shared":  1.0,
 }
+
+# Subscription agents: upper bound disabled, only floor trajectory enforced
+SUBSCRIPTION_AGENTS = {"rex"}
 
 # --- Floor trajectory: minimum spend curve ---
 # time-weighted: by hour H, agent should have spent at least floor(H) tokens
@@ -81,6 +86,7 @@ class Governor:
 
     def __init__(self, agent: str):
         self.agent = agent.lower()
+        self.is_subscription = self.agent in SUBSCRIPTION_AGENTS
         self.budget_cap = BUDGET_CAPS.get(self.agent, 2.0)
         self.min_daily = MIN_DAILY_TOKENS.get(self.agent, 100)
 
@@ -93,51 +99,76 @@ class Governor:
         # Aggregate today's spend for this agent
         T_day, dollar_day = self._aggregate_today(today)
 
-        # If rex, also count Claude Code session tokens
+        # If rex, also count Claude Code session tokens (shadow accounting)
         if self.agent == "rex":
             rex_tokens, rex_cost = self._aggregate_rex_sessions(today)
             T_day += rex_tokens
-            dollar_day += rex_cost
+            dollar_day += rex_cost  # shadow cost — not real billing
 
-        budget_remaining = self.budget_cap - dollar_day
+        budget_remaining = self.budget_cap - dollar_day if not self.is_subscription else 0.0
 
         # Floor trajectory: linear interpolation
         # At hour H, expected = min_daily * (H / 24)
         floor_expected = int(self.min_daily * (hour / 24)) if hour > 0 else 0
         floor_gap = max(0, floor_expected - T_day)
 
-        # Pace: green (on track), yellow (near limits), red (over/under)
-        budget_ratio = dollar_day / self.budget_cap if self.budget_cap > 0 else 0
-        if budget_ratio > 0.9:
-            pace = "red"
-        elif budget_ratio > 0.7:
-            pace = "yellow"
-        elif floor_gap > 0 and hour >= 12:
-            pace = "yellow"
-        elif T_day == 0 and hour >= 6:
-            pace = "red"
-        else:
-            pace = "green"
+        # --- Subscription agents: only floor matters ---
+        if self.is_subscription:
+            # Pace based on activity, not cost
+            if T_day == 0 and hour >= 6:
+                pace = "red"
+            elif floor_gap > 0 and hour >= 12:
+                pace = "yellow"
+            elif T_day > floor_expected * 2:
+                pace = "green"  # well above floor = strong
+            else:
+                pace = "green"
 
-        # Forecast
-        if budget_remaining < 0:
-            forecast = "risk"
-        elif T_day == 0 and hour >= 18:
-            forecast = "risk"
-        elif floor_gap > self.min_daily * 0.3:
-            forecast = "risk"
-        else:
-            forecast = "ok"
+            # Forecast: only activity-based
+            if T_day == 0 and hour >= 18:
+                forecast = "risk"
+            elif floor_gap > self.min_daily * 0.3:
+                forecast = "risk"
+            else:
+                forecast = "ok"
 
-        # Mode
-        if budget_remaining <= 0:
-            mode = "critical"  # over budget → stop or cheapest only
-        elif floor_gap > 0 and hour >= 12:
-            mode = "compact"   # below floor → cheap useful actions
-        elif budget_ratio > 0.8:
-            mode = "compact"   # approaching cap → conserve
+            # Mode: subscription never hits critical from cost
+            if floor_gap > 0 and hour >= 12:
+                mode = "compact"
+            else:
+                mode = "normal"
         else:
-            mode = "normal"
+            # --- API-billed agents: dual rail (cost + floor) ---
+            budget_ratio = dollar_day / self.budget_cap if self.budget_cap > 0 else 0
+
+            if budget_ratio > 0.9:
+                pace = "red"
+            elif budget_ratio > 0.7:
+                pace = "yellow"
+            elif floor_gap > 0 and hour >= 12:
+                pace = "yellow"
+            elif T_day == 0 and hour >= 6:
+                pace = "red"
+            else:
+                pace = "green"
+
+            if budget_remaining < 0:
+                forecast = "risk"
+            elif T_day == 0 and hour >= 18:
+                forecast = "risk"
+            elif floor_gap > self.min_daily * 0.3:
+                forecast = "risk"
+            else:
+                forecast = "ok"
+
+            if budget_remaining <= 0:
+                mode = "critical"
+            elif floor_gap > 0 and hour >= 12:
+                mode = "compact"
+            elif budget_ratio > 0.8:
+                mode = "compact"
+            else:
+                mode = "normal"
 
         # Hard fail check (only meaningful at EOD)
         hard_fail = (T_day == 0 and hour >= 23)
