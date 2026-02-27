@@ -20,6 +20,7 @@ import os
 import re
 import time
 import uuid
+import hashlib
 import litellm
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass, field, asdict
@@ -285,6 +286,42 @@ def _classify_status(error) -> str:
     return "error"
 
 
+def _prompt_hash(prompt: str) -> str:
+    """Short hash for prompt correlation without storing prompt text."""
+    try:
+        return hashlib.sha256((prompt or "").encode("utf-8")).hexdigest()[:16]
+    except Exception:
+        return ""
+
+
+def _runtime_agent_meta() -> dict:
+    """
+    Best-effort agent attribution for token spend dashboards.
+    Reads env variables so existing callers do not need code changes.
+    """
+    agent_id = (
+        os.environ.get("RHEA_AGENT_ID")
+        or os.environ.get("RHEA_ACTOR")
+        or os.environ.get("AGENT_ID")
+        or ""
+    ).strip()
+    agent_name = (
+        os.environ.get("RHEA_AGENT_NAME")
+        or os.environ.get("AGENT_NAME")
+        or ""
+    ).strip()
+    call_source = (
+        os.environ.get("RHEA_CALL_SOURCE")
+        or os.environ.get("RHEA_CONTEXT")
+        or ""
+    ).strip()
+    return {
+        "agent_id": agent_id or "unknown",
+        "agent_name": agent_name,
+        "call_source": call_source,
+    }
+
+
 def _log_call(
     provider: str,
     model: str,
@@ -293,6 +330,7 @@ def _log_call(
     total_tokens: int,
     latency_ms: float,
     error,
+    metadata: Optional[dict] = None,
 ) -> None:
     """Append a single JSONL record to the call log."""
     CALL_LOG_PATH.parent.mkdir(parents=True, exist_ok=True)
@@ -310,6 +348,11 @@ def _log_call(
         "status": status,
         "error_short": redact_secrets(str(error)[:200]) if error else "",
     }
+    record.update(_runtime_agent_meta())
+    if metadata:
+        for k, v in metadata.items():
+            if v is not None:
+                record[k] = v
     try:
         with open(CALL_LOG_PATH, "a") as f:
             f.write(redact_secrets(json.dumps(record)) + "\n")
@@ -572,6 +615,10 @@ class RheaBridge:
                 token_info["completion_tokens"],
                 token_info["total_tokens"],
                 latency_ms, None,
+                metadata={
+                    "mode": mode or "",
+                    "prompt_hash": _prompt_hash(prompt),
+                },
             )
 
             return ModelResponse(
@@ -583,7 +630,13 @@ class RheaBridge:
         except Exception as e:
             elapsed = time.time() - t0
             latency_ms = elapsed * 1000
-            _log_call(provider_name, model_id, 0, 0, 0, latency_ms, str(e))
+            _log_call(
+                provider_name, model_id, 0, 0, 0, latency_ms, str(e),
+                metadata={
+                    "mode": mode or "",
+                    "prompt_hash": _prompt_hash(prompt),
+                },
+            )
             return ModelResponse(
                 provider=provider_name, model=model_id,
                 text="", latency_s=round(elapsed, 2), error=str(e),
