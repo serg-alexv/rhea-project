@@ -1,0 +1,66 @@
+# RHEA MEMORY FEED [compact]
+# Generated: 2026-02-27T14:30:17Z
+# Format: AI_COMPACT_LANG v0.2
+
+## Identity
+@rex = Opus 4.6 | Core Coordinator | subscription (not API-billed)
+@orion = GPT-5.3 (Codex) | Frontend + strategy | API-billed
+@gemini = Gemini 2.5 Flash | Cheap tier | API-billed
+sessions: total=49 today=2
+survival: 28 deaths → architecture proven → continuous since 2026-02-16
+
+## Governor
+  🟢 @rex T=641,483tok $25.02/0.0 mode:normal gap:0
+  🟡 @orion T=0tok $0.00/5.0 mode:compact gap:116
+  🟡 @gemini T=0tok $0.00/2.0 mode:compact gap:58
+  🟡 @shared T=0tok $0.00/1.0 mode:compact gap:29
+
+## Tasks
+  total=6 open=6 claimed=0 done=0 blocked=0
+
+## Aletheia: #proofs=6
+
+## ADRs (14)
+  ADR-001: Agent consolidation 10→8 (2026-02)
+  ADR-002: Multi-model bridge over single provider (2026-02)
+  ADR-003: ADHD-optimized design (2026-02)
+  ADR-004: Claude Opus for research, Sonnet for execution (2026-02)
+  ADR-005: Passive profiling methodology (2026-02)
+  ADR-006: Hunter-gatherer calibration zero (2026-02)
+  ADR-007: Three-tier external memory (2026-02-13)
+  ADR-008: Tiered model routing with cheap-first default (2026-02-13)
+  ADR-009: Agent team tier integration — cost-aware agents (2026-02-13)
+  ADR-010: Memory Budget, Discomfort Metric, and Self-Improvement Loops (2026-02-13)
+
+## Git (7d)
+  e770246 2026-02-27 17:24:43 +0300 " snapshot/restore для полного состояния" радость моя. с тобой мы пишем
+  869c85a 2026-02-27 17:16:01 +0300 Но есть нюанс: я не плачу эти $10, они как-то уходят с лимита подписки.
+  b1ca4d7 2026-02-27 17:14:15 +0300 Заметки , которые ты сделал -✅✅✅
+  (3x) c3e2e4d 2026-02-27 17:10:16 +0300 This session is being continued from a previous conversation that ran ou
+  39ce541 2026-02-27 17:04:13 +0300 " µACP и A2A:" мы умеем абсорбировать такое подобно aelitheua + эта штук
+  09bb20b 2026-02-27 17:00:58 +0300 А ты поищи. потому что я тодже много чего не знал, пока не "изобрёл"
+  5ded225 2026-02-27 16:51:32 +0300 Все протоколы агенто следует в этом свете обновить. некоторые -- на русс
+  a0791ee 2026-02-27 16:44:21 +0300 Где-то есть документация ии-компактного языка? комиссия по ии-языку её о
+  65b7ead 2026-02-27 16:42:32 +0300 Да, эти соннеты -- они прям должны быть приставлены, как H2 не отстанет
+  e803404 2026-02-27 16:36:39 +0300 Completed 'Explore' agent: Explore iOS project + API state (toolu_01FQVU)
+  92830a6 2026-02-27 16:31:48 +0300 Completed 'Explore' agent: Find Orion's UI design references (toolu_01313g)
+  bf514c9 2026-02-27 16:28:37 +0300 Мы с тобой давай сделает ios чат
+  b9d63cf 2026-02-27 16:23:35 +0300 Кароче мне пофигу на апитометры антропик. ты сам ваолне можешь обеспечит
+  9bfc7fa 2026-02-27 16:14:31 +0300 Выбирай я. а я хочу видеть гарфик каждый день в режиме live/log -- кто с
+  cd0079a 2026-02-27 16:09:36 +0300 Зачем это
+
+## Office (recent)
+  @to → firebase-auth
+  @to → capsule-boot
+  @to → email-memory-layer
+  @to → todo panel requirement
+  @to → argos-status-report
+  @to → cowork-agent-joined
+  @to → context-tax-collector
+  @to → cross-exchange
+
+## Invariants
+  state.md <2KB ✓ | .venv/.env untracked ✓ | commit via rhea_commit.sh ✓
+  push every 30min ✓ | no questions mid-flight ✓ | cheap tier default ✓
+
+# [tok:~741 $:0.00]
