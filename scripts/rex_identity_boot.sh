@@ -21,4 +21,8 @@ echo "=== COMPACT STATE (auto-loaded) ==="
 if [ -f "$STATE" ]; then
     cat "$STATE"
 fi
+echo ""
+echo "=== MEMORY FEED [compact] (auto-generated) ==="
+# Regenerate feed fresh on every boot — 1 second, ~1200 tokens, all memory deduped
+python3 src/memory_feed.py 2>/dev/null || echo "(feed generation failed — read opera/memory/FEED.compact if exists)"
 echo "=== END BOOT CONTEXT ==="
