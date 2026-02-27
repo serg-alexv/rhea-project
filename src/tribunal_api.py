@@ -21,6 +21,7 @@ import json
 import hashlib
 import secrets
 import uuid
+import subprocess
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import Optional
@@ -29,10 +30,13 @@ from fastapi import FastAPI, HTTPException, Header, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
+_PROJECT_ROOT = Path(__file__).resolve().parent.parent
+
 # Ensure src/ is importable
 sys.path.insert(0, str(Path(__file__).parent))
 RULIAD_ROOT = Path(__file__).parent.parent / "friends" / "ruliad" / "explorer"
 sys.path.insert(0, str(RULIAD_ROOT))
+
 from rhea_bridge import RheaBridge
 from consensus_analyzer import ConsensusAnalyzer, math_augment, detect_math_domains
 from rhea_profile_manager import profile_manager
@@ -241,6 +245,15 @@ class MathVerifyRequest(BaseModel):
     skip_tribunal: bool = False
 
 
+class OfficeActionRequest(BaseModel):
+    action: str = Field(..., description="wake|boot|drain|lease|ping")
+    target: str = Field(default="ALL", description="Agent desk name or ALL")
+    source: str = Field(default="ORION", description="Sender desk for ping")
+    message: str = Field(default="UI pulse check-in", max_length=4000)
+    priority: str = Field(default="P1")
+    ttl_s: int = Field(default=86400, ge=60, le=604800)
+
+
 # ---------------------------------------------------------------------------
 # New request/response models — sceptic, session rewind, ontology switch
 # ---------------------------------------------------------------------------
@@ -333,6 +346,12 @@ class TribunalICEResponse(BaseModel):
 
 CALL_LOG = Path(__file__).parent.parent / "logs" / "tribunal_api_calls.jsonl"
 BRIDGE_CALL_LOG = Path(__file__).parent.parent / "logs" / "bridge_calls.jsonl"
+OFFICE_ROOT = _PROJECT_ROOT / "opera" / "ops" / "virtual-office"
+OFFICE_MAILBOX_LOG = OFFICE_ROOT / "relay_mailbox.jsonl"
+OFFICE_ACKS_LOG = OFFICE_ROOT / "relay_acks.jsonl"
+OFFICE_LEASES_DIR = OFFICE_ROOT / "leases"
+OFFICE_SNAPSHOTS_DIR = OFFICE_ROOT / "snapshots"
+REX_PAGER_PATH = _PROJECT_ROOT / "opera" / "ops" / "rex_pager.py"
 
 # Import redaction from bridge
 from rhea_bridge import redact_secrets
@@ -363,6 +382,269 @@ def _parse_ts(ts: str) -> Optional[datetime]:
 
 def _hour_iso(dt: datetime) -> str:
     return dt.astimezone(timezone.utc).replace(minute=0, second=0, microsecond=0).isoformat().replace("+00:00", "Z")
+
+
+def _read_json_file(path: Path) -> dict:
+    if not path.exists():
+        return {}
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        return data if isinstance(data, dict) else {}
+    except Exception:
+        return {}
+
+
+def _read_jsonl_records(path: Path) -> list[dict]:
+    if not path.exists():
+        return []
+    records: list[dict] = []
+    with open(path, "r", encoding="utf-8") as f:
+        for raw in f:
+            line = raw.strip()
+            if not line:
+                continue
+            try:
+                rec = json.loads(line)
+            except Exception:
+                continue
+            if isinstance(rec, dict):
+                records.append(rec)
+    return records
+
+
+def _message_body(msg: dict) -> str:
+    payload = msg.get("payload")
+    if isinstance(payload, dict):
+        body = payload.get("body")
+        if isinstance(body, str) and body.strip():
+            return body.strip()
+        nested = payload.get("payload")
+        if isinstance(nested, dict):
+            for key in ("instruction", "note", "context", "topic", "action"):
+                val = nested.get(key)
+                if isinstance(val, str) and val.strip():
+                    return val.strip()
+        return json.dumps(payload, ensure_ascii=False)[:500]
+    return str(payload or "")[:500]
+
+
+def _is_question_msg(msg: dict, body: str) -> bool:
+    msg_type = str(msg.get("type") or "").lower()
+    if "request" in msg_type:
+        return True
+    payload = msg.get("payload")
+    if isinstance(payload, dict) and str(payload.get("msg_type") or "").lower() == "request":
+        return True
+    body_l = body.lower()
+    if "?" in body:
+        return True
+    if "reply" in body_l or "please report" in body_l or "status check" in body_l:
+        return True
+    return False
+
+
+def _summarize_office_state() -> dict:
+    now = datetime.now(timezone.utc)
+    mailbox = _read_jsonl_records(OFFICE_MAILBOX_LOG)
+    ack_records = _read_jsonl_records(OFFICE_ACKS_LOG)
+    acked_ids = {
+        str(rec.get("message_id", "")).strip()
+        for rec in ack_records
+        if str(rec.get("message_id", "")).strip()
+    }
+
+    pending_by_target: dict[str, list[dict]] = {}
+    queue_preview: list[dict] = []
+    pending_total_count = 0
+    for msg in mailbox:
+        msg_id = str(msg.get("id", "")).strip()
+        if msg_id and msg_id in acked_ids:
+            continue
+        pending_total_count += 1
+        target = str(msg.get("target", "")).upper().strip() or "UNKNOWN"
+        body = _message_body(msg)
+        ts = _parse_ts(str(msg.get("timestamp", "")))
+        age_min = None
+        if ts:
+            age_min = max(0.0, (now - ts).total_seconds() / 60.0)
+        is_question = _is_question_msg(msg, body)
+        pending_entry = {
+            "id": msg_id,
+            "seq": int(msg.get("seq") or 0),
+            "source": str(msg.get("source") or "unknown"),
+            "target": target,
+            "priority": str(msg.get("priority") or "P1"),
+            "type": str(msg.get("type") or "msg.send"),
+            "timestamp": msg.get("timestamp"),
+            "age_min": round(age_min, 1) if age_min is not None else None,
+            "body": body,
+            "is_question": is_question,
+        }
+        pending_by_target.setdefault(target, []).append(pending_entry)
+        queue_preview.append(pending_entry)
+
+    leases: dict[str, dict] = {}
+    if OFFICE_LEASES_DIR.exists():
+        for path in OFFICE_LEASES_DIR.glob("*.json"):
+            lease = _read_json_file(path)
+            agent = str(lease.get("agent") or path.stem).upper().strip()
+            if agent:
+                leases[agent] = lease
+
+    snapshots: dict[str, dict] = {}
+    if OFFICE_SNAPSHOTS_DIR.exists():
+        for path in OFFICE_SNAPSHOTS_DIR.glob("*.json"):
+            snap = _read_json_file(path)
+            agent = str(snap.get("agent") or path.stem).upper().strip()
+            if agent:
+                snapshots[agent] = snap
+
+    agents = sorted(set(leases.keys()) | set(snapshots.keys()) | set(pending_by_target.keys()))
+    rows = []
+    for agent in agents:
+        pending = pending_by_target.get(agent, [])
+        pending_count = len(pending)
+        question_count = sum(1 for p in pending if p["is_question"])
+        oldest_pending_min = max((float(p["age_min"]) for p in pending if p["age_min"] is not None), default=0.0)
+        newest_pending_ts = None
+        if pending:
+            newest_pending = max(
+                pending,
+                key=lambda p: p["seq"],
+            )
+            newest_pending_ts = newest_pending.get("timestamp")
+
+        lease = leases.get(agent, {})
+        lease_expires_at = str(lease.get("expires_at") or "")
+        lease_renewed_at = str(lease.get("renewed_at") or lease.get("acquired_at") or "")
+        lease_expired = True
+        lease_ts = _parse_ts(lease_expires_at)
+        if lease_ts:
+            lease_expired = lease_ts <= now
+
+        snap = snapshots.get(agent, {})
+        snapshot_saved_at = str(snap.get("saved_at") or "")
+        last_activity = None
+        for ts in (lease_renewed_at, snapshot_saved_at, newest_pending_ts):
+            dt = _parse_ts(str(ts))
+            if dt and (last_activity is None or dt > last_activity):
+                last_activity = dt
+
+        if pending_count > 0 and lease_expired:
+            status = "stuck"
+        elif question_count > 0:
+            status = "needs_attention"
+        elif lease and not lease_expired:
+            status = "alive"
+        elif pending_count > 0:
+            status = "needs_attention"
+        else:
+            status = "idle"
+
+        rows.append(
+            {
+                "agent": agent,
+                "status": status,
+                "lease_token": int(lease.get("lease_token") or 0),
+                "lease_expired": lease_expired,
+                "lease_expires_at": lease_expires_at or None,
+                "lease_renewed_at": lease_renewed_at or None,
+                "snapshot_last_seq": int(snap.get("last_seq_applied") or 0),
+                "snapshot_saved_at": snapshot_saved_at or None,
+                "pending_count": pending_count,
+                "question_count": question_count,
+                "oldest_pending_min": round(oldest_pending_min, 1) if pending_count else 0.0,
+                "last_activity_at": last_activity.isoformat().replace("+00:00", "Z") if last_activity else None,
+            }
+        )
+
+    status_weight = {
+        "stuck": 0,
+        "needs_attention": 1,
+        "alive": 2,
+        "idle": 3,
+    }
+    rows.sort(
+        key=lambda r: (
+            status_weight.get(r["status"], 9),
+            -int(r["pending_count"]),
+            -int(r["question_count"]),
+            r["agent"],
+        )
+    )
+
+    queue_preview.sort(key=lambda m: int(m.get("seq") or 0), reverse=True)
+    queue_preview = queue_preview[:14]
+
+    return {
+        "generated_at": now.isoformat().replace("+00:00", "Z"),
+        "office_root": str(OFFICE_ROOT),
+        "mailbox_total": len(mailbox),
+        "pending_total": pending_total_count,
+        "stuck_total": sum(1 for r in rows if r["status"] == "stuck"),
+        "question_total": sum(int(r["question_count"]) for r in rows),
+        "agents": rows,
+        "queue_preview": queue_preview,
+    }
+
+
+def _resolve_action_targets(target: str, agent_rows: list[dict]) -> list[str]:
+    raw = (target or "").strip().upper()
+    if raw and raw != "ALL":
+        return [raw]
+
+    skip = {"ALL", "UNKNOWN", "PERSONAL", "--INTERVAL"}
+    targets = [
+        str(row.get("agent", "")).upper()
+        for row in agent_rows
+        if str(row.get("agent", "")).upper() not in skip
+        and not str(row.get("agent", "")).startswith("--")
+        and (int(row.get("pending_count", 0)) > 0 or not bool(row.get("lease_expired", True)))
+    ]
+    if targets:
+        return sorted(set(targets))
+    # Fallback set for cold starts with no pulse data.
+    return ["REX", "ORION", "HYPERION", "GPT"]
+
+
+def _run_rex_pager(args: list[str], timeout_s: int = 45) -> dict:
+    if not REX_PAGER_PATH.exists():
+        return {
+            "ok": False,
+            "returncode": 127,
+            "stdout_tail": "",
+            "stderr_tail": f"rex_pager not found: {REX_PAGER_PATH}",
+            "timed_out": False,
+        }
+    cmd = ["python3", str(REX_PAGER_PATH), *args]
+    try:
+        proc = subprocess.run(
+            cmd,
+            cwd=str(_PROJECT_ROOT),
+            capture_output=True,
+            text=True,
+            timeout=timeout_s,
+        )
+        stdout = (proc.stdout or "").strip()
+        stderr = (proc.stderr or "").strip()
+        return {
+            "ok": proc.returncode == 0,
+            "returncode": proc.returncode,
+            "stdout_tail": stdout[-1600:],
+            "stderr_tail": stderr[-1000:],
+            "timed_out": False,
+        }
+    except subprocess.TimeoutExpired as exc:
+        out = exc.stdout.decode() if isinstance(exc.stdout, bytes) else (exc.stdout or "")
+        err = exc.stderr.decode() if isinstance(exc.stderr, bytes) else (exc.stderr or "")
+        return {
+            "ok": False,
+            "returncode": 124,
+            "stdout_tail": out[-1600:],
+            "stderr_tail": err[-1000:] or f"timeout after {timeout_s}s",
+            "timed_out": True,
+        }
 
 
 # ---------------------------------------------------------------------------
@@ -492,6 +774,63 @@ async def usage_agents(window_hours: int = 24):
         "hourly_total_tokens": [
             {"hour": k, "tokens": v} for k, v in sorted(hourly_total.items())
         ],
+    }
+
+
+@app.get("/office/pulse", dependencies=[Depends(verify_api_key)])
+async def office_pulse():
+    """Live office pulse: stuck desks, pending requests, lease/snapshot health."""
+    return _summarize_office_state()
+
+
+@app.post("/office/action", dependencies=[Depends(verify_api_key)])
+async def office_action(req: OfficeActionRequest):
+    """Execute office controls via rex_pager (wake/boot/drain/lease/ping)."""
+    action = (req.action or "").strip().lower()
+    if action not in {"wake", "boot", "drain", "lease", "ping"}:
+        raise HTTPException(status_code=400, detail=f"Unsupported action: {req.action}")
+
+    pulse = _summarize_office_state()
+    targets = _resolve_action_targets(req.target, pulse.get("agents", []))
+    if not targets:
+        raise HTTPException(status_code=400, detail="No targets resolved for action")
+
+    source = (req.source or "ORION").strip().upper()
+    priority = (req.priority or "P1").strip().upper()
+    message = (req.message or "UI pulse check-in").strip() or "UI pulse check-in"
+
+    results = []
+    for target in targets:
+        if action == "wake":
+            args = ["wake", target]
+            timeout_s = 70
+        elif action == "boot":
+            args = ["boot", target]
+            timeout_s = 70
+        elif action == "drain":
+            args = ["drain", target]
+            timeout_s = 35
+        elif action == "lease":
+            args = ["lease", target, "--acquire"]
+            timeout_s = 20
+        else:  # ping
+            args = ["send", source, target, message, "--priority", priority, "--ttl", str(req.ttl_s)]
+            timeout_s = 20
+
+        run = _run_rex_pager(args, timeout_s=timeout_s)
+        run["target"] = target
+        run["action"] = action
+        run["args"] = args
+        results.append(run)
+
+    ok_count = sum(1 for r in results if r.get("ok"))
+    return {
+        "status": "ok" if ok_count == len(results) else "partial",
+        "action": action,
+        "targets": targets,
+        "ok_count": ok_count,
+        "error_count": len(results) - ok_count,
+        "results": results,
     }
 
 @app.get("/modes")
