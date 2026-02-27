@@ -257,6 +257,17 @@ def generate_feed() -> str:
 
     lines += [
         "",
+        "## Modules (what we built)",
+        "  bridge: 6 providers, 31 models, 4 tiers → src/rhea_bridge.py",
+        "  tribunal: multi-model consensus API :8400 → src/tribunal_api.py",
+        "  aletheia: proof store + verification chains → src/aletheia_api.py + data/proof.db",
+        "  office: agent communicator + H₂O Sonnet gate → src/office.py",
+        "  governor: dual-rail token budget (subscription/API) → src/token_governor.py",
+        "  task_queue: persistent pipeline (add/claim/complete/block) → src/task_queue.py",
+        "  memory_feed: this file — compact memory, deduped → src/memory_feed.py",
+        "  ruliad/explorer: OntologyEngine — hypothesis lifecycle (propose→verify→accept|reject), 3-layer verification (consensus+formal+red_team), evidence chains → friends/ruliad/explorer/",
+        "  ai_compact_lang: v0.2 — µACP 4-verb + A2A cards + Wolfram exprs → docs/AI_COMPACT_LANG.md",
+        "",
         "## Invariants",
         "  state.md <2KB ✓ | .venv/.env untracked ✓ | commit via rhea_commit.sh ✓",
         "  push every 30min ✓ | no questions mid-flight ✓ | cheap tier default ✓",
