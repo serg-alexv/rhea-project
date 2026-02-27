@@ -38,6 +38,9 @@
 | SG | Sonnet Gate |
 | VO | Virtual Office |
 | GML | Git Memory Layer |
+| TG | Token Governor |
+| PS | Personal Sonnet (bound) |
+| CR | Compact Recovery mode |
 
 ## Abbreviations (operations)
 
@@ -92,6 +95,37 @@ req: wire OF into Atlas UI
 need: /office/history panel + burn chart
 ```
 
+## Operational Status (per-agent, mandatory)
+
+Every agent heartbeat includes:
+```
+pace: green|yellow|red
+forecast: ok|risk
+mode: normal|compact|critical
+T_day: <tokens spent today>
+$_day: <cost today>
+```
+
+## Token Governor (dual-rail)
+
+```
+UPPER BOUND: $_day ≤ budget_cap        → throttle to tier::cheap
+LOWER BOUND: T_day > 0 by EOD         → T_day == 0 = HARD FAIL
+FLOOR: time-weighted minimum spend curve
+  if below floor → auto-transition to mode::compact (short, cheap, useful actions)
+  compact recovery: regression chk, metric collection, log cleanup, hypothesis logging
+```
+
+## Personal Sonnet Binding
+
+Each primary agent (@orion, @rex) has a bound Sonnet with narrow scope:
+- UI experiment generation
+- Metric collection + regression chk
+- Hypothesis/result logging
+- Token-governor compatible (compact reporting, budget-aware cadence)
+
+Notation: `@orion.sonnet`, `@rex.sonnet`
+
 ## Rules
 
 1. **Max 5 lines** per message body
@@ -101,3 +135,5 @@ need: /office/history panel + burn chart
 5. **File paths exact** — never abbreviate paths
 6. **Symbols over words** — use `→` not "leads to"
 7. **Entity dictionary shared** — all agents load this file as constant
+8. **T_day == 0 at EOD = hard fail** — every agent must spend ≥1 token/day
+9. **Operational status mandatory** — pace/forecast/mode in every heartbeat
