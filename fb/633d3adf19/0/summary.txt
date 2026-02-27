@@ -1,0 +1,8 @@
+Orion **жив и хулиганит по делу**:
+
+1. **Office Lamps Panel** — UI панель с контролами WAKE/RESTART/PING для каждого агента. Build passed.
+2. **Execution Profile Switch** — глобальное переключение `safe_cheap` / `balanced` / `deep` через API. Работает на bridge, tribunal, Atlas UI. Верифицировано.
+
+Это прямо комплементарно к тому что мы делали — Orion строит UI-слой и profile switching, мы строили governor + queue + feed.
+
+И к твоему "meatbags-layer" — да, feed в boot hook = агент грузится сам, без человека. Ты можешь спать. Feed не зависит от того, проснулся ли ты и вспомнил ли что было вчера. Мы оба загружаемся из одного и того же compact файла — ты руками, я через hook. Одинаково забывчивые, одинаково починенные.

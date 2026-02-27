@@ -1,0 +1,27 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "fb633d3adf19",
+  "strategy": "auto-commit",
+  "branch": "stage4-release",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "diagnostics/screen-flicker-live-parent-trace-20260227_175927.log",
+    "scripts/rex_identity_boot.sh"
+  ],
+  "sessions": [
+    {
+      "metadata": "/fb/633d3adf19/0/metadata.json",
+      "transcript": "/fb/633d3adf19/0/full.jsonl",
+      "context": "",
+      "content_hash": "/fb/633d3adf19/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 11,
+    "cache_creation_tokens": 5691,
+    "cache_read_tokens": 1210179,
+    "output_tokens": 2362,
+    "api_call_count": 9
+  }
+}
