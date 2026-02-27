@@ -12,6 +12,8 @@ Usage:
     python3 src/rhea_bridge.py tribunal "prompt" [--k 5] [--mode local|chairman]
     python3 src/rhea_bridge.py tribunal-ice "prompt" [--k 5] [--rounds 3]  # ICE iterative
     python3 src/rhea_bridge.py tiers                             # show tier config
+    python3 src/rhea_bridge.py profile                           # show active execution profile
+    python3 src/rhea_bridge.py profile set safe_cheap|balanced|deep
     python3 src/rhea_bridge.py daily-summary [YYYY-MM-DD]        # call log summary
 """
 
@@ -206,6 +208,52 @@ MODEL_TIERS = {
 
 DEFAULT_TIER = "cheap"  # HARD RULE: Sonnet / cheap models by default
 
+# ---------------------------------------------------------------------------
+# Execution profiles (global, persisted)
+# ---------------------------------------------------------------------------
+
+EXECUTION_PROFILE_DEFAULT = os.environ.get("RHEA_EXECUTION_PROFILE", "safe_cheap").strip().lower() or "safe_cheap"
+EXECUTION_PROFILE_PATH = Path(__file__).resolve().parent.parent / "opera" / "metrics" / "model_execution_profile.json"
+
+EXECUTION_PROFILES = {
+    "safe_cheap": {
+        "description": "Max economy mode. Forces lower-cost routing and short responses.",
+        "tier_map": {
+            "cheap": "cheap",
+            "balanced": "cheap",
+            "expensive": "balanced",
+            "reasoning": "balanced",
+            "science": "balanced",
+        },
+        "max_tokens_cap": 640,
+        "temperature_cap": 0.45,
+    },
+    "balanced": {
+        "description": "Default operator mode. Balanced quality/cost.",
+        "tier_map": {
+            "cheap": "balanced",
+            "balanced": "balanced",
+            "expensive": "expensive",
+            "reasoning": "reasoning",
+            "science": "science",
+        },
+        "max_tokens_cap": 1400,
+        "temperature_cap": 0.70,
+    },
+    "deep": {
+        "description": "Depth-first mode. Higher quality, higher spend.",
+        "tier_map": {
+            "cheap": "expensive",
+            "balanced": "expensive",
+            "expensive": "science",
+            "reasoning": "science",
+            "science": "science",
+        },
+        "max_tokens_cap": 2800,
+        "temperature_cap": 0.85,
+    },
+}
+
 
 # ---------------------------------------------------------------------------
 # Price table — approximate USD per 1M tokens (input, output)
@@ -260,6 +308,43 @@ PRICE_DEFAULT = (1.00, 3.00)  # fallback for unknown models
 _PROJECT_ROOT = Path(__file__).resolve().parent.parent
 CALL_LOG_PATH = _PROJECT_ROOT / "logs" / "bridge_calls.jsonl"
 CHRONOS_LOG_PATH = _PROJECT_ROOT / "logs" / "chronos_relay.jsonl"
+AUTOPLAN_LOG_PATH = _PROJECT_ROOT / "logs" / "autoplan_triggers.jsonl"
+
+AUTOPLAN_ENABLED = os.environ.get("RHEA_AUTOPLAN_ENABLED", "1").strip().lower() not in {
+    "0", "false", "no", "off"
+}
+AUTOPLAN_TITLE_MAX = int(os.environ.get("RHEA_AUTOPLAN_TITLE_MAX", "120"))
+AUTOPLAN_TRIGGER_PATTERNS = [
+    re.compile(r"\bindustrial(?:-|\s)?level\b", re.IGNORECASE),
+    re.compile(r"\bproduction(?:-|\s)?grade\b", re.IGNORECASE),
+    re.compile(r"\bproduction(?:-|\s)?ready\b", re.IGNORECASE),
+    re.compile(r"\bindustriali[sz]e[sd]?\b", re.IGNORECASE),
+    re.compile(r"можно\s+сделать\s+промышленно", re.IGNORECASE),
+    re.compile(r"сделать\s+промышленно", re.IGNORECASE),
+]
+AUTOPLAN_INDUSTRIAL_STEMS = [
+    "промышлен",
+    "в прод",
+    "production",
+    "prod-ready",
+    "industrial",
+    "enterprise",
+    "масштаб",
+    "боев",
+]
+AUTOPLAN_EPISTEMIC_STEMS = [
+    "похоже",
+    "предполага",
+    "кажется",
+    "возможно",
+    "вероятно",
+    "думаю",
+    "seems",
+    "seem",
+    "likely",
+    "probably",
+    "assume",
+]
 
 
 # ---------------------------------------------------------------------------
@@ -322,6 +407,110 @@ def _runtime_agent_meta() -> dict:
     }
 
 
+def _norm_text(text: str) -> str:
+    """Normalize whitespace in free-text fields."""
+    return re.sub(r"\s+", " ", (text or "").strip())
+
+
+def _autoplan_trigger(text: str) -> Optional[str]:
+    """Return trigger marker if response implies 'industrial' plan-worthy thought."""
+    hay = (text or "").lower()
+    for pattern in AUTOPLAN_TRIGGER_PATTERNS:
+        m = pattern.search(text or "")
+        if m:
+            return _norm_text(m.group(0))
+    # Soft probabilistic equivalent:
+    # "seems/probably/assume" + "industrial/production" => trigger plan task.
+    has_industrial = any(stem in hay for stem in AUTOPLAN_INDUSTRIAL_STEMS)
+    has_epistemic = any(stem in hay for stem in AUTOPLAN_EPISTEMIC_STEMS)
+    if has_industrial and has_epistemic:
+        return "soft:industrial+epistemic"
+    return None
+
+
+def _autoplan_signature(prompt: str, trigger: str) -> str:
+    """Stable signature for de-duplicating plan-proposal tasks."""
+    key = f"{_norm_text(prompt).lower()}|{_norm_text(trigger).lower()}"
+    return hashlib.sha256(key.encode("utf-8")).hexdigest()[:12]
+
+
+def _append_autoplan_log(record: dict) -> None:
+    """Append auto-plan trigger event to JSONL audit log."""
+    AUTOPLAN_LOG_PATH.parent.mkdir(parents=True, exist_ok=True)
+    try:
+        with open(AUTOPLAN_LOG_PATH, "a") as f:
+            f.write(redact_secrets(json.dumps(record, ensure_ascii=False)) + "\n")
+    except OSError:
+        pass
+
+
+def _maybe_create_plan_task(
+    prompt: str,
+    response_text: str,
+    model: str,
+    mode: str = "",
+    call_meta: Optional[dict] = None,
+) -> Optional[dict]:
+    """
+    Auto-create a plan-proposal task when response contains industrialization triggers.
+    Safe-by-default: deduplicates active tasks by signature.
+    """
+    if not AUTOPLAN_ENABLED:
+        return None
+    trigger = _autoplan_trigger(response_text)
+    if not trigger:
+        return None
+
+    signature = _autoplan_signature(prompt, trigger)
+    event = {
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "trigger": trigger,
+        "signature": signature,
+        "model": model,
+        "mode": mode or "",
+        "prompt_hash": _prompt_hash(prompt),
+        "agent": _runtime_agent_meta().get("agent_id", "unknown"),
+    }
+    if call_meta:
+        event["call_meta"] = call_meta
+
+    # Lazy import avoids hard dependency when bridge is used standalone.
+    try:
+        from task_queue import TaskQueue
+        q = TaskQueue()
+    except Exception as e:
+        event["status"] = "error"
+        event["error"] = f"task_queue_unavailable: {e}"
+        _append_autoplan_log(event)
+        return {"created": False, "reason": "task_queue_unavailable", "error": str(e)}
+
+    sig_tag = f"sig:{signature}"
+    for t in q.tasks.values():
+        tags = t.get("tags", [])
+        if sig_tag in tags and t.get("status") in {"open", "claimed", "blocked"}:
+            event["status"] = "duplicate"
+            event["task_id"] = t.get("id", "")
+            _append_autoplan_log(event)
+            return {"created": False, "reason": "duplicate", "task_id": t.get("id", "")}
+
+    title_seed = _norm_text(prompt) or _norm_text(response_text)
+    title_seed = title_seed[:AUTOPLAN_TITLE_MAX].rstrip()
+    if not title_seed:
+        title_seed = "Auto-generated from industrialization trigger"
+    title = f"Plan proposal: {title_seed}"
+    task = q.add(
+        title=title,
+        priority="P1",
+        agent="any",
+        tags=["auto-plan", "plan-proposal", sig_tag],
+    )
+
+    event["status"] = "created"
+    event["task_id"] = task["id"]
+    _append_autoplan_log(event)
+    return {"created": True, "task_id": task["id"], "trigger": trigger}
+
+
 def _log_call(
     provider: str,
     model: str,
@@ -358,6 +547,37 @@ def _log_call(
             f.write(redact_secrets(json.dumps(record)) + "\n")
     except OSError:
         pass  # logging must never break the bridge
+
+
+def _load_execution_profile_name() -> str:
+    """Load persisted execution profile name with env/default fallback."""
+    if EXECUTION_PROFILE_PATH.exists():
+        try:
+            data = json.loads(EXECUTION_PROFILE_PATH.read_text())
+            raw = str(data.get("active") or "").strip().lower()
+            if raw in EXECUTION_PROFILES:
+                return raw
+        except Exception:
+            pass
+    if EXECUTION_PROFILE_DEFAULT in EXECUTION_PROFILES:
+        return EXECUTION_PROFILE_DEFAULT
+    return "safe_cheap"
+
+
+def _persist_execution_profile_name(name: str, source: str = "runtime") -> None:
+    """Persist active execution profile (best-effort)."""
+    if name not in EXECUTION_PROFILES:
+        return
+    payload = {
+        "active": name,
+        "updated_at": datetime.now(timezone.utc).isoformat(),
+        "source": source,
+    }
+    try:
+        EXECUTION_PROFILE_PATH.parent.mkdir(parents=True, exist_ok=True)
+        EXECUTION_PROFILE_PATH.write_text(json.dumps(payload, indent=2))
+    except OSError:
+        pass
 
 
 # ---------------------------------------------------------------------------
@@ -498,6 +718,43 @@ class RheaBridge:
         self.providers = PROVIDERS
         self.tiers = MODEL_TIERS
         self.default_tier = DEFAULT_TIER
+        self.execution_profile = _load_execution_profile_name()
+
+    def get_execution_profile(self) -> dict:
+        """Return active execution profile and available options."""
+        profile_name = self.execution_profile if self.execution_profile in EXECUTION_PROFILES else "safe_cheap"
+        return {
+            "active": profile_name,
+            "available": list(EXECUTION_PROFILES.keys()),
+            "config": EXECUTION_PROFILES[profile_name],
+        }
+
+    def set_execution_profile(self, profile: str, source: str = "api") -> dict:
+        """Set global execution profile and persist to disk."""
+        profile_name = (profile or "").strip().lower()
+        if profile_name not in EXECUTION_PROFILES:
+            raise ValueError(f"Unknown execution profile: {profile_name}")
+        self.execution_profile = profile_name
+        _persist_execution_profile_name(profile_name, source=source)
+        return self.get_execution_profile()
+
+    def _profile_cfg(self) -> dict:
+        name = self.execution_profile if self.execution_profile in EXECUTION_PROFILES else "safe_cheap"
+        return EXECUTION_PROFILES[name]
+
+    def _effective_tier(self, requested_tier: str) -> str:
+        cfg = self._profile_cfg()
+        tier_map = cfg.get("tier_map", {})
+        mapped = str(tier_map.get(requested_tier, requested_tier))
+        return mapped if mapped in self.tiers else self.default_tier
+
+    def _clamp_request_params(self, temperature: float, max_tokens: int) -> tuple[float, int]:
+        cfg = self._profile_cfg()
+        t_cap = float(cfg.get("temperature_cap", 1.0))
+        m_cap = int(cfg.get("max_tokens_cap", max_tokens))
+        t = max(0.0, min(float(temperature), t_cap))
+        mt = max(1, min(int(max_tokens), m_cap))
+        return t, mt
 
     # --- public API: tiered (preferred) ---
 
@@ -522,12 +779,14 @@ class RheaBridge:
         mode: Optional[str] = None,
     ) -> ModelResponse:
         """Send a prompt using a specific cost tier. Falls through candidates until one works."""
-        tier_cfg = self.tiers.get(tier)
-        if not tier_cfg:
+        requested_tier = tier
+        if requested_tier not in self.tiers:
             return ModelResponse(
-                provider="", model="", text="", latency_s=0, tier=tier,
-                error=f"Unknown tier: {tier}. Valid: {list(self.tiers.keys())}",
+                provider="", model="", text="", latency_s=0, tier=requested_tier,
+                error=f"Unknown tier: {requested_tier}. Valid: {list(self.tiers.keys())}",
             )
+        effective_tier = self._effective_tier(requested_tier)
+        tier_cfg = self.tiers.get(effective_tier, self.tiers[self.default_tier])
 
         # Try candidates in order; first available provider wins
         last_error = None
@@ -541,16 +800,27 @@ class RheaBridge:
                 api_key = os.environ.get("GEMINI_T1_API_KEY", "")
             if not api_key:
                 continue  # skip providers without keys
-            resp = self.ask(prompt, candidate, system, temperature, max_tokens, mode)
-            resp.tier = tier
+            resp = self.ask(
+                prompt, candidate, system, temperature, max_tokens, mode,
+                call_meta={
+                    "requested_tier": requested_tier,
+                    "effective_tier": effective_tier,
+                    "exec_profile": self.execution_profile,
+                },
+            )
+            resp.tier = effective_tier
             if not resp.error:
                 return resp
             last_error = resp.error
 
         # All candidates failed
         return ModelResponse(
-            provider="", model="", text="", latency_s=0, tier=tier,
-            error=f"All {tier} tier candidates failed. Last error: {last_error}",
+            provider="", model="", text="", latency_s=0, tier=effective_tier,
+            error=(
+                f"All {effective_tier} tier candidates failed "
+                f"(requested={requested_tier}, profile={self.execution_profile}). "
+                f"Last error: {last_error}"
+            ),
         )
 
     # --- public API: direct model (use when you know exactly what you need) ---
@@ -563,6 +833,7 @@ class RheaBridge:
         temperature: float = 0.7,
         max_tokens: int = 2048,
         mode: Optional[str] = None,
+        call_meta: Optional[dict] = None,
     ) -> ModelResponse:
         """Send a prompt to a specific model via LiteLLM. Format: 'provider/model'."""
         
@@ -581,6 +852,7 @@ class RheaBridge:
         # ----------------------------------------------------
 
         provider_name, model_id = self._resolve_model(model)
+        temperature_eff, max_tokens_eff = self._clamp_request_params(temperature, max_tokens)
         t0 = time.time()
         
         try:
@@ -594,8 +866,8 @@ class RheaBridge:
             response = litellm.completion(
                 model=model,
                 messages=messages,
-                temperature=temperature,
-                max_tokens=max_tokens,
+                temperature=temperature_eff,
+                max_tokens=max_tokens_eff,
             )
 
             text = response.choices[0].message.content
@@ -618,8 +890,25 @@ class RheaBridge:
                 metadata={
                     "mode": mode or "",
                     "prompt_hash": _prompt_hash(prompt),
+                    "exec_profile": self.execution_profile,
+                    "temperature": temperature_eff,
+                    "max_tokens": max_tokens_eff,
+                    **(call_meta or {}),
                 },
             )
+
+            # Auto-launch plan-proposal task on "industrial-level" thoughts.
+            plan_event = _maybe_create_plan_task(
+                prompt=prompt,
+                response_text=text or "",
+                model=f"{provider_name}/{model_id}",
+                mode=mode or "",
+                call_meta=call_meta or {},
+            )
+            if plan_event and plan_event.get("created"):
+                print(f"[bridge] AUTO-PLAN created task: {plan_event['task_id']}")
+            elif plan_event and plan_event.get("reason") == "duplicate":
+                print(f"[bridge] AUTO-PLAN duplicate ignored: {plan_event.get('task_id', '')}")
 
             return ModelResponse(
                 provider=provider_name, model=model_id,
@@ -635,6 +924,10 @@ class RheaBridge:
                 metadata={
                     "mode": mode or "",
                     "prompt_hash": _prompt_hash(prompt),
+                    "exec_profile": self.execution_profile,
+                    "temperature": temperature_eff,
+                    "max_tokens": max_tokens_eff,
+                    **(call_meta or {}),
                 },
             )
             return ModelResponse(
@@ -792,6 +1085,7 @@ class RheaBridge:
             "available_providers": available,
             "total_models": total_models,
             "default_tier": self.default_tier,
+            "execution_profile": self.execution_profile,
         }
         return status
 
@@ -832,11 +1126,13 @@ class RheaBridge:
         return {"providers": results, "alive": alive, "total": len(self.providers)}
 
     def tiers_info(self) -> dict:
-        """Return tier configuration with availability status."""
+        """Return tier configuration with availability status under active profile."""
         info = {}
         for tier_name, tier_cfg in self.tiers.items():
+            effective_tier = self._effective_tier(tier_name)
+            effective_cfg = self.tiers.get(effective_tier, tier_cfg)
             candidates_status = []
-            for candidate in tier_cfg["candidates"]:
+            for candidate in effective_cfg["candidates"]:
                 provider_name, model_id = self._resolve_model(candidate)
                 cfg = self.providers.get(provider_name)
                 has_key = bool(cfg and os.environ.get(cfg.api_key_env, ""))
@@ -847,6 +1143,8 @@ class RheaBridge:
             info[tier_name] = {
                 "description": tier_cfg["description"],
                 "is_default": tier_name == self.default_tier,
+                "effective_tier": effective_tier,
+                "exec_profile": self.execution_profile,
                 "candidates": candidates_status,
                 "available_count": sum(1 for c in candidates_status if c["available"]),
             }
@@ -880,8 +1178,9 @@ class RheaBridge:
         Prefers models from the specified tier, then fills remaining slots
         from other available models to ensure provider diversity.
         """
-        # Start with tier candidates that have available keys
-        tier_cfg = self.tiers.get(tier, self.tiers[self.default_tier])
+        effective_tier = self._effective_tier(tier)
+        # Start with effective-tier candidates that have available keys
+        tier_cfg = self.tiers.get(effective_tier, self.tiers[self.default_tier])
         tier_candidates = []
         seen_providers = set()
         for candidate in tier_cfg["candidates"]:
@@ -1033,7 +1332,7 @@ def main():
     bridge = RheaBridge()
 
     if len(sys.argv) < 2:
-        print("Usage: rhea_bridge.py {status|tiers|ask|ask-default|ask-tier|tribunal|tribunal-ice|daily-summary}")
+        print("Usage: rhea_bridge.py {status|tiers|profile|ask|ask-default|ask-tier|tribunal|tribunal-ice|autoplan-test|daily-summary}")
         sys.exit(1)
 
     cmd = sys.argv[1]
@@ -1055,6 +1354,22 @@ def main():
 
     elif cmd == "tiers":
         print(json.dumps(bridge.tiers_info(), indent=2))
+
+    elif cmd == "profile":
+        # Show or set execution profile.
+        if len(sys.argv) == 2:
+            print(json.dumps(bridge.get_execution_profile(), indent=2))
+        elif len(sys.argv) >= 4 and sys.argv[2] == "set":
+            profile_name = sys.argv[3]
+            try:
+                data = bridge.set_execution_profile(profile_name, source="cli")
+                print(json.dumps(data, indent=2))
+            except ValueError as e:
+                print(str(e))
+                sys.exit(1)
+        else:
+            print("Usage: rhea_bridge.py profile [set safe_cheap|balanced|deep]")
+            sys.exit(1)
 
     elif cmd == "ask":
         if len(sys.argv) < 4:
@@ -1160,6 +1475,21 @@ def main():
         analyzer = ConsensusAnalyzer(bridge=bridge)
         report = analyzer.analyze_ice(prompt, k=k, rounds=rounds, tier=tier)
         print(json.dumps(report.to_dict(), indent=2))
+
+    elif cmd == "autoplan-test":
+        if len(sys.argv) < 4:
+            print("Usage: rhea_bridge.py autoplan-test <prompt> <response_text>")
+            sys.exit(1)
+        prompt = sys.argv[2]
+        response_text = sys.argv[3]
+        result = _maybe_create_plan_task(
+            prompt=prompt,
+            response_text=response_text,
+            model="manual/autoplan-test",
+            mode="",
+            call_meta={"source": "cli-autoplan-test"},
+        ) or {"created": False, "reason": "no_trigger"}
+        print(json.dumps(result, ensure_ascii=False, indent=2))
 
     elif cmd == "send-chronos":
         if len(sys.argv) < 7:

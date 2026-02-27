@@ -254,6 +254,10 @@ class OfficeActionRequest(BaseModel):
     ttl_s: int = Field(default=86400, ge=60, le=604800)
 
 
+class ExecutionProfileRequest(BaseModel):
+    profile: str = Field(..., description="safe_cheap|balanced|deep")
+
+
 # ---------------------------------------------------------------------------
 # New request/response models — sceptic, session rewind, ontology switch
 # ---------------------------------------------------------------------------
@@ -655,11 +659,13 @@ def _run_rex_pager(args: list[str], timeout_s: int = 45) -> dict:
 async def health():
     bridge = get_bridge()
     status = bridge.models_status()
+    summary = status.get("summary", {})
     return {
         "status": "ok",
-        "providers_available": status["summary"]["available_providers"],
-        "providers_total": status["summary"]["total_providers"],
-        "total_models": status["summary"]["total_models"],
+        "providers_available": summary.get("available_providers", 0),
+        "providers_total": summary.get("total_providers", 0),
+        "total_models": summary.get("total_models", 0),
+        "execution_profile": summary.get("execution_profile", "safe_cheap"),
         "analyzer_version": "v2-ice-council",
         "profile_mode": profile_manager.get_active_mode(),
     }
@@ -669,6 +675,21 @@ async def health():
 async def models():
     bridge = get_bridge()
     return bridge.models_status()
+
+
+@app.get("/settings/execution-profile")
+async def get_execution_profile():
+    bridge = get_bridge()
+    return bridge.get_execution_profile()
+
+
+@app.post("/settings/execution-profile", dependencies=[Depends(verify_api_key)])
+async def set_execution_profile(req: ExecutionProfileRequest):
+    bridge = get_bridge()
+    try:
+        return bridge.set_execution_profile(req.profile, source="api")
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 
 @app.get("/usage/agents")
