@@ -1,0 +1,3 @@
+**FinderSync PID 96055** — это `com.google.drivefs.finderhelper.findersync`. Google Drive Finder extension. Оно синкает файлы и заставляет Finder индексировать. При 107% CPU — Drive скорее всего качает/загружает что-то массово.
+
+Это может быть причина и блинков и CPU. Google Drive Finder Sync + WindowServer 42% = перерисовка иконок синхронизации.

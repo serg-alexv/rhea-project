@@ -1,0 +1,23 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "d62b41e9ba60",
+  "session_id": "94aabe90-9b2d-48e7-be8c-6bf820a0b6a9",
+  "strategy": "auto-commit",
+  "created_at": "2026-02-27T09:28:10.626239Z",
+  "branch": "stage4-release",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "scripts/rhea_pulse.sh"
+  ],
+  "agent": "Claude Code",
+  "transcript_identifier_at_start": "befef1da-1e9e-43d1-8c91-fc38609d4ef2",
+  "checkpoint_transcript_start": 3470,
+  "transcript_lines_at_start": 3470,
+  "token_usage": {
+    "input_tokens": 8,
+    "cache_creation_tokens": 3527,
+    "cache_read_tokens": 812755,
+    "output_tokens": 639,
+    "api_call_count": 6
+  }
+}
