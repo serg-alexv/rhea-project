@@ -1,0 +1,26 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "fc2c8335d1fc",
+  "strategy": "auto-commit",
+  "branch": "stage4-release",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "docs/attention_behavior_source_collection.md"
+  ],
+  "sessions": [
+    {
+      "metadata": "/fc/2c8335d1fc/0/metadata.json",
+      "transcript": "/fc/2c8335d1fc/0/full.jsonl",
+      "context": "",
+      "content_hash": "/fc/2c8335d1fc/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 7,
+    "cache_creation_tokens": 3322,
+    "cache_read_tokens": 805321,
+    "output_tokens": 1497,
+    "api_call_count": 5
+  }
+}
