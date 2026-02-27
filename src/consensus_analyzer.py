@@ -502,18 +502,53 @@ def _measure_convergence(prev_texts: list[str], curr_texts: list[str]) -> float:
 
 
 # ---------------------------------------------------------------------------
+# Signal density (rarefied flow filter)
+# ---------------------------------------------------------------------------
+
+SIGNAL_THRESHOLD = 0.15  # below this, response is "empty particle" — no signal
+
+def _signal_density(text: str, tokens: list[str]) -> float:
+    """How much actual signal a response carries. 0 = noise, 1 = dense.
+
+    Three components:
+    - content_ratio: content words / total words (filters boilerplate)
+    - specificity: average token length as proxy for technical depth
+    - length_factor: very short responses carry less signal
+    """
+    words = text.lower().split()
+    if len(words) < 5:
+        return 0.0
+    content_ratio = len(tokens) / len(words) if words else 0.0
+    avg_token_len = sum(len(t) for t in tokens) / len(tokens) if tokens else 0.0
+    specificity = min(avg_token_len / 8.0, 1.0)
+    length_factor = min(len(words) / 50, 1.0)
+    return round(content_ratio * 0.3 + specificity * 0.3 + length_factor * 0.4, 4)
+
+
+# ---------------------------------------------------------------------------
 # Core analysis (shared by all levels)
 # ---------------------------------------------------------------------------
 
 def _core_analysis(
     model_ids: list[str], texts: list[str],
 ) -> dict:
-    """Run TF-IDF, stance, agreement/divergence on a set of responses. Returns dict of metrics."""
+    """Run TF-IDF, stance, agreement/divergence on a set of responses.
+
+    Uses rarefied flow model: each response has a signal density.
+    Pairwise similarities are weighted by the product of participant densities.
+    Empty particles (low density) don't pollute the consensus.
+    """
     tokenized = [_tokenize(text) for text in texts]
     tfidf = TfIdf()
     vectors = tfidf.fit_transform(tokenized)
 
-    similarities, sim_values = {}, []
+    # Signal density per response
+    densities = [_signal_density(text, toks) for text, toks in zip(texts, tokenized)]
+    active = [i for i, d in enumerate(densities) if d > SIGNAL_THRESHOLD]
+
+    # Weighted pairwise similarity (rarefied: weight = density_i * density_j)
+    similarities = {}
+    weighted_sum, total_weight = 0.0, 0.0
     for i in range(len(model_ids)):
         for j in range(i + 1, len(model_ids)):
             cosine = _cosine_similarity(vectors[i], vectors[j])
@@ -521,15 +556,22 @@ def _core_analysis(
             blended = _blended_similarity(cosine, jaccard)
             key = f"{model_ids[i]} vs {model_ids[j]}"
             similarities[key] = round(blended, 4)
-            sim_values.append(blended)
+            # Weight by signal density of both participants
+            w = densities[i] * densities[j]
+            weighted_sum += blended * w
+            total_weight += w
 
-    raw_text_sim = sum(sim_values) / len(sim_values) if sim_values else 0.0
+    raw_text_sim = weighted_sum / total_weight if total_weight > 0 else 0.0
 
+    # Stance detection — only count signal-carrying responses for alignment
     stances = {mid: _detect_stance(text) for mid, text in zip(model_ids, texts)}
-    stance_values = [s["stance"] for s in stances.values()]
-    stance_counts = Counter(stance_values)
-    dominant_count = max(stance_counts.values()) if stance_counts else 0
-    stance_alignment = dominant_count / len(stance_values) if stance_values else 0.0
+    if active:
+        active_stances = [stances[model_ids[i]]["stance"] for i in active]
+        stance_counts = Counter(active_stances)
+        dominant_count = max(stance_counts.values())
+        stance_alignment = dominant_count / len(active_stances)
+    else:
+        stance_alignment = 0.0
 
     agreement_pts, divergence_pts = _find_agreement_divergence(model_ids, texts)
     total_pts = len(agreement_pts) + len(divergence_pts)
@@ -538,8 +580,8 @@ def _core_analysis(
     calibrated_text = min(max((raw_text_sim - 0.02) / 0.40, 0.0), 1.0)
     agreement_score = round(0.35 * calibrated_text + 0.40 * stance_alignment + 0.25 * claim_overlap, 4)
 
-    n = len(model_ids)
-    model_factor = min(n / 5, 1.0)
+    n_active = len(active)
+    model_factor = min(n_active / 5, 1.0)
     confidence = round(0.3 * model_factor + 0.4 * agreement_score + 0.3 * stance_alignment, 4)
 
     return {
@@ -552,6 +594,8 @@ def _core_analysis(
         "confidence": confidence,
         "vocab_size": len(tfidf.idf),
         "tokenized": tokenized,
+        "densities": {mid: d for mid, d in zip(model_ids, densities)},
+        "active_count": n_active,
     }
 
 
