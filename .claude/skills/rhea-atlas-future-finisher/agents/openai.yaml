@@ -1,0 +1,4 @@
+interface:
+  display_name: "Rhea Atlas Future Finisher"
+  short_description: "Finish Rhea Atlas with Rex-first Chrome-latest rigor"
+  default_prompt: "Start with a Rex brief from local relay and logs, then list recent ORION commands, propose the smallest high-value Atlas step, and implement with a file-relay fallback if Firebase/Firestore is degraded."
