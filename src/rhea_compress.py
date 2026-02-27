@@ -7,9 +7,11 @@ Usage:
     python3 src/rhea_compress.py <image_path> <recipient> [--relay]
     from src.rhea_compress import compress
 """
-import os, sys, json, shutil
+import os, sys, json, shutil, base64, mimetypes
 from datetime import datetime
 from pathlib import Path
+
+import litellm
 
 sys.path.insert(0, str(Path(__file__).parent))
 from rhea_bridge import RheaBridge
@@ -68,28 +70,43 @@ def compress(image_path: str, recipient: str) -> dict:
     file_size = Path(image_path).stat().st_size
     original_ref = _store_original(image_path)
 
+    # Encode image to base64
+    mime = mimetypes.guess_type(image_path)[0] or "image/png"
+    with open(image_path, "rb") as f:
+        b64 = base64.b64encode(f.read()).decode()
+
+    # Get cheap model from bridge
     bridge = RheaBridge()
-    response = bridge.ask_vision(
-        image_path=image_path,
-        prompt=_build_prompt(recipient),
-        tier="cheap",
+    tier_response = bridge.ask_tier("cheap", "ping")
+    model = tier_response.model
+
+    # Build multimodal content
+    content = [
+        {"type": "text", "text": _build_prompt(recipient)},
+        {"type": "image_url", "image_url": {"url": f"data:{mime};base64,{b64}"}}
+    ]
+
+    # Call litellm directly
+    response = litellm.completion(
+        model=model,
+        messages=[{"role": "user", "content": content}],
         max_tokens=300,
+        temperature=0.3,
     )
 
-    if response.error:
-        raise RuntimeError(f"Vision model error: {response.error}")
+    summary = response.choices[0].message.content.strip()
+    tokens_used = response.usage.completion_tokens if hasattr(response, 'usage') else 150
 
-    tokens_used = response.tokens_used or 0
     raw_estimate = max(1, file_size // 4)          # 1 token ≈ 4 bytes for images
     tokens_saved = raw_estimate - tokens_used
     compression_ratio = round(raw_estimate / max(1, tokens_used), 2)
 
     return {
-        "summary": response.text.strip(),
+        "summary": summary,
         "tokens_used": tokens_used,
         "tokens_saved": tokens_saved,
         "compression_ratio": compression_ratio,
-        "model_used": f"{response.provider}/{response.model}",
+        "model_used": model,
         "original_ref": original_ref,
     }
 
