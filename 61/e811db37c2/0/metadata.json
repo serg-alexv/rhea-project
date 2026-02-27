@@ -1,0 +1,25 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "61e811db37c2",
+  "session_id": "94aabe90-9b2d-48e7-be8c-6bf820a0b6a9",
+  "strategy": "auto-commit",
+  "created_at": "2026-02-27T15:05:59.904974Z",
+  "branch": "stage4-release",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "diagnostics/post-fix-capture-check-20260227_180509.log",
+    "diagnostics/post-fix-capture-check-20260227_180540.log",
+    "diagnostics/post-fix-capture-check-20260227_180554.log"
+  ],
+  "agent": "Claude Code",
+  "transcript_identifier_at_start": "0badf620-39ca-45ab-bd3e-0a807c3de3a2",
+  "checkpoint_transcript_start": 6369,
+  "transcript_lines_at_start": 6369,
+  "token_usage": {
+    "input_tokens": 4,
+    "cache_creation_tokens": 1380,
+    "cache_read_tokens": 277411,
+    "output_tokens": 720,
+    "api_call_count": 2
+  }
+}
