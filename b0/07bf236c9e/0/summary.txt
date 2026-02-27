@@ -1,0 +1,7 @@
+Список foreground процессов. Из подозрительного для screen capture:
+
+- **CleanMyMac_5** — имеет screen recording permission на многих системах (для "оптимизации")
+- **QuickTime Player** — может записывать экран
+- **Google Chrome** — расширения могут иметь доступ к tab capture
+
+TCC база заблокирована для прямого чтения (SIP). Но ты можешь проверить сам: **System Settings → Privacy & Security → Screen Recording** — там список всех приложений с доступом к экрану. Если увидишь что-то неожиданное — это кандидат.
