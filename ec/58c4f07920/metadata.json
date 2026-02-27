@@ -1,0 +1,28 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "ec58c4f07920",
+  "strategy": "auto-commit",
+  "branch": "stage4-release",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "contracts/behavior_loop.py",
+    "data/behavior_loop_gemini.md",
+    "data/behavior_loop_live.md"
+  ],
+  "sessions": [
+    {
+      "metadata": "/ec/58c4f07920/0/metadata.json",
+      "transcript": "/ec/58c4f07920/0/full.jsonl",
+      "context": "",
+      "content_hash": "/ec/58c4f07920/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 16,
+    "cache_creation_tokens": 59546,
+    "cache_read_tokens": 1026833,
+    "output_tokens": 17285,
+    "api_call_count": 12
+  }
+}

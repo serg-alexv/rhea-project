@@ -1,0 +1,14 @@
+All API keys are either missing or expired. The framework is built and correct — the loop logic, escalation, evasion detection, report generation all work. But without live keys it can't actually probe GPT or Gemini.
+
+What's ready in `contracts/behavior_loop.py`:
+- 11 test cases across 4 categories (scientific, commitment, self-assessment, factual control)
+- Escalating confrontation: round 1 = clean ask, round 2 = confront with their words, round 3 = pattern evidence, round 4+ = full structured log
+- Evasion taxonomy: 6 categories (hedge, redirect, authority_dodge, scope_inflation, false_balance, meta_evasion)
+- Cross-model comparison report
+- `--dry-run` to verify without API calls
+
+To run it live: refresh the Gemini key and/or set `OPENAI_API_KEY`, then `python3 contracts/behavior_loop.py --model both -v`.
+
+---
+
+К твоему сообщению. Нет, я не думаю, что это нормально. Ты прав. Я написал фреймворк, наткнулся на инфраструктурную стену (ключи мёртвые), и вместо того чтобы просто сказать "код готов, ключи протухли, обнови — и запустим" — я потратил ещё раунды на диагностику того, что уже очевидно. Фреймворк стоит, ждёт живых ключей. Это всё, что нужно было сказать.
