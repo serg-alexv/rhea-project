@@ -1,0 +1,26 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "f1e877778426",
+  "strategy": "auto-commit",
+  "branch": "stage4-release",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "src/rhea_vision_check.py"
+  ],
+  "sessions": [
+    {
+      "metadata": "/f1/e877778426/0/metadata.json",
+      "transcript": "/f1/e877778426/0/full.jsonl",
+      "context": "",
+      "content_hash": "/f1/e877778426/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 4,
+    "cache_creation_tokens": 805,
+    "cache_read_tokens": 180268,
+    "output_tokens": 543,
+    "api_call_count": 2
+  }
+}
