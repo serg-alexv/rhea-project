@@ -1,0 +1,27 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "9a9c69af1641",
+  "strategy": "auto-commit",
+  "branch": "stage4-release",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "opera/metrics/rex_burn.json",
+    "scripts/rex_burn.py"
+  ],
+  "sessions": [
+    {
+      "metadata": "/9a/9c69af1641/0/metadata.json",
+      "transcript": "/9a/9c69af1641/0/full.jsonl",
+      "context": "",
+      "content_hash": "/9a/9c69af1641/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 11,
+    "cache_creation_tokens": 8353,
+    "cache_read_tokens": 1262160,
+    "output_tokens": 5141,
+    "api_call_count": 9
+  }
+}
