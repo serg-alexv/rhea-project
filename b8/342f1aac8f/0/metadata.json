@@ -1,0 +1,31 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "b8342f1aac8f",
+  "session_id": "94aabe90-9b2d-48e7-be8c-6bf820a0b6a9",
+  "strategy": "auto-commit",
+  "created_at": "2026-02-27T13:14:31.327482Z",
+  "branch": "stage4-release",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "opera/metrics/token_burn.json",
+    "scripts/token_burn.py"
+  ],
+  "agent": "Claude Code",
+  "transcript_identifier_at_start": "db3c9c83-9b93-4c21-8231-515d2f00e600",
+  "checkpoint_transcript_start": 5135,
+  "transcript_lines_at_start": 5135,
+  "token_usage": {
+    "input_tokens": 8,
+    "cache_creation_tokens": 9454,
+    "cache_read_tokens": 470037,
+    "output_tokens": 3633,
+    "api_call_count": 4,
+    "subagent_tokens": {
+      "input_tokens": 39,
+      "cache_creation_tokens": 85445,
+      "cache_read_tokens": 679733,
+      "output_tokens": 5790,
+      "api_call_count": 10
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "b8342f1aac8f",
+  "strategy": "auto-commit",
+  "branch": "stage4-release",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "opera/metrics/token_burn.json",
+    "scripts/token_burn.py"
+  ],
+  "sessions": [
+    {
+      "metadata": "/b8/342f1aac8f/0/metadata.json",
+      "transcript": "/b8/342f1aac8f/0/full.jsonl",
+      "context": "",
+      "content_hash": "/b8/342f1aac8f/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 8,
+    "cache_creation_tokens": 9454,
+    "cache_read_tokens": 470037,
+    "output_tokens": 3633,
+    "api_call_count": 4
+  }
+}

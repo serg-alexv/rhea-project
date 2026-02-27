@@ -1,0 +1,5 @@
+Данные за вчера. Gemini сжёг 88.7% (94K токенов), Orion 9.6% (10K), Rex — 0 (все 32 вызова Anthropic упали с ошибкой авторизации).
+
+`python3 scripts/token_burn.py --live` — обновляется каждые 10 секунд, выводит в терминал + пишет JSON в `opera/metrics/token_burn.json`.
+
+Rex'овы собственные токены (Claude Code сессия) в bridge_calls не попадают — это отдельный биллинг Anthropic. Dashboard показывает только то, что Rex **диспатчит** другим через bridge. Чтобы трекать Rex'а самого, нужен хук на Claude Code API usage — или внешний скрипт, который дёргает Anthropic billing API.
