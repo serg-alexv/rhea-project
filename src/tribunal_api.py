@@ -1643,6 +1643,24 @@ async def get_outbox(agent: Optional[str] = None, limit: int = 20):
     return {"messages": results}
 
 
+# ---------------------------------------------------------------------------
+# Token Governor
+# ---------------------------------------------------------------------------
+
+from token_governor import Governor, all_governors
+
+@app.get("/governor")
+async def governor_all():
+    """Dual-rail token governor — all agents."""
+    return all_governors()
+
+@app.get("/governor/{agent}")
+async def governor_agent(agent: str):
+    """Dual-rail token governor — single agent check + enforce."""
+    gov = Governor(agent)
+    return gov.enforce()
+
+
 def _read_jsonl_tail(path: Path, limit: int, agent_filter: Optional[str] = None) -> dict:
     """Read last N records from a JSONL file."""
     if not path.exists():
