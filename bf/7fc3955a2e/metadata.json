@@ -1,0 +1,32 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "bf7fc3955a2e",
+  "strategy": "auto-commit",
+  "branch": "stage4-release",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "friends/aletheia/hypotheses/epidemiology/demo_hyp_resistance_game_02.md",
+    "friends/aletheia/hypotheses/quantum_biology/demo_hyp_quantum_bio_01.md",
+    "friends/aletheia/proofs/chronobiology/demo_chrono_melatonin_01.md",
+    "friends/aletheia/proofs/drug_discovery/demo_drugdisc_allosteric_02.md",
+    "friends/aletheia/proofs/philosophy_of_mind/demo_ice_consciousness_03.md",
+    "rhea-ontology-explorer/data/graph.json",
+    "scripts/seed_demo.py"
+  ],
+  "sessions": [
+    {
+      "metadata": "/bf/7fc3955a2e/0/metadata.json",
+      "transcript": "/bf/7fc3955a2e/0/full.jsonl",
+      "context": "",
+      "content_hash": "/bf/7fc3955a2e/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 13,
+    "cache_creation_tokens": 29914,
+    "cache_read_tokens": 1220709,
+    "output_tokens": 11767,
+    "api_call_count": 9
+  }
+}

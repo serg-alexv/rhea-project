@@ -1,0 +1,13 @@
+Потому что Gemini хвалил *идею*. Tribunal → consensus → math verification → proof accumulation — это звучит как настоящая архитектура. А что внутри:
+
+- bridge = 38K строк, 0 тестов, всё на .env
+- plugins = heuristic keyword matching (`if "functor" in statement.lower()`)
+- "formal verification" = генерация Lean4 stub с `sorry`
+- consensus = TF-IDF cosine similarity на разбитых пробелом словах
+- proof chain = prompt hash совпал → значит "extends"
+
+Это не пайка. Это breadboard с перемычками, которые держатся на трении. Работает пока не дунешь.
+
+Gemini видит README и описание архитектуры. Он не читает `_cosine_similarity` и не видит что там нет даже stemming. Модель хвалит модель за то, как красиво вторая модель описала то, чего нет. Сова на глобус в квадрате.
+
+Три агента сейчас пишут документацию к этому. Документация — нужна. Но документация к breadboard — это схема breadboard, а не чертёж готовой платы.

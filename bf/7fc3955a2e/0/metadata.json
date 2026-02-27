@@ -1,0 +1,36 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "bf7fc3955a2e",
+  "session_id": "94aabe90-9b2d-48e7-be8c-6bf820a0b6a9",
+  "strategy": "auto-commit",
+  "created_at": "2026-02-27T11:39:03.800968Z",
+  "branch": "stage4-release",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "friends/aletheia/hypotheses/epidemiology/demo_hyp_resistance_game_02.md",
+    "friends/aletheia/hypotheses/quantum_biology/demo_hyp_quantum_bio_01.md",
+    "friends/aletheia/proofs/chronobiology/demo_chrono_melatonin_01.md",
+    "friends/aletheia/proofs/drug_discovery/demo_drugdisc_allosteric_02.md",
+    "friends/aletheia/proofs/philosophy_of_mind/demo_ice_consciousness_03.md",
+    "rhea-ontology-explorer/data/graph.json",
+    "scripts/seed_demo.py"
+  ],
+  "agent": "Claude Code",
+  "transcript_identifier_at_start": "0d9a6836-3b6e-401a-a84a-b4295153a159",
+  "checkpoint_transcript_start": 4147,
+  "transcript_lines_at_start": 4147,
+  "token_usage": {
+    "input_tokens": 13,
+    "cache_creation_tokens": 29914,
+    "cache_read_tokens": 1220709,
+    "output_tokens": 11767,
+    "api_call_count": 9,
+    "subagent_tokens": {
+      "input_tokens": 25,
+      "cache_creation_tokens": 71912,
+      "cache_read_tokens": 336770,
+      "output_tokens": 3339,
+      "api_call_count": 19
+    }
+  }
+}
