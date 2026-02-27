@@ -1,0 +1,23 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "a0553f7467dc",
+  "session_id": "94aabe90-9b2d-48e7-be8c-6bf820a0b6a9",
+  "strategy": "auto-commit",
+  "created_at": "2026-02-27T07:46:53.06649Z",
+  "branch": "stage4-release",
+  "checkpoints_count": 1,
+  "files_touched": [
+    ".firecrawl/gdrive-folder.md"
+  ],
+  "agent": "Claude Code",
+  "transcript_identifier_at_start": "bceac7fe-6b61-4fad-b392-487eaf591d81",
+  "checkpoint_transcript_start": 2493,
+  "transcript_lines_at_start": 2493,
+  "token_usage": {
+    "input_tokens": 4,
+    "cache_creation_tokens": 660,
+    "cache_read_tokens": 298977,
+    "output_tokens": 491,
+    "api_call_count": 2
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "a0553f7467dc",
+  "strategy": "auto-commit",
+  "branch": "stage4-release",
+  "checkpoints_count": 1,
+  "files_touched": [
+    ".firecrawl/gdrive-folder.md"
+  ],
+  "sessions": [
+    {
+      "metadata": "/a0/553f7467dc/0/metadata.json",
+      "transcript": "/a0/553f7467dc/0/full.jsonl",
+      "context": "",
+      "content_hash": "/a0/553f7467dc/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 4,
+    "cache_creation_tokens": 660,
+    "cache_read_tokens": 298977,
+    "output_tokens": 491,
+    "api_call_count": 2
+  }
+}
