@@ -1,0 +1,39 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "2cd02a2ea31b",
+  "strategy": "auto-commit",
+  "branch": "stage4-release",
+  "checkpoints_count": 1,
+  "files_touched": [
+    ".claude/agents/architect.md",
+    ".claude/agents/culturist.md",
+    ".claude/agents/growth.md",
+    ".claude/agents/lifesci.md",
+    ".claude/agents/profiler.md",
+    ".claude/agents/qdoc.md",
+    ".claude/agents/reviewer.md",
+    ".claude/agents/techlead.md",
+    ".claude/agents/watcher.md",
+    "opera/ops/virtual-office/inbox/RELAY_20260227_164704_ORION_to_REX.md",
+    "opera/ops/virtual-office/outbox/ORION_20260227_STATUS_OFFICE_LAMPS_TO_REX.md",
+    "prompts/AUTONOMY_WITH_AUDIT_ROOT.md",
+    "prompts/chronos-protocol-v3-en.md",
+    "prompts/delegation-run-v3.md"
+  ],
+  "sessions": [
+    {
+      "metadata": "/2c/d02a2ea31b/0/metadata.json",
+      "transcript": "/2c/d02a2ea31b/0/full.jsonl",
+      "context": "",
+      "content_hash": "/2c/d02a2ea31b/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 24,
+    "cache_creation_tokens": 37887,
+    "cache_read_tokens": 2221619,
+    "output_tokens": 8770,
+    "api_call_count": 20
+  }
+}

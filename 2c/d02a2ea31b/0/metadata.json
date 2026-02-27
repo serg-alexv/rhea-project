@@ -1,0 +1,43 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "2cd02a2ea31b",
+  "session_id": "94aabe90-9b2d-48e7-be8c-6bf820a0b6a9",
+  "strategy": "auto-commit",
+  "created_at": "2026-02-27T13:51:32.948332Z",
+  "branch": "stage4-release",
+  "checkpoints_count": 1,
+  "files_touched": [
+    ".claude/agents/architect.md",
+    ".claude/agents/culturist.md",
+    ".claude/agents/growth.md",
+    ".claude/agents/lifesci.md",
+    ".claude/agents/profiler.md",
+    ".claude/agents/qdoc.md",
+    ".claude/agents/reviewer.md",
+    ".claude/agents/techlead.md",
+    ".claude/agents/watcher.md",
+    "opera/ops/virtual-office/inbox/RELAY_20260227_164704_ORION_to_REX.md",
+    "opera/ops/virtual-office/outbox/ORION_20260227_STATUS_OFFICE_LAMPS_TO_REX.md",
+    "prompts/AUTONOMY_WITH_AUDIT_ROOT.md",
+    "prompts/chronos-protocol-v3-en.md",
+    "prompts/delegation-run-v3.md"
+  ],
+  "agent": "Claude Code",
+  "transcript_identifier_at_start": "0a5fa414-b96d-43a7-a08a-d1ec10358f60",
+  "checkpoint_transcript_start": 5685,
+  "transcript_lines_at_start": 5685,
+  "token_usage": {
+    "input_tokens": 24,
+    "cache_creation_tokens": 37887,
+    "cache_read_tokens": 2221619,
+    "output_tokens": 8770,
+    "api_call_count": 20,
+    "subagent_tokens": {
+      "input_tokens": 10,
+      "cache_creation_tokens": 34323,
+      "cache_read_tokens": 95774,
+      "output_tokens": 2639,
+      "api_call_count": 2
+    }
+  }
+}
