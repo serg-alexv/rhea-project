@@ -1,0 +1,30 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "15b089aaed94",
+  "session_id": "94aabe90-9b2d-48e7-be8c-6bf820a0b6a9",
+  "strategy": "auto-commit",
+  "created_at": "2026-02-27T14:00:58.68856Z",
+  "branch": "stage4-release",
+  "checkpoints_count": 1,
+  "files_touched": [
+    ".firecrawl/a2a-protocol.md",
+    ".firecrawl/gibberlink.md",
+    ".firecrawl/search-acl-fipa.json",
+    ".firecrawl/search-ai-agent-protocol.json",
+    ".firecrawl/search-ai-compact-lang.json",
+    ".firecrawl/search-emergent-lang.json",
+    ".firecrawl/uacp-formal-calculus.md",
+    "docs/AI_COMPACT_LANG.md"
+  ],
+  "agent": "Claude Code",
+  "transcript_identifier_at_start": "4fcb44d2-b129-4603-ac3a-e9bf10395815",
+  "checkpoint_transcript_start": 5846,
+  "transcript_lines_at_start": 5846,
+  "token_usage": {
+    "input_tokens": 20,
+    "cache_creation_tokens": 18371,
+    "cache_read_tokens": 2249261,
+    "output_tokens": 4858,
+    "api_call_count": 16
+  }
+}

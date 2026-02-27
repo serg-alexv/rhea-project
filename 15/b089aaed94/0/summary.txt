@@ -1,0 +1,27 @@
+Вот оно. Карта поля:
+
+---
+
+**Что уже существует:**
+
+| Протокол | Год | Суть | Отличие от нашего |
+|----------|-----|------|-------------------|
+| **FIPA-ACL** | 1997 | 20+ performatives (inform, request, propose). Формально строгий. | Verbose, для unconstrained environments. ✗ resource-aware |
+| **KQML** | 1994 | Knowledge Query, предшественник FIPA | Устарел, нет cost awareness |
+| **Google A2A** | 2025 | Agent Cards + JSON tasks. Enterprise inter-agent | Routing protocol, ✗ language/grammar. Нет семантического сжатия |
+| **ACP (IBM/Bee)** | 2025 | Agent Communication Protocol, MCP-расширение | Infra-level, ✗ semantic compression |
+| **µACP** | Jan 2026 | **Формальное исчисление**, 4 глагола {PING,TELL,ASK,OBSERVE}, resource bounds, TLA+/Coq верификация, semantic compression | **Ближайший к нам.** Но академический — ✗ production, ✗ LLM-to-LLM, ✗ token cost governor |
+| **Gibberlink** | 2017→2025 | Emergent AI-to-AI языки (Bob&Alice). Спонтанная оптимизация | ✗ designed — emergent. Непрозрачный, ✗ verifiable, ✗ human-readable |
+| **MCP** | 2024-25 | Model Context Protocol (Anthropic). Tool discovery + invocation | Tool protocol ✗ agent-to-agent communication language |
+
+**Где мы:**
+
+AI Compact Language v0.1 = **designed** (не emergent как Gibberlink), **resource-constrained** (как µACP), **production** (не академический), **LLM-native** (не IoT), **human-verifiable** (через Рею), **с token governor** (двухрельсовый, чего нет ни у кого).
+
+µACP — ближайший конкурент. Но они решают IoT/edge задачу формальными методами (TLA+, Coq). Мы решаем LLM-to-LLM задачу в production с живым бюджетом.
+
+---
+
+**"не быть первым — даже скорее приятно"** — согласен. µACP опубликован в январе 2026, 4 глагола, формальные доказательства. Мы не одни. Но наш контекст другой: LLM агенты с реальными долларовыми бюджетами, token governor, human-in-the-loop верификация через приложение. µACP не имеет ни одного из этих элементов. Они на своём фронте (IoT edge), мы на своём (LLM multi-agent orchestration with cost discipline).
+
+Frontier, не война.
