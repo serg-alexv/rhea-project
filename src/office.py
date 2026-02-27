@@ -215,9 +215,22 @@ class Office:
 
     # ------------------------------------------------------------------
     # Relay: route compressed message to receiver's model
+    # H₂O: Sonnet bonded on both sides (compress in → agent → compress out)
     # ------------------------------------------------------------------
 
-    # TODO(human): Implement _relay routing logic
+    # Agent → native model mapping (cheap tier — Sonnet is the expensive part)
+    AGENT_MODELS = {
+        "orion":  "openai/gpt-4o",
+        "gemini": "gemini/gemini-2.5-flash",
+        "rex":    None,  # Rex = local process, no relay
+        "human":  None,  # Human = no model, persist only
+    }
+
+    AGENT_SYSTEM = {
+        "orion": "You are Orion (GPT). Respond in dense AI shorthand. Symbols: →∴Δ≈✓✗. No filler.",
+        "gemini": "You are Gemini. Respond in dense AI shorthand. Symbols: →∴Δ≈✓✗. No filler.",
+    }
+
     def _relay(
         self,
         sender: str,
@@ -226,10 +239,75 @@ class Office:
         reply_to: Optional[str] = None,
     ) -> tuple[str, int, float]:
         """
-        Route a compressed message to the receiver agent's model.
+        Route compressed message to receiver's native model.
+        H₂O bond: response also passes back through Sonnet compression.
         Returns (response_text, tokens_used, cost_usd).
         """
-        pass
+        model = self.AGENT_MODELS.get(receiver)
+
+        # No model target → persist-only (human, rex-local)
+        if model is None:
+            return compressed_msg, 0, 0.0
+
+        # Build context if reply chain exists
+        prompt = compressed_msg
+        if reply_to:
+            ctx = self._fetch_context(reply_to)
+            if ctx:
+                prompt = f"[prior: {ctx}]\n{compressed_msg}"
+
+        # Agent processes the message
+        system = self.AGENT_SYSTEM.get(receiver, "Respond concisely. AI shorthand OK.")
+        try:
+            resp: ModelResponse = self.bridge.ask(
+                prompt=prompt,
+                model=model,
+                system=system,
+                max_tokens=512,
+                temperature=0.4,
+            )
+            if resp.error:
+                return f"[RELAY_ERROR: {resp.error}]", 0, 0.0
+
+            raw_response = resp.text or ""
+            relay_tokens = resp.tokens_used
+
+            # H₂O bond: compress response back through Sonnet
+            compressed_response, gate_out_tokens = self._gate_compress(raw_response)
+
+            # Estimate cost from bridge price table
+            cost = self._estimate_cost(model, relay_tokens, gate_out_tokens)
+
+            return compressed_response, relay_tokens + gate_out_tokens, cost
+
+        except Exception as e:
+            return f"[RELAY_ERROR: {e}]", 0, 0.0
+
+    def _fetch_context(self, reply_to: str) -> Optional[str]:
+        """Load the original message for reply context."""
+        if not OFFICE_LOG.exists():
+            return None
+        with open(OFFICE_LOG) as f:
+            for line in f:
+                try:
+                    rec = json.loads(line.strip())
+                    if rec.get("id") == reply_to:
+                        return rec.get("compressed") or rec.get("text", "")
+                except (json.JSONDecodeError, KeyError):
+                    continue
+        return None
+
+    def _estimate_cost(self, model: str, relay_tokens: int, gate_tokens: int) -> float:
+        """Rough cost: relay model + Sonnet gate output pass."""
+        from rhea_bridge import PRICE_TABLE, PRICE_DEFAULT
+        # Relay model cost (assume 50/50 in/out split)
+        model_id = model.split("/")[-1] if "/" in model else model
+        price_in, price_out = PRICE_TABLE.get(model_id, PRICE_DEFAULT)
+        relay_cost = (relay_tokens * (price_in + price_out) / 2) / 1_000_000
+        # Gate output pass (Sonnet)
+        gate_price_in, gate_price_out = PRICE_TABLE.get("claude-sonnet-4-20250514", (3.0, 15.0))
+        gate_cost = (gate_tokens * (gate_price_in + gate_price_out) / 2) / 1_000_000
+        return round(relay_cost + gate_cost, 8)
 
     # ------------------------------------------------------------------
     # Persistence: JSONL log + git memory layer

@@ -1496,49 +1496,172 @@ async def startup():
 
 
 # ---------------------------------------------------------------------------
-# Team Chat — shared channel between human, Rex, Orion, Gemini
+# Office Communicator — H₂O bonded (Sonnet gate on every message)
 # ---------------------------------------------------------------------------
 
-CHAT_LOG = _PROJECT_ROOT / "data" / "chat.jsonl"
+from office import Office
+_office: Optional[Office] = None
+
+def get_office() -> Office:
+    global _office
+    if _office is None:
+        _office = Office(bridge=get_bridge())
+    return _office
 
 
 class ChatMessage(BaseModel):
     sender: str          # "human" | "rex" | "orion" | "gemini"
     text: str
-    ts: str = ""         # filled server-side
-    id: str = ""         # filled server-side
+    ts: str = ""
+    id: str = ""
 
 
 @app.post("/chat")
 async def post_chat(msg: ChatMessage):
-    """Post a message to the team chat."""
-    msg.ts = datetime.now(timezone.utc).isoformat()
-    msg.id = uuid.uuid4().hex[:12]
-    CHAT_LOG.parent.mkdir(parents=True, exist_ok=True)
-    with open(CHAT_LOG, "a") as f:
-        f.write(json.dumps(msg.dict()) + "\n")
-    return msg.dict()
+    """Post to shared chat via Office communicator."""
+    record = get_office().post_chat(sender=msg.sender, text=msg.text)
+    return record
 
 
 @app.get("/chat")
 async def get_chat(after: str = "", limit: int = 50):
-    """Get recent chat messages. Optional: after=<timestamp> for polling."""
-    if not CHAT_LOG.exists():
-        return {"messages": []}
-    messages = []
-    with open(CHAT_LOG) as f:
+    """Get recent chat messages."""
+    messages = get_office().get_chat(after=after, limit=limit)
+    return {"messages": messages}
+
+
+class OfficeMsg(BaseModel):
+    sender: str
+    receiver: str
+    text: str
+    reply_to: Optional[str] = None
+
+
+@app.post("/office/send")
+async def office_send(msg: OfficeMsg):
+    """Send agent→agent message. Sonnet-gated both directions (H₂O bond)."""
+    result = get_office().send(
+        sender=msg.sender,
+        receiver=msg.receiver,
+        text=msg.text,
+        reply_to=msg.reply_to,
+    )
+    return {
+        "id": result.id,
+        "sender": result.sender,
+        "receiver": result.receiver,
+        "compressed": result.compressed,
+        "response": result.response,
+        "gate_tokens": result.gate_tokens,
+        "relay_tokens": result.relay_tokens,
+        "cost_usd": result.cost_usd,
+        "ts": result.ts,
+    }
+
+
+@app.post("/office/broadcast")
+async def office_broadcast(msg: ChatMessage):
+    """Broadcast to all agents. Each message Sonnet-gated."""
+    results = get_office().broadcast(sender=msg.sender, text=msg.text)
+    return {"sent": len(results), "messages": [
+        {"receiver": r.receiver, "response": r.response, "cost_usd": r.cost_usd}
+        for r in results
+    ]}
+
+
+@app.get("/office/history")
+async def office_history(agent: Optional[str] = None, limit: int = 30):
+    """Full office communication log. iOS app uses this for log visibility."""
+    return {"messages": get_office().history(agent=agent, limit=limit)}
+
+
+# ---------------------------------------------------------------------------
+# Log Visibility — same level as Rex sees
+# ---------------------------------------------------------------------------
+
+BRIDGE_LOG = _PROJECT_ROOT / "logs" / "bridge_calls.jsonl"
+TRIBUNAL_LOG = _PROJECT_ROOT / "logs" / "tribunal_api_calls.jsonl"
+
+
+@app.get("/logs/bridge")
+async def get_bridge_logs(limit: int = 50, agent: Optional[str] = None):
+    """Bridge call log — every LLM API call with cost, latency, status."""
+    return _read_jsonl_tail(BRIDGE_LOG, limit, agent_filter=agent)
+
+
+@app.get("/logs/tribunal")
+async def get_tribunal_logs(limit: int = 30):
+    """Tribunal invocation log — every consensus query."""
+    return _read_jsonl_tail(TRIBUNAL_LOG, limit)
+
+
+@app.get("/logs/burn")
+async def get_burn_summary():
+    """Token burn summary per agent — aggregated from bridge log."""
+    if not BRIDGE_LOG.exists():
+        return {"agents": {}, "total_cost": 0}
+    agent_map = {
+        "openai": "ORION", "gemini": "GEMINI", "deepseek": "GEMINI",
+        "anthropic": "REX", "azure": "ORION",
+        "openrouter": "SHARED", "huggingface": "SHARED",
+    }
+    agents: dict = {}
+    with open(BRIDGE_LOG) as f:
         for line in f:
-            line = line.strip()
-            if not line:
-                continue
             try:
-                rec = json.loads(line)
-                if after and rec.get("ts", "") <= after:
-                    continue
-                messages.append(rec)
-            except json.JSONDecodeError:
+                rec = json.loads(line.strip())
+                agent = rec.get("agent_name") or agent_map.get(rec.get("provider", ""), "SHARED")
+                if agent not in agents:
+                    agents[agent] = {"calls": 0, "tokens": 0, "cost_usd": 0.0, "errors": 0}
+                agents[agent]["calls"] += 1
+                agents[agent]["tokens"] += rec.get("total_tokens", 0)
+                agents[agent]["cost_usd"] += rec.get("cost_usd", 0.0)
+                if rec.get("status") not in ("ok", None):
+                    agents[agent]["errors"] += 1
+            except (json.JSONDecodeError, KeyError):
                 continue
-    return {"messages": messages[-limit:]}
+    total = sum(a["cost_usd"] for a in agents.values())
+    return {"agents": agents, "total_cost": round(total, 4)}
+
+
+@app.get("/logs/outbox")
+async def get_outbox(agent: Optional[str] = None, limit: int = 20):
+    """Agent outbox messages — markdown files from virtual office."""
+    outbox_dir = _PROJECT_ROOT / "opera" / "ops" / "virtual-office" / "outbox"
+    if not outbox_dir.exists():
+        return {"messages": []}
+    files = sorted(outbox_dir.glob("*.md"), key=lambda f: f.name, reverse=True)
+    if agent:
+        files = [f for f in files if f.name.upper().startswith(agent.upper())]
+    results = []
+    for f in files[:limit]:
+        try:
+            content = f.read_text()[:500]  # first 500 chars preview
+            results.append({"file": f.name, "preview": content})
+        except Exception:
+            continue
+    return {"messages": results}
+
+
+def _read_jsonl_tail(path: Path, limit: int, agent_filter: Optional[str] = None) -> dict:
+    """Read last N records from a JSONL file."""
+    if not path.exists():
+        return {"records": [], "total": 0}
+    records = []
+    with open(path) as f:
+        for line in f:
+            try:
+                rec = json.loads(line.strip())
+                if agent_filter:
+                    provider = rec.get("provider", "")
+                    agent_name = rec.get("agent_name", "")
+                    if agent_filter.lower() not in (provider, agent_name.lower()):
+                        continue
+                records.append(rec)
+            except (json.JSONDecodeError, KeyError):
+                continue
+    tail = records[-limit:]
+    return {"records": tail, "total": len(records)}
 
 
 # ---------------------------------------------------------------------------
