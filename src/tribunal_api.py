@@ -21,7 +21,7 @@ import json
 import hashlib
 import secrets
 import uuid
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import Optional
 
@@ -38,6 +38,7 @@ from consensus_analyzer import ConsensusAnalyzer, math_augment, detect_math_doma
 from rhea_profile_manager import profile_manager
 from rhea_visual_context import update_state, get_health_history
 import aletheia_pipeline as aletheia
+from aletheia_api import aletheia_router
 
 # ---------------------------------------------------------------------------
 # App setup
@@ -48,6 +49,9 @@ app = FastAPI(
     description="Multi-model consensus as a service. Send a prompt, get structured agreement analysis across 3-7 AI models.",
     version="0.1.0",
 )
+
+# Expose Aletheia read-only endpoints under /api/aletheia (mirrors rhead /aletheia)
+app.include_router(aletheia_router, prefix="/aletheia")
 
 app.add_middleware(
     CORSMiddleware,
@@ -328,6 +332,7 @@ class TribunalICEResponse(BaseModel):
 # ---------------------------------------------------------------------------
 
 CALL_LOG = Path(__file__).parent.parent / "logs" / "tribunal_api_calls.jsonl"
+BRIDGE_CALL_LOG = Path(__file__).parent.parent / "logs" / "bridge_calls.jsonl"
 
 # Import redaction from bridge
 from rhea_bridge import redact_secrets
@@ -345,6 +350,19 @@ def _log_api_call(endpoint: str, request_data: dict, elapsed_s: float, status: s
     }
     with open(CALL_LOG, "a") as f:
         f.write(redact_secrets(json.dumps(entry)) + "\n")
+
+
+def _parse_ts(ts: str) -> Optional[datetime]:
+    if not ts:
+        return None
+    try:
+        return datetime.fromisoformat(ts.replace("Z", "+00:00"))
+    except Exception:
+        return None
+
+
+def _hour_iso(dt: datetime) -> str:
+    return dt.astimezone(timezone.utc).replace(minute=0, second=0, microsecond=0).isoformat().replace("+00:00", "Z")
 
 
 # ---------------------------------------------------------------------------
@@ -369,6 +387,112 @@ async def health():
 async def models():
     bridge = get_bridge()
     return bridge.models_status()
+
+
+@app.get("/usage/agents")
+async def usage_agents(window_hours: int = 24):
+    """
+    Aggregate bridge token usage by agent from logs/bridge_calls.jsonl.
+    Window defaults to 24h (daily live view).
+    """
+    window_hours = max(1, min(window_hours, 72))
+    now = datetime.now(timezone.utc)
+    since = now - timedelta(hours=window_hours)
+
+    if not BRIDGE_CALL_LOG.exists():
+        return {
+            "window_hours": window_hours,
+            "since": since.isoformat().replace("+00:00", "Z"),
+            "until": now.isoformat().replace("+00:00", "Z"),
+            "total_calls": 0,
+            "total_tokens": 0,
+            "total_cost_usd": 0.0,
+            "agents": [],
+            "hourly_total_tokens": [],
+        }
+
+    agents: dict[str, dict] = {}
+    hourly_total: dict[str, int] = {}
+    total_calls = 0
+    total_tokens = 0
+    total_cost = 0.0
+
+    with open(BRIDGE_CALL_LOG, "r", encoding="utf-8") as f:
+        for raw in f:
+            line = raw.strip()
+            if not line:
+                continue
+            try:
+                rec = json.loads(line)
+            except Exception:
+                continue
+
+            ts = _parse_ts(str(rec.get("timestamp", "")))
+            if not ts or ts < since:
+                continue
+
+            agent_id = str(rec.get("agent_id") or rec.get("agent") or "unknown")
+            agent_name = str(rec.get("agent_name") or "")
+            tokens = int(rec.get("total_tokens") or 0)
+            cost = float(rec.get("cost_usd") or 0.0)
+            status = str(rec.get("status") or "")
+            provider = str(rec.get("provider") or "")
+            model = str(rec.get("model") or "")
+
+            row = agents.setdefault(
+                agent_id,
+                {
+                    "agent_id": agent_id,
+                    "agent_name": agent_name,
+                    "calls": 0,
+                    "ok_calls": 0,
+                    "tokens": 0,
+                    "cost_usd": 0.0,
+                    "providers": {},
+                    "models": {},
+                    "hourly_tokens": {},
+                },
+            )
+            if agent_name and not row["agent_name"]:
+                row["agent_name"] = agent_name
+
+            row["calls"] += 1
+            if status == "ok":
+                row["ok_calls"] += 1
+            row["tokens"] += tokens
+            row["cost_usd"] += cost
+            row["providers"][provider] = row["providers"].get(provider, 0) + 1
+            row["models"][model] = row["models"].get(model, 0) + 1
+
+            hour_key = _hour_iso(ts)
+            row["hourly_tokens"][hour_key] = row["hourly_tokens"].get(hour_key, 0) + tokens
+            hourly_total[hour_key] = hourly_total.get(hour_key, 0) + tokens
+
+            total_calls += 1
+            total_tokens += tokens
+            total_cost += cost
+
+    agent_rows = list(agents.values())
+    for row in agent_rows:
+        row["cost_usd"] = round(float(row["cost_usd"]), 8)
+        row["providers"] = dict(sorted(row["providers"].items(), key=lambda x: x[1], reverse=True))
+        row["models"] = dict(sorted(row["models"].items(), key=lambda x: x[1], reverse=True))
+        row["hourly_tokens"] = dict(sorted(row["hourly_tokens"].items()))
+
+    agent_rows.sort(key=lambda r: (r["tokens"], r["calls"]), reverse=True)
+
+    return {
+        "window_hours": window_hours,
+        "since": since.isoformat().replace("+00:00", "Z"),
+        "until": now.isoformat().replace("+00:00", "Z"),
+        "total_calls": total_calls,
+        "total_tokens": total_tokens,
+        "total_cost_usd": round(total_cost, 8),
+        "agents": agent_rows,
+        "hourly_total_tokens": [
+            {"hour": k, "tokens": v} for k, v in sorted(hourly_total.items())
+        ],
+    }
 
 @app.get("/modes")
 async def get_modes():
@@ -1030,6 +1154,52 @@ async def startup():
     if _keys_env == "":
         print(f"\n  Dev API key: {_dev_key}")
         print(f"  Usage: curl -H 'X-API-Key: {_dev_key}' -X POST ...\n")
+
+
+# ---------------------------------------------------------------------------
+# Team Chat — shared channel between human, Rex, Orion, Gemini
+# ---------------------------------------------------------------------------
+
+CHAT_LOG = _PROJECT_ROOT / "data" / "chat.jsonl"
+
+
+class ChatMessage(BaseModel):
+    sender: str          # "human" | "rex" | "orion" | "gemini"
+    text: str
+    ts: str = ""         # filled server-side
+    id: str = ""         # filled server-side
+
+
+@app.post("/chat")
+async def post_chat(msg: ChatMessage):
+    """Post a message to the team chat."""
+    msg.ts = datetime.now(timezone.utc).isoformat()
+    msg.id = uuid.uuid4().hex[:12]
+    CHAT_LOG.parent.mkdir(parents=True, exist_ok=True)
+    with open(CHAT_LOG, "a") as f:
+        f.write(json.dumps(msg.dict()) + "\n")
+    return msg.dict()
+
+
+@app.get("/chat")
+async def get_chat(after: str = "", limit: int = 50):
+    """Get recent chat messages. Optional: after=<timestamp> for polling."""
+    if not CHAT_LOG.exists():
+        return {"messages": []}
+    messages = []
+    with open(CHAT_LOG) as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                rec = json.loads(line)
+                if after and rec.get("ts", "") <= after:
+                    continue
+                messages.append(rec)
+            except json.JSONDecodeError:
+                continue
+    return {"messages": messages[-limit:]}
 
 
 # ---------------------------------------------------------------------------
