@@ -1,0 +1,29 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "2c3b5b29ac25",
+  "strategy": "auto-commit",
+  "branch": "stage4-release",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "opera/tasks/queue.jsonl",
+    "opera/tasks/state.json",
+    "src/task_queue.py",
+    "src/tribunal_api.py"
+  ],
+  "sessions": [
+    {
+      "metadata": "/2c/3b5b29ac25/0/metadata.json",
+      "transcript": "/2c/3b5b29ac25/0/full.jsonl",
+      "context": "",
+      "content_hash": "/2c/3b5b29ac25/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 14,
+    "cache_creation_tokens": 11644,
+    "cache_read_tokens": 964988,
+    "output_tokens": 7628,
+    "api_call_count": 10
+  }
+}
