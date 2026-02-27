@@ -1,10 +1,12 @@
 """
 Agent Tree — budget allocation for daily self-evolve cycle.
 
-Each agent has a role, a model tier, and a turn budget.
-The tree enforces that strategic work stays on Opus,
-implementation on Sonnet, mechanics on Haiku.
-No agent can exceed its budget. No agent can call a higher tier.
+Rex (Opus 4.6) is the sole team lead. Makes all decisions.
+Orion (GPT-5.3) and Gemini 3.1 are senior specialists — strong, but directed by Rex.
+Sonnet workers write code within contracts. Haiku does mechanical ops.
+
+Human controls max 2 agents directly (Rex + one senior when needed).
+Everything else is Rex's internal delegation — invisible to human.
 """
 
 from dataclasses import dataclass, field
@@ -12,18 +14,18 @@ from enum import Enum
 
 
 class Tier(Enum):
-    OPUS = "opus"           # thinks
-    SONNET = "sonnet"       # builds
-    HAIKU = "haiku"         # moves
+    FRONTIER = "frontier"   # Opus 4.6, GPT-5.3, Gemini 3.1 — thinks, decides
+    SONNET = "sonnet"       # builds code within contracts
+    HAIKU = "haiku"         # moves files, commits, formats
 
 
 @dataclass
 class AgentBudget:
-    max_turns: int              # hard cap on agentic round-trips
-    max_file_reads: int         # cap on Read tool calls
-    max_file_writes: int        # cap on Write/Edit calls
-    can_spawn: bool = False     # can this agent spawn sub-agents?
-    allowed_tiers: tuple[Tier, ...] = (Tier.HAIKU,)  # tiers it can spawn
+    max_turns: int
+    max_file_reads: int
+    max_file_writes: int
+    can_spawn: bool = False
+    allowed_tiers: tuple[Tier, ...] = (Tier.HAIKU,)
 
 
 @dataclass
@@ -31,9 +33,10 @@ class AgentNode:
     name: str
     role: str
     tier: Tier
+    model: str                      # actual model ID
     budget: AgentBudget
     children: list["AgentNode"] = field(default_factory=list)
-    product: str | None = None  # which contract boundary it operates within
+    product: str | None = None
 
     def total_tree_turns(self) -> int:
         return self.budget.max_turns + sum(c.total_tree_turns() for c in self.children)
@@ -43,99 +46,74 @@ class AgentNode:
 
 DAILY_EVOLVE_TREE = AgentNode(
     name="rex",
-    role="coordinator — reads probe results, decides what to improve, delegates",
-    tier=Tier.OPUS,
+    role="team lead — decides what to improve, delegates, reviews",
+    tier=Tier.FRONTIER,
+    model="claude-opus-4-6",
     budget=AgentBudget(
         max_turns=15,
         max_file_reads=10,
-        max_file_writes=3,      # only contracts and MEMORY
+        max_file_writes=3,
         can_spawn=True,
-        allowed_tiers=(Tier.SONNET, Tier.HAIKU),
+        allowed_tiers=(Tier.FRONTIER, Tier.SONNET, Tier.HAIKU),
     ),
     children=[
-        # ── Probe agent: finds weaknesses ───────────────
+        # ── Senior specialists (frontier models) ────────
         AgentNode(
-            name="probe",
-            role="run tests, measure coverage, find lowest-scoring component",
-            tier=Tier.SONNET,
-            budget=AgentBudget(max_turns=20, max_file_reads=30, max_file_writes=0),
-            product=None,  # cross-cutting — reads all products
+            name="orion",
+            role="frontend, code review, leak detection, fast pattern matching",
+            tier=Tier.FRONTIER,
+            model="gpt-5.3",
+            budget=AgentBudget(
+                max_turns=20, max_file_reads=30, max_file_writes=15,
+                can_spawn=True, allowed_tiers=(Tier.SONNET, Tier.HAIKU),
+            ),
+            product=None,  # cross-cutting — Rex assigns per task
+        ),
+        AgentNode(
+            name="gemini",
+            role="full-project analysis, long-context review, documentation",
+            tier=Tier.FRONTIER,
+            model="gemini-3.1",
+            budget=AgentBudget(
+                max_turns=15, max_file_reads=50, max_file_writes=10,
+                can_spawn=True, allowed_tiers=(Tier.SONNET, Tier.HAIKU),
+            ),
+            product=None,  # cross-cutting — Rex assigns per task
         ),
 
-        # ── Per-product implementors ────────────────────
+        # ── Sonnet workers (one per product) ────────────
         AgentNode(
             name="consensus-dev",
             role="improve consensus accuracy within contract",
             tier=Tier.SONNET,
-            budget=AgentBudget(
-                max_turns=25, max_file_reads=15, max_file_writes=10,
-                can_spawn=True, allowed_tiers=(Tier.HAIKU,),
-            ),
+            model="claude-sonnet-4-6",
+            budget=AgentBudget(max_turns=25, max_file_reads=15, max_file_writes=10),
             product="consensus",
-            children=[
-                AgentNode(
-                    name="consensus-fmt",
-                    role="formatting, imports, file moves",
-                    tier=Tier.HAIKU,
-                    budget=AgentBudget(max_turns=10, max_file_reads=5, max_file_writes=10),
-                    product="consensus",
-                ),
-            ],
         ),
         AgentNode(
             name="aletheia-dev",
-            role="improve storage reliability, chain accuracy within contract",
+            role="improve storage reliability, chain accuracy",
             tier=Tier.SONNET,
-            budget=AgentBudget(
-                max_turns=25, max_file_reads=15, max_file_writes=10,
-                can_spawn=True, allowed_tiers=(Tier.HAIKU,),
-            ),
+            model="claude-sonnet-4-6",
+            budget=AgentBudget(max_turns=25, max_file_reads=15, max_file_writes=10),
             product="aletheia",
-            children=[
-                AgentNode(
-                    name="aletheia-fmt",
-                    role="formatting, imports, file moves",
-                    tier=Tier.HAIKU,
-                    budget=AgentBudget(max_turns=10, max_file_reads=5, max_file_writes=10),
-                    product="aletheia",
-                ),
-            ],
         ),
         AgentNode(
             name="ruliad-dev",
-            role="improve verification depth within contract",
+            role="improve verification depth, plugin quality",
             tier=Tier.SONNET,
-            budget=AgentBudget(
-                max_turns=25, max_file_reads=15, max_file_writes=10,
-                can_spawn=True, allowed_tiers=(Tier.HAIKU,),
-            ),
+            model="claude-sonnet-4-6",
+            budget=AgentBudget(max_turns=25, max_file_reads=15, max_file_writes=10),
             product="ruliad",
-            children=[
-                AgentNode(
-                    name="ruliad-fmt",
-                    role="formatting, imports, file moves",
-                    tier=Tier.HAIKU,
-                    budget=AgentBudget(max_turns=10, max_file_reads=5, max_file_writes=10),
-                    product="ruliad",
-                ),
-            ],
         ),
 
-        # ── Reviewer: checks contracts after changes ────
+        # ── Mechanical ──────────────────────────────────
         AgentNode(
-            name="reviewer",
-            role="run contract tests, verify no boundary violations",
-            tier=Tier.SONNET,
-            budget=AgentBudget(max_turns=10, max_file_reads=20, max_file_writes=0),
-            product=None,  # cross-cutting
-        ),
-
-        # ── Committer: mechanical git work ──────────────
-        AgentNode(
-            name="committer",
-            role="stage, commit, push — nothing else",
+            name="ops",
+            role="git, formatting, file moves, cleanup",
             tier=Tier.HAIKU,
-            budget=AgentBudget(max_turns=5, max_file_reads=0, max_file_writes=0),
+            model="claude-haiku-4-5",
+            budget=AgentBudget(max_turns=10, max_file_reads=5, max_file_writes=15),
         ),
     ],
 )
@@ -143,10 +121,10 @@ DAILY_EVOLVE_TREE = AgentNode(
 
 def print_tree(node: AgentNode, indent: int = 0):
     prefix = "  " * indent
-    tier_label = node.tier.value.upper()
+    tier = node.tier.value.upper()
     budget = f"{node.budget.max_turns}t/{node.budget.max_file_reads}r/{node.budget.max_file_writes}w"
-    product = f" [{node.product}]" if node.product else ""
-    print(f"{prefix}{node.name} ({tier_label}) — {budget}{product}")
+    prod = f" [{node.product}]" if node.product else ""
+    print(f"{prefix}{node.name} ({tier}: {node.model}) — {budget}{prod}")
     print(f"{prefix}  {node.role}")
     for child in node.children:
         print_tree(child, indent + 1)
@@ -156,14 +134,14 @@ if __name__ == "__main__":
     print("\nAgent Tree — Daily Evolve Cycle\n")
     print_tree(DAILY_EVOLVE_TREE)
     total = DAILY_EVOLVE_TREE.total_tree_turns()
-    print(f"\nTotal budget: {total} turns across tree")
-    print(f"Opus turns: {DAILY_EVOLVE_TREE.budget.max_turns} (coordinator only)")
+
+    frontier = DAILY_EVOLVE_TREE.budget.max_turns
+    frontier += sum(c.budget.max_turns for c in DAILY_EVOLVE_TREE.children if c.tier == Tier.FRONTIER)
     sonnet = sum(c.budget.max_turns for c in DAILY_EVOLVE_TREE.children if c.tier == Tier.SONNET)
     haiku = sum(c.budget.max_turns for c in DAILY_EVOLVE_TREE.children if c.tier == Tier.HAIKU)
-    # include nested haiku
-    for c in DAILY_EVOLVE_TREE.children:
-        for gc in c.children:
-            if gc.tier == Tier.HAIKU:
-                haiku += gc.budget.max_turns
-    print(f"Sonnet turns: {sonnet}")
-    print(f"Haiku turns: {haiku}")
+
+    print(f"\nTotal: {total} turns")
+    print(f"  Frontier: {frontier}  (Rex 15 + Orion 20 + Gemini 15)")
+    print(f"  Sonnet:   {sonnet}  (3 product devs × 25)")
+    print(f"  Haiku:    {haiku}")
+    print(f"\nHuman controls: Rex + (Orion | Gemini) = max 2")
