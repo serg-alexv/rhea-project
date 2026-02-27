@@ -1,0 +1,47 @@
+client:
+  name: basic
+  file-system: device-agnostic
+tools: {}
+targets:
+  "PackageStructure": ["<PackageStructure>"]
+  "RheaPreview-arm64-apple-macosx26.0-debug.module": ["<RheaPreview-arm64-apple-macosx26.0-debug.module>"]
+  "main": ["<RheaPreview-arm64-apple-macosx26.0-debug.module>"]
+  "test": ["<RheaPreview-arm64-apple-macosx26.0-debug.module>"]
+default: "main"
+nodes:
+  "/Users/sa/rh.1/ios/RheaPreview.swiftpm/Sources/":
+    is-directory-structure: true
+    content-exclusion-patterns: [".git",".build"]
+commands:
+  "/Users/sa/rh.1/ios/RheaPreview.swiftpm/.build/arm64-apple-macosx/debug/RheaPreview.build/sources":
+    tool: write-auxiliary-file
+    inputs: ["<sources-file-list>","/Users/sa/rh.1/ios/RheaPreview.swiftpm/Sources/AtlasWebView.swift","/Users/sa/rh.1/ios/RheaPreview.swiftpm/Sources/GovernorView.swift","/Users/sa/rh.1/ios/RheaPreview.swiftpm/Sources/RheaPreviewApp.swift","/Users/sa/rh.1/ios/RheaPreview.swiftpm/Sources/TasksView.swift"]
+    outputs: ["/Users/sa/rh.1/ios/RheaPreview.swiftpm/.build/arm64-apple-macosx/debug/RheaPreview.build/sources"]
+    description: "Write auxiliary file /Users/sa/rh.1/ios/RheaPreview.swiftpm/.build/arm64-apple-macosx/debug/RheaPreview.build/sources"
+
+  "/Users/sa/rh.1/ios/RheaPreview.swiftpm/.build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt":
+    tool: write-auxiliary-file
+    inputs: ["<swift-get-version>","/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"]
+    outputs: ["/Users/sa/rh.1/ios/RheaPreview.swiftpm/.build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt"]
+    always-out-of-date: "true"
+    description: "Write auxiliary file /Users/sa/rh.1/ios/RheaPreview.swiftpm/.build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt"
+
+  "<RheaPreview-arm64-apple-macosx26.0-debug.module>":
+    tool: phony
+    inputs: ["/Users/sa/rh.1/ios/RheaPreview.swiftpm/.build/arm64-apple-macosx/debug/RheaPreview.build/AtlasWebView.swift.o","/Users/sa/rh.1/ios/RheaPreview.swiftpm/.build/arm64-apple-macosx/debug/RheaPreview.build/GovernorView.swift.o","/Users/sa/rh.1/ios/RheaPreview.swiftpm/.build/arm64-apple-macosx/debug/RheaPreview.build/RheaPreviewApp.swift.o","/Users/sa/rh.1/ios/RheaPreview.swiftpm/.build/arm64-apple-macosx/debug/RheaPreview.build/TasksView.swift.o","/Users/sa/rh.1/ios/RheaPreview.swiftpm/.build/arm64-apple-macosx/debug/Modules/RheaPreview.swiftmodule"]
+    outputs: ["<RheaPreview-arm64-apple-macosx26.0-debug.module>"]
+
+  "C.RheaPreview-arm64-apple-macosx26.0-debug.module":
+    tool: shell
+    inputs: ["/Users/sa/rh.1/ios/RheaPreview.swiftpm/Sources/AtlasWebView.swift","/Users/sa/rh.1/ios/RheaPreview.swiftpm/Sources/GovernorView.swift","/Users/sa/rh.1/ios/RheaPreview.swiftpm/Sources/RheaPreviewApp.swift","/Users/sa/rh.1/ios/RheaPreview.swiftpm/Sources/TasksView.swift","/Users/sa/rh.1/ios/RheaPreview.swiftpm/.build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt","/Users/sa/rh.1/ios/RheaPreview.swiftpm/.build/arm64-apple-macosx/debug/RheaPreview.build/sources"]
+    outputs: ["/Users/sa/rh.1/ios/RheaPreview.swiftpm/.build/arm64-apple-macosx/debug/RheaPreview.build/AtlasWebView.swift.o","/Users/sa/rh.1/ios/RheaPreview.swiftpm/.build/arm64-apple-macosx/debug/RheaPreview.build/GovernorView.swift.o","/Users/sa/rh.1/ios/RheaPreview.swiftpm/.build/arm64-apple-macosx/debug/RheaPreview.build/RheaPreviewApp.swift.o","/Users/sa/rh.1/ios/RheaPreview.swiftpm/.build/arm64-apple-macosx/debug/RheaPreview.build/TasksView.swift.o","/Users/sa/rh.1/ios/RheaPreview.swiftpm/.build/arm64-apple-macosx/debug/Modules/RheaPreview.swiftmodule"]
+    description: "Compiling Swift Module 'RheaPreview' (4 sources)"
+    args: ["/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc","-module-name","RheaPreview","-emit-dependencies","-emit-module","-emit-module-path","/Users/sa/rh.1/ios/RheaPreview.swiftpm/.build/arm64-apple-macosx/debug/Modules/RheaPreview.swiftmodule","-output-file-map","/Users/sa/rh.1/ios/RheaPreview.swiftpm/.build/arm64-apple-macosx/debug/RheaPreview.build/output-file-map.json","-parse-as-library","-incremental","-c","@/Users/sa/rh.1/ios/RheaPreview.swiftpm/.build/arm64-apple-macosx/debug/RheaPreview.build/sources","-I","/Users/sa/rh.1/ios/RheaPreview.swiftpm/.build/arm64-apple-macosx/debug/Modules","-target","arm64-apple-macosx14.0","-incremental","-enable-batch-mode","-serialize-diagnostics","-index-store-path","/Users/sa/rh.1/ios/RheaPreview.swiftpm/.build/arm64-apple-macosx/debug/index/store","-Onone","-enable-testing","-j8","-DSWIFT_PACKAGE","-DDEBUG","-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE","-module-cache-path","/Users/sa/rh.1/ios/RheaPreview.swiftpm/.build/arm64-apple-macosx/debug/ModuleCache","-parseable-output","-parse-as-library","-emit-objc-header","-emit-objc-header-path","/Users/sa/rh.1/ios/RheaPreview.swiftpm/.build/arm64-apple-macosx/debug/RheaPreview.build/include/RheaPreview-Swift.h","-swift-version","5","-plugin-path","/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing","-sdk","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk","-F","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks","-F","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks","-I","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib","-L","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib","-g","-Xcc","-isysroot","-Xcc","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk","-Xcc","-F","-Xcc","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks","-Xcc","-F","-Xcc","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks","-Xcc","-fPIC","-Xcc","-g","-package-name","rheapreview_swiftpm"]
+
+  "PackageStructure":
+    tool: package-structure-tool
+    inputs: ["/Users/sa/rh.1/ios/RheaPreview.swiftpm/Sources/","/Users/sa/rh.1/ios/RheaPreview.swiftpm/Package.swift","/Users/sa/rh.1/ios/RheaPreview.swiftpm/Package.resolved"]
+    outputs: ["<PackageStructure>"]
+    description: "Planning build"
+    allow-missing-inputs: true
+
