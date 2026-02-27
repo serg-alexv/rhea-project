@@ -15,19 +15,10 @@ import litellm
 sys.path.insert(0, str(Path(__file__).parent))
 from rhea_bridge import RheaBridge
 
-RECIPIENT_CAPABILITY = {
-    "opus": "Opus — frontier LLM, понимает с полуслова. Будь максимально краток.",
-    "pro": "Gemini Pro — сильная модель, но не знает контекста проекта. Дай ключевые детали.",
-    "flash": "Gemini Flash — быстрая но поверхностная. Опиши явно, без намёков.",
-    "lite": "Слабая модель без CLI-опыта. Опиши как для человека, который никогда не видел терминал.",
-}
-
-
-def build_vision_prompt(recipient_tier: str = "opus") -> str:
-    cap = RECIPIENT_CAPABILITY.get(recipient_tier, RECIPIENT_CAPABILITY["flash"])
+def build_vision_prompt(recipient_model: str = "claude-opus-4") -> str:
     return (
-        f"Опиши этот скриншот для текстовой LLM без зрения. "
-        f"{cap} Минимум токенов, максимум точности."
+        f"Опиши этот скриншот для {recipient_model} (у неё нет зрения). "
+        f"Минимум токенов, максимум точности."
     )
 
 
