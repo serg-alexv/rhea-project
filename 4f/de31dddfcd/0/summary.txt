@@ -1,0 +1,6 @@
+Починено. Два режима:
+- `python3 src/rhea_vision_check.py img.png` — один дешёвый vision → описание для Opus
+- `python3 src/rhea_vision_check.py img.png --for gemini-2.5-flash-8b` — описание для слабой модели
+- `python3 src/rhea_vision_check.py img.png --invariance` — все модели, сравнение
+
+Docstring актуальный, баг с `INVARIANCE_PROMPT` убран.
