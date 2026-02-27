@@ -1,0 +1,24 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "d9502ad1cbba",
+  "session_id": "94aabe90-9b2d-48e7-be8c-6bf820a0b6a9",
+  "strategy": "auto-commit",
+  "created_at": "2026-02-27T13:44:21.410236Z",
+  "branch": "stage4-release",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "docs/AI_COMPACT_LANG.md",
+    "src/office.py"
+  ],
+  "agent": "Claude Code",
+  "transcript_identifier_at_start": "1e754c4c-24c5-437e-87d5-4b72c48ab216",
+  "checkpoint_transcript_start": 5641,
+  "transcript_lines_at_start": 5641,
+  "token_usage": {
+    "input_tokens": 12,
+    "cache_creation_tokens": 6119,
+    "cache_read_tokens": 916294,
+    "output_tokens": 3154,
+    "api_call_count": 10
+  }
+}

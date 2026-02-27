@@ -1,0 +1,27 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "d9502ad1cbba",
+  "strategy": "auto-commit",
+  "branch": "stage4-release",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "docs/AI_COMPACT_LANG.md",
+    "src/office.py"
+  ],
+  "sessions": [
+    {
+      "metadata": "/d9/502ad1cbba/0/metadata.json",
+      "transcript": "/d9/502ad1cbba/0/full.jsonl",
+      "context": "",
+      "content_hash": "/d9/502ad1cbba/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 12,
+    "cache_creation_tokens": 6119,
+    "cache_read_tokens": 916294,
+    "output_tokens": 3154,
+    "api_call_count": 10
+  }
+}
