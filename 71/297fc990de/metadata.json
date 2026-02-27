@@ -1,0 +1,30 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "71297fc990de",
+  "strategy": "auto-commit",
+  "branch": "stage4-release",
+  "checkpoints_count": 1,
+  "files_touched": [
+    ".rhea/autonudge/autonudge.meta.json",
+    ".rhea/autonudge/autonudge.stdout.log",
+    "docs/procedures/autonudge-ops.md",
+    "scripts/rhea/autonudge.sh",
+    "scripts/rhea/verify_jsonl_chain.py"
+  ],
+  "sessions": [
+    {
+      "metadata": "/71/297fc990de/0/metadata.json",
+      "transcript": "/71/297fc990de/0/full.jsonl",
+      "context": "",
+      "content_hash": "/71/297fc990de/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 15,
+    "cache_creation_tokens": 9523,
+    "cache_read_tokens": 1328124,
+    "output_tokens": 6287,
+    "api_call_count": 13
+  }
+}
