@@ -16,15 +16,8 @@ sys.path.insert(0, str(Path(__file__).parent))
 from rhea_bridge import RheaBridge
 
 INVARIANCE_PROMPT = (
-    "List every distinct text string visible on this screenshot. "
-    "One per line. Format: LOCATION | TEXT\n"
-    "LOCATION = top-left, top-center, top-right, center-left, center, center-right, "
-    "bottom-left, bottom-center, bottom-right.\n"
-    "Rules:\n"
-    "- Only text you can actually read. If blurry or cut off, write PARTIAL: before the text.\n"
-    "- Do not guess, infer, or complete partial words.\n"
-    "- Do not describe images, icons, or colors — only text.\n"
-    "- No commentary. No intro. No summary. Just the list."
+    "Опиши этот скриншот так, чтобы Opus (текстовая LLM без зрения) "
+    "мог работать с ним дальше. Минимум токенов, максимум точности."
 )
 
 
