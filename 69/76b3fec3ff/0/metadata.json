@@ -1,0 +1,24 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "6976b3fec3ff",
+  "session_id": "94aabe90-9b2d-48e7-be8c-6bf820a0b6a9",
+  "strategy": "auto-commit",
+  "created_at": "2026-02-27T14:30:38.046499Z",
+  "branch": "stage4-release",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "opera/memory/FEED.compact",
+    "src/memory_feed.py"
+  ],
+  "agent": "Claude Code",
+  "transcript_identifier_at_start": "de02a55b-1b52-420a-9077-e97ccf92fce4",
+  "checkpoint_transcript_start": 6152,
+  "transcript_lines_at_start": 6152,
+  "token_usage": {
+    "input_tokens": 9,
+    "cache_creation_tokens": 10533,
+    "cache_read_tokens": 753635,
+    "output_tokens": 4996,
+    "api_call_count": 7
+  }
+}
