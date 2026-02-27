@@ -1,0 +1,25 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "16fbf4bed065",
+  "session_id": "94aabe90-9b2d-48e7-be8c-6bf820a0b6a9",
+  "strategy": "auto-commit",
+  "created_at": "2026-02-27T14:10:16.517711Z",
+  "branch": "stage4-release",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "opera/metrics/governor_state.json",
+    "src/token_governor.py",
+    "src/tribunal_api.py"
+  ],
+  "agent": "Claude Code",
+  "transcript_identifier_at_start": "4adc6466-fd03-400e-b006-559f88057cf6",
+  "checkpoint_transcript_start": 5952,
+  "transcript_lines_at_start": 5952,
+  "token_usage": {
+    "input_tokens": 14,
+    "cache_creation_tokens": 44077,
+    "cache_read_tokens": 849694,
+    "output_tokens": 5484,
+    "api_call_count": 10
+  }
+}

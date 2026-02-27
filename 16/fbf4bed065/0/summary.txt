@@ -1,0 +1,17 @@
+State persists to `opera/metrics/governor_state.json` — any agent or UI can read it without calling the Python module.
+
+Summary of what's live:
+
+| Endpoint | Method | Returns |
+|----------|--------|---------|
+| `/governor` | GET | All 4 agents: pace, forecast, mode, T_day, $_day, budget |
+| `/governor/{agent}` | GET | Single agent + enforcement action |
+
+| Agent | Status | Mode | Action |
+|-------|--------|------|--------|
+| Rex | red | critical | THROTTLE (session size heuristic inflated) |
+| Orion | yellow | compact | COMPACT_RECOVERY (0 bridge calls today) |
+| Gemini | yellow | compact | COMPACT_RECOVERY (0 bridge calls today) |
+| Shared | yellow | compact | COMPACT_RECOVERY (0 bridge calls today) |
+
+The Rex cost estimation needs real billing data instead of file-size heuristics, but the dual-rail framework — upper bound (budget cap) + lower bound (floor trajectory) + mode transitions — is operational. Orion's P0 mandate implemented.
