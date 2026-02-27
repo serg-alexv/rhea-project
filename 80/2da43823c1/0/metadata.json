@@ -1,0 +1,23 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "802da43823c1",
+  "session_id": "94aabe90-9b2d-48e7-be8c-6bf820a0b6a9",
+  "strategy": "auto-commit",
+  "created_at": "2026-02-27T14:14:15.978505Z",
+  "branch": "stage4-release",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "src/token_governor.py"
+  ],
+  "agent": "Claude Code",
+  "transcript_identifier_at_start": "95afe033-4d0c-47dd-b200-4d9c410b1566",
+  "checkpoint_transcript_start": 6010,
+  "transcript_lines_at_start": 6010,
+  "token_usage": {
+    "input_tokens": 14,
+    "cache_creation_tokens": 58197,
+    "cache_read_tokens": 906183,
+    "output_tokens": 6732,
+    "api_call_count": 12
+  }
+}

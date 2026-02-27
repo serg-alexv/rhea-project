@@ -1,0 +1,26 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "802da43823c1",
+  "strategy": "auto-commit",
+  "branch": "stage4-release",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "src/token_governor.py"
+  ],
+  "sessions": [
+    {
+      "metadata": "/80/2da43823c1/0/metadata.json",
+      "transcript": "/80/2da43823c1/0/full.jsonl",
+      "context": "",
+      "content_hash": "/80/2da43823c1/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 14,
+    "cache_creation_tokens": 58197,
+    "cache_read_tokens": 906183,
+    "output_tokens": 6732,
+    "api_call_count": 12
+  }
+}
