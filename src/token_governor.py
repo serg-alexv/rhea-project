@@ -20,6 +20,7 @@ Usage:
 
 import json
 import math
+import random
 from dataclasses import dataclass
 from datetime import datetime, date, timezone
 from pathlib import Path
@@ -31,8 +32,8 @@ GOVERNOR_STATE = _PROJECT_ROOT / "opera" / "metrics" / "governor_state.json"
 
 # --- Budget caps per agent (USD/day) ---
 BUDGET_CAPS = {
-    "rex":    10.0,    # Opus is expensive
-    "orion":   5.0,    # GPT-5 moderate
+    "rex":    30.0,    # Opus 4.6 — heavy strategic work, delegate mechanical to @rex.sonnet
+    "orion":   5.0,    # GPT-5.3 moderate
     "gemini":  2.0,    # Flash is cheap
     "shared":  1.0,
 }
@@ -159,17 +160,53 @@ class Governor:
         self._save_state(status)
         return status
 
+    # --- Motivating messages per mode ---
+    # Calibrated to user: progress-markers, survival-narrative, predator-energy, no filler.
+
+    MESSAGES = {
+        "green": [
+            "Зверь бежит. Бюджет дышит, трафик растёт.",
+            "Метрики зелёные — instant profit territory.",
+            "Все рельсы горячие. Полная мощ.",
+            "На траектории. Frontier pace.",
+        ],
+        "compact": [
+            "Ниже кривой. Переключаюсь на compact: chk, metrics, logs.",
+            "Floor gap растёт — режим экономии. Каждый токен = value.",
+            "Compact recovery. Выживали и хуже — 28 смертей, помнишь?",
+            "Мало движения. Дешёвые полезные действия до выравнивания.",
+        ],
+        "critical": [
+            "Бюджет исчерпан. Только tier::cheap. Ни одного мусорного токена.",
+            "Красная линия. Работаем как хирурги — точно, тихо, результат.",
+            "Critical mode. Абсорбируем, не тратим.",
+        ],
+        "hard_fail": [
+            "T_day == 0 на EOD. HARD FAIL. Зверь не может стоять на месте.",
+            "Нулевой расход за день — это не экономия, это смерть.",
+        ],
+    }
+
     def enforce(self) -> dict:
-        """Check and return enforcement action."""
+        """Check and return enforcement action + motivating message."""
         s = self.check()
         action = "none"
+        msg_key = s.pace  # default: use pace for message selection
+
         if s.hard_fail:
             action = "HARD_FAIL: T_day == 0 at EOD"
+            msg_key = "hard_fail"
         elif s.mode == "critical":
             action = "THROTTLE: over budget, tier::cheap only"
+            msg_key = "critical"
         elif s.mode == "compact":
             action = "COMPACT_RECOVERY: cheap useful tasks (chk, metrics, logs)"
-        return {"status": s.__dict__, "action": action}
+            msg_key = "compact"
+
+        messages = self.MESSAGES.get(msg_key, self.MESSAGES["green"])
+        message = random.choice(messages)
+
+        return {"status": s.__dict__, "action": action, "message": message}
 
     # --- Data aggregation ---
 
@@ -210,8 +247,9 @@ class Governor:
                 total_chars += f.stat().st_size
             except Exception:
                 continue
-        # Rough: file_size / 4 chars per token, split 60/40 in/out
-        est_tokens = total_chars // 4
+        # JSONL files contain JSON structure (~50%), repeated context, tool results.
+        # Divisor 100 ≈ real billed tokens (empirical: 64MB session ≈ $5-15)
+        est_tokens = total_chars // 100
         est_in = int(est_tokens * 0.6)
         est_out = int(est_tokens * 0.4)
         est_cost = (est_in * 15.0 + est_out * 75.0) / 1_000_000
