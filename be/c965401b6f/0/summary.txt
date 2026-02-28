@@ -1,0 +1,29 @@
+Status: Dialog endpoint is wired correctly but **Gemini API key is expired** — only key we have. No OPENAI, ANTHROPIC, DEEPSEEK, or OPENROUTER keys in env. Need a fresh API key before Dialog can talk.
+
+---
+
+Now for your Play question — yes, you can absolutely use Play's component library. Looking at your screenshot ("Mika's Team" project):
+
+`★ Insight ─────────────────────────────────────`
+Play.app exports production SwiftUI. Since our app is a Swift Playground package (`.swiftpm`), Play-generated views drop in directly as `.swift` files in `Sources/`. The key moves:
+
+1. **Design in Play** → export SwiftUI → paste into our `Sources/`
+2. Play components use standard SwiftUI — swap their colors for `RheaTheme.*` to keep consistency
+3. Play's strength: **cards, navigation, transitions, layout** — exactly what Governor and Dialog need
+`─────────────────────────────────────────────────`
+
+What you can max out from Play:
+
+- **Agent cards** (Governor view) — design rich cards with pace indicators, budget gauges, action buttons
+- **Dialog bubbles** — chat UI with better typography and spacing than what I hand-coded
+- **Tab bar styling** — custom tab appearance
+- **Transitions/animations** — Play handles `.matchedGeometryEffect` and hero transitions well
+- **That white Governor screen** — redesign it in Play with proper empty states
+
+The limitation: Play doesn't know about our `RheaTheme` or API layer, so you design the visual shell in Play, export, then I wire the data/networking. That's the optimal split — Play for visual craft, code for plumbing.
+
+Two immediate priorities:
+1. **Get a fresh API key** (Gemini or any provider) so Dialog actually responds
+2. **Design the main screens in Play** — export them and I'll integrate with our backend hooks
+
+Want to start designing in Play while I get any new API key wired?
