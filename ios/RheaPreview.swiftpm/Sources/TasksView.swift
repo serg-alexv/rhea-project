@@ -19,7 +19,7 @@ struct TasksView: View {
     @State private var tasks: [TaskItem] = []
     @State private var loading = true
     @State private var filter: String = "all"
-    private let apiBase = "http://localhost:8400"
+    @AppStorage("apiBaseURL") private var apiBaseURL = AppConfig.defaultAPIBaseURL
 
     var filteredTasks: [TaskItem] {
         guard filter != "all" else { return tasks }
@@ -82,7 +82,7 @@ struct TasksView: View {
     func fetch() async {
         loading = true
         defer { loading = false }
-        guard let url = URL(string: "\(apiBase)/tasks") else { return }
+        guard let url = URL(string: "\(apiBaseURL)/tasks") else { return }
         do {
             let (data, _) = try await URLSession.shared.data(from: url)
             let response = try JSONDecoder().decode(TasksResponse.self, from: data)
