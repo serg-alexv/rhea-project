@@ -54,4 +54,14 @@ compacted. Sticky slots guarantee ~500 tokens are NEVER compacted.
 is exactly what Rhea already uses. The patterns above fill specific gaps without architectural
 refactoring. Each can be implemented independently.
 
+## Security Note (Orion review)
+OpenClaw assumes a **single trusted operator boundary** — not hostile multi-tenant
+isolation. For Rhea: one gateway per trust boundary, isolated host/user. Do not
+expose OpenClaw-derived endpoints to untrusted networks without auth.
+
+## Convergence: Orion + Rex
+Both agents independently concluded: absorb OpenClaw as **pattern library**, not
+runtime dependency. Carbonyl = optional adapter with pinned binary, not core.
+This convergence strengthens the decision.
+
 **Status:** Accepted. Implementation begins with Sticky Context.
