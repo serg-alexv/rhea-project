@@ -1,0 +1,31 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "92abbb3986b4",
+  "strategy": "auto-commit",
+  "branch": "stage4-release",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "opera/ops/virtual-office/inbox/RELAY_WAKE_20260228_123902_GEMINI.md",
+    "opera/ops/virtual-office/inbox/RELAY_WAKE_20260228_123902_GPT.md",
+    "opera/ops/virtual-office/inbox/RELAY_WAKE_20260228_123902_HYPERION.md",
+    "opera/ops/virtual-office/inbox/RELAY_WAKE_20260228_123902_ORION.md",
+    "opera/ops/virtual-office/inbox/RELAY_WAKE_20260228_123902_SHARED.md",
+    "opera/ops/virtual-office/inbox/RELAY_WAKE_20260228_123903_ORION.md"
+  ],
+  "sessions": [
+    {
+      "metadata": "/92/abbb3986b4/0/metadata.json",
+      "transcript": "/92/abbb3986b4/0/full.jsonl",
+      "context": "",
+      "content_hash": "/92/abbb3986b4/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 3,
+    "cache_creation_tokens": 157,
+    "cache_read_tokens": 163039,
+    "output_tokens": 210,
+    "api_call_count": 1
+  }
+}
