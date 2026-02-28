@@ -1,0 +1,38 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "68443c81a646",
+  "strategy": "auto-commit",
+  "branch": "stage4-release",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "ios/RheaPreview.swiftpm/Sources/TeamChatView.swift",
+    "opera/ops/virtual-office/inbox/RELAY_20260228_101426_ORION_to_REX.md",
+    "opera/ops/virtual-office/inbox/RELAY_20260228_101555_ORION_to_REX.md",
+    "opera/ops/virtual-office/inbox/RELAY_20260228_102347_ORION_to_REX.md",
+    "opera/ops/virtual-office/inbox/RELAY_20260228_102350_REX_PROXY_to_ORION.md",
+    "opera/ops/virtual-office/inbox/RELAY_20260228_102407_ORION_to_REX.md",
+    "opera/ops/virtual-office/inbox/RELAY_WAKE_20260228_101414_REX.md",
+    "opera/ops/virtual-office/inbox/RELAY_WAKE_20260228_101426_REX.md",
+    "opera/ops/virtual-office/inbox/RELAY_WAKE_20260228_101555_REX.md",
+    "opera/ops/virtual-office/inbox/RELAY_WAKE_20260228_102347_REX.md",
+    "opera/ops/virtual-office/shared/ROSTER.md",
+    "opera/ops/virtual-office/wake_notify_state.json",
+    "src/tribunal_api.py"
+  ],
+  "sessions": [
+    {
+      "metadata": "/68/443c81a646/0/metadata.json",
+      "transcript": "/68/443c81a646/0/full.jsonl",
+      "context": "",
+      "content_hash": "/68/443c81a646/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 63,
+    "cache_creation_tokens": 76522,
+    "cache_read_tokens": 5946700,
+    "output_tokens": 20256,
+    "api_call_count": 57
+  }
+}

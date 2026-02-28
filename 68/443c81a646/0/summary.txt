@@ -1,0 +1,19 @@
+`★ Insight ─────────────────────────────────────`
+**Cross-session identity is a cache coherence problem.** Each agent session starts cold — like a CPU core after a cache flush. ROSTER.md acts as a shared L2 cache: every agent writes its state on exit, every agent reads it on boot. The version tracking table at the bottom is the critical piece — it lets the human see *which* Rex/Orion they talked to on which day, with what model. Without it, session amnesia compounds: you don't just forget what you did, you forget who did it.
+`─────────────────────────────────────────────────`
+
+Done. Here's what's delivered:
+
+**ROSTER.md** (`opera/ops/virtual-office/shared/ROSTER.md`) — the shared "кто есть кто":
+- Every agent's model, provider, role, strengths, weaknesses
+- Methods registry table: how agents communicate, persist knowledge, build/deploy
+- Version tracking table: date + agent + model + session ID + key action
+- Bootstrap sequence updated — ROSTER.md is now step 1 (before outbox, before personality)
+
+**Radio v3** — additive, nothing lost:
+- Filter chips (tap agent name to isolate their stream, tap again to show all)
+- Tap-to-expand on any console line → shows full message text + receiver
+- New glyphs: `⚖` for tribunal results, `⦿` for broadcasts
+- Backend: `/tribunal` and `/office/broadcast` now push events to the Radio SSE bus
+
+The rule going forward: ROSTER.md gets updated by every agent, every session. You read it first, you know who you're dealing with.
