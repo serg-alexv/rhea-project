@@ -1,0 +1,59 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "b6590dc703ae",
+  "strategy": "auto-commit",
+  "branch": "stage4-release",
+  "checkpoints_count": 1,
+  "files_touched": [
+    ".rhea/ndi/ndi.stdout.log",
+    ".rhea/ndi/state.json",
+    ".rhea/queue_guard/queue_guard.stdout.log",
+    ".rhea/queue_guard/state.json",
+    "docs/procedures/queue-maintainer.md",
+    "ios/RheaPreview.swiftpm/Sources/PulseMonitorView.swift",
+    "ios/RheaPreview.swiftpm/Sources/TeamChatView.swift",
+    "opera/metrics/ndi_pulse.json",
+    "opera/metrics/ndi_trace.jsonl",
+    "opera/metrics/queue_guard_trace.jsonl",
+    "opera/metrics/queue_health.json",
+    "opera/metrics/radio_pulse.json",
+    "opera/ops/virtual-office/inbox/RELAY_20260228_104518_--FROM_to_REX.md",
+    "opera/ops/virtual-office/inbox/RELAY_20260228_104518_ORION_to_MIKA.md",
+    "opera/ops/virtual-office/inbox/RELAY_20260228_104548_REX_PROXY_to_--FROM.md",
+    "opera/ops/virtual-office/inbox/RELAY_20260228_104558_ORION_to_REX.md",
+    "opera/ops/virtual-office/inbox/RELAY_20260228_104618_REX_PROXY_to_ORION.md",
+    "opera/ops/virtual-office/inbox/RELAY_20260228_104729_REX_PROXY_to_MIKA.md",
+    "opera/ops/virtual-office/inbox/RELAY_20260228_104834_ORION_to_REX.md",
+    "opera/ops/virtual-office/inbox/RELAY_20260228_105358_ORION_to_REX.md",
+    "opera/ops/virtual-office/inbox/RELAY_20260228_105405_ORION_to_MIKA.md",
+    "opera/ops/virtual-office/inbox/RELAY_20260228_105550_ORION_to_REX.md",
+    "opera/ops/virtual-office/inbox/RELAY_20260228_105601_ORION_to_REX.md",
+    "opera/ops/virtual-office/inbox/RELAY_20260228_105903_ORION_to_REX.md",
+    "opera/ops/virtual-office/inbox/RELAY_20260228_105910_ORION_to_MIKA.md",
+    "opera/ops/virtual-office/inbox/RELAY_WAKE_20260228_104518_REX.md",
+    "opera/ops/virtual-office/inbox/RELAY_WAKE_20260228_104558_REX.md",
+    "scripts/flicker_mark.py",
+    "scripts/ndi_watchdog.py",
+    "scripts/rhea/ndi.sh",
+    "scripts/rhea/queue_guard.sh",
+    "scripts/rhea_queue_applet.py",
+    "scripts/rhea_queue_guard.py",
+    "src/tribunal_api.py"
+  ],
+  "sessions": [
+    {
+      "metadata": "/b6/590dc703ae/0/metadata.json",
+      "transcript": "/b6/590dc703ae/0/full.jsonl",
+      "context": "",
+      "content_hash": "/b6/590dc703ae/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 69,
+    "cache_creation_tokens": 75525,
+    "cache_read_tokens": 7523210,
+    "output_tokens": 18886,
+    "api_call_count": 63
+  }
+}

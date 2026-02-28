@@ -1,0 +1,24 @@
+Pushed. Now here's what's live on the simulator:
+
+**What's implemented:**
+1. **Console ↔ Bubble toggle** — toolbar button (terminal icon / bubble icon) switches between the v2 console and the restored v1 chat-style layout
+2. **Agent roster sheet** — person.3 icon in toolbar opens a half-sheet with all agents, their lease status, and WAKE buttons
+3. **BubbleLine view** — colored cards per sender, human messages align right, agent messages align left, sender→receiver direction shown, type badge, tap to expand full text
+
+`★ Insight ─────────────────────────────────────`
+**Naming collisions in flat Swift packages**: When all Swift files in a `.swiftpm/Sources` directory compile into one module, every top-level `struct` shares a single namespace. This is why `FilterChip` → `RadioFilterChip` and `AgentStatus` → `RadioAgentInfo` — the fix is prefixing with the view's domain. In a real multi-module project, Swift Package Manager's module boundaries handle this automatically.
+
+**The iMessage alignment pattern**: `if isHuman { Spacer(minLength: 40) }` before content + the inverse after content is the standard SwiftUI technique for left/right chat bubble alignment. The `minLength: 40` ensures there's always a gap on the opposite side so bubbles never stretch full width.
+`─────────────────────────────────────────────────`
+
+Now — the BubbleLine has a `TODO(human)` placeholder where I want your input on the visual design of the bubble layout. The structure works, but there's a design decision worth your hand:
+
+---
+
+**Learn by Doing**
+
+**Context:** I've built both view modes — the terminal console (v2) and the restored bubble chat (v1). The bubble view works: colored rounded rectangles per sender, human messages right-aligned, agent messages left-aligned, tap-to-expand, type badge. But the *visual identity* of each sender's bubble is just a tinted background right now — no avatar, no icon, nothing that makes Rex vs Orion instantly recognizable at a glance.
+
+**Your Task:** In `TeamChatView.swift`, inside the `BubbleLine` `body` property, find `TODO(human)`. Replace it with a computed property or inline logic that returns an SF Symbol name (or emoji) per agent — the avatar/icon shown at the top-left of each bubble. For example: Rex could be a crown, Orion a star, Gemini twins, human a person, tribunal scales, relay an antenna.
+
+**Guidance:** Consider what makes each agent's role memorable at a glance on a small phone screen. SF Symbols (`Image(systemName:)`) render crisp at any size and match iOS conventions. Alternatively, plain emoji works if you want more personality. The property should take a sender string and return a `String`. Think about what feels right for _your_ team.
