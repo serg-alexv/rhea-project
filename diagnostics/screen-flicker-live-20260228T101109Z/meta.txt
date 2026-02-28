@@ -1,0 +1,5 @@
+started_utc=2026-02-28T10:11:09Z
+duration_sec=1800
+out_dir=/Users/sa/rh.1/diagnostics/screen-flicker-live-20260228T101109Z
+host=gpro.local
+user=sa
