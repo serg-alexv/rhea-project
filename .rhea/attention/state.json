@@ -1,0 +1,7 @@
+{
+  "last_trigger_epoch": 1772279796,
+  "last_trigger_ts": "2026-02-28T11:56:36Z",
+  "last_reason": "drill:manual-check",
+  "last_risk": "critical",
+  "updated_at": "2026-02-28T11:56:36Z"
+}
