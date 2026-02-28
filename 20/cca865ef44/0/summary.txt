@@ -1,0 +1,12 @@
+All fixed and deployed. Summary:
+
+**Fixed:**
+1. **Agent sheet loads now** — API restarted with `/agents` endpoint, returns 16 agents with lease status
+2. **Keyboard dismisses** — scroll down to dismiss interactively, or tap anywhere on the feed
+3. **Governor cards** — each agent now has **Wake** + **Ping** action buttons (outline capsules, haptic feedback)
+4. **Pulse agents** — each row now has a **Wake** button
+5. **"More" tab** — that's standard iOS for 6+ tabs. Tasks and Settings are in there. Can be reduced to 5 if you want.
+
+`★ Insight ─────────────────────────────────────`
+**`.scrollDismissesKeyboard(.interactively)`** is the iOS 16+ way to let users drag-dismiss the keyboard. Combined with `UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder)...)` on tap, this covers both gestures. The `sendAction` approach is the cleanest way to dismiss keyboard in SwiftUI without needing `@FocusState` wiring — it sends the resign message up the responder chain to whoever currently has focus.
+`─────────────────────────────────────────────────`

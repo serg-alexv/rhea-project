@@ -1,0 +1,30 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "20cca865ef44",
+  "strategy": "auto-commit",
+  "branch": "stage4-release",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "docs/procedures/family-workflow.md",
+    "ios/RheaPreview.swiftpm/Sources/GovernorView.swift",
+    "ios/RheaPreview.swiftpm/Sources/PulseMonitorView.swift",
+    "ios/RheaPreview.swiftpm/Sources/TeamChatView.swift",
+    "scripts/rhea_family.py"
+  ],
+  "sessions": [
+    {
+      "metadata": "/20/cca865ef44/0/metadata.json",
+      "transcript": "/20/cca865ef44/0/full.jsonl",
+      "context": "",
+      "content_hash": "/20/cca865ef44/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 18,
+    "cache_creation_tokens": 22470,
+    "cache_read_tokens": 1527224,
+    "output_tokens": 4954,
+    "api_call_count": 14
+  }
+}
