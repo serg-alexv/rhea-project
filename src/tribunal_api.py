@@ -690,61 +690,108 @@ def _run_rex_pager(args: list[str], timeout_s: int = 45) -> dict:
 async def landing():
     """Landing page — what Rhea is + how to try it."""
     from fastapi.responses import HTMLResponse
-    html = """<!DOCTYPE html>
+    # Dynamic stats from Aletheia
+    try:
+        from aletheia_pipeline import AletheiaCapturePipeline
+        pipe = AletheiaCapturePipeline()
+        stats = pipe.get_stats()
+        proof_count = stats.get("proof_count", 0)
+        ontology_count = stats.get("ontology_count", 0)
+        avg_confidence = stats.get("avg_confidence")
+        avg_conf_str = f"{avg_confidence:.0%}" if avg_confidence else "—"
+    except Exception:
+        proof_count, ontology_count, avg_conf_str = 0, 0, "—"
+
+    # How many providers are actually alive right now
+    try:
+        bridge = get_bridge()
+        status = bridge.models_status()
+        n_providers = status.get("summary", {}).get("available_providers", 0)
+    except Exception:
+        n_providers = 0
+
+    multi_note = f"Rhea queries {n_providers} AI provider{'s' if n_providers != 1 else ''}" if n_providers > 0 else "Rhea queries AI models"
+    if n_providers >= 2:
+        multi_note += " independently and measures agreement"
+    else:
+        multi_note += " (multi-model consensus activates with 2+ providers)"
+
+    url = "https://rhea-tribunal-api-145767756165.europe-west1.run.app"
+    html = f"""<!DOCTYPE html>
 <html lang="en">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Rhea — Multi-Model Consensus</title>
+<title>Rhea — Scientific Claim Verification</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:system-ui,-apple-system,sans-serif;background:#0a0a0a;color:#e0e0e0;
-  display:flex;justify-content:center;padding:2rem}
-main{max-width:640px;width:100%}
-h1{font-size:2rem;margin-bottom:.5rem;color:#fff}
-.sub{color:#888;margin-bottom:2rem;font-size:1.1rem}
-.axiom{color:#ff6b35;font-family:monospace;font-size:1.3rem;margin:1.5rem 0;
-  padding:1rem;border-left:3px solid #ff6b35}
-h2{font-size:1.2rem;color:#aaa;margin:2rem 0 .5rem;text-transform:uppercase;letter-spacing:.1em;font-weight:400}
-pre{background:#111;padding:1rem;border-radius:6px;overflow-x:auto;font-size:.85rem;line-height:1.5;margin:.5rem 0}
-code{color:#7ec8e3}
-.try{color:#4ade80}
-a{color:#7ec8e3;text-decoration:none}
-a:hover{text-decoration:underline}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin:1rem 0}
-.stat{background:#111;padding:1rem;border-radius:6px;text-align:center}
-.stat .n{font-size:1.8rem;color:#fff;font-weight:700}
-.stat .l{color:#666;font-size:.8rem;text-transform:uppercase}
-.foot{margin-top:3rem;color:#444;font-size:.8rem;text-align:center}
+*{{margin:0;padding:0;box-sizing:border-box}}
+body{{font-family:system-ui,-apple-system,sans-serif;background:#0a0a0a;color:#e0e0e0;
+  display:flex;justify-content:center;padding:2rem}}
+main{{max-width:640px;width:100%}}
+h1{{font-size:2rem;margin-bottom:.5rem;color:#fff}}
+.sub{{color:#888;margin-bottom:2rem;font-size:1.1rem}}
+.axiom{{color:#ff6b35;font-family:monospace;font-size:1.3rem;margin:1.5rem 0;
+  padding:1rem;border-left:3px solid #ff6b35}}
+h2{{font-size:1.2rem;color:#aaa;margin:2rem 0 .5rem;text-transform:uppercase;letter-spacing:.1em;font-weight:400}}
+pre{{background:#111;padding:1rem;border-radius:6px;overflow-x:auto;font-size:.85rem;line-height:1.5;margin:.5rem 0}}
+code{{color:#7ec8e3}}
+.try{{color:#4ade80}}
+a{{color:#7ec8e3;text-decoration:none}}
+a:hover{{text-decoration:underline}}
+.stats{{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin:1rem 0}}
+.stat{{background:#111;padding:1rem;border-radius:6px;text-align:center}}
+.stat .n{{font-size:1.8rem;color:#fff;font-weight:700}}
+.stat .l{{color:#666;font-size:.8rem;text-transform:uppercase}}
+.foot{{margin-top:3rem;color:#444;font-size:.8rem;text-align:center}}
 </style></head>
 <body><main>
 <h1>Rhea</h1>
-<p class="sub">Multi-model consensus API. Send a claim, get verified truth.</p>
+<p class="sub">Scientific claim verification API. Biochemistry, chronobiology, pharmacology.</p>
 <div class="axiom">&#x2207; &gt; 0 &#x2228; &#x22A5;<br>
-<small style="color:#666">gradient positive or bottom — don't settle for less</small></div>
+<small style="color:#666">gradient positive or bottom &mdash; don't settle for less</small></div>
 
-<h2>Try it</h2>
-<pre><code class="try">curl -X POST {url}/tribunal \\
+<div class="stats">
+<div class="stat"><div class="n">{proof_count}</div><div class="l">verified proofs</div></div>
+<div class="stat"><div class="n">{ontology_count}</div><div class="l">ontologies</div></div>
+<div class="stat"><div class="n">{avg_conf_str}</div><div class="l">avg confidence</div></div>
+</div>
+
+<h2>Try it &mdash; no key needed</h2>
+<pre><code class="try"># Search the proof library
+curl "{url}/aletheia/search?q=hemoglobin"
+
+# Get library stats
+curl "{url}/aletheia/stats"
+
+# Verify a claim (needs API key)
+curl -X POST {url}/tribunal \\
   -H "Content-Type: application/json" \\
   -H "X-API-Key: dev-bypass" \\
-  -d '{{"prompt":"Hemoglobin contains iron"}}'</code></pre>
-
-<h2>Endpoints</h2>
-<pre><code>GET  /health          — status + provider count
-GET  /aletheia/stats  — proof store statistics
-POST /tribunal        — multi-model consensus
-POST /tribunal/ice    — iterative deep consensus
-GET  /quantum/summary — quantum circuit state</code></pre>
+  -d '{{"prompt":"ATP synthase uses rotary catalysis"}}'</code></pre>
 
 <h2>What it does</h2>
-<p>You send a scientific claim. Rhea asks multiple AI models independently.
-If they agree — higher confidence. If they disagree — you see exactly where and why.
-Every verification is recorded in Aletheia (proof chain).</p>
+<p>You send a scientific claim. {multi_note}.
+Every verification is stored in Aletheia &mdash; a searchable proof library with provenance chains.</p>
+<p style="color:#888;margin-top:.5rem">Currently: {n_providers} provider{'s' if n_providers != 1 else ''} live.
+Consensus scoring requires 2+ independent models responding to the same claim.</p>
+
+<h2>Open endpoints</h2>
+<pre><code>GET  /health              &mdash; status + provider count
+GET  /aletheia/stats      &mdash; proof library statistics
+GET  /aletheia/search?q=  &mdash; search proofs (no key)
+GET  /aletheia/proofs     &mdash; list all proofs (no key)
+GET  /agents/status       &mdash; live agent status</code></pre>
+
+<h2>Auth endpoints</h2>
+<pre><code>POST /tribunal            &mdash; verify a claim
+POST /tribunal/ice        &mdash; iterative deep verification
+POST /aletheia/submit     &mdash; add a proof manually</code></pre>
 
 <h2>Stack</h2>
-<p>FastAPI + SQLite WAL + Gemini 2.5 Flash + Qiskit 2.3 + Cloud Run.<br>
-Open source: <a href="https://github.com/serg-alexv/rhea-project">github.com/serg-alexv/rhea-project</a></p>
+<p>FastAPI + SQLite WAL + Gemini 2.5 Flash + Cloud Run (europe-west1).<br>
+Built by a biochemist and three AI agents.<br>
+<a href="https://github.com/serg-alexv/rhea-project">github.com/serg-alexv/rhea-project</a></p>
 
-<div class="foot">Rhea — the flow explorers. No questions needed.</div>
-</main></body></html>""".replace("{url}", "https://rhea-tribunal-api-145767756165.europe-west1.run.app")
+<div class="foot">&#x2207; &gt; 0 &#x2228; &#x22A5;</div>
+</main></body></html>"""
     return HTMLResponse(content=html)
 
 
