@@ -90,7 +90,7 @@ Reject only decoration that competes with primary action without adding meaning.
 ## 5.3 Accepted UI doctrine lines (user-validated)
 - sharp semantics + liquid transitions
 - hard data + hot feel
-- tiny exact details + impossible overall impression
+- tiny exact details + attempt to become a valuable bridge for users
 
 Keep poles sharp; blur the transition, not the meanings.
 
