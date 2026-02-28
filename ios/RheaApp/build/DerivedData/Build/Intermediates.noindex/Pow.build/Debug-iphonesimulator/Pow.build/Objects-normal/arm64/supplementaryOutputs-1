@@ -1,0 +1,58 @@
+{
+  "/Users/sa/rh.1/ios/RheaApp/build/DerivedData/Build/Intermediates.noindex/Pow.build/Debug-iphonesimulator/Pow.build/DerivedSources/resource_bundle_accessor.swift" : {
+    "const-values" : "/Users/sa/rh.1/ios/RheaApp/build/DerivedData/Build/Intermediates.noindex/Pow.build/Debug-iphonesimulator/Pow.build/Objects-normal/arm64/resource_bundle_accessor.swiftconstvalues",
+    "dependencies" : "/Users/sa/rh.1/ios/RheaApp/build/DerivedData/Build/Intermediates.noindex/Pow.build/Debug-iphonesimulator/Pow.build/Objects-normal/arm64/resource_bundle_accessor.d",
+    "diagnostics" : "/Users/sa/rh.1/ios/RheaApp/build/DerivedData/Build/Intermediates.noindex/Pow.build/Debug-iphonesimulator/Pow.build/Objects-normal/arm64/resource_bundle_accessor.dia",
+    "object" : "/Users/sa/rh.1/ios/RheaApp/build/DerivedData/Build/Intermediates.noindex/Pow.build/Debug-iphonesimulator/Pow.build/Objects-normal/arm64/resource_bundle_accessor.o",
+    "swift-dependencies" : "/Users/sa/rh.1/ios/RheaApp/build/DerivedData/Build/Intermediates.noindex/Pow.build/Debug-iphonesimulator/Pow.build/Objects-normal/arm64/resource_bundle_accessor.swiftdeps"
+  },
+  "/Users/sa/rh.1/ios/RheaApp/build/DerivedData/SourcePackages/checkouts/Pow/Sources/Pow/Effects/GlowEffect.swift" : {
+    "const-values" : "/Users/sa/rh.1/ios/RheaApp/build/DerivedData/Build/Intermediates.noindex/Pow.build/Debug-iphonesimulator/Pow.build/Objects-normal/arm64/GlowEffect.swiftconstvalues",
+    "dependencies" : "/Users/sa/rh.1/ios/RheaApp/build/DerivedData/Build/Intermediates.noindex/Pow.build/Debug-iphonesimulator/Pow.build/Objects-normal/arm64/GlowEffect.d",
+    "diagnostics" : "/Users/sa/rh.1/ios/RheaApp/build/DerivedData/Build/Intermediates.noindex/Pow.build/Debug-iphonesimulator/Pow.build/Objects-normal/arm64/GlowEffect.dia",
+    "object" : "/Users/sa/rh.1/ios/RheaApp/build/DerivedData/Build/Intermediates.noindex/Pow.build/Debug-iphonesimulator/Pow.build/Objects-normal/arm64/GlowEffect.o",
+    "swift-dependencies" : "/Users/sa/rh.1/ios/RheaApp/build/DerivedData/Build/Intermediates.noindex/Pow.build/Debug-iphonesimulator/Pow.build/Objects-normal/arm64/GlowEffect.swiftdeps"
+  },
+  "/Users/sa/rh.1/ios/RheaApp/build/DerivedData/SourcePackages/checkouts/Pow/Sources/Pow/Effects/HapticFeedbackEffect.swift" : {
+    "const-values" : "/Users/sa/rh.1/ios/RheaApp/build/DerivedData/Build/Intermediates.noindex/Pow.build/Debug-iphonesimulator/Pow.build/Objects-normal/arm64/HapticFeedbackEffect.swiftconstvalues",
+    "dependencies" : "/Users/sa/rh.1/ios/RheaApp/build/DerivedData/Build/Intermediates.noindex/Pow.build/Debug-iphonesimulator/Pow.build/Objects-normal/arm64/HapticFeedbackEffect.d",
+    "diagnostics" : "/Users/sa/rh.1/ios/RheaApp/build/DerivedData/Build/Intermediates.noindex/Pow.build/Debug-iphonesimulator/Pow.build/Objects-normal/arm64/HapticFeedbackEffect.dia",
+    "object" : "/Users/sa/rh.1/ios/RheaApp/build/DerivedData/Build/Intermediates.noindex/Pow.build/Debug-iphonesimulator/Pow.build/Objects-normal/arm64/HapticFeedbackEffect.o",
+    "swift-dependencies" : "/Users/sa/rh.1/ios/RheaApp/build/DerivedData/Build/Intermediates.noindex/Pow.build/Debug-iphonesimulator/Pow.build/Objects-normal/arm64/HapticFeedbackEffect.swiftdeps"
+  },
+  "/Users/sa/rh.1/ios/RheaApp/build/DerivedData/SourcePackages/checkouts/Pow/Sources/Pow/Effects/JumpEffect.swift" : {
+    "const-values" : "/Users/sa/rh.1/ios/RheaApp/build/DerivedData/Build/Intermediates.noindex/Pow.build/Debug-iphonesimulator/Pow.build/Objects-normal/arm64/JumpEffect.swiftconstvalues",
+    "dependencies" : "/Users/sa/rh.1/ios/RheaApp/build/DerivedData/Build/Intermediates.noindex/Pow.build/Debug-iphonesimulator/Pow.build/Objects-normal/arm64/JumpEffect.d",
+    "diagnostics" : "/Users/sa/rh.1/ios/RheaApp/build/DerivedData/Build/Intermediates.noindex/Pow.build/Debug-iphonesimulator/Pow.build/Objects-normal/arm64/JumpEffect.dia",
+    "object" : "/Users/sa/rh.1/ios/RheaApp/build/DerivedData/Build/Intermediates.noindex/Pow.build/Debug-iphonesimulator/Pow.build/Objects-normal/arm64/JumpEffect.o",
+    "swift-dependencies" : "/Users/sa/rh.1/ios/RheaApp/build/DerivedData/Build/Intermediates.noindex/Pow.build/Debug-iphonesimulator/Pow.build/Objects-normal/arm64/JumpEffect.swiftdeps"
+  },
+  "/Users/sa/rh.1/ios/RheaApp/build/DerivedData/SourcePackages/checkouts/Pow/Sources/Pow/Effects/PingEffect.swift" : {
+    "const-values" : "/Users/sa/rh.1/ios/RheaApp/build/DerivedData/Build/Intermediates.noindex/Pow.build/Debug-iphonesimulator/Pow.build/Objects-normal/arm64/PingEffect.swiftconstvalues",
+    "dependencies" : "/Users/sa/rh.1/ios/RheaApp/build/DerivedData/Build/Intermediates.noindex/Pow.build/Debug-iphonesimulator/Pow.build/Objects-normal/arm64/PingEffect.d",
+    "diagnostics" : "/Users/sa/rh.1/ios/RheaApp/build/DerivedData/Build/Intermediates.noindex/Pow.build/Debug-iphonesimulator/Pow.build/Objects-normal/arm64/PingEffect.dia",
+    "object" : "/Users/sa/rh.1/ios/RheaApp/build/DerivedData/Build/Intermediates.noindex/Pow.build/Debug-iphonesimulator/Pow.build/Objects-normal/arm64/PingEffect.o",
+    "swift-dependencies" : "/Users/sa/rh.1/ios/RheaApp/build/DerivedData/Build/Intermediates.noindex/Pow.build/Debug-iphonesimulator/Pow.build/Objects-normal/arm64/PingEffect.swiftdeps"
+  },
+  "/Users/sa/rh.1/ios/RheaApp/build/DerivedData/SourcePackages/checkouts/Pow/Sources/Pow/Effects/PulseEffect.swift" : {
+    "const-values" : "/Users/sa/rh.1/ios/RheaApp/build/DerivedData/Build/Intermediates.noindex/Pow.build/Debug-iphonesimulator/Pow.build/Objects-normal/arm64/PulseEffect.swiftconstvalues",
+    "dependencies" : "/Users/sa/rh.1/ios/RheaApp/build/DerivedData/Build/Intermediates.noindex/Pow.build/Debug-iphonesimulator/Pow.build/Objects-normal/arm64/PulseEffect.d",
+    "diagnostics" : "/Users/sa/rh.1/ios/RheaApp/build/DerivedData/Build/Intermediates.noindex/Pow.build/Debug-iphonesimulator/Pow.build/Objects-normal/arm64/PulseEffect.dia",
+    "object" : "/Users/sa/rh.1/ios/RheaApp/build/DerivedData/Build/Intermediates.noindex/Pow.build/Debug-iphonesimulator/Pow.build/Objects-normal/arm64/PulseEffect.o",
+    "swift-dependencies" : "/Users/sa/rh.1/ios/RheaApp/build/DerivedData/Build/Intermediates.noindex/Pow.build/Debug-iphonesimulator/Pow.build/Objects-normal/arm64/PulseEffect.swiftdeps"
+  },
+  "/Users/sa/rh.1/ios/RheaApp/build/DerivedData/SourcePackages/checkouts/Pow/Sources/Pow/Effects/PushDownEffect.swift" : {
+    "const-values" : "/Users/sa/rh.1/ios/RheaApp/build/DerivedData/Build/Intermediates.noindex/Pow.build/Debug-iphonesimulator/Pow.build/Objects-normal/arm64/PushDownEffect.swiftconstvalues",
+    "dependencies" : "/Users/sa/rh.1/ios/RheaApp/build/DerivedData/Build/Intermediates.noindex/Pow.build/Debug-iphonesimulator/Pow.build/Objects-normal/arm64/PushDownEffect.d",
+    "diagnostics" : "/Users/sa/rh.1/ios/RheaApp/build/DerivedData/Build/Intermediates.noindex/Pow.build/Debug-iphonesimulator/Pow.build/Objects-normal/arm64/PushDownEffect.dia",
+    "object" : "/Users/sa/rh.1/ios/RheaApp/build/DerivedData/Build/Intermediates.noindex/Pow.build/Debug-iphonesimulator/Pow.build/Objects-normal/arm64/PushDownEffect.o",
+    "swift-dependencies" : "/Users/sa/rh.1/ios/RheaApp/build/DerivedData/Build/Intermediates.noindex/Pow.build/Debug-iphonesimulator/Pow.build/Objects-normal/arm64/PushDownEffect.swiftdeps"
+  },
+  "/Users/sa/rh.1/ios/RheaApp/build/DerivedData/SourcePackages/checkouts/Pow/Sources/Pow/Effects/RisingParticleEffect.swift" : {
+    "const-values" : "/Users/sa/rh.1/ios/RheaApp/build/DerivedData/Build/Intermediates.noindex/Pow.build/Debug-iphonesimulator/Pow.build/Objects-normal/arm64/RisingParticleEffect.swiftconstvalues",
+    "dependencies" : "/Users/sa/rh.1/ios/RheaApp/build/DerivedData/Build/Intermediates.noindex/Pow.build/Debug-iphonesimulator/Pow.build/Objects-normal/arm64/RisingParticleEffect.d",
+    "diagnostics" : "/Users/sa/rh.1/ios/RheaApp/build/DerivedData/Build/Intermediates.noindex/Pow.build/Debug-iphonesimulator/Pow.build/Objects-normal/arm64/RisingParticleEffect.dia",
+    "object" : "/Users/sa/rh.1/ios/RheaApp/build/DerivedData/Build/Intermediates.noindex/Pow.build/Debug-iphonesimulator/Pow.build/Objects-normal/arm64/RisingParticleEffect.o",
+    "swift-dependencies" : "/Users/sa/rh.1/ios/RheaApp/build/DerivedData/Build/Intermediates.noindex/Pow.build/Debug-iphonesimulator/Pow.build/Objects-normal/arm64/RisingParticleEffect.swiftdeps"
+  }
+}
