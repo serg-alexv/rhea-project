@@ -28,6 +28,6 @@ ENV PYTHONPATH="/app/src:/app/friends/ruliad/explorer:/app"
 # Create writable directories the app needs at runtime
 RUN mkdir -p /app/logs /app/data
 
-EXPOSE 8000
+EXPOSE 8400
 
-CMD ["python3", "src/rhead.py"]
+CMD ["python3", "src/tribunal_api.py"]
