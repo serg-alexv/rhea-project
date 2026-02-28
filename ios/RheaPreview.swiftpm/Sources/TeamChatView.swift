@@ -30,6 +30,10 @@ struct TeamChatView: View {
     @State private var composerText: String = ""
     @State private var isSending = false
     @State private var prevItemCount = 0
+    @State private var showBubbles = false  // toggle: console vs bubble view
+    @State private var showAgentSheet = false
+    @State private var knownAgents: [RadioAgentInfo] = []
+    @State private var wakingAgent: String? = nil
     @AppStorage("apiBaseURL") private var apiBaseURL = AppConfig.defaultAPIBaseURL
 
     /// All known senders (for filter chips)
@@ -54,25 +58,45 @@ struct TeamChatView: View {
                     filterBar
                 }
 
-                // Live stream console
+                // Live stream — console or bubble mode
                 ScrollView {
-                    LazyVStack(alignment: .leading, spacing: 2) {
-                        ForEach(visibleItems) { item in
-                            ConsoleLine(item: item, isExpanded: expandedIDs.contains(item.id))
-                                .contentShape(Rectangle())
-                                .onTapGesture {
-                                    withAnimation(.easeInOut(duration: 0.2)) {
-                                        if expandedIDs.contains(item.id) {
-                                            expandedIDs.remove(item.id)
-                                        } else {
-                                            expandedIDs.insert(item.id)
+                    if showBubbles {
+                        LazyVStack(spacing: 8) {
+                            ForEach(visibleItems) { item in
+                                BubbleLine(item: item, isExpanded: expandedIDs.contains(item.id))
+                                    .contentShape(Rectangle())
+                                    .onTapGesture {
+                                        withAnimation(.easeInOut(duration: 0.2)) {
+                                            if expandedIDs.contains(item.id) {
+                                                expandedIDs.remove(item.id)
+                                            } else {
+                                                expandedIDs.insert(item.id)
+                                            }
                                         }
                                     }
-                                }
+                            }
                         }
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 8)
+                    } else {
+                        LazyVStack(alignment: .leading, spacing: 2) {
+                            ForEach(visibleItems) { item in
+                                ConsoleLine(item: item, isExpanded: expandedIDs.contains(item.id))
+                                    .contentShape(Rectangle())
+                                    .onTapGesture {
+                                        withAnimation(.easeInOut(duration: 0.2)) {
+                                            if expandedIDs.contains(item.id) {
+                                                expandedIDs.remove(item.id)
+                                            } else {
+                                                expandedIDs.insert(item.id)
+                                            }
+                                        }
+                                    }
+                            }
+                        }
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 8)
                     }
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 8)
                 }
                 .background(Color.black)
 
@@ -81,9 +105,34 @@ struct TeamChatView: View {
             }
             .background(Color.black)
             .navigationTitle("Radio")
+            .toolbar {
+                ToolbarItemGroup(placement: .primaryAction) {
+                    // Console ↔ Bubble toggle
+                    Button {
+                        withAnimation(.easeInOut(duration: 0.25)) { showBubbles.toggle() }
+                    } label: {
+                        Image(systemName: showBubbles ? "terminal" : "bubble.left.and.bubble.right")
+                            .font(.caption)
+                            .foregroundStyle(.white.opacity(0.7))
+                    }
+
+                    // Agent roster sheet
+                    Button {
+                        Task { await fetchAgents() }
+                        showAgentSheet = true
+                    } label: {
+                        Image(systemName: "person.3")
+                            .font(.caption)
+                            .foregroundStyle(.white.opacity(0.7))
+                    }
+                }
+            }
             #if os(iOS)
             .toolbarColorScheme(.dark, for: .navigationBar)
             #endif
+            .sheet(isPresented: $showAgentSheet) {
+                agentSheet
+            }
             .task {
                 await fetchFull()
                 startPolling()
@@ -216,7 +265,121 @@ struct TeamChatView: View {
         )
     }
 
-    // MARK: - Networking
+    // MARK: - Agent Sheet
+
+    var agentSheet: some View {
+        NavigationStack {
+            List {
+                if knownAgents.isEmpty {
+                    HStack {
+                        ProgressView()
+                            .tint(.white)
+                        Text("Loading agents…")
+                            .foregroundStyle(.secondary)
+                    }
+                    .listRowBackground(Color.black.opacity(0.8))
+                } else {
+                    ForEach(knownAgents) { agent in
+                        HStack(spacing: 12) {
+                            // Color dot
+                            Circle()
+                                .fill(agentColor(agent.name))
+                                .frame(width: 10, height: 10)
+
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(agent.name.uppercased())
+                                    .font(.system(.body, design: .monospaced, weight: .bold))
+                                    .foregroundStyle(agentColor(agent.name))
+                                Text(agent.expired ? "offline" : "lease #\(agent.leaseToken)")
+                                    .font(.system(.caption2, design: .monospaced))
+                                    .foregroundStyle(agent.expired ? .red.opacity(0.7) : .green.opacity(0.7))
+                            }
+
+                            Spacer()
+
+                            // Wake button
+                            Button {
+                                Task { await wakeAgent(agent.name) }
+                            } label: {
+                                if wakingAgent == agent.name.uppercased() {
+                                    ProgressView()
+                                        .tint(agentColor(agent.name))
+                                } else {
+                                    Text("WAKE")
+                                        .font(.system(.caption, design: .monospaced, weight: .bold))
+                                        .foregroundStyle(.black)
+                                        .padding(.horizontal, 12)
+                                        .padding(.vertical, 5)
+                                        .background(Capsule().fill(agentColor(agent.name)))
+                                }
+                            }
+                            .buttonStyle(.plain)
+                        }
+                        .padding(.vertical, 4)
+                        .listRowBackground(Color.black.opacity(0.8))
+                    }
+                }
+            }
+            .scrollContentBackground(.hidden)
+            .background(Color.black)
+            .navigationTitle("Agents")
+            .navigationBarTitleDisplayMode(.inline)
+            #if os(iOS)
+            .toolbarColorScheme(.dark, for: .navigationBar)
+            #endif
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Done") { showAgentSheet = false }
+                        .foregroundStyle(RheaTheme.green)
+                }
+            }
+        }
+        .presentationDetents([.medium])
+        .presentationDragIndicator(.visible)
+    }
+
+    // MARK: - Agent Networking
+
+    func fetchAgents() async {
+        guard let url = URL(string: "\(apiBaseURL)/agents") else { return }
+        do {
+            let (data, _) = try await URLSession.shared.data(from: url)
+            if let dict = try JSONSerialization.jsonObject(with: data) as? [String: [String: Any]] {
+                knownAgents = dict.map { (key, val) in
+                    RadioAgentInfo(
+                        name: key,
+                        leaseToken: val["lease_token"] as? Int ?? 0,
+                        expired: val["expired"] as? Bool ?? true,
+                        lastActive: val["last_active"] as? String ?? ""
+                    )
+                }.sorted { $0.name < $1.name }
+            }
+        } catch {}
+    }
+
+    func wakeAgent(_ name: String) async {
+        let upper = name.uppercased()
+        wakingAgent = upper
+        defer { wakingAgent = nil }
+        guard let url = URL(string: "\(apiBaseURL)/agents/wake/\(upper)") else { return }
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        do {
+            let (_, response) = try await URLSession.shared.data(for: request)
+            if let http = response as? HTTPURLResponse, http.statusCode < 300 {
+                #if os(iOS)
+                let generator = UINotificationFeedbackGenerator()
+                generator.notificationOccurred(.success)
+                #endif
+                // Refresh agent list
+                await fetchAgents()
+                // Poll for the wake broadcast
+                await pollDelta()
+            }
+        } catch {}
+    }
+
+    // MARK: - Feed Networking
 
     func fetchFull() async {
         guard let url = URL(string: "\(apiBaseURL)/feed?limit=100") else { return }
@@ -382,6 +545,109 @@ struct ConsoleLine: View {
             return String(stripped.prefix(120)) + "…"
         }
         return stripped
+    }
+}
+
+// MARK: - Agent Status Model
+
+struct RadioAgentInfo: Identifiable {
+    var id: String { name }
+    let name: String
+    let leaseToken: Int
+    let expired: Bool
+    let lastActive: String
+}
+
+// MARK: - Bubble Line (chat-style, v1 restored)
+
+struct BubbleLine: View {
+    let item: FeedItem
+    var isExpanded: Bool = false
+    @State private var appeared = false
+
+    var senderColor: Color {
+        switch item.sender.lowercased() {
+        case "rex": return RheaTheme.accent
+        case "orion": return .purple
+        case "gemini": return RheaTheme.amber
+        case "human": return RheaTheme.green
+        case "relay": return .orange
+        case "tribunal": return .cyan
+        default: return .gray
+        }
+    }
+
+    var isHuman: Bool { item.sender.lowercased() == "human" }
+
+    var body: some View {
+        // TODO(human): Design the bubble layout for agent messages
+        HStack(alignment: .top, spacing: 8) {
+            if isHuman { Spacer(minLength: 40) }
+
+            VStack(alignment: isHuman ? .trailing : .leading, spacing: 4) {
+                // Header: sender → receiver + time
+                HStack(spacing: 6) {
+                    Text(item.sender.uppercased())
+                        .font(.system(.caption2, design: .monospaced, weight: .bold))
+                        .foregroundStyle(senderColor)
+                    if !item.receiver.isEmpty && item.receiver != "all" {
+                        Text("→ \(item.receiver.uppercased())")
+                            .font(.system(.caption2, design: .monospaced))
+                            .foregroundStyle(senderColor.opacity(0.5))
+                    }
+                    Spacer()
+                    Text(formatBubbleTime(item.ts))
+                        .font(.system(.caption2, design: .monospaced))
+                        .foregroundStyle(.secondary)
+                }
+
+                // Message body
+                Text(isExpanded ? item.text : truncatedText(item.text))
+                    .font(.system(.caption, design: .monospaced))
+                    .foregroundStyle(.white.opacity(0.85))
+                    .multilineTextAlignment(.leading)
+                    .textSelection(.enabled)
+
+                // Type badge
+                Text(item.type.uppercased())
+                    .font(.system(size: 9, weight: .medium, design: .monospaced))
+                    .foregroundStyle(senderColor.opacity(0.5))
+            }
+            .padding(10)
+            .background(
+                RoundedRectangle(cornerRadius: 12)
+                    .fill(senderColor.opacity(0.12))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 12)
+                            .strokeBorder(senderColor.opacity(0.2), lineWidth: 0.5)
+                    )
+            )
+
+            if !isHuman { Spacer(minLength: 40) }
+        }
+        .opacity(appeared ? 1 : 0)
+        .offset(y: appeared ? 0 : 8)
+        .onAppear {
+            withAnimation(.easeOut(duration: 0.2)) {
+                appeared = true
+            }
+        }
+    }
+
+    func formatBubbleTime(_ iso: String) -> String {
+        if let tIdx = iso.firstIndex(of: "T") {
+            let time = iso[iso.index(after: tIdx)...]
+            if time.count >= 5 { return String(time.prefix(5)) }
+        }
+        return ""
+    }
+
+    func truncatedText(_ text: String) -> String {
+        let clean = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        if clean.count > 200 {
+            return String(clean.prefix(200)) + "…"
+        }
+        return clean
     }
 }
 
