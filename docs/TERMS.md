@@ -66,7 +66,7 @@ To the maximum extent permitted by law, TimeLabs NPO and its contributors shall 
 ## 6. Intellectual Property
 
 - **Your inputs and research**: remain yours. TimeLabs NPO does not claim ownership of queries you submit.
-- **Platform code**: open source under the license in the GitHub repository (github.com/serg-alexv/rhea-project).
+- **Platform code**: open source under the MIT License. See [LICENSE](https://github.com/serg-alexv/rhea-project/blob/main/LICENSE).
 - **AI model outputs**: governed by the terms of the underlying model providers (OpenAI, Anthropic, Google, etc.).
 
 ---

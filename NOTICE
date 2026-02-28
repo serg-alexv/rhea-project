@@ -1,0 +1,44 @@
+RHEA PROJECT — DEPENDENCY ATTRIBUTION
+======================================
+
+This project incorporates code from the following open-source libraries.
+All upstream licenses are preserved in their respective packages/repositories.
+
+SWIFT / iOS (forked to github.com/serg-alexv/*)
+-----------------------------------------------
+SwiftUIX              MIT     https://github.com/SwiftUIX/SwiftUIX
+Pow                   MIT     https://github.com/EmergeTools/Pow
+Chat (ExyteChat)      MIT     https://github.com/exyte/Chat
+PopupView             MIT     https://github.com/exyte/PopupView
+AnimatedTabBar        MIT     https://github.com/exyte/AnimatedTabBar
+FloatingButton        MIT     https://github.com/exyte/FloatingButton
+AlertKit              MIT     https://github.com/sparrowcode/AlertKit
+Kingfisher            MIT     https://github.com/onevcat/Kingfisher
+ActivityIndicatorView MIT     https://github.com/exyte/ActivityIndicatorView
+MediaPicker           MIT     https://github.com/exyte/MediaPicker
+AnchoredPopup         MIT     https://github.com/exyte/AnchoredPopup
+swiftui-introspect    MIT     https://github.com/siteline/swiftui-introspect
+libwebp-Xcode        BSD-3   https://github.com/SDWebImage/libwebp-Xcode
+giphy-ios-sdk         MPL-2.0 https://github.com/Giphy/giphy-ios-sdk
+
+PYTHON
+------
+FastAPI               BSD-3   https://github.com/tiangolo/fastapi
+uvicorn               BSD-3   https://github.com/encode/uvicorn
+pydantic              MIT     https://github.com/pydantic/pydantic
+requests              Apache-2.0  https://github.com/psf/requests
+redis-py              MIT     https://github.com/redis/redis-py
+litellm               MIT     https://github.com/BerriAI/litellm
+google-auth           Apache-2.0  https://github.com/googleapis/google-auth-library-python
+google-cloud-firestore Apache-2.0 https://github.com/googleapis/python-firestore
+PyJWT                 MIT     https://github.com/jpadilla/pyjwt
+
+TYPESCRIPT / NODE.JS
+--------------------
+Next.js               Apache-2.0  https://github.com/vercel/next.js
+React                 MIT     https://github.com/facebook/react
+Three.js              MIT     https://github.com/mrdoob/three.js
+Framer Motion         MIT     https://github.com/framer/motion
+@react-three/fiber    MIT     https://github.com/pmndrs/react-three-fiber
+@react-three/drei     MIT     https://github.com/pmndrs/drei
+Tailwind CSS          MIT     https://github.com/tailwindlabs/tailwindcss
