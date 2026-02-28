@@ -1,0 +1,11 @@
+**Build 1.0 (5) uploaded successfully.** App Store Connect is processing it now.
+
+The archive is also in Xcode Organizer now — you should see a 5th entry with version `1.0 (5)` if you refresh. This one has:
+- App icon (1024x1024 with the "R" logo)
+- All 4 iPad orientations
+- `CFBundleIconName: AppIcon`
+- Proper version from build settings (no more hardcoded "1")
+
+`★ Insight ─────────────────────────────────────`
+xcodegen's `info.properties` writes literal values into Info.plist by default. To make `MARKETING_VERSION` and `CURRENT_PROJECT_VERSION` from build settings work, you must explicitly set `CFBundleShortVersionString: $(MARKETING_VERSION)` and `CFBundleVersion: $(CURRENT_PROJECT_VERSION)` in the properties. Without this, the plist gets hardcoded "1.0" and "1" regardless of what the build settings say — which is why all 4 archives showed `1.0 (1)`.
+`─────────────────────────────────────────────────`
