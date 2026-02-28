@@ -19,6 +19,8 @@ import sys
 import time
 import json
 import hashlib
+import base64
+import binascii
 import secrets
 import uuid
 import subprocess
@@ -1569,6 +1571,45 @@ def get_office() -> Office:
     return _office
 
 
+class DialogRequest(BaseModel):
+    text: str = Field(..., min_length=1, max_length=5000)
+    sender: str = "human"
+
+
+@app.post("/dialog")
+async def dialog_endpoint(req: DialogRequest):
+    """Human dialog — sends to tribunal (k=2, cheap) and returns consensus."""
+    from datetime import datetime, timezone
+    now = datetime.now(timezone.utc)
+    try:
+        bridge = RheaBridge()
+        result = await asyncio.get_event_loop().run_in_executor(
+            None,
+            lambda: bridge.tribunal(
+                prompt=req.text,
+                k=2,
+                tier="cheap",
+                mode="local",
+                system="You are Rhea, a helpful research assistant. Answer concisely and accurately.",
+            ),
+        )
+        consensus = result.consensus or "No response available."
+        successful = [r for r in result.responses if not r.error]
+        # Log to chat history
+        office = get_office()
+        office.post_chat(sender=req.sender, text=req.text)
+        office.post_chat(sender="rhea", text=consensus)
+        return {
+            "reply": consensus,
+            "agreement_score": len(successful) / max(len(result.responses), 1),
+            "models_responded": len(successful),
+            "elapsed_s": result.elapsed_s,
+            "ts": now.isoformat().replace("+00:00", "Z"),
+        }
+    except Exception as e:
+        return {"reply": f"Error: {str(e)}", "agreement_score": 0, "models_responded": 0, "elapsed_s": 0, "ts": now.isoformat().replace("+00:00", "Z")}
+
+
 class ChatMessage(BaseModel):
     sender: str          # "human" | "rex" | "orion" | "gemini"
     text: str
@@ -1597,6 +1638,44 @@ class OfficeMsg(BaseModel):
     reply_to: Optional[str] = None
 
 
+class OfficeShot(BaseModel):
+    sender: str = "human"
+    receiver: str = "SHARED"   # specific agent or ALL for broadcast
+    note: str = ""
+    image_b64: str = Field(..., min_length=16, max_length=4_000_000)
+    mime: str = "image/jpeg"
+    filename: str = "screenshot.jpg"
+
+
+def _ext_for_mime(mime: str) -> str:
+    m = (mime or "").lower().strip()
+    if "png" in m:
+        return "png"
+    if "webp" in m:
+        return "webp"
+    if "heic" in m or "heif" in m:
+        return "heic"
+    return "jpg"
+
+
+def _decode_image_b64(raw: str, fallback_mime: str) -> tuple[bytes, str]:
+    payload = (raw or "").strip()
+    mime = (fallback_mime or "image/jpeg").strip()
+    if payload.startswith("data:"):
+        # data:<mime>;base64,<payload>
+        head, _, tail = payload.partition(",")
+        if ";base64" not in head or not tail:
+            raise ValueError("invalid data url")
+        parsed_mime = head[5:].split(";")[0].strip()
+        if parsed_mime:
+            mime = parsed_mime
+        payload = tail
+    try:
+        return base64.b64decode(payload, validate=True), mime
+    except binascii.Error as exc:
+        raise ValueError("invalid base64") from exc
+
+
 @app.post("/office/send")
 async def office_send(msg: OfficeMsg):
     """Send agent→agent message. Sonnet-gated both directions (H₂O bond)."""
@@ -1618,6 +1697,98 @@ async def office_send(msg: OfficeMsg):
         "gate_tokens": result.gate_tokens,
         "relay_tokens": result.relay_tokens,
         "cost_usd": result.cost_usd,
+        "ts": result.ts,
+    }
+
+
+@app.post("/office/send_shot")
+async def office_send_shot(req: OfficeShot):
+    """Send compact screenshot payload to one agent or broadcast."""
+    try:
+        image_bytes, mime = _decode_image_b64(req.image_b64, req.mime)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+    if not image_bytes:
+        raise HTTPException(status_code=400, detail="empty image payload")
+    if len(image_bytes) > 2_500_000:
+        raise HTTPException(status_code=413, detail="image too large; send compressed image <= 2.5MB")
+
+    now = datetime.now(timezone.utc)
+    ts = now.strftime("%Y%m%dT%H%M%SZ")
+    shot_id = f"shot-{ts}-{secrets.token_hex(3)}"
+    date_dir = now.strftime("%Y-%m-%d")
+    ext = _ext_for_mime(mime)
+    media_dir = _PROJECT_ROOT / "opera" / "media" / "shots" / date_dir
+    media_dir.mkdir(parents=True, exist_ok=True)
+    file_path = media_dir / f"{shot_id}.{ext}"
+    file_path.write_bytes(image_bytes)
+
+    rel_path = file_path.relative_to(_PROJECT_ROOT)
+    sha = hashlib.sha1(image_bytes).hexdigest()[:12]
+    size_kb = round(len(image_bytes) / 1024.0, 1)
+    note = " ".join((req.note or "").split()).strip()
+    filename = (req.filename or f"screenshot.{ext}").strip()
+    sender = (req.sender or "human").strip()
+    receiver = (req.receiver or "SHARED").strip()
+
+    text_parts = [
+        f"[SHOT {shot_id}] {filename}",
+        f"mime={mime} size_kb={size_kb} sha1={sha}",
+        f"path={rel_path}",
+    ]
+    if note:
+        text_parts.append(f"note={note}")
+    message_text = "\n".join(text_parts)
+
+    if receiver.upper() in {"ALL", "BROADCAST", "*"}:
+        results = get_office().broadcast(sender=sender, text=message_text)
+        _broadcast_event(
+            {
+                "id": shot_id,
+                "type": "shot_broadcast",
+                "sender": sender,
+                "receiver": "all",
+                "text": message_text[:220],
+                "shot_id": shot_id,
+                "media_path": str(rel_path),
+                "ts": now.isoformat().replace("+00:00", "Z"),
+            }
+        )
+        return {
+            "status": "ok",
+            "mode": "broadcast",
+            "shot_id": shot_id,
+            "media_path": str(rel_path),
+            "size_bytes": len(image_bytes),
+            "mime": mime,
+            "sha1": sha,
+            "sent": len(results),
+        }
+
+    result = get_office().send(sender=sender, receiver=receiver, text=message_text)
+    _broadcast_event(
+        {
+            "id": shot_id,
+            "type": "shot",
+            "sender": sender,
+            "receiver": receiver,
+            "text": message_text[:220],
+            "shot_id": shot_id,
+            "media_path": str(rel_path),
+            "ts": now.isoformat().replace("+00:00", "Z"),
+        }
+    )
+    return {
+        "status": "ok",
+        "mode": "direct",
+        "office_id": result.id,
+        "shot_id": shot_id,
+        "receiver": receiver,
+        "media_path": str(rel_path),
+        "size_bytes": len(image_bytes),
+        "mime": mime,
+        "sha1": sha,
         "ts": result.ts,
     }
 
