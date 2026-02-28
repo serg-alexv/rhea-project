@@ -27,6 +27,9 @@ struct TeamChatView: View {
     @State private var lastTS: String = ""
     @State private var expandedIDs: Set<String> = []
     @State private var filterAgent: String? = nil  // nil = show all
+    @State private var composerText: String = ""
+    @State private var isSending = false
+    @State private var prevItemCount = 0
     @AppStorage("apiBaseURL") private var apiBaseURL = AppConfig.defaultAPIBaseURL
 
     /// All known senders (for filter chips)
@@ -72,6 +75,9 @@ struct TeamChatView: View {
                     .padding(.vertical, 8)
                 }
                 .background(Color.black)
+
+                // Composer bar
+                composerBar
             }
             .background(Color.black)
             .navigationTitle("Radio")
@@ -84,6 +90,63 @@ struct TeamChatView: View {
             }
             .onDisappear { pollTimer?.invalidate() }
         }
+    }
+
+    // MARK: - Composer bar
+
+    var composerBar: some View {
+        HStack(spacing: 8) {
+            TextField("broadcast...", text: $composerText)
+                .font(.system(.caption, design: .monospaced))
+                .foregroundStyle(.white)
+                .padding(.horizontal, 12)
+                .padding(.vertical, 8)
+                .background(
+                    RoundedRectangle(cornerRadius: 8)
+                        .fill(Color.white.opacity(0.08))
+                )
+                .submitLabel(.send)
+                .onSubmit { Task { await sendMessage() } }
+
+            Button {
+                Task { await sendMessage() }
+            } label: {
+                Image(systemName: isSending ? "arrow.up.circle.fill" : "arrow.up.circle")
+                    .font(.title3)
+                    .foregroundStyle(composerText.isEmpty ? .secondary : RheaTheme.green)
+            }
+            .disabled(composerText.isEmpty || isSending)
+        }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 8)
+        .background(Color.black.opacity(0.95))
+    }
+
+    func sendMessage() async {
+        let text = composerText.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !text.isEmpty else { return }
+        isSending = true
+        defer { isSending = false }
+
+        guard let url = URL(string: "\(apiBaseURL)/feed/push") else { return }
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        let body: [String: Any] = [
+            "sender": "human",
+            "text": text,
+            "type": "radio"
+        ]
+        request.httpBody = try? JSONSerialization.data(withJSONObject: body)
+
+        do {
+            let (_, response) = try await URLSession.shared.data(for: request)
+            if let http = response as? HTTPURLResponse, http.statusCode < 300 {
+                withAnimation { composerText = "" }
+                // Immediately poll for the new message
+                await pollDelta()
+            }
+        } catch {}
     }
 
     // MARK: - Filter bar
@@ -183,6 +246,11 @@ struct TeamChatView: View {
                 if let first = response.items.first {
                     lastTS = first.ts
                 }
+                // Haptic kick — new activity on the radio
+                #if os(iOS)
+                let generator = UIImpactFeedbackGenerator(style: .medium)
+                generator.impactOccurred()
+                #endif
             }
         } catch {}
     }

@@ -1936,15 +1936,21 @@ async def feed_stream():
                              headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"})
 
 
+class FeedPushMsg(BaseModel):
+    sender: str
+    text: str
+    type: str = "broadcast"
+    receiver: str = "all"
+
 @app.post("/feed/push")
-async def feed_push(sender: str, text: str, msg_type: str = "broadcast"):
+async def feed_push(msg: FeedPushMsg):
     """Push a message onto the radio frequency. All listeners get it instantly."""
     event = {
         "id": secrets.token_hex(6),
-        "type": msg_type,
-        "sender": sender,
-        "receiver": "all",
-        "text": text,
+        "type": msg.type,
+        "sender": msg.sender,
+        "receiver": msg.receiver,
+        "text": msg.text,
         "ts": datetime.now(timezone.utc).isoformat(),
     }
     _broadcast_event(event)
