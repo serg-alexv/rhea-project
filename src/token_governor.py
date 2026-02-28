@@ -369,6 +369,56 @@ class Governor:
         est_cost = (est_in * 15.0 + est_out * 75.0) / 1_000_000
         return est_tokens, est_cost
 
+    def _has_recent_activity(self) -> bool:
+        """Check if agent has recent relay/outbox activity today (not just token spend)."""
+        today_str = date.today().strftime("%Y%m%d")
+        agent_upper = self.agent.upper()
+
+        # Signal 1: outbox files with today's date
+        outbox = _PROJECT_ROOT / "opera" / "ops" / "virtual-office" / "outbox"
+        if outbox.exists():
+            for f in outbox.iterdir():
+                if agent_upper in f.name.upper() and today_str in f.name:
+                    return True
+
+        # Signal 2: inbox relay files addressed to or from this agent today
+        inbox = _PROJECT_ROOT / "opera" / "ops" / "virtual-office" / "inbox"
+        if inbox.exists():
+            for f in inbox.iterdir():
+                if agent_upper in f.name.upper() and today_str in f.name:
+                    return True
+
+        # Signal 3: recent radio feed entries mentioning this agent (last 200 lines)
+        feed = _PROJECT_ROOT / "opera" / "metrics" / "radio_feed.jsonl"
+        if feed.exists():
+            try:
+                lines = feed.read_text().strip().split("\n")
+                for line in lines[-200:]:
+                    rec = json.loads(line)
+                    ts = rec.get("ts", "")
+                    if ts.startswith(date.today().isoformat()) and self.agent in rec.get("text", "").lower():
+                        return True
+            except Exception:
+                pass
+
+        # Signal 4: bridge_calls.jsonl — any call attributed to this agent today
+        if BRIDGE_LOG.exists():
+            try:
+                with open(BRIDGE_LOG) as f:
+                    for line in f:
+                        rec = json.loads(line.strip())
+                        if not rec.get("timestamp", "").startswith(date.today().isoformat()):
+                            continue
+                        agent = rec.get("agent_name", "").lower()
+                        if not agent:
+                            agent = AGENT_MAP.get(rec.get("provider", ""), "shared")
+                        if agent == self.agent:
+                            return True
+            except Exception:
+                pass
+
+        return False
+
     def _save_state(self, status: GovernorStatus) -> None:
         """Write governor state to metrics for live visibility."""
         GOVERNOR_STATE.parent.mkdir(parents=True, exist_ok=True)
