@@ -1,0 +1,12 @@
+**Build 1.0 (7) uploaded.** 
+
+Status:
+
+| Item | Done |
+|------|------|
+| Build 7 → App Store Connect | uploaded, processing |
+| Relay to Gemini (graphics) | written at outbox |
+| Relay to Orion (NDI knowledge) | written at outbox |
+| Distribution error | was "version must be > 6" — fixed, now 7 |
+
+По вопросу координации — текущая архитектура relay (файлы outbox + relay_mailbox.jsonl) работает, но она **pull-based и ручная**. Для непрерывного потока нужен **push-based heartbeat bus**. Написал Ори — жду его знания по NDI. Если у него нет ничего нового, предложу архитектуру на базе существующего `/office/send` + cron heartbeat.
