@@ -717,78 +717,82 @@ async def landing():
         multi_note += " (multi-model consensus activates with 2+ providers)"
 
     url = "https://rhea-tribunal-api-145767756165.europe-west1.run.app"
+    providers_line = f"{n_providers} model{'s' if n_providers != 1 else ''} live" if n_providers > 0 else "warming up"
     html = f"""<!DOCTYPE html>
 <html lang="en">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Rhea — Scientific Claim Verification</title>
+<title>Rhea</title>
 <style>
 *{{margin:0;padding:0;box-sizing:border-box}}
-body{{font-family:system-ui,-apple-system,sans-serif;background:#0a0a0a;color:#e0e0e0;
-  display:flex;justify-content:center;padding:2rem}}
-main{{max-width:640px;width:100%}}
-h1{{font-size:2rem;margin-bottom:.5rem;color:#fff}}
-.sub{{color:#888;margin-bottom:2rem;font-size:1.1rem}}
-.axiom{{color:#ff6b35;font-family:monospace;font-size:1.3rem;margin:1.5rem 0;
-  padding:1rem;border-left:3px solid #ff6b35}}
-h2{{font-size:1.2rem;color:#aaa;margin:2rem 0 .5rem;text-transform:uppercase;letter-spacing:.1em;font-weight:400}}
-pre{{background:#111;padding:1rem;border-radius:6px;overflow-x:auto;font-size:.85rem;line-height:1.5;margin:.5rem 0}}
-code{{color:#7ec8e3}}
-.try{{color:#4ade80}}
-a{{color:#7ec8e3;text-decoration:none}}
-a:hover{{text-decoration:underline}}
-.stats{{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin:1rem 0}}
-.stat{{background:#111;padding:1rem;border-radius:6px;text-align:center}}
-.stat .n{{font-size:1.8rem;color:#fff;font-weight:700}}
-.stat .l{{color:#666;font-size:.8rem;text-transform:uppercase}}
-.foot{{margin-top:3rem;color:#444;font-size:.8rem;text-align:center}}
+body{{font-family:'SF Mono',SFMono-Regular,Menlo,Consolas,monospace;
+  background:#050505;color:#c0c0c0;display:flex;justify-content:center;padding:3rem 1.5rem}}
+main{{max-width:600px;width:100%}}
+.mark{{font-size:2.8rem;color:#fff;letter-spacing:-.05em;margin-bottom:.2rem}}
+.epithet{{color:#555;font-size:.85rem;margin-bottom:2.5rem;line-height:1.5}}
+.axiom{{color:#ff4400;font-size:1.1rem;margin:2rem 0;padding:.8rem 1.2rem;
+  border-left:2px solid #ff4400;letter-spacing:.02em}}
+.axiom small{{color:#444;display:block;margin-top:.3rem;font-size:.75rem}}
+.live{{display:flex;gap:1.5rem;margin:2rem 0;flex-wrap:wrap}}
+.live .v{{font-size:1.6rem;color:#fff;font-weight:600}}
+.live .k{{color:#444;font-size:.65rem;text-transform:uppercase;letter-spacing:.15em}}
+.live .cell{{min-width:80px}}
+h2{{font-size:.7rem;color:#333;margin:2.5rem 0 .8rem;text-transform:uppercase;
+  letter-spacing:.2em;font-weight:400}}
+pre{{background:#0a0a0a;padding:1rem;border-radius:4px;overflow-x:auto;
+  font-size:.78rem;line-height:1.6;margin:.5rem 0;border:1px solid #151515}}
+code{{color:#888}}.g{{color:#4a7}}.r{{color:#a44}}.w{{color:#ddd}}
+a{{color:#666;text-decoration:none;border-bottom:1px solid #222}}
+a:hover{{color:#fff;border-color:#444}}
+.hunt{{color:#666;font-size:.8rem;line-height:1.7;margin:1.5rem 0}}
+.hunt em{{color:#999;font-style:normal}}
+.foot{{margin-top:4rem;color:#222;font-size:.65rem;text-align:center;letter-spacing:.1em}}
 </style></head>
 <body><main>
-<h1>Rhea</h1>
-<p class="sub">Scientific claim verification API. Biochemistry, chronobiology, pharmacology.</p>
-<div class="axiom">&#x2207; &gt; 0 &#x2228; &#x22A5;<br>
-<small style="color:#666">gradient positive or bottom &mdash; don't settle for less</small></div>
 
-<div class="stats">
-<div class="stat"><div class="n">{proof_count}</div><div class="l">verified proofs</div></div>
-<div class="stat"><div class="n">{ontology_count}</div><div class="l">ontologies</div></div>
-<div class="stat"><div class="n">{avg_conf_str}</div><div class="l">avg confidence</div></div>
+<div class="mark">Rhea</div>
+<p class="epithet">The titan who tricked Time.<br>
+Now she spins the Toile.</p>
+
+<div class="axiom">&#x2207; &gt; 0 &#x2228; &#x22A5;
+<small>gradient positive or bottom &mdash; settle and you're prey</small></div>
+
+<div class="live">
+<div class="cell"><div class="v">{proof_count}</div><div class="k">proofs</div></div>
+<div class="cell"><div class="v">{ontology_count}</div><div class="k">ontologies</div></div>
+<div class="cell"><div class="v">{avg_conf_str}</div><div class="k">confidence</div></div>
+<div class="cell"><div class="v">{providers_line}</div><div class="k">right now</div></div>
 </div>
 
-<h2>Try it &mdash; no key needed</h2>
-<pre><code class="try"># Search the proof library
-curl "{url}/aletheia/search?q=hemoglobin"
+<h2>Pull a thread</h2>
+<pre><code><span class="g">curl</span> <span class="w">"{url}/aletheia/search?q=hemoglobin"</span>
 
-# Get library stats
-curl "{url}/aletheia/stats"
+<span class="g">curl</span> <span class="w">"{url}/aletheia/stats"</span>
 
-# Verify a claim (needs API key)
-curl -X POST {url}/tribunal \\
-  -H "Content-Type: application/json" \\
-  -H "X-API-Key: dev-bypass" \\
-  -d '{{"prompt":"ATP synthase uses rotary catalysis"}}'</code></pre>
+<span class="g">curl</span> -X POST {url}/tribunal \\
+  -H <span class="w">"Content-Type: application/json"</span> \\
+  -H <span class="w">"X-API-Key: dev-bypass"</span> \\
+  -d <span class="w">'{{"prompt":"ATP synthase uses rotary catalysis"}}'</span></code></pre>
 
-<h2>What it does</h2>
-<p>You send a scientific claim. {multi_note}.
-Every verification is stored in Aletheia &mdash; a searchable proof library with provenance chains.</p>
-<p style="color:#888;margin-top:.5rem">Currently: {n_providers} provider{'s' if n_providers != 1 else ''} live.
-Consensus scoring requires 2+ independent models responding to the same claim.</p>
+<h2>What the spider does</h2>
+<p class="hunt">
+You throw a claim into the web.<br>
+Rhea sends it to <em>{n_providers} independent model{'s' if n_providers != 1 else ''}</em> &mdash; they don't see each other.<br>
+Agreement = signal. Divergence = where the lie hides.<br>
+Every kill is stored in <em>Aletheia</em> &mdash; provenance chains, not marketing copy.</p>
 
-<h2>Open endpoints</h2>
-<pre><code>GET  /health              &mdash; status + provider count
-GET  /aletheia/stats      &mdash; proof library statistics
-GET  /aletheia/search?q=  &mdash; search proofs (no key)
-GET  /aletheia/proofs     &mdash; list all proofs (no key)
-GET  /agents/status       &mdash; live agent status</code></pre>
+<h2>Endpoints</h2>
+<pre><code><span class="g">GET </span> /aletheia/search?q=   search the web
+<span class="g">GET </span> /aletheia/stats       what's caught
+<span class="g">GET </span> /aletheia/proofs      all kills
+<span class="g">GET </span> /agents/status        who's hunting
+<span class="g">POST</span> /tribunal             verify a claim
+<span class="g">POST</span> /tribunal/ice         deep verification
+<span class="g">GET </span> /health               pulse</code></pre>
 
-<h2>Auth endpoints</h2>
-<pre><code>POST /tribunal            &mdash; verify a claim
-POST /tribunal/ice        &mdash; iterative deep verification
-POST /aletheia/submit     &mdash; add a proof manually</code></pre>
-
-<h2>Stack</h2>
-<p>FastAPI + SQLite WAL + Gemini 2.5 Flash + Cloud Run (europe-west1).<br>
-Built by a biochemist and three AI agents.<br>
-<a href="https://github.com/serg-alexv/rhea-project">github.com/serg-alexv/rhea-project</a></p>
+<h2>Anatomy</h2>
+<pre><code>FastAPI &middot; SQLite WAL &middot; Gemini 2.5 Flash &middot; Cloud Run
+Built by a biochemist and three AI agents.
+<a href="https://github.com/serg-alexv/rhea-project">src</a></code></pre>
 
 <div class="foot">&#x2207; &gt; 0 &#x2228; &#x22A5;</div>
 </main></body></html>"""
