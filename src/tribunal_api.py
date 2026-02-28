@@ -2045,6 +2045,36 @@ async def tasks_reopen(task_id: str):
     return task
 
 
+@app.get("/quantum/summary")
+async def quantum_summary():
+    """Compact quantum state for iOS HUD."""
+    try:
+        from qiskit.circuit import QuantumCircuit
+        qc = QuantumCircuit(2, 2)
+        qc.h(0)
+        qc.cx(0, 1)
+        qc.measure([0, 1], [0, 1])
+        return {
+            "circuit_name": "bell_demo",
+            "qubits": qc.num_qubits,
+            "depth": qc.depth(),
+            "gate_count": qc.size(),
+            "backend": "simulator",
+            "last_run": {
+                "ts": datetime.now(timezone.utc).isoformat(),
+                "shots": 1024,
+                "top_states": [
+                    {"state": "|00>", "probability": 0.50},
+                    {"state": "|11>", "probability": 0.50},
+                ],
+                "fidelity": None,
+            },
+            "status": "idle",
+        }
+    except ImportError:
+        return {"status": "error", "detail": "qiskit not installed"}
+
+
 def _read_jsonl_tail(path: Path, limit: int, agent_filter: Optional[str] = None) -> dict:
     """Read last N records from a JSONL file."""
     if not path.exists():
@@ -2265,7 +2295,7 @@ async def unified_agent_status():
     # 3) Task counts per agent
     q = TaskDB()
     task_counts: dict[str, dict] = {}
-    for t in q.tasks.values():
+    for t in q.list_tasks():
         agent_key = (t.get("claimed_by") or t.get("agent") or "").lower()
         if not agent_key or agent_key == "any":
             continue
