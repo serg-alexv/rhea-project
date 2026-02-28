@@ -1,0 +1,88 @@
+{
+  "buildCommand" : {
+    "command" : "build",
+    "skipDependencies" : false,
+    "style" : "buildAndRun"
+  },
+  "configuredTargets" : [
+    {
+      "guid" : "d3853a43f81b561bb9581f030b6a75dce11cf1b653ad921d557013af76b1c403"
+    }
+  ],
+  "containerPath" : "/Users/sa/rh.1/ios/RheaApp/RheaApp.xcodeproj",
+  "continueBuildingAfterErrors" : false,
+  "dependencyScope" : "workspace",
+  "enableIndexBuildArena" : false,
+  "hideShellScriptEnvironment" : false,
+  "parameters" : {
+    "action" : "install",
+    "activeArchitecture" : "undefined_arch",
+    "activeRunDestination" : {
+      "disableOnlyActiveArch" : true,
+      "platform" : "iphoneos",
+      "sdk" : "iphoneos26.2",
+      "sdkVariant" : "iphoneos",
+      "supportedArchitectures" : [
+        "armv4t",
+        "armv5",
+        "armv6",
+        "armv7",
+        "armv7f",
+        "armv7s",
+        "armv7k",
+        "arm64",
+        "arm64e"
+      ],
+      "targetArchitecture" : "undefined_arch"
+    },
+    "arenaInfo" : {
+      "buildIntermediatesPath" : "/Users/sa/rh.1/ios/RheaApp/build/DerivedData/Build/Intermediates.noindex",
+      "buildProductsPath" : "/Users/sa/rh.1/ios/RheaApp/build/DerivedData/Build/Products",
+      "derivedDataPath" : "/Users/sa/rh.1/ios/RheaApp/build/DerivedData",
+      "indexDataStoreFolderPath" : "/Users/sa/rh.1/ios/RheaApp/build/DerivedData/Index.noindex/DataStore",
+      "indexEnableDataStore" : true,
+      "indexPCHPath" : "/Users/sa/rh.1/ios/RheaApp/build/DerivedData/Index.noindex/PrecompiledHeaders",
+      "pchPath" : "/Users/sa/rh.1/ios/RheaApp/build/DerivedData/Build/Intermediates.noindex/PrecompiledHeaders"
+    },
+    "configurationName" : "Release",
+    "overrides" : {
+      "commandLine" : {
+        "table" : {
+          "CODE_SIGN_STYLE" : "Automatic",
+          "DEVELOPMENT_TEAM" : "398XACWZ7G"
+        }
+      },
+      "synthesized" : {
+        "table" : {
+          "ACTION" : "install",
+          "ASSET_PACK_FOLDER_PATH" : "/Users/sa/rh.1/ios/RheaApp/build/DerivedData/Build/Intermediates.noindex/ArchiveIntermediates/RheaApp/InstallationBuildProductsLocation/OnDemandResources",
+          "ASSETCATALOG_COMPILER_FLATTENED_APP_ICON_PATH" : "/Users/sa/rh.1/ios/RheaApp/build/DerivedData/Build/Intermediates.noindex/ArchiveIntermediates/RheaApp/BuildProductsPath/ProductIcon.png",
+          "DEPLOYMENT_LOCATION" : "YES",
+          "DEPLOYMENT_POSTPROCESSING" : "YES",
+          "DSTROOT" : "/Users/sa/rh.1/ios/RheaApp/build/DerivedData/Build/Intermediates.noindex/ArchiveIntermediates/RheaApp/InstallationBuildProductsLocation",
+          "EMBED_ASSET_PACKS_IN_PRODUCT_BUNDLE" : "NO",
+          "ENABLE_PREVIEWS" : "NO",
+          "ENABLE_SIGNATURE_AGGREGATION" : "YES",
+          "ENABLE_XOJIT_PREVIEWS" : "YES",
+          "INDEX_ENABLE_DATA_STORE" : "NO",
+          "MESSAGES_APPLICATION_EXTENSION_SUPPORT_FOLDER_PATH" : "/Users/sa/rh.1/ios/RheaApp/build/DerivedData/Build/Intermediates.noindex/ArchiveIntermediates/RheaApp/BuildProductsPath/MessagesApplicationExtensionSupport",
+          "MESSAGES_APPLICATION_SUPPORT_FOLDER_PATH" : "/Users/sa/rh.1/ios/RheaApp/build/DerivedData/Build/Intermediates.noindex/ArchiveIntermediates/RheaApp/BuildProductsPath/MessagesApplicationSupport",
+          "OBJROOT" : "/Users/sa/rh.1/ios/RheaApp/build/DerivedData/Build/Intermediates.noindex/ArchiveIntermediates/RheaApp/IntermediateBuildFilesPath",
+          "ONLY_ACTIVE_ARCH" : "YES",
+          "SHARED_PRECOMPS_DIR" : "/Users/sa/rh.1/ios/RheaApp/build/DerivedData/Build/Intermediates.noindex/ArchiveIntermediates/RheaApp/PrecompiledHeaders",
+          "SIGNATURE_METADATA_FOLDER_PATH" : "/Users/sa/rh.1/ios/RheaApp/build/DerivedData/Build/Intermediates.noindex/ArchiveIntermediates/RheaApp/BuildProductsPath/Signatures",
+          "SWIFT_STDLIB_TOOL_UNSIGNED_DESTINATION_DIR" : "/Users/sa/rh.1/ios/RheaApp/build/DerivedData/Build/Intermediates.noindex/ArchiveIntermediates/RheaApp/BuildProductsPath/SwiftSupport",
+          "SYMROOT" : "/Users/sa/rh.1/ios/RheaApp/build/DerivedData/Build/Intermediates.noindex/ArchiveIntermediates/RheaApp/BuildProductsPath",
+          "TOOLCHAINS" : "com.apple.dt.toolchain.Metal.32023 $(inherited)",
+          "WATCHKIT_2_SUPPORT_FOLDER_PATH" : "/Users/sa/rh.1/ios/RheaApp/build/DerivedData/Build/Intermediates.noindex/ArchiveIntermediates/RheaApp/BuildProductsPath/WatchKitSupport2"
+        }
+      }
+    }
+  },
+  "schemeCommand" : "archive",
+  "showNonLoggedProgress" : true,
+  "useDryRun" : false,
+  "useImplicitDependencies" : true,
+  "useLegacyBuildLocations" : false,
+  "useParallelTargets" : true
+}

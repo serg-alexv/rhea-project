@@ -5,6 +5,9 @@ struct RheaPreviewApp: App {
     var body: some Scene {
         WindowGroup {
             TabView {
+                DialogView()
+                    .tabItem { Label("Dialog", systemImage: "text.bubble") }
+
                 TeamChatView()
                     .tabItem { Label("Team", systemImage: "bubble.left.and.bubble.right") }
 
