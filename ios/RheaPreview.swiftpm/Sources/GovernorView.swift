@@ -3,21 +3,31 @@ import Charts
 import Pow
 
 struct AgentStatus: Codable, Identifiable {
-    var id: String { agent }
-    let agent: String
+    var id: String { name }
+    let name: String
+    let alive: Bool
+    let pace: String
+    let forecast: String?
+    let mode: String
     let billing_mode: String?
     let upper_rail_enabled: Bool?
-    let pace: String
-    let forecast: String
-    let mode: String
     let T_day: Int
     let dollar_day: Double
-    let budget_cap: Double
-    let budget_remaining: Double
-    let floor_expected: Int
+    let budget_cap: Double?
+    let budget_remaining: Double?
+    let floor_expected: Int?
     let floor_gap: Int
-    let hour: Int
+    let hour: Int?
     let hard_fail: Bool
+    // Office enrichment
+    let office_status: String?
+    let pending_msgs: Int?
+    let tasks_open: Int?
+    let tasks_claimed: Int?
+    let last_activity: String?
+
+    // Compat: old code uses .agent
+    var agent: String { name }
 }
 
 struct GovernorView: View {
@@ -81,15 +91,20 @@ struct GovernorView: View {
         .glassCard()
     }
 
+    struct GovernorUnifiedResponse: Codable {
+        let _ts: String
+        let agents: [String: AgentStatus]
+    }
+
     func fetch() async {
         loading = true
         defer { loading = false }
-        guard let url = URL(string: "\(apiBaseURL)/governor") else { return }
+        guard let url = URL(string: "\(apiBaseURL)/agents/status") else { return }
         do {
             let (data, _) = try await URLSession.shared.data(from: url)
-            let raw = try JSONDecoder().decode([String: AgentStatus].self, from: data)
+            let resp = try JSONDecoder().decode(GovernorUnifiedResponse.self, from: data)
             withAnimation(.spring(duration: 0.4)) {
-                agents = raw.values.sorted { $0.agent < $1.agent }
+                agents = resp.agents.values.sorted { $0.agent < $1.agent }
                 refreshCount += 1
             }
         } catch {
@@ -131,8 +146,8 @@ struct AgentCard: View {
     @AppStorage("apiBaseURL") private var apiBaseURL = AppConfig.defaultAPIBaseURL
 
     var budgetFraction: Double {
-        guard status.budget_cap > 0 else { return 0 }
-        return min(status.dollar_day / status.budget_cap, 1.0)
+        guard let cap = status.budget_cap, cap > 0 else { return 0 }
+        return min(status.dollar_day / cap, 1.0)
     }
 
     var body: some View {
@@ -164,14 +179,14 @@ struct AgentCard: View {
             }
 
             // Budget gauge (only for API-billed agents with budget_cap > 0)
-            if status.budget_cap > 0 {
+            if (status.budget_cap ?? 0) > 0 {
                 VStack(alignment: .leading, spacing: 6) {
                     HStack {
                         Text("Budget")
                             .font(.caption)
                             .foregroundStyle(.secondary)
                         Spacer()
-                        Text("$\(String(format: "%.2f", status.dollar_day)) / $\(String(format: "%.0f", status.budget_cap))")
+                        Text("$\(String(format: "%.2f", status.dollar_day)) / $\(String(format: "%.0f", status.budget_cap ?? 0))")
                             .font(.system(.caption, design: .monospaced))
                             .foregroundStyle(.white.opacity(0.7))
                     }
@@ -198,10 +213,29 @@ struct AgentCard: View {
                     .foregroundStyle(.secondary)
             }
 
+            // Office status enrichment
+            if let officeStatus = status.office_status {
+                HStack(spacing: 8) {
+                    Text(officeStatus)
+                        .font(.system(.caption2, design: .monospaced, weight: .semibold))
+                        .foregroundStyle(status.alive ? RheaTheme.green : RheaTheme.red)
+                    if let pending = status.pending_msgs, pending > 0 {
+                        Text("\(pending) pending")
+                            .font(.system(.caption2, design: .monospaced))
+                            .foregroundStyle(RheaTheme.amber)
+                    }
+                    if let open = status.tasks_open, open > 0 {
+                        Text("\(open) tasks")
+                            .font(.system(.caption2, design: .monospaced))
+                            .foregroundStyle(.secondary)
+                    }
+                }
+            }
+
             // Stats row
             HStack(spacing: 16) {
                 StatChip(icon: "number", text: formatTokens(status.T_day))
-                StatChip(icon: "clock", text: "h\(status.hour)")
+                StatChip(icon: "clock", text: "h\(status.hour ?? 0)")
                 if status.floor_gap > 0 {
                     StatChip(icon: "arrow.down.to.line", text: "gap:\(status.floor_gap)", color: RheaTheme.amber)
                 }

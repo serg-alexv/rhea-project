@@ -8,16 +8,34 @@ struct PulseQueueSummary: Codable {
     let _updated: String?
 }
 
-struct PulseAgentLeaseDTO: Codable {
-    let agent: String?
-    let lease_token: Int?
-    let expired: Bool?
-    let last_active: String?
+struct PulseAgentDTO: Codable {
+    let name: String
+    let alive: Bool
+    let pace: String
+    let mode: String
+    let billing_mode: String
+    let T_day: Int
+    let dollar_day: Double
+    let floor_gap: Int
+    let lease_token: Int
+    let lease_expired: Bool
+    let lease_expires_at: String?
+    let office_status: String
+    let pending_msgs: Int
+    let tasks_open: Int
+    let tasks_claimed: Int
+    let last_activity: String?
+    let last_feed: String?
+}
+
+struct PulseUnifiedResponse: Codable {
+    let _ts: String
+    let agents: [String: PulseAgentDTO]
 }
 
 struct PulseMonitorView: View {
     @State private var summary: PulseQueueSummary? = nil
-    @State private var agents: [String: PulseAgentLeaseDTO] = [:]
+    @State private var agents: [String: PulseAgentDTO] = [:]
     @State private var loading = true
     @State private var lastAction = "idle"
     @State private var pollTimer: Timer? = nil
@@ -69,7 +87,7 @@ struct PulseMonitorView: View {
         let p0 = summary?.active_by_priority["P0"] ?? 0
         let stale = summary?.stale_count ?? 0
         let openCount = summary?.counts["open"] ?? 0
-        let offline = agents.values.filter { $0.expired ?? true }.count
+        let offline = agents.values.filter { !$0.alive }.count
         let risk = pulseRisk(p0: p0, stale: stale, offline: offline)
 
         return VStack(alignment: .leading, spacing: 8) {
@@ -192,15 +210,26 @@ struct PulseMonitorView: View {
                     let a = agents[key]
                     HStack {
                         Circle()
-                            .fill((a?.expired ?? true) ? RheaTheme.red : RheaTheme.green)
+                            .fill(RheaTheme.paceColor(a?.pace ?? "red"))
                             .frame(width: 8, height: 8)
-                        Text(key.uppercased())
-                            .font(.system(.caption, design: .monospaced))
-                            .foregroundStyle(.white)
-                        Spacer()
-                        Text("lease \(a?.lease_token ?? 0)")
+                        VStack(alignment: .leading, spacing: 1) {
+                            Text(key.uppercased())
+                                .font(.system(.caption, design: .monospaced, weight: .semibold))
+                                .foregroundStyle(.white)
+                            HStack(spacing: 6) {
+                                Text(a?.office_status ?? "unknown")
+                                    .foregroundStyle((a?.alive ?? false) ? RheaTheme.green : RheaTheme.red)
+                                if (a?.pending_msgs ?? 0) > 0 {
+                                    Text("\(a?.pending_msgs ?? 0)msg")
+                                        .foregroundStyle(RheaTheme.amber)
+                                }
+                            }
                             .font(.system(.caption2, design: .monospaced))
-                            .foregroundStyle(.secondary)
+                        }
+                        Spacer()
+                        Text((a?.mode ?? "?").uppercased())
+                            .font(.system(.caption2, design: .rounded, weight: .semibold))
+                            .foregroundStyle(RheaTheme.modeColor(a?.mode ?? "normal"))
                         Button {
                             Task { await wake(key.uppercased()) }
                         } label: {
@@ -261,10 +290,11 @@ struct PulseMonitorView: View {
     }
 
     func fetchAgents() async {
-        guard let url = URL(string: "\(apiBaseURL)/agents") else { return }
+        guard let url = URL(string: "\(apiBaseURL)/agents/status") else { return }
         do {
             let (data, _) = try await URLSession.shared.data(from: url)
-            agents = try JSONDecoder().decode([String: PulseAgentLeaseDTO].self, from: data)
+            let resp = try JSONDecoder().decode(PulseUnifiedResponse.self, from: data)
+            agents = resp.agents
         } catch {
             agents = [:]
         }

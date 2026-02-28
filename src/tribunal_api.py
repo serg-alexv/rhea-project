@@ -1998,6 +1998,94 @@ async def list_agents():
     return agents
 
 
+@app.get("/agents/status")
+async def unified_agent_status():
+    """Single source of truth: governor + office + tasks + radio merged per agent."""
+    now = datetime.now(timezone.utc)
+
+    # 1) Governor
+    gov_data = all_governors()
+
+    # 2) Office pulse (leases + pending messages + status)
+    office = _summarize_office_state()
+    office_by_agent = {r["agent"].upper(): r for r in office.get("agents", [])}
+
+    # 3) Task counts per agent
+    q = TaskQueue()
+    task_counts: dict[str, dict] = {}
+    for t in q.tasks.values():
+        agent_key = (t.get("claimed_by") or t.get("agent") or "").lower()
+        if not agent_key or agent_key == "any":
+            continue
+        if agent_key not in task_counts:
+            task_counts[agent_key] = {"open": 0, "claimed": 0}
+        if t["status"] == "open":
+            task_counts[agent_key]["open"] += 1
+        elif t["status"] == "claimed":
+            task_counts[agent_key]["claimed"] += 1
+
+    # 4) Last radio message per agent
+    last_feed: dict[str, str] = {}
+    for item in reversed(_RADIO_LOG):
+        sender = str(item.get("sender", "")).lower()
+        if sender and sender not in last_feed:
+            text = str(item.get("text", ""))
+            last_feed[sender] = text[:80] if len(text) > 80 else text
+
+    # Merge all agents from any source
+    all_names = set()
+    for k in gov_data:
+        all_names.add(k.lower())
+    for r in office.get("agents", []):
+        all_names.add(r["agent"].lower())
+
+    result = {}
+    for name in sorted(all_names):
+        upper = name.upper()
+        gov = gov_data.get(name, {})
+        ofc = office_by_agent.get(upper, {})
+        tc = task_counts.get(name, {"open": 0, "claimed": 0})
+
+        pace = gov.get("pace", "red")
+        office_status = ofc.get("status", "idle")
+        lease_expired = ofc.get("lease_expired", True)
+        has_activity = pace != "red" or office_status in ("alive", "needs_attention")
+        alive = (not lease_expired or has_activity) and office_status != "stuck"
+
+        result[upper] = {
+            "name": upper,
+            "alive": alive,
+            # Governor fields
+            "pace": pace,
+            "forecast": gov.get("forecast", "ok"),
+            "mode": gov.get("mode", "unknown"),
+            "billing_mode": gov.get("billing_mode", "unknown"),
+            "upper_rail_enabled": gov.get("upper_rail_enabled", False),
+            "T_day": gov.get("T_day", 0),
+            "dollar_day": gov.get("dollar_day", 0.0),
+            "budget_cap": gov.get("budget_cap", 0.0),
+            "budget_remaining": gov.get("budget_remaining", 0.0),
+            "floor_expected": gov.get("floor_expected", 0),
+            "floor_gap": gov.get("floor_gap", 0),
+            "hour": gov.get("hour", 0),
+            "hard_fail": gov.get("hard_fail", False),
+            # Office fields
+            "lease_token": ofc.get("lease_token", 0),
+            "lease_expired": lease_expired,
+            "lease_expires_at": ofc.get("lease_expires_at"),
+            "office_status": office_status,
+            "pending_msgs": ofc.get("pending_count", 0),
+            # Task fields
+            "tasks_open": tc["open"],
+            "tasks_claimed": tc["claimed"],
+            # Activity
+            "last_activity": ofc.get("last_activity_at"),
+            "last_feed": last_feed.get(name, ""),
+        }
+
+    return {"_ts": now.isoformat().replace("+00:00", "Z"), "agents": result}
+
+
 @app.post("/agents/wake/{agent}")
 async def wake_agent(agent: str):
     """Wake an agent by writing a wake marker and broadcasting on Radio."""
