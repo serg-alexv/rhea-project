@@ -35,7 +35,7 @@ sys.path.insert(0, str(PROJECT_ROOT / "src"))
 import urllib.request
 import urllib.error
 
-from task_queue import TaskQueue
+from task_db import TaskDB
 
 API_BASE = "http://localhost:8400"
 
@@ -202,7 +202,7 @@ def one_cycle(agent_name: str) -> bool:
     claim_resp = api_call("POST", f"/tasks/next/claim?agent={agent_name}")
     if not claim_resp:
         # Fallback to direct file access if API is down
-        q = TaskQueue()
+        q = TaskDB()
         task = q.claim(agent_name)
         if not task:
             summary = api_call("GET", "/tasks/summary") or q.summary()
@@ -225,13 +225,13 @@ def one_cycle(agent_name: str) -> bool:
     if success:
         resp = api_call("POST", f"/tasks/{task['id']}/complete?result={urllib.parse.quote(result_text[:500])}")
         if not resp:
-            q = TaskQueue()
+            q = TaskDB()
             q.complete(task["id"], result=result_text[:500])
         log(f"DONE {task['id']}: {result_text[:80]}")
     else:
         resp = api_call("POST", f"/tasks/{task['id']}/block?reason={urllib.parse.quote(result_text[:200])}")
         if not resp:
-            q = TaskQueue()
+            q = TaskDB()
             q.block(task["id"], reason=result_text[:200])
         log(f"BLOCKED {task['id']}: {result_text[:80]}")
 
