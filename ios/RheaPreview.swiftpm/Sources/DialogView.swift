@@ -23,19 +23,16 @@ struct ChatHistoryResponse: Codable {
     let messages: [ChatMsg]
 }
 
-struct OfficeSendRequest: Codable {
-    let sender: String
-    let receiver: String
+struct DialogRequest: Codable {
     let text: String
+    let sender: String
 }
 
-struct OfficeSendResponse: Codable {
-    let id: String?
-    let sender: String?
-    let receiver: String?
-    let compressed: String?
-    let response: String?
-    let cost_usd: Double?
+struct DialogResponse: Codable {
+    let reply: String?
+    let agreement_score: Double?
+    let models_responded: Int?
+    let elapsed_s: Double?
     let ts: String?
 }
 
@@ -280,9 +277,9 @@ struct DialogView: View {
         )
         messages.append(localMsg)
 
-        // Send via /office/send for targeted agent communication
-        let body = OfficeSendRequest(sender: "human", receiver: targetAgent, text: text)
-        guard let url = URL(string: "\(apiBaseURL)/office/send"),
+        // Send via /dialog for real LLM tribunal response
+        let body = DialogRequest(text: text, sender: "human")
+        guard let url = URL(string: "\(apiBaseURL)/dialog"),
               let payload = try? JSONEncoder().encode(body) else {
             isSending = false
             return
@@ -298,12 +295,18 @@ struct DialogView: View {
             DispatchQueue.main.async {
                 isSending = false
                 if let data = data,
-                   let resp = try? JSONDecoder().decode(OfficeSendResponse.self, from: data) {
-                    if let r = resp.response, !r.isEmpty {
-                        agentResponse = r
-                    }
-                    if let comp = resp.compressed, !comp.isEmpty, agentResponse == nil {
-                        agentResponse = comp
+                   let resp = try? JSONDecoder().decode(DialogResponse.self, from: data) {
+                    if let reply = resp.reply, !reply.isEmpty {
+                        agentResponse = reply
+                        // Also add as a chat message so it persists in scroll
+                        let replyMsg = ChatMsg(
+                            id: UUID().uuidString,
+                            sender: "rhea",
+                            text: reply,
+                            ts: resp.ts ?? ISO8601DateFormatter().string(from: Date())
+                        )
+                        messages.append(replyMsg)
+                        agentResponse = nil
                     }
                 }
             }
