@@ -29,7 +29,7 @@ let package = Package(
         .package(url: "https://github.com/serg-alexv/AnimatedTabBar", from: "0.0.1"),
         .package(url: "https://github.com/serg-alexv/FloatingButton", from: "1.2.0"),
         .package(url: "https://github.com/serg-alexv/AlertKit", from: "5.1.0"),
-        .package(url: "https://github.com/serg-alexv/Kingfisher", from: "8.0.0"),
+        // Kingfisher comes transitively via Chat — no duplicate needed
     ],
     targets: [
         .executableTarget(
