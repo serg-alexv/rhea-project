@@ -28,9 +28,30 @@ from typing import Optional
 
 from fastapi import FastAPI, HTTPException, Header, Depends
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
 
 _PROJECT_ROOT = Path(__file__).resolve().parent.parent
+
+# ---------------------------------------------------------------------------
+# Global event bus — SSE radio frequency for all agents
+# ---------------------------------------------------------------------------
+import asyncio
+import collections
+
+_EVENT_BUS: asyncio.Queue = None  # lazy-init per event loop
+_SUBSCRIBERS: list = []  # list of asyncio.Queue (one per SSE client)
+
+def _broadcast_event(event: dict):
+    """Push event to all connected SSE subscribers."""
+    dead = []
+    for q in _SUBSCRIBERS:
+        try:
+            q.put_nowait(event)
+        except asyncio.QueueFull:
+            dead.append(q)
+    for q in dead:
+        _SUBSCRIBERS.remove(q)
 
 # Ensure src/ is importable
 sys.path.insert(0, str(Path(__file__).parent))
@@ -1567,6 +1588,9 @@ async def office_send(msg: OfficeMsg):
         text=msg.text,
         reply_to=msg.reply_to,
     )
+    _broadcast_event({"id": result.id, "type": "office", "sender": result.sender,
+                       "receiver": result.receiver, "text": result.compressed or msg.text,
+                       "ts": result.ts})
     return {
         "id": result.id,
         "sender": result.sender,
@@ -1864,6 +1888,53 @@ def _ts_from_filename(name: str) -> str:
         d = m2.group(1)
         return f"{d[:4]}-{d[4:6]}-{d[6:8]}T00:00:00+00:00"
     return ""
+
+
+# ---------------------------------------------------------------------------
+# SSE Live Stream — radio frequency
+# ---------------------------------------------------------------------------
+
+@app.get("/feed/stream")
+async def feed_stream():
+    """SSE stream. Every event on the bus is pushed to all listeners.
+    iOS app connects once and keeps listening — like a radio frequency."""
+    q: asyncio.Queue = asyncio.Queue(maxsize=200)
+    _SUBSCRIBERS.append(q)
+
+    async def event_generator():
+        try:
+            # Send initial heartbeat
+            yield f"data: {json.dumps({'type': 'connected', 'ts': datetime.now(timezone.utc).isoformat()})}\n\n"
+            while True:
+                try:
+                    event = await asyncio.wait_for(q.get(), timeout=15.0)
+                    yield f"data: {json.dumps(event)}\n\n"
+                except asyncio.TimeoutError:
+                    # Keepalive ping every 15s
+                    yield f"data: {json.dumps({'type': 'ping', 'ts': datetime.now(timezone.utc).isoformat()})}\n\n"
+        except asyncio.CancelledError:
+            pass
+        finally:
+            if q in _SUBSCRIBERS:
+                _SUBSCRIBERS.remove(q)
+
+    return StreamingResponse(event_generator(), media_type="text/event-stream",
+                             headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"})
+
+
+@app.post("/feed/push")
+async def feed_push(sender: str, text: str, msg_type: str = "broadcast"):
+    """Push a message onto the radio frequency. All listeners get it instantly."""
+    event = {
+        "id": secrets.token_hex(6),
+        "type": msg_type,
+        "sender": sender,
+        "receiver": "all",
+        "text": text,
+        "ts": datetime.now(timezone.utc).isoformat(),
+    }
+    _broadcast_event(event)
+    return event
 
 
 # ---------------------------------------------------------------------------

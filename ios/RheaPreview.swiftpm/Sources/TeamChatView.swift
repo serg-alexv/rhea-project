@@ -1,8 +1,10 @@
 import SwiftUI
 
+// MARK: - Models
+
 struct FeedItem: Codable, Identifiable {
     let id: String
-    let type: String      // "office", "outbox", "relay"
+    let type: String
     let sender: String
     let receiver: String
     let text: String
@@ -14,183 +16,224 @@ struct FeedResponse: Codable {
     let total: Int
 }
 
+// MARK: - Live Radio View
+
 struct TeamChatView: View {
     @State private var items: [FeedItem] = []
-    @State private var loading = true
-    @State private var filter: String = "all"
+    @State private var activeSenders: Set<String> = []
+    @State private var latestItem: FeedItem? = nil
+    @State private var pulse = false
+    @State private var pollTimer: Timer? = nil
+    @State private var lastTS: String = ""
     @AppStorage("apiBaseURL") private var apiBaseURL = AppConfig.defaultAPIBaseURL
-
-    var filteredItems: [FeedItem] {
-        guard filter != "all" else { return items }
-        return items.filter { $0.sender.lowercased() == filter || $0.receiver.lowercased() == filter }
-    }
-
-    var agents: [String] {
-        let all = Set(items.map { $0.sender.lowercased() })
-        return Array(all).sorted()
-    }
 
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
-                // Agent filter bar
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 8) {
-                        FilterChip(label: "All", count: items.count,
-                                   isActive: filter == "all") { filter = "all" }
-                        ForEach(agents, id: \.self) { agent in
-                            FilterChip(
-                                label: agent.uppercased(),
-                                count: items.filter { $0.sender.lowercased() == agent }.count,
-                                isActive: filter == agent,
-                                color: agentColor(agent)
-                            ) { filter = agent }
-                        }
-                    }
-                    .padding(.horizontal)
-                    .padding(.vertical, 10)
-                }
-                .background(RheaTheme.bg)
+                // ON AIR — who's active NOW
+                onAirBanner
 
-                if loading {
-                    Spacer()
-                    ProgressView()
-                    Spacer()
-                } else if filteredItems.isEmpty {
-                    Spacer()
-                    ContentUnavailableView("No Messages", systemImage: "bubble.left.and.bubble.right",
-                                           description: Text("Feed empty or API offline"))
-                    Spacer()
-                } else {
-                    ScrollView {
-                        LazyVStack(spacing: 8) {
-                            ForEach(filteredItems) { item in
-                                ChatBubble(item: item)
-                            }
+                // Live stream console
+                ScrollView {
+                    LazyVStack(alignment: .leading, spacing: 2) {
+                        ForEach(items) { item in
+                            ConsoleLine(item: item)
                         }
-                        .padding(.horizontal)
-                        .padding(.top, 8)
-                        .padding(.bottom, 20)
                     }
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 8)
                 }
+                .background(Color.black)
             }
-            .background(RheaTheme.bg)
-            .navigationTitle("Team")
+            .background(Color.black)
+            .navigationTitle("Radio")
             #if os(iOS)
             .toolbarColorScheme(.dark, for: .navigationBar)
             #endif
-            .refreshable { await fetch() }
-            .task { await fetch() }
+            .task {
+                await fetchFull()
+                startPolling()
+            }
+            .onDisappear { pollTimer?.invalidate() }
         }
     }
 
-    func fetch() async {
-        loading = true
-        defer { loading = false }
-        guard let url = URL(string: "\(apiBaseURL)/feed?limit=80") else { return }
+    // MARK: - ON AIR banner
+
+    var onAirBanner: some View {
+        HStack(spacing: 12) {
+            // Pulsing red dot
+            Circle()
+                .fill(Color.red)
+                .frame(width: 12, height: 12)
+                .scaleEffect(pulse ? 1.3 : 0.8)
+                .opacity(pulse ? 1.0 : 0.5)
+                .animation(.easeInOut(duration: 0.8).repeatForever(autoreverses: true), value: pulse)
+                .onAppear { pulse = true }
+
+            Text("ON AIR")
+                .font(.system(.caption, design: .monospaced, weight: .black))
+                .foregroundStyle(.red)
+
+            // Active agents as bright pills
+            ForEach(Array(activeSenders).sorted(), id: \.self) { agent in
+                Text(agent.uppercased())
+                    .font(.system(.caption2, design: .monospaced, weight: .bold))
+                    .foregroundStyle(.black)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 3)
+                    .background(
+                        Capsule().fill(agentColor(agent))
+                    )
+            }
+
+            Spacer()
+
+            Text("\(items.count)")
+                .font(.system(.caption2, design: .monospaced))
+                .foregroundStyle(.secondary)
+        }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 10)
+        .background(Color.black)
+        .overlay(
+            Rectangle()
+                .fill(latestItem != nil ? agentColor(latestItem?.sender ?? "").opacity(0.15) : .clear)
+                .animation(.easeOut(duration: 1.5), value: latestItem?.id)
+        )
+    }
+
+    // MARK: - Networking
+
+    func fetchFull() async {
+        guard let url = URL(string: "\(apiBaseURL)/feed?limit=100") else { return }
         do {
             let (data, _) = try await URLSession.shared.data(from: url)
             let response = try JSONDecoder().decode(FeedResponse.self, from: data)
-            withAnimation(.spring(duration: 0.3)) {
-                items = response.items
+            items = response.items
+            updateActiveSenders()
+            if let first = items.first {
+                lastTS = first.ts
             }
-        } catch {
-            items = []
+        } catch {}
+    }
+
+    func pollDelta() async {
+        let encoded = lastTS.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+        guard let url = URL(string: "\(apiBaseURL)/feed?limit=20&since=\(encoded)") else { return }
+        do {
+            let (data, _) = try await URLSession.shared.data(from: url)
+            let response = try JSONDecoder().decode(FeedResponse.self, from: data)
+            if !response.items.isEmpty {
+                withAnimation(.spring(duration: 0.2)) {
+                    items.insert(contentsOf: response.items, at: 0)
+                    latestItem = response.items.first
+                }
+                updateActiveSenders()
+                if let first = response.items.first {
+                    lastTS = first.ts
+                }
+            }
+        } catch {}
+    }
+
+    func startPolling() {
+        pollTimer = Timer.scheduledTimer(withTimeInterval: 3.0, repeats: true) { _ in
+            Task { await pollDelta() }
         }
     }
 
+    func updateActiveSenders() {
+        // "Active" = sent something in the last 5 minutes
+        let cutoff = ISO8601DateFormatter().string(from: Date().addingTimeInterval(-300))
+        let recent = items.filter { $0.ts > cutoff }
+        activeSenders = Set(recent.map { $0.sender.lowercased() })
+    }
+
     func agentColor(_ agent: String) -> Color {
-        switch agent {
+        switch agent.lowercased() {
         case "rex": return RheaTheme.accent
         case "orion": return .purple
         case "gemini": return RheaTheme.amber
         case "human": return RheaTheme.green
-        default: return .secondary
+        case "relay": return .orange
+        default: return .gray
         }
     }
 }
 
-// MARK: - ChatBubble
-struct ChatBubble: View {
+// MARK: - Console Line (terminal-style)
+
+struct ConsoleLine: View {
     let item: FeedItem
     @State private var appeared = false
-
-    var typeIcon: String {
-        switch item.type {
-        case "office": return "bubble.left.fill"
-        case "outbox": return "paperplane.fill"
-        case "relay": return "arrow.triangle.swap"
-        default: return "ellipsis.bubble"
-        }
-    }
 
     var senderColor: Color {
         switch item.sender.lowercased() {
         case "rex": return RheaTheme.accent
         case "orion": return .purple
         case "gemini": return RheaTheme.amber
-        case "human", "to": return RheaTheme.green
-        default: return .secondary
+        case "human": return RheaTheme.green
+        case "relay": return .orange
+        default: return .gray
+        }
+    }
+
+    var typeGlyph: String {
+        switch item.type {
+        case "office": return ">"
+        case "outbox": return ">>"
+        case "relay": return "~>"
+        default: return "|"
         }
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            // Header: sender → receiver + type icon
-            HStack(spacing: 6) {
-                Circle()
-                    .fill(senderColor)
-                    .frame(width: 8, height: 8)
+        HStack(alignment: .top, spacing: 0) {
+            // Timestamp
+            Text(formatTime(item.ts))
+                .foregroundStyle(.green.opacity(0.5))
 
-                Text(item.sender.uppercased())
-                    .font(.system(.caption, design: .monospaced, weight: .bold))
-                    .foregroundStyle(senderColor)
+            Text(" ")
 
-                Image(systemName: "arrow.right")
-                    .font(.system(size: 8))
-                    .foregroundStyle(.secondary)
+            // Sender
+            Text(item.sender.prefix(6).uppercased().padding(toLength: 6, withPad: " ", startingAt: 0))
+                .foregroundStyle(senderColor)
 
-                Text(item.receiver.uppercased())
-                    .font(.system(.caption2, design: .monospaced))
-                    .foregroundStyle(.secondary)
+            Text(typeGlyph)
+                .foregroundStyle(.secondary)
 
-                Spacer()
+            Text(" ")
 
-                Image(systemName: typeIcon)
-                    .font(.system(size: 10))
-                    .foregroundStyle(.secondary)
-
-                if !item.ts.isEmpty {
-                    Text(formatTime(item.ts))
-                        .font(.system(.caption2, design: .monospaced))
-                        .foregroundStyle(.secondary.opacity(0.7))
-                }
-            }
-
-            // Message text
-            Text(item.text.trimmingCharacters(in: .whitespacesAndNewlines))
-                .font(.system(.caption, design: .default))
-                .foregroundStyle(.white.opacity(0.85))
-                .lineLimit(6)
+            // Message (first line, truncated)
+            Text(firstLine(item.text))
+                .foregroundStyle(.white.opacity(0.8))
+                .lineLimit(2)
         }
-        .glassCard()
+        .font(.system(size: 11, weight: .regular, design: .monospaced))
+        .padding(.vertical, 1)
         .opacity(appeared ? 1 : 0)
-        .offset(y: appeared ? 0 : 10)
         .onAppear {
-            withAnimation(.spring(duration: 0.3, bounce: 0.2).delay(Double.random(in: 0...0.1))) {
+            withAnimation(.easeIn(duration: 0.15)) {
                 appeared = true
             }
         }
     }
 
     func formatTime(_ iso: String) -> String {
-        // Extract HH:MM from ISO timestamp
         if let tIdx = iso.firstIndex(of: "T") {
             let time = iso[iso.index(after: tIdx)...]
-            if time.count >= 5 {
-                return String(time.prefix(5))
-            }
+            if time.count >= 5 { return String(time.prefix(5)) }
         }
-        return ""
+        return "     "
+    }
+
+    func firstLine(_ text: String) -> String {
+        let stripped = text.replacingOccurrences(of: "\n", with: " ")
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+        if stripped.count > 120 {
+            return String(stripped.prefix(120)) + "…"
+        }
+        return stripped
     }
 }

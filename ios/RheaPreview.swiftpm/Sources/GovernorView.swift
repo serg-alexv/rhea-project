@@ -62,14 +62,21 @@ struct GovernorView: View {
     var summaryHeader: some View {
         let totalTokens = agents.reduce(0) { $0 + $1.T_day }
         let totalCost = agents.reduce(0.0) { $0 + $1.dollar_day }
-        let healthyCount = agents.filter { $0.mode == "normal" }.count
+        let stableCount = agents.filter { $0.mode == "normal" && !$0.hard_fail }.count
+        let onTrackCount = agents.filter { $0.floor_gap <= 0 }.count
 
-        return HStack(spacing: 12) {
-            MetricPill(label: "Agents", value: "\(agents.count)", color: RheaTheme.accent)
-            MetricPill(label: "Healthy", value: "\(healthyCount)/\(agents.count)",
-                       color: healthyCount == agents.count ? RheaTheme.green : RheaTheme.amber)
-            MetricPill(label: "Tokens", value: formatTokens(totalTokens), color: .white)
-            MetricPill(label: "Cost", value: "$\(String(format: "%.2f", totalCost))", color: RheaTheme.amber)
+        return VStack(alignment: .leading, spacing: 8) {
+            HStack(spacing: 12) {
+                MetricPill(label: "Agents", value: "\(agents.count)", color: RheaTheme.accent)
+                MetricPill(label: "Stable", value: "\(stableCount)/\(agents.count)",
+                           color: stableCount == agents.count ? RheaTheme.green : RheaTheme.amber)
+                MetricPill(label: "Tokens", value: formatTokens(totalTokens), color: .white)
+                MetricPill(label: "Cost", value: "$\(String(format: "%.2f", totalCost))", color: RheaTheme.amber)
+            }
+
+            Text("On track: \(onTrackCount)/\(agents.count) (floor trajectory)")
+                .font(.caption2)
+                .foregroundStyle(.secondary)
         }
         .glassCard()
     }
@@ -167,10 +174,6 @@ struct AgentCard: View {
                             .foregroundStyle(.white.opacity(0.7))
                     }
 
-                    // TODO(human): Implement the budget gauge visualization
-                    // This gauge should show budget usage as a visual bar/ring.
-                    // Available: budgetFraction (0.0–1.0), RheaTheme colors.
-                    // Consider: ProgressView, Gauge, or custom Shape.
                     GeometryReader { geo in
                         ZStack(alignment: .leading) {
                             RoundedRectangle(cornerRadius: 4)
@@ -201,9 +204,9 @@ struct AgentCard: View {
                     StatChip(icon: "arrow.down.to.line", text: "gap:\(status.floor_gap)", color: RheaTheme.amber)
                 }
                 Spacer()
-                Text(status.forecast)
+                Text(status.floor_gap > 0 ? "behind floor" : "on track")
                     .font(.system(.caption2, design: .monospaced))
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(status.floor_gap > 0 ? RheaTheme.amber : RheaTheme.green)
             }
         }
         .glassCard()
