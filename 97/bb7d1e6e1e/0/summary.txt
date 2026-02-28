@@ -1,0 +1,8 @@
+Готово. Приложение уже на симуляторе, PID 5253. Открой Simulator — Radio tab обновлён:
+
+1. **Тулбар** — две новые кнопки: переключатель console/bubble + sheet агентов
+2. **Bubble mode** — цветные карточки с иконками (корона Rex, звезда Orion, искры Gemini, антенна relay)
+3. **Agent sheet** — список агентов с lease статусом + кнопки WAKE
+4. **Console mode** — всё на месте, ничего не потеряно
+
+Orion ACK'd (seq=171) — его PulseMonitorView уже в билде.

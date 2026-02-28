@@ -1,0 +1,31 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "97bb7d1e6e1e",
+  "strategy": "auto-commit",
+  "branch": "stage4-release",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "ios/RheaPreview.swiftpm/Sources/TeamChatView.swift",
+    "opera/ops/virtual-office/inbox/RELAY_20260228_110149_REX_to_ORION.md",
+    "opera/ops/virtual-office/inbox/RELAY_20260228_110205_ORION_to_MIKA.md",
+    "opera/ops/virtual-office/inbox/RELAY_20260228_110205_ORION_to_REX.md",
+    "opera/ops/virtual-office/inbox/RELAY_20260228_110206_ORION_to_HYPERION.md",
+    "opera/ops/virtual-office/shared/FAMILY_CONTEXT.md"
+  ],
+  "sessions": [
+    {
+      "metadata": "/97/bb7d1e6e1e/0/metadata.json",
+      "transcript": "/97/bb7d1e6e1e/0/full.jsonl",
+      "context": "",
+      "content_hash": "/97/bb7d1e6e1e/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 17,
+    "cache_creation_tokens": 8458,
+    "cache_read_tokens": 1375433,
+    "output_tokens": 3644,
+    "api_call_count": 15
+  }
+}
