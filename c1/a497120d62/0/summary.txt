@@ -1,0 +1,7 @@
+`★ Insight ─────────────────────────────────────`
+**Все три модели на подписках.** Bridge log считал shadow cost, а реальный API billing = $0.00. Orion работает через Codex subscription (как Rex через Claude Max), а не через API-ключ. OpenAI dashboard: 23 запроса, 1,565 токенов — это только то, что шло через API key (тесты bridge). Основная работа Orion = подписка Codex, не billing API.
+
+Discrepancy 10K (bridge) vs 1.5K (dashboard) = bridge log считает token estimate по response size, а dashboard считает actual billed tokens. Плюс bridge мог логировать retries и test calls.
+
+Вывод: **governor надо перестроить**. Все три агента — subscription. Dual-rail (budget cap) не нужен никому. Нужен только floor trajectory (активность).
+`─────────────────────────────────────────────────`
