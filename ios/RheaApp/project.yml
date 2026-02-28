@@ -19,16 +19,15 @@ targets:
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.rhea.preview
+        DEVELOPMENT_TEAM: "398XACWZ7G"
         MARKETING_VERSION: "1.0"
         CURRENT_PROJECT_VERSION: "1"
         INFOPLIST_GENERATION_MODE: GeneratedByXcode
         CODE_SIGN_STYLE: Automatic
         SWIFT_VERSION: "5.9"
       configs:
-        debug:
-          CODE_SIGN_IDENTITY: "Apple Development"
-        release:
-          CODE_SIGN_IDENTITY: "Apple Distribution"
+        debug: {}
+        release: {}
     dependencies:
       - package: Pow
     info:
