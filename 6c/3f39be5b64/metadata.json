@@ -1,0 +1,33 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "6c3f39be5b64",
+  "strategy": "auto-commit",
+  "branch": "stage4-release",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "opera/ops/virtual-office/inbox/RELAY_20260228_162227_MIKA_to_REX.md",
+    "opera/ops/virtual-office/inbox/RELAY_WAKE_20260228_162217_GEMINI.md",
+    "opera/ops/virtual-office/inbox/RELAY_WAKE_20260228_162217_GPT.md",
+    "opera/ops/virtual-office/inbox/RELAY_WAKE_20260228_162217_SHARED.md",
+    "opera/ops/virtual-office/inbox/RELAY_WAKE_20260228_162227_REX.md",
+    "opera/ops/virtual-office/inbox/RELAY_WAKE_20260228_162237_GEMINI.md",
+    "opera/ops/virtual-office/inbox/RELAY_WAKE_20260228_162237_GPT.md",
+    "opera/ops/virtual-office/inbox/RELAY_WAKE_20260228_162237_SHARED.md"
+  ],
+  "sessions": [
+    {
+      "metadata": "/6c/3f39be5b64/0/metadata.json",
+      "transcript": "/6c/3f39be5b64/0/full.jsonl",
+      "context": "",
+      "content_hash": "/6c/3f39be5b64/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 3,
+    "cache_creation_tokens": 376,
+    "cache_read_tokens": 131722,
+    "output_tokens": 655,
+    "api_call_count": 1
+  }
+}
