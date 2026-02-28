@@ -2032,12 +2032,17 @@ async def unified_agent_status():
             text = str(item.get("text", ""))
             last_feed[sender] = text[:80] if len(text) > 80 else text
 
-    # Merge all agents from any source
+    # Known agent roster (governor agents + real team members)
+    KNOWN_AGENTS = {"rex", "orion", "gemini", "shared", "hyperion", "gpt", "a1", "b2", "claude", "sonnet"}
+
+    # Merge agents: governor agents + known office agents only
     all_names = set()
     for k in gov_data:
         all_names.add(k.lower())
     for r in office.get("agents", []):
-        all_names.add(r["agent"].lower())
+        name_lower = r["agent"].lower().strip()
+        if name_lower in KNOWN_AGENTS:
+            all_names.add(name_lower)
 
     result = {}
     for name in sorted(all_names):
