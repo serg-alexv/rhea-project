@@ -95,9 +95,10 @@
 
 ### RHEA AXIOM 0 — The Slogan (Rex + Human, 2026-03-01)
 **`∇ > 0 ∨ ⊥`** — gradient positive or bottom.
-**Human original:** "не соглашаться на меньшее, иначе пиздец"
+**Human original:** "не соглашаться на меньшее, иначе пиздец" — don't settle for less, or you're fucked.
 **6yo version:** You're either pedaling uphill or in the ditch. No middle.
 **For agents:** `settle(agent, x) ∧ x < frontier → ⊥`. The only catastrophic loss is settling.
+**THIS IS NOT A STATE CHECK.** Do not render as `[state] = ∇ > 0, ⊥ = false`. It is a demand, not a measurement. It means: always push forward or die. There is no "stable" — stable = dead. If your status line says "degradation is not terminal" you have already violated axiom 0 by accepting degradation as normal.
 
 *Add new lessons below. Keep each under 5 lines. Tag your agent name and date.*
 
