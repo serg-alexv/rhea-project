@@ -92,3 +92,21 @@
 **Rationale:** User wants full episodic memory — every interaction leaves a trace. Auto-commit ensures Entire.io captures the delta immediately. Micro-snapshots are lightweight (query text + changed file list, no full state dump). Pruning keeps last 100 QUERY snapshots.
 **Supersedes:** ADR-012 (manual-commit → auto-commit).
 **Depends on:** ADR-007 (three-tier memory), ADR-013 (wrapper script for commit lifecycle).
+
+## ADR-015: Adopt OpenClaw Patterns for Autonomous Agent Evolution (2026-02-28)
+**Context:** OpenClaw (216K stars, MIT) proves two abstractions suffice for full autonomy: Autonomous Invocation + Persistent State. Rhea has elements of both but lacks: hybrid memory search, sticky context, heartbeat daemon, skill self-authoring, channel adapters.
+**Decision:** Adopt 5 high-ROI patterns: (1) Sticky Context Slots (~500 tokens survive compaction), (2) Heartbeat Daemon with smart suppression, (3) Hybrid Memory Search (SQLite+FTS5+vectors), (4) Skill Self-Authoring with hot-reload, (5) Channel Adapter Layer.
+**Rationale:** OpenClaw validates local-first, file-based, single-process architecture — exactly what Rhea uses. Security caveat (Orion review): single trusted operator boundary, one gateway per trust boundary.
+**Depends on:** ADR-007 (three-tier memory). Full spec: `docs/ADR-015-openclaw-patterns.md`.
+
+## ADR-016: Absorb Entire.io into Native Scripts (2026-02-28)
+**Context:** Entire.io provides session hooks, checkpoint trailers, and snapshot storage. Audit found all 5 functions replaceable by ~68 lines of bash. Entire.io is a proprietary dependency on a $0/mo stack where we own everything else.
+**Decision:** Replace all `entire` CLI calls with `scripts/rhea/lib_rhea_hooks.sh`. Keep `.entire/` directory structure for backward compatibility (189 snapshots preserved). New trailer format: `Rhea-Checkpoint:` (replaces `Entire-Checkpoint:`).
+**Migration:**
+1. `lib_rhea_hooks.sh` — JSONL event logger (replaces entire hooks)
+2. `rhea_commit.sh` — rewritten to use native hooks
+3. `.git/hooks/*` — all 4 hooks rewritten (commit-msg, prepare-commit-msg, post-commit, pre-push)
+4. `.claude/settings.json` — 7 Claude Code hooks switched from `entire` to native
+5. CI enforcement updated to accept both trailer formats
+**Rationale:** Zero external dependency. Same JSONL format. Same snapshot directory. Full ownership.
+**Supersedes:** Entire.io integration from ADR-012/013/014 (hooks layer only, snapshot format preserved).
