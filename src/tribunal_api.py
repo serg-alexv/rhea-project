@@ -1014,6 +1014,16 @@ async def tribunal(req: TribunalRequest):
         meta=report.get("meta", {}),
     )
 
+    # Broadcast tribunal result to Radio
+    _broadcast_event({
+        "id": f"tribunal-{int(time.time())}",
+        "type": "tribunal",
+        "sender": "tribunal",
+        "receiver": "all",
+        "text": f"[{req.mode}] {req.prompt[:100]} → confidence={tribunal_response.confidence:.0%} agreement={tribunal_response.agreement_score:.0%} ({tribunal_response.models_responded}/{tribunal_response.models_queried} models, {elapsed:.1f}s)",
+        "ts": datetime.now(timezone.utc).isoformat(),
+    })
+
     # Append to session history for rewind support
     _session_history.append({
         "step": len(_session_history),
@@ -1608,6 +1618,10 @@ async def office_send(msg: OfficeMsg):
 async def office_broadcast(msg: ChatMessage):
     """Broadcast to all agents. Each message Sonnet-gated."""
     results = get_office().broadcast(sender=msg.sender, text=msg.text)
+    for r in results:
+        _broadcast_event({"id": r.id if hasattr(r, "id") else "", "type": "broadcast",
+                          "sender": msg.sender, "receiver": r.receiver,
+                          "text": msg.text[:200], "ts": r.ts if hasattr(r, "ts") else datetime.now(timezone.utc).isoformat()})
     return {"sent": len(results), "messages": [
         {"receiver": r.receiver, "response": r.response, "cost_usd": r.cost_usd}
         for r in results
