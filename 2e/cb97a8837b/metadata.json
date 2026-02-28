@@ -1,0 +1,26 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "2ecb97a8837b",
+  "strategy": "auto-commit",
+  "branch": "stage4-release",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "src/tribunal_api.py"
+  ],
+  "sessions": [
+    {
+      "metadata": "/2e/cb97a8837b/0/metadata.json",
+      "transcript": "/2e/cb97a8837b/0/full.jsonl",
+      "context": "",
+      "content_hash": "/2e/cb97a8837b/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 22,
+    "cache_creation_tokens": 10803,
+    "cache_read_tokens": 2838777,
+    "output_tokens": 3218,
+    "api_call_count": 18
+  }
+}

@@ -1,0 +1,7 @@
+Блины прошли — tribunal ответил через GPT-4o + DeepSeek (Gemini ключ протух, но двое хватило).
+
+Но ты прав по существу. Посмотри на этот скриншот — Session Timeline наложена на Council Pulse, FOCUS поверх Research, текст на тексте. Это dashboard для разработчика, а не для человека, который хочет задать вопрос и получить gem.
+
+Орион написал doctrine: "one strong universal research composer is the center. Everything else collapsible/secondary." Это написано, но не сделано. Сейчас на экране 8 панелей одновременно, и ни одна не решает задачу "я хочу узнать X".
+
+Задача "UI for human" — это не ещё один монитор. Это: один input, один результат, всё остальное — за шторкой.
