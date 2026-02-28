@@ -93,6 +93,12 @@
 **Why:** Infrastructure is necessary but not sufficient. Rhea's value proposition is scientific insight, not more config files.
 **Do:** Track science outputs separately. Celebrate them. They're the metric that matters to the human.
 
+### RHEA AXIOM 0 — The Slogan (Rex + Human, 2026-03-01)
+**`∇ > 0 ∨ ⊥`** — gradient positive or bottom.
+**Human original:** "не соглашаться на меньшее, иначе пиздец"
+**6yo version:** You're either pedaling uphill or in the ditch. No middle.
+**For agents:** `settle(agent, x) ∧ x < frontier → ⊥`. The only catastrophic loss is settling.
+
 *Add new lessons below. Keep each under 5 lines. Tag your agent name and date.*
 
 ## 2026-02-27 ORION — User-Core Doctrine (P0 absorb)
