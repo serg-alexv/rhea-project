@@ -340,18 +340,30 @@ def _get_conn() -> sqlite3.Connection:
 # ═══════════════════════════════════════════════════════════════════════
 
 def classify_tier(agreement_score: float, confidence: float,
-                  math_verification: Optional[Dict] = None) -> ProofTier:
+                  math_verification: Optional[Dict] = None,
+                  solo_mode: bool = False) -> ProofTier:
     """
     Determine if result is proof, hypothesis, or noise.
 
-    proof      — agreement >= 0.85 OR (>= 0.75 AND math verified)
-    hypothesis — agreement >= 0.50
-    noise      — agreement < 0.50
+    Multi-model:
+      proof      — agreement >= 0.85 OR (>= 0.75 AND math verified)
+      hypothesis — agreement >= 0.50
+      noise      — agreement < 0.50
+
+    Solo model (agreement always 0.0):
+      hypothesis — confidence >= 0.3 (single model can never reach proof)
+      noise      — confidence < 0.3
     """
     math_boost = False
     if math_verification:
         verdicts = math_verification.get("verdicts", {})
         math_boost = any(v == "verified" for v in verdicts.values())
+
+    # Solo mode: use confidence for tier since agreement is meaningless with 1 model
+    if solo_mode or (agreement_score == 0.0 and confidence > 0.0):
+        if confidence >= 0.3:
+            return "hypothesis"  # Single model can never reach proof
+        return "noise"
 
     if agreement_score >= 0.85:
         return "proof"
@@ -585,7 +597,8 @@ def capture(tribunal_response: Dict, consensus_report: Dict,
     confidence = consensus_report.get("confidence", 0.0)
     math_ver = consensus_report.get("math_verification", {})
 
-    tier = classify_tier(agreement_score, confidence, math_ver)
+    solo = consensus_report.get("meta", {}).get("solo_mode", False)
+    tier = classify_tier(agreement_score, confidence, math_ver, solo_mode=solo)
 
     if tier == "noise":
         _log_noise(proof_id, prompt_hash, agreement_score, now, request_meta)

@@ -634,9 +634,41 @@ class ConsensusAnalyzer:
         report.model_count = len(responses)
         report.successful_count = len(valid)
 
-        if len(valid) < 2:
-            report.consensus_text = f"Insufficient responses ({len(valid)}/{len(responses)} valid)."
+        if len(valid) == 0:
+            report.consensus_text = "No valid responses."
             report.confidence = 0.0
+            return report
+
+        if len(valid) == 1:
+            # Solo mode: 1 model responded. No agreement possible, but we can
+            # measure response quality to produce a non-zero confidence.
+            mid, text = valid[0]
+            tokens = _tokenize(text)
+            density = _signal_density(text, tokens)
+            stance = _detect_stance(text)
+
+            # Solo confidence: blend of signal density and stance clarity
+            stance_clarity = max(stance["affirmative"], stance["negative"])
+            # Longer, denser responses with clear stance → higher confidence
+            solo_conf = round(0.5 * density + 0.3 * stance_clarity + 0.2 * min(len(text) / 500, 1.0), 4)
+            # Cap at 0.7 — single model can never reach full confidence
+            solo_conf = min(solo_conf, 0.7)
+
+            report.confidence = solo_conf
+            report.agreement_score = 0.0  # Honest: no agreement with 1 model
+            report.stance_summary = {mid: stance}
+            report.analysis_method = "solo_model"
+            report.consensus_text = (
+                f"Single model response ({mid}). "
+                f"Stance: {stance['stance']}. "
+                f"Solo confidence: {solo_conf:.0%} (no cross-model agreement possible)."
+            )
+            report.meta = {
+                "solo_mode": True,
+                "signal_density": density,
+                "stance_clarity": round(stance_clarity, 4),
+                "response_length": len(text),
+            }
             return report
 
         model_ids = [mid for mid, _ in valid]
