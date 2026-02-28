@@ -7,12 +7,12 @@ import json
 import time
 import os
 import redis
-from dotenv import load_dotenv
 from pathlib import Path
 
-# Load env
+# Load env (native — no python-dotenv dependency)
 PROJECT_ROOT = Path(__file__).parent.parent
-load_dotenv(PROJECT_ROOT / ".env", override=True)
+from env_loader import load_env
+load_env(PROJECT_ROOT / ".env", override=True)
 
 # Set dev API key for local frontend
 if not os.environ.get("TRIBUNAL_API_KEYS"):

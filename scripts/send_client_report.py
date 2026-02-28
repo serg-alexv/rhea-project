@@ -5,16 +5,15 @@ client_report_send.py — Sends the finalized genomic report to the client.
 import os
 import sys
 from pathlib import Path
-from dotenv import load_dotenv
-
 # Add src to path
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
+from env_loader import load_env
 from rhea_post_office import RheaPostOffice
 
 def send_report():
     print("=== ORION: SENDING REPORT TO CLIENT ===")
-    load_dotenv()
+    load_env()
 
     po = RheaPostOffice()
     if not po.is_configured():

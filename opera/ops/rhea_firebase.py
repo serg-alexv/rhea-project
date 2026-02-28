@@ -25,8 +25,9 @@ import re
 
 # Force load .env from project root
 try:
-    from dotenv import load_dotenv
-    load_dotenv(Path(__file__).parent.parent.parent / ".env")
+    sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
+    from env_loader import load_env
+    load_env(Path(__file__).parent.parent.parent / ".env")
 except ImportError:
     pass
 
