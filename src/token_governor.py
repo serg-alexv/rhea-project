@@ -190,9 +190,14 @@ class Governor:
 
         # --- Subscription agents: only floor matters ---
         if self.is_subscription:
+            # Cross-reference: if agent has recent relay or lease activity, override pace
+            has_relay_activity = self._has_recent_activity()
+
             # Pace based on activity, not cost
-            if T_day == 0 and hour >= 6:
+            if T_day == 0 and not has_relay_activity and hour >= 6:
                 pace = "red"
+            elif T_day == 0 and has_relay_activity:
+                pace = "green"  # relay-active but no token tracking
             elif floor_gap > 0 and hour >= 12:
                 pace = "yellow"
             elif T_day > floor_expected * 2:
