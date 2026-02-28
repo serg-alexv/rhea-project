@@ -1,0 +1,6 @@
+Вот:
+
+- **Privacy Policy URL:** `https://gist.github.com/serg-alexv/80cc9617d08af57969b91f0d1fb1dc60`
+- **Marketing URL:** `https://github.com/serg-alexv/rhea-project` (если приватный — поставь тот же gist URL, Apple не проверяет строго на этапе TestFlight)
+
+Вставляй и жми Submit.
