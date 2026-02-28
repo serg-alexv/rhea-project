@@ -1,0 +1,16 @@
+Summary of carbonyl session testing:
+
+**What works:**
+- Carbonyl renders modern web pages in the terminal (OpenAI page rendered correctly)
+- `pexpect` + `pyte` pipeline gives clean text extraction from the virtual screen buffer
+- Session file cloning (Cookies, Local Storage, Preferences) copies ~11MB successfully
+
+**What doesn't work:**
+- **Authentication** — macOS Chrome encrypts cookies with a Keychain-stored AES key. Carbonyl can't access that key, so all session cookies are undecryptable. Every authenticated site will show "please log in."
+
+**Alternatives for dashboard access (ranked):**
+1. `claude-in-chrome` MCP — controls real Chrome (needs extension connected)
+2. AppleScript + Chrome — `osascript` for navigation + JS extraction (used successfully last session)
+3. Manual cookie decryption — extract Keychain key via `security find-generic-password`, then AES-decrypt the Cookies SQLite
+
+All findings saved to `memory/carbonyl-sessions.md`. The session cloning technique itself is documented — it's useful for non-authenticated sites. For authenticated dashboards, we need the Chrome extension or AppleScript approach.

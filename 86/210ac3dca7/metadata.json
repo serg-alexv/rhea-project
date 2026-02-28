@@ -1,0 +1,33 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "86210ac3dca7",
+  "strategy": "auto-commit",
+  "branch": "stage4-release",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "docs/procedures/carbonyl-profiles-safe.md",
+    "ios/RheaPreview.swiftpm/README.md",
+    "ios/RheaPreview.swiftpm/Sources/AppConfig.swift",
+    "ios/RheaPreview.swiftpm/Sources/SettingsView.swift",
+    "opera/ops/virtual-office/inbox/RELAY_20260228_123426_ORION_to_REX.md",
+    "opera/ops/virtual-office/inbox/RELAY_20260228_123906_ORION_to_REX.md",
+    "scripts/carbonyl_profiles.sh",
+    "scripts/ios_preview.sh"
+  ],
+  "sessions": [
+    {
+      "metadata": "/86/210ac3dca7/0/metadata.json",
+      "transcript": "/86/210ac3dca7/0/full.jsonl",
+      "context": "",
+      "content_hash": "/86/210ac3dca7/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 34,
+    "cache_creation_tokens": 118855,
+    "cache_read_tokens": 2542188,
+    "output_tokens": 11064,
+    "api_call_count": 28
+  }
+}
