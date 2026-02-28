@@ -1,0 +1,9 @@
+Xcode should now show `RheaApp` project with a standard project structure. In this format:
+
+1. **Left sidebar** → click **RheaApp** (blue app icon at top)
+2. **Target "RheaApp"** → **Signing & Capabilities** tab should now be visible
+3. Check **Automatically manage signing** → select your **Team** (Apple ID)
+4. **Top bar** → switch destination from simulator to **iPhone 13 Pro Max**
+5. **Cmd+R**
+
+The xcodegen project references the same source files from `RheaPreview.swiftpm/Sources/`, same Pow dependency, same bundle ID `com.rhea.preview`. Only difference: proper `.xcodeproj` format that Xcode fully understands for signing.
