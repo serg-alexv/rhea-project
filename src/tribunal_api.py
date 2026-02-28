@@ -28,7 +28,7 @@ from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import Optional
 
-from fastapi import FastAPI, HTTPException, Header, Depends
+from fastapi import FastAPI, HTTPException, Header, Depends, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
@@ -1948,7 +1948,7 @@ async def get_outbox(agent: Optional[str] = None, limit: int = 20):
 # ---------------------------------------------------------------------------
 
 from token_governor import Governor, all_governors
-from task_queue import TaskQueue
+from task_db import TaskDB
 
 @app.get("/governor")
 async def governor_all():
@@ -1968,39 +1968,40 @@ async def governor_agent(agent: str):
 @app.get("/tasks")
 async def tasks_list(status: Optional[str] = None, agent: Optional[str] = None):
     """List tasks with optional filters."""
-    q = TaskQueue()
+    q = TaskDB()
     return {"tasks": q.list_tasks(status=status, agent=agent)}
 
 @app.get("/tasks/summary")
 async def tasks_summary():
     """Task queue health for dashboard."""
-    q = TaskQueue()
+    q = TaskDB()
     return q.summary()
 
 @app.post("/tasks")
 async def tasks_add(title: str, priority: str = "P1", agent: str = "any",
                     tags: str = ""):
     """Add a task to the queue."""
-    q = TaskQueue()
+    q = TaskDB()
     tag_list = [t.strip() for t in tags.split(",") if t.strip()] if tags else []
     return q.add(title, priority=priority, agent=agent, tags=tag_list)
 
 @app.post("/tasks/{task_id}/claim")
 async def tasks_claim(task_id: str, agent: str = "rex"):
     """Claim a specific task or next available (task_id='next')."""
-    q = TaskQueue()
+    db = TaskDB()
     if task_id == "next":
-        task = q.claim(agent)
+        task = db.claim(agent)
     else:
-        t = q.tasks.get(task_id)
+        t = db.get(task_id)
         if t and t["status"] == "open":
-            t["status"] = "claimed"
-            t["claimed_by"] = agent
             from datetime import datetime, timezone
-            t["updated"] = datetime.now(timezone.utc).isoformat()
-            q._append_log("claim", {"id": task_id, "agent": agent})
-            q._save_state()
-            task = t
+            now = datetime.now(timezone.utc).isoformat()
+            db.db.execute(
+                "UPDATE tasks SET status='claimed', claimed_by=?, updated=? WHERE id=?",
+                (agent, now, task_id))
+            db._log("claim", task_id, agent)
+            db.db.commit()
+            task = db.get(task_id)
         else:
             task = None
     if not task:
@@ -2010,7 +2011,7 @@ async def tasks_claim(task_id: str, agent: str = "rex"):
 @app.post("/tasks/{task_id}/complete")
 async def tasks_complete(task_id: str, result: str = ""):
     """Mark task as done."""
-    q = TaskQueue()
+    q = TaskDB()
     task = q.complete(task_id, result)
     if not task:
         raise HTTPException(status_code=404, detail="Task not found")
@@ -2019,8 +2020,26 @@ async def tasks_complete(task_id: str, result: str = ""):
 @app.post("/tasks/{task_id}/block")
 async def tasks_block(task_id: str, reason: str = ""):
     """Block a task."""
-    q = TaskQueue()
+    q = TaskDB()
     task = q.block(task_id, reason)
+    if not task:
+        raise HTTPException(status_code=404, detail="Task not found")
+    return task
+
+
+@app.post("/tasks/release-stale")
+async def tasks_release_stale(hours: int = 2):
+    """Release all stale claimed tasks back to open."""
+    q = TaskDB()
+    released = q.release_stale(hours=hours)
+    return {"released": len(released), "tasks": [t["id"] for t in released]}
+
+
+@app.post("/tasks/{task_id}/reopen")
+async def tasks_reopen(task_id: str):
+    """Force-reopen a claimed/blocked task."""
+    db = TaskDB()
+    task = db.reopen(task_id)
     if not task:
         raise HTTPException(status_code=404, detail="Task not found")
     return task
@@ -2244,7 +2263,7 @@ async def unified_agent_status():
     office_by_agent = {r["agent"].upper(): r for r in office.get("agents", [])}
 
     # 3) Task counts per agent
-    q = TaskQueue()
+    q = TaskDB()
     task_counts: dict[str, dict] = {}
     for t in q.tasks.values():
         agent_key = (t.get("claimed_by") or t.get("agent") or "").lower()

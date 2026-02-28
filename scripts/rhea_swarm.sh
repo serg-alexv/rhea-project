@@ -126,10 +126,15 @@ cmd_start() {
     green "  Started $name ($model)"
   done
 
-  # Create relay + heartbeat window
+  # Create relay window (auto-delivers outbox→inbox every 60s)
   tmux new-window -t "$SESSION" -n "relay" \
     "cd $PROJECT_ROOT && while true; do bash $SCRIPT_DIR/rhea_swarm.sh relay; sleep 60; done"
 
+  # Create executor window (autonomous task loop)
+  tmux new-window -t "$SESSION" -n "executor" \
+    "cd $PROJECT_ROOT && python3 scripts/rhea_executor.py --daemon --agent rex --interval 120"
+
+  # Create heartbeat window
   tmux new-window -t "$SESSION" -n "heartbeat" \
     "cd $PROJECT_ROOT && python3 scripts/rhea_heartbeat.py --daemon"
 
@@ -282,8 +287,11 @@ cmd_install() {
   <key>ProgramArguments</key>
   <array>
     <string>/bin/bash</string>
-    <string>${SCRIPT_DIR}/rhea_swarm.sh</string>
-    <string>loop</string>
+    <string>python3</string>
+    <string>${SCRIPT_DIR}/rhea_executor.py</string>
+    <string>--daemon</string>
+    <string>--agent</string>
+    <string>rex</string>
   </array>
   <key>WorkingDirectory</key>
   <string>${PROJECT_ROOT}</string>
