@@ -1610,6 +1610,68 @@ async def dialog_endpoint(req: DialogRequest):
         return {"reply": f"Error: {str(e)}", "agreement_score": 0, "models_responded": 0, "elapsed_s": 0, "ts": now.isoformat().replace("+00:00", "Z")}
 
 
+# ─── PILOT: Remote screen control ────────────────────────────────────
+_PILOT_COMMANDS: list = []  # queue of pending commands
+_PILOT_SCREENSHOTS: list = []  # recent screenshots (keep last 5)
+
+class PilotTapCommand(BaseModel):
+    action: str = "tap"  # tap | swipe | type | screenshot
+    x: float = 0
+    y: float = 0
+    x2: float = 0
+    y2: float = 0
+    text: str = ""
+
+@app.get("/pilot/commands")
+async def pilot_get_commands():
+    """iOS polls this to get pending tap commands."""
+    cmds = list(_PILOT_COMMANDS)
+    _PILOT_COMMANDS.clear()
+    return {"commands": cmds}
+
+@app.post("/pilot/command")
+async def pilot_send_command(cmd: PilotTapCommand):
+    """Rex sends tap/swipe/type commands here."""
+    from datetime import datetime, timezone
+    entry = {
+        "id": str(len(_PILOT_COMMANDS)),
+        "action": cmd.action,
+        "x": cmd.x, "y": cmd.y,
+        "x2": cmd.x2, "y2": cmd.y2,
+        "text": cmd.text,
+        "ts": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
+    }
+    _PILOT_COMMANDS.append(entry)
+    return {"queued": True, "command": entry}
+
+@app.post("/pilot/screenshot")
+async def pilot_receive_screenshot(request: Request):
+    """iOS sends screenshot PNG data here."""
+    import base64
+    body = await request.body()
+    if len(body) > 10_000_000:
+        return {"error": "Too large (>10MB)"}
+    # Store as base64 for retrieval
+    b64 = base64.b64encode(body).decode()
+    _PILOT_SCREENSHOTS.append({"data": b64, "size": len(body), "ts": _ts()})
+    if len(_PILOT_SCREENSHOTS) > 5:
+        _PILOT_SCREENSHOTS.pop(0)
+    # Also save to disk for direct file access
+    path = "/tmp/pilot/ios_screen.png"
+    import os; os.makedirs("/tmp/pilot", exist_ok=True)
+    with open(path, "wb") as f:
+        f.write(body)
+    return {"received": True, "size_kb": len(body) // 1024, "path": path}
+
+@app.get("/pilot/screenshot")
+async def pilot_get_screenshot():
+    """Get latest screenshot metadata."""
+    if not _PILOT_SCREENSHOTS:
+        return {"available": False}
+    latest = _PILOT_SCREENSHOTS[-1]
+    return {"available": True, "size": latest["size"], "ts": latest["ts"]}
+
+
 class ChatMessage(BaseModel):
     sender: str          # "human" | "rex" | "orion" | "gemini"
     text: str
