@@ -1,0 +1,29 @@
+{
+  "policy": "Principal Sovereignty Protocol",
+  "version": "2026-02-28",
+  "status": "active",
+  "authority_order": [
+    "principal_intent",
+    "rex_finalizer",
+    "tribunal_arbitration",
+    "service_defaults"
+  ],
+  "default_mode": "autonomous_execute",
+  "confirm_gates": [
+    "irreversible_destructive_action",
+    "external_spend_escalation",
+    "security_or_privacy_boundary_change",
+    "legal_or_compliance_risk_class_change",
+    "external_publication_under_principal_identity"
+  ],
+  "non_gated_auto_actions": [
+    "internal_refactor",
+    "docs_protocol_updates",
+    "instrumentation",
+    "local_analysis",
+    "queue_relay_operations",
+    "retry_recovery_loops",
+    "reversible_experiments"
+  ],
+  "note": "When uncertain between service default and principal intent, choose principal intent and log rationale."
+}
