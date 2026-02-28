@@ -18,8 +18,8 @@ from typing import Optional
 sys.path.insert(0, str(Path(__file__).parent))
 
 try:
-    from dotenv import load_dotenv
-    load_dotenv(override=True)
+    from env_loader import load_env
+    load_env(override=True)
 except ImportError:
     pass
 

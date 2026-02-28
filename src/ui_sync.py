@@ -7,12 +7,12 @@ import json
 import os
 import time
 from pathlib import Path
-from dotenv import load_dotenv
 import redis
+from env_loader import load_env
 
 # Load env from root
 PROJECT_ROOT = Path(__file__).parent.parent
-load_dotenv(PROJECT_ROOT / ".env")
+load_env(PROJECT_ROOT / ".env")
 
 REDIS_URL = os.environ.get("REDIS_URL")
 DASHBOARD_FILE = PROJECT_ROOT / "opera" / "metrics" / "live_dashboard.json"

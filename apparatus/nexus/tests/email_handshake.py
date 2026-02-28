@@ -15,8 +15,8 @@ def run_handshake():
     print("=== ORION POST OFFICE HANDSHAKE ===")
     
     # Manually load from .env for this script since it might not be in shell env yet
-    from dotenv import load_dotenv
-    load_dotenv()
+    from env_loader import load_env
+    load_env()
 
     po = RheaPostOffice()
     

@@ -49,10 +49,10 @@ import logging
 logging.getLogger("LiteLLM").setLevel(logging.CRITICAL)
 
 try:
-    from dotenv import load_dotenv
-    load_dotenv(override=True)
+    from env_loader import load_env
+    load_env(override=True)
 except ImportError:
-    pass  # dotenv optional — env vars can be set directly
+    pass  # env_loader not available — env vars set directly
 
 try:
     from consensus_analyzer import ConsensusAnalyzer
