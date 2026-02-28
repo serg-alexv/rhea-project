@@ -1,0 +1,3 @@
+Это нормально — "Preparing → Validating..." Xcode валидирует IPA с серверами Apple перед загрузкой. Прогресс-бар ~70%, дождись — обычно 1-3 минуты.
+
+После Validating будет "Uploading..." → потом "Upload Succeeded". Жди.
