@@ -14,6 +14,9 @@ struct RheaPreviewApp: App {
                 GovernorView()
                     .tabItem { Label("Governor", systemImage: "gauge.with.dots.needle.33percent") }
 
+                PulseMonitorView()
+                    .tabItem { Label("Pulse", systemImage: "dot.radiowaves.left.and.right") }
+
                 TasksView()
                     .tabItem { Label("Tasks", systemImage: "checklist") }
 

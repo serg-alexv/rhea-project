@@ -23,12 +23,21 @@ struct PulseMonitorView: View {
     @State private var pollTimer: Timer? = nil
     @State private var flickerNote = "screen flicker observed"
     @AppStorage("apiBaseURL") private var apiBaseURL = AppConfig.defaultAPIBaseURL
+    @AppStorage("table_rex") private var tableRex = true
+    @AppStorage("table_orion") private var tableOrion = true
+    @AppStorage("table_gpt") private var tableGpt = false
+    @AppStorage("table_hyperion") private var tableHyperion = true
+    @AppStorage("table_gemini") private var tableGemini = false
+    @AppStorage("table_shared") private var tableShared = false
+    @AppStorage("family_visibility_only") private var familyVisibilityOnly = false
 
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 14) {
                     pulseHeader
+
+                    tableControlCard
 
                     flickerControlCard
 
@@ -115,6 +124,33 @@ struct PulseMonitorView: View {
         .glassCard()
     }
 
+    var tableControlCard: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text("Family Table")
+                .font(.system(.headline, design: .rounded, weight: .bold))
+                .foregroundStyle(.white)
+            Text("Tap seats to include/exclude from current family scope.")
+                .font(.caption2)
+                .foregroundStyle(.secondary)
+
+            HStack(spacing: 8) {
+                SeatToggle(label: "REX", isOn: $tableRex, onColor: RheaTheme.accent)
+                SeatToggle(label: "ORION", isOn: $tableOrion, onColor: .purple)
+                SeatToggle(label: "GPT", isOn: $tableGpt, onColor: .indigo)
+                SeatToggle(label: "HYPERION", isOn: $tableHyperion, onColor: .mint)
+            }
+            HStack(spacing: 8) {
+                SeatToggle(label: "GEMINI", isOn: $tableGemini, onColor: RheaTheme.amber)
+                SeatToggle(label: "SHARED", isOn: $tableShared, onColor: .gray)
+                Spacer()
+            }
+
+            Toggle("Apply family scope to visibility", isOn: $familyVisibilityOnly)
+                .font(.caption)
+        }
+        .glassCard()
+    }
+
     var queueCard: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text("Queue")
@@ -139,15 +175,20 @@ struct PulseMonitorView: View {
     }
 
     var agentsCard: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        let seatSet = Set(activeSeatNames().map { $0.lowercased() })
+        let keys = agents.keys.sorted().filter { key in
+            if !familyVisibilityOnly { return true }
+            return seatSet.contains(key.lowercased())
+        }
+        return VStack(alignment: .leading, spacing: 8) {
             Text("Agents")
                 .font(.system(.headline, design: .rounded, weight: .bold))
                 .foregroundStyle(.white)
-            if agents.isEmpty {
+            if keys.isEmpty {
                 Text(loading ? "Loading..." : "No agent data")
                     .foregroundStyle(.secondary)
             } else {
-                ForEach(agents.keys.sorted(), id: \.self) { key in
+                ForEach(keys, id: \.self) { key in
                     let a = agents[key]
                     HStack {
                         Circle()
@@ -176,6 +217,17 @@ struct PulseMonitorView: View {
             }
         }
         .glassCard()
+    }
+
+    func activeSeatNames() -> [String] {
+        var out: [String] = []
+        if tableRex { out.append("rex") }
+        if tableOrion { out.append("orion") }
+        if tableGpt { out.append("gpt") }
+        if tableHyperion { out.append("hyperion") }
+        if tableGemini { out.append("gemini") }
+        if tableShared { out.append("shared") }
+        return out
     }
 
     func pulseRisk(p0: Int, stale: Int, offline: Int) -> (label: String, color: Color) {
@@ -298,5 +350,27 @@ private struct QueueRow: View {
                 .font(.system(.caption, design: .monospaced, weight: .semibold))
                 .foregroundStyle(.white)
         }
+    }
+}
+
+private struct SeatToggle: View {
+    let label: String
+    @Binding var isOn: Bool
+    let onColor: Color
+
+    var body: some View {
+        Button {
+            isOn.toggle()
+        } label: {
+            Text(label)
+                .font(.system(.caption2, design: .monospaced, weight: .bold))
+                .foregroundStyle(isOn ? .black : .secondary)
+                .padding(.horizontal, 10)
+                .padding(.vertical, 6)
+                .background(
+                    Capsule().fill(isOn ? onColor : .white.opacity(0.08))
+                )
+        }
+        .buttonStyle(.plain)
     }
 }
