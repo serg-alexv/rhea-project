@@ -142,12 +142,13 @@ MODEL_TIERS = {
     "cheap": {
         "description": "Default tier. Fast, cost-effective. Use for all routine work.",
         "candidates": [
+            "groq/llama-3.1-8b-instant",
+            "cerebras/llama-3.3-70b",
             "deepseek/deepseek-chat",
             "anthropic/claude-haiku-3-5-20241022",
             "gemini/gemini-2.5-flash",
             "openai/gpt-4o-mini",
             "azure/gpt-4o-mini",
-            "gemini/gemini-2.5-flash-8b",
             "openai/gpt-4.1-nano",
             "openrouter/anthropic/claude-sonnet-4",
         ],
@@ -155,10 +156,11 @@ MODEL_TIERS = {
     "balanced": {
         "description": "Mid-tier. For complex reasoning that cheap tier struggles with.",
         "candidates": [
+            "cerebras/llama-3.3-70b",
+            "groq/llama-3.3-70b-versatile",
             "gemini/gemini-2.5-flash",
             "deepseek/deepseek-chat",
             "openai/gpt-4o",
-            "gemini/gemini-2.5-flash",
         ],
     },
     "expensive": {
@@ -191,6 +193,8 @@ MODEL_TIERS = {
         "description": "Science-grade models. For biology, chemistry, STEM tribunal queries.",
         "candidates": [
             "anthropic/claude-sonnet-4-20250514",
+            "cerebras/llama-3.3-70b",
+            "groq/llama-3.3-70b-versatile",
             "gemini/gemini-3.1-pro-preview",
             "gemini/gemini-3-pro-preview",
             "gemini/gemini-2.5-pro",
@@ -678,6 +682,26 @@ PROVIDERS = {
             "gpt-4o", "gpt-4o-mini", "gpt-5",
         ],
         call_method="azure_openai",
+    ),
+    "cerebras": ProviderConfig(
+        name="cerebras",
+        display_name="Cerebras",
+        base_url="https://api.cerebras.ai/v1",
+        api_key_env="CEREBRAS_API_KEY",
+        models=[
+            "llama-3.3-70b", "llama-4-scout-17b-16e",
+        ],
+        call_method="openai_compatible",
+    ),
+    "groq": ProviderConfig(
+        name="groq",
+        display_name="Groq",
+        base_url="https://api.groq.com/openai/v1",
+        api_key_env="GROQ_API_KEY",
+        models=[
+            "llama-3.3-70b-versatile", "llama-3.1-8b-instant",
+        ],
+        call_method="openai_compatible",
     ),
 }
 
