@@ -23,6 +23,11 @@ struct RheaPreviewApp: App {
                 TasksView()
                     .tabItem { Label("Tasks", systemImage: "checklist") }
 
+                NavigationStack {
+                    ScreenPilotView()
+                }
+                    .tabItem { Label("Pilot", systemImage: "antenna.radiowaves.left.and.right.circle") }
+
                 SettingsView()
                     .tabItem { Label("Settings", systemImage: "slider.horizontal.3") }
             }
