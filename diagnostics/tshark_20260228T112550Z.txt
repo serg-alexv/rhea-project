@@ -1,0 +1,2 @@
+Capturing on 'Wi-Fi: en0'
+0 packets captured
