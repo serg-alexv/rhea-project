@@ -127,6 +127,8 @@ struct MetricPill: View {
 struct AgentCard: View {
     let status: AgentStatus
     @State private var appeared = false
+    @State private var actionInProgress: String? = nil
+    @AppStorage("apiBaseURL") private var apiBaseURL = AppConfig.defaultAPIBaseURL
 
     var budgetFraction: Double {
         guard status.budget_cap > 0 else { return 0 }
@@ -208,6 +210,17 @@ struct AgentCard: View {
                     .font(.system(.caption2, design: .monospaced))
                     .foregroundStyle(status.floor_gap > 0 ? RheaTheme.amber : RheaTheme.green)
             }
+
+            // Action buttons
+            HStack(spacing: 10) {
+                AgentActionButton(label: "Wake", icon: "bolt.fill", color: RheaTheme.amber, isLoading: actionInProgress == "wake") {
+                    await performAction("wake")
+                }
+                AgentActionButton(label: "Ping", icon: "antenna.radiowaves.left.and.right", color: RheaTheme.accent, isLoading: actionInProgress == "ping") {
+                    await performAction("ping")
+                }
+                Spacer()
+            }
         }
         .glassCard()
         .opacity(appeared ? 1 : 0)
@@ -219,10 +232,69 @@ struct AgentCard: View {
         }
     }
 
+    func performAction(_ action: String) async {
+        actionInProgress = action
+        defer { actionInProgress = nil }
+        let endpoint = action == "wake" ? "agents/wake/\(status.agent)" : "feed/push"
+        guard let url = URL(string: "\(apiBaseURL)/\(endpoint)") else { return }
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        if action == "ping" {
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            let body: [String: Any] = ["sender": "human", "text": "PING \(status.agent)", "type": "radio"]
+            request.httpBody = try? JSONSerialization.data(withJSONObject: body)
+        }
+        do {
+            let (_, response) = try await URLSession.shared.data(for: request)
+            if let http = response as? HTTPURLResponse, http.statusCode < 300 {
+                #if os(iOS)
+                UINotificationFeedbackGenerator().notificationOccurred(.success)
+                #endif
+            }
+        } catch {}
+    }
+
     func formatTokens(_ n: Int) -> String {
         if n >= 1_000_000 { return "\(n / 1_000_000)M" }
         if n >= 1_000 { return "\(n / 1_000)K" }
         return "\(n)"
+    }
+}
+
+// MARK: - AgentActionButton
+struct AgentActionButton: View {
+    let label: String
+    let icon: String
+    let color: Color
+    let isLoading: Bool
+    let action: () async -> Void
+
+    var body: some View {
+        Button {
+            Task { await action() }
+        } label: {
+            HStack(spacing: 4) {
+                if isLoading {
+                    ProgressView()
+                        .tint(color)
+                        .controlSize(.mini)
+                } else {
+                    Image(systemName: icon)
+                        .font(.system(size: 10, weight: .bold))
+                }
+                Text(label)
+                    .font(.system(.caption2, design: .monospaced, weight: .bold))
+            }
+            .foregroundStyle(color)
+            .padding(.horizontal, 10)
+            .padding(.vertical, 5)
+            .background(
+                Capsule().strokeBorder(color.opacity(0.4), lineWidth: 1)
+                    .background(Capsule().fill(color.opacity(0.1)))
+            )
+        }
+        .buttonStyle(.plain)
+        .disabled(isLoading)
     }
 }
 

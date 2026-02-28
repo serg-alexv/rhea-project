@@ -99,6 +99,12 @@ struct TeamChatView: View {
                     }
                 }
                 .background(Color.black)
+                .scrollDismissesKeyboard(.interactively)
+                .onTapGesture {
+                    #if os(iOS)
+                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                    #endif
+                }
 
                 // Composer bar
                 composerBar
