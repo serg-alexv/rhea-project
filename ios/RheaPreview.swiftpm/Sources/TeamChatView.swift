@@ -35,6 +35,14 @@ struct TeamChatView: View {
     @State private var knownAgents: [RadioAgentInfo] = []
     @State private var wakingAgent: String? = nil
     @AppStorage("apiBaseURL") private var apiBaseURL = AppConfig.defaultAPIBaseURL
+    @AppStorage("table_rex") private var tableRex = true
+    @AppStorage("table_orion") private var tableOrion = true
+    @AppStorage("table_gpt") private var tableGpt = false
+    @AppStorage("table_hyperion") private var tableHyperion = true
+    @AppStorage("table_gemini") private var tableGemini = false
+    @AppStorage("table_shared") private var tableShared = false
+    @AppStorage("family_visibility_only") private var familyVisibilityOnly = false
+    @AppStorage("family_send_mode") private var familySendMode = true
 
     /// All known senders (for filter chips)
     var allSenders: [String] {
@@ -43,8 +51,17 @@ struct TeamChatView: View {
 
     /// Filtered items based on selected agent filter
     var visibleItems: [FeedItem] {
-        guard let agent = filterAgent else { return items }
-        return items.filter { $0.sender.lowercased() == agent }
+        var base = items
+        if familyVisibilityOnly {
+            let allowed = Set(activeTableTargets().map { $0.lowercased() }).union(["human", "relay"])
+            base = base.filter { item in
+                let s = item.sender.lowercased()
+                let r = item.receiver.lowercased()
+                return allowed.contains(s) || allowed.contains(r)
+            }
+        }
+        guard let agent = filterAgent else { return base }
+        return base.filter { $0.sender.lowercased() == agent }
     }
 
     var body: some View {
@@ -183,6 +200,23 @@ struct TeamChatView: View {
         isSending = true
         defer { isSending = false }
 
+        if familySendMode {
+            let targets = activeTableTargets()
+            if !targets.isEmpty {
+                var okCount = 0
+                for target in targets {
+                    if await sendOfficeMessage(to: target, text: text) {
+                        okCount += 1
+                    }
+                }
+                if okCount > 0 {
+                    withAnimation { composerText = "" }
+                    await pollDelta()
+                }
+                return
+            }
+        }
+
         guard let url = URL(string: "\(apiBaseURL)/feed/push") else { return }
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
@@ -202,6 +236,37 @@ struct TeamChatView: View {
                 await pollDelta()
             }
         } catch {}
+    }
+
+    func activeTableTargets() -> [String] {
+        var out: [String] = []
+        if tableRex { out.append("rex") }
+        if tableOrion { out.append("orion") }
+        if tableGpt { out.append("gpt") }
+        if tableHyperion { out.append("hyperion") }
+        if tableGemini { out.append("gemini") }
+        if tableShared { out.append("shared") }
+        return out
+    }
+
+    func sendOfficeMessage(to receiver: String, text: String) async -> Bool {
+        guard let url = URL(string: "\(apiBaseURL)/office/send") else { return false }
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        let body: [String: Any] = [
+            "sender": "human",
+            "receiver": receiver,
+            "text": text
+        ]
+        request.httpBody = try? JSONSerialization.data(withJSONObject: body)
+        do {
+            let (_, response) = try await URLSession.shared.data(for: request)
+            if let http = response as? HTTPURLResponse {
+                return http.statusCode < 300
+            }
+        } catch {}
+        return false
     }
 
     // MARK: - Filter bar
@@ -338,29 +403,49 @@ struct TeamChatView: View {
                     Button("Done") { showAgentSheet = false }
                         .foregroundStyle(RheaTheme.green)
                 }
+                ToolbarItem(placement: .primaryAction) {
+                    Button {
+                        knownAgents = []
+                        Task { await fetchAgents() }
+                    } label: {
+                        Image(systemName: "arrow.clockwise")
+                            .foregroundStyle(.white.opacity(0.7))
+                    }
+                }
             }
+            .task { await fetchAgents() }
         }
-        .presentationDetents([.medium])
+        .presentationDetents([.medium, .large])
         .presentationDragIndicator(.visible)
     }
 
     // MARK: - Agent Networking
 
+    struct AgentLeaseDTO: Codable {
+        let agent: String
+        let lease_token: Int
+        let expired: Bool
+        let last_active: String
+    }
+
     func fetchAgents() async {
         guard let url = URL(string: "\(apiBaseURL)/agents") else { return }
         do {
             let (data, _) = try await URLSession.shared.data(from: url)
-            if let dict = try JSONSerialization.jsonObject(with: data) as? [String: [String: Any]] {
-                knownAgents = dict.map { (key, val) in
+            let dict = try JSONDecoder().decode([String: AgentLeaseDTO].self, from: data)
+            withAnimation {
+                knownAgents = dict.values.map { dto in
                     RadioAgentInfo(
-                        name: key,
-                        leaseToken: val["lease_token"] as? Int ?? 0,
-                        expired: val["expired"] as? Bool ?? true,
-                        lastActive: val["last_active"] as? String ?? ""
+                        name: dto.agent,
+                        leaseToken: dto.lease_token,
+                        expired: dto.expired,
+                        lastActive: dto.last_active
                     )
                 }.sorted { $0.name < $1.name }
             }
-        } catch {}
+        } catch {
+            print("[RadioAgents] fetch error: \(error)")
+        }
     }
 
     func wakeAgent(_ name: String) async {
