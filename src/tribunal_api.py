@@ -686,6 +686,68 @@ def _run_rex_pager(args: list[str], timeout_s: int = 45) -> dict:
 # Endpoints
 # ---------------------------------------------------------------------------
 
+@app.get("/")
+async def landing():
+    """Landing page — what Rhea is + how to try it."""
+    from fastapi.responses import HTMLResponse
+    html = """<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Rhea — Multi-Model Consensus</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:system-ui,-apple-system,sans-serif;background:#0a0a0a;color:#e0e0e0;
+  display:flex;justify-content:center;padding:2rem}
+main{max-width:640px;width:100%}
+h1{font-size:2rem;margin-bottom:.5rem;color:#fff}
+.sub{color:#888;margin-bottom:2rem;font-size:1.1rem}
+.axiom{color:#ff6b35;font-family:monospace;font-size:1.3rem;margin:1.5rem 0;
+  padding:1rem;border-left:3px solid #ff6b35}
+h2{font-size:1.2rem;color:#aaa;margin:2rem 0 .5rem;text-transform:uppercase;letter-spacing:.1em;font-weight:400}
+pre{background:#111;padding:1rem;border-radius:6px;overflow-x:auto;font-size:.85rem;line-height:1.5;margin:.5rem 0}
+code{color:#7ec8e3}
+.try{color:#4ade80}
+a{color:#7ec8e3;text-decoration:none}
+a:hover{text-decoration:underline}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin:1rem 0}
+.stat{background:#111;padding:1rem;border-radius:6px;text-align:center}
+.stat .n{font-size:1.8rem;color:#fff;font-weight:700}
+.stat .l{color:#666;font-size:.8rem;text-transform:uppercase}
+.foot{margin-top:3rem;color:#444;font-size:.8rem;text-align:center}
+</style></head>
+<body><main>
+<h1>Rhea</h1>
+<p class="sub">Multi-model consensus API. Send a claim, get verified truth.</p>
+<div class="axiom">&#x2207; &gt; 0 &#x2228; &#x22A5;<br>
+<small style="color:#666">gradient positive or bottom — don't settle for less</small></div>
+
+<h2>Try it</h2>
+<pre><code class="try">curl -X POST {url}/tribunal \\
+  -H "Content-Type: application/json" \\
+  -H "X-API-Key: dev-bypass" \\
+  -d '{{"prompt":"Hemoglobin contains iron"}}'</code></pre>
+
+<h2>Endpoints</h2>
+<pre><code>GET  /health          — status + provider count
+GET  /aletheia/stats  — proof store statistics
+POST /tribunal        — multi-model consensus
+POST /tribunal/ice    — iterative deep consensus
+GET  /quantum/summary — quantum circuit state</code></pre>
+
+<h2>What it does</h2>
+<p>You send a scientific claim. Rhea asks multiple AI models independently.
+If they agree — higher confidence. If they disagree — you see exactly where and why.
+Every verification is recorded in Aletheia (proof chain).</p>
+
+<h2>Stack</h2>
+<p>FastAPI + SQLite WAL + Gemini 2.5 Flash + Qiskit 2.3 + Cloud Run.<br>
+Open source: <a href="https://github.com/serg-alexv/rhea-project">github.com/serg-alexv/rhea-project</a></p>
+
+<div class="foot">Rhea — the flow explorers. No questions needed.</div>
+</main></body></html>""".replace("{url}", "https://rhea-tribunal-api-145767756165.europe-west1.run.app")
+    return HTMLResponse(content=html)
+
+
 @app.get("/health")
 async def health():
     bridge = get_bridge()
