@@ -191,25 +191,24 @@ def git_push_check():
 
 
 def one_cycle(agent_name: str) -> bool:
-    """Run one claim→execute→complete cycle. Returns True if work was done."""
+    """Run one execute cycle. Picks up tasks already claimed for this agent
+    (by flow_up_guard), or claims a new one if none are assigned."""
 
-    # 1. Release stale via API (single source of truth)
-    released = api_call("POST", "/tasks/release-stale?hours=2")
-    if released and released.get("released", 0) > 0:
-        log(f"Released {released['released']} stale tasks via API")
-
-    # 2. Claim via API
-    claim_resp = api_call("POST", f"/tasks/next/claim?agent={agent_name}")
-    if not claim_resp:
-        # Fallback to direct file access if API is down
-        q = TaskDB()
-        task = q.claim(agent_name)
+    # 1. Check for tasks already claimed by this agent (guard assigns them)
+    db = TaskDB()
+    my_tasks = db.list_tasks(status="claimed", agent=agent_name)
+    if my_tasks:
+        # Pick highest-priority claimed task
+        task = my_tasks[0]
+        log(f"EXECUTING {task['id']} [{task['priority']}]: {task['title'][:60]}")
+    else:
+        # No pre-assigned tasks — try to claim an open one
+        task = db.claim(agent_name)
         if not task:
-            summary = api_call("GET", "/tasks/summary") or q.summary()
+            summary = db.summary()
             log(f"No tasks for {agent_name}. Queue: {summary.get('counts', {})}")
             return False
-    else:
-        task = claim_resp
+        log(f"CLAIMED {task['id']} [{task['priority']}]: {task['title'][:60]}")
 
     log(f"CLAIMED {task['id']} [{task['priority']}]: {task['title'][:60]}")
 
