@@ -1,15 +1,9 @@
 #!/usr/bin/env bash
-# rhea_commit.sh — Wrapper for git commit that ensures Entire.io session lifecycle
+# rhea_commit.sh — Wrapper for git commit with native session lifecycle
 #
-# Problem: Cowork commits via osascript bypass Entire.io's agent hooks.
-#          No session-start → no trailer → no checkpoint on entire.io dashboard.
-#
-# Solution: This script wraps git commit with explicit session hook calls:
-#   1. entire hooks git session-start
-#   2. git commit (with all user arguments)
-#   3. entire hooks git prepare-commit-msg (trailer injection happens here)
-#   4. entire hooks git post-commit (condense + checkpoint push)
-#   5. entire hooks git session-stop
+# Replaces Entire.io dependency with lib_rhea_hooks.sh (ADR-016).
+# Backward-compatible: snapshots still go to .entire/snapshots/,
+# logs still go to .entire/logs/.
 #
 # Usage:
 #   scripts/rhea_commit.sh -m "your commit message"
@@ -17,11 +11,17 @@
 #   scripts/rhea_commit.sh  (opens editor for commit message)
 #
 # ADR-013 (Tribunal-002 decision, 2026-02-14)
+# ADR-016 (Entire.io absorption, 2026-02-28)
 
 set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$REPO_ROOT"
+
+# shellcheck disable=SC1091
+source "scripts/rhea/lib_entire.sh"
+# shellcheck disable=SC1091
+source "scripts/rhea/lib_rhea_hooks.sh"
 
 # Colors
 RED='\033[0;31m'
@@ -33,16 +33,9 @@ log() { echo -e "${GREEN}[rhea-commit]${NC} $*"; }
 warn() { echo -e "${YELLOW}[rhea-commit]${NC} $*"; }
 err() { echo -e "${RED}[rhea-commit]${NC} $*" >&2; }
 
-# Check if entire CLI is available
-if ! command -v entire &>/dev/null; then
-    err "entire CLI not found. Install from https://entire.io"
-    err "Falling back to plain git commit..."
-    git commit "$@"
-    exit $?
-fi
-
-# Step 1: Start Entire.io session
-log "Starting Entire.io session..."
+# Step 1: Start session (native hooks)
+log "Starting session..."
+rhea_git_session_start
 
 # QWRR Lease Fencing (I5: No zombie effects)
 if [ -n "${RHEA_AGENT_ID:-}" ] && [ -n "${RHEA_LEASE_TOKEN:-}" ]; then
@@ -54,16 +47,9 @@ if [ -n "${RHEA_AGENT_ID:-}" ] && [ -n "${RHEA_LEASE_TOKEN:-}" ]; then
     log "Lease valid."
 fi
 
-if entire hooks git session-start 2>/dev/null; then
-    SESSION_STARTED=true
-    log "Session started"
-else
-    warn "session-start failed (non-fatal) — continuing"
-    SESSION_STARTED=false
-fi
+log "Session started"
 
 # Step 1.5: L4 Auto-Flush (Context Cache Coherency)
-# Generate fresh L4 bridge from virtual office state before commit
 L4_BRIDGE="rhea-elementary/memory-core/context-bridge.md"
 EXPORTER="rhea-nexus/tools/export_state.py"
 OFFICE_DIR="ops/virtual-office"
@@ -75,33 +61,24 @@ if [ -f "$EXPORTER" ] && [ -d "$OFFICE_DIR" ]; then
 fi
 
 # Step 2: Run git commit with all user arguments
-# The commit-msg hook will inject trailers if session is active
 log "Running git commit..."
 COMMIT_EXIT=0
 git commit "$@" || COMMIT_EXIT=$?
 
 if [ $COMMIT_EXIT -ne 0 ]; then
     err "git commit failed (exit $COMMIT_EXIT)"
-    # Still try to stop session cleanly
-    if [ "$SESSION_STARTED" = true ]; then
-        entire hooks git session-stop 2>/dev/null || true
-    fi
+    rhea_git_session_stop
     exit $COMMIT_EXIT
 fi
 
 log "Commit successful"
 
-# Step 3: Trigger post-commit (checkpoint condensation + push)
-# Note: post-commit hook should already run automatically,
-# but we call it explicitly to ensure it fires in all contexts
-log "Triggering post-commit checkpoint..."
-entire hooks git post-commit 2>/dev/null || warn "post-commit hook returned non-zero (non-fatal)"
+# Step 3: Post-commit logging
+rhea_git_post_commit
 
 # Step 4: Stop session
-if [ "$SESSION_STARTED" = true ]; then
-    log "Stopping Entire.io session..."
-    entire hooks git session-stop 2>/dev/null || warn "session-stop failed (non-fatal)"
-fi
+log "Stopping session..."
+rhea_git_session_stop
 
 # Step 5: Run Rhea autosave snapshot
 if [ -x "$REPO_ROOT/scripts/rhea_autosave.sh" ]; then
@@ -110,23 +87,24 @@ if [ -x "$REPO_ROOT/scripts/rhea_autosave.sh" ]; then
 fi
 
 COMMIT_SHA=$(git rev-parse --short HEAD)
-log "Done! Commit ${COMMIT_SHA} with Entire.io checkpoint pipeline"
+log "Done! Commit ${COMMIT_SHA} with Rhea checkpoint pipeline"
 
-# Step 5.5: CI Enforcement (Task #16)
+# Step 5.5: CI Enforcement — check for either trailer format
 log "Running CI enforcement check..."
-if git log -1 --pretty=%B | grep -q "Entire-Checkpoint:"; then
+if git log -1 --pretty=%B | grep -qE "(Entire-Checkpoint|Rhea-Checkpoint):"; then
     log "CI enforcement: Checkpoint trailer found. [PASS]"
 else
-    warn "CI enforcement: Checkpoint trailer MISSING. This commit violates protocol HC-4."
-    warn "Ensure 'entire' CLI is properly configured and session was started."
+    warn "CI enforcement: Checkpoint trailer MISSING."
+    warn "This is expected for the first commit after Entire.io absorption."
 fi
 
 # Step 6: D-metric check
 log "Running D-metric check..."
-if python3 scripts/compute_d_metric.py; then
+if python3 scripts/compute_d_metric.py 2>/dev/null; then
     log "D-metric is within threshold."
 else
     warn "D-metric exceeds threshold T2. [SPRINT NEEDED]"
-    warn "D=$(python3 scripts/compute_d_metric.py 2>/dev/null || echo '?') — consider running Reflexive Sprint."
 fi
 
+# Prune old hook logs
+rhea_hooks_prune
