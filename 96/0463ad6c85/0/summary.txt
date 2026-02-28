@@ -1,0 +1,12 @@
+**Сессия — итог:**
+
+| Deliverable | Status |
+|---|---|
+| `_has_recent_activity()` — Orion больше не красный | ✅ |
+| `GET /agents/status` — единая правда, 10 агентов | ✅ |
+| iOS Governor/Pulse/Radio → один endpoint | ✅ |
+| TAIMLABS signing + archive + export | ✅ |
+| **TestFlight: https://testflight.apple.com/join/BNya22Jg** | ✅ |
+| `scripts/testflight.sh` — одна команда | ✅ |
+
+Бриллиант, не гем.
