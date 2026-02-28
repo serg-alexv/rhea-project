@@ -43,6 +43,11 @@ struct TeamChatView: View {
     @AppStorage("table_shared") private var tableShared = false
     @AppStorage("family_visibility_only") private var familyVisibilityOnly = false
     @AppStorage("family_send_mode") private var familySendMode = true
+    @AppStorage("table_experiment_mode") private var tableExperimentMode = true
+    @AppStorage("table_session_id") private var tableSessionID = ""
+    @AppStorage("table_turn_counter") private var tableTurn = 0
+    @State private var activeTurnTag: String? = nil
+    @State private var activeTurnTargets: [String] = []
 
     /// All known senders (for filter chips)
     var allSenders: [String] {
@@ -69,6 +74,10 @@ struct TeamChatView: View {
             VStack(spacing: 0) {
                 // ON AIR — who's active NOW
                 onAirBanner
+
+                if familySendMode {
+                    tableExperimentBanner
+                }
 
                 // Filter chips (scrollable, only when >1 sender)
                 if allSenders.count > 1 {
@@ -157,6 +166,7 @@ struct TeamChatView: View {
                 agentSheet
             }
             .task {
+                ensureTableSession()
                 await fetchFull()
                 startPolling()
             }
@@ -194,6 +204,59 @@ struct TeamChatView: View {
         .background(Color.black.opacity(0.95))
     }
 
+    var tableExperimentBanner: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack(spacing: 8) {
+                Text("TABLE \(tableSessionID) #\(tableTurn)")
+                    .font(.system(.caption2, design: .monospaced, weight: .bold))
+                    .foregroundStyle(.white.opacity(0.9))
+                Spacer()
+                Toggle("tag", isOn: $tableExperimentMode)
+                    .labelsHidden()
+                    .scaleEffect(0.85)
+                Button("new") {
+                    tableSessionID = Self.newTableSessionID()
+                    tableTurn = 0
+                    activeTurnTag = nil
+                    activeTurnTargets = []
+                }
+                .font(.system(.caption2, design: .monospaced, weight: .bold))
+                .foregroundStyle(RheaTheme.green)
+            }
+
+            if let tag = activeTurnTag {
+                let statuses = turnStatuses(tag: tag)
+                let pending = statuses.filter { !$0.seen }.count
+                HStack(spacing: 8) {
+                    Text(tag)
+                        .font(.system(.caption2, design: .monospaced))
+                        .foregroundStyle(.secondary)
+                    Text("pending \(pending)")
+                        .font(.system(.caption2, design: .monospaced, weight: .bold))
+                        .foregroundStyle(pending == 0 ? RheaTheme.green : RheaTheme.amber)
+                    Spacer()
+                }
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 6) {
+                        ForEach(statuses, id: \.seat) { row in
+                            Text("\(row.seat.uppercased()) \(row.seen ? "ok" : "wait")")
+                                .font(.system(.caption2, design: .monospaced, weight: .bold))
+                                .foregroundStyle(row.seen ? .black : .white.opacity(0.8))
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, 4)
+                                .background(
+                                    Capsule().fill(row.seen ? RheaTheme.green : Color.white.opacity(0.12))
+                                )
+                        }
+                    }
+                }
+            }
+        }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 8)
+        .background(Color.black.opacity(0.95))
+    }
+
     func sendMessage() async {
         let text = composerText.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !text.isEmpty else { return }
@@ -203,13 +266,24 @@ struct TeamChatView: View {
         if familySendMode {
             let targets = activeTableTargets()
             if !targets.isEmpty {
+                var outbound = text
+                var turnTag: String? = nil
+                if tableExperimentMode {
+                    ensureTableSession()
+                    tableTurn += 1
+                    let tag = "[TABLE:\(tableSessionID)#\(tableTurn)]"
+                    outbound = "\(tag) \(text)"
+                    turnTag = tag
+                }
                 var okCount = 0
                 for target in targets {
-                    if await sendOfficeMessage(to: target, text: text) {
+                    if await sendOfficeMessage(to: target, text: outbound) {
                         okCount += 1
                     }
                 }
                 if okCount > 0 {
+                    activeTurnTag = turnTag
+                    activeTurnTargets = targets
                     withAnimation { composerText = "" }
                     await pollDelta()
                 }
@@ -247,6 +321,37 @@ struct TeamChatView: View {
         if tableGemini { out.append("gemini") }
         if tableShared { out.append("shared") }
         return out
+    }
+
+    static func newTableSessionID() -> String {
+        let stamp = String(Int(Date().timeIntervalSince1970), radix: 36).uppercased()
+        let tail = UUID().uuidString.replacingOccurrences(of: "-", with: "").prefix(4).uppercased()
+        return "\(stamp)-\(tail)"
+    }
+
+    func ensureTableSession() {
+        if tableSessionID.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            tableSessionID = Self.newTableSessionID()
+            tableTurn = 0
+        }
+    }
+
+    func turnStatuses(tag: String) -> [(seat: String, seen: Bool)] {
+        activeTurnTargets.map { seat in
+            (seat: seat, seen: hasTaggedReply(seat: seat, tag: tag))
+        }
+    }
+
+    func hasTaggedReply(seat: String, tag: String) -> Bool {
+        items.contains { item in
+            seatMatchesSender(seat: seat, sender: item.sender) && item.text.contains(tag)
+        }
+    }
+
+    func seatMatchesSender(seat: String, sender: String) -> Bool {
+        let s = sender.lowercased()
+        let seatL = seat.lowercased()
+        return s == seatL || s.hasPrefix("\(seatL)-") || s.hasPrefix("\(seatL)_")
     }
 
     func sendOfficeMessage(to receiver: String, text: String) async -> Bool {
