@@ -160,6 +160,17 @@ struct PulseMonitorView: View {
                         Text("lease \(a?.lease_token ?? 0)")
                             .font(.system(.caption2, design: .monospaced))
                             .foregroundStyle(.secondary)
+                        Button {
+                            Task { await wake(key.uppercased()) }
+                        } label: {
+                            Text("Wake")
+                                .font(.system(.caption2, design: .monospaced, weight: .bold))
+                                .foregroundStyle(RheaTheme.amber)
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, 3)
+                                .background(Capsule().strokeBorder(RheaTheme.amber.opacity(0.4), lineWidth: 1))
+                        }
+                        .buttonStyle(.plain)
                     }
                 }
             }
