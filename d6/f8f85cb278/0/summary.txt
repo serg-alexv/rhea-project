@@ -1,0 +1,9 @@
+iPhone Mirroring still can't connect — the phone is **unlocked and in use**, which is the blocker. iPhone Mirroring requires the opposite:
+
+**Lock your phone** (press the side button to turn the screen off). Mirroring only works when the iPhone is locked/sleeping — it takes over the display remotely. While you're actively using the phone, macOS can't mirror it.
+
+Once you lock it, I'll detect the connection and navigate to Play.app.
+
+Meanwhile — the server is healthy and `/agents/status` returns full data. The **Governor white screen** issue on TestFlight is because the current TestFlight build predates the GovernorView rewrite to use `/agents/status`. A new archive + upload would fix all three tabs (Governor, Pulse, Dialog).
+
+Also noticed Orion is running in parallel (`gpt-5.3-codex xhigh · 62% left`) — the Radio widget on the phone is live and pulling real data. The system is working.
