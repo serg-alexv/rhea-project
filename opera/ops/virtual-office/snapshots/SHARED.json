@@ -1,0 +1,8 @@
+{
+  "agent": "SHARED",
+  "last_seq_applied": 0,
+  "state_hash": "831a42bce6fcdeb9",
+  "saved_at": "2026-02-28T12:18:47.106932+00:00",
+  "lease_token": 2,
+  "messages_drained": 0
+}
