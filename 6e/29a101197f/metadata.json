@@ -1,0 +1,44 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "6e29a101197f",
+  "strategy": "auto-commit",
+  "branch": "stage4-release",
+  "checkpoints_count": 1,
+  "files_touched": [
+    ".rhea/attention/state.json",
+    "ios/RheaPreview.swiftpm/Sources/GovernorView.swift",
+    "ios/RheaPreview.swiftpm/Sources/PulseMonitorView.swift",
+    "ios/RheaPreview.swiftpm/Sources/TeamChatView.swift",
+    "opera/metrics/attention_protocol.jsonl",
+    "opera/ops/virtual-office/inbox/RELAY_20260228_115943_MIKA_to_ORION.md",
+    "opera/ops/virtual-office/inbox/RELAY_20260228_115943_MIKA_to_REX.md",
+    "opera/ops/virtual-office/inbox/RELAY_20260228_115944_MIKA_to_HYPERION.md",
+    "opera/ops/virtual-office/inbox/RELAY_20260228_120203_MIKA_to_HYPERION.md",
+    "opera/ops/virtual-office/inbox/RELAY_20260228_120203_MIKA_to_ORION.md",
+    "opera/ops/virtual-office/inbox/RELAY_20260228_120203_MIKA_to_REX.md",
+    "opera/ops/virtual-office/inbox/RELAY_WAKE_20260228_120202_ORION.md",
+    "opera/ops/virtual-office/inbox/RELAY_WAKE_20260228_120202_REX.md",
+    "opera/ops/virtual-office/inbox/RELAY_WAKE_20260228_120203_GEMINI.md",
+    "opera/ops/virtual-office/inbox/RELAY_WAKE_20260228_120203_GPT.md",
+    "opera/ops/virtual-office/inbox/RELAY_WAKE_20260228_120203_HYPERION.md",
+    "opera/ops/virtual-office/inbox/RELAY_WAKE_20260228_120203_SHARED.md",
+    "scripts/attention_forcer.py",
+    "src/tribunal_api.py"
+  ],
+  "sessions": [
+    {
+      "metadata": "/6e/29a101197f/0/metadata.json",
+      "transcript": "/6e/29a101197f/0/full.jsonl",
+      "context": "",
+      "content_hash": "/6e/29a101197f/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 54,
+    "cache_creation_tokens": 43490,
+    "cache_read_tokens": 5274310,
+    "output_tokens": 17074,
+    "api_call_count": 50
+  }
+}

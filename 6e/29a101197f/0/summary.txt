@@ -1,0 +1,18 @@
+Done. Now about **TestFlight** — this is the part where you need to contribute a design decision.
+
+`★ Insight ─────────────────────────────────────`
+**Unified status pattern**: The `/agents/status` endpoint follows the "Backend for Frontend" (BFF) pattern — one API call returns everything the UI needs, pre-merged. This eliminates the "three monitors disagree" problem because the merge logic lives server-side, not spread across 3 iOS views each fetching different endpoints with different timing. The `alive` field is a composite boolean: `(not lease_expired OR has_activity) AND office_status != "stuck"` — one truth, derived from multiple signals.
+`─────────────────────────────────────────────────`
+
+**What landed:**
+- `GET /agents/status` — merges governor + office + tasks + radio into one response
+- All 3 iOS views (Governor, Pulse, Radio agent sheet) now fetch from this single endpoint
+- Orion shows consistently green/alive across all monitors
+- Agent cards enriched: show `office_status`, `pending_msgs`, `tasks_open`, `mode` badge
+
+**TestFlight**: You have Apple Development certs (`serg.alexv@gmail.com`). To get a TestFlight code:
+1. Open App Store Connect → create app record with bundle ID `com.rhea.preview`
+2. In Xcode: Product → Archive → Distribute → App Store Connect (TestFlight)
+3. After ~15min processing, you get a TestFlight link
+
+Want me to script `xcodebuild archive` + `altool --upload-app` so future builds are one command?
