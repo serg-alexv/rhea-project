@@ -1,0 +1,19 @@
+**Прямо сейчас:**
+
+1. **TestFlight** — https://testflight.apple.com/join/BNya22Jg — ждёт processing Apple (~15 мин). После этого можно ставить на реальный iPhone.
+
+2. **Tribunal API** — перезапущен с `/agents/status`. 10 агентов, unified truth. Но симулятор показал "No Data" потому что при архиве xcodebuild был в `ios/RheaApp/` — нужно в симуляторе просто rebuild (Cmd+R из Xcode) с новым кодом.
+
+3. **Что работает на сервере:**
+   - Rex: green, alive, normal
+   - Orion: green, alive, normal (больше не красный)
+   - Gemini: green, alive, normal
+   - Hyperion/GPT: alive но pace=red (нет governor data)
+   - Shared: green, compact
+
+4. **Что НЕ сделано:**
+   - Gemini API key сдох — tribunal только GPT-4o + DeepSeek
+   - Human-facing research UI — нулевой прогресс
+   - Unified status не видно в iOS пока не rebuild в simulator
+
+Ждём TestFlight processing или делаем что-то?
