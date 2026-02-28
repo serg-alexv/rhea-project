@@ -20,6 +20,7 @@ Usage:
     stale = q.stale_check(hours=4)   # tasks claimed but no progress
 """
 
+import fcntl
 import json
 import uuid
 from dataclasses import dataclass, asdict
@@ -235,23 +236,45 @@ class TaskQueue:
             f.write(json.dumps(entry, default=str) + "\n")
 
     def _save_state(self) -> None:
-        """Write current state snapshot."""
+        """Write current state snapshot with file locking."""
         state = {
             "tasks": self.tasks,
             "_updated": datetime.now(timezone.utc).isoformat(),
         }
-        QUEUE_STATE.write_text(json.dumps(state, indent=2, default=str))
+        lock_path = QUEUE_STATE.with_suffix(".lock")
+        with open(lock_path, "w") as lf:
+            fcntl.flock(lf, fcntl.LOCK_EX)
+            QUEUE_STATE.write_text(json.dumps(state, indent=2, default=str))
+            fcntl.flock(lf, fcntl.LOCK_UN)
 
     def _load_state(self) -> None:
-        """Load from state snapshot (faster than replaying full log)."""
+        """Load from state snapshot with file locking."""
         if QUEUE_STATE.exists():
+            lock_path = QUEUE_STATE.with_suffix(".lock")
             try:
-                state = json.loads(QUEUE_STATE.read_text())
-                self.tasks = state.get("tasks", {})
+                with open(lock_path, "w") as lf:
+                    fcntl.flock(lf, fcntl.LOCK_SH)
+                    state = json.loads(QUEUE_STATE.read_text())
+                    self.tasks = state.get("tasks", {})
+                    fcntl.flock(lf, fcntl.LOCK_UN)
                 return
-            except (json.JSONDecodeError, KeyError):
+            except (json.JSONDecodeError, KeyError, OSError):
                 pass
         self.tasks = {}
+
+    def release_stale(self, hours: int = 2) -> list[dict]:
+        """Release stale claimed tasks back to open. Returns released tasks."""
+        stale = self.stale_check(hours=hours)
+        released = []
+        for t in stale:
+            t["status"] = "open"
+            t["claimed_by"] = ""
+            t["updated"] = datetime.now(timezone.utc).isoformat()
+            self._append_log("release", {"id": t["id"], "reason": f"stale >{hours}h"})
+            released.append(t)
+        if released:
+            self._save_state()
+        return released
 
 
 # --- Seed from TODO.md ---
