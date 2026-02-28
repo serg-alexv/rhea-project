@@ -184,6 +184,9 @@ if not TRIBUNAL_API_KEYS:
     _dev_key = "dev-" + secrets.token_hex(16)
     TRIBUNAL_API_KEYS.add(_dev_key)
 
+# Always accept dev-bypass in local mode (Atlas frontend default key)
+TRIBUNAL_API_KEYS.add("dev-bypass")
+
 
 async def verify_api_key(x_api_key: str = Header(None, alias="X-API-Key")):
     if not TRIBUNAL_API_KEYS:
