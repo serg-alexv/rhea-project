@@ -579,10 +579,30 @@ struct BubbleLine: View {
 
     var isHuman: Bool { item.sender.lowercased() == "human" }
 
+    var senderIcon: String {
+        switch item.sender.lowercased() {
+        case "rex": return "crown"
+        case "orion": return "star.circle"
+        case "gemini": return "sparkles"
+        case "human": return "person.fill"
+        case "relay": return "antenna.radiowaves.left.and.right"
+        case "tribunal": return "scalemass"
+        default: return "circle.dotted"
+        }
+    }
+
     var body: some View {
-        // TODO(human): Design the bubble layout for agent messages
         HStack(alignment: .top, spacing: 8) {
             if isHuman { Spacer(minLength: 40) }
+
+            // Agent avatar (left side for non-human)
+            if !isHuman {
+                Image(systemName: senderIcon)
+                    .font(.system(size: 14))
+                    .foregroundStyle(senderColor)
+                    .frame(width: 24, height: 24)
+                    .background(Circle().fill(senderColor.opacity(0.15)))
+            }
 
             VStack(alignment: isHuman ? .trailing : .leading, spacing: 4) {
                 // Header: sender → receiver + time
@@ -622,6 +642,15 @@ struct BubbleLine: View {
                             .strokeBorder(senderColor.opacity(0.2), lineWidth: 0.5)
                     )
             )
+
+            // Human avatar (right side)
+            if isHuman {
+                Image(systemName: senderIcon)
+                    .font(.system(size: 14))
+                    .foregroundStyle(senderColor)
+                    .frame(width: 24, height: 24)
+                    .background(Circle().fill(senderColor.opacity(0.15)))
+            }
 
             if !isHuman { Spacer(minLength: 40) }
         }
