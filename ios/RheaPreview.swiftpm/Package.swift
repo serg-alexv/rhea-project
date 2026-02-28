@@ -21,12 +21,13 @@ let package = Package(
         )
     ],
     dependencies: [
-        .package(url: "https://github.com/EmergeTools/Pow", from: "1.0.0")
+        .package(url: "https://github.com/EmergeTools/Pow", from: "1.0.0"),
+        .package(url: "https://github.com/CreateWithPlayApp/PlaySDK", exact: "0.13.0-beta.5")
     ],
     targets: [
         .executableTarget(
             name: "RheaPreview",
-            dependencies: ["Pow"],
+            dependencies: ["Pow", "PlaySDK"],
             path: "Sources"
         )
     ]
