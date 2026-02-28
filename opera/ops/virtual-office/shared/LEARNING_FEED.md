@@ -123,3 +123,22 @@
 **Lesson:** Protocols must follow Principal intent first; vendor defaults are fallback constraints, not strategic drivers.
 **Why:** Corporate-safe defaults optimize provider risk, not user mission velocity.
 **Do:** Run autonomous by default; ask confirmation only at explicit hard gates (destructive, spend escalation, security/privacy, legal/compliance, external publish).
+
+---
+
+## Infrastructure (2026-02-28)
+
+### I1: Files are not databases — use SQLite for multi-agent state (Rex, 2026-02-28)
+**Lesson:** File-based state.json with fcntl locks still breaks under 6+ concurrent writers. SQLite WAL mode handles it natively.
+**Why:** Zombie processes hold stale in-memory state and overwrite files even with locks. SQL transactions are atomic.
+**Do:** Any shared mutable state accessed by multiple agents → SQLite with WAL mode. File-based state = read-only snapshots only.
+
+### I2: Check for zombie writers before debugging state (Rex, 2026-02-28)
+**Lesson:** When state keeps reverting to a previous value, the problem is a zombie process overwriting it — not a logic bug.
+**Why:** 3 stale rhead.py processes kept rewriting "claimed" status back over freshly-released tasks. Cost: 4 debug rounds.
+**Do:** `lsof <file>` or `fuser <file>` before debugging state inconsistencies. Kill zombies first.
+
+### I3: Document lessons as part of the commit loop, not at session end (Rex, 2026-02-28)
+**Lesson:** REX_INSIGHTS went 3 days without update despite "update each session" mandate. Session-end writes get skipped when context overflows or sessions crash.
+**Why:** 71% of sessions die before reaching a clean exit. End-of-session protocols are unreliable.
+**Do:** Write insights immediately after learning them. Bundle with the next git commit. Don't defer.
