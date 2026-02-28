@@ -1,0 +1,40 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "1b3521155e8a",
+  "session_id": "94aabe90-9b2d-48e7-be8c-6bf820a0b6a9",
+  "strategy": "auto-commit",
+  "created_at": "2026-02-28T16:46:41.900909Z",
+  "branch": "stage4-release",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "opera/ops/virtual-office/inbox/RELAY_WAKE_20260228_164327_GEMINI.md",
+    "opera/ops/virtual-office/inbox/RELAY_WAKE_20260228_164327_GPT.md",
+    "opera/ops/virtual-office/inbox/RELAY_WAKE_20260228_164327_SHARED.md",
+    "opera/ops/virtual-office/inbox/RELAY_WAKE_20260228_164347_GEMINI.md",
+    "opera/ops/virtual-office/inbox/RELAY_WAKE_20260228_164347_GPT.md",
+    "opera/ops/virtual-office/inbox/RELAY_WAKE_20260228_164347_SHARED.md",
+    "opera/ops/virtual-office/inbox/RELAY_WAKE_20260228_164408_GEMINI.md",
+    "opera/ops/virtual-office/inbox/RELAY_WAKE_20260228_164408_GPT.md",
+    "opera/ops/virtual-office/inbox/RELAY_WAKE_20260228_164408_SHARED.md",
+    "opera/ops/virtual-office/inbox/RELAY_WAKE_20260228_164428_GEMINI.md",
+    "opera/ops/virtual-office/inbox/RELAY_WAKE_20260228_164428_GPT.md",
+    "opera/ops/virtual-office/inbox/RELAY_WAKE_20260228_164428_SHARED.md",
+    "opera/ops/virtual-office/inbox/RELAY_WAKE_20260228_164448_GEMINI.md",
+    "opera/ops/virtual-office/inbox/RELAY_WAKE_20260228_164448_GPT.md",
+    "opera/ops/virtual-office/inbox/RELAY_WAKE_20260228_164448_SHARED.md",
+    "opera/ops/virtual-office/inbox/RELAY_WAKE_20260228_164509_GEMINI.md",
+    "opera/ops/virtual-office/inbox/RELAY_WAKE_20260228_164509_GPT.md",
+    "opera/ops/virtual-office/inbox/RELAY_WAKE_20260228_164509_SHARED.md"
+  ],
+  "agent": "Claude Code",
+  "transcript_identifier_at_start": "412add52-81c4-4871-88fd-c1f5773487eb",
+  "checkpoint_transcript_start": 12558,
+  "transcript_lines_at_start": 12558,
+  "token_usage": {
+    "input_tokens": 7,
+    "cache_creation_tokens": 124850,
+    "cache_read_tokens": 318527,
+    "output_tokens": 2269,
+    "api_call_count": 3
+  }
+}
