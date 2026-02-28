@@ -1,0 +1,23 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "60637fc9dc68",
+  "session_id": "94aabe90-9b2d-48e7-be8c-6bf820a0b6a9",
+  "strategy": "auto-commit",
+  "created_at": "2026-02-28T11:20:29.895548Z",
+  "branch": "stage4-release",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "scripts/red_pixel_canary.py"
+  ],
+  "agent": "Claude Code",
+  "transcript_identifier_at_start": "e6ffc546-0546-4431-ac30-7513725cce36",
+  "checkpoint_transcript_start": 8933,
+  "transcript_lines_at_start": 8933,
+  "token_usage": {
+    "input_tokens": 3,
+    "cache_creation_tokens": 205,
+    "cache_read_tokens": 134339,
+    "output_tokens": 8,
+    "api_call_count": 1
+  }
+}
