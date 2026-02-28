@@ -1,0 +1,26 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "0af58b16ebdf",
+  "strategy": "auto-commit",
+  "branch": "stage4-release",
+  "checkpoints_count": 1,
+  "files_touched": [
+    ".rhea/ndi/red_pixel.pid"
+  ],
+  "sessions": [
+    {
+      "metadata": "/0a/f58b16ebdf/0/metadata.json",
+      "transcript": "/0a/f58b16ebdf/0/full.jsonl",
+      "context": "",
+      "content_hash": "/0a/f58b16ebdf/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 3,
+    "cache_creation_tokens": 608,
+    "cache_read_tokens": 150689,
+    "output_tokens": 8,
+    "api_call_count": 1
+  }
+}
