@@ -1,0 +1,8 @@
+{"ts": "2026-02-28T10:50:53Z", "event": "ndi_process_start", "event_id": "4bc1d4560081", "risk": "warn", "summary": "NDI process started: 405:/usr/libexec/opendirectoryd", "notify": true, "count_new": 11}
+{"ts": "2026-02-28T10:50:53Z", "event": "tcc_screen_capture_change", "event_id": "1c87152f1412", "risk": "warn", "summary": "ScreenCapture TCC grants changed", "notify": true, "grants": 0}
+{"ts": "2026-02-28T10:50:53Z", "event": "ndi_pulse_risk", "event_id": "a3800fd05aa3", "risk": "warn", "summary": "risk=warn | proc=12 ndi_proc=11 | ndi_ports=0 | tcc_grants=0", "notify": true}
+{"ts": "2026-02-28T10:50:54Z", "event": "ndi_pulse", "event_id": "130f719aa072", "risk": "warn", "summary": "risk=warn | proc=12 ndi_proc=11 | ndi_ports=0 | tcc_grants=0", "notify": false}
+{"ts": "2026-02-28T10:51:18Z", "event": "ndi_pulse", "event_id": "630b6d1cf590", "risk": "warn", "summary": "risk=warn | proc=2 ndi_proc=1 | ndi_ports=0 | tcc_grants=0", "notify": false}
+{"ts": "2026-02-28T10:53:30Z", "event": "ndi_pulse", "event_id": "48cd4ba870f3", "risk": "warn", "summary": "risk=warn | proc=5 ndi_proc=4 | ndi_ports=0 | tcc_grants=0", "notify": false}
+{"ts": "2026-02-28T10:54:25Z", "event": "ndi_pulse", "event_id": "630b6d1cf590", "risk": "warn", "summary": "risk=warn | proc=2 ndi_proc=1 | ndi_ports=0 | tcc_grants=0", "notify": false}
+{"ts": "2026-02-28T10:58:56Z", "event": "manual_flicker", "event_id": "fe8fac595aa0", "risk": "warn", "notify": true, "summary": "manual check from codex"}

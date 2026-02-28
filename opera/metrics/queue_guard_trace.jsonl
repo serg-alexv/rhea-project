@@ -1,0 +1,3 @@
+{"ts": "2026-02-28T10:53:05Z", "event": "queue_health", "risk": "ok", "summary": "risk=ok files=6 changed=0 archived=0 lines=1258 bytes=397287", "changed_files": 0, "archived": 0, "notify": false}
+{"ts": "2026-02-28T10:53:29Z", "event": "queue_health", "risk": "ok", "summary": "risk=ok files=6 changed=0 archived=0 lines=1265 bytes=398743", "changed_files": 0, "archived": 0, "notify": false}
+{"ts": "2026-02-28T10:54:24Z", "event": "queue_health", "risk": "ok", "summary": "risk=ok files=6 changed=0 archived=0 lines=1270 bytes=400421", "changed_files": 0, "archived": 0, "notify": false}

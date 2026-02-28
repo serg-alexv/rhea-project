@@ -1,0 +1,13 @@
+{
+  "active_proc_ids": [
+    "28346:/usr/libexec/replayd",
+    "554:/Library/SystemExtensions/01BF2AF3-188A-436E-AB83-B6BFC2F3F326/c"
+  ],
+  "active_ndi_ids": [
+    "554:/Library/SystemExtensions/01BF2AF3-188A-436E-AB83-B6BFC2F3F326/c"
+  ],
+  "active_ports": [],
+  "last_tcc_hash": "da39a3ee5e6b4b0d",
+  "last_risk": "warn",
+  "last_run": "2026-02-28T10:54:25Z"
+}

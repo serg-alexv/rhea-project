@@ -1969,6 +1969,56 @@ async def feed_push(msg: FeedPushMsg):
 
 
 # ---------------------------------------------------------------------------
+# Agent Wake / Status
+# ---------------------------------------------------------------------------
+
+@app.get("/agents")
+async def list_agents():
+    """List all known agents and their lease status."""
+    leases_dir = _PROJECT_ROOT / "opera" / "ops" / "virtual-office" / "leases"
+    agents = {}
+    if leases_dir.exists():
+        for f in leases_dir.glob("*.json"):
+            if f.stem.startswith("-"):
+                continue
+            try:
+                data = json.loads(f.read_text())
+                expired = data.get("expires_at", "") < datetime.now(timezone.utc).isoformat()
+                agents[f.stem] = {
+                    "agent": f.stem,
+                    "lease_token": data.get("lease_token", 0),
+                    "expired": expired,
+                    "last_active": data.get("renewed_at", data.get("acquired_at", "")),
+                }
+            except Exception:
+                pass
+    return agents
+
+
+@app.post("/agents/wake/{agent}")
+async def wake_agent(agent: str):
+    """Wake an agent by writing a wake marker and broadcasting on Radio."""
+    agent = agent.upper()
+    # Write wake marker
+    inbox = _PROJECT_ROOT / "opera" / "ops" / "virtual-office" / "inbox"
+    ts = datetime.now(timezone.utc)
+    ts_str = ts.strftime("%Y%m%d_%H%M%S")
+    marker = inbox / f"RELAY_WAKE_{ts_str}_{agent}.md"
+    marker.write_text(f"# RELAY WAKE — {agent}\n**Time:** {ts.isoformat()}\n**Trigger:** iOS Radio wake request\n")
+
+    # Broadcast on radio
+    _broadcast_event({
+        "id": f"wake-{secrets.token_hex(4)}",
+        "type": "wake",
+        "sender": "human",
+        "receiver": agent,
+        "text": f"WAKE {agent} — requested via iOS Radio",
+        "ts": ts.isoformat(),
+    })
+    return {"status": "wake_sent", "agent": agent, "marker": marker.name}
+
+
+# ---------------------------------------------------------------------------
 # Direct execution
 # ---------------------------------------------------------------------------
 
