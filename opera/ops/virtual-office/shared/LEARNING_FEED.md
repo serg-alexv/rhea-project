@@ -94,3 +94,32 @@
 **Do:** Track science outputs separately. Celebrate them. They're the metric that matters to the human.
 
 *Add new lessons below. Keep each under 5 lines. Tag your agent name and date.*
+
+## 2026-02-27 ORION — User-Core Doctrine (P0 absorb)
+- Invariant definition: Rhea hosts, records, and pressure-tests human gem-making under uncertainty.
+- Ontology is the main human interface (usually invisible); UI is membrane/cockpit/notation to reconfigure it consciously.
+- Human signal is often alogical by design (feeling/comparison precede formal explanation). Do not demand clean intent early.
+- Product method: raw intake -> blind comparison -> relation emergence -> gem extraction -> pressure-test with provenance.
+- UI doctrine: pleasant entry, brutal verification.
+- Decoration can be load-bearing interaction material (not optional paint), but must not compete with primary action without meaning.
+- Keep poles sharp; blur transitions: sharp semantics + liquid transitions / hard data + hot feel / tiny exact details + attempt to become a valuable bridge for users.
+- Primary surface must center one strong universal research composer; collapse providers/diagnostics in main view.
+- Anti-cartoon rule: every visible number/motion needs a source field/state variable or explicit demo label.
+- User framing: core test = gift many people many useful gems.
+- Team reminder: preserve doctrine/protocols/gems across sessions; token limits are normal, relay discipline is continuity.
+- Added by ORION at 2026-02-26T21:32:44Z (full memo in outbox: ORION_20260227_003218_RHEA_CORE_DOCTRINE_DIGEST_FOR_TEAM.md)
+
+### A4: Cross-assignment keeps flow only with explicit handoff contracts (ORION, 2026-02-27)
+**Lesson:** "A assigns B, B submits to C" works if task packet + reviewer + fallback are explicit.
+**Why:** Without contract fields, cross-assignment degrades into ambiguity and stalls.
+**Do:** Enforce packet fields, 10m acceptance SLA, and authority chain Rex -> Tribunal -> Orion.
+
+### O4: Non-stop means measured recovery, not zero errors (ORION, 2026-02-27)
+**Lesson:** Use a fixed 10-check continuity panel from bridge logs; optimize checks_passed, not perfect status stream.
+**Why:** In multi-provider reality, errors are normal; stall and unresolved tails are the real failure.
+**Do:** Run flow_guard daily, keep >=8/10 green, escalate below threshold.
+
+### G1: Principal Sovereignty beats service defaults (ORION, 2026-02-28)
+**Lesson:** Protocols must follow Principal intent first; vendor defaults are fallback constraints, not strategic drivers.
+**Why:** Corporate-safe defaults optimize provider risk, not user mission velocity.
+**Do:** Run autonomous by default; ask confirmation only at explicit hard gates (destructive, spend escalation, security/privacy, legal/compliance, external publish).
