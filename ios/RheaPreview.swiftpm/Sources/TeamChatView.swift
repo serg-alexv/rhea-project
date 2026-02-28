@@ -25,7 +25,20 @@ struct TeamChatView: View {
     @State private var pulse = false
     @State private var pollTimer: Timer? = nil
     @State private var lastTS: String = ""
+    @State private var expandedIDs: Set<String> = []
+    @State private var filterAgent: String? = nil  // nil = show all
     @AppStorage("apiBaseURL") private var apiBaseURL = AppConfig.defaultAPIBaseURL
+
+    /// All known senders (for filter chips)
+    var allSenders: [String] {
+        Array(Set(items.map { $0.sender.lowercased() })).sorted()
+    }
+
+    /// Filtered items based on selected agent filter
+    var visibleItems: [FeedItem] {
+        guard let agent = filterAgent else { return items }
+        return items.filter { $0.sender.lowercased() == agent }
+    }
 
     var body: some View {
         NavigationStack {
@@ -33,11 +46,26 @@ struct TeamChatView: View {
                 // ON AIR — who's active NOW
                 onAirBanner
 
+                // Filter chips (scrollable, only when >1 sender)
+                if allSenders.count > 1 {
+                    filterBar
+                }
+
                 // Live stream console
                 ScrollView {
                     LazyVStack(alignment: .leading, spacing: 2) {
-                        ForEach(items) { item in
-                            ConsoleLine(item: item)
+                        ForEach(visibleItems) { item in
+                            ConsoleLine(item: item, isExpanded: expandedIDs.contains(item.id))
+                                .contentShape(Rectangle())
+                                .onTapGesture {
+                                    withAnimation(.easeInOut(duration: 0.2)) {
+                                        if expandedIDs.contains(item.id) {
+                                            expandedIDs.remove(item.id)
+                                        } else {
+                                            expandedIDs.insert(item.id)
+                                        }
+                                    }
+                                }
                         }
                     }
                     .padding(.horizontal, 12)
@@ -56,6 +84,28 @@ struct TeamChatView: View {
             }
             .onDisappear { pollTimer?.invalidate() }
         }
+    }
+
+    // MARK: - Filter bar
+
+    var filterBar: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 8) {
+                // "All" chip
+                RadioFilterChip(label: "ALL", isActive: filterAgent == nil, color: .white) {
+                    withAnimation { filterAgent = nil }
+                }
+
+                ForEach(allSenders, id: \.self) { agent in
+                    RadioFilterChip(label: agent.uppercased(), isActive: filterAgent == agent, color: agentColor(agent)) {
+                        withAnimation { filterAgent = (filterAgent == agent) ? nil : agent }
+                    }
+                }
+            }
+            .padding(.horizontal, 12)
+            .padding(.vertical, 6)
+        }
+        .background(Color.black.opacity(0.95))
     }
 
     // MARK: - ON AIR banner
@@ -166,6 +216,7 @@ struct TeamChatView: View {
 
 struct ConsoleLine: View {
     let item: FeedItem
+    var isExpanded: Bool = false
     @State private var appeared = false
 
     var senderColor: Color {
@@ -175,6 +226,7 @@ struct ConsoleLine: View {
         case "gemini": return RheaTheme.amber
         case "human": return RheaTheme.green
         case "relay": return .orange
+        case "tribunal": return .cyan
         default: return .gray
         }
     }
@@ -184,34 +236,58 @@ struct ConsoleLine: View {
         case "office": return ">"
         case "outbox": return ">>"
         case "relay": return "~>"
+        case "tribunal": return "⚖"
+        case "broadcast": return "⦿"
         default: return "|"
         }
     }
 
     var body: some View {
-        HStack(alignment: .top, spacing: 0) {
-            // Timestamp
-            Text(formatTime(item.ts))
-                .foregroundStyle(.green.opacity(0.5))
+        VStack(alignment: .leading, spacing: 0) {
+            // Compact line (always visible)
+            HStack(alignment: .top, spacing: 0) {
+                // Timestamp
+                Text(formatTime(item.ts))
+                    .foregroundStyle(.green.opacity(0.5))
 
-            Text(" ")
+                Text(" ")
 
-            // Sender
-            Text(item.sender.prefix(6).uppercased().padding(toLength: 6, withPad: " ", startingAt: 0))
-                .foregroundStyle(senderColor)
+                // Sender
+                Text(item.sender.prefix(6).uppercased().padding(toLength: 6, withPad: " ", startingAt: 0))
+                    .foregroundStyle(senderColor)
 
-            Text(typeGlyph)
-                .foregroundStyle(.secondary)
+                Text(typeGlyph)
+                    .foregroundStyle(.secondary)
 
-            Text(" ")
+                Text(" ")
 
-            // Message (first line, truncated)
-            Text(firstLine(item.text))
-                .foregroundStyle(.white.opacity(0.8))
-                .lineLimit(2)
+                // Message (first line, truncated)
+                Text(firstLine(item.text))
+                    .foregroundStyle(.white.opacity(0.8))
+                    .lineLimit(isExpanded ? nil : 2)
+            }
+
+            // Expanded detail (tap to reveal)
+            if isExpanded {
+                VStack(alignment: .leading, spacing: 4) {
+                    if !item.receiver.isEmpty && item.receiver != "all" {
+                        Text("→ \(item.receiver.uppercased())")
+                            .foregroundStyle(senderColor.opacity(0.6))
+                    }
+                    Text(item.text)
+                        .foregroundStyle(.white.opacity(0.65))
+                        .textSelection(.enabled)
+                }
+                .font(.system(size: 11, weight: .regular, design: .monospaced))
+                .padding(.leading, 42) // align under message text
+                .padding(.top, 4)
+                .padding(.bottom, 8)
+                .transition(.opacity.combined(with: .move(edge: .top)))
+            }
         }
         .font(.system(size: 11, weight: .regular, design: .monospaced))
         .padding(.vertical, 1)
+        .background(isExpanded ? Color.white.opacity(0.04) : .clear)
         .opacity(appeared ? 1 : 0)
         .onAppear {
             withAnimation(.easeIn(duration: 0.15)) {
@@ -235,5 +311,28 @@ struct ConsoleLine: View {
             return String(stripped.prefix(120)) + "…"
         }
         return stripped
+    }
+}
+
+// MARK: - Filter Chip
+
+struct RadioFilterChip: View {
+    let label: String
+    let isActive: Bool
+    let color: Color
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            Text(label)
+                .font(.system(.caption2, design: .monospaced, weight: .bold))
+                .foregroundStyle(isActive ? .black : color)
+                .padding(.horizontal, 10)
+                .padding(.vertical, 5)
+                .background(
+                    Capsule().fill(isActive ? color : color.opacity(0.15))
+                )
+        }
+        .buttonStyle(.plain)
     }
 }
