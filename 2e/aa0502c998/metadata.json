@@ -1,0 +1,37 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "2eaa0502c998",
+  "strategy": "auto-commit",
+  "branch": "stage4-release",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "diagnostics/screen-flicker-live-20260228T101109Z/logstream.log",
+    "diagnostics/screen-flicker-live-20260228T101109Z/meta.txt",
+    "diagnostics/screen-flicker-live-20260228T101109Z/sampler.tsv",
+    "ios/RheaPreview.swiftpm/Sources/RheaPreviewApp.swift",
+    "ios/RheaPreview.swiftpm/Sources/TeamChatView.swift",
+    "opera/ops/virtual-office/inbox/RELAY_20260228_101125_ORION_to_REX.md",
+    "opera/ops/virtual-office/inbox/RELAY_20260228_101142_ORION_to_REX.md",
+    "opera/ops/virtual-office/inbox/RELAY_20260228_101228_ORION_to_REX.md",
+    "opera/ops/virtual-office/inbox/RELAY_WAKE_20260228_101125_REX.md",
+    "opera/ops/virtual-office/inbox/RELAY_WAKE_20260228_101143_REX.md",
+    "opera/ops/virtual-office/inbox/RELAY_WAKE_20260228_101229_REX.md",
+    "src/tribunal_api.py"
+  ],
+  "sessions": [
+    {
+      "metadata": "/2e/aa0502c998/0/metadata.json",
+      "transcript": "/2e/aa0502c998/0/full.jsonl",
+      "context": "",
+      "content_hash": "/2e/aa0502c998/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 24,
+    "cache_creation_tokens": 16964,
+    "cache_read_tokens": 2943570,
+    "output_tokens": 6184,
+    "api_call_count": 20
+  }
+}
