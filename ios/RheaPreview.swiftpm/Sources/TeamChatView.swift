@@ -237,13 +237,16 @@ struct TeamChatView: View {
         do {
             let (data, _) = try await URLSession.shared.data(from: url)
             let response = try JSONDecoder().decode(FeedResponse.self, from: data)
-            if !response.items.isEmpty {
+            // Deduplicate: only insert items we don't already have
+            let existingIDs = Set(items.map(\.id))
+            let newItems = response.items.filter { !existingIDs.contains($0.id) }
+            if !newItems.isEmpty {
                 withAnimation(.spring(duration: 0.2)) {
-                    items.insert(contentsOf: response.items, at: 0)
-                    latestItem = response.items.first
+                    items.insert(contentsOf: newItems, at: 0)
+                    latestItem = newItems.first
                 }
                 updateActiveSenders()
-                if let first = response.items.first {
+                if let first = newItems.first {
                     lastTS = first.ts
                 }
                 // Haptic kick — new activity on the radio
