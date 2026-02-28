@@ -24,11 +24,13 @@ import random
 from dataclasses import dataclass
 from datetime import datetime, date, timezone
 from pathlib import Path
+from typing import Any
 
 _PROJECT_ROOT = Path(__file__).resolve().parent.parent
 BRIDGE_LOG = _PROJECT_ROOT / "logs" / "bridge_calls.jsonl"
 REX_SESSIONS = Path.home() / ".claude" / "projects" / "-Users-sa-rh-1"
 GOVERNOR_STATE = _PROJECT_ROOT / "opera" / "metrics" / "governor_state.json"
+BILLING_POLICY_PATH = _PROJECT_ROOT / "opera" / "metrics" / "governor_billing_policy.json"
 
 # --- Budget caps per agent (USD/day) ---
 # Rex = subscription (Anthropic Max), cost tracking = shadow only, no real billing.
@@ -65,9 +67,72 @@ AGENT_MAP = {
 }
 
 
+def _default_billing_mode(agent: str) -> str:
+    return "subscription" if agent in SUBSCRIPTION_AGENTS else "api"
+
+
+def _load_billing_policy() -> dict[str, dict[str, Any]]:
+    """
+    Load optional billing policy overrides from JSON.
+
+    Supported shapes:
+    1) {"agents": {"orion": "subscription"}}
+    2) {"agents": {"orion": {"billing_mode": "subscription", "budget_cap": 0.0}}}
+    """
+    policy: dict[str, dict[str, Any]] = {}
+
+    for agent in set(BUDGET_CAPS.keys()) | set(MIN_DAILY_TOKENS.keys()):
+        policy[agent] = {
+            "billing_mode": _default_billing_mode(agent),
+            "budget_cap": float(BUDGET_CAPS.get(agent, 0.0)),
+        }
+
+    if not BILLING_POLICY_PATH.exists():
+        return policy
+
+    try:
+        raw = json.loads(BILLING_POLICY_PATH.read_text())
+    except Exception:
+        return policy
+
+    agents = raw.get("agents", {})
+    if not isinstance(agents, dict):
+        return policy
+
+    for agent, spec in agents.items():
+        a = str(agent).lower()
+        cur = policy.get(
+            a,
+            {
+                "billing_mode": _default_billing_mode(a),
+                "budget_cap": float(BUDGET_CAPS.get(a, 0.0)),
+            },
+        )
+
+        if isinstance(spec, str):
+            mode = spec.lower().strip()
+            if mode in {"subscription", "api"}:
+                cur["billing_mode"] = mode
+        elif isinstance(spec, dict):
+            mode = str(spec.get("billing_mode", "")).lower().strip()
+            if mode in {"subscription", "api"}:
+                cur["billing_mode"] = mode
+            if "budget_cap" in spec:
+                try:
+                    cur["budget_cap"] = float(spec.get("budget_cap"))
+                except Exception:
+                    pass
+
+        policy[a] = cur
+
+    return policy
+
+
 @dataclass
 class GovernorStatus:
     agent: str
+    billing_mode: str   # subscription | api
+    upper_rail_enabled: bool
     pace: str           # green | yellow | red
     forecast: str       # ok | risk
     mode: str           # normal | compact | critical
@@ -86,8 +151,19 @@ class Governor:
 
     def __init__(self, agent: str):
         self.agent = agent.lower()
-        self.is_subscription = self.agent in SUBSCRIPTION_AGENTS
-        self.budget_cap = BUDGET_CAPS.get(self.agent, 2.0)
+        policy = _load_billing_policy()
+        cfg = policy.get(
+            self.agent,
+            {
+                "billing_mode": _default_billing_mode(self.agent),
+                "budget_cap": float(BUDGET_CAPS.get(self.agent, 2.0)),
+            },
+        )
+        self.billing_mode = str(cfg.get("billing_mode", _default_billing_mode(self.agent))).lower()
+        self.is_subscription = self.billing_mode == "subscription"
+        self.budget_cap = float(cfg.get("budget_cap", BUDGET_CAPS.get(self.agent, 2.0)))
+        if self.is_subscription:
+            self.budget_cap = 0.0
         self.min_daily = MIN_DAILY_TOKENS.get(self.agent, 100)
 
     def check(self) -> GovernorStatus:
@@ -175,6 +251,8 @@ class Governor:
 
         status = GovernorStatus(
             agent=self.agent,
+            billing_mode=self.billing_mode,
+            upper_rail_enabled=not self.is_subscription,
             pace=pace,
             forecast=forecast,
             mode=mode,
@@ -319,7 +397,15 @@ if __name__ == "__main__":
         statuses = all_governors()
         for name, s in statuses.items():
             pace_icon = {"green": "🟢", "yellow": "🟡", "red": "🔴"}.get(s["pace"], "⚪")
-            print(f"  {pace_icon} {name.upper():8s}  T={s['T_day']:>8,} tok  ${s['dollar_day']:>7.3f}/${s['budget_cap']:.1f}  mode:{s['mode']:8s}  gap:{s['floor_gap']}")
+            if s.get("billing_mode") == "subscription":
+                billing_str = "subscription"
+            else:
+                billing_str = f"api ${s['dollar_day']:>7.3f}/${s['budget_cap']:.1f}"
+            print(
+                f"  {pace_icon} {name.upper():8s}  "
+                f"T={s['T_day']:>8,} tok  {billing_str:22s}  "
+                f"mode:{s['mode']:8s}  gap:{s['floor_gap']}"
+            )
     else:
         gov = Governor(agent)
         result = gov.enforce()

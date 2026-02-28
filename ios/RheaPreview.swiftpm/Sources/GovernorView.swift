@@ -5,6 +5,8 @@ import Pow
 struct AgentStatus: Codable, Identifiable {
     var id: String { agent }
     let agent: String
+    let billing_mode: String?
+    let upper_rail_enabled: Bool?
     let pace: String
     let forecast: String
     let mode: String
@@ -22,7 +24,7 @@ struct GovernorView: View {
     @State private var agents: [AgentStatus] = []
     @State private var loading = true
     @State private var refreshCount = 0
-    private let apiBase = "http://localhost:8400"
+    @AppStorage("apiBaseURL") private var apiBaseURL = AppConfig.defaultAPIBaseURL
 
     var body: some View {
         NavigationStack {
@@ -75,7 +77,7 @@ struct GovernorView: View {
     func fetch() async {
         loading = true
         defer { loading = false }
-        guard let url = URL(string: "\(apiBase)/governor") else { return }
+        guard let url = URL(string: "\(apiBaseURL)/governor") else { return }
         do {
             let (data, _) = try await URLSession.shared.data(from: url)
             let raw = try JSONDecoder().decode([String: AgentStatus].self, from: data)
@@ -183,6 +185,12 @@ struct AgentCard: View {
                     }
                     .frame(height: 6)
                 }
+            }
+
+            if status.billing_mode == "subscription" {
+                Text("subscription mode")
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
             }
 
             // Stats row

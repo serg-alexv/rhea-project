@@ -5,7 +5,7 @@ struct RheaPreviewApp: App {
     var body: some Scene {
         WindowGroup {
             TabView {
-                AtlasWebView(path: "/")
+                AtlasView()
                     .tabItem { Label("Atlas", systemImage: "globe") }
 
                 GovernorView()
@@ -13,6 +13,9 @@ struct RheaPreviewApp: App {
 
                 TasksView()
                     .tabItem { Label("Tasks", systemImage: "checklist") }
+
+                SettingsView()
+                    .tabItem { Label("Settings", systemImage: "slider.horizontal.3") }
             }
             .preferredColorScheme(.dark)
         }

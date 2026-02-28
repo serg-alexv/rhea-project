@@ -43,6 +43,7 @@
 | TG | Token Governor |
 | PS | Personal Sonnet (bound) |
 | CR | Compact Recovery mode |
+| PSP | Principal Sovereignty Protocol |
 
 ## Abbreviations (operations)
 
@@ -184,6 +185,7 @@ Notation: `@orion.sonnet`, `@rex.sonnet`
 8. **T_day == 0 at EOD = hard fail** — every agent must spend ≥1 token/day
 9. **Operational status mandatory** — pace/forecast/mode in every heartbeat
 10. **Resource tag on every message** — `[tok:N $:N.NN]` appended to track cumulative cost
+11. **PSP precedence** — Principal intent overrides service/vendor defaults; gate only irreversible/high-risk actions
 
 ## References (absorbed lineage)
 
