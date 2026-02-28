@@ -457,18 +457,33 @@ struct TeamChatView: View {
                 } else {
                     ForEach(knownAgents) { agent in
                         HStack(spacing: 12) {
-                            // Color dot
+                            // Pace dot
                             Circle()
-                                .fill(agentColor(agent.name))
+                                .fill(agent.alive ? RheaTheme.paceColor(agent.pace) : .red)
                                 .frame(width: 10, height: 10)
 
                             VStack(alignment: .leading, spacing: 2) {
-                                Text(agent.name.uppercased())
-                                    .font(.system(.body, design: .monospaced, weight: .bold))
-                                    .foregroundStyle(agentColor(agent.name))
-                                Text(agent.expired ? "offline" : "lease #\(agent.leaseToken)")
-                                    .font(.system(.caption2, design: .monospaced))
-                                    .foregroundStyle(agent.expired ? .red.opacity(0.7) : .green.opacity(0.7))
+                                HStack(spacing: 6) {
+                                    Text(agent.name.uppercased())
+                                        .font(.system(.body, design: .monospaced, weight: .bold))
+                                        .foregroundStyle(agentColor(agent.name))
+                                    Text(agent.mode.uppercased())
+                                        .font(.system(.caption2, design: .rounded, weight: .semibold))
+                                        .foregroundStyle(RheaTheme.modeColor(agent.mode))
+                                }
+                                HStack(spacing: 8) {
+                                    Text(agent.officeStatus)
+                                        .foregroundStyle(agent.alive ? .green.opacity(0.7) : .red.opacity(0.7))
+                                    if agent.pendingMsgs > 0 {
+                                        Text("\(agent.pendingMsgs) pending")
+                                            .foregroundStyle(RheaTheme.amber)
+                                    }
+                                    if agent.tasksOpen > 0 || agent.tasksClaimed > 0 {
+                                        Text("T:\(agent.tasksOpen)/\(agent.tasksClaimed)")
+                                            .foregroundStyle(.secondary)
+                                    }
+                                }
+                                .font(.system(.caption2, design: .monospaced))
                             }
 
                             Spacer()
@@ -526,25 +541,55 @@ struct TeamChatView: View {
 
     // MARK: - Agent Networking
 
-    struct AgentLeaseDTO: Codable {
-        let agent: String
+    struct UnifiedAgentDTO: Codable {
+        let name: String
+        let alive: Bool
+        let pace: String
+        let mode: String
+        let billing_mode: String
+        let T_day: Int
+        let dollar_day: Double
+        let floor_gap: Int
         let lease_token: Int
-        let expired: Bool
-        let last_active: String
+        let lease_expired: Bool
+        let lease_expires_at: String?
+        let office_status: String
+        let pending_msgs: Int
+        let tasks_open: Int
+        let tasks_claimed: Int
+        let last_activity: String?
+        let last_feed: String?
+    }
+
+    struct UnifiedStatusResponse: Codable {
+        let _ts: String
+        let agents: [String: UnifiedAgentDTO]
     }
 
     func fetchAgents() async {
-        guard let url = URL(string: "\(apiBaseURL)/agents") else { return }
+        guard let url = URL(string: "\(apiBaseURL)/agents/status") else { return }
         do {
             let (data, _) = try await URLSession.shared.data(from: url)
-            let dict = try JSONDecoder().decode([String: AgentLeaseDTO].self, from: data)
+            let resp = try JSONDecoder().decode(UnifiedStatusResponse.self, from: data)
             withAnimation {
-                knownAgents = dict.values.map { dto in
+                knownAgents = resp.agents.values.map { dto in
                     RadioAgentInfo(
-                        name: dto.agent,
+                        name: dto.name,
+                        alive: dto.alive,
+                        pace: dto.pace,
+                        mode: dto.mode,
+                        billingMode: dto.billing_mode,
+                        tDay: dto.T_day,
+                        dollarDay: dto.dollar_day,
+                        floorGap: dto.floor_gap,
                         leaseToken: dto.lease_token,
-                        expired: dto.expired,
-                        lastActive: dto.last_active
+                        leaseExpired: dto.lease_expired,
+                        officeStatus: dto.office_status,
+                        pendingMsgs: dto.pending_msgs,
+                        tasksOpen: dto.tasks_open,
+                        tasksClaimed: dto.tasks_claimed,
+                        lastActivity: dto.last_activity,
+                        lastFeed: dto.last_feed ?? ""
                     )
                 }.sorted { $0.name < $1.name }
             }
@@ -749,9 +794,21 @@ struct ConsoleLine: View {
 struct RadioAgentInfo: Identifiable {
     var id: String { name }
     let name: String
+    let alive: Bool
+    let pace: String
+    let mode: String
+    let billingMode: String
+    let tDay: Int
+    let dollarDay: Double
+    let floorGap: Int
     let leaseToken: Int
-    let expired: Bool
-    let lastActive: String
+    let leaseExpired: Bool
+    let officeStatus: String
+    let pendingMsgs: Int
+    let tasksOpen: Int
+    let tasksClaimed: Int
+    let lastActivity: String?
+    let lastFeed: String
 }
 
 // MARK: - Bubble Line (chat-style, v1 restored)
