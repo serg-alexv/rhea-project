@@ -1,0 +1,33 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "cf59f2da004c",
+  "strategy": "auto-commit",
+  "branch": "stage4-release",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "opera/ops/virtual-office/inbox/RELAY_WAKE_20260228_140917_GEMINI.md",
+    "opera/ops/virtual-office/inbox/RELAY_WAKE_20260228_140917_GPT.md",
+    "opera/ops/virtual-office/inbox/RELAY_WAKE_20260228_140917_ORION.md",
+    "opera/ops/virtual-office/inbox/RELAY_WAKE_20260228_140937_ORION.md",
+    "opera/ops/virtual-office/inbox/RELAY_WAKE_20260228_140958_ORION.md",
+    "opera/ops/virtual-office/inbox/RELAY_WAKE_20260228_140958_SHARED.md",
+    "opera/ops/virtual-office/inbox/RELAY_WAKE_20260228_141018_ORION.md",
+    "opera/ops/virtual-office/outbox/REX_20260228_170800_RELAY_TO_GEMINI_XCODE_SSL.md"
+  ],
+  "sessions": [
+    {
+      "metadata": "/cf/59f2da004c/0/metadata.json",
+      "transcript": "/cf/59f2da004c/0/full.jsonl",
+      "context": "",
+      "content_hash": "/cf/59f2da004c/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 8,
+    "cache_creation_tokens": 5609,
+    "cache_read_tokens": 684469,
+    "output_tokens": 2816,
+    "api_call_count": 6
+  }
+}
