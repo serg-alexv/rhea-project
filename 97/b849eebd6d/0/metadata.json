@@ -1,0 +1,25 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "97b849eebd6d",
+  "session_id": "94aabe90-9b2d-48e7-be8c-6bf820a0b6a9",
+  "strategy": "auto-commit",
+  "created_at": "2026-02-28T11:26:59.538532Z",
+  "branch": "stage4-release",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "diagnostics/live_20260228T112643Z.pcapng",
+    "diagnostics/tshark_20260228T112550Z.txt",
+    "src/token_governor.py"
+  ],
+  "agent": "Claude Code",
+  "transcript_identifier_at_start": "e3b1360e-d3f4-4b8b-95be-3930a2916e74",
+  "checkpoint_transcript_start": 8953,
+  "transcript_lines_at_start": 8953,
+  "token_usage": {
+    "input_tokens": 15,
+    "cache_creation_tokens": 13388,
+    "cache_read_tokens": 1561191,
+    "output_tokens": 2467,
+    "api_call_count": 11
+  }
+}

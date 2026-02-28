@@ -1,0 +1,28 @@
+{
+  "cli_version": "0.4.3",
+  "checkpoint_id": "97b849eebd6d",
+  "strategy": "auto-commit",
+  "branch": "stage4-release",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "diagnostics/live_20260228T112643Z.pcapng",
+    "diagnostics/tshark_20260228T112550Z.txt",
+    "src/token_governor.py"
+  ],
+  "sessions": [
+    {
+      "metadata": "/97/b849eebd6d/0/metadata.json",
+      "transcript": "/97/b849eebd6d/0/full.jsonl",
+      "context": "",
+      "content_hash": "/97/b849eebd6d/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 15,
+    "cache_creation_tokens": 13388,
+    "cache_read_tokens": 1561191,
+    "output_tokens": 2467,
+    "api_call_count": 11
+  }
+}
