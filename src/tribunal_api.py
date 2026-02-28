@@ -41,9 +41,14 @@ import collections
 
 _EVENT_BUS: asyncio.Queue = None  # lazy-init per event loop
 _SUBSCRIBERS: list = []  # list of asyncio.Queue (one per SSE client)
+_RADIO_LOG: list = []  # in-memory log of pushed/broadcast messages (included in /feed)
 
 def _broadcast_event(event: dict):
-    """Push event to all connected SSE subscribers."""
+    """Push event to all connected SSE subscribers AND in-memory radio log."""
+    _RADIO_LOG.append(event)
+    # Cap in-memory log at 200 items
+    if len(_RADIO_LOG) > 200:
+        del _RADIO_LOG[:100]
     dead = []
     for q in _SUBSCRIBERS:
         try:
@@ -1875,6 +1880,9 @@ async def unified_feed(limit: int = 50, since: Optional[str] = None):
                 "ts": _ts_from_filename(f.name),
             })
 
+    # 4. In-memory radio log (pushed/broadcast messages not on disk)
+    items.extend(_RADIO_LOG)
+
     # Sort by ts descending, dedup by id
     seen = set()
     unique = []
@@ -1886,6 +1894,9 @@ async def unified_feed(limit: int = 50, since: Optional[str] = None):
     # Apply since filter
     if since:
         unique = [i for i in unique if i.get("ts", "") > since]
+
+    # Filter out malformed senders (e.g. "--from" from bad CLI args)
+    unique = [i for i in unique if not i.get("sender", "").startswith("-")]
 
     return {"items": unique[:limit], "total": len(unique)}
 
