@@ -1,0 +1,187 @@
+Filtering the log data using "process == "screencapture" OR process == "WindowServer" OR process CONTAINS[c] "newtek" OR process CONTAINS[c] "obs" OR process CONTAINS[c] "chromeremotedesktop" OR process CONTAINS[c] "displaylink" OR process CONTAINS[c] "camerahub" OR composedMessage CONTAINS[c] "ScreenCapture" OR composedMessage CONTAINS[c] "NDI""
+Timestamp               Ty Process[PID:TID]
+2026-02-28 13:11:10.896 Df remotepairingd[14987:5fa8f4] [com.apple.dt.remotepairing:remotepairingd] device-6 (00008110-000C11CC22D9801E): Sending RSD heartbeat 9D22B836-470D-4670-8167-665D2E6EA5C4
+2026-02-28 13:11:10.897 Df remoted[383:601c14] [com.apple.RemoteServiceDiscovery:remoted] coredevice-13573> Sending heartbeat request 47
+2026-02-28 13:11:11.903 Df kernel[0:601973] (apfs) notify_volume_purgeable_space_has_changed:2768: disk3s5 Sending notification because threshold of 1073741824 was crossed (delta -1434288128 change -1434288128)
+2026-02-28 13:11:11.973 E  sandboxd[54397:601c1a] [com.apple.sandbox.reporting:violation] Sandbox: com.filtersoftware.filteronme.Ca(24734) deny(1) mach-lookup com.apple.audio.audiohald
+Process:         com.filtersoftware.filteronme.Ca [24734]
+Path:            /Library/SystemExtensions/C8170ABC-E3ED-4C5E-8C97-F2C99D019BD6/com.filtersoftware.filteronme.CameraExtension.systemextension/Contents/MacOS/com.filtersoftware.filteronme.CameraExtension
+Load Address:    0x102b04000
+Identifier:      com.filtersoftware.filteronme.CameraExtension
+Version:         1 (1.0)
+Code Type:       arm64 (Native)
+Parent Process:  launchd [1]
+Responsible:     /Library/SystemExtensions/C8170ABC-E3ED-4C5E-8C97-F2C99D019BD6/com.filtersoftware.filteronme.CameraExtension.systemextension/Contents/MacOS/com.filtersoftware.filteronme.CameraExtension
+User ID:         501
+
+Date/Time:       2026-02-28 13:11:11.844 GMT+3
+OS Version:      macOS 26.4 (25E5207k)
+Release Type:    User
+Report Version:  8
+
+MetaData: {"checker-pid":1,"operation":"mach-lookup","responsible-process-sdk":1703936,"policy-description":"Sandbox","apple-internal":false,"uid":501,"summary":"deny(1) mach-lookup com.apple.audio.audiohald","primary-filter-value":"com.apple.audio.audiohald","parent-process-pid":1,"target":"com.apple.audio.audiohald","hardware":"J293","responsible-process-signing-id":"com.filtersoftware.filteronme.CameraExtension","action":"deny","platform-binary":false,"profile-in-collection":false,"signing-id":"com.filtersoftware.filteronme.CameraExtension","binary-in-trust-cache":false,"sandbox_checker":"launchd","build":"macOS 26.4 (25E5207k)","process-path":"\134/Library\134/SystemExtensions\134/C8170ABC-E3ED-4C5E-8C97-F2C99D019BD6\134/com.filtersoftware.filteronme.CameraExtension.systemextension\134/Contents\134/MacOS\134/com.filtersoftware.filteronme.CameraExtension","parent-process-name":"launchd","container":"\134/Users\134/sa\134/Library\134/Containers\134/com.filtersoftware.filteronme.CameraExtension\134/Data","team-id":"ZUV3YWYN43","process_path":["Library","SystemExtensions","C8170ABC-E3ED-4C5E-8C97-F2C99D019BD6","com.filtersoftware.filteronme.CameraExtension.systemextension","Contents","MacOS","com.filtersoftware.filteronme.CameraExtension"],"translated":false,"pid":24734,"process":"com.filtersoftware.filteronme.Ca","mach_namespace":1,"normalized_target":["com.apple.audio.audiohald"],"platform_binary":"no","flags":5,"checker":"launchd","responsible-process-team-id":"ZUV3YWYN43","platform-policy":false,"primary-filter":"global-name","responsible-process-path":"\134/Library\134/SystemExtensions\134/C8170ABC-E3ED-4C5E-8C97-F2C99D019BD6\134/com.filtersoftware.filteronme.CameraExtension.systemextension\134/Contents\134/MacOS\134/com.filtersoftware.filteronme.CameraExtension","global-name":"com.apple.audio.audiohald","errno":1,"profile-flags":0,"release-type":"User"}
+
+Thread 0 (id: 1951381):
+0   libsystem_kernel.dylib        	0x00000001840e3c34 mach_msg2_trap + 8
+1   libsystem_kernel.dylib        	0x00000001840ec9c0 mach_msg_overwrite + 480
+2   libsystem_kernel.dylib        	0x00000001840e3fc0 mach_msg + 24
+3   CoreFoundation                	0x00000001841e4d38 __CFRunLoopServiceMachPort + 160
+4   CoreFoundation                	0x00000001841e3624 __CFRunLoopRun + 1188
+5   CoreFoundation                	0x00000001842b576c _CFRunLoopRunSpecificWithOptions + 532
+6   CoreFoundation                	0x00000001842594f4 CFRunLoopRun + 64
+7   com.filtersoftware.filteronme.CameraExtension	0x0000000102b055e8 main + 96
+8   dyld                          	0x0000000183d6b9b8 start + 6992
+
+Thread 1 (id: 1951386, caulk.messenger.shared:17):
+0   libsystem_kernel.dylib        	0x00000001840e3bb0 semaphore_wait_trap + 8
+1   caulk                         	0x0000000190a10cac caulk::concurrent::details::worker_thread::run() + 32
+2   caulk                         	0x0000000190a1094c void* caulk::thread_proxy<std::__1::tuple<caulk::thread::attributes, void (caulk::concurrent::details::worker_thread::*)(), std::__1::tuple<caulk::concurrent::details::worker_thread*>>>(void*) + 96
+3   libsystem_pthread.dylib       	0x0000000184127c58 _pthread_start + 136
+4   libsystem_pthread.dylib       	0x0000000184122c1c thread_start + 8
+
+Thread 2 (id: 1951387, caulk.messenger.shared:high):
+0   libsystem_kernel.dylib        	0x00000001840e3bb0 semaphore_wait_trap + 8
+1   caulk                         	0x0000000190a10cac caulk::concurrent::details::worker_thread::run() + 32
+2   caulk                         	0x0000000190a1094c void* caulk::thread_proxy<std::__1::tuple<caulk::thread::attributes, void (caulk::concurrent::details::worker_thread::*)(), std::__1::tuple<caulk::concurrent::details::worker_thread*>>>(void*) + 96
+3   libsystem_pthread.dylib       	0x0000000184127c58 _pthread_start + 136
+4   libsystem_pthread.dylib       	0x0000000184122c1c thread_start + 8
+
+Thread 3 (id: 1951410):
+0   libsystem_kernel.dylib        	0x00000001840e750c __psynch_cvwait + 8
+1   libc++.1.dylib                	0x000000018403d858 std::__1::condition_variable::wait(std::__1::unique_lock<std::__1::mutex>&) + 32
+2   BanubaEffectPlayer            	0x000000010646b580
+3   BanubaEffectPlayer            	0x00000001069b8a98
+4   BanubaEffectPlayer            	0x00000001069b8b54
+5   BanubaEffectPlayer            	0x00000001069b8b54
+6   BanubaEffectPlayer            	0x00000001069b8b54
+7   BanubaEffectPlayer            	0x000000010623c868
+8   libsystem_pthread.dylib       	0x0000000184127c58 _pthread_start + 136
+9   libsystem_pthread.dylib       	0x0000000184122c1c thread_start + 8
+
+Thread 4 (id: 1951411):
+0   libsystem_kernel.dylib        	0x00000001840e750c __psynch_cvwait + 8
+1   libc++.1.dylib                	0x000000018403d858 std::__1::condition_variable::wait(std::__1::unique_lock<std::__1::mutex>&) + 32
+2   BanubaEffectPlayer            	0x000000010646b580
+3   BanubaEffectPlayer            	0x00000001069b8a98
+4   BanubaEffectPlayer            	0x00000001069b8b54
+5   BanubaEffectPlayer            	0x00000001069b8b54
+6   BanubaEffectPlayer            	0x000000010669a018
+7   libsystem_pthread.dylib       	0x0000000184127c58 _pthread_start + 136
+8   libsystem_pthread.dylib       	0x0000000184122c1c thread_start + 8
+
+Thread 5 (id: 1951412):
+0   libsystem_kernel.dylib        	0x00000001840e750c __psynch_cvwait + 8
+1   libc++.1.dylib                	0x000000018403d858 std::__1::condition_variable::wait(std::__1::unique_lock<std::__1::mutex>&) + 32
+2   BanubaEffectPlayer            	0x000000010646b580
+3   BanubaEffectPlayer            	0x00000001069b8a98
+4   BanubaEffectPlayer            	0x00000001069b8b54
+5   BanubaEffectPlayer            	0x000000010669a018
+6   libsystem_pthread.dylib       	0x0000000184127c58 _pthread_start + 136
+7   libsystem_pthread.dylib       	0x0000000184122c1c thread_start + 8
+
+Thread 6 (id: 1951413):
+0   libsystem_kernel.dylib        	0x00000001840e750c __psynch_cvwait + 8
+1   libc++.1.dylib                	0x000000018403d858 std::__1::condition_variable::wait(std::__1::unique_lock<std::__1::mutex>&) + 32
+2   BanubaEffectPlayer            	0x000000010646b580
+3   BanubaEffectPlayer            	0x00000001069b8a98
+4   BanubaEffectPlayer            	0x000000010669a018
+5   libsystem_pthread.dylib       	0x0000000184127c58 _pthread_start + 136
+6   libsystem_pthread.dylib       	0x0000000184122c1c thread_start + 8
+
+Thread 7 (id: 1951414):
+0   libsystem_kernel.dylib        	0x00000001840e750c __psynch_cvwait + 8
+1   libc++.1.dylib                	0x000000018403d858 std::__1::condition_variable::wait(std::__1::unique_lock<std::__1::mutex>&) + 32
+2   BanubaEffectPlayer            	0x000000010646b580
+3   BanubaEffectPlayer            	0x00000001069b8a98
+4   BanubaEffectPlayer            	0x00000001069b8b54
+5   BanubaEffectPlayer            	0x000000010669a018
+6   libsystem_pthread.dylib       	0x0000000184127c58 _pthread_start + 136
+7   libsystem_pthread.dylib       	0x0000000184122c1c thread_start + 8
+
+Thread 8 (id: 1951415):
+0   libsystem_kernel.dylib        	0x00000001840e750c __psynch_cvwait + 8
+1   libc++.1.dylib                	0x000000018403d858 std::__1::condition_variable::wait(std::__1::unique_lock<std::__1::mutex>&) + 32
+2   BanubaEffectPlayer            	0x000000010646b580
+3   BanubaEffectPlayer            	0x00000001069b8a98
+4   BanubaEffectPlayer            	0x000000010669a018
+5   libsystem_pthread.dylib       	0x0000000184127c58 _pthread_start + 136
+6   libsystem_pthread.dylib       	0x0000000184122c1c thread_start + 8
+
+Thread 9 (id: 1951416):
+0   libsystem_kernel.dylib        	0x00000001840e750c __psynch_cvwait + 8
+1   libc++.1.dylib                	0x000000018403d858 std::__1::condition_variable::wait(std::__1::unique_lock<std::__1::mutex>&) + 32
+2   BanubaEffectPlayer            	0x000000010646b580
+3   BanubaEffectPlayer            	0x00000001069b8a98
+4   BanubaEffectPlayer            	0x000000010669a018
+5   libsystem_pthread.dylib       	0x0000000184127c58 _pthread_start + 136
+6   libsystem_pthread.dylib       	0x0000000184122c1c thread_start + 8
+
+Thread 10 (id: 1951417):
+0   libsystem_kernel.dylib        	0x00000001840e750c __psynch_cvwait + 8
+1   libc++.1.dylib                	0x000000018403d858 std::__1::condition_variable::wait(std::__1::unique_lock<std::__1::mutex>&) + 32
+2   BanubaEffectPlayer            	0x000000010646b580
+3   BanubaEffectPlayer            	0x00000001069b8a98
+4   BanubaEffectPlayer            	0x000000010669a018
+5   libsystem_pthread.dylib       	0x0000000184127c58 _pthread_start + 136
+6   libsystem_pthread.dylib       	0x0000000184122c1c thread_start + 8
+
+Thread 11 (id: 1951426, caulk::deferred_logger):
+0   libsystem_kernel.dylib        	0x00000001840e3bb0 semaphore_wait_trap + 8
+1   caulk                         	0x0000000190a10cac caulk::concurrent::details::worker_thread::run() + 32
+2   caulk                         	0x0000000190a1094c void* caulk::thread_proxy<std::__1::tuple<caulk::thread::attributes, void (caulk::concurrent::details::worker_thread::*)(), std::__1::tuple<caulk::concurrent::details::worker_thread*>>>(void*) + 96
+3   libsystem_pthread.dylib       	0x0000000184127c58 _pthread_start + 136
+4   libsystem_pthread.dylib       	0x0000000184122c1c thread_start + 8
+
+Thread 12 (id: 1951427):
+0   libsystem_kernel.dylib        	0x00000001840e750c __psynch_cvwait + 8
+1   libc++.1.dylib                	0x000000018403d858 std::__1::condition_variable::wait(std::__1::unique_lock<std::__1::mutex>&) + 32
+2   BanubaEffectPlayer            	0x000000010621d5c4
+3   libsystem_pthread.dylib       	0x0000000184127c58 _pthread_start + 136
+4   libsystem_pthread.dylib       	0x0000000184122c1c thread_start + 8
+
+Thread 13 (id: 6264134):
+0   libsystem_kernel.dylib        	0x00000001840e59f0 __workq_kernreturn + 8
+1   libsystem_pthread.dylib       	0x0000000184122c10 start_wqthread + 8
+
+Thread 14 (id: 6269991):
+0   libsystem_kernel.dylib        	0x00000001840e3c34 mach_msg2_trap + 8
+1   libsystem_kernel.dylib        	0x00000001840ec9c0 mach_msg_overwrite + 480
+2   libsystem_kernel.dylib        	0x00000001840e3fc0 mach_msg + 24
+3   libxpc.dylib                  	0x0000000183e2a61c _xpc_pipe_mach_msg + 56
+4   libxpc.dylib                  	0x0000000183e29d08 _xpc_pipe_routine + 384
+5   libxpc.dylib                  	0x0000000183dfbe50 _xpc_interface_routine + 228
+6   libxpc.dylib                  	0x0000000183dfe6dc bootstrap_look_up3 + 276
+7   libxpc.dylib                  	0x0000000183dfe5a0 bootstrap_look_up2 + 48
+8   CoreAudio                     	0x0000000187762c44 HALC_ProxySystem::HALC_ProxySystem() + 324
+9   CoreAudio                     	0x0000000187781108 HALC_ProxyObjectMap::_CreateSystemObject() + 88
+10  CoreAudio                     	0x000000018778077c HALC_ProxyObjectMap::CopyObjectByObjectID(unsigned int) + 168
+11  CoreAudio                     	0x00000001874183c0 HALC_ShellPlugIn::ConnectToServer() + 48
+12  CoreAudio                     	0x0000000187521644 invocation function for block in AMCP::Utility::Dispatch_Queue::after(long long, void () block_pointer) const + 84
+13  libdispatch.dylib             	0x0000000183f864b0 _dispatch_client_callout + 16
+14  libdispatch.dylib             	0x0000000183f711c8 _dispatch_continuation_pop + 596
+15  libdispatch.dylib             	0x0000000183f841b0 _dispatch_source_latch_and_call + 392
+16  libdispatch.dylib             	0x0000000183f82e84 _dispatch_source_invoke + 844
+17  libdispatch.dylib             	0x0000000183f74e98 _dispatch_lane_serial_drain + 332
+18  libdispatch.dylib             	0x0000000183f75b64 _dispatch_lane_invoke + 448
+19  libdispatch.dylib             	0x0000000183f76ec8 _dispatch_workloop_invoke + 1584
+20  libdispatch.dylib             	0x0000000183f7fe34 _dispatch_root_queue_drain_deferred_wlh + 284
+21  libdispatch.dylib             	0x0000000183f7f734 _dispatch_workloop_worker_thread + 720
+22  libsystem_pthread.dylib       	0x0000000184123ec0 _pthread_wqthread + 292
+23  libsystem_pthread.dylib       	0x0000000184122c10 start_wqthread + 8
+
+Thread 15 (id: 6286014):
+0   libsystem_kernel.dylib        	0x00000001840e59f0 __workq_kernreturn + 8
+1   libsystem_pthread.dylib       	0x0000000184122c10 start_wqthread + 8
+
+Binary Images:
+       0x102b04000 -        0x102b05587  com.filtersoftware.filteronme.CameraExtension (1.0 - 1) <c5927746-fd80-3bd8-9179-f08a00153172> /Library/SystemExtensions/C8170ABC-E3ED-4C5E-8C97-F2C99D019BD6/com.filtersoftware.filteronme.CameraExtension.systemextension/Contents/MacOS/com.filtersoftware.filteronme.CameraExtension
+       0x105a50000 -        0x105a54b6f  banuba.sdk.effect-player (1.17.6 - 11706000) <8330b9f0-d2a8-3874-9ff2-933c61eadd23> /Library/SystemExtensions/C8170ABC-E3ED-4C5E-8C97-F2C99D019BD6/com.filtersoftware.filteronme.CameraExtension.systemextension/Contents/Frameworks/BanubaEffectPlayer.framework/Versions/A/BanubaEffectPlayer
+       0x183d4c000 -        0x183d4cfff  com.apple.darwin.ignition (1.0.0 - 58) <2ea2b865-787a-35da-ac17-1136ef68abb1> /usr/lib/dyld
+       0x183df6000 -        0x183df746f  libxpc.dylib <b9fc57dc-b95d-392e-b057-4c125bdddf28> /usr/lib/system/libxpc.dylib
+       0x183f6b000 -        0x183f6c13f  libdispatch.dylib <304366b0-c06f-3de3-8af3-5a9189291122> /usr/lib/system/libdispatch.dylib
+       0x184037000 -        0x1840385f7  libc++.1.dylib <e58b266b-3986-3f72-9cf6-aea3388264f1> /usr/lib/libc++.1.dylib
+       0x1840e3000 -        0x1840e37bf  libsystem_kernel.dylib <c9cf9387-0631-35f4-b833-20fb26998205> /usr/lib/system/libsystem_kernel.dylib
+       0x184121000 -        0x184121907  libsystem_pthread.dylib <a77f77f9-9b4e-3646-bddd-5213a08f3aa7> /usr/lib/system/libsystem_pthread.dylib
+       0x184167000 -        0x1841686ef  com.apple.CoreFoundation (6.9 - 4418.1) <f125fb2e-0103-31e8-98a0-2ab75d80059f> /System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation
+       0x187259000 -        0x18725a88f  com.apple.audio.CoreAudio (5.0 - 5.0) <2c5d3fd2-312d-3df5-a5a6-1a758fdb3bd7> /System/Library/Frameworks/CoreAudio.framework/Versions/A/CoreAudio
+       0x190a0f000 -        0x190a0fc37  com.apple.audio.caulk (1.0) <4a1e0102-17eb-3292-91e8-75a28e7f82a8> /System/Library/PrivateFrameworks/caulk.framework/Versions/A/caulk

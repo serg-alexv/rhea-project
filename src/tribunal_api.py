@@ -1769,6 +1769,104 @@ def _read_jsonl_tail(path: Path, limit: int, agent_filter: Optional[str] = None)
 
 
 # ---------------------------------------------------------------------------
+# Unified Feed — broadcast-first team chat for iOS
+# ---------------------------------------------------------------------------
+
+@app.get("/feed")
+async def unified_feed(limit: int = 50, since: Optional[str] = None):
+    """Unified chronological feed: office messages + outbox + inbox relays.
+    Returns newest-first. iOS TeamChat view polls this."""
+    items = []
+
+    # 1. Office history (agent↔agent messages)
+    try:
+        for msg in get_office().history(limit=200):
+            items.append({
+                "id": msg.get("id", ""),
+                "type": "office",
+                "sender": msg.get("sender", "?"),
+                "receiver": msg.get("receiver", "all"),
+                "text": msg.get("compressed") or msg.get("text", ""),
+                "ts": msg.get("ts", ""),
+            })
+    except Exception:
+        pass
+
+    # 2. Outbox files (agent dispatches)
+    outbox_dir = _PROJECT_ROOT / "opera" / "ops" / "virtual-office" / "outbox"
+    if outbox_dir.exists():
+        for f in sorted(outbox_dir.glob("*.md"), key=lambda p: p.name, reverse=True)[:50]:
+            parts = f.stem.split("_")
+            sender = parts[0] if parts else "?"
+            try:
+                preview = f.read_text()[:300]
+            except Exception:
+                preview = ""
+            items.append({
+                "id": f.stem,
+                "type": "outbox",
+                "sender": sender.lower(),
+                "receiver": "team",
+                "text": preview,
+                "ts": _ts_from_filename(f.name),
+            })
+
+    # 3. Inbox relays
+    inbox_dir = _PROJECT_ROOT / "opera" / "ops" / "virtual-office" / "inbox"
+    if inbox_dir.exists():
+        for f in sorted(inbox_dir.glob("RELAY_*.md"), key=lambda p: p.name, reverse=True)[:30]:
+            parts = f.stem.split("_")
+            sender = "relay"
+            receiver = "team"
+            for i, p in enumerate(parts):
+                if p == "to" and i + 1 < len(parts):
+                    receiver = parts[i + 1].lower()
+                if i > 2 and p not in ("to", "RELAY") and not p.isdigit():
+                    sender = p.lower()
+                    break
+            try:
+                preview = f.read_text()[:300]
+            except Exception:
+                preview = ""
+            items.append({
+                "id": f.stem,
+                "type": "relay",
+                "sender": sender,
+                "receiver": receiver,
+                "text": preview,
+                "ts": _ts_from_filename(f.name),
+            })
+
+    # Sort by ts descending, dedup by id
+    seen = set()
+    unique = []
+    for item in sorted(items, key=lambda x: x.get("ts", ""), reverse=True):
+        if item["id"] not in seen:
+            seen.add(item["id"])
+            unique.append(item)
+
+    # Apply since filter
+    if since:
+        unique = [i for i in unique if i.get("ts", "") > since]
+
+    return {"items": unique[:limit], "total": len(unique)}
+
+
+def _ts_from_filename(name: str) -> str:
+    """Extract ISO timestamp from filename like ORION_20260227_145947_..."""
+    import re
+    m = re.search(r"(\d{8})_(\d{6})", name)
+    if m:
+        d, t = m.group(1), m.group(2)
+        return f"{d[:4]}-{d[4:6]}-{d[6:8]}T{t[:2]}:{t[2:4]}:{t[4:6]}+00:00"
+    m2 = re.search(r"(\d{8})", name)
+    if m2:
+        d = m2.group(1)
+        return f"{d[:4]}-{d[4:6]}-{d[6:8]}T00:00:00+00:00"
+    return ""
+
+
+# ---------------------------------------------------------------------------
 # Direct execution
 # ---------------------------------------------------------------------------
 
