@@ -1232,6 +1232,19 @@ class RheaBridge:
                     if len(selected) >= k:
                         break
 
+        # Intra-provider diversity: when only 1 provider has keys,
+        # fill remaining slots with different models from that provider
+        if len(selected) < k and len(seen_providers) == 1:
+            solo_provider = list(seen_providers)[0]
+            cfg = self.providers[solo_provider]
+            used_models = {s.split("/")[-1] for s in selected}
+            for model in cfg.models:
+                if model not in used_models:
+                    selected.append(f"{solo_provider}/{model}")
+                    used_models.add(model)
+                    if len(selected) >= k:
+                        break
+
         if not selected:
             # Fallback defaults (will fail gracefully if no keys)
             defaults = [
