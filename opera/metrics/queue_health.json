@@ -1,0 +1,78 @@
+{
+  "ts": "2026-02-28T10:54:24Z",
+  "risk": "ok",
+  "summary": "risk=ok files=6 changed=0 archived=0 lines=1270 bytes=400421",
+  "totals": {
+    "files": 6,
+    "lines": 1270,
+    "bytes": 400421,
+    "changed": 0,
+    "archived": 0
+  },
+  "warnings": [],
+  "files": [
+    {
+      "name": "task_queue",
+      "path": "/Users/sa/rh.1/opera/tasks/queue.jsonl",
+      "line_count": 15,
+      "size_bytes": 5719,
+      "max_lines": 4000,
+      "keep_lines": 2000,
+      "overflow_archived": 0,
+      "changed": false
+    },
+    {
+      "name": "relay_mailbox",
+      "path": "/Users/sa/rh.1/opera/ops/virtual-office/relay_mailbox.jsonl",
+      "line_count": 123,
+      "size_bytes": 70300,
+      "max_lines": 8000,
+      "keep_lines": 3000,
+      "overflow_archived": 0,
+      "changed": false
+    },
+    {
+      "name": "relay_acks",
+      "path": "/Users/sa/rh.1/opera/ops/virtual-office/relay_acks.jsonl",
+      "line_count": 102,
+      "size_bytes": 12023,
+      "max_lines": 8000,
+      "keep_lines": 3000,
+      "overflow_archived": 0,
+      "changed": false
+    },
+    {
+      "name": "bridge_calls",
+      "path": "/Users/sa/rh.1/logs/bridge_calls.jsonl",
+      "line_count": 385,
+      "size_bytes": 161189,
+      "max_lines": 10000,
+      "keep_lines": 4000,
+      "overflow_archived": 0,
+      "changed": false
+    },
+    {
+      "name": "radio_feed",
+      "path": "/Users/sa/rh.1/opera/metrics/radio_feed.jsonl",
+      "line_count": 639,
+      "size_bytes": 150040,
+      "max_lines": 15000,
+      "keep_lines": 5000,
+      "overflow_archived": 0,
+      "changed": false
+    },
+    {
+      "name": "ndi_trace",
+      "path": "/Users/sa/rh.1/opera/metrics/ndi_trace.jsonl",
+      "line_count": 6,
+      "size_bytes": 1150,
+      "max_lines": 8000,
+      "keep_lines": 2000,
+      "overflow_archived": 0,
+      "changed": false
+    }
+  ],
+  "runs": 4,
+  "compactions": 0,
+  "last_compaction": null
+}
