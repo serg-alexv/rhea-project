@@ -1,5 +1,6 @@
 import SwiftUI
 import AnimatedTabBar
+import RheaKit
 
 @main
 struct RheaPreviewApp: App {

@@ -3,31 +3,14 @@ options:
   bundleIdPrefix: com.rhea
   deploymentTarget:
     iOS: "17.0"
-    macOS: "14.0"
   xcodeVersion: "26.2"
 
 packages:
-  Pow:
-    url: https://github.com/serg-alexv/Pow
-    from: "1.0.0"
+  RheaKit:
+    path: ../../packages/RheaKit
   AnimatedTabBar:
     url: https://github.com/serg-alexv/AnimatedTabBar
     from: "0.0.1"
-  GRDB:
-    url: https://github.com/groue/GRDB.swift
-    from: "7.0.0"
-  swift-collections:
-    url: https://github.com/apple/swift-collections
-    from: "1.1.0"
-  Starscream:
-    url: https://github.com/daltoniam/Starscream
-    from: "4.0.8"
-  MarkdownUI:
-    url: https://github.com/gonzalezreal/swift-markdown-ui
-    from: "2.4.0"
-  KeychainAccess:
-    url: https://github.com/kishikawakatsumi/KeychainAccess
-    from: "4.2.2"
 
 targets:
   RheaApp:
@@ -35,8 +18,10 @@ targets:
     platform: iOS
     sources:
       - path: ../RheaPreview.swiftpm/Sources
-        excludes:
-          - CommandCentreApp.swift
+        includes:
+          - RheaPreviewApp.swift
+          - ScreenPilotView.swift
+          - Assets.xcassets
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.rhea.preview
@@ -51,15 +36,8 @@ targets:
         debug: {}
         release: {}
     dependencies:
-      - package: Pow
+      - package: RheaKit
       - package: AnimatedTabBar
-      - package: GRDB
-        product: GRDB
-      - package: swift-collections
-        product: Collections
-      - package: MarkdownUI
-      - package: KeychainAccess
-      - package: Starscream
     info:
       path: Info.plist
       properties:
@@ -73,40 +51,3 @@ targets:
         CFBundleDisplayName: Rhea
         CFBundleShortVersionString: $(MARKETING_VERSION)
         CFBundleVersion: $(CURRENT_PROJECT_VERSION)
-
-  RheaCommandCentre:
-    type: application
-    platform: macOS
-    sources:
-      - path: ../RheaPreview.swiftpm/Sources
-        excludes:
-          - RheaPreviewApp.swift
-          - ScreenPilotView.swift
-    settings:
-      base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.rhea.commandcentre
-        DEVELOPMENT_TEAM: "398XACWZ7G"
-        MARKETING_VERSION: "1.0"
-        CURRENT_PROJECT_VERSION: "1"
-        CODE_SIGN_STYLE: Automatic
-        SWIFT_VERSION: "5.9"
-        MACOSX_DEPLOYMENT_TARGET: "14.0"
-      configs:
-        debug: {}
-        release: {}
-    dependencies:
-      - package: Pow
-      - package: GRDB
-        product: GRDB
-      - package: swift-collections
-        product: Collections
-      - package: MarkdownUI
-      - package: KeychainAccess
-      - package: Starscream
-    info:
-      path: Info-macOS.plist
-      properties:
-        CFBundleDisplayName: Rhea Command Centre
-        CFBundleShortVersionString: $(MARKETING_VERSION)
-        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
-        LSMinimumSystemVersion: $(MACOSX_DEPLOYMENT_TARGET)
