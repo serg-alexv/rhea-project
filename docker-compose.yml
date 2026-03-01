@@ -1,0 +1,60 @@
+# Rhea Platform — Production Docker Compose
+# One command: docker compose up -d
+# Runs: API (auth + billing + tribunal) + Caddy (HTTPS + reverse proxy)
+#
+# Required env vars (in .env or docker-compose override):
+#   GEMINI_API_KEY          — at minimum one model provider
+#   JWT_SECRET              — production JWT signing key
+#   STRIPE_SECRET_KEY       — Stripe billing (optional, disables checkout if missing)
+#   STRIPE_WEBHOOK_SECRET   — Stripe webhook verification
+#   STRIPE_PRO_PRICE_ID     — Stripe Price ID for Pro plan
+#   STRIPE_ENTERPRISE_PRICE_ID — Stripe Price ID for Enterprise plan
+#   BTCPAY_WEBHOOK_SECRET   — BTCPay Server webhook HMAC key (optional)
+#   DOMAIN                  — your domain for Caddy auto-TLS (default: localhost)
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: config/docker/Dockerfile.platform
+    environment:
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - JWT_SECRET=${JWT_SECRET}
+      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY:-}
+      - STRIPE_WEBHOOK_SECRET=${STRIPE_WEBHOOK_SECRET:-}
+      - STRIPE_PRO_PRICE_ID=${STRIPE_PRO_PRICE_ID:-}
+      - STRIPE_ENTERPRISE_PRICE_ID=${STRIPE_ENTERPRISE_PRICE_ID:-}
+      - BTCPAY_WEBHOOK_SECRET=${BTCPAY_WEBHOOK_SECRET:-}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - TRIBUNAL_API_KEYS=${TRIBUNAL_API_KEYS:-}
+      - FLY_APP_NAME=docker
+    volumes:
+      - rhea-data:/app/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8400/health')"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  caddy:
+    image: caddy:2-alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./config/Caddyfile:/etc/caddy/Caddyfile
+      - caddy-data:/data
+      - caddy-config:/config
+    environment:
+      - DOMAIN=${DOMAIN:-localhost}
+    depends_on:
+      api:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  rhea-data:
+  caddy-data:
+  caddy-config:

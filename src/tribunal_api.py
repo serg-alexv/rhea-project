@@ -92,8 +92,12 @@ app = FastAPI(
 app.include_router(aletheia_router, prefix="/aletheia")
 
 # Auth (signup/login/profile)
-from auth_api import auth_router
+from auth_api import auth_router, _current_user
 app.include_router(auth_router, prefix="/auth")
+
+# Billing (plans/keys/checkout/webhooks)
+from billing import billing_router, validate_api_key as validate_billing_key, check_quota, record_usage
+app.include_router(billing_router)
 
 app.add_middleware(
     CORSMiddleware,
@@ -214,6 +218,16 @@ async def verify_api_key(
         except Exception:
             pass  # fall through to API key check
 
+    # Accept customer API keys (rk_...) from billing system
+    if x_api_key and x_api_key.startswith("rk_"):
+        user = validate_billing_key(x_api_key)
+        if user:
+            if not check_quota(user["user_id"]):
+                raise HTTPException(status_code=429, detail="Monthly quota exceeded. Upgrade your plan at /billing/plans")
+            return
+        raise HTTPException(status_code=401, detail="Invalid API key")
+
+    # Fall back to admin API keys
     if not TRIBUNAL_API_KEYS:
         raise HTTPException(status_code=401, detail="API is locked: No keys configured in TRIBUNAL_API_KEYS")
     if not x_api_key or x_api_key not in TRIBUNAL_API_KEYS:
