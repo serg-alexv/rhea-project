@@ -27,17 +27,19 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.rhea.preview
         DEVELOPMENT_TEAM: "398XACWZ7G"
         MARKETING_VERSION: "1.0"
-        CURRENT_PROJECT_VERSION: "12"
+        CURRENT_PROJECT_VERSION: "13"
         INFOPLIST_GENERATION_MODE: GeneratedByXcode
         CODE_SIGN_STYLE: Automatic
         SWIFT_VERSION: "5.9"
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        CODE_SIGN_ENTITLEMENTS: RheaApp.entitlements
       configs:
         debug: {}
         release: {}
     dependencies:
       - package: RheaKit
       - package: AnimatedTabBar
+      - target: RheaKeyboard
     info:
       path: Info.plist
       properties:
@@ -52,3 +54,33 @@ targets:
         CFBundleDisplayName: Rhea
         CFBundleShortVersionString: $(MARKETING_VERSION)
         CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+
+  RheaKeyboard:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: ../RheaKeyboard/Sources
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.rhea.preview.keyboard
+        DEVELOPMENT_TEAM: "398XACWZ7G"
+        MARKETING_VERSION: "1.0"
+        CURRENT_PROJECT_VERSION: "13"
+        CODE_SIGN_STYLE: Automatic
+        SWIFT_VERSION: "5.9"
+        INFOPLIST_GENERATION_MODE: GeneratedByXcode
+        CODE_SIGN_ENTITLEMENTS: RheaKeyboard.entitlements
+    info:
+      path: RheaKeyboard-Info.plist
+      properties:
+        CFBundleDisplayName: Rhea
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.keyboard-service
+          NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).KeyboardViewController
+          NSExtensionAttributes:
+            RequestsOpenAccess: true
+            PrimaryLanguage: en
+            PrefersRightToLeft: false
+            IsASCIICapable: true
