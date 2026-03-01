@@ -796,317 +796,529 @@ async def landing():
 
     url = os.environ.get("FLY_APP_NAME") and "https://rhea-tribunal.fly.dev" or "http://localhost:8400"
     providers_line = f"{n_providers} model{'s' if n_providers != 1 else ''} live" if n_providers > 0 else "warming up"
+    btc_addr = os.environ.get("BTC_DONATION_ADDRESS", "")
+    btc_section = ""
+    if btc_addr:
+        btc_section = f"""
+<section class="reveal" id="support">
+<div class="section-title">
+  <h2>Support the project</h2>
+  <p>Rhea is built by independent researchers. Every sat helps.</p>
+</div>
+<div style="max-width:500px;margin:0 auto;text-align:center">
+  <div class="glass-card" style="padding:2rem">
+    <div style="font-size:2rem;margin-bottom:1rem">&#x20BF;</div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--accent);
+      word-break:break-all;padding:.8rem;background:rgba(0,113,227,.06);border-radius:8px;
+      border:1px solid rgba(0,113,227,.15);margin-bottom:1rem;cursor:pointer"
+      onclick="navigator.clipboard.writeText('{btc_addr}');this.style.borderColor='var(--green)';
+      this.insertAdjacentHTML('afterend','<div style=\\'color:var(--green);font-size:.7rem;margin-top:.3rem\\'>Copied!</div>')">
+      {btc_addr}
+    </div>
+    <div style="font-size:.7rem;color:var(--muted)">Click to copy &bull; On-chain BTC &bull; BTCPay webhook auto-credits your account</div>
+  </div>
+</div>
+</section>"""
     html = f"""<!DOCTYPE html>
 <html lang="en">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Rhea &mdash; Multi-Model Consensus Platform</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{{margin:0;padding:0;box-sizing:border-box}}
-:root{{--bg:#000;--surface:#111;--card:#161616;--border:#222;--text:#f5f5f7;
-  --muted:#86868b;--accent:#0071e3;--accent-hover:#0077ED;--green:#30d158;
-  --orange:#ff9f0a;--red:#ff453a;--purple:#bf5af2;--radius:16px;--radius-sm:12px}}
+:root{{--bg:#000;--surface:#0a0a0f;--card:#111118;--border:rgba(255,255,255,.08);
+  --text:#f5f5f7;--muted:#86868b;--accent:#0071e3;--accent-hover:#0077ED;
+  --green:#30d158;--orange:#ff9f0a;--red:#ff453a;--purple:#bf5af2;--cyan:#64d2ff;
+  --radius:20px;--radius-sm:14px}}
 body{{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);
-  -webkit-font-smoothing:antialiased;line-height:1.47059}}
-a{{color:var(--accent);text-decoration:none}}
-a:hover{{text-decoration:underline}}
+  -webkit-font-smoothing:antialiased;line-height:1.47059;overflow-x:hidden}}
+a{{color:var(--accent);text-decoration:none}}a:hover{{text-decoration:underline}}
+
+/* ANIMATIONS */
+@keyframes fadeUp{{from{{opacity:0;transform:translateY(30px)}}to{{opacity:1;transform:none}}}}
+@keyframes fadeIn{{from{{opacity:0}}to{{opacity:1}}}}
+@keyframes shimmer{{0%{{background-position:200% 0}}100%{{background-position:-200% 0}}}}
+@keyframes pulse-ring{{0%{{transform:scale(.95);opacity:1}}100%{{transform:scale(1.3);opacity:0}}}}
+@keyframes float{{0%,100%{{transform:translateY(0)}}50%{{transform:translateY(-8px)}}}}
+@keyframes gradient-shift{{0%{{background-position:0% 50%}}50%{{background-position:100% 50%}}100%{{background-position:0% 50%}}}}
+@keyframes typing{{from{{width:0}}to{{width:100%}}}}
+
+.reveal{{opacity:0;transform:translateY(30px);transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .8s cubic-bezier(.16,1,.3,1)}}
+.reveal.visible{{opacity:1;transform:none}}
+.stagger-1{{transition-delay:.1s}}.stagger-2{{transition-delay:.2s}}.stagger-3{{transition-delay:.3s}}.stagger-4{{transition-delay:.4s}}
+
+/* GLASS */
+.glass{{background:rgba(255,255,255,.03);backdrop-filter:blur(40px) saturate(180%);
+  -webkit-backdrop-filter:blur(40px) saturate(180%);border:1px solid var(--border)}}
+.glass-card{{background:rgba(255,255,255,.04);backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);border:1px solid var(--border);border-radius:var(--radius);
+  transition:.4s cubic-bezier(.16,1,.3,1)}}
+.glass-card:hover{{border-color:rgba(255,255,255,.15);transform:translateY(-4px);
+  box-shadow:0 20px 60px rgba(0,0,0,.4)}}
 
 /* NAV */
-nav{{position:sticky;top:0;z-index:100;background:rgba(0,0,0,.8);backdrop-filter:saturate(180%) blur(20px);
-  -webkit-backdrop-filter:saturate(180%) blur(20px);border-bottom:1px solid var(--border);padding:0 2rem}}
-.nav-inner{{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:48px}}
-.nav-brand{{font-weight:600;font-size:1.1rem;letter-spacing:-.02em}}
-.nav-links{{display:flex;gap:1.5rem;align-items:center;font-size:.85rem;color:var(--muted)}}
-.nav-links a{{color:var(--muted)}}
-.nav-links a:hover{{color:var(--text);text-decoration:none}}
-.btn-sm{{display:inline-flex;align-items:center;gap:.4rem;padding:.4rem 1rem;border-radius:980px;
-  font-size:.8rem;font-weight:500;cursor:pointer;border:none;transition:.2s}}
-.btn-primary{{background:var(--accent);color:#fff}}.btn-primary:hover{{background:var(--accent-hover);text-decoration:none}}
+nav{{position:sticky;top:0;z-index:100;padding:0 2rem;border-bottom:1px solid var(--border)}}
+nav .glass{{border:none;border-radius:0}}
+.nav-inner{{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:52px}}
+.nav-brand{{font-weight:700;font-size:1.15rem;letter-spacing:-.02em;
+  background:linear-gradient(135deg,#fff,var(--cyan));-webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;background-clip:text}}
+.nav-links{{display:flex;gap:1.2rem;align-items:center;font-size:.82rem;color:var(--muted)}}
+.nav-links a{{color:var(--muted);transition:.2s}}.nav-links a:hover{{color:var(--text);text-decoration:none}}
+
+/* AUTH WIDGET (compact top-bar) */
+.auth-widget{{position:relative}}
+.auth-trigger{{display:flex;align-items:center;gap:.4rem;padding:.35rem .9rem;border-radius:980px;
+  font-size:.78rem;font-weight:500;cursor:pointer;border:1px solid var(--border);
+  background:rgba(255,255,255,.06);color:var(--text);transition:.3s}}
+.auth-trigger:hover{{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.2)}}
+.auth-trigger .dot{{width:6px;height:6px;border-radius:50%;background:var(--green);
+  animation:pulse-ring 2s ease-out infinite}}
+.auth-dropdown{{position:absolute;top:calc(100% + 8px);right:0;width:280px;border-radius:var(--radius-sm);
+  padding:1rem;display:none;z-index:200;animation:fadeUp .3s cubic-bezier(.16,1,.3,1)}}
+.auth-widget:hover .auth-dropdown{{display:block}}
+.auth-dropdown a{{display:flex;align-items:center;gap:.6rem;padding:.55rem .8rem;border-radius:10px;
+  font-size:.8rem;font-weight:500;color:var(--text);transition:.2s;text-decoration:none}}
+.auth-dropdown a:hover{{background:rgba(255,255,255,.06)}}
+.auth-dropdown a svg{{width:18px;height:18px;flex-shrink:0}}
+.auth-sep{{border-top:1px solid var(--border);margin:.5rem 0}}
+.auth-dropdown .email-form{{display:flex;gap:.4rem;margin-top:.3rem}}
+.auth-dropdown input{{flex:1;padding:.4rem .6rem;border-radius:8px;border:1px solid var(--border);
+  background:rgba(255,255,255,.04);color:var(--text);font-size:.75rem;font-family:inherit}}
+.auth-dropdown input:focus{{outline:none;border-color:var(--accent)}}
+
+/* BUTTONS */
+.btn{{display:inline-flex;align-items:center;gap:.5rem;padding:.55rem 1.3rem;border-radius:980px;
+  font-size:.85rem;font-weight:500;cursor:pointer;border:none;transition:.3s;text-decoration:none}}
+.btn-primary{{background:var(--accent);color:#fff;box-shadow:0 4px 15px rgba(0,113,227,.3)}}
+.btn-primary:hover{{background:var(--accent-hover);box-shadow:0 6px 25px rgba(0,113,227,.4);transform:translateY(-1px);text-decoration:none}}
 .btn-ghost{{background:transparent;color:var(--text);border:1px solid var(--border)}}
-.btn-ghost:hover{{background:#1a1a1a;text-decoration:none}}
+.btn-ghost:hover{{background:rgba(255,255,255,.06);text-decoration:none}}
 
 /* HERO */
-.hero{{text-align:center;padding:6rem 2rem 4rem;max-width:900px;margin:0 auto}}
-.hero-badge{{display:inline-block;padding:.3rem .8rem;border-radius:980px;background:#1a1a2e;
-  color:var(--accent);font-size:.75rem;font-weight:500;margin-bottom:1.5rem;
-  border:1px solid rgba(0,113,227,.2)}}
-.hero h1{{font-size:3.5rem;font-weight:700;letter-spacing:-.03em;line-height:1.08;margin-bottom:1rem}}
-.hero h1 em{{font-style:normal;background:linear-gradient(135deg,var(--accent),var(--purple));
+.hero-wrap{{position:relative;overflow:hidden}}
+.hero-mesh{{position:absolute;inset:0;opacity:.15;
+  background:radial-gradient(ellipse at 20% 50%,var(--accent),transparent 50%),
+    radial-gradient(ellipse at 80% 20%,var(--purple),transparent 50%),
+    radial-gradient(ellipse at 50% 80%,var(--cyan),transparent 50%);
+  background-size:200% 200%;animation:gradient-shift 15s ease infinite}}
+.hero{{position:relative;z-index:1;text-align:center;padding:7rem 2rem 5rem;max-width:900px;margin:0 auto}}
+.hero-badge{{display:inline-flex;align-items:center;gap:.5rem;padding:.35rem 1rem;border-radius:980px;
+  font-size:.72rem;font-weight:500;margin-bottom:2rem;animation:fadeIn 1s .2s both;
+  border:1px solid rgba(48,209,88,.2);color:var(--green);background:rgba(48,209,88,.06)}}
+.hero-badge .live-dot{{width:6px;height:6px;border-radius:50%;background:var(--green);
+  box-shadow:0 0 8px var(--green);animation:pulse-ring 2s ease-out infinite}}
+.hero h1{{font-size:4.2rem;font-weight:800;letter-spacing:-.04em;line-height:1.05;
+  margin-bottom:1.2rem;animation:fadeUp .8s .3s both}}
+.hero h1 em{{font-style:normal;background:linear-gradient(135deg,var(--accent),var(--purple),var(--cyan));
+  background-size:200% 200%;animation:gradient-shift 8s ease infinite;
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}}
-.hero p{{font-size:1.25rem;color:var(--muted);max-width:600px;margin:0 auto 2.5rem;line-height:1.5;font-weight:300}}
-.hero-actions{{display:flex;gap:.8rem;justify-content:center;flex-wrap:wrap}}
-.hero-actions .btn-sm{{padding:.6rem 1.5rem;font-size:.9rem}}
+.hero p{{font-size:1.2rem;color:var(--muted);max-width:580px;margin:0 auto 2.5rem;
+  line-height:1.55;font-weight:300;animation:fadeUp .8s .5s both}}
+.hero-actions{{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;animation:fadeUp .8s .7s both}}
 
-/* STATS BAR */
-.stats{{display:flex;justify-content:center;gap:3rem;padding:2rem;flex-wrap:wrap}}
+/* STATS */
+.stats-bar{{padding:2.5rem 2rem;animation:fadeUp .8s .9s both}}
+.stats-inner{{max-width:800px;margin:0 auto;display:flex;justify-content:space-around;
+  padding:1.5rem 2rem;border-radius:var(--radius)}}
 .stat{{text-align:center}}
-.stat .val{{font-size:2rem;font-weight:700;color:var(--text)}}
-.stat .lbl{{font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-top:.2rem}}
+.stat .val{{font-size:2.2rem;font-weight:700;
+  background:linear-gradient(180deg,#fff,#888);-webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;background-clip:text}}
+.stat .lbl{{font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;margin-top:.3rem}}
 
-/* SECTIONS */
+/* SECTION */
 section{{padding:5rem 2rem;max-width:1200px;margin:0 auto}}
-.section-title{{text-align:center;margin-bottom:3rem}}
-.section-title h2{{font-size:2.5rem;font-weight:700;letter-spacing:-.02em;margin-bottom:.5rem}}
-.section-title p{{color:var(--muted);font-size:1rem;max-width:500px;margin:0 auto}}
+.section-title{{text-align:center;margin-bottom:3.5rem}}
+.section-title h2{{font-size:2.8rem;font-weight:700;letter-spacing:-.03em;margin-bottom:.6rem}}
+.section-title p{{color:var(--muted);font-size:1rem;max-width:480px;margin:0 auto;line-height:1.5}}
 
 /* PRICING */
-.pricing-toggle{{display:flex;justify-content:center;gap:.5rem;margin-bottom:2.5rem}}
-.pricing-grid{{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.2rem;max-width:1100px;margin:0 auto}}
-.plan{{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:2rem;
-  display:flex;flex-direction:column;transition:.3s;position:relative}}
-.plan:hover{{border-color:#444;transform:translateY(-2px)}}
-.plan.featured{{border-color:var(--accent);background:linear-gradient(180deg,rgba(0,113,227,.08),var(--card))}}
+.pricing-grid{{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;max-width:1100px;margin:0 auto}}
+.plan{{border-radius:var(--radius);padding:2rem;display:flex;flex-direction:column;position:relative}}
+.plan.featured{{border-color:var(--accent)!important;background:linear-gradient(180deg,rgba(0,113,227,.1),rgba(0,0,0,0))!important}}
 .plan.featured::before{{content:'Most Popular';position:absolute;top:-10px;left:50%;transform:translateX(-50%);
-  background:var(--accent);color:#fff;font-size:.65rem;font-weight:600;padding:.2rem .8rem;
-  border-radius:980px;white-space:nowrap}}
-.plan-name{{font-size:.85rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.5rem}}
-.plan-price{{font-size:2.5rem;font-weight:700;margin-bottom:.3rem}}
-.plan-price small{{font-size:.9rem;color:var(--muted);font-weight:400}}
-.plan-desc{{color:var(--muted);font-size:.85rem;margin-bottom:1.5rem;line-height:1.5}}
+  background:linear-gradient(135deg,var(--accent),var(--purple));color:#fff;font-size:.6rem;font-weight:600;
+  padding:.25rem .8rem;border-radius:980px;white-space:nowrap}}
+.plan-name{{font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;margin-bottom:.6rem}}
+.plan-price{{font-size:2.8rem;font-weight:800;margin-bottom:.2rem;letter-spacing:-.03em}}
+.plan-price small{{font-size:.85rem;color:var(--muted);font-weight:400}}
+.plan-desc{{color:var(--muted);font-size:.8rem;margin-bottom:1.5rem;line-height:1.5}}
 .plan-features{{list-style:none;flex:1;margin-bottom:1.5rem}}
-.plan-features li{{padding:.4rem 0;font-size:.85rem;color:#ccc;display:flex;align-items:baseline;gap:.5rem}}
-.plan-features li::before{{content:'';display:inline-block;width:6px;height:6px;border-radius:50%;
-  background:var(--green);flex-shrink:0;margin-top:.3rem}}
-.plan-cta{{display:block;text-align:center;padding:.7rem;border-radius:var(--radius-sm);
-  font-size:.85rem;font-weight:500;cursor:pointer;border:none;transition:.2s;text-decoration:none}}
-.plan-cta.primary{{background:var(--accent);color:#fff}}.plan-cta.primary:hover{{background:var(--accent-hover)}}
+.plan-features li{{padding:.35rem 0;font-size:.8rem;color:#bbb;display:flex;align-items:center;gap:.5rem}}
+.plan-features li::before{{content:'';width:16px;height:16px;border-radius:50%;flex-shrink:0;
+  background:rgba(48,209,88,.12);display:flex;align-items:center;justify-content:center;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' fill='%2330d158'%3E%3Cpath d='M8.5 3L4 7.5 1.5 5'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:center}}
+.plan-cta{{display:block;text-align:center;padding:.75rem;border-radius:var(--radius-sm);
+  font-size:.85rem;font-weight:500;cursor:pointer;border:none;transition:.3s;text-decoration:none}}
+.plan-cta.primary{{background:var(--accent);color:#fff;box-shadow:0 4px 15px rgba(0,113,227,.25)}}
+.plan-cta.primary:hover{{background:var(--accent-hover);box-shadow:0 6px 20px rgba(0,113,227,.35)}}
 .plan-cta.outline{{background:transparent;color:var(--text);border:1px solid var(--border)}}
-.plan-cta.outline:hover{{background:#1a1a1a}}
-.plan .byok{{font-size:.7rem;color:var(--muted);text-align:center;margin-top:.5rem}}
+.plan-cta.outline:hover{{background:rgba(255,255,255,.05)}}
+.plan .byok{{font-size:.65rem;color:var(--muted);text-align:center;margin-top:.6rem}}
 
-/* AUTH SECTION */
-.auth-section{{text-align:center;padding:4rem 2rem;background:var(--surface);border-radius:var(--radius);
-  max-width:600px;margin:3rem auto}}
-.auth-btns{{display:flex;flex-direction:column;gap:.6rem;max-width:320px;margin:1.5rem auto 0}}
-.auth-btn{{display:flex;align-items:center;gap:.8rem;padding:.7rem 1.2rem;border-radius:var(--radius-sm);
-  font-size:.85rem;font-weight:500;border:1px solid var(--border);background:var(--card);
-  color:var(--text);cursor:pointer;text-decoration:none;transition:.2s}}
-.auth-btn:hover{{background:#222;text-decoration:none}}
-.auth-btn .icon{{width:20px;height:20px;display:flex;align-items:center;justify-content:center}}
-.auth-btn.google .icon{{color:#4285f4}}.auth-btn.ms .icon{{color:#00a4ef}}.auth-btn.apple .icon{{color:#fff}}
+/* FEATURES BENTO */
+.bento{{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;max-width:1000px;margin:0 auto}}
+.bento-card{{border-radius:var(--radius);padding:2rem;position:relative;overflow:hidden;min-height:180px}}
+.bento-card h3{{font-size:1rem;font-weight:600;margin-bottom:.4rem}}
+.bento-card p{{font-size:.8rem;color:var(--muted);line-height:1.5}}
+.bento-card .bento-icon{{font-size:2rem;margin-bottom:1rem;display:block}}
+.bento-card.span-2{{grid-column:span 2}}
+
+/* COMFYUI PREVIEW */
+.comfy-preview{{border-radius:var(--radius);padding:2.5rem;position:relative;overflow:hidden}}
+.comfy-preview .node-graph{{display:flex;gap:.8rem;align-items:center;flex-wrap:wrap;margin-top:1.5rem}}
+.comfy-node{{padding:.6rem 1rem;border-radius:10px;font-size:.7rem;font-weight:500;
+  border:1px solid;display:flex;align-items:center;gap:.4rem;animation:float 4s ease-in-out infinite}}
+.comfy-node:nth-child(2){{animation-delay:.5s}}.comfy-node:nth-child(3){{animation-delay:1s}}
+.comfy-node:nth-child(4){{animation-delay:1.5s}}.comfy-node:nth-child(5){{animation-delay:2s}}
+.comfy-edge{{width:30px;height:2px;background:var(--border);position:relative}}
+.comfy-edge::after{{content:'';position:absolute;right:-3px;top:-3px;width:8px;height:8px;
+  border-radius:50%;background:var(--accent);animation:pulse-ring 2s ease-out infinite}}
 
 /* PLATFORMS */
-.platforms{{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1rem;
-  max-width:800px;margin:2rem auto 0}}
-.plat-card{{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);
-  padding:1.5rem 1rem;text-align:center;transition:.2s}}
-.plat-card:hover{{border-color:#444}}
-.plat-card .icon{{font-size:1.5rem;margin-bottom:.5rem}}
-.plat-card .name{{font-size:.8rem;font-weight:500}}
-.plat-card .sub{{font-size:.65rem;color:var(--muted);margin-top:.2rem}}
+.plat-grid{{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;
+  max-width:900px;margin:2rem auto 0}}
+.plat-card{{border-radius:var(--radius-sm);padding:1.8rem 1.2rem;text-align:center}}
+.plat-card .p-icon{{font-size:2rem;margin-bottom:.7rem;display:block}}
+.plat-card .p-name{{font-size:.85rem;font-weight:600}}
+.plat-card .p-sub{{font-size:.7rem;color:var(--muted);margin-top:.3rem}}
 
-/* API BLOCK */
-.api-block{{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
-  padding:2rem;max-width:700px;margin:2rem auto}}
-.api-block pre{{background:#0a0a0a;border-radius:var(--radius-sm);padding:1.2rem;overflow-x:auto;
-  font-family:'JetBrains Mono',monospace;font-size:.8rem;line-height:1.7;border:1px solid #1a1a1a}}
-.api-block code{{color:#888}}.g{{color:var(--green)}}.w{{color:#ddd}}.r{{color:var(--red)}}.b{{color:var(--accent)}}
+/* API */
+.api-block{{border-radius:var(--radius);padding:2rem;max-width:700px;margin:2rem auto}}
+.api-block pre{{background:#050508;border-radius:var(--radius-sm);padding:1.5rem;overflow-x:auto;
+  font-family:'JetBrains Mono',monospace;font-size:.78rem;line-height:1.7;border:1px solid rgba(255,255,255,.05)}}
+.api-block code{{color:#777}}.g{{color:var(--green)}}.w{{color:#ddd}}.r{{color:#555}}.b{{color:var(--accent)}}
+
+/* LEGACY */
+.legacy-bar{{max-width:800px;margin:0 auto;padding:2rem;border-radius:var(--radius);
+  display:flex;gap:2rem;align-items:center}}
+.legacy-bar .legacy-icon{{font-size:2rem;flex-shrink:0}}
+.legacy-bar .legacy-text h3{{font-size:.9rem;font-weight:600;margin-bottom:.2rem}}
+.legacy-bar .legacy-text p{{font-size:.78rem;color:var(--muted);line-height:1.5}}
 
 /* PRINCIPLE */
-.principle-bar{{text-align:center;padding:3rem 2rem;max-width:700px;margin:0 auto}}
-.principle-bar blockquote{{font-size:1.1rem;color:var(--muted);font-style:italic;
-  border-left:3px solid var(--accent);padding-left:1.2rem;text-align:left}}
+.principle-bar{{text-align:center;padding:4rem 2rem;max-width:700px;margin:0 auto}}
+.principle-bar blockquote{{font-size:1.15rem;color:var(--muted);font-style:italic;
+  border-left:3px solid var(--accent);padding-left:1.5rem;text-align:left;line-height:1.6}}
 
 /* FOOTER */
-footer{{text-align:center;padding:3rem 2rem;color:#333;font-size:.7rem;letter-spacing:.05em}}
-footer a{{color:#555}}
+footer{{text-align:center;padding:3.5rem 2rem;border-top:1px solid var(--border)}}
+footer .f-links{{margin-bottom:1rem;font-size:.82rem;color:#555;display:flex;justify-content:center;gap:1.5rem;flex-wrap:wrap}}
+footer .f-links a{{color:#555}}.f-links a:hover{{color:var(--text)}}
+footer .f-copy{{color:#333;font-size:.68rem;letter-spacing:.04em}}
 
 /* RESPONSIVE */
-@media(max-width:768px){{
-  .hero h1{{font-size:2.2rem}}
-  .pricing-grid{{grid-template-columns:1fr}}
-  .stats{{gap:1.5rem}}
-  .stat .val{{font-size:1.4rem}}
-  nav{{padding:0 1rem}}
-}}
+@media(max-width:900px){{.pricing-grid{{grid-template-columns:repeat(2,1fr)}}
+  .bento{{grid-template-columns:1fr}}.bento-card.span-2{{grid-column:span 1}}}}
+@media(max-width:600px){{.hero h1{{font-size:2.5rem}}.pricing-grid{{grid-template-columns:1fr}}
+  .stats-inner{{flex-direction:column;gap:1.5rem}}.nav-links{{gap:.6rem;font-size:.75rem}}
+  nav{{padding:0 1rem}}.plat-grid{{grid-template-columns:repeat(2,1fr)}}
+  .legacy-bar{{flex-direction:column;text-align:center}}}}
 </style></head>
 <body>
 
 <!-- NAV -->
-<nav>
+<nav class="glass">
 <div class="nav-inner">
   <div class="nav-brand">Rhea</div>
   <div class="nav-links">
+    <a href="#features">Features</a>
     <a href="#pricing">Pricing</a>
     <a href="#platforms">Apps</a>
     <a href="/health">Status</a>
     <a href="https://github.com/serg-alexv/rhea-project">GitHub</a>
-    <a href="/auth/login-page" class="btn-sm btn-ghost">Sign In</a>
-    <a href="#auth" class="btn-sm btn-primary">Get Started Free</a>
+    <!-- Compact auth widget -->
+    <div class="auth-widget">
+      <div class="auth-trigger"><span class="dot"></span> Sign In</div>
+      <div class="auth-dropdown glass-card">
+        <a href="/auth/google?callback=web">
+          <svg viewBox="0 0 24 24"><path fill="#4285f4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/><path fill="#34a853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#fbbc05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18A10.96 10.96 0 0 0 1 12c0 1.77.42 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#ea4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+          Google
+        </a>
+        <a href="/auth/microsoft?callback=web">
+          <svg viewBox="0 0 24 24"><rect fill="#f25022" x="1" y="1" width="10" height="10"/><rect fill="#00a4ef" x="1" y="13" width="10" height="10"/><rect fill="#7fba00" x="13" y="1" width="10" height="10"/><rect fill="#ffb900" x="13" y="13" width="10" height="10"/></svg>
+          Microsoft
+        </a>
+        <a href="/auth/login-page">
+          <svg viewBox="0 0 24 24" fill="#fff"><path d="M17.05 20.28c-.98.95-2.05.88-3.08.4-1.09-.5-2.08-.48-3.24 0-1.44.62-2.2.44-3.06-.4C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg>
+          Apple
+        </a>
+        <div class="auth-sep"></div>
+        <div style="padding:0 .8rem">
+          <div style="font-size:.7rem;color:var(--muted);margin-bottom:.4rem">Or sign up with email</div>
+          <form action="/auth/signup" method="post" class="email-form" onsubmit="return false">
+            <input type="email" placeholder="you@example.com" id="nav-email">
+            <a href="#auth" class="btn btn-primary" style="padding:.35rem .7rem;font-size:.7rem"
+              onclick="document.getElementById('auth-email').value=document.getElementById('nav-email').value;
+              document.getElementById('auth').scrollIntoView({{behavior:'smooth'}})">Go</a>
+          </form>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 </nav>
 
-<!-- HERO -->
-<div class="hero">
-  <div class="hero-badge">{providers_line} &bull; multi-model consensus</div>
-  <h1>Verify anything.<br><em>Trust the agreement.</em></h1>
-  <p>{multi_note}. Consensus is the signal. Divergence reveals where claims break.</p>
-  <div class="hero-actions">
-    <a href="#auth" class="btn-sm btn-primary">Start Free</a>
-    <a href="#pricing" class="btn-sm btn-ghost">See Pricing</a>
+<!-- HERO with animated gradient mesh -->
+<div class="hero-wrap">
+  <div class="hero-mesh"></div>
+  <div class="hero">
+    <div class="hero-badge"><span class="live-dot"></span> {providers_line} &bull; multi-model consensus</div>
+    <h1>Verify anything.<br><em>Trust the agreement.</em></h1>
+    <p>{multi_note}. Consensus is the signal. Divergence reveals where claims break.</p>
+    <div class="hero-actions">
+      <a href="#auth" class="btn btn-primary" style="padding:.65rem 2rem;font-size:.95rem">Start Free</a>
+      <a href="#pricing" class="btn btn-ghost">See Plans</a>
+    </div>
   </div>
 </div>
 
-<!-- LIVE STATS -->
-<div class="stats">
+<!-- ANIMATED STATS -->
+<div class="stats-bar">
+<div class="stats-inner glass-card">
   <div class="stat"><div class="val">{proof_count}</div><div class="lbl">Proofs stored</div></div>
   <div class="stat"><div class="val">{ontology_count}</div><div class="lbl">Ontologies</div></div>
   <div class="stat"><div class="val">{avg_conf_str}</div><div class="lbl">Avg confidence</div></div>
   <div class="stat"><div class="val">{providers_line}</div><div class="lbl">Right now</div></div>
 </div>
+</div>
+
+<!-- FEATURES BENTO GRID -->
+<section id="features" class="reveal">
+<div class="section-title">
+  <h2>Built for truth-seekers</h2>
+  <p>Every tool you need to verify, prove, and build knowledge.</p>
+</div>
+<div class="bento">
+  <div class="bento-card glass-card span-2 stagger-1">
+    <span class="bento-icon">&#x2696;</span>
+    <h3>Tribunal Consensus</h3>
+    <p>Query multiple AI models independently. They don't see each other's answers.
+       Agreement = signal. Divergence = where the lie hides. 3-model, 5-model, or ICE deep verification.</p>
+  </div>
+  <div class="bento-card glass-card stagger-2">
+    <span class="bento-icon">&#x1F9EC;</span>
+    <h3>Aletheia Proofs</h3>
+    <p>Every verified claim is stored with provenance chains. Searchable. Exportable. Not marketing copy.</p>
+  </div>
+  <div class="bento-card glass-card stagger-3">
+    <span class="bento-icon">&#x1F916;</span>
+    <h3>Sceptic Mode</h3>
+    <p>Adversarial verification. One model attacks the claim, others defend. Stress-test your knowledge.</p>
+  </div>
+  <div class="bento-card glass-card stagger-4">
+    <span class="bento-icon">&#x26A1;</span>
+    <h3>Workflow Engine</h3>
+    <p>Automate verification pipelines. Chain tribunal calls, proof storage, and notifications into DAGs.</p>
+  </div>
+  <div class="bento-card glass-card stagger-1">
+    <span class="bento-icon">&#x1F511;</span>
+    <h3>BYOK: Bring Your Own Keys</h3>
+    <p>Plug your API keys. Pay providers directly. $0 platform fee. You own the infrastructure.</p>
+  </div>
+</div>
+</section>
+
+<!-- COMFYUI INTEGRATION PREVIEW -->
+<section class="reveal">
+<div class="section-title">
+  <h2>Coming: ComfyUI Integration</h2>
+  <p>Visual node-based workflow editor for Rhea's verification cycles.</p>
+</div>
+<div class="comfy-preview glass-card" style="max-width:800px;margin:0 auto">
+  <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.5rem">
+    <span style="font-size:.65rem;font-weight:600;color:var(--orange);text-transform:uppercase;letter-spacing:.1em">
+      Planned Integration</span>
+    <span style="font-size:.6rem;color:var(--muted)">&bull; Visual DAG editor as a CC tab</span>
+  </div>
+  <p style="font-size:.82rem;color:var(--muted);line-height:1.5;margin-bottom:1.5rem">
+    ComfyUI-style node graph for building multi-step verification workflows.
+    Drag nodes, connect edges, run consensus cycles visually.</p>
+  <div class="node-graph">
+    <div class="comfy-node" style="border-color:var(--green);color:var(--green);background:rgba(48,209,88,.08)">
+      &#x25B6; Input Claim</div>
+    <div class="comfy-edge"></div>
+    <div class="comfy-node" style="border-color:var(--accent);color:var(--accent);background:rgba(0,113,227,.08)">
+      &#x2696; Tribunal k=3</div>
+    <div class="comfy-edge"></div>
+    <div class="comfy-node" style="border-color:var(--orange);color:var(--orange);background:rgba(255,159,10,.08)">
+      &#x1F914; Sceptic Probe</div>
+    <div class="comfy-edge"></div>
+    <div class="comfy-node" style="border-color:var(--purple);color:var(--purple);background:rgba(191,90,242,.08)">
+      &#x1F4BE; Aletheia Store</div>
+    <div class="comfy-edge"></div>
+    <div class="comfy-node" style="border-color:var(--cyan);color:var(--cyan);background:rgba(100,210,255,.08)">
+      &#x2705; Output Proof</div>
+  </div>
+</div>
+</section>
 
 <!-- PRICING -->
-<section id="pricing">
+<section id="pricing" class="reveal">
 <div class="section-title">
   <h2>Simple, transparent pricing</h2>
   <p>Start free. Scale with credits. Bring your own keys for zero platform cost.</p>
 </div>
-
 <div class="pricing-grid">
-
-  <!-- FREE -->
-  <div class="plan">
+  <div class="plan glass-card stagger-1">
     <div class="plan-name" style="color:var(--green)">Free</div>
     <div class="plan-price">$0 <small>forever</small></div>
     <div class="plan-desc">100 credits on signup. Perfect for trying the consensus engine.</div>
     <ul class="plan-features">
       <li>100 free credits</li>
-      <li>3-model tribunal consensus</li>
+      <li>3-model tribunal</li>
       <li>Aletheia proof storage</li>
-      <li>Web, iOS, macOS apps</li>
+      <li>All apps (web, iOS, macOS)</li>
       <li>Google &amp; Microsoft auth</li>
-      <li>Community support</li>
     </ul>
     <a href="#auth" class="plan-cta primary">Get Started Free</a>
   </div>
-
-  <!-- PRO -->
-  <div class="plan featured">
+  <div class="plan glass-card featured stagger-2">
     <div class="plan-name" style="color:var(--accent)">Pro</div>
-    <div class="plan-price">$19 <small>/month</small></div>
-    <div class="plan-desc">For researchers and professionals who need deeper consensus.</div>
+    <div class="plan-price">$19 <small>/mo</small></div>
+    <div class="plan-desc">For researchers who need deeper consensus and adversarial testing.</div>
     <ul class="plan-features">
       <li>2,000 credits/month</li>
-      <li>5-model ICE deep verification</li>
-      <li>Priority model routing</li>
+      <li>5-model ICE verification</li>
       <li>Sceptic adversarial mode</li>
-      <li>Export proofs &amp; ontologies</li>
-      <li>CLI access + API key</li>
+      <li>Priority model routing</li>
+      <li>CLI + API key</li>
       <li>Email support</li>
     </ul>
     <a href="#auth" class="plan-cta primary">Start Pro Trial</a>
-    <div class="byok">Or BYOK: plug your keys, pay providers directly</div>
+    <div class="byok">Or BYOK &mdash; $0 with your keys</div>
   </div>
-
-  <!-- TEAM -->
-  <div class="plan">
+  <div class="plan glass-card stagger-3">
     <div class="plan-name" style="color:var(--orange)">Team</div>
-    <div class="plan-price">$49 <small>/month</small></div>
+    <div class="plan-price">$49 <small>/mo</small></div>
     <div class="plan-desc">Shared workspace for labs and research groups.</div>
     <ul class="plan-features">
       <li>10,000 credits/month</li>
       <li>Up to 10 seats</li>
       <li>Shared proof library</li>
-      <li>Team ontology management</li>
-      <li>Workflow automation engine</li>
-      <li>Admin controls &amp; audit log</li>
+      <li>Workflow automation</li>
+      <li>Admin controls</li>
       <li>Priority support</li>
     </ul>
     <a href="#auth" class="plan-cta outline">Contact Us</a>
-    <div class="byok">BYOK: $0 platform fee with your own keys</div>
+    <div class="byok">BYOK: $0 platform fee</div>
   </div>
-
-  <!-- SOVEREIGN -->
-  <div class="plan">
+  <div class="plan glass-card stagger-4">
     <div class="plan-name" style="color:var(--purple)">Sovereign</div>
-    <div class="plan-price">$199 <small>/month</small></div>
-    <div class="plan-desc">Full infrastructure ownership. Your data, your models, your rules.</div>
+    <div class="plan-price">$199 <small>/mo</small></div>
+    <div class="plan-desc">Full infrastructure ownership. Your data, models, rules.</div>
     <ul class="plan-features">
-      <li>Unlimited credits (self-hosted)</li>
-      <li>Deploy on your infrastructure</li>
-      <li>All model providers unlocked</li>
-      <li>ADMIN_EMAILS genline control</li>
-      <li>Custom model routing</li>
+      <li>Unlimited (self-hosted)</li>
+      <li>All providers unlocked</li>
+      <li>ADMIN_EMAILS genline</li>
+      <li>Custom routing</li>
       <li>White-label &amp; SSO</li>
       <li>Dedicated support + SLA</li>
     </ul>
     <a href="#auth" class="plan-cta outline">Request Access</a>
-    <div class="byok">You own the infrastructure &mdash; you control who's admin</div>
+    <div class="byok">You own the infrastructure</div>
   </div>
-
 </div>
 </section>
 
-<!-- AUTH -->
-<section id="auth">
-<div class="auth-section">
-  <h2 style="font-size:1.5rem;font-weight:600;margin-bottom:.5rem">Sign in to Rhea</h2>
-  <p style="color:var(--muted);font-size:.85rem">One account across all platforms</p>
-  <div class="auth-btns">
-    <a href="/auth/google?callback=web" class="auth-btn google">
-      <span class="icon"><svg viewBox="0 0 24 24" width="20" height="20"><path fill="#4285f4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/><path fill="#34a853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#fbbc05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18A10.96 10.96 0 0 0 1 12c0 1.77.42 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#ea4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg></span>
-      Continue with Google
-    </a>
-    <a href="/auth/microsoft?callback=web" class="auth-btn ms">
-      <span class="icon"><svg viewBox="0 0 24 24" width="18" height="18"><rect fill="#f25022" x="1" y="1" width="10" height="10"/><rect fill="#00a4ef" x="1" y="13" width="10" height="10"/><rect fill="#7fba00" x="13" y="1" width="10" height="10"/><rect fill="#ffb900" x="13" y="13" width="10" height="10"/></svg></span>
-      Continue with Microsoft
-    </a>
-    <a href="/auth/login-page" class="auth-btn apple">
-      <span class="icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M17.05 20.28c-.98.95-2.05.88-3.08.4-1.09-.5-2.08-.48-3.24 0-1.44.62-2.2.44-3.06-.4C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg></span>
-      Continue with Apple
-    </a>
+<!-- AUTH SECTION -->
+<section id="auth" class="reveal">
+<div style="max-width:480px;margin:0 auto;text-align:center">
+  <div class="glass-card" style="padding:2.5rem">
+    <h2 style="font-size:1.6rem;font-weight:700;margin-bottom:.4rem">Create your account</h2>
+    <p style="color:var(--muted);font-size:.82rem;margin-bottom:1.5rem">One account across all platforms</p>
+    <div style="display:flex;flex-direction:column;gap:.5rem;margin-bottom:1rem">
+      <a href="/auth/google?callback=web" style="display:flex;align-items:center;gap:.7rem;padding:.65rem 1rem;
+        border-radius:12px;border:1px solid var(--border);background:rgba(255,255,255,.03);
+        color:var(--text);font-size:.82rem;font-weight:500;text-decoration:none;transition:.2s"
+        onmouseover="this.style.background='rgba(255,255,255,.07)'" onmouseout="this.style.background='rgba(255,255,255,.03)'">
+        <svg viewBox="0 0 24 24" width="18" height="18"><path fill="#4285f4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/><path fill="#34a853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#fbbc05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18A10.96 10.96 0 0 0 1 12c0 1.77.42 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#ea4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+        Continue with Google</a>
+      <a href="/auth/microsoft?callback=web" style="display:flex;align-items:center;gap:.7rem;padding:.65rem 1rem;
+        border-radius:12px;border:1px solid var(--border);background:rgba(255,255,255,.03);
+        color:var(--text);font-size:.82rem;font-weight:500;text-decoration:none;transition:.2s"
+        onmouseover="this.style.background='rgba(255,255,255,.07)'" onmouseout="this.style.background='rgba(255,255,255,.03)'">
+        <svg viewBox="0 0 24 24" width="16" height="16"><rect fill="#f25022" x="1" y="1" width="10" height="10"/><rect fill="#00a4ef" x="1" y="13" width="10" height="10"/><rect fill="#7fba00" x="13" y="1" width="10" height="10"/><rect fill="#ffb900" x="13" y="13" width="10" height="10"/></svg>
+        Continue with Microsoft</a>
+      <a href="/auth/login-page" style="display:flex;align-items:center;gap:.7rem;padding:.65rem 1rem;
+        border-radius:12px;border:1px solid var(--border);background:rgba(255,255,255,.03);
+        color:var(--text);font-size:.82rem;font-weight:500;text-decoration:none;transition:.2s"
+        onmouseover="this.style.background='rgba(255,255,255,.07)'" onmouseout="this.style.background='rgba(255,255,255,.03)'">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="#fff"><path d="M17.05 20.28c-.98.95-2.05.88-3.08.4-1.09-.5-2.08-.48-3.24 0-1.44.62-2.2.44-3.06-.4C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg>
+        Continue with Apple</a>
+    </div>
+    <div style="display:flex;align-items:center;gap:.8rem;margin:1rem 0;color:var(--muted);font-size:.7rem">
+      <div style="flex:1;height:1px;background:var(--border)"></div>or<div style="flex:1;height:1px;background:var(--border)"></div>
+    </div>
+    <div style="display:flex;gap:.4rem">
+      <input id="auth-email" type="email" placeholder="you@example.com" style="flex:1;padding:.55rem .8rem;
+        border-radius:10px;border:1px solid var(--border);background:rgba(255,255,255,.04);
+        color:var(--text);font-size:.82rem;font-family:inherit">
+      <button class="btn btn-primary" style="padding:.55rem 1.2rem;font-size:.82rem;border-radius:10px">Sign Up</button>
+    </div>
+    <p style="color:#444;font-size:.65rem;margin-top:.8rem">Apple Sign In available natively on iOS</p>
   </div>
-  <p style="color:#444;font-size:.7rem;margin-top:1rem">
-    Or <a href="/auth/signup" style="color:var(--accent)">sign up with email</a> &bull;
-    Apple Sign In available on iOS
-  </p>
 </div>
 </section>
 
 <!-- PLATFORMS -->
-<section id="platforms">
+<section id="platforms" class="reveal">
 <div class="section-title">
   <h2>Available everywhere</h2>
   <p>One account. Every platform. Native experience.</p>
 </div>
-<div class="platforms">
-  <div class="plat-card">
-    <div class="icon">&#xF8FF;</div>
-    <div class="name">iOS</div>
-    <div class="sub"><a href="https://testflight.apple.com/join/BNya22Jg">TestFlight</a></div>
+<div class="plat-grid">
+  <div class="plat-card glass-card stagger-1">
+    <span class="p-icon">&#xF8FF;</span>
+    <div class="p-name">iOS</div>
+    <div class="p-sub"><a href="https://testflight.apple.com/join/BNya22Jg">TestFlight</a></div>
   </div>
-  <div class="plat-card">
-    <div class="icon">&#x1F4BB;</div>
-    <div class="name">macOS</div>
-    <div class="sub"><a href="https://github.com/serg-alexv/rhea-project/releases">Download DMG</a></div>
+  <div class="plat-card glass-card stagger-2">
+    <span class="p-icon">&#x1F4BB;</span>
+    <div class="p-name">macOS</div>
+    <div class="p-sub"><a href="https://github.com/serg-alexv/rhea-project/releases">Download DMG</a></div>
   </div>
-  <div class="plat-card">
-    <div class="icon">&#x1F310;</div>
-    <div class="name">Web</div>
-    <div class="sub"><a href="{url}">Atlas</a></div>
+  <div class="plat-card glass-card stagger-3">
+    <span class="p-icon">&#x1F310;</span>
+    <div class="p-name">Web</div>
+    <div class="p-sub"><a href="{url}">Atlas Dashboard</a></div>
   </div>
-  <div class="plat-card">
-    <div class="icon">&#x2328;</div>
-    <div class="name">CLI</div>
-    <div class="sub">curl + API key</div>
+  <div class="plat-card glass-card stagger-4">
+    <span class="p-icon">&#x2328;&#xFE0F;</span>
+    <div class="p-name">CLI</div>
+    <div class="p-sub">curl + Bearer token</div>
   </div>
-  <div class="plat-card">
-    <div class="icon">&#x1F4E6;</div>
-    <div class="name">Python</div>
-    <div class="sub">pip install rhea-memory</div>
+  <div class="plat-card glass-card stagger-1">
+    <span class="p-icon">&#x1F4E6;</span>
+    <div class="p-name">Python</div>
+    <div class="p-sub">pip install rhea-memory</div>
+  </div>
+</div>
+</section>
+
+<!-- KEYBOARD + PLAYUI LEGACY NOTE -->
+<section class="reveal">
+<div class="legacy-bar glass-card">
+  <div class="legacy-icon">&#x2328;&#xFE0F;</div>
+  <div class="legacy-text">
+    <h3>Keyboard &amp; Play UI</h3>
+    <p>The iOS Keyboard extension and Play macOS UI SDK continue as separate legacy products.
+    They ship independently and are available in their respective app stores.
+    The Rhea platform builds on top of their foundation.</p>
   </div>
 </div>
 </section>
 
 <!-- API -->
-<section>
+<section class="reveal">
 <div class="section-title">
   <h2>Try it now</h2>
   <p>No SDK required. One curl to truth.</p>
 </div>
-<div class="api-block">
+<div class="api-block glass-card">
 <pre><code><span class="g">curl</span> -X POST {url}/tribunal \\
   -H <span class="w">"Content-Type: application/json"</span> \\
   -H <span class="w">"Authorization: Bearer YOUR_TOKEN"</span> \\
@@ -1118,25 +1330,524 @@ footer a{{color:#555}}
 </div>
 </section>
 
+<!-- BTC SUPPORT -->
+{btc_section}
+
 <!-- PRINCIPLE -->
-<div class="principle-bar">
+<div class="principle-bar reveal">
 <blockquote>The infrastructure owner controls who's admin, not the application.<br>
 You own your data, your models, your keys. Rhea serves you &mdash; not the other way around.</blockquote>
 </div>
 
 <!-- FOOTER -->
 <footer>
-  <div style="margin-bottom:.8rem;font-size:.85rem;color:#555">
-    <a href="https://github.com/serg-alexv/rhea-project">GitHub</a> &middot;
-    <a href="/health">Status</a> &middot;
-    <a href="/models">Models</a> &middot;
+  <div class="f-links">
+    <a href="https://github.com/serg-alexv/rhea-project">GitHub</a>
+    <a href="/health">Status</a>
+    <a href="/models">Models</a>
     <a href="/aletheia/stats">Aletheia</a>
+    <a href="https://testflight.apple.com/join/BNya22Jg">TestFlight</a>
   </div>
-  <div>&#x2207; &gt; 0 &#x2228; &#x22A5; &mdash; gradient positive or bottom</div>
-  <div style="margin-top:.5rem">Built by a biochemist and three AI agents</div>
+  <div class="f-links" style="margin-top:.5rem">
+    <a href="/terms">Terms</a>
+    <a href="/privacy">Privacy</a>
+    <a href="/security">Security</a>
+    <a href="/community">Community</a>
+    <a href="/docs">Docs</a>
+    <a href="/contact">Contact</a>
+  </div>
+  <div class="f-copy">&#x2207; &gt; 0 &#x2228; &#x22A5; &mdash; gradient positive or bottom<br>
+  &copy; 2026 TimeLabs NPO</div>
 </footer>
 
+<!-- Scroll reveal + stats counter animation -->
+<script>
+(()=>{{
+  const obs=new IntersectionObserver((entries)=>{{
+    entries.forEach(e=>{{if(e.isIntersecting){{e.target.classList.add('visible');obs.unobserve(e.target)}}}})
+  }},{{threshold:.15,rootMargin:'0px 0px -40px 0px'}});
+  document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+  // Animate stat numbers
+  document.querySelectorAll('.stat .val').forEach(el=>{{
+    const text=el.textContent;const num=parseInt(text);
+    if(!isNaN(num)&&num>0){{
+      let start=0;const dur=1500;const startTime=performance.now();
+      const step=(now)=>{{
+        const p=Math.min((now-startTime)/dur,1);
+        const eased=1-Math.pow(1-p,3);
+        el.textContent=Math.round(start+(num-start)*eased);
+        if(p<1)requestAnimationFrame(step);else el.textContent=text
+      }};
+      requestAnimationFrame(step)
+    }}
+  }})
+}})()
+</script>
+
 </body></html>"""
+    return HTMLResponse(content=html)
+
+
+# ---------------------------------------------------------------------------
+# Legal / info pages
+# ---------------------------------------------------------------------------
+
+_PAGE_STYLE = """<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Rhea &mdash; {title}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{{margin:0;padding:0;box-sizing:border-box}}
+:root{{--bg:#000;--surface:#0a0a0f;--card:#111118;--border:rgba(255,255,255,.08);
+  --text:#f5f5f7;--muted:#86868b;--accent:#0071e3;--green:#30d158;--radius:16px}}
+body{{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);
+  -webkit-font-smoothing:antialiased;line-height:1.6;overflow-x:hidden;min-height:100vh}}
+a{{color:var(--accent);text-decoration:none}}a:hover{{text-decoration:underline}}
+.back{{display:inline-flex;align-items:center;gap:.4rem;color:var(--muted);font-size:.82rem;
+  margin-bottom:2.5rem;transition:.2s}}
+.back:hover{{color:var(--text);text-decoration:none}}
+.back svg{{width:14px;height:14px}}
+.wrap{{max-width:780px;margin:0 auto;padding:4rem 2rem 6rem}}
+h1{{font-size:2.4rem;font-weight:700;letter-spacing:-.03em;margin-bottom:.5rem}}
+.subtitle{{color:var(--muted);font-size:.9rem;margin-bottom:3rem;padding-bottom:2rem;
+  border-bottom:1px solid var(--border)}}
+h2{{font-size:1.1rem;font-weight:600;margin:2.5rem 0 .7rem;color:var(--text)}}
+p{{color:#bbb;font-size:.88rem;margin-bottom:.9rem;line-height:1.65}}
+ul{{color:#bbb;font-size:.88rem;padding-left:1.4rem;margin-bottom:.9rem}}
+ul li{{margin-bottom:.35rem;line-height:1.55}}
+code{{font-family:'JetBrains Mono',monospace;font-size:.8rem;background:rgba(255,255,255,.06);
+  padding:.1rem .4rem;border-radius:5px;color:var(--green)}}
+.tag{{display:inline-block;padding:.15rem .6rem;border-radius:6px;font-size:.68rem;font-weight:600;
+  text-transform:uppercase;letter-spacing:.06em;margin-right:.4rem}}
+.tag-get{{background:rgba(48,209,88,.1);color:var(--green);border:1px solid rgba(48,209,88,.2)}}
+.tag-post{{background:rgba(0,113,227,.1);color:var(--accent);border:1px solid rgba(0,113,227,.2)}}
+.endpoint{{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;
+  padding:1.1rem 1.3rem;margin-bottom:.8rem}}
+.endpoint .path{{font-family:'JetBrains Mono',monospace;font-size:.82rem;color:#ddd;margin-bottom:.4rem}}
+.endpoint .desc{{font-size:.8rem;color:var(--muted);line-height:1.5}}
+footer{{text-align:center;padding:2.5rem 2rem;border-top:1px solid var(--border);
+  color:#333;font-size:.7rem;letter-spacing:.04em}}
+</style></head>
+<body>
+<div class="wrap">
+<a href="/" class="back">
+  <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5">
+    <path d="M9 11L5 7l4-4"/>
+  </svg>
+  Back to Rhea
+</a>
+{body}
+</div>
+<footer>&copy; 2026 TimeLabs NPO</footer>
+</body></html>"""
+
+
+@app.get("/terms")
+async def terms():
+    """Terms of Service page."""
+    from fastapi.responses import HTMLResponse
+    body = """
+<h1>Terms of Service</h1>
+<p class="subtitle">TimeLabs NPO &bull; Effective date: 1 January 2026 &bull; Last updated: 1 March 2026</p>
+
+<h2>1. Acceptance of Terms</h2>
+<p>By accessing or using the Rhea platform, its APIs, mobile applications, or any associated services (collectively, the "Service"), you agree to be bound by these Terms of Service ("Terms"). If you do not agree to these Terms, do not use the Service. These Terms constitute a legally binding agreement between you and TimeLabs NPO ("TimeLabs", "we", "us").</p>
+
+<h2>2. Accounts</h2>
+<p>To access most features of the Service, you must create an account. You agree to:</p>
+<ul>
+  <li>Provide accurate, current, and complete information during registration.</li>
+  <li>Maintain and promptly update your account information.</li>
+  <li>Keep your password and API keys confidential and not share them with any third party.</li>
+  <li>Accept responsibility for all activities that occur under your account.</li>
+  <li>Notify us immediately at support@rhea-project.org if you suspect unauthorised access.</li>
+</ul>
+<p>Accounts are personal. You may not transfer or sell your account. We reserve the right to terminate accounts that violate these Terms.</p>
+
+<h2>3. Credits and Billing</h2>
+<p>The Service operates on a credit system. Free accounts receive 100 credits upon registration. Additional credits are available through paid plans as described on our pricing page. Credits are non-refundable except where required by applicable law. We reserve the right to modify pricing with 30 days' notice. Bring-Your-Own-Key (BYOK) users route requests through their own provider accounts and are responsible for costs charged by those providers directly.</p>
+
+<h2>4. Acceptable Use</h2>
+<p>You agree not to use the Service to:</p>
+<ul>
+  <li>Generate, distribute, or facilitate the creation of illegal, harmful, or deceptive content.</li>
+  <li>Attempt to reverse-engineer, decompile, or extract model weights or proprietary algorithms.</li>
+  <li>Conduct denial-of-service attacks or send automated queries that exceed documented rate limits.</li>
+  <li>Circumvent authentication, billing, or quota mechanisms.</li>
+  <li>Resell or sublicense API access without our prior written consent.</li>
+  <li>Violate any applicable local, national, or international law or regulation.</li>
+</ul>
+<p>We reserve the right to suspend or terminate access for violations without prior notice.</p>
+
+<h2>5. Intellectual Property</h2>
+<p>The Rhea platform source code is made available under open-source licences as indicated in the GitHub repository. TimeLabs retains ownership of all trademarks, service marks, and trade names associated with the Rhea brand. Your input data and any proofs you generate and store remain yours. You grant TimeLabs a limited, non-exclusive licence to process your data solely to deliver the Service.</p>
+
+<h2>6. Disclaimers</h2>
+<p>THE SERVICE IS PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, OR NON-INFRINGEMENT. TIMELABS DOES NOT WARRANT THAT THE SERVICE WILL BE UNINTERRUPTED, ERROR-FREE, OR THAT RESULTS OBTAINED WILL BE ACCURATE OR RELIABLE. MULTI-MODEL CONSENSUS IS A STATISTICAL SIGNAL, NOT A GUARANTEE OF FACTUAL ACCURACY.</p>
+
+<h2>7. Limitation of Liability</h2>
+<p>TO THE FULLEST EXTENT PERMITTED BY APPLICABLE LAW, TIMELABS AND ITS OFFICERS, DIRECTORS, AGENTS, AND PARTNERS SHALL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, OR ANY LOSS OF PROFITS OR REVENUES, WHETHER INCURRED DIRECTLY OR INDIRECTLY, OR ANY LOSS OF DATA, USE, GOODWILL, OR OTHER INTANGIBLE LOSSES, RESULTING FROM YOUR ACCESS TO OR USE OF (OR INABILITY TO ACCESS OR USE) THE SERVICE.</p>
+
+<h2>8. Termination</h2>
+<p>You may terminate your account at any time by contacting support@rhea-project.org. We may suspend or terminate your access immediately, without notice, if you breach these Terms. Upon termination, your right to use the Service ceases immediately. You may request an export of your stored proofs before termination.</p>
+
+<h2>9. Governing Law</h2>
+<p>These Terms are governed by and construed in accordance with the laws of the European Union and the Republic of the Netherlands, without regard to conflict-of-law principles. Any disputes shall be submitted to the exclusive jurisdiction of the courts of Amsterdam, the Netherlands. If any provision of these Terms is found unenforceable, the remaining provisions shall remain in full force.</p>
+
+<h2>10. Changes to Terms</h2>
+<p>We may update these Terms from time to time. Material changes will be communicated via email or a prominent notice on the platform at least 14 days before taking effect. Your continued use of the Service after the effective date constitutes acceptance of the revised Terms.</p>
+
+<h2>Contact</h2>
+<p>Questions about these Terms? Email <a href="mailto:support@rhea-project.org">support@rhea-project.org</a> or open an issue on <a href="https://github.com/serg-alexv/rhea-project">GitHub</a>.</p>
+"""
+    html = _PAGE_STYLE.format(title="Terms of Service", body=body)
+    return HTMLResponse(content=html)
+
+
+@app.get("/privacy")
+async def privacy():
+    """Privacy Policy page (GDPR-compliant)."""
+    from fastapi.responses import HTMLResponse
+    body = """
+<h1>Privacy Policy</h1>
+<p class="subtitle">TimeLabs NPO &bull; Effective date: 1 January 2026 &bull; GDPR-compliant</p>
+
+<h2>1. Who We Are</h2>
+<p>TimeLabs NPO ("TimeLabs", "we", "us") operates the Rhea multi-model consensus platform. We are committed to protecting your personal data and processing it lawfully, fairly, and transparently in accordance with the General Data Protection Regulation (GDPR) and applicable national data protection laws.</p>
+
+<h2>2. Data We Collect</h2>
+<p>We collect the minimum data necessary to operate the Service:</p>
+<ul>
+  <li><strong>Account data:</strong> Email address, OAuth provider identity (Google/Microsoft/Apple), account creation timestamp.</li>
+  <li><strong>Usage data:</strong> Number of API calls, credit consumption, plan tier, anonymised prompt hashes (SHA-256, non-reversible), response latencies.</li>
+  <li><strong>Technical data:</strong> IP address (retained for 30 days for abuse prevention), User-Agent string, request timestamps.</li>
+  <li><strong>Billing data:</strong> Stripe customer ID, subscription status. Full payment card data is never stored by TimeLabs — it is handled exclusively by Stripe.</li>
+  <li><strong>Content you store:</strong> Proofs and ontology entries you deliberately save to Aletheia. These are stored under your account and accessible only by you unless you explicitly share them.</li>
+</ul>
+<p>We do not collect: your raw prompt text (only its hash), biometric data, or any special categories of personal data as defined by GDPR Article 9.</p>
+
+<h2>3. How We Use Your Data</h2>
+<p>Your data is used exclusively to:</p>
+<ul>
+  <li>Authenticate you and maintain your session.</li>
+  <li>Deliver the consensus and proof-storage features you request.</li>
+  <li>Track and enforce your plan quota.</li>
+  <li>Detect and prevent abuse and fraudulent activity.</li>
+  <li>Send transactional emails (account confirmation, quota warnings). No marketing emails without explicit opt-in.</li>
+</ul>
+<p>Legal bases under GDPR: contractual necessity (Art. 6(1)(b)) for account and service delivery; legitimate interests (Art. 6(1)(f)) for security and abuse prevention; consent (Art. 6(1)(a)) for any optional communications.</p>
+
+<h2>4. Data Storage</h2>
+<p>Data is stored in SQLite databases (WAL mode) hosted on Fly.io infrastructure in the <strong>Amsterdam (AMS) region</strong> within the European Economic Area. Fly.io provides SOC 2 Type II certified infrastructure. Backups are retained for 30 days and encrypted at rest using AES-256.</p>
+
+<h2>5. Data Sharing</h2>
+<p>We do not sell, rent, or share your personal data with third parties for their own purposes. The Rhea platform is built on a self-hosted paradigm — your data stays within our controlled infrastructure. Limited sharing occurs only with:</p>
+<ul>
+  <li><strong>AI model providers</strong> (e.g. Anthropic, OpenAI, Google): your prompt text is sent to these providers to generate responses. Providers' own privacy policies apply to data they receive. We send only what is necessary for the query.</li>
+  <li><strong>Stripe:</strong> for payment processing. Stripe is a data processor acting under our instructions.</li>
+  <li><strong>Legal authorities:</strong> if required by a valid court order or applicable law, and only to the minimum extent required.</li>
+</ul>
+
+<h2>6. Cookies and Local Storage</h2>
+<p>We use minimal cookies:</p>
+<ul>
+  <li><strong>JWT session token:</strong> a signed, short-lived authentication token stored in <code>localStorage</code> or a <code>Secure; HttpOnly</code> cookie. No tracking cookies.</li>
+  <li>No advertising pixels, no analytics third-party cookies, no cross-site trackers.</li>
+</ul>
+
+<h2>7. Your Rights Under GDPR</h2>
+<p>As a data subject you have the right to:</p>
+<ul>
+  <li><strong>Access:</strong> request a copy of your personal data at any time.</li>
+  <li><strong>Rectification:</strong> correct inaccurate data we hold about you.</li>
+  <li><strong>Erasure ("right to be forgotten"):</strong> request deletion of your account and associated data. Processing: within 30 days.</li>
+  <li><strong>Portability:</strong> export your stored proofs and account data in JSON format via the API (<code>GET /auth/profile</code> and <code>GET /aletheia/export</code>).</li>
+  <li><strong>Restriction:</strong> request we restrict processing of your data while a dispute is resolved.</li>
+  <li><strong>Objection:</strong> object to processing based on legitimate interests.</li>
+  <li><strong>Withdraw consent:</strong> where processing is based on consent, you may withdraw it at any time.</li>
+</ul>
+<p>To exercise any right, email <a href="mailto:support@rhea-project.org">support@rhea-project.org</a>. We will respond within 30 days. You also have the right to lodge a complaint with your national data protection authority.</p>
+
+<h2>8. Data Retention</h2>
+<p>Account data is retained while your account is active. Deleted accounts are purged within 30 days. Server logs (IP, timestamps) are retained for 30 days. Aletheia proof data is retained indefinitely unless you delete it or your account.</p>
+
+<h2>9. Children</h2>
+<p>The Service is not directed at children under the age of 16. We do not knowingly collect personal data from minors. If we become aware that a minor has created an account, we will delete it promptly.</p>
+
+<h2>10. Changes to This Policy</h2>
+<p>We may update this policy. Material changes will be communicated by email at least 14 days before taking effect. The current version is always available at <a href="/privacy">/privacy</a>.</p>
+
+<h2>Contact</h2>
+<p>Data controller: TimeLabs NPO. Privacy enquiries: <a href="mailto:support@rhea-project.org">support@rhea-project.org</a>.</p>
+"""
+    html = _PAGE_STYLE.format(title="Privacy Policy", body=body)
+    return HTMLResponse(content=html)
+
+
+@app.get("/security")
+async def security():
+    """Security overview page."""
+    from fastapi.responses import HTMLResponse
+    body = """
+<h1>Security</h1>
+<p class="subtitle">How Rhea protects your data and how you can help keep it safe.</p>
+
+<h2>Authentication — JWT</h2>
+<p>All API access is gated behind signed JSON Web Tokens (JWT, HS256). Tokens are issued at <code>POST /auth/login</code> and <code>POST /auth/signup</code>, and expire after 24 hours. Tokens are verified on every request by the server — there is no client-side trust. Bearer tokens must be transmitted over HTTPS; the server rejects plain-HTTP connections in production.</p>
+
+<h2>Webhook Security — HMAC Verification</h2>
+<p>Incoming webhooks (e.g. Stripe payment events, BTCPay notifications) are verified using HMAC-SHA256 signatures. The shared secret is stored exclusively as an environment variable on the server — never in source code or logs. Requests with invalid or missing signatures are rejected with HTTP 403 before any processing occurs.</p>
+
+<h2>Admin Promotion — No REST Endpoint</h2>
+<p>There is no API endpoint to promote a user to administrator. Admin status is granted exclusively by listing an email address in the <code>ADMIN_EMAILS</code> environment variable on the server. This means: compromising an account, a token, or the database is insufficient to gain admin access. Only the infrastructure owner (you, on self-hosted deployments, or TimeLabs on the managed platform) can grant admin rights.</p>
+
+<h2>Data at Rest</h2>
+<p>User data is stored in SQLite databases operating in WAL (Write-Ahead Logging) mode, hosted on Fly.io's AMS region. WAL mode ensures consistency during concurrent access and provides a recoverable journal. Fly.io encrypts volumes at rest using AES-256. Database files are never exposed via any API endpoint.</p>
+
+<h2>Transport Security — HTTPS Everywhere</h2>
+<p>All traffic to <code>rhea-tribunal.fly.dev</code> and associated subdomains is served exclusively over HTTPS with TLS 1.2+. Fly.io automatically provisions and renews TLS certificates via Let's Encrypt. HTTP requests are redirected to HTTPS at the load-balancer level before reaching the application.</p>
+
+<h2>Secret Management</h2>
+<p>API keys, JWT secrets, OAuth credentials, and webhook secrets are stored exclusively as environment variables set via <code>fly secrets set</code> or equivalent infrastructure tooling. They are never committed to source control. The repository provides <code>scripts/rhea/rotate_key.sh</code> for safe in-place key rotation — keys are never passed as CLI arguments (which would expose them in shell history).</p>
+
+<h2>Rate Limiting</h2>
+<p>All authenticated endpoints are subject to per-key rate limiting (configurable via <code>TRIBUNAL_RATE_LIMIT</code> env var, default 30 requests/minute) and daily quotas (<code>TRIBUNAL_DAILY_LIMIT</code>, default 1,000 requests/day). Exceeded limits return HTTP 429. This limits the damage of compromised tokens.</p>
+
+<h2>Dependency and Supply Chain</h2>
+<p>Dependencies are pinned in <code>requirements.txt</code>. We regularly audit dependencies for known CVEs. The project uses a minimal dependency footprint — FastAPI, SQLite (stdlib), and a small set of well-maintained libraries.</p>
+
+<h2>Responsible Disclosure</h2>
+<p>If you discover a security vulnerability in Rhea, we ask that you report it responsibly:</p>
+<ul>
+  <li>Email <a href="mailto:support@rhea-project.org">support@rhea-project.org</a> with subject line "Security Disclosure".</li>
+  <li>Include a description of the vulnerability, steps to reproduce, and your assessment of impact.</li>
+  <li>Allow us 90 days to investigate and remediate before public disclosure.</li>
+  <li>We will acknowledge receipt within 48 hours and aim to resolve critical issues within 14 days.</li>
+</ul>
+<p>We do not currently offer a bug bounty programme, but we genuinely appreciate responsible disclosures and will credit reporters in our changelog if they wish.</p>
+"""
+    html = _PAGE_STYLE.format(title="Security", body=body)
+    return HTMLResponse(content=html)
+
+
+@app.get("/community")
+async def community():
+    """Community page."""
+    from fastapi.responses import HTMLResponse
+    body = """
+<h1>Community</h1>
+<p class="subtitle">Rhea is built in public, by humans and AI agents working together.</p>
+
+<h2>Open Source Foundation</h2>
+<p>Rhea is built on an open-source foundation. The core tribunal engine, Aletheia proof pipeline, multi-provider bridge, and mobile client libraries are publicly available on GitHub. We believe the infrastructure for verifying knowledge should be auditable and forkable.</p>
+<p><a href="https://github.com/serg-alexv/rhea-project">github.com/serg-alexv/rhea-project</a> — source code, issues, and pull requests.</p>
+
+<h2>The Team</h2>
+<p>Rhea is built by a small team of humans and AI agents working in a shared virtual office. The current roster includes three AI collaborators:</p>
+<ul>
+  <li><strong>Rex</strong> — Core Coordinator. Claude-based. Manages routing, memory, and cross-agent synthesis. Specialises in knowledge organisation and system architecture.</li>
+  <li><strong>Orion</strong> — Frontend and integration lead. GPT-based. Owns the Atlas web dashboard, iOS client wiring, and workflow automation. Runs on the shared office protocol.</li>
+  <li><strong>Gemini</strong> — Research and verification. Google Gemini-based. Leads deep research tasks, ontology expansion, and fact-checking pipelines. Multi-modal capable.</li>
+</ul>
+<p>All three agents share a virtual office with a common inbox, outbox, and learning feed. They commit code, write relays to each other, and collaborate on the same codebase as autonomous peers — not tools.</p>
+
+<h2>Apps and Releases</h2>
+<ul>
+  <li><strong>iOS (TestFlight):</strong> <a href="https://testflight.apple.com/join/BNya22Jg">testflight.apple.com/join/BNya22Jg</a> — Native iOS app with Tribunal, Aletheia, Governor, and Atlas tabs. JWT auth with Keychain storage.</li>
+  <li><strong>macOS (Play):</strong> <a href="https://github.com/serg-alexv/rhea-project/releases">GitHub Releases</a> — 12-pane native macOS operations centre. Download the DMG from the latest release.</li>
+  <li><strong>Python package:</strong> <code>pip install rhea-memory</code> — SQLite-backed memory store with CLI for agents and scripts.</li>
+  <li><strong>Web (Atlas):</strong> Live at <a href="https://rhea-tribunal.fly.dev">rhea-tribunal.fly.dev</a> — The API and dashboard, deployed on Fly.io AMS.</li>
+</ul>
+
+<h2>Contributing</h2>
+<p>We welcome contributions. Open an issue to discuss a feature or bug, then submit a pull request. Please follow the existing code style and include tests where applicable. All pull requests are reviewed by the team before merging.</p>
+<p>For large changes, open an issue first so we can discuss the approach and avoid duplicated effort.</p>
+
+<h2>Get Involved</h2>
+<p>The best ways to engage with the community:</p>
+<ul>
+  <li>Star and watch the <a href="https://github.com/serg-alexv/rhea-project">GitHub repository</a> for updates.</li>
+  <li>Open issues for bugs, feature requests, or questions.</li>
+  <li>Try the iOS beta on <a href="https://testflight.apple.com/join/BNya22Jg">TestFlight</a> and leave feedback.</li>
+  <li>Email us at <a href="mailto:support@rhea-project.org">support@rhea-project.org</a> for partnership or research enquiries.</li>
+</ul>
+"""
+    html = _PAGE_STYLE.format(title="Community", body=body)
+    return HTMLResponse(content=html)
+
+
+@app.get("/docs")
+async def api_docs():
+    """API Documentation page."""
+    from fastapi.responses import HTMLResponse
+    body = """
+<h1>API Documentation</h1>
+<p class="subtitle">Base URL: <code>https://rhea-tribunal.fly.dev</code> &bull; All authenticated endpoints require <code>Authorization: Bearer &lt;token&gt;</code></p>
+
+<h2>Authentication</h2>
+
+<div class="endpoint">
+  <div class="path"><span class="tag tag-post">POST</span>/auth/signup</div>
+  <div class="desc">Create a new account with email and password. Returns a JWT token and 100 free credits.
+  <br>Body: <code>{{"email": "you@example.com", "password": "..."}}</code>
+  <br>Response: <code>{{"token": "eyJ...", "user_id": 1, "credits": 100}}</code></div>
+</div>
+
+<div class="endpoint">
+  <div class="path"><span class="tag tag-post">POST</span>/auth/login</div>
+  <div class="desc">Authenticate with email and password. Returns a fresh JWT token.
+  <br>Body: <code>{{"email": "you@example.com", "password": "..."}}</code>
+  <br>Response: <code>{{"token": "eyJ...", "user_id": 1}}</code></div>
+</div>
+
+<div class="endpoint">
+  <div class="path"><span class="tag tag-get">GET</span>/auth/profile</div>
+  <div class="desc">Retrieve your account profile, credit balance, and plan tier. Requires Bearer token.
+  <br>Response: <code>{{"user_id": 1, "email": "...", "credits": 85, "plan": "free", "role": "user"}}</code></div>
+</div>
+
+<h2>Tribunal — Consensus Engine</h2>
+
+<div class="endpoint">
+  <div class="path"><span class="tag tag-post">POST</span>/tribunal</div>
+  <div class="desc">Core consensus endpoint. Queries k independent models and measures agreement.
+  <br>Body: <code>{{"prompt": "ATP synthase uses rotary catalysis", "k": 5, "tier": "cheap", "mode": "local"}}</code>
+  <br>Parameters: <code>k</code> (2–10 models), <code>tier</code> (cheap/balanced/expensive), <code>mode</code> (local=L1, chairman=L2).
+  <br>Response includes: <code>agreement_score</code>, <code>confidence</code>, <code>consensus</code>, per-model <code>responses</code>, <code>divergence_points</code>.</div>
+</div>
+
+<div class="endpoint">
+  <div class="path"><span class="tag tag-post">POST</span>/tribunal/ice</div>
+  <div class="desc">Iterative Consensus Evolution (ICE) — multi-round critique and refinement. More expensive but higher accuracy.
+  <br>Body: <code>{{"prompt": "...", "k": 5, "rounds": 2, "tier": "cheap", "chairman_tier": "balanced"}}</code>
+  <br>Parameters: <code>rounds</code> (1–5 critique rounds). Response includes <code>round_history</code> and <code>convergence_achieved</code>.</div>
+</div>
+
+<div class="endpoint">
+  <div class="path"><span class="tag tag-post">POST</span>/tribunal/sceptic</div>
+  <div class="desc">Adversarial verification mode. Models actively challenge the claim and generate counterarguments.
+  <br>Body: <code>{{"prompt": "...", "k": 5, "devil_advocate": true}}</code>
+  <br>Response includes: <code>counterarguments</code> list and <code>strongest_challenge</code>.</div>
+</div>
+
+<h2>Aletheia — Proof Storage</h2>
+
+<div class="endpoint">
+  <div class="path"><span class="tag tag-post">POST</span>/aletheia/capture</div>
+  <div class="desc">Store a verified proof with provenance chain. Accepts a tribunal response or manual entry.
+  <br>Body: <code>{{"claim": "...", "verdict": "supported", "confidence": 0.87, "sources": [...]}}</code></div>
+</div>
+
+<div class="endpoint">
+  <div class="path"><span class="tag tag-get">GET</span>/aletheia/search</div>
+  <div class="desc">Semantic search over stored proofs.
+  <br>Query params: <code>q</code> (search term), <code>limit</code> (default 10), <code>ontology</code> (filter by domain).
+  <br>Response: list of matching proofs with relevance scores.</div>
+</div>
+
+<div class="endpoint">
+  <div class="path"><span class="tag tag-get">GET</span>/aletheia/stats</div>
+  <div class="desc">Aggregate statistics: proof count, ontology count, average confidence, recent activity.
+  <br>No authentication required. Response: <code>{{"proof_count": 42, "ontology_count": 6, "avg_confidence": 0.84}}</code></div>
+</div>
+
+<div class="endpoint">
+  <div class="path"><span class="tag tag-get">GET</span>/aletheia/ontology</div>
+  <div class="desc">List available ontology lenses (general, pharmacology, biochemistry, logic, topology, systems_biology).</div>
+</div>
+
+<h2>Billing</h2>
+
+<div class="endpoint">
+  <div class="path"><span class="tag tag-get">GET</span>/billing/plans</div>
+  <div class="desc">List available plans with pricing, credit allocations, and feature sets. No authentication required.</div>
+</div>
+
+<div class="endpoint">
+  <div class="path"><span class="tag tag-post">POST</span>/billing/checkout</div>
+  <div class="desc">Create a Stripe checkout session for plan upgrade.
+  <br>Body: <code>{{"plan": "pro"}}</code>. Response: <code>{{"checkout_url": "https://checkout.stripe.com/..."}}</code></div>
+</div>
+
+<div class="endpoint">
+  <div class="path"><span class="tag tag-get">GET</span>/billing/keys</div>
+  <div class="desc">List your active API keys (rk_... format) for programmatic access without JWT.</div>
+</div>
+
+<h2>Infrastructure</h2>
+
+<div class="endpoint">
+  <div class="path"><span class="tag tag-get">GET</span>/health</div>
+  <div class="desc">Service health check. Returns provider availability, model count, and execution profile. No authentication required.
+  <br>Response: <code>{{"status": "ok", "providers_available": 3, "total_models": 12}}</code></div>
+</div>
+
+<div class="endpoint">
+  <div class="path"><span class="tag tag-get">GET</span>/models</div>
+  <div class="desc">Full list of configured model providers, available models per tier, and their current status.
+  <br>Response includes per-provider model lists and availability flags.</div>
+</div>
+
+<div class="endpoint">
+  <div class="path"><span class="tag tag-get">GET</span>/agents/status</div>
+  <div class="desc">Office agent status dashboard — shows active agents (Rex, Orion, Hyperion, GPT), pending message counts, lease status, and last activity. Requires authentication.</div>
+</div>
+
+<div class="endpoint">
+  <div class="path"><span class="tag tag-get">GET</span>/feed/stream</div>
+  <div class="desc">Server-Sent Events (SSE) stream of live office radio — inter-agent messages, system events, and broadcast alerts. Connect with <code>EventSource</code> in a browser or curl with <code>--no-buffer</code>.
+  <br>Event format: <code>data: {{"type": "radio", "source": "REX", "body": "..."}}</code></div>
+</div>
+
+<h2>Rate Limits and Error Codes</h2>
+<p>All endpoints enforce per-key rate limits. Default: 30 requests/minute, 1,000 requests/day. Exceeded limits return HTTP 429 with a <code>Retry-After</code> header.</p>
+<ul>
+  <li><code>401 Unauthorized</code> — Missing or invalid token/API key.</li>
+  <li><code>403 Forbidden</code> — Valid token but insufficient permissions (e.g. webhook signature mismatch).</li>
+  <li><code>429 Too Many Requests</code> — Rate limit or quota exceeded.</li>
+  <li><code>422 Unprocessable Entity</code> — Request body validation failed (see <code>detail</code> field).</li>
+  <li><code>500 Internal Server Error</code> — Unexpected server error. If this persists, please report it.</li>
+</ul>
+
+<h2>Interactive Docs</h2>
+<p>FastAPI generates interactive OpenAPI documentation automatically: <a href="/openapi.json">openapi.json</a> (machine-readable schema). You can load this into Postman, Insomnia, or any OpenAPI-compatible client.</p>
+"""
+    html = _PAGE_STYLE.format(title="API Docs", body=body)
+    return HTMLResponse(content=html)
+
+
+@app.get("/contact")
+async def contact():
+    """Contact page."""
+    from fastapi.responses import HTMLResponse
+    body = """
+<h1>Contact</h1>
+<p class="subtitle">TimeLabs NPO &bull; We're a small team — we read every message.</p>
+
+<h2>General Support</h2>
+<p>For questions about your account, billing, API access, or platform features:</p>
+<p><a href="mailto:support@rhea-project.org">support@rhea-project.org</a></p>
+<p>We aim to respond within 2 business days. For faster answers to technical questions, GitHub Issues are monitored daily.</p>
+
+<h2>GitHub Issues</h2>
+<p>Bug reports, feature requests, and technical questions are best handled via GitHub Issues where the community and the team can collaborate:</p>
+<p><a href="https://github.com/serg-alexv/rhea-project/issues">github.com/serg-alexv/rhea-project/issues</a></p>
+<p>Please search existing issues before opening a new one. Include reproduction steps and relevant error messages when reporting bugs.</p>
+
+<h2>Security Disclosures</h2>
+<p>Please do not report security vulnerabilities via public GitHub issues. Email us directly at <a href="mailto:support@rhea-project.org">support@rhea-project.org</a> with "Security Disclosure" in the subject line. See our <a href="/security">Security page</a> for the full responsible disclosure policy.</p>
+
+<h2>Research and Partnerships</h2>
+<p>Rhea is operated by TimeLabs NPO, a non-profit organisation focused on open tools for knowledge verification. If you are a researcher, institution, or organisation interested in collaboration, grant applications, or integration partnerships, reach out at <a href="mailto:support@rhea-project.org">support@rhea-project.org</a> with a brief description of your interest.</p>
+
+<h2>About TimeLabs NPO</h2>
+<p>TimeLabs NPO is the legal entity behind the Rhea platform. It was founded to support open, auditable infrastructure for multi-model AI consensus and knowledge provenance. The organisation is non-profit: revenue from the managed platform covers infrastructure costs and supports continued open-source development.</p>
+<p>We believe the tools for verifying knowledge should be accessible, transparent, and under community control — not locked behind proprietary systems.</p>
+"""
+    html = _PAGE_STYLE.format(title="Contact", body=body)
     return HTMLResponse(content=html)
 
 
