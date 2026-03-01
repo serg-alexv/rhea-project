@@ -81,6 +81,40 @@ targets:
           NSExtensionPointIdentifier: com.apple.networkextension.packet-tunnel
           NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).PacketTunnelProvider
 
+  RheaCommandCentre:
+    type: application
+    platform: macOS
+    sources:
+      - path: ../RheaPreview.swiftpm/Sources
+        includes:
+          - CommandCentreApp.swift
+          - CommandCentreLayout.swift
+          - MenuBarView.swift
+          - Assets.xcassets
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.rhea.commandcentre
+        DEVELOPMENT_TEAM: "398XACWZ7G"
+        MARKETING_VERSION: "1.0"
+        CURRENT_PROJECT_VERSION: "15"
+        MACOSX_DEPLOYMENT_TARGET: "14.0"
+        CODE_SIGN_STYLE: Automatic
+        SWIFT_VERSION: "5.9"
+        INFOPLIST_GENERATION_MODE: GeneratedByXcode
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+      configs:
+        debug: {}
+        release: {}
+    dependencies:
+      - package: RheaKit
+    info:
+      path: CommandCentre-Info.plist
+      properties:
+        CFBundleDisplayName: Rhea Command Centre
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        LSMinimumSystemVersion: $(MACOSX_DEPLOYMENT_TARGET)
+
   RheaKeyboard:
     type: app-extension
     platform: iOS
