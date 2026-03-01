@@ -1,24 +1,27 @@
 import SwiftUI
+import NetworkExtension
 
 /// Privacy & relay configuration.
 ///
 /// Layers:
 ///   1. DNS-over-HTTPS — encrypts DNS queries (system-level via NEDNSSettingsManager)
 ///   2. API Relay — routes tribunal queries through encrypted relay endpoint
-///   3. VPN — full traffic tunneling via Rhea backend (requires PacketTunnelProvider)
+///   3. VPN — full traffic tunneling via Rhea backend (PacketTunnelProvider + WireGuard)
 ///
-/// For v1: in-app relay toggle + DNS privacy indicator + connection status.
-/// Full VPN requires a Network Extension target (like the keyboard extension).
+/// No third-party VPN subscriptions. Own infrastructure only.
 public struct RelayPrivacyView: View {
     @AppStorage("relayEnabled") private var relayEnabled = false
     @AppStorage("dohProvider") private var dohProvider = "cloudflare"
     @AppStorage("apiBaseURL") private var apiBaseURL = AppConfig.defaultAPIBaseURL
+
+    @StateObject private var tunnel = TunnelManager.shared
 
     @State private var connectionStatus = "Checking..."
     @State private var publicIP = "..."
     @State private var dnsProvider = "..."
     @State private var latencyMs: Int?
     @State private var isChecking = false
+    @State private var vpnError: String?
 
     private let dohProviders: [(id: String, name: String, url: String)] = [
         ("cloudflare", "Cloudflare", "https://1.1.1.1/dns-query"),
@@ -41,6 +44,9 @@ public struct RelayPrivacyView: View {
 
                     // DNS-over-HTTPS
                     dnsCard
+
+                    // VPN tunnel
+                    vpnCard
 
                     // Privacy info
                     infoCard
@@ -172,6 +178,80 @@ public struct RelayPrivacyView: View {
         .glassCard()
     }
 
+    private var vpnCard: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                Image(systemName: "shield.lefthalf.filled")
+                    .foregroundStyle(tunnel.isConnected ? RheaTheme.green : RheaTheme.accent)
+                Text("RHEA VPN")
+                    .font(.system(size: 11, weight: .bold, design: .monospaced))
+                    .foregroundStyle(.white)
+                Spacer()
+                if tunnel.status == .invalid {
+                    Text("NOT CONFIGURED")
+                        .font(.system(size: 9, weight: .bold, design: .monospaced))
+                        .foregroundStyle(.secondary)
+                } else {
+                    Button {
+                        do {
+                            try tunnel.toggle()
+                            vpnError = nil
+                        } catch {
+                            vpnError = error.localizedDescription
+                        }
+                    } label: {
+                        Text(tunnel.isConnected ? "DISCONNECT" : "CONNECT")
+                            .font(.system(size: 10, weight: .bold, design: .monospaced))
+                            .padding(.horizontal, 10)
+                            .padding(.vertical, 4)
+                            .background(
+                                RoundedRectangle(cornerRadius: 6)
+                                    .fill(tunnel.isConnected ? RheaTheme.red.opacity(0.3) : RheaTheme.green.opacity(0.3))
+                            )
+                            .foregroundStyle(tunnel.isConnected ? RheaTheme.red : RheaTheme.green)
+                    }
+                }
+            }
+
+            HStack(spacing: 16) {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("STATUS")
+                        .font(.system(size: 9, weight: .bold, design: .monospaced))
+                        .foregroundStyle(.secondary)
+                    HStack(spacing: 4) {
+                        Circle()
+                            .fill(tunnel.isConnected ? RheaTheme.green : .secondary)
+                            .frame(width: 6, height: 6)
+                        Text(tunnel.statusText.uppercased())
+                            .font(.system(size: 10, weight: .bold, design: .monospaced))
+                            .foregroundStyle(tunnel.isConnected ? RheaTheme.green : .secondary)
+                    }
+                }
+                if let since = tunnel.connectedSince {
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("UPTIME")
+                            .font(.system(size: 9, weight: .bold, design: .monospaced))
+                            .foregroundStyle(.secondary)
+                        Text(since, style: .relative)
+                            .font(.system(size: 10, design: .monospaced))
+                            .foregroundStyle(.white)
+                    }
+                }
+            }
+
+            Text("Routes all device traffic through Rhea infrastructure. No third-party VPN. WireGuard protocol.")
+                .font(.system(size: 11))
+                .foregroundStyle(.secondary)
+
+            if let vpnError {
+                Text(vpnError)
+                    .font(.system(size: 10, weight: .semibold, design: .monospaced))
+                    .foregroundStyle(RheaTheme.red)
+            }
+        }
+        .glassCard()
+    }
+
     private var infoCard: some View {
         VStack(alignment: .leading, spacing: 6) {
             Text("PRIVACY LAYERS")
@@ -181,7 +261,12 @@ public struct RelayPrivacyView: View {
             privacyRow(icon: "lock.shield", label: "HTTPS", status: "Always on", color: RheaTheme.green)
             privacyRow(icon: "network", label: "DNS-over-HTTPS", status: dohProvider.capitalized, color: RheaTheme.green)
             privacyRow(icon: "arrow.triangle.branch", label: "API Relay", status: relayEnabled ? "Active" : "Off", color: relayEnabled ? RheaTheme.green : .secondary)
-            privacyRow(icon: "shield.lefthalf.filled", label: "Full VPN", status: "Coming soon", color: .secondary)
+            privacyRow(
+                icon: "shield.lefthalf.filled",
+                label: "Full VPN",
+                status: tunnel.isConnected ? "Active" : tunnel.status == .invalid ? "Setup needed" : "Off",
+                color: tunnel.isConnected ? RheaTheme.green : .secondary
+            )
         }
         .glassCard()
     }
