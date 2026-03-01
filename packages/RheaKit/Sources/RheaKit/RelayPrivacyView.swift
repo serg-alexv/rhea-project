@@ -16,6 +16,8 @@ public struct RelayPrivacyView: View {
 
     @StateObject private var tunnel = TunnelManager.shared
 
+    @AppStorage("dpiPreset") private var dpiPreset = "gentle"
+
     @State private var connectionStatus = "Checking..."
     @State private var publicIP = "..."
     @State private var dnsProvider = "..."
@@ -44,6 +46,9 @@ public struct RelayPrivacyView: View {
 
                     // DNS-over-HTTPS
                     dnsCard
+
+                    // DPI bypass
+                    dpiCard
 
                     // VPN tunnel
                     vpnCard
@@ -178,6 +183,79 @@ public struct RelayPrivacyView: View {
         .glassCard()
     }
 
+    private let dpiPresets: [(id: String, name: String, desc: String)] = [
+        ("off", "OFF", "No packet modification"),
+        ("gentle", "Gentle", "ClientHello split + Host case. Defeats passive DPI."),
+        ("aggressive", "Aggressive", "Split + disorder + fake TTL. For heavy censorship."),
+    ]
+
+    private var dpiCard: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                Image(systemName: "wand.and.stars")
+                    .foregroundStyle(dpiPreset != "off" ? RheaTheme.accent : .secondary)
+                Text("DPI BYPASS")
+                    .font(.system(size: 11, weight: .bold, design: .monospaced))
+                    .foregroundStyle(.white)
+                Spacer()
+                Text("ZAPRET-STYLE")
+                    .font(.system(size: 8, weight: .bold, design: .monospaced))
+                    .foregroundStyle(.secondary)
+            }
+
+            Text("Anti-censorship packet transformations. No server needed.")
+                .font(.system(size: 11))
+                .foregroundStyle(.secondary)
+
+            ForEach(dpiPresets, id: \.id) { preset in
+                Button {
+                    dpiPreset = preset.id
+                } label: {
+                    HStack {
+                        Image(systemName: dpiPreset == preset.id ? "checkmark.circle.fill" : "circle")
+                            .foregroundStyle(dpiPreset == preset.id ? RheaTheme.accent : .secondary)
+                            .font(.system(size: 14))
+                        VStack(alignment: .leading, spacing: 1) {
+                            Text(preset.name)
+                                .font(.system(size: 12, weight: .semibold, design: .monospaced))
+                                .foregroundStyle(.white)
+                            Text(preset.desc)
+                                .font(.system(size: 9, design: .monospaced))
+                                .foregroundStyle(.secondary)
+                        }
+                        Spacer()
+                    }
+                    .padding(.vertical, 3)
+                }
+            }
+
+            if dpiPreset != "off" {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("ACTIVE TECHNIQUES")
+                        .font(.system(size: 9, weight: .bold, design: .monospaced))
+                        .foregroundStyle(.secondary)
+                    techniqueRow("TLS ClientHello split", active: true)
+                    techniqueRow("Host header case randomize", active: true)
+                    techniqueRow("TLS record split", active: dpiPreset == "aggressive")
+                    techniqueRow("Segment disorder", active: dpiPreset == "aggressive")
+                    techniqueRow("Fake packet (low TTL)", active: dpiPreset == "aggressive")
+                }
+            }
+        }
+        .glassCard()
+    }
+
+    private func techniqueRow(_ label: String, active: Bool) -> some View {
+        HStack(spacing: 6) {
+            Circle()
+                .fill(active ? RheaTheme.green : .secondary.opacity(0.3))
+                .frame(width: 5, height: 5)
+            Text(label)
+                .font(.system(size: 10, design: .monospaced))
+                .foregroundStyle(active ? .white : .secondary)
+        }
+    }
+
     private var vpnCard: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
@@ -261,6 +339,7 @@ public struct RelayPrivacyView: View {
             privacyRow(icon: "lock.shield", label: "HTTPS", status: "Always on", color: RheaTheme.green)
             privacyRow(icon: "network", label: "DNS-over-HTTPS", status: dohProvider.capitalized, color: RheaTheme.green)
             privacyRow(icon: "arrow.triangle.branch", label: "API Relay", status: relayEnabled ? "Active" : "Off", color: relayEnabled ? RheaTheme.green : .secondary)
+            privacyRow(icon: "wand.and.stars", label: "DPI Bypass", status: dpiPreset == "off" ? "Off" : dpiPreset.capitalized, color: dpiPreset != "off" ? RheaTheme.green : .secondary)
             privacyRow(
                 icon: "shield.lefthalf.filled",
                 label: "Full VPN",
