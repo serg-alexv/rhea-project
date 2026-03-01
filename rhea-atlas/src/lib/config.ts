@@ -10,4 +10,7 @@ export const API_BASE: string =
 export const TRIBUNAL_API: string =
   process.env.NEXT_PUBLIC_TRIBUNAL_API ?? `${API_BASE}/api`;
 
+export const TRIBUNAL_API_KEY: string =
+  process.env.NEXT_PUBLIC_TRIBUNAL_API_KEY ?? '';
+
 export const IS_PRODUCTION: boolean = process.env.NODE_ENV === 'production';

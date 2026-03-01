@@ -123,8 +123,8 @@ function NebulaField({ density }: { density: ContextDensity }) {
     <group>
       <points ref={pointsRef}>
         <bufferGeometry>
-          <bufferAttribute attach="attributes-position" count={positions.length / 3} array={positions} itemSize={3} />
-          <bufferAttribute attach="attributes-size" count={sizes.length} array={sizes} itemSize={1} />
+          <bufferAttribute attach="attributes-position" args={[positions, 3]} />
+          <bufferAttribute attach="attributes-size" args={[sizes, 1]} />
         </bufferGeometry>
         <pointsMaterial
           color={density.color}
@@ -187,7 +187,7 @@ function CloudField({ density }: { density: ContextDensity }) {
       </mesh>
       <points ref={orbitRef}>
         <bufferGeometry>
-          <bufferAttribute attach="attributes-position" count={orbitPositions.length / 3} array={orbitPositions} itemSize={3} />
+          <bufferAttribute attach="attributes-position" args={[orbitPositions, 3]} />
         </bufferGeometry>
         <pointsMaterial color={density.color} transparent opacity={0.22} size={0.035} sizeAttenuation depthWrite={false} />
       </points>

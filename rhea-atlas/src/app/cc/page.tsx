@@ -12,6 +12,7 @@ async function sendNotification(title: string, body: string) {
   if (!isTauri) return
   try {
     const { isPermissionGranted, requestPermission, sendNotification: notify } =
+      // @ts-expect-error — optional Tauri dependency, only available in desktop builds
       await import('@tauri-apps/plugin-notification')
     let granted = await isPermissionGranted()
     if (!granted) granted = (await requestPermission()) === 'granted'
@@ -22,8 +23,9 @@ async function sendNotification(title: string, body: string) {
 async function listenGlobalShortcut(handler: (key: string) => void) {
   if (!isTauri) return
   try {
+    // @ts-expect-error — optional Tauri dependency, only available in desktop builds
     const { listen } = await import('@tauri-apps/api/event')
-    listen<string>('global-shortcut', (e) => handler(e.payload))
+    listen('global-shortcut', (e: { payload: string }) => handler(e.payload))
   } catch { /* browser fallback — silent */ }
 }
 

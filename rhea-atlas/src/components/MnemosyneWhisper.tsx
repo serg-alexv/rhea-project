@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useWhisperStore } from '@/store/useWhisperStore';
 import { MoodCategory, WhisperGlyph } from '@/data/whispers';
@@ -24,7 +24,7 @@ function cornerClass(corner: WhisperCorner): string {
   return 'bottom-24 left-80';
 }
 
-function glyphPath(glyph: WhisperGlyph): JSX.Element {
+function glyphPath(glyph: WhisperGlyph): React.JSX.Element {
   const common = { stroke: 'currentColor', fill: 'none', strokeWidth: 1.8, strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const };
   switch (glyph) {
     case 'moon':
