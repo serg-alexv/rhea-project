@@ -1,4 +1,6 @@
 import SwiftUI
+import GRDB
+import Collections
 
 /// The shared brain of Rhea Play UI.
 /// One store, one polling loop, one source of truth.
@@ -20,12 +22,48 @@ final class RheaStore: ObservableObject {
     private let api = RheaAPI.shared
     private var pollTimer: Timer?
 
+    /// Local SQLite cache — mirrors server's rhea.db for offline access.
+    /// GRDB gives typed Swift records over raw SQL.
+    let db: DatabaseQueue? = {
+        let path = FileManager.default
+            .urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
+            .appendingPathComponent("rhea", isDirectory: true)
+        try? FileManager.default.createDirectory(at: path, withIntermediateDirectories: true)
+        let dbPath = path.appendingPathComponent("local.db").path
+        guard let db = try? DatabaseQueue(path: dbPath) else { return nil }
+        try? db.write { db in
+            try db.execute(sql: """
+                CREATE TABLE IF NOT EXISTS cached_proofs (
+                    id TEXT PRIMARY KEY,
+                    claim TEXT NOT NULL,
+                    tier TEXT,
+                    agreement_score REAL,
+                    confidence REAL,
+                    created_at TEXT,
+                    data TEXT
+                );
+                CREATE TABLE IF NOT EXISTS cached_history (
+                    id INTEGER PRIMARY KEY,
+                    type TEXT NOT NULL,
+                    prompt TEXT NOT NULL,
+                    agreement_score REAL,
+                    created_at TEXT,
+                    data TEXT
+                );
+            """)
+        }
+        return db
+    }()
+
     // ─── Core State (polled) ─────────────────────────────────────────
 
     @Published var agents: [AgentDTO] = []
     @Published var health: HealthSnapshot?
     @Published var connectionAlive = false
     @Published var proofCount = 0
+
+    /// Agent lookup by name — O(1) access, preserves order.
+    private(set) var agentMap: OrderedDictionary<String, AgentDTO> = [:]
 
     // ─── Derived Metrics ─────────────────────────────────────────────
 
@@ -68,7 +106,9 @@ final class RheaStore: ObservableObject {
 
         // Agents
         do {
-            agents = try await api.agents()
+            let fetched = try await api.agents()
+            agents = fetched
+            agentMap = OrderedDictionary(uniqueKeysWithValues: fetched.map { ($0.name, $0) })
             connectionAlive = true
             lastFetch["agents"] = Date()
         } catch {

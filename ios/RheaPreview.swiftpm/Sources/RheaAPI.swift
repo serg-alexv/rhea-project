@@ -1,10 +1,13 @@
 import Foundation
+import KeychainAccess
 
 /// Shared HTTP client for all Rhea API communication.
 /// Single source of truth for base URL, auth headers, timeouts.
 /// Every pane talks through this — no more independent URLSession calls.
 final class RheaAPI: @unchecked Sendable {
     static let shared = RheaAPI()
+
+    private let keychain = Keychain(service: "com.rhea.api")
 
     private let session: URLSession = {
         let config = URLSessionConfiguration.default
@@ -13,7 +16,14 @@ final class RheaAPI: @unchecked Sendable {
         return URLSession(configuration: config)
     }()
 
-    private let apiKey = "dev-bypass"
+    /// API key: reads from Keychain, falls back to dev-bypass for local dev.
+    var apiKey: String {
+        (try? keychain.get("api-key")) ?? "dev-bypass"
+    }
+
+    func setAPIKey(_ key: String) {
+        try? keychain.set(key, key: "api-key")
+    }
 
     var baseURL: String {
         UserDefaults.standard.string(forKey: "apiBaseURL")

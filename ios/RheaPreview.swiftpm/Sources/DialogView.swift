@@ -1,4 +1,5 @@
 import SwiftUI
+import MarkdownUI
 
 // MARK: - Models
 
@@ -137,7 +138,7 @@ struct DialogView: View {
                                 Text(targetAgent.uppercased())
                                     .font(.system(size: 10, weight: .bold, design: .monospaced))
                                     .foregroundColor(RheaTheme.green)
-                                Text(resp)
+                                Markdown(resp)
                                     .font(.system(size: 13, design: .monospaced))
                                     .foregroundColor(.white.opacity(0.9))
                             }

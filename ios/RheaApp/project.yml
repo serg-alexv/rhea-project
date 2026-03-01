@@ -13,6 +13,21 @@ packages:
   AnimatedTabBar:
     url: https://github.com/serg-alexv/AnimatedTabBar
     from: "0.0.1"
+  GRDB:
+    url: https://github.com/groue/GRDB.swift
+    from: "7.0.0"
+  swift-collections:
+    url: https://github.com/apple/swift-collections
+    from: "1.1.0"
+  Starscream:
+    url: https://github.com/daltoniam/Starscream
+    from: "4.0.8"
+  MarkdownUI:
+    url: https://github.com/gonzalezreal/swift-markdown-ui
+    from: "2.4.0"
+  KeychainAccess:
+    url: https://github.com/kishikawakatsumi/KeychainAccess
+    from: "4.2.2"
 
 targets:
   RheaApp:
@@ -38,6 +53,13 @@ targets:
     dependencies:
       - package: Pow
       - package: AnimatedTabBar
+      - package: GRDB
+        product: GRDB
+      - package: swift-collections
+        product: Collections
+      - package: MarkdownUI
+      - package: KeychainAccess
+      - package: Starscream
     info:
       path: Info.plist
       properties:
@@ -74,6 +96,13 @@ targets:
         release: {}
     dependencies:
       - package: Pow
+      - package: GRDB
+        product: GRDB
+      - package: swift-collections
+        product: Collections
+      - package: MarkdownUI
+      - package: KeychainAccess
+      - package: Starscream
     info:
       path: Info-macOS.plist
       properties:
