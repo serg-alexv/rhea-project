@@ -1496,6 +1496,42 @@ async def cc_sessions(limit: int = 20):
     """List all tribunal sessions with step counts."""
     return {"sessions": rhea_db.query_sessions(limit=limit)}
 
+@app.get("/cc/ndi", dependencies=[Depends(verify_api_key)])
+async def cc_ndi_status():
+    """NDI runtime status + source discovery."""
+    try:
+        import ndi_bridge
+        return ndi_bridge.status()
+    except Exception as e:
+        return {"available": False, "error": str(e)}
+
+@app.get("/cc/ndi/discover", dependencies=[Depends(verify_api_key)])
+async def cc_ndi_discover(timeout: int = 3000):
+    """Discover NDI sources on the local network."""
+    try:
+        import ndi_bridge
+        return {"sources": ndi_bridge.discover_sources(timeout_ms=timeout)}
+    except Exception as e:
+        return {"sources": [], "error": str(e)}
+
+@app.post("/cc/ndi/send-test", dependencies=[Depends(verify_api_key)])
+async def cc_ndi_send_test(name: str = "Rhea Command Centre", duration: int = 5):
+    """Broadcast NDI test pattern (color bars) for verification."""
+    try:
+        import ndi_bridge
+        import threading
+        def _send():
+            with ndi_bridge.NDISender(name) as sender:
+                start = time.time()
+                while time.time() - start < min(duration, 30):
+                    sender.send_test_pattern(1920, 1080)
+                    time.sleep(1 / 30)
+        t = threading.Thread(target=_send, daemon=True)
+        t.start()
+        return {"status": "broadcasting", "name": name, "duration_s": min(duration, 30)}
+    except Exception as e:
+        return {"status": "error", "error": str(e)}
+
 
 # ---------------------------------------------------------------------------
 # POST /ontology/switch  +  GET /ontology
