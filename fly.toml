@@ -1,33 +1,29 @@
 app = "rhea-tribunal"
-primary_region = "iad"
+primary_region = "ams"
 
 [build]
-  dockerfile = "Dockerfile"
-
-[processes]
-  app = "python3 src/tribunal_api.py"
+  dockerfile = "config/docker/Dockerfile.tribunal"
 
 [env]
   PORT = "8400"
   PYTHONUNBUFFERED = "1"
 
-[[services]]
+[http_service]
   internal_port = 8400
-  protocol = "tcp"
+  force_https = true
+  auto_stop_machines = "suspend"
+  auto_start_machines = true
+  min_machines_running = 0
 
-  [[services.ports]]
-    port = 443
-    handlers = ["tls", "http"]
-
-  [[services.ports]]
-    port = 80
-    handlers = ["http"]
-
-  [services.concurrency]
-    type = "connections"
+  [http_service.concurrency]
+    type = "requests"
     hard_limit = 100
     soft_limit = 80
 
 [[vm]]
   size = "shared-cpu-1x"
   memory = "512mb"
+
+[mounts]
+  source = "rhea_data"
+  destination = "/app/data"
