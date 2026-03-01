@@ -514,8 +514,8 @@ struct TeamChatView: View {
             .scrollContentBackground(.hidden)
             .background(Color.black)
             .navigationTitle("Agents")
-            .navigationBarTitleDisplayMode(.inline)
             #if os(iOS)
+            .navigationBarTitleDisplayMode(.inline)
             .toolbarColorScheme(.dark, for: .navigationBar)
             #endif
             .toolbar {

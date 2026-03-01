@@ -64,9 +64,11 @@ struct DialogView: View {
             }
             .background(RheaTheme.bg)
             .navigationTitle("Dialog")
+            #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)
+            #endif
             .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
+                ToolbarItem(placement: .automatic) {
                     Button { fetchHistory() } label: {
                         Image(systemName: "arrow.clockwise")
                             .foregroundColor(RheaTheme.accent)

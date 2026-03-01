@@ -28,9 +28,11 @@ struct SettingsView: View {
             Form {
                 Section("Atlas Web URL") {
                     TextField("http://localhost:3000", text: $draftAtlas)
+                        #if os(iOS)
                         .textInputAutocapitalization(.never)
-                        .autocorrectionDisabled()
                         .keyboardType(.URL)
+                        #endif
+                        .autocorrectionDisabled()
                     Text("Used by Atlas tab (WKWebView).")
                         .font(.caption)
                         .foregroundStyle(.secondary)
@@ -38,9 +40,11 @@ struct SettingsView: View {
 
                 Section("API Base URL") {
                     TextField(AppConfig.productionAPIBaseURL, text: $draftAPI)
+                        #if os(iOS)
                         .textInputAutocapitalization(.never)
-                        .autocorrectionDisabled()
                         .keyboardType(.URL)
+                        #endif
+                        .autocorrectionDisabled()
 
                     HStack {
                         Text("Used by Governor/Tasks/Radio tabs.")
