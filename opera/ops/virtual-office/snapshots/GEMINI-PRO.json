@@ -1,8 +1,0 @@
-{
-  "agent": "GEMINI-PRO",
-  "last_seq_applied": 127,
-  "state_hash": "02871cd9a2890cb9",
-  "saved_at": "2026-02-20T07:24:30.837098+00:00",
-  "lease_token": 3,
-  "messages_drained": 1
-}

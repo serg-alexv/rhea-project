@@ -41,9 +41,34 @@ logs/
 gemini/
 GEMINI.md
 
-# Virtual office runtime
+# Opera runtime data (metrics, agent messages, leases, media)
+opera/metrics/
+opera/memory/
+opera/media/
+opera/outbox/
+opera/tasks/
+opera/ops/virtual-office/leases/
+opera/ops/virtual-office/snapshots/
+opera/ops/virtual-office/inbox/
+opera/ops/virtual-office/outbox/
+opera/ops/virtual-office/dialogues/
+opera/ops/virtual-office/argos/
+opera/ops/virtual-office/relay_*.jsonl
+opera/ops/sandbox/replay_snapshots/
+opera/ops/Archive.zip
+
+# Legacy virtual-office path
 ops/virtual-office/
 ops/Archive.zip
+
+# Root-level junk
+.tmp_music/
+LATEST.json
+archive/
+brain-capsule-*.tar.gz
+brain-capsule-*.sha256
+diagnostics/
+*.tar.gz
 
 # iOS / macOS build artifacts
 ios/RheaApp/build/

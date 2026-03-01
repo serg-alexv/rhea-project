@@ -1,8 +1,0 @@
-{
-  "agent": "CLAUDE",
-  "last_seq_applied": 123,
-  "state_hash": "c8067c95faf61652",
-  "saved_at": "2026-02-20T07:24:29.765006+00:00",
-  "lease_token": 3,
-  "messages_drained": 1
-}
