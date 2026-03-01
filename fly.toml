@@ -2,7 +2,7 @@ app = "rhea-tribunal"
 primary_region = "ams"
 
 [build]
-  dockerfile = "config/docker/Dockerfile.tribunal"
+  dockerfile = "config/docker/Dockerfile.platform"
 
 [env]
   PORT = "8400"
