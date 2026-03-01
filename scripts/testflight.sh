@@ -40,17 +40,17 @@ bump_build() {
     current=$(grep "CURRENT_PROJECT_VERSION" "$yml" | head -1 | sed 's/.*: *"\{0,1\}\([0-9]*\)"\{0,1\}/\1/')
     local next=$((current + 1))
     sed -i '' "s/CURRENT_PROJECT_VERSION: .*/CURRENT_PROJECT_VERSION: \"$next\"/" "$yml"
-    log "Build number: $current → $next"
+    log "Build number: $current → $next" >&2
     echo "$next"
 }
 
-# --- Step 1: Regenerate Xcode project ---
-log "Regenerating Xcode project..."
+# --- Step 1: Bump build number (BEFORE xcodegen so it bakes into xcodeproj) ---
 cd "$IOS_DIR"
-xcodegen generate 2>&1 | grep -v "^$"
-
-# --- Step 2: Bump build number ---
 BUILD_NUM=$(bump_build)
+
+# --- Step 2: Regenerate Xcode project (now reads bumped version) ---
+log "Regenerating Xcode project..."
+xcodegen generate 2>&1 | grep -v "^$"
 
 # --- Step 3: Archive ---
 log "Archiving (Release)..."
