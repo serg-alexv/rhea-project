@@ -1,0 +1,20 @@
+## DERP Relay Map — Rhea's own relay infrastructure
+## No Tailscale relays used. Own infrastructure only.
+##
+## DERP relays are used when direct peer-to-peer WireGuard
+## connections fail (NAT, firewall). The relay forwards
+## encrypted WireGuard packets between peers.
+
+regions:
+  900:
+    regionid: 900
+    regioncode: "rhea-ru"
+    regionname: "Rhea Moscow"
+    nodes:
+      - name: "rhea-derp-1"
+        regionid: 900
+        hostname: "derp.timelabs.ru"
+        ipv4: "31.177.76.32"
+        stunport: 3478
+        stunonly: false
+        derpport: 8443
