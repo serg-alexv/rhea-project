@@ -738,7 +738,7 @@ async def landing():
     else:
         multi_note += " (multi-model consensus activates with 2+ providers)"
 
-    url = "https://rhea-tribunal-api-145767756165.europe-west1.run.app"
+    url = os.environ.get("FLY_APP_NAME") and "https://rhea-tribunal.fly.dev" or "http://localhost:8400"
     providers_line = f"{n_providers} model{'s' if n_providers != 1 else ''} live" if n_providers > 0 else "warming up"
     html = f"""<!DOCTYPE html>
 <html lang="en">
@@ -792,7 +792,7 @@ Now she spins the Toile.</p>
 
 <span class="g">curl</span> -X POST {url}/tribunal \\
   -H <span class="w">"Content-Type: application/json"</span> \\
-  -H <span class="w">"X-API-Key: dev-bypass"</span> \\
+  -H <span class="w">"Authorization: Bearer YOUR_TOKEN"</span> \\
   -d <span class="w">'{{"prompt":"ATP synthase uses rotary catalysis"}}'</span></code></pre>
 
 <h2>What the spider does</h2>
@@ -811,10 +811,24 @@ Every kill is stored in <em>Aletheia</em> &mdash; provenance chains, not marketi
 <span class="g">POST</span> /tribunal/ice         deep verification
 <span class="g">GET </span> /health               pulse</code></pre>
 
+<h2>Get started</h2>
+<pre><code><span class="g">curl</span> -X POST {url}/auth/signup \\
+  -H <span class="w">"Content-Type: application/json"</span> \\
+  -d <span class="w">'{{"email":"you@example.com","password":"your-password"}}'</span>
+
+<span class="r"># Returns: {{"token": "eyJ..."}}</span>
+<span class="r"># Use in Authorization: Bearer YOUR_TOKEN</span></code></pre>
+
+<p class="hunt">
+<em>iOS app</em>: <a href="https://testflight.apple.com/join/BNya22Jg">TestFlight</a><br>
+<em>macOS app</em>: <a href="https://github.com/serg-alexv/rhea-project/releases">GitHub Releases</a><br>
+<em>Memory package</em>: <code>pip install packages/rhea-memory/</code>
+</p>
+
 <h2>Anatomy</h2>
-<pre><code>FastAPI &middot; SQLite WAL &middot; Gemini 2.5 Flash &middot; Cloud Run
+<pre><code>FastAPI &middot; SQLite WAL &middot; Gemini 2.5 Flash &middot; Fly.io
 Built by a biochemist and three AI agents.
-<a href="https://github.com/serg-alexv/rhea-project">src</a></code></pre>
+<a href="https://github.com/serg-alexv/rhea-project">src</a> &middot; <a href="https://github.com/serg-alexv/rhea-project/releases">releases</a></code></pre>
 
 <div class="foot">&#x2207; &gt; 0 &#x2228; &#x22A5;</div>
 </main></body></html>"""
@@ -1515,6 +1529,8 @@ async def cc_sessions(limit: int = 20):
 @app.get("/cc/ndi", dependencies=[Depends(verify_api_key)])
 async def cc_ndi_status():
     """NDI runtime status + source discovery."""
+    if os.environ.get("FLY_APP_NAME"):
+        return {"available": False, "error": "NDI requires local server (network protocol)"}
     try:
         import ndi_bridge
         return ndi_bridge.status()
