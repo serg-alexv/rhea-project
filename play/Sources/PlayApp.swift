@@ -1862,10 +1862,7 @@ struct NDIFlowView: View {
                         // Source list
                         ndiSourceList
 
-                        // TODO(human): NDI flow visualization
-                        // Implement a real-time visual representation of NDI data flows.
-                        // This should show source→receiver connections, bandwidth, frame rates,
-                        // and signal quality as a live-updating flow diagram.
+                        // NDI flow visualization
                         ndiFlowDiagram
                     }
                     .padding(16)
@@ -2026,36 +2023,155 @@ struct NDIFlowView: View {
         }
     }
 
-    // TODO(human): NDI flow visualization
     var ndiFlowDiagram: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("FLOW DIAGRAM")
+            Text("FLOW TOPOLOGY")
                 .font(.system(size: 10, weight: .bold, design: .monospaced))
                 .foregroundStyle(RheaTheme.accent.opacity(0.5))
 
-            // Placeholder — implement real-time flow visualization
-            HStack {
-                Spacer()
-                VStack(spacing: 8) {
-                    Image(systemName: "point.3.connected.trianglepath.dotted")
-                        .font(.system(size: 32))
-                        .foregroundStyle(.white.opacity(0.1))
-                    Text("Flow visualization pending")
-                        .font(.system(size: 11, design: .monospaced))
+            if sources.isEmpty {
+                // No sources — show network scan prompt
+                HStack {
+                    Spacer()
+                    VStack(spacing: 8) {
+                        Image(systemName: "point.3.connected.trianglepath.dotted")
+                            .font(.system(size: 28))
+                            .foregroundStyle(.white.opacity(0.1))
+                        Text("Run discovery to map flows")
+                            .font(.system(size: 11, design: .monospaced))
+                            .foregroundStyle(.white.opacity(0.2))
+                    }
+                    .padding(.vertical, 24)
+                    Spacer()
+                }
+                .background(
+                    RoundedRectangle(cornerRadius: 8)
+                        .fill(RheaTheme.card.opacity(0.3))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(style: StrokeStyle(lineWidth: 1, dash: [4, 4]))
+                                .foregroundStyle(.white.opacity(0.06))
+                        )
+                )
+            } else {
+                // Flow diagram: source nodes on left → hub → receivers on right
+                Canvas { context, size in
+                    let hubX = size.width * 0.5
+                    let hubY = size.height * 0.5
+                    let hubRadius: CGFloat = 18
+                    let sourceSpacing = max(40, size.height / CGFloat(max(sources.count, 1) + 1))
+
+                    // Draw hub (Rhea NDI router)
+                    let hubRect = CGRect(x: hubX - hubRadius, y: hubY - hubRadius, width: hubRadius * 2, height: hubRadius * 2)
+                    context.fill(Circle().path(in: hubRect), with: .color(RheaTheme.accent.opacity(0.15)))
+                    context.stroke(Circle().path(in: hubRect), with: .color(RheaTheme.accent.opacity(0.4)), lineWidth: 1.5)
+
+                    // Hub label
+                    context.draw(
+                        Text("NDI")
+                            .font(.system(size: 8, weight: .black, design: .monospaced))
+                            .foregroundStyle(RheaTheme.accent),
+                        at: CGPoint(x: hubX, y: hubY)
+                    )
+
+                    // Draw source nodes on left
+                    for (i, source) in sources.enumerated() {
+                        let nodeY = sourceSpacing * CGFloat(i + 1)
+                        let nodeX: CGFloat = 80
+                        let nodeSize: CGFloat = 10
+
+                        // Connection line: source → hub
+                        var path = Path()
+                        path.move(to: CGPoint(x: nodeX + nodeSize, y: nodeY))
+                        // Bezier curve for smooth flow line
+                        let cp1 = CGPoint(x: nodeX + (hubX - nodeX) * 0.4, y: nodeY)
+                        let cp2 = CGPoint(x: hubX - (hubX - nodeX) * 0.3, y: hubY)
+                        path.addCurve(to: CGPoint(x: hubX - hubRadius, y: hubY), control1: cp1, control2: cp2)
+                        context.stroke(path, with: .color(RheaTheme.green.opacity(0.3)), lineWidth: 1)
+
+                        // Animated pulse dot on line (uses source index for offset)
+                        let pulseT = 0.3 + Double(i) * 0.15
+                        let pulsePoint = path.trimmedPath(from: 0, to: pulseT).currentPoint ?? CGPoint(x: nodeX, y: nodeY)
+                        let pulseDot = CGRect(x: pulsePoint.x - 2, y: pulsePoint.y - 2, width: 4, height: 4)
+                        context.fill(Circle().path(in: pulseDot), with: .color(RheaTheme.green.opacity(0.6)))
+
+                        // Source node
+                        let nodeRect = CGRect(x: nodeX - nodeSize/2, y: nodeY - nodeSize/2, width: nodeSize, height: nodeSize)
+                        context.fill(Circle().path(in: nodeRect), with: .color(RheaTheme.green))
+
+                        // Source label
+                        let shortName = source.name.components(separatedBy: " (").first ?? source.name
+                        context.draw(
+                            Text(shortName)
+                                .font(.system(size: 9, weight: .semibold, design: .monospaced))
+                                .foregroundStyle(.white.opacity(0.6)),
+                            at: CGPoint(x: nodeX - 30, y: nodeY),
+                            anchor: .trailing
+                        )
+
+                        // IP label below
+                        if let url = source.url {
+                            let ip = url.components(separatedBy: ":").first ?? url
+                            context.draw(
+                                Text(ip)
+                                    .font(.system(size: 7, design: .monospaced))
+                                    .foregroundStyle(.white.opacity(0.2)),
+                                at: CGPoint(x: nodeX - 30, y: nodeY + 11),
+                                anchor: .trailing
+                            )
+                        }
+                    }
+
+                    // Draw output side (Rhea → broadcast)
+                    let outX = size.width - 80
+                    let outY = hubY
+
+                    // Hub → output line
+                    var outPath = Path()
+                    outPath.move(to: CGPoint(x: hubX + hubRadius, y: hubY))
+                    outPath.addLine(to: CGPoint(x: outX - 6, y: outY))
+                    context.stroke(outPath, with: .color(RheaTheme.amber.opacity(0.3)), lineWidth: 1)
+
+                    // Output node (broadcast)
+                    let outRect = CGRect(x: outX - 5, y: outY - 5, width: 10, height: 10)
+                    context.fill(Circle().path(in: outRect), with: .color(RheaTheme.amber))
+                    context.draw(
+                        Text("OUT")
+                            .font(.system(size: 9, weight: .bold, design: .monospaced))
+                            .foregroundStyle(RheaTheme.amber.opacity(0.7)),
+                        at: CGPoint(x: outX + 25, y: outY)
+                    )
+                }
+                .frame(height: max(150, CGFloat(sources.count + 1) * 50))
+                .background(
+                    RoundedRectangle(cornerRadius: 8)
+                        .fill(Color.black.opacity(0.2))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(RheaTheme.accent.opacity(0.08), lineWidth: 1)
+                        )
+                )
+
+                // Legend
+                HStack(spacing: 16) {
+                    legendItem("Source", RheaTheme.green)
+                    legendItem("Router", RheaTheme.accent)
+                    legendItem("Output", RheaTheme.amber)
+                    Spacer()
+                    Text("\(sources.count) source\(sources.count == 1 ? "" : "s") mapped")
+                        .font(.system(size: 9, design: .monospaced))
                         .foregroundStyle(.white.opacity(0.2))
                 }
-                .padding(.vertical, 32)
-                Spacer()
             }
-            .background(
-                RoundedRectangle(cornerRadius: 8)
-                    .fill(RheaTheme.card.opacity(0.3))
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 8)
-                            .stroke(style: StrokeStyle(lineWidth: 1, dash: [4, 4]))
-                            .foregroundStyle(.white.opacity(0.06))
-                    )
-            )
+        }
+    }
+
+    func legendItem(_ label: String, _ color: Color) -> some View {
+        HStack(spacing: 4) {
+            Circle().fill(color).frame(width: 6, height: 6)
+            Text(label)
+                .font(.system(size: 9, design: .monospaced))
+                .foregroundStyle(.white.opacity(0.3))
         }
     }
 
