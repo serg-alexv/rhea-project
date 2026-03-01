@@ -1,0 +1,44 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Install all dependencies including billing
+RUN pip install --no-cache-dir \
+    fastapi==0.128.8 \
+    uvicorn==0.39.0 \
+    requests==2.32.3 \
+    litellm \
+    toml==0.10.2 \
+    pyjwt==2.10.1 \
+    google-auth==2.38.0 \
+    google-auth-httplib2==0.2.0 \
+    stripe==11.4.1
+
+# Copy all source modules
+COPY src/tribunal_api.py src/
+COPY src/rhea_bridge.py src/
+COPY src/consensus_analyzer.py src/
+COPY src/aletheia_api.py src/
+COPY src/aletheia_pipeline.py src/
+COPY src/office.py src/
+COPY src/token_governor.py src/
+COPY src/task_db.py src/
+COPY src/rhea_db.py src/
+COPY src/rhea_profile_manager.py src/
+COPY src/rhea_visual_context.py src/
+COPY src/env_loader.py src/
+COPY src/auth_api.py src/
+COPY src/billing.py src/
+COPY src/ndi_bridge.py src/
+
+# Create runtime directories
+RUN mkdir -p logs data
+
+WORKDIR /app/src
+
+EXPOSE 8400
+
+HEALTHCHECK --interval=30s --timeout=5s --retries=3 \
+    CMD python3 -c "import urllib.request; urllib.request.urlopen('http://localhost:8400/health')"
+
+CMD ["uvicorn", "tribunal_api:app", "--host", "0.0.0.0", "--port", "8400", "--workers", "2"]
