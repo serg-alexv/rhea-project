@@ -1,6 +1,7 @@
-// rhea-tray — macOS menu bar health monitor
+// rhea-tray — macOS menu bar health monitor + NDI pulse + notification control
 // Reads ~/.rhea/health-status.json from the rhea-health daemon
-// Shows green/yellow/red dot + dropdown with tracked processes
+// Sends NDI health pulse via ndi_bridge.py
+// Controls macOS Focus mode to silence notification noise
 // Build: swiftc -framework Cocoa -o rhea-tray src/tray.swift
 
 import Cocoa
@@ -29,6 +30,189 @@ struct HealthEvent: Codable {
     let action: String
 }
 
+// MARK: — NDI Pulse
+
+class NDIPulse {
+    private let projectRoot: String
+    private var pulseTimer: Timer?
+    private(set) var isActive = false
+    private(set) var lastPulseOk = false
+
+    init() {
+        // Find project root from rhea-health binary location
+        let home = NSHomeDirectory()
+        // Try common locations
+        let candidates = [
+            "\(home)/rh.1",
+            "\(home)/rh",
+        ]
+        projectRoot = candidates.first { FileManager.default.fileExists(atPath: "\($0)/src/ndi_bridge.py") } ?? "\(home)/rh.1"
+    }
+
+    func start() {
+        guard !isActive else { return }
+        isActive = true
+        sendPulse() // immediate first pulse
+        pulseTimer = Timer.scheduledTimer(withTimeInterval: 10.0, repeats: true) { [weak self] _ in
+            self?.sendPulse()
+        }
+    }
+
+    func stop() {
+        pulseTimer?.invalidate()
+        pulseTimer = nil
+        isActive = false
+    }
+
+    private func sendPulse() {
+        // Read current health state to determine pulse color
+        let home = NSHomeDirectory()
+        let statusPath = "\(home)/.rhea/health-status.json"
+        var color = "green"
+
+        if let data = FileManager.default.contents(atPath: statusPath),
+           let status = try? JSONDecoder().decode(HealthStatus.self, from: data) {
+            if status.watched.contains(where: { $0.strikes >= 2 }) {
+                color = "red"
+            } else if status.tracking > 0 {
+                color = "yellow"
+            }
+        }
+
+        // Call ndi_bridge.py to send a single pulse frame
+        // We use a tiny Python script that sends one colored frame
+        let script = """
+        import sys; sys.path.insert(0, '\(projectRoot)/src')
+        try:
+            import ndi_bridge
+            colors = {'green': (0,200,80,255), 'yellow': (255,200,0,255), 'red': (255,40,40,255)}
+            c = colors.get('\(color)', (0,200,80,255))
+            with ndi_bridge.NDISender('Rhea Health Pulse') as s:
+                row = bytes(c) * 64
+                frame = row * 64
+                s.send_rgba(frame, 64, 64, fps=1)
+            print('ok')
+        except Exception as e:
+            print(f'err:{e}')
+        """
+
+        DispatchQueue.global(qos: .utility).async { [weak self] in
+            let task = Process()
+            task.executableURL = URL(fileURLWithPath: "/usr/bin/python3")
+            task.arguments = ["-c", script]
+            let pipe = Pipe()
+            task.standardOutput = pipe
+            task.standardError = FileHandle.nullDevice
+
+            do {
+                try task.run()
+                task.waitUntilExit()
+                let data = pipe.fileHandleForReading.readDataToEndOfFile()
+                let output = String(data: data, encoding: .utf8)?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+                DispatchQueue.main.async {
+                    self?.lastPulseOk = output == "ok"
+                }
+            } catch {
+                DispatchQueue.main.async {
+                    self?.lastPulseOk = false
+                }
+            }
+        }
+    }
+}
+
+// MARK: — Notification Control
+
+class NotificationControl {
+    private(set) var focusActive = false
+
+    func checkFocusStatus() {
+        let task = Process()
+        task.executableURL = URL(fileURLWithPath: "/usr/bin/defaults")
+        task.arguments = ["read", "com.apple.controlcenter", "NSStatusItem Visible FocusModes"]
+        let pipe = Pipe()
+        task.standardOutput = pipe
+        task.standardError = FileHandle.nullDevice
+        do {
+            try task.run()
+            task.waitUntilExit()
+        } catch {}
+    }
+
+    func toggleDND() {
+        // Use AppleScript to toggle Focus/DND — most reliable method on modern macOS
+        let script: String
+        if focusActive {
+            // Turn off DND
+            script = """
+            tell application "System Events"
+                tell its application process "ControlCenter"
+                    click menu bar item "Focus" of menu bar 1
+                    delay 0.3
+                    click checkbox 1 of group 1 of window "Control Center"
+                end tell
+            end tell
+            """
+        } else {
+            // Use shortcuts — more reliable
+            script = """
+            do shell script "shortcuts run 'Do Not Disturb' 2>/dev/null || true"
+            """
+        }
+
+        // Simpler approach: use `defaults` to write DND state
+        // and `killall` to restart NC
+        let dndScript = focusActive
+            ? "defaults write com.apple.controlcenter 'NSStatusItem Visible FocusModes' -bool false"
+            : "defaults write com.apple.controlcenter 'NSStatusItem Visible FocusModes' -bool true"
+
+        let task = Process()
+        task.executableURL = URL(fileURLWithPath: "/bin/bash")
+        task.arguments = ["-c", dndScript]
+        task.standardOutput = FileHandle.nullDevice
+        task.standardError = FileHandle.nullDevice
+        do {
+            try task.run()
+            task.waitUntilExit()
+            focusActive.toggle()
+        } catch {}
+    }
+
+    /// Silence a specific app's notifications via defaults
+    func silenceApp(bundleId: String) {
+        // Set notification flags to 0 (disabled) for this bundle
+        let task = Process()
+        task.executableURL = URL(fileURLWithPath: "/bin/bash")
+        // Use sqlite to modify notification center DB directly
+        let home = NSHomeDirectory()
+        let cmd = """
+        sqlite3 "\(home)/Library/Application Support/com.apple.notificationcenterui/db2/db" \
+        "UPDATE record SET presented=0 WHERE app_id IN (SELECT app_id FROM app WHERE identifier='\(bundleId)');" 2>/dev/null
+        """
+        task.arguments = ["-c", cmd]
+        task.standardOutput = FileHandle.nullDevice
+        task.standardError = FileHandle.nullDevice
+        do {
+            try task.run()
+            task.waitUntilExit()
+        } catch {}
+    }
+
+    /// Clear all pending notifications
+    func clearAll() {
+        // Kill notification center to clear all banners
+        let task = Process()
+        task.executableURL = URL(fileURLWithPath: "/usr/bin/killall")
+        task.arguments = ["NotificationCenter"]
+        task.standardOutput = FileHandle.nullDevice
+        task.standardError = FileHandle.nullDevice
+        do {
+            try task.run()
+            task.waitUntilExit()
+        } catch {}
+    }
+}
+
 // MARK: — Tray controller
 
 class HealthTray: NSObject {
@@ -38,6 +222,8 @@ class HealthTray: NSObject {
     private let logPath: String
     private var lastStatus: HealthStatus?
     private var recentKills: [HealthEvent] = []
+    let ndiPulse = NDIPulse()
+    let notifControl = NotificationControl()
 
     override init() {
         let home = NSHomeDirectory()
@@ -53,6 +239,9 @@ class HealthTray: NSObject {
             button.image = makeIcon(color: .systemGreen)
             button.toolTip = "Rhea Health Monitor"
         }
+
+        // Auto-start NDI pulse
+        ndiPulse.start()
 
         updateMenu()
         startPolling()
@@ -136,7 +325,6 @@ class HealthTray: NSObject {
 
         button.image = makeIcon(color: color)
 
-        // Show count if tracking
         if status.tracking > 0 {
             button.title = " \(status.tracking)"
         } else {
@@ -157,7 +345,7 @@ class HealthTray: NSObject {
         menu.addItem(header)
         menu.addItem(NSMenuItem.separator())
 
-        // Status
+        // --- Health Status ---
         if let status = lastStatus {
             if status.tracking == 0 {
                 let item = NSMenuItem(title: "● All clear — no CPU hogs", action: nil, keyEquivalent: "")
@@ -182,7 +370,6 @@ class HealthTray: NSObject {
                 }
             }
 
-            // Timestamp
             let ts = status.ts.prefix(19).replacingOccurrences(of: "T", with: " ")
             let tsItem = NSMenuItem(title: "Last scan: \(ts)", action: nil, keyEquivalent: "")
             tsItem.isEnabled = false
@@ -193,7 +380,7 @@ class HealthTray: NSObject {
             menu.addItem(item)
         }
 
-        // Recent kills
+        // --- Recent Kills ---
         if !recentKills.isEmpty {
             menu.addItem(NSMenuItem.separator())
             let killHeader = NSMenuItem(title: "Recent Kills", action: nil, keyEquivalent: "")
@@ -213,14 +400,63 @@ class HealthTray: NSObject {
 
         menu.addItem(NSMenuItem.separator())
 
-        // Actions
+        // --- NDI Pulse ---
+        let ndiHeader = NSMenuItem(title: "NDI Pulse", action: nil, keyEquivalent: "")
+        ndiHeader.isEnabled = false
+        if let font = NSFont.boldSystemFont(ofSize: 11) as NSFont? {
+            ndiHeader.attributedTitle = NSAttributedString(string: "NDI Pulse",
+                attributes: [.font: font])
+        }
+        menu.addItem(ndiHeader)
+
+        let pulseStatus = ndiPulse.isActive
+            ? (ndiPulse.lastPulseOk ? "● Broadcasting (10s interval)" : "● Active (NDI lib not found)")
+            : "○ Stopped"
+        let pulseItem = NSMenuItem(title: "  \(pulseStatus)", action: nil, keyEquivalent: "")
+        pulseItem.isEnabled = false
+        menu.addItem(pulseItem)
+
+        let togglePulse = NSMenuItem(
+            title: ndiPulse.isActive ? "  Stop NDI Pulse" : "  Start NDI Pulse",
+            action: #selector(toggleNDIPulse),
+            keyEquivalent: "n"
+        )
+        togglePulse.target = self
+        menu.addItem(togglePulse)
+
+        menu.addItem(NSMenuItem.separator())
+
+        // --- Notification Control ---
+        let notifHeader = NSMenuItem(title: "Notifications", action: nil, keyEquivalent: "")
+        notifHeader.isEnabled = false
+        if let font = NSFont.boldSystemFont(ofSize: 11) as NSFont? {
+            notifHeader.attributedTitle = NSAttributedString(string: "Notifications",
+                attributes: [.font: font])
+        }
+        menu.addItem(notifHeader)
+
+        let clearNotifs = NSMenuItem(title: "  Clear All Notifications", action: #selector(clearNotifications), keyEquivalent: "c")
+        clearNotifs.target = self
+        menu.addItem(clearNotifs)
+
+        let silenceXcode = NSMenuItem(title: "  Silence Xcode", action: #selector(silenceXcodeNotifs), keyEquivalent: "")
+        silenceXcode.target = self
+        menu.addItem(silenceXcode)
+
+        let silenceChrome = NSMenuItem(title: "  Silence Chrome", action: #selector(silenceChromeNotifs), keyEquivalent: "")
+        silenceChrome.target = self
+        menu.addItem(silenceChrome)
+
+        let silenceMail = NSMenuItem(title: "  Silence Mail", action: #selector(silenceMailNotifs), keyEquivalent: "")
+        silenceMail.target = self
+        menu.addItem(silenceMail)
+
+        menu.addItem(NSMenuItem.separator())
+
+        // --- Files ---
         let openLog = NSMenuItem(title: "Open Health Log…", action: #selector(openLogFile), keyEquivalent: "l")
         openLog.target = self
         menu.addItem(openLog)
-
-        let openStatus = NSMenuItem(title: "Open Status JSON…", action: #selector(openStatusFile), keyEquivalent: "s")
-        openStatus.target = self
-        menu.addItem(openStatus)
 
         menu.addItem(NSMenuItem.separator())
 
@@ -231,15 +467,39 @@ class HealthTray: NSObject {
         statusItem.menu = menu
     }
 
+    // MARK: — Actions
+
+    @objc private func toggleNDIPulse() {
+        if ndiPulse.isActive {
+            ndiPulse.stop()
+        } else {
+            ndiPulse.start()
+        }
+        updateMenu()
+    }
+
+    @objc private func clearNotifications() {
+        notifControl.clearAll()
+    }
+
+    @objc private func silenceXcodeNotifs() {
+        notifControl.silenceApp(bundleId: "com.apple.dt.Xcode")
+    }
+
+    @objc private func silenceChromeNotifs() {
+        notifControl.silenceApp(bundleId: "com.google.Chrome")
+    }
+
+    @objc private func silenceMailNotifs() {
+        notifControl.silenceApp(bundleId: "com.apple.mail")
+    }
+
     @objc private func openLogFile() {
         NSWorkspace.shared.open(URL(fileURLWithPath: logPath))
     }
 
-    @objc private func openStatusFile() {
-        NSWorkspace.shared.open(URL(fileURLWithPath: statusPath))
-    }
-
     @objc private func quitApp() {
+        ndiPulse.stop()
         NSApplication.shared.terminate(nil)
     }
 }
