@@ -142,6 +142,7 @@ MODEL_TIERS = {
     "cheap": {
         "description": "Default tier. Fast, cost-effective. Use for all routine work.",
         "candidates": [
+            "github/gpt-4o-mini",
             "groq/llama-3.1-8b-instant",
             "cerebras/llama-3.3-70b",
             "deepseek/deepseek-chat",
@@ -156,6 +157,7 @@ MODEL_TIERS = {
     "balanced": {
         "description": "Mid-tier. For complex reasoning that cheap tier struggles with.",
         "candidates": [
+            "github/gpt-4o",
             "cerebras/llama-3.3-70b",
             "groq/llama-3.3-70b-versatile",
             "gemini/gemini-2.5-flash",
@@ -703,6 +705,17 @@ PROVIDERS = {
         ],
         call_method="openai_compatible",
     ),
+    "github": ProviderConfig(
+        name="github",
+        display_name="GitHub Models",
+        base_url="https://models.inference.ai.azure.com",
+        api_key_env="GITHUB_TOKEN",
+        models=[
+            "gpt-4o-mini", "gpt-4o",
+            "meta-llama-3.1-8b-instruct", "Phi-4",
+        ],
+        call_method="openai_compatible",
+    ),
 }
 
 # Map env vars for LiteLLM Azure OpenAI provider
@@ -886,12 +899,25 @@ class RheaBridge:
                 messages.append({"role": "system", "content": system})
             messages.append({"role": "user", "content": prompt})
 
-            # Call LiteLLM
+            # Call LiteLLM — inject api_base/api_key for custom providers
+            extra_kwargs = {}
+            cfg = self.providers.get(provider_name)
+            if cfg and cfg.base_url and provider_name not in ("openai", "anthropic", "azure"):
+                # Custom OpenAI-compatible: override base_url and api_key
+                api_key = os.environ.get(cfg.api_key_env, "")
+                extra_kwargs["api_base"] = cfg.base_url
+                extra_kwargs["api_key"] = api_key
+                # Use "openai/" prefix so LiteLLM routes to generic OpenAI handler
+                litellm_model = f"openai/{model_id}"
+            else:
+                litellm_model = model
+
             response = litellm.completion(
-                model=model,
+                model=litellm_model,
                 messages=messages,
                 temperature=temperature_eff,
                 max_tokens=max_tokens_eff,
+                **extra_kwargs,
             )
 
             text = response.choices[0].message.content
