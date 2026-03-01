@@ -39,5 +39,31 @@ else
   warn "state.md not found"
 fi
 
+# 4) System health — check for stuck processes
+if command -v rhea-health &>/dev/null; then
+  STATUS_FILE="$HOME/.rhea/health-status.json"
+  if [ -f "$STATUS_FILE" ]; then
+    tracking=$(python3 -c "import json; print(json.load(open('$STATUS_FILE'))['tracking'])" 2>/dev/null || echo "0")
+    if [ "$tracking" -gt 5 ]; then
+      warn "rhea-health tracking $tracking CPU hogs — system under load"
+    fi
+    # Check for stuck Apple daemons specifically
+    stuck=$(python3 -c "
+import json
+d = json.load(open('$STATUS_FILE'))
+bad = [w for w in d.get('watched',[]) if w['strikes'] >= 3 and w['cpu'] > 80]
+for b in bad: print(f\"  {b['name']} pid={b['pid']} cpu={b['cpu']:.0f}% strikes={b['strikes']}\")
+" 2>/dev/null || true)
+    if [ -n "$stuck" ]; then
+      warn "Stuck processes detected (rhea-health will auto-restart):"
+      echo "$stuck" >&2
+    fi
+  fi
+  # Verify daemon is running
+  if ! launchctl list 2>/dev/null | grep -q "com.rhea.health"; then
+    warn "rhea-health daemon not running. Load: launchctl load ~/Library/LaunchAgents/com.rhea.health.plist"
+  fi
+fi
+
 log_event "rhea check" "ok" "invariants ok"
 echo "OK: checks passed"

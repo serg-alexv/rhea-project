@@ -24,11 +24,23 @@ const API_BASE: &str = "http://localhost:8400";
 // Known zombie patterns — processes that should never eat CPU for long
 const ZOMBIE_PATTERNS: &[&str] = &[
     "carbonyl",
-    "replayd", // Apple screen replay buffer — flag but don't kill
+    "replayd",
+    "usernoted",                        // Apple notification daemon — gets stuck at 100%+
+    "spotlightknowledged",              // Spotlight indexer — gets stuck in loops
+    "com.apple.dt.Xcode.sourcecontrol", // Xcode Git — spawns stuck processes
+    "Music",                            // Apple Music — background CPU hog
 ];
 
-// Processes safe to kill when they exceed threshold
+// Processes safe to kill (carbonyl = our zombie, never needed)
 const KILLABLE: &[&str] = &["carbonyl"];
+
+// Apple daemons safe to restart — macOS will respawn them via launchd
+// Killing them clears stuck state without side effects
+const RESTARTABLE: &[&str] = &[
+    "usernoted",
+    "spotlightknowledged",
+    "com.apple.dt.Xcode.sourcecontrol",
+];
 
 #[derive(Debug, Serialize)]
 struct HealthEvent {
@@ -156,6 +168,16 @@ fn is_killable(name: &str) -> bool {
     KILLABLE.iter().any(|p| name.contains(p))
 }
 
+fn is_restartable(name: &str) -> bool {
+    RESTARTABLE.iter().any(|p| name.contains(p))
+}
+
+fn restart_process(name: &str) -> bool {
+    // Use killall by name — macOS launchd respawns the daemon automatically
+    let _ = Command::new("killall").arg(name).output();
+    true
+}
+
 fn is_zombie_pattern(name: &str) -> bool {
     ZOMBIE_PATTERNS.iter().any(|p| name.contains(p))
 }
@@ -188,6 +210,20 @@ fn run_scan(tracker: &mut ProcessTracker) {
                 action: "SIGTERM+SIGKILL".into(),
             };
             kill_process(*pid);
+            log_event(&event);
+            push_to_feed(&event);
+            tracker.strikes.remove(pid);
+        } else if entry.1 >= STRIKE_LIMIT && is_restartable(name) {
+            // Apple daemon stuck — restart it (launchd will respawn)
+            let event = HealthEvent {
+                ts: Utc::now().to_rfc3339(),
+                event: "daemon_restarted".into(),
+                pid: *pid,
+                name: name.clone(),
+                cpu: *cpu,
+                action: "killall (launchd respawns)".into(),
+            };
+            restart_process(name);
             log_event(&event);
             push_to_feed(&event);
             tracker.strikes.remove(pid);
