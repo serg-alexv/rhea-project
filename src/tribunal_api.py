@@ -97,7 +97,10 @@ from auth_api import auth_router, _current_user
 app.include_router(auth_router, prefix="/auth")
 
 # Billing (plans/keys/checkout/webhooks)
-from billing import billing_router, validate_api_key as validate_billing_key, check_quota, record_usage
+from billing import (
+    billing_router, validate_api_key as validate_billing_key,
+    check_quota, record_usage, compute_query_cost, deduct_credits_dynamic,
+)
 app.include_router(billing_router)
 
 # Workflow engine (automation DAG execution)
@@ -217,9 +220,21 @@ async def verify_api_key(
     # Accept JWT Bearer token (from auth_api signup/login)
     if authorization and authorization.startswith("Bearer "):
         try:
-            from auth_api import _decode_token
-            _decode_token(authorization[7:])
+            from auth_api import _decode_token, _get_db as _auth_db
+            payload = _decode_token(authorization[7:])
+            # Check if admin (bypasses credits)
+            with _auth_db() as db:
+                user_row = db.execute("SELECT id, role, credits FROM users WHERE id = ?", (int(payload["sub"]),)).fetchone()
+            if user_row and user_row["role"] == "admin":
+                return  # admin — no credit check
+            # Regular user — check quota
+            if user_row:
+                user_id = user_row["id"]
+                if not check_quota(user_id):
+                    raise HTTPException(status_code=429, detail="Monthly quota exceeded. Upgrade your plan at /billing/plans")
             return  # valid JWT — allow through
+        except HTTPException:
+            raise
         except Exception:
             pass  # fall through to API key check
 
@@ -237,6 +252,25 @@ async def verify_api_key(
         raise HTTPException(status_code=401, detail="API is locked: No keys configured in TRIBUNAL_API_KEYS")
     if not x_api_key or x_api_key not in TRIBUNAL_API_KEYS:
         raise HTTPException(status_code=401, detail="Invalid or missing API key. Sign up at /auth/signup")
+
+
+def _resolve_user_id(
+    x_api_key: Optional[str],
+    authorization: Optional[str],
+) -> Optional[int]:
+    """Extract user_id from JWT or rk_ API key. Returns None for static admin keys (no credit deduction)."""
+    if authorization and authorization.startswith("Bearer "):
+        try:
+            from auth_api import _decode_token
+            payload = _decode_token(authorization[7:])
+            return int(payload["sub"])
+        except Exception:
+            pass
+    if x_api_key and x_api_key.startswith("rk_"):
+        user = validate_billing_key(x_api_key)
+        if user:
+            return user["user_id"]
+    return None  # static admin key or dev-bypass — no credit deduction
 
 
 # ---------------------------------------------------------------------------
@@ -762,95 +796,344 @@ async def landing():
     html = f"""<!DOCTYPE html>
 <html lang="en">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Rhea</title>
+<title>Rhea &mdash; Multi-Model Consensus Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{{margin:0;padding:0;box-sizing:border-box}}
-body{{font-family:'SF Mono',SFMono-Regular,Menlo,Consolas,monospace;
-  background:#050505;color:#c0c0c0;display:flex;justify-content:center;padding:3rem 1.5rem}}
-main{{max-width:600px;width:100%}}
-.mark{{font-size:2.8rem;color:#fff;letter-spacing:-.05em;margin-bottom:.2rem}}
-.epithet{{color:#555;font-size:.85rem;margin-bottom:2.5rem;line-height:1.5}}
-.axiom{{color:#ff4400;font-size:1.1rem;margin:2rem 0;padding:.8rem 1.2rem;
-  border-left:2px solid #ff4400;letter-spacing:.02em}}
-.axiom small{{color:#444;display:block;margin-top:.3rem;font-size:.75rem}}
-.live{{display:flex;gap:1.5rem;margin:2rem 0;flex-wrap:wrap}}
-.live .v{{font-size:1.6rem;color:#fff;font-weight:600}}
-.live .k{{color:#444;font-size:.65rem;text-transform:uppercase;letter-spacing:.15em}}
-.live .cell{{min-width:80px}}
-h2{{font-size:.7rem;color:#333;margin:2.5rem 0 .8rem;text-transform:uppercase;
-  letter-spacing:.2em;font-weight:400}}
-pre{{background:#0a0a0a;padding:1rem;border-radius:4px;overflow-x:auto;
-  font-size:.78rem;line-height:1.6;margin:.5rem 0;border:1px solid #151515}}
-code{{color:#888}}.g{{color:#4a7}}.r{{color:#a44}}.w{{color:#ddd}}
-a{{color:#666;text-decoration:none;border-bottom:1px solid #222}}
-a:hover{{color:#fff;border-color:#444}}
-.hunt{{color:#666;font-size:.8rem;line-height:1.7;margin:1.5rem 0}}
-.hunt em{{color:#999;font-style:normal}}
-.foot{{margin-top:4rem;color:#222;font-size:.65rem;text-align:center;letter-spacing:.1em}}
+:root{{--bg:#000;--surface:#111;--card:#161616;--border:#222;--text:#f5f5f7;
+  --muted:#86868b;--accent:#0071e3;--accent-hover:#0077ED;--green:#30d158;
+  --orange:#ff9f0a;--red:#ff453a;--purple:#bf5af2;--radius:16px;--radius-sm:12px}}
+body{{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);
+  -webkit-font-smoothing:antialiased;line-height:1.47059}}
+a{{color:var(--accent);text-decoration:none}}
+a:hover{{text-decoration:underline}}
+
+/* NAV */
+nav{{position:sticky;top:0;z-index:100;background:rgba(0,0,0,.8);backdrop-filter:saturate(180%) blur(20px);
+  -webkit-backdrop-filter:saturate(180%) blur(20px);border-bottom:1px solid var(--border);padding:0 2rem}}
+.nav-inner{{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:48px}}
+.nav-brand{{font-weight:600;font-size:1.1rem;letter-spacing:-.02em}}
+.nav-links{{display:flex;gap:1.5rem;align-items:center;font-size:.85rem;color:var(--muted)}}
+.nav-links a{{color:var(--muted)}}
+.nav-links a:hover{{color:var(--text);text-decoration:none}}
+.btn-sm{{display:inline-flex;align-items:center;gap:.4rem;padding:.4rem 1rem;border-radius:980px;
+  font-size:.8rem;font-weight:500;cursor:pointer;border:none;transition:.2s}}
+.btn-primary{{background:var(--accent);color:#fff}}.btn-primary:hover{{background:var(--accent-hover);text-decoration:none}}
+.btn-ghost{{background:transparent;color:var(--text);border:1px solid var(--border)}}
+.btn-ghost:hover{{background:#1a1a1a;text-decoration:none}}
+
+/* HERO */
+.hero{{text-align:center;padding:6rem 2rem 4rem;max-width:900px;margin:0 auto}}
+.hero-badge{{display:inline-block;padding:.3rem .8rem;border-radius:980px;background:#1a1a2e;
+  color:var(--accent);font-size:.75rem;font-weight:500;margin-bottom:1.5rem;
+  border:1px solid rgba(0,113,227,.2)}}
+.hero h1{{font-size:3.5rem;font-weight:700;letter-spacing:-.03em;line-height:1.08;margin-bottom:1rem}}
+.hero h1 em{{font-style:normal;background:linear-gradient(135deg,var(--accent),var(--purple));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}}
+.hero p{{font-size:1.25rem;color:var(--muted);max-width:600px;margin:0 auto 2.5rem;line-height:1.5;font-weight:300}}
+.hero-actions{{display:flex;gap:.8rem;justify-content:center;flex-wrap:wrap}}
+.hero-actions .btn-sm{{padding:.6rem 1.5rem;font-size:.9rem}}
+
+/* STATS BAR */
+.stats{{display:flex;justify-content:center;gap:3rem;padding:2rem;flex-wrap:wrap}}
+.stat{{text-align:center}}
+.stat .val{{font-size:2rem;font-weight:700;color:var(--text)}}
+.stat .lbl{{font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-top:.2rem}}
+
+/* SECTIONS */
+section{{padding:5rem 2rem;max-width:1200px;margin:0 auto}}
+.section-title{{text-align:center;margin-bottom:3rem}}
+.section-title h2{{font-size:2.5rem;font-weight:700;letter-spacing:-.02em;margin-bottom:.5rem}}
+.section-title p{{color:var(--muted);font-size:1rem;max-width:500px;margin:0 auto}}
+
+/* PRICING */
+.pricing-toggle{{display:flex;justify-content:center;gap:.5rem;margin-bottom:2.5rem}}
+.pricing-grid{{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.2rem;max-width:1100px;margin:0 auto}}
+.plan{{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:2rem;
+  display:flex;flex-direction:column;transition:.3s;position:relative}}
+.plan:hover{{border-color:#444;transform:translateY(-2px)}}
+.plan.featured{{border-color:var(--accent);background:linear-gradient(180deg,rgba(0,113,227,.08),var(--card))}}
+.plan.featured::before{{content:'Most Popular';position:absolute;top:-10px;left:50%;transform:translateX(-50%);
+  background:var(--accent);color:#fff;font-size:.65rem;font-weight:600;padding:.2rem .8rem;
+  border-radius:980px;white-space:nowrap}}
+.plan-name{{font-size:.85rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.5rem}}
+.plan-price{{font-size:2.5rem;font-weight:700;margin-bottom:.3rem}}
+.plan-price small{{font-size:.9rem;color:var(--muted);font-weight:400}}
+.plan-desc{{color:var(--muted);font-size:.85rem;margin-bottom:1.5rem;line-height:1.5}}
+.plan-features{{list-style:none;flex:1;margin-bottom:1.5rem}}
+.plan-features li{{padding:.4rem 0;font-size:.85rem;color:#ccc;display:flex;align-items:baseline;gap:.5rem}}
+.plan-features li::before{{content:'';display:inline-block;width:6px;height:6px;border-radius:50%;
+  background:var(--green);flex-shrink:0;margin-top:.3rem}}
+.plan-cta{{display:block;text-align:center;padding:.7rem;border-radius:var(--radius-sm);
+  font-size:.85rem;font-weight:500;cursor:pointer;border:none;transition:.2s;text-decoration:none}}
+.plan-cta.primary{{background:var(--accent);color:#fff}}.plan-cta.primary:hover{{background:var(--accent-hover)}}
+.plan-cta.outline{{background:transparent;color:var(--text);border:1px solid var(--border)}}
+.plan-cta.outline:hover{{background:#1a1a1a}}
+.plan .byok{{font-size:.7rem;color:var(--muted);text-align:center;margin-top:.5rem}}
+
+/* AUTH SECTION */
+.auth-section{{text-align:center;padding:4rem 2rem;background:var(--surface);border-radius:var(--radius);
+  max-width:600px;margin:3rem auto}}
+.auth-btns{{display:flex;flex-direction:column;gap:.6rem;max-width:320px;margin:1.5rem auto 0}}
+.auth-btn{{display:flex;align-items:center;gap:.8rem;padding:.7rem 1.2rem;border-radius:var(--radius-sm);
+  font-size:.85rem;font-weight:500;border:1px solid var(--border);background:var(--card);
+  color:var(--text);cursor:pointer;text-decoration:none;transition:.2s}}
+.auth-btn:hover{{background:#222;text-decoration:none}}
+.auth-btn .icon{{width:20px;height:20px;display:flex;align-items:center;justify-content:center}}
+.auth-btn.google .icon{{color:#4285f4}}.auth-btn.ms .icon{{color:#00a4ef}}.auth-btn.apple .icon{{color:#fff}}
+
+/* PLATFORMS */
+.platforms{{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1rem;
+  max-width:800px;margin:2rem auto 0}}
+.plat-card{{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);
+  padding:1.5rem 1rem;text-align:center;transition:.2s}}
+.plat-card:hover{{border-color:#444}}
+.plat-card .icon{{font-size:1.5rem;margin-bottom:.5rem}}
+.plat-card .name{{font-size:.8rem;font-weight:500}}
+.plat-card .sub{{font-size:.65rem;color:var(--muted);margin-top:.2rem}}
+
+/* API BLOCK */
+.api-block{{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:2rem;max-width:700px;margin:2rem auto}}
+.api-block pre{{background:#0a0a0a;border-radius:var(--radius-sm);padding:1.2rem;overflow-x:auto;
+  font-family:'JetBrains Mono',monospace;font-size:.8rem;line-height:1.7;border:1px solid #1a1a1a}}
+.api-block code{{color:#888}}.g{{color:var(--green)}}.w{{color:#ddd}}.r{{color:var(--red)}}.b{{color:var(--accent)}}
+
+/* PRINCIPLE */
+.principle-bar{{text-align:center;padding:3rem 2rem;max-width:700px;margin:0 auto}}
+.principle-bar blockquote{{font-size:1.1rem;color:var(--muted);font-style:italic;
+  border-left:3px solid var(--accent);padding-left:1.2rem;text-align:left}}
+
+/* FOOTER */
+footer{{text-align:center;padding:3rem 2rem;color:#333;font-size:.7rem;letter-spacing:.05em}}
+footer a{{color:#555}}
+
+/* RESPONSIVE */
+@media(max-width:768px){{
+  .hero h1{{font-size:2.2rem}}
+  .pricing-grid{{grid-template-columns:1fr}}
+  .stats{{gap:1.5rem}}
+  .stat .val{{font-size:1.4rem}}
+  nav{{padding:0 1rem}}
+}}
 </style></head>
-<body><main>
+<body>
 
-<div class="mark">Rhea</div>
-<p class="epithet">The titan who tricked Time.<br>
-Now she spins the Toile.</p>
+<!-- NAV -->
+<nav>
+<div class="nav-inner">
+  <div class="nav-brand">Rhea</div>
+  <div class="nav-links">
+    <a href="#pricing">Pricing</a>
+    <a href="#platforms">Apps</a>
+    <a href="/health">Status</a>
+    <a href="https://github.com/serg-alexv/rhea-project">GitHub</a>
+    <a href="/auth/login-page" class="btn-sm btn-ghost">Sign In</a>
+    <a href="#auth" class="btn-sm btn-primary">Get Started Free</a>
+  </div>
+</div>
+</nav>
 
-<div class="axiom">&#x2207; &gt; 0 &#x2228; &#x22A5;
-<small>gradient positive or bottom &mdash; settle and you're prey</small></div>
-
-<div class="live">
-<div class="cell"><div class="v">{proof_count}</div><div class="k">proofs</div></div>
-<div class="cell"><div class="v">{ontology_count}</div><div class="k">ontologies</div></div>
-<div class="cell"><div class="v">{avg_conf_str}</div><div class="k">confidence</div></div>
-<div class="cell"><div class="v">{providers_line}</div><div class="k">right now</div></div>
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">{providers_line} &bull; multi-model consensus</div>
+  <h1>Verify anything.<br><em>Trust the agreement.</em></h1>
+  <p>{multi_note}. Consensus is the signal. Divergence reveals where claims break.</p>
+  <div class="hero-actions">
+    <a href="#auth" class="btn-sm btn-primary">Start Free</a>
+    <a href="#pricing" class="btn-sm btn-ghost">See Pricing</a>
+  </div>
 </div>
 
-<h2>Pull a thread</h2>
-<pre><code><span class="g">curl</span> <span class="w">"{url}/aletheia/search?q=hemoglobin"</span>
+<!-- LIVE STATS -->
+<div class="stats">
+  <div class="stat"><div class="val">{proof_count}</div><div class="lbl">Proofs stored</div></div>
+  <div class="stat"><div class="val">{ontology_count}</div><div class="lbl">Ontologies</div></div>
+  <div class="stat"><div class="val">{avg_conf_str}</div><div class="lbl">Avg confidence</div></div>
+  <div class="stat"><div class="val">{providers_line}</div><div class="lbl">Right now</div></div>
+</div>
 
-<span class="g">curl</span> <span class="w">"{url}/aletheia/stats"</span>
+<!-- PRICING -->
+<section id="pricing">
+<div class="section-title">
+  <h2>Simple, transparent pricing</h2>
+  <p>Start free. Scale with credits. Bring your own keys for zero platform cost.</p>
+</div>
 
-<span class="g">curl</span> -X POST {url}/tribunal \\
+<div class="pricing-grid">
+
+  <!-- FREE -->
+  <div class="plan">
+    <div class="plan-name" style="color:var(--green)">Free</div>
+    <div class="plan-price">$0 <small>forever</small></div>
+    <div class="plan-desc">100 credits on signup. Perfect for trying the consensus engine.</div>
+    <ul class="plan-features">
+      <li>100 free credits</li>
+      <li>3-model tribunal consensus</li>
+      <li>Aletheia proof storage</li>
+      <li>Web, iOS, macOS apps</li>
+      <li>Google &amp; Microsoft auth</li>
+      <li>Community support</li>
+    </ul>
+    <a href="#auth" class="plan-cta primary">Get Started Free</a>
+  </div>
+
+  <!-- PRO -->
+  <div class="plan featured">
+    <div class="plan-name" style="color:var(--accent)">Pro</div>
+    <div class="plan-price">$19 <small>/month</small></div>
+    <div class="plan-desc">For researchers and professionals who need deeper consensus.</div>
+    <ul class="plan-features">
+      <li>2,000 credits/month</li>
+      <li>5-model ICE deep verification</li>
+      <li>Priority model routing</li>
+      <li>Sceptic adversarial mode</li>
+      <li>Export proofs &amp; ontologies</li>
+      <li>CLI access + API key</li>
+      <li>Email support</li>
+    </ul>
+    <a href="#auth" class="plan-cta primary">Start Pro Trial</a>
+    <div class="byok">Or BYOK: plug your keys, pay providers directly</div>
+  </div>
+
+  <!-- TEAM -->
+  <div class="plan">
+    <div class="plan-name" style="color:var(--orange)">Team</div>
+    <div class="plan-price">$49 <small>/month</small></div>
+    <div class="plan-desc">Shared workspace for labs and research groups.</div>
+    <ul class="plan-features">
+      <li>10,000 credits/month</li>
+      <li>Up to 10 seats</li>
+      <li>Shared proof library</li>
+      <li>Team ontology management</li>
+      <li>Workflow automation engine</li>
+      <li>Admin controls &amp; audit log</li>
+      <li>Priority support</li>
+    </ul>
+    <a href="#auth" class="plan-cta outline">Contact Us</a>
+    <div class="byok">BYOK: $0 platform fee with your own keys</div>
+  </div>
+
+  <!-- SOVEREIGN -->
+  <div class="plan">
+    <div class="plan-name" style="color:var(--purple)">Sovereign</div>
+    <div class="plan-price">$199 <small>/month</small></div>
+    <div class="plan-desc">Full infrastructure ownership. Your data, your models, your rules.</div>
+    <ul class="plan-features">
+      <li>Unlimited credits (self-hosted)</li>
+      <li>Deploy on your infrastructure</li>
+      <li>All model providers unlocked</li>
+      <li>ADMIN_EMAILS genline control</li>
+      <li>Custom model routing</li>
+      <li>White-label &amp; SSO</li>
+      <li>Dedicated support + SLA</li>
+    </ul>
+    <a href="#auth" class="plan-cta outline">Request Access</a>
+    <div class="byok">You own the infrastructure &mdash; you control who's admin</div>
+  </div>
+
+</div>
+</section>
+
+<!-- AUTH -->
+<section id="auth">
+<div class="auth-section">
+  <h2 style="font-size:1.5rem;font-weight:600;margin-bottom:.5rem">Sign in to Rhea</h2>
+  <p style="color:var(--muted);font-size:.85rem">One account across all platforms</p>
+  <div class="auth-btns">
+    <a href="/auth/google?callback=web" class="auth-btn google">
+      <span class="icon"><svg viewBox="0 0 24 24" width="20" height="20"><path fill="#4285f4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/><path fill="#34a853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#fbbc05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18A10.96 10.96 0 0 0 1 12c0 1.77.42 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#ea4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg></span>
+      Continue with Google
+    </a>
+    <a href="/auth/microsoft?callback=web" class="auth-btn ms">
+      <span class="icon"><svg viewBox="0 0 24 24" width="18" height="18"><rect fill="#f25022" x="1" y="1" width="10" height="10"/><rect fill="#00a4ef" x="1" y="13" width="10" height="10"/><rect fill="#7fba00" x="13" y="1" width="10" height="10"/><rect fill="#ffb900" x="13" y="13" width="10" height="10"/></svg></span>
+      Continue with Microsoft
+    </a>
+    <a href="/auth/login-page" class="auth-btn apple">
+      <span class="icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M17.05 20.28c-.98.95-2.05.88-3.08.4-1.09-.5-2.08-.48-3.24 0-1.44.62-2.2.44-3.06-.4C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg></span>
+      Continue with Apple
+    </a>
+  </div>
+  <p style="color:#444;font-size:.7rem;margin-top:1rem">
+    Or <a href="/auth/signup" style="color:var(--accent)">sign up with email</a> &bull;
+    Apple Sign In available on iOS
+  </p>
+</div>
+</section>
+
+<!-- PLATFORMS -->
+<section id="platforms">
+<div class="section-title">
+  <h2>Available everywhere</h2>
+  <p>One account. Every platform. Native experience.</p>
+</div>
+<div class="platforms">
+  <div class="plat-card">
+    <div class="icon">&#xF8FF;</div>
+    <div class="name">iOS</div>
+    <div class="sub"><a href="https://testflight.apple.com/join/BNya22Jg">TestFlight</a></div>
+  </div>
+  <div class="plat-card">
+    <div class="icon">&#x1F4BB;</div>
+    <div class="name">macOS</div>
+    <div class="sub"><a href="https://github.com/serg-alexv/rhea-project/releases">Download DMG</a></div>
+  </div>
+  <div class="plat-card">
+    <div class="icon">&#x1F310;</div>
+    <div class="name">Web</div>
+    <div class="sub"><a href="{url}">Atlas</a></div>
+  </div>
+  <div class="plat-card">
+    <div class="icon">&#x2328;</div>
+    <div class="name">CLI</div>
+    <div class="sub">curl + API key</div>
+  </div>
+  <div class="plat-card">
+    <div class="icon">&#x1F4E6;</div>
+    <div class="name">Python</div>
+    <div class="sub">pip install rhea-memory</div>
+  </div>
+</div>
+</section>
+
+<!-- API -->
+<section>
+<div class="section-title">
+  <h2>Try it now</h2>
+  <p>No SDK required. One curl to truth.</p>
+</div>
+<div class="api-block">
+<pre><code><span class="g">curl</span> -X POST {url}/tribunal \\
   -H <span class="w">"Content-Type: application/json"</span> \\
   -H <span class="w">"Authorization: Bearer YOUR_TOKEN"</span> \\
-  -d <span class="w">'{{"prompt":"ATP synthase uses rotary catalysis"}}'</span></code></pre>
+  -d <span class="w">'{{"prompt":"ATP synthase uses rotary catalysis"}}'</span>
 
-<h2>What the spider does</h2>
-<p class="hunt">
-You throw a claim into the web.<br>
-Rhea sends it to <em>{n_providers} independent model{'s' if n_providers != 1 else ''}</em> &mdash; they don't see each other.<br>
-Agreement = signal. Divergence = where the lie hides.<br>
-Every kill is stored in <em>Aletheia</em> &mdash; provenance chains, not marketing copy.</p>
+<span class="r"># Response:</span>
+<span class="r"># {{"agreement_score": 0.94, "confidence": 0.87,</span>
+<span class="r">#   "response": "Confirmed by 3/3 models..."}}</span></code></pre>
+</div>
+</section>
 
-<h2>Endpoints</h2>
-<pre><code><span class="g">GET </span> /aletheia/search?q=   search the web
-<span class="g">GET </span> /aletheia/stats       what's caught
-<span class="g">GET </span> /aletheia/proofs      all kills
-<span class="g">GET </span> /agents/status        who's hunting
-<span class="g">POST</span> /tribunal             verify a claim
-<span class="g">POST</span> /tribunal/ice         deep verification
-<span class="g">GET </span> /health               pulse</code></pre>
+<!-- PRINCIPLE -->
+<div class="principle-bar">
+<blockquote>The infrastructure owner controls who's admin, not the application.<br>
+You own your data, your models, your keys. Rhea serves you &mdash; not the other way around.</blockquote>
+</div>
 
-<h2>Get started</h2>
-<pre><code><span class="g">curl</span> -X POST {url}/auth/signup \\
-  -H <span class="w">"Content-Type: application/json"</span> \\
-  -d <span class="w">'{{"email":"you@example.com","password":"your-password"}}'</span>
+<!-- FOOTER -->
+<footer>
+  <div style="margin-bottom:.8rem;font-size:.85rem;color:#555">
+    <a href="https://github.com/serg-alexv/rhea-project">GitHub</a> &middot;
+    <a href="/health">Status</a> &middot;
+    <a href="/models">Models</a> &middot;
+    <a href="/aletheia/stats">Aletheia</a>
+  </div>
+  <div>&#x2207; &gt; 0 &#x2228; &#x22A5; &mdash; gradient positive or bottom</div>
+  <div style="margin-top:.5rem">Built by a biochemist and three AI agents</div>
+</footer>
 
-<span class="r"># Returns: {{"token": "eyJ..."}}</span>
-<span class="r"># Use in Authorization: Bearer YOUR_TOKEN</span></code></pre>
-
-<p class="hunt">
-<em>iOS app</em>: <a href="https://testflight.apple.com/join/BNya22Jg">TestFlight</a><br>
-<em>macOS app</em>: <a href="https://github.com/serg-alexv/rhea-project/releases">GitHub Releases</a><br>
-<em>Memory package</em>: <code>pip install packages/rhea-memory/</code>
-</p>
-
-<h2>Anatomy</h2>
-<pre><code>FastAPI &middot; SQLite WAL &middot; Gemini 2.5 Flash &middot; Fly.io
-Built by a biochemist and three AI agents.
-<a href="https://github.com/serg-alexv/rhea-project">src</a> &middot; <a href="https://github.com/serg-alexv/rhea-project/releases">releases</a></code></pre>
-
-<div class="foot">&#x2207; &gt; 0 &#x2228; &#x22A5;</div>
-</main></body></html>"""
+</body></html>"""
     return HTMLResponse(content=html)
 
 
@@ -1119,9 +1402,19 @@ async def set_mode(req: SetModeRequest):
         raise HTTPException(status_code=400, detail=f"Invalid mode: {req.mode}")
 
 @app.post("/tribunal", response_model=TribunalResponse, dependencies=[Depends(verify_api_key), Depends(check_rate_limit)])
-async def tribunal(req: TribunalRequest):
+async def tribunal(
+    req: TribunalRequest,
+    x_api_key: Optional[str] = Header(None, alias="X-API-Key"),
+    authorization: Optional[str] = Header(None, alias="Authorization"),
+):
     t0 = time.time()
     bridge = get_bridge()
+
+    # Dynamic credit deduction based on operation type, tier, and k
+    user_id = _resolve_user_id(x_api_key, authorization)
+    if user_id is not None:
+        cost = compute_query_cost("tribunal", k=req.k, tier=req.tier)
+        deduct_credits_dynamic(user_id, cost, "tribunal")
 
     # Prepend active ontology prompt when a non-default ontology is selected
     effective_system = req.system
@@ -1236,9 +1529,19 @@ async def tribunal(req: TribunalRequest):
 
 
 @app.post("/tribunal/ice", response_model=TribunalICEResponse, dependencies=[Depends(verify_api_key), Depends(check_rate_limit)])
-async def tribunal_ice(req: TribunalICERequest):
+async def tribunal_ice(
+    req: TribunalICERequest,
+    x_api_key: Optional[str] = Header(None, alias="X-API-Key"),
+    authorization: Optional[str] = Header(None, alias="Authorization"),
+):
     t0 = time.time()
     analyzer = get_analyzer()
+
+    # Dynamic credit deduction — ICE is more expensive than plain tribunal
+    user_id = _resolve_user_id(x_api_key, authorization)
+    if user_id is not None:
+        cost = compute_query_cost("ice", k=req.k, tier=req.tier)
+        deduct_credits_dynamic(user_id, cost, "ice")
 
     report = analyzer.analyze_ice(
         prompt=req.prompt,
@@ -1337,7 +1640,11 @@ async def math_verify(req: MathVerifyRequest):
 # ---------------------------------------------------------------------------
 
 @app.post("/tribunal/sceptic", response_model=TribunalScepticResponse, dependencies=[Depends(verify_api_key), Depends(check_rate_limit)])
-async def tribunal_sceptic(req: TribunalScepticRequest):
+async def tribunal_sceptic(
+    req: TribunalScepticRequest,
+    x_api_key: Optional[str] = Header(None, alias="X-API-Key"),
+    authorization: Optional[str] = Header(None, alias="Authorization"),
+):
     """
     Adversarial tribunal: query k models for an initial answer, then have each
     model actively critique the best (consensus) answer.  Returns both the
@@ -1345,6 +1652,12 @@ async def tribunal_sceptic(req: TribunalScepticRequest):
     """
     t0 = time.time()
     bridge = get_bridge()
+
+    # Dynamic credit deduction for sceptic operation
+    user_id = _resolve_user_id(x_api_key, authorization)
+    if user_id is not None:
+        cost = compute_query_cost("sceptic", k=req.k, tier=req.tier)
+        deduct_credits_dynamic(user_id, cost, "sceptic")
 
     # Prepend active ontology prefix (same logic as /tribunal)
     effective_system = req.system

@@ -425,6 +425,24 @@ export default function CommandCentre() {
         >
           Automation
         </Link>
+        <Link
+          href="/cc/decisions"
+          className="px-4 py-2 text-xs font-medium text-white/40 hover:text-white/60 transition-colors border-b-2 border-transparent"
+        >
+          Decisions
+        </Link>
+        <Link
+          href="/cc/papers"
+          className="px-4 py-2 text-xs font-medium text-white/40 hover:text-white/60 transition-colors border-b-2 border-transparent"
+        >
+          Papers
+        </Link>
+        <Link
+          href="/cc/graphics"
+          className="px-4 py-2 text-xs font-medium text-white/40 hover:text-white/60 transition-colors border-b-2 border-transparent"
+        >
+          Graphics
+        </Link>
       </div>
 
       {/* 3-column layout */}
