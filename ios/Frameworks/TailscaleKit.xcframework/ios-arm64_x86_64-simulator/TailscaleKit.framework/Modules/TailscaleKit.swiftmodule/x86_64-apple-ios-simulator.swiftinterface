@@ -1,0 +1,602 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 6.2.4 (swiftlang-6.2.4.1.4 clang-1700.6.4.2)
+// swift-module-flags: -target x86_64-apple-ios18.1-simulator -enable-objc-interop -enable-library-evolution -swift-version 6 -enforce-exclusivity=checked -O -enable-experimental-feature DebugDescriptionMacro -module-name TailscaleKit
+// swift-module-flags-ignorable:  -formal-cxx-interoperability-mode=off -interface-compiler-version 6.2.4
+import Combine
+import Foundation
+import Network
+import Swift
+@_exported import TailscaleKit
+import UIKit
+import _Concurrency
+import _StringProcessing
+import _SwiftConcurrencyShims
+public enum LocalAPIError : Swift.Error, Foundation.LocalizedError {
+  case localAPIBadResponse
+  case localAPIStatusError(status: Swift.Int, body: Swift.String)
+  case localAPIURLRequestError
+  case localAPIBugReportError
+  case localAPIJSONEncodeError
+}
+public actor LocalAPIClient {
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(localNode: TailscaleKit.TailscaleNode, logger: (any TailscaleKit.LogSink)?)
+  #endif
+  public func watchIPNBus(mask: TailscaleKit.Ipn.NotifyWatchOpt, consumer: any TailscaleKit.MessageConsumer) async throws -> TailscaleKit.MessageProcessor
+  public func getPrefs() async throws -> TailscaleKit.Ipn.Prefs
+  @discardableResult
+  public func editPrefs(mask: TailscaleKit.Ipn.MaskedPrefs) async throws -> TailscaleKit.Ipn.Prefs
+  public func start(options: TailscaleKit.Ipn.Options) async throws
+  public func startLoginInteractive() async throws
+  public func resetAuth() async throws
+  public func profiles() async throws -> [TailscaleKit.IpnLocal.LoginProfile]
+  public func currentProfile() async throws -> TailscaleKit.IpnLocal.LoginProfile
+  public func addProfile() async throws
+  public func switchProfile(profileID: Swift.String) async throws
+  public func deleteProfile(profileID: Swift.String) async throws
+  public func backendStatus() async throws -> TailscaleKit.IpnState.Status
+  @objc deinit
+  @available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
+  @_semantics("defaultActor") nonisolated final public var unownedExecutor: _Concurrency.UnownedSerialExecutor {
+    get
+  }
+}
+public protocol MessageConsumer : _Concurrency.Actor {
+  func notify(_ notify: TailscaleKit.Ipn.Notify)
+  func error(_ error: any Swift.Error)
+}
+@_hasMissingDesignatedInitializers public class MessageProcessor : @unchecked Swift.Sendable {
+  @objc deinit
+  public func cancel()
+}
+public struct Empty : Swift.Sendable {
+  public struct Message : Swift.Codable, Swift.Sendable {
+    public func encode(to encoder: any Swift.Encoder) throws
+    public init(from decoder: any Swift.Decoder) throws
+  }
+}
+public struct Key : Swift.Sendable {
+  public typealias NodePublic = Swift.String
+}
+public struct IP : Swift.Sendable {
+  public typealias Addr = Swift.String
+  public typealias Prefix = Swift.String
+}
+public struct Time : Swift.Sendable {
+  public typealias Time = Swift.String
+}
+public struct Ipn : Swift.Sendable {
+  public enum State : Swift.Int, Swift.Codable, Swift.CaseIterable, Swift.Sendable {
+    case NoState
+    case InUseOtherUser
+    case NeedsLogin
+    case NeedsMachineAuth
+    case Stopped
+    case Starting
+    case Running
+    #if compiler(>=5.3) && $NonescapableTypes
+    public init?(rawValue: Swift.Int)
+    #endif
+    public typealias AllCases = [TailscaleKit.Ipn.State]
+    public typealias RawValue = Swift.Int
+    nonisolated public static var allCases: [TailscaleKit.Ipn.State] {
+      get
+    }
+    public var rawValue: Swift.Int {
+      get
+    }
+  }
+  public struct EngineStatus : Swift.Codable, Swift.Sendable, Swift.Equatable {
+    public var RBytes: Swift.Int64
+    public var WBytes: Swift.Int64
+    public var NumLive: Swift.Int
+    public var LivePeers: [TailscaleKit.Key.NodePublic : TailscaleKit.IpnState.PeerStatusLite]
+    public static func == (a: TailscaleKit.Ipn.EngineStatus, b: TailscaleKit.Ipn.EngineStatus) -> Swift.Bool
+    public func encode(to encoder: any Swift.Encoder) throws
+    public init(from decoder: any Swift.Decoder) throws
+  }
+  public struct Notify : Swift.Codable, Swift.Sendable {
+    public var Version: Swift.String?
+    public var SessionID: Swift.String?
+    public var ErrMessage: Swift.String?
+    public var LoginFinished: TailscaleKit.Empty.Message?
+    public var State: TailscaleKit.Ipn.State?
+    public var Prefs: TailscaleKit.Ipn.Prefs?
+    public var NetMap: TailscaleKit.Netmap.NetworkMap?
+    public var Engine: TailscaleKit.Ipn.EngineStatus?
+    public var BrowseToURL: Swift.String?
+    public var LocalTCPPort: Swift.UInt16?
+    public var ClientVersion: TailscaleKit.Tailcfg.ClientVersion?
+    public func encode(to encoder: any Swift.Encoder) throws
+    public init(from decoder: any Swift.Decoder) throws
+  }
+  public struct NotifyWatchOpt : Swift.OptionSet, Swift.Sendable {
+    public let rawValue: Swift.UInt64
+    public init(rawValue: Swift.UInt64)
+    public static let engineUpdates: TailscaleKit.Ipn.NotifyWatchOpt
+    public static let initialState: TailscaleKit.Ipn.NotifyWatchOpt
+    public static let prefs: TailscaleKit.Ipn.NotifyWatchOpt
+    public static let netmap: TailscaleKit.Ipn.NotifyWatchOpt
+    public static let noPrivateKeys: TailscaleKit.Ipn.NotifyWatchOpt
+    public static let rateLimitNetmaps: TailscaleKit.Ipn.NotifyWatchOpt
+    public typealias ArrayLiteralElement = TailscaleKit.Ipn.NotifyWatchOpt
+    public typealias Element = TailscaleKit.Ipn.NotifyWatchOpt
+    public typealias RawValue = Swift.UInt64
+  }
+  public struct Prefs : Swift.Codable, Swift.Sendable {
+    public var ControlURL: Swift.String
+    public var RouteAll: Swift.Bool
+    public var AllowSingleHosts: Swift.Bool
+    public var CorpDNS: Swift.Bool
+    public var WantRunning: Swift.Bool
+    public var LoggedOut: Swift.Bool
+    public var ShieldsUp: Swift.Bool
+    public var AdvertiseRoutes: [Swift.String]?
+    public var AdvertiseTags: [Swift.String]?
+    public var ExitNodeID: Swift.String
+    public var ExitNodeAllowLANAccess: Swift.Bool
+    public var ForceDaemon: Swift.Bool?
+    public var Hostname: Swift.String
+    public func encode(to encoder: any Swift.Encoder) throws
+    public init(from decoder: any Swift.Decoder) throws
+  }
+  public struct MaskedPrefs : Swift.Codable, Swift.Sendable {
+    public var ControlURL: Swift.String {
+      get
+      set
+    }
+    public var RouteAll: Swift.Bool {
+      get
+      set
+    }
+    public var CorpDNS: Swift.Bool {
+      get
+      set
+    }
+    public var ExitNodeID: Swift.String {
+      get
+      set
+    }
+    public var ExitNodeAllowLANAccess: Swift.Bool {
+      get
+      set
+    }
+    public var WantRunning: Swift.Bool {
+      get
+      set
+    }
+    public var ShieldsUp: Swift.Bool {
+      get
+      set
+    }
+    public var AdvertiseRoutes: [Swift.String]? {
+      get
+      set
+    }
+    public var ForceDaemon: Swift.Bool {
+      get
+      set
+    }
+    public var Hostname: Swift.String {
+      get
+      set
+    }
+    public init()
+    @discardableResult
+    public func controlURL(_ value: Swift.String) -> TailscaleKit.Ipn.MaskedPrefs
+    @discardableResult
+    public func routeAll(_ value: Swift.Bool) -> TailscaleKit.Ipn.MaskedPrefs
+    @discardableResult
+    public func corpDNS(_ value: Swift.Bool) -> TailscaleKit.Ipn.MaskedPrefs
+    @discardableResult
+    public func exitNodeID(_ value: Swift.String) -> TailscaleKit.Ipn.MaskedPrefs
+    @discardableResult
+    public func exitNodeAllowLANAccess(_ value: Swift.Bool) -> TailscaleKit.Ipn.MaskedPrefs
+    @discardableResult
+    public func wantRunning(_ value: Swift.Bool) -> TailscaleKit.Ipn.MaskedPrefs
+    @discardableResult
+    public func shieldsUp(_ value: Swift.Bool) -> TailscaleKit.Ipn.MaskedPrefs
+    @discardableResult
+    public func advertiseRoutes(_ value: [Swift.String]) -> TailscaleKit.Ipn.MaskedPrefs
+    @discardableResult
+    public func forceDaemon(_ value: Swift.Bool) -> TailscaleKit.Ipn.MaskedPrefs
+    @discardableResult
+    public func hostname(_ value: Swift.String) -> TailscaleKit.Ipn.MaskedPrefs
+    public func encode(to encoder: any Swift.Encoder) throws
+    public init(from decoder: any Swift.Decoder) throws
+  }
+  public struct Options : Swift.Codable {
+    public var UpdatePrefs: TailscaleKit.Ipn.Prefs?
+    public var AuthKey: Swift.String?
+    public func encode(to encoder: any Swift.Encoder) throws
+    public init(from decoder: any Swift.Decoder) throws
+  }
+}
+public struct IpnLocal : Swift.Sendable {
+  public struct LoginProfile : Swift.Equatable, Swift.Codable, Swift.Identifiable, Swift.Sendable {
+    public var ID: Swift.String
+    public var Name: Swift.String
+    public var Key: Swift.String
+    public var UserProfile: TailscaleKit.Tailcfg.UserProfile
+    public var NetworkProfile: TailscaleKit.Tailcfg.NetworkProfile?
+    public var LocalUserID: Swift.String
+    public var ControlURL: Swift.String?
+    public var id: Swift.String {
+      get
+    }
+    public func isNullUser() -> Swift.Bool
+    public static func == (a: TailscaleKit.IpnLocal.LoginProfile, b: TailscaleKit.IpnLocal.LoginProfile) -> Swift.Bool
+    public typealias ID = Swift.String
+    public func encode(to encoder: any Swift.Encoder) throws
+    public init(from decoder: any Swift.Decoder) throws
+  }
+}
+public struct IpnState : Swift.Sendable {
+  public struct PeerStatus : Swift.Codable, Swift.Equatable, Swift.Sendable {
+    public var ID: TailscaleKit.Tailcfg.StableNodeID
+    public var HostName: Swift.String
+    public var DNSName: Swift.String
+    public var TailscaleIPs: [TailscaleKit.IP.Addr]?
+    public var Tags: [Swift.String]?
+    public var PrimaryRoutes: [Swift.String]?
+    public var Addrs: [Swift.String]?
+    public var CurAddr: Swift.String?
+    public var Relay: Swift.String?
+    public var PeerRelay: Swift.String?
+    public var Online: Swift.Bool
+    public var ExitNode: Swift.Bool
+    public var ExitNodeOption: Swift.Bool
+    public var PeerAPIURL: [Swift.String]?
+    public var Capabilities: [Swift.String]?
+    public var SSH_HostKeys: [Swift.String]?
+    public var ShareeNode: Swift.Bool?
+    public var Expired: Swift.Bool?
+    public static func == (a: TailscaleKit.IpnState.PeerStatus, b: TailscaleKit.IpnState.PeerStatus) -> Swift.Bool
+    public func encode(to encoder: any Swift.Encoder) throws
+    public init(from decoder: any Swift.Decoder) throws
+  }
+  public struct PeerStatusLite : Swift.Codable, Swift.Sendable, Swift.Equatable {
+    public var RxBytes: Swift.Int64
+    public var TxBytes: Swift.Int64
+    public var LastHandshake: TailscaleKit.Time.Time
+    public var NodeKey: Swift.String
+    public static func == (a: TailscaleKit.IpnState.PeerStatusLite, b: TailscaleKit.IpnState.PeerStatusLite) -> Swift.Bool
+    public func encode(to encoder: any Swift.Encoder) throws
+    public init(from decoder: any Swift.Decoder) throws
+  }
+  public struct Status : Swift.Codable, Swift.Sendable {
+    public var Version: Swift.String
+    public var BackendState: Swift.String
+    public var AuthURL: Swift.String
+    public var TailscaleIPs: [TailscaleKit.IP.Addr]?
+    public var SelfStatus: TailscaleKit.IpnState.PeerStatus?
+    public var ExitNodeStatus: TailscaleKit.IpnState.ExitNodeStatus?
+    public var Health: [Swift.String]?
+    public var CurrentTailnet: TailscaleKit.IpnState.TailnetStatus?
+    public var CertDomains: [Swift.String]?
+    public var Peer: [Swift.String : TailscaleKit.IpnState.PeerStatus]?
+    public var User: [Swift.String : TailscaleKit.Tailcfg.UserProfile]?
+    public var ClientVersion: TailscaleKit.Tailcfg.ClientVersion?
+    public func encode(to encoder: any Swift.Encoder) throws
+    public init(from decoder: any Swift.Decoder) throws
+  }
+  public struct ExitNodeStatus : Swift.Codable, Swift.Sendable {
+    public var ID: TailscaleKit.Tailcfg.StableNodeID
+    public var Online: Swift.Bool
+    public var TailscaleIPs: [TailscaleKit.IP.Prefix]?
+    public func encode(to encoder: any Swift.Encoder) throws
+    public init(from decoder: any Swift.Decoder) throws
+  }
+  public struct TailnetStatus : Swift.Codable, Swift.Sendable {
+    public var Name: Swift.String
+    public var MagicDNSSuffix: Swift.String
+    public var MagicDNSEnabled: Swift.Bool
+    public func encode(to encoder: any Swift.Encoder) throws
+    public init(from decoder: any Swift.Decoder) throws
+  }
+}
+public struct Netmap : Swift.Sendable {
+  public struct NetworkMap : Swift.Codable, Swift.Equatable, Swift.Sendable {
+    public var SelfNode: TailscaleKit.Tailcfg.Node
+    public var NodeKey: TailscaleKit.Key.NodePublic
+    public var Peers: [TailscaleKit.Tailcfg.Node]?
+    public var Domain: Swift.String
+    public var UserProfiles: [Swift.String : TailscaleKit.Tailcfg.UserProfile]
+    public var DNS: TailscaleKit.Tailcfg.DNSConfig?
+    #if compiler(>=5.3) && $NonescapableTypes
+    public func currentUserProfile() -> TailscaleKit.Tailcfg.UserProfile?
+    #endif
+    #if compiler(>=5.3) && $NonescapableTypes
+    public func userProfile(for id: Swift.Int64) -> TailscaleKit.Tailcfg.UserProfile?
+    #endif
+    public static func == (lhs: TailscaleKit.Netmap.NetworkMap, rhs: TailscaleKit.Netmap.NetworkMap) -> Swift.Bool
+    public func encode(to encoder: any Swift.Encoder) throws
+    public init(from decoder: any Swift.Decoder) throws
+  }
+}
+public struct Tailcfg : Swift.Sendable {
+  public typealias MachineKey = Swift.String
+  public typealias NodeID = Swift.Int64
+  public typealias StableNodeID = Swift.String
+  public typealias UserID = Swift.Int64
+  public struct Hostinfo : Swift.Codable, Swift.Equatable, Swift.Sendable {
+    public var OS: Swift.String?
+    public var OSVersion: Swift.String?
+    public var DeviceModel: Swift.String?
+    public var ShareeNode: Swift.Bool?
+    public var Hostname: Swift.String?
+    public var ShieldsUp: Swift.Bool?
+    public static func == (a: TailscaleKit.Tailcfg.Hostinfo, b: TailscaleKit.Tailcfg.Hostinfo) -> Swift.Bool
+    public func encode(to encoder: any Swift.Encoder) throws
+    public init(from decoder: any Swift.Decoder) throws
+  }
+  public struct Node : Swift.Codable, Swift.Equatable, @unchecked Swift.Sendable {
+    public var ID: TailscaleKit.Tailcfg.NodeID
+    public var StableID: TailscaleKit.Tailcfg.StableNodeID
+    public var Name: Swift.String
+    public var User: TailscaleKit.Tailcfg.UserID
+    public var Sharer: TailscaleKit.Tailcfg.UserID?
+    public var Key: TailscaleKit.Key.NodePublic
+    public var KeyExpiry: TailscaleKit.Time.Time?
+    public var Addresses: [TailscaleKit.IP.Prefix]?
+    public var AllowedIPs: [TailscaleKit.IP.Prefix]?
+    public var Hostinfo: TailscaleKit.Tailcfg.Hostinfo
+    public var LastSeen: TailscaleKit.Time.Time?
+    public var Online: Swift.Bool?
+    public var Capabilities: [Swift.String]?
+    public var Tags: [Swift.String]?
+    public var ComputedName: Swift.String
+    public var ComputedNameWithHost: Swift.String
+    public var IsExitNode: Swift.Bool {
+      get
+    }
+    public var isAdmin: Swift.Bool {
+      get
+    }
+    public var KeyDoesNotExpire: Swift.Bool {
+      get
+    }
+    public var HasExpiredAuth: Swift.Bool {
+      get
+    }
+    public var SharerOrUser: TailscaleKit.Tailcfg.UserID {
+      get
+    }
+    public var hasNonZeroLastSeen: Swift.Bool {
+      get
+    }
+    public static func == (lhs: TailscaleKit.Tailcfg.Node, rhs: TailscaleKit.Tailcfg.Node) -> Swift.Bool
+    public func encode(to encoder: any Swift.Encoder) throws
+    public init(from decoder: any Swift.Decoder) throws
+  }
+  public struct UserProfile : Swift.Equatable, Swift.Codable, Swift.Identifiable, Swift.Hashable, Swift.Sendable {
+    public var ID: Swift.Int64
+    public var DisplayName: Swift.String
+    public var LoginName: Swift.String
+    public var ProfilePicURL: Swift.String?
+    public var id: Swift.Int64 {
+      get
+    }
+    public var isTaggedDevice: Swift.Bool {
+      get
+    }
+    public func hash(into hasher: inout Swift.Hasher)
+    public static func == (a: TailscaleKit.Tailcfg.UserProfile, b: TailscaleKit.Tailcfg.UserProfile) -> Swift.Bool
+    public typealias ID = Swift.Int64
+    public func encode(to encoder: any Swift.Encoder) throws
+    public var hashValue: Swift.Int {
+      get
+    }
+    public init(from decoder: any Swift.Decoder) throws
+  }
+  public struct NetworkProfile : Swift.Codable, Swift.Equatable, Swift.Sendable {
+    public var MagicDNSName: Swift.String?
+    public var DomainName: Swift.String?
+    public var DisplayName: Swift.String?
+    public static func == (a: TailscaleKit.Tailcfg.NetworkProfile, b: TailscaleKit.Tailcfg.NetworkProfile) -> Swift.Bool
+    public func encode(to encoder: any Swift.Encoder) throws
+    public init(from decoder: any Swift.Decoder) throws
+  }
+  public struct DNSRecord : Swift.Codable, Swift.Sendable, Swift.Equatable {
+    public var Name: Swift.String
+    public var RecordType: Swift.String?
+    public var Value: Swift.String
+    public static func == (a: TailscaleKit.Tailcfg.DNSRecord, b: TailscaleKit.Tailcfg.DNSRecord) -> Swift.Bool
+    public func encode(to encoder: any Swift.Encoder) throws
+    public init(from decoder: any Swift.Decoder) throws
+  }
+  public struct DNSConfig : Swift.Codable, Swift.Sendable, Swift.Equatable {
+    public var Resolvers: [TailscaleKit.DNSType.Resolver]?
+    public var Routes: [Swift.String : [TailscaleKit.DNSType.Resolver]?]?
+    public var FallbackResolvers: [TailscaleKit.DNSType.Resolver]?
+    public var Domains: [Swift.String]?
+    public var Nameservers: [TailscaleKit.IP.Addr]?
+    public var ExtraRecords: [TailscaleKit.Tailcfg.DNSRecord]?
+    public static func == (a: TailscaleKit.Tailcfg.DNSConfig, b: TailscaleKit.Tailcfg.DNSConfig) -> Swift.Bool
+    public func encode(to encoder: any Swift.Encoder) throws
+    public init(from decoder: any Swift.Decoder) throws
+  }
+  public struct ClientVersion : Swift.Codable, Swift.Sendable, Swift.Equatable {
+    public var RunningLatest: Swift.Bool?
+    public var LatestVersion: Swift.String?
+    public var UrgentSecurityUpdate: Swift.Bool?
+    public var Notify: Swift.Bool?
+    public var NotifyURL: Swift.String?
+    public var NotifyText: Swift.String?
+    public static func == (a: TailscaleKit.Tailcfg.ClientVersion, b: TailscaleKit.Tailcfg.ClientVersion) -> Swift.Bool
+    public func encode(to encoder: any Swift.Encoder) throws
+    public init(from decoder: any Swift.Decoder) throws
+  }
+}
+public struct DNSType : Swift.Sendable {
+  public struct Resolver : Swift.Codable, Swift.Identifiable, Swift.Sendable, Swift.Equatable {
+    public var Addr: Swift.String?
+    public var BootstrapResolution: [TailscaleKit.IP.Addr]?
+    public var id: Swift.String {
+      get
+    }
+    public static func == (a: TailscaleKit.DNSType.Resolver, b: TailscaleKit.DNSType.Resolver) -> Swift.Bool
+    public typealias ID = Swift.String
+    public func encode(to encoder: any Swift.Encoder) throws
+    public init(from decoder: any Swift.Decoder) throws
+  }
+}
+@_hasMissingDesignatedInitializers public actor IncomingConnection {
+  final public let remoteAddress: Swift.String?
+  public func state() -> any _Concurrency.AsyncSequence<TailscaleKit.ConnectionState, Swift.Never>
+  @objc deinit
+  public func close()
+  public func receive(maximumLength: Swift.Int = 4096, timeout: Swift.Int32) async throws -> Foundation.Data
+  public func receiveMessage(timeout: Swift.Int32) async throws -> Foundation.Data
+  @available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
+  @_semantics("defaultActor") nonisolated final public var unownedExecutor: _Concurrency.UnownedSerialExecutor {
+    get
+  }
+}
+public actor Listener {
+  public func state() -> any _Concurrency.AsyncSequence<TailscaleKit.ListenerState, Swift.Never>
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(tailscale: TailscaleKit.TailscaleHandle, proto: TailscaleKit.NetProtocol, address: Swift.String, logger: (any TailscaleKit.LogSink)? = nil) async throws
+  #endif
+  @objc deinit
+  public func close()
+  public func accept(timeout: Foundation.TimeInterval = 60) async throws -> TailscaleKit.IncomingConnection
+  @available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
+  @_semantics("defaultActor") nonisolated final public var unownedExecutor: _Concurrency.UnownedSerialExecutor {
+    get
+  }
+}
+public protocol LogSink : Swift.Sendable {
+  #if compiler(>=5.3) && $NonescapableTypes
+  var logFileHandle: Swift.Int32? { get }
+  #endif
+  func log(_ message: Swift.String)
+}
+public struct DefaultLogger : TailscaleKit.LogSink {
+  public var logFileHandle: Swift.Int32?
+  public func log(_ message: Swift.String)
+}
+public struct BlackholeLogger : TailscaleKit.LogSink {
+  public var logFileHandle: Swift.Int32?
+  public func log(_ message: Swift.String)
+}
+public enum ConnectionState {
+  case idle
+  case connected
+  case closed
+  case failed
+  public static func == (a: TailscaleKit.ConnectionState, b: TailscaleKit.ConnectionState) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public enum ListenerState {
+  case idle
+  case listening
+  case closed
+  case failed
+  public static func == (a: TailscaleKit.ListenerState, b: TailscaleKit.ListenerState) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public typealias TailscaleHandle = Swift.Int32
+public typealias TailscaleConnection = Swift.Int32
+public typealias TailscaleListener = Swift.Int32
+public actor OutgoingConnection {
+  public var state: TailscaleKit.ConnectionState
+  public init(tailscale: TailscaleKit.TailscaleHandle, to address: Swift.String, proto: TailscaleKit.NetProtocol, logger: any TailscaleKit.LogSink) async throws
+  public func connect() async throws
+  @objc deinit
+  public func close()
+  public func send(_ data: Foundation.Data) throws
+  @available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
+  @_semantics("defaultActor") nonisolated final public var unownedExecutor: _Concurrency.UnownedSerialExecutor {
+    get
+  }
+}
+public enum TailscaleError : Swift.Error {
+  case badInterfaceHandle
+  case listenerClosed
+  case invalidTimeout
+  case connectionClosed
+  case readFailed
+  case shortWrite
+  case invalidProxyAddress
+  case invalidControlURL
+  case cannotFetchIps(_: Swift.String? = nil)
+  case posixError(_: Foundation.POSIXError, _: Swift.String? = nil)
+  case unknownPosixError(_: Swift.Int32, _: Swift.String? = nil)
+  case internalError(_: Swift.String? = nil)
+}
+public let kDefaultControlURL: Swift.String
+public struct Configuration : Swift.Sendable {
+  public let hostName: Swift.String
+  public let path: Swift.String
+  public let authKey: Swift.String?
+  public let controlURL: Swift.String
+  public let ephemeral: Swift.Bool
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(hostName: Swift.String, path: Swift.String, authKey: Swift.String?, controlURL: Swift.String, ephemeral: Swift.Bool = false)
+  #endif
+}
+public enum NetProtocol : Swift.String {
+  case tcp
+  case udp
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init?(rawValue: Swift.String)
+  #endif
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
+public typealias IPAddresses = (ip4: Swift.String?, ip6: Swift.String?)
+public actor TailscaleNode {
+  final public let tailscale: TailscaleKit.TailscaleHandle?
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(config: TailscaleKit.Configuration, logger: (any TailscaleKit.LogSink)?) throws
+  #endif
+  @objc deinit
+  public func close() async throws
+  public func up() async throws
+  public func down() throws
+  public func addrs() async throws -> TailscaleKit.IPAddresses
+  public struct LoopbackConfig : Swift.Sendable {
+    public let address: Swift.String
+    public let proxyCredential: Swift.String
+    public let localAPIKey: Swift.String
+    #if compiler(>=5.3) && $NonescapableTypes
+    public var ip: Swift.String? {
+      get
+    }
+    #endif
+    #if compiler(>=5.3) && $NonescapableTypes
+    public var port: Swift.Int? {
+      get
+    }
+    #endif
+  }
+  public func loopback() throws -> TailscaleKit.TailscaleNode.LoopbackConfig
+  @available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
+  @_semantics("defaultActor") nonisolated final public var unownedExecutor: _Concurrency.UnownedSerialExecutor {
+    get
+  }
+}
+extension Foundation.URLSessionConfiguration {
+  @discardableResult
+  public func proxyVia(_ node: TailscaleKit.TailscaleNode) async throws -> TailscaleKit.TailscaleNode.LoopbackConfig
+  public static func tailscaleSession(_ node: TailscaleKit.TailscaleNode) async throws -> (Foundation.URLSessionConfiguration, TailscaleKit.TailscaleNode.LoopbackConfig)
+}
+extension TailscaleKit.Ipn.State : Swift.Equatable {}
+extension TailscaleKit.Ipn.State : Swift.Hashable {}
+extension TailscaleKit.Ipn.State : Swift.RawRepresentable {}
+extension TailscaleKit.ConnectionState : Swift.Equatable {}
+extension TailscaleKit.ConnectionState : Swift.Hashable {}
+extension TailscaleKit.ListenerState : Swift.Equatable {}
+extension TailscaleKit.ListenerState : Swift.Hashable {}
+extension TailscaleKit.NetProtocol : Swift.Equatable {}
+extension TailscaleKit.NetProtocol : Swift.Hashable {}
+extension TailscaleKit.NetProtocol : Swift.RawRepresentable {}

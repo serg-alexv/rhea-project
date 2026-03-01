@@ -1,0 +1,6 @@
+framework module TailscaleKit {
+  umbrella header "TailscaleKit.h"
+  export *
+
+  module * { export * }
+}
