@@ -103,9 +103,12 @@ from billing import (
 )
 app.include_router(billing_router)
 
-# Workflow engine (automation DAG execution)
-from workflow_engine import workflow_router
-app.include_router(workflow_router, prefix="/workflows")
+# Workflow engine (automation DAG execution) — optional, graceful if missing
+try:
+    from workflow_engine import workflow_router
+    app.include_router(workflow_router, prefix="/workflows")
+except ImportError:
+    pass
 
 app.add_middleware(
     CORSMiddleware,
