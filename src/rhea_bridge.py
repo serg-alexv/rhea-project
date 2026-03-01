@@ -727,6 +727,53 @@ if "AZURE_API_VERSION" not in os.environ:
 
 
 # ---------------------------------------------------------------------------
+# Auto-detect GitHub token from gh CLI if GITHUB_TOKEN not set
+# ---------------------------------------------------------------------------
+if not os.environ.get("GITHUB_TOKEN"):
+    try:
+        import subprocess
+        _gh_token = subprocess.run(
+            ["gh", "auth", "token"],
+            capture_output=True, text=True, timeout=5,
+        )
+        if _gh_token.returncode == 0 and _gh_token.stdout.strip():
+            os.environ["GITHUB_TOKEN"] = _gh_token.stdout.strip()
+            print("[bridge] GITHUB_TOKEN auto-detected from gh CLI")
+    except Exception:
+        pass  # gh not available — skip
+
+
+# ---------------------------------------------------------------------------
+# Provider key validation — build set of providers with working keys
+# ---------------------------------------------------------------------------
+
+def _provider_has_key(cfg: ProviderConfig) -> bool:
+    """Check if a provider has an API key set in the environment."""
+    key = os.environ.get(cfg.api_key_env, "")
+    if not key and cfg.name == "gemini":
+        key = os.environ.get("GEMINI_T1_API_KEY", "")
+    return bool(key)
+
+
+# Log dead providers at import time so operators see it immediately
+_DEAD_PROVIDERS: set = set()
+_LIVE_PROVIDERS: set = set()
+for _pname, _pcfg in PROVIDERS.items():
+    if _provider_has_key(_pcfg):
+        _LIVE_PROVIDERS.add(_pname)
+    else:
+        _DEAD_PROVIDERS.add(_pname)
+
+if _DEAD_PROVIDERS:
+    _dead_list = ", ".join(sorted(_DEAD_PROVIDERS))
+    _live_list = ", ".join(sorted(_LIVE_PROVIDERS)) or "(none)"
+    print(f"[bridge] DEAD providers (no API key): {_dead_list}")
+    print(f"[bridge] LIVE providers: {_live_list}")
+    print(f"[bridge] Routing will skip {len(_DEAD_PROVIDERS)} dead provider(s) — "
+          f"only {len(_LIVE_PROVIDERS)} provider(s) active")
+
+
+# ---------------------------------------------------------------------------
 # Bridge
 # ---------------------------------------------------------------------------
 
@@ -827,15 +874,14 @@ class RheaBridge:
 
         # Try candidates in order; first available provider wins
         last_error = None
+        skipped_dead = 0
         for candidate in tier_cfg["candidates"]:
             provider_name, model_id = self._resolve_model(candidate)
             cfg = self.providers.get(provider_name)
             if not cfg:
                 continue
-            api_key = os.environ.get(cfg.api_key_env, "")
-            if not api_key and cfg.name == "gemini":
-                api_key = os.environ.get("GEMINI_T1_API_KEY", "")
-            if not api_key:
+            if not _provider_has_key(cfg):
+                skipped_dead += 1
                 continue  # skip providers without keys
             resp = self.ask(
                 prompt, candidate, system, temperature, max_tokens, mode,
@@ -851,11 +897,13 @@ class RheaBridge:
             last_error = resp.error
 
         # All candidates failed
+        total_candidates = len(tier_cfg["candidates"])
         return ModelResponse(
             provider="", model="", text="", latency_s=0, tier=effective_tier,
             error=(
                 f"All {effective_tier} tier candidates failed "
-                f"(requested={requested_tier}, profile={self.execution_profile}). "
+                f"({skipped_dead}/{total_candidates} skipped — no API key, "
+                f"requested={requested_tier}, profile={self.execution_profile}). "
                 f"Last error: {last_error}"
             ),
         )
@@ -889,9 +937,35 @@ class RheaBridge:
         # ----------------------------------------------------
 
         provider_name, model_id = self._resolve_model(model)
+
+        # --- Fail-fast: skip providers with no API key ---
+        if provider_name in _DEAD_PROVIDERS:
+            cfg = self.providers.get(provider_name)
+            env_var = cfg.api_key_env if cfg else "UNKNOWN"
+            err_msg = (
+                f"Provider '{provider_name}' has no API key "
+                f"({env_var} not set) — skipping {model}"
+            )
+            _log_call(
+                provider_name, model_id, 0, 0, 0, 0.0, err_msg,
+                metadata={
+                    "mode": mode or "",
+                    "prompt_hash": _prompt_hash(prompt),
+                    "exec_profile": self.execution_profile,
+                    "skip_reason": "dead_provider",
+                    **(call_meta or {}),
+                },
+            )
+            return ModelResponse(
+                provider=provider_name, model=model_id,
+                text="", latency_s=0.0,
+                error=err_msg,
+            )
+        # -----------------------------------------------
+
         temperature_eff, max_tokens_eff = self._clamp_request_params(temperature, max_tokens)
         t0 = time.time()
-        
+
         try:
             # Prepare messages for LiteLLM
             messages = []
@@ -1115,24 +1189,27 @@ class RheaBridge:
         """Return provider availability and model counts."""
         status = {"providers": {}}
         for name, cfg in self.providers.items():
-            key = os.environ.get(cfg.api_key_env, "")
+            has_key = _provider_has_key(cfg)
+            is_dead = name in _DEAD_PROVIDERS
             status["providers"][name] = {
                 "display_name": cfg.display_name,
-                "available": bool(key),
+                "available": has_key and not is_dead,
                 "api_key_env": cfg.api_key_env,
-                "key_set": bool(key),
+                "key_set": has_key,
+                "routing_status": "live" if (has_key and not is_dead) else "dead_no_key",
                 "models": cfg.models,
                 "model_count": len(cfg.models),
                 "base_url": cfg.base_url,
             }
         total_models = sum(len(c.models) for c in self.providers.values())
-        available = sum(
-            1 for c in self.providers.values()
-            if os.environ.get(c.api_key_env)
-        )
+        available = len(_LIVE_PROVIDERS)
+        dead = len(_DEAD_PROVIDERS)
         status["summary"] = {
             "total_providers": len(self.providers),
             "available_providers": available,
+            "dead_providers": dead,
+            "live_provider_names": sorted(_LIVE_PROVIDERS),
+            "dead_provider_names": sorted(_DEAD_PROVIDERS),
             "total_models": total_models,
             "default_tier": self.default_tier,
             "execution_profile": self.execution_profile,
@@ -1145,10 +1222,7 @@ class RheaBridge:
         results = {}
         test_models = {}
         for name, cfg in self.providers.items():
-            key = os.environ.get(cfg.api_key_env, "")
-            if not key and name == "gemini":
-                key = os.environ.get("GEMINI_T1_API_KEY", "")
-            if not key:
+            if not _provider_has_key(cfg):
                 results[name] = {"live": False, "error": "no_key", "latency_s": 0}
                 continue
             test_models[name] = f"{name}/{cfg.models[0]}"
@@ -1185,10 +1259,11 @@ class RheaBridge:
             for candidate in effective_cfg["candidates"]:
                 provider_name, model_id = self._resolve_model(candidate)
                 cfg = self.providers.get(provider_name)
-                has_key = bool(cfg and os.environ.get(cfg.api_key_env, ""))
+                has_key = bool(cfg and _provider_has_key(cfg)) if cfg else False
                 candidates_status.append({
                     "model": candidate,
                     "available": has_key,
+                    "skip_reason": None if has_key else "no_key",
                 })
             info[tier_name] = {
                 "description": tier_cfg["description"],
@@ -1197,6 +1272,7 @@ class RheaBridge:
                 "exec_profile": self.execution_profile,
                 "candidates": candidates_status,
                 "available_count": sum(1 for c in candidates_status if c["available"]),
+                "dead_count": sum(1 for c in candidates_status if not c["available"]),
             }
         return info
 
@@ -1238,10 +1314,7 @@ class RheaBridge:
             cfg = self.providers.get(provider_name)
             if not cfg:
                 continue
-            api_key = os.environ.get(cfg.api_key_env, "")
-            if not api_key and cfg.name == "gemini":
-                api_key = os.environ.get("GEMINI_T1_API_KEY", "")
-            if api_key and provider_name not in seen_providers:
+            if _provider_has_key(cfg) and provider_name not in seen_providers:
                 tier_candidates.append(candidate)
                 seen_providers.add(provider_name)
 
@@ -1252,7 +1325,7 @@ class RheaBridge:
             for name, cfg in self.providers.items():
                 if name in seen_providers:
                     continue
-                if os.environ.get(cfg.api_key_env) and cfg.models:
+                if _provider_has_key(cfg) and cfg.models:
                     selected.append(f"{name}/{cfg.models[0]}")
                     seen_providers.add(name)
                     if len(selected) >= k:
