@@ -37,13 +37,9 @@ struct CommandCentreApp: App {
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 struct PlayShell: View {
+    @StateObject private var store = RheaStore.shared
     @State private var selectedPane: Pane = .radio
-    @State private var agents: [AgentDTO] = []
-    @State private var pollTimer: Timer? = nil
-    @State private var connectionAlive = false
     @State private var pulseFlash = false
-    @State private var totalTokens = 0
-    @State private var totalCost = 0.0
     @AppStorage("apiBaseURL") private var apiBaseURL = AppConfig.defaultAPIBaseURL
 
     enum Pane: String, CaseIterable, Identifiable {
@@ -127,10 +123,12 @@ struct PlayShell: View {
         }
         .background(RheaTheme.bg)
         .task {
-            await fetchAgents()
-            startPolling()
+            store.startPolling()
         }
-        .onDisappear { stopPolling() }
+        .onDisappear { store.stopPolling() }
+        .onChange(of: store.connectionAlive) { _ in
+            pulseFlash.toggle()
+        }
     }
 
     // ━━ TOP BAR ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -160,7 +158,7 @@ struct PlayShell: View {
 
             // Agent pills
             HStack(spacing: 6) {
-                ForEach(agents) { agent in
+                ForEach(store.agents) { agent in
                     agentPill(agent)
                 }
             }
@@ -169,9 +167,9 @@ struct PlayShell: View {
 
             // Metrics
             HStack(spacing: 16) {
-                metricLabel("T", formatTokens(totalTokens), .white)
-                metricLabel("$", String(format: "%.2f", totalCost), RheaTheme.amber)
-                metricLabel("P", "\(agents.filter { !$0.isHardFail }.count)/\(agents.count)", RheaTheme.green)
+                metricLabel("T", store.formatTokens(store.totalTokens), .white)
+                metricLabel("$", String(format: "%.2f", store.totalCost), RheaTheme.amber)
+                metricLabel("P", "\(store.aliveCount)/\(store.agents.count)", RheaTheme.green)
             }
         }
         .padding(.horizontal, 16)
@@ -277,7 +275,7 @@ struct PlayShell: View {
                 .padding(.horizontal, 12)
                 .padding(.top, 6)
 
-            ForEach(agents) { agent in
+            ForEach(store.agents) { agent in
                 HStack(spacing: 8) {
                     Circle()
                         .fill(agent.alive ? RheaTheme.green : RheaTheme.red)
@@ -294,7 +292,7 @@ struct PlayShell: View {
                         .foregroundStyle(RheaTheme.modeColor(agent.mode).opacity(0.6))
 
                     if agent.T_day > 0 {
-                        Text(formatTokens(agent.T_day))
+                        Text(store.formatTokens(agent.T_day))
                             .font(.system(size: 9, design: .monospaced))
                             .foregroundStyle(.white.opacity(0.3))
                     }
@@ -333,11 +331,11 @@ struct PlayShell: View {
             // Connection indicator
             HStack(spacing: 6) {
                 Circle()
-                    .fill(connectionAlive ? RheaTheme.green : RheaTheme.red)
+                    .fill(store.connectionAlive ? RheaTheme.green : RheaTheme.red)
                     .frame(width: 6, height: 6)
-                Text(connectionAlive ? "LIVE" : "OFFLINE")
+                Text(store.connectionAlive ? "LIVE" : "OFFLINE")
                     .font(.system(size: 9, weight: .bold, design: .monospaced))
-                    .foregroundStyle(connectionAlive ? RheaTheme.green : RheaTheme.red)
+                    .foregroundStyle(store.connectionAlive ? RheaTheme.green : RheaTheme.red)
             }
 
             Rectangle()
@@ -373,42 +371,6 @@ struct PlayShell: View {
         .background(RheaTheme.card.opacity(0.4))
     }
 
-    // ━━ POLLING ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-    func fetchAgents() async {
-        guard let url = URL(string: "\(apiBaseURL)/agents/status") else { return }
-        do {
-            let (data, _) = try await URLSession.shared.data(from: url)
-            struct Resp: Codable { let agents: [String: AgentDTO] }
-            let resp = try JSONDecoder().decode(Resp.self, from: data)
-            withAnimation(.spring(duration: 0.3)) {
-                agents = resp.agents.values.sorted { $0.name < $1.name }
-                totalTokens = agents.reduce(0) { $0 + $1.T_day }
-                totalCost = agents.reduce(0.0) { $0 + $1.dollar_day }
-                connectionAlive = true
-                pulseFlash.toggle()
-            }
-        } catch {
-            connectionAlive = false
-        }
-    }
-
-    func startPolling() {
-        pollTimer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { _ in
-            Task { await fetchAgents() }
-        }
-    }
-
-    func stopPolling() {
-        pollTimer?.invalidate()
-        pollTimer = nil
-    }
-
-    func formatTokens(_ n: Int) -> String {
-        if n >= 1_000_000 { return "\(n / 1_000_000)M" }
-        if n >= 1_000 { return "\(n / 1_000)K" }
-        return "\(n)"
-    }
 }
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -546,7 +508,7 @@ struct AletheiaView: View {
     @State private var ontologies: [[String: Any]] = []
     @State private var loading = true
     @State private var selectedProof: [String: Any]? = nil
-    @AppStorage("apiBaseURL") private var apiBaseURL = AppConfig.defaultAPIBaseURL
+    private let api = RheaAPI.shared
 
     var body: some View {
         VStack(spacing: 0) {
@@ -822,24 +784,8 @@ struct AletheiaView: View {
     func fetchAll() async {
         loading = true
         defer { loading = false }
-
-        // Proofs
-        if let url = URL(string: "\(apiBaseURL)/aletheia/proofs") {
-            if let (data, _) = try? await URLSession.shared.data(from: url),
-               let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-               let p = json["proofs"] as? [[String: Any]] {
-                proofs = p
-            }
-        }
-
-        // Ontologies
-        if let url = URL(string: "\(apiBaseURL)/ontology") {
-            if let (data, _) = try? await URLSession.shared.data(from: url),
-               let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-               let o = json["ontologies"] as? [[String: Any]] {
-                ontologies = o
-            }
-        }
+        proofs = (try? await api.proofs()) ?? []
+        ontologies = (try? await api.ontologies()) ?? []
     }
 }
 
@@ -852,7 +798,7 @@ struct RuliadView: View {
     @State private var selectedOntology: String? = nil
     @State private var hypotheses: [[String: Any]] = []
     @State private var loading = true
-    @AppStorage("apiBaseURL") private var apiBaseURL = AppConfig.defaultAPIBaseURL
+    private let api = RheaAPI.shared
 
     var body: some View {
         VStack(spacing: 0) {
@@ -1058,23 +1004,11 @@ struct RuliadView: View {
     func fetchOntologies() async {
         loading = true
         defer { loading = false }
-        guard let url = URL(string: "\(apiBaseURL)/ontology") else { return }
-        if let (data, _) = try? await URLSession.shared.data(from: url),
-           let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-           let o = json["ontologies"] as? [[String: Any]] {
-            ontologies = o
-        }
+        ontologies = (try? await api.ontologies()) ?? []
     }
 
     func fetchHypotheses(_ ontology: String) async {
-        guard let url = URL(string: "\(apiBaseURL)/ontology/\(ontology)") else { return }
-        if let (data, _) = try? await URLSession.shared.data(from: url),
-           let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-           let h = json["hypotheses"] as? [[String: Any]] {
-            hypotheses = h
-        } else {
-            hypotheses = []
-        }
+        hypotheses = (try? await api.ontologyDetail(ontology)) ?? []
     }
 }
 
@@ -1083,13 +1017,13 @@ struct RuliadView: View {
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 struct InfraView: View {
-    @State private var health: [String: Any]? = nil
-    @State private var providers: [[String: Any]] = []
+    @ObservedObject private var store = RheaStore.shared
+    @State private var providers: [InfraModels.ProviderInfo] = []
     @State private var ndiStatus: [String: Any]? = nil
     @State private var modelCount = 0
     @State private var providerCount = 0
     @State private var loading = true
-    @AppStorage("apiBaseURL") private var apiBaseURL = AppConfig.defaultAPIBaseURL
+    private let api = RheaAPI.shared
 
     var body: some View {
         VStack(spacing: 0) {
@@ -1113,7 +1047,7 @@ struct InfraView: View {
 
             Divider().overlay(RheaTheme.accent.opacity(0.08))
 
-            if loading && health == nil {
+            if loading && store.health == nil {
                 Spacer()
                 ProgressView().controlSize(.small)
                 Spacer()
@@ -1125,12 +1059,12 @@ struct InfraView: View {
                             deploymentCard(
                                 name: "FLY.IO",
                                 icon: "airplane",
-                                status: health != nil ? "LIVE" : "DOWN",
-                                alive: health != nil,
+                                status: store.health != nil ? "LIVE" : "DOWN",
+                                alive: store.health != nil,
                                 details: [
                                     ("Region", "ams"),
-                                    ("Profile", health?["execution_profile"] as? String ?? "—"),
-                                    ("Analyzer", health?["analyzer_version"] as? String ?? "—"),
+                                    ("Profile", store.health?.execution_profile ?? "—"),
+                                    ("Analyzer", store.health?.analyzer_version ?? "—"),
                                 ]
                             )
 
@@ -1163,8 +1097,8 @@ struct InfraView: View {
                         HStack(spacing: 12) {
                             infraMetric("PROVIDERS", "\(providerCount)", "server.rack", RheaTheme.green)
                             infraMetric("MODELS", "\(modelCount)", "cpu", RheaTheme.accent)
-                            infraMetric("STATUS", health?["status"] as? String ?? "—", "heart.fill", health != nil ? RheaTheme.green : RheaTheme.red)
-                            infraMetric("MODE", health?["profile_mode"] as? String ?? "—", "slider.horizontal.3", RheaTheme.amber)
+                            infraMetric("STATUS", store.health?.status ?? "—", "heart.fill", store.health != nil ? RheaTheme.green : RheaTheme.red)
+                            infraMetric("MODE", store.health?.profile_mode ?? "—", "slider.horizontal.3", RheaTheme.amber)
                         }
 
                         // Provider list
@@ -1174,7 +1108,7 @@ struct InfraView: View {
                                 .foregroundStyle(RheaTheme.accent.opacity(0.5))
                                 .padding(.horizontal, 4)
 
-                            ForEach(Array(providers.enumerated()), id: \.offset) { _, prov in
+                            ForEach(providers) { prov in
                                 providerRow(prov)
                             }
                         }
@@ -1185,13 +1119,13 @@ struct InfraView: View {
                             Text("ENDPOINT")
                                 .font(.system(size: 9, weight: .bold, design: .monospaced))
                                 .foregroundStyle(.secondary)
-                            Text(apiBaseURL)
+                            Text(api.baseURL)
                                 .font(.system(size: 11, design: .monospaced))
                                 .foregroundStyle(RheaTheme.accent)
                                 .textSelection(.enabled)
                             Spacer()
                             Circle()
-                                .fill(health != nil ? RheaTheme.green : RheaTheme.red)
+                                .fill(store.connectionAlive ? RheaTheme.green : RheaTheme.red)
                                 .frame(width: 8, height: 8)
                         }
                         .glassCard()
@@ -1259,26 +1193,25 @@ struct InfraView: View {
         .glassCard()
     }
 
-    func providerRow(_ prov: [String: Any]) -> some View {
+    func providerRow(_ prov: InfraModels.ProviderInfo) -> some View {
         HStack(spacing: 10) {
-            let available = prov["available"] as? Bool ?? false
             Circle()
-                .fill(available ? RheaTheme.green : RheaTheme.red)
+                .fill((prov.available ?? false) ? RheaTheme.green : RheaTheme.red)
                 .frame(width: 6, height: 6)
 
-            Text(prov["name"] as? String ?? "—")
+            Text(prov.name)
                 .font(.system(size: 11, weight: .semibold, design: .monospaced))
                 .foregroundStyle(.white.opacity(0.8))
 
             Spacer()
 
-            if let models = prov["model_count"] as? Int {
+            if let models = prov.model_count {
                 Text("\(models) models")
                     .font(.system(size: 10, design: .monospaced))
                     .foregroundStyle(.secondary)
             }
 
-            if let tier = prov["tier"] as? String {
+            if let tier = prov.tier {
                 Text(tier)
                     .font(.system(size: 9, weight: .bold, design: .monospaced))
                     .foregroundStyle(RheaTheme.accent.opacity(0.6))
@@ -1296,39 +1229,15 @@ struct InfraView: View {
         loading = true
         defer { loading = false }
 
-        // Health
-        if let url = URL(string: "\(apiBaseURL)/health") {
-            if let (data, _) = try? await URLSession.shared.data(from: url),
-               let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any] {
-                health = json
-            }
-        }
-
-        // Models/providers
-        if let url = URL(string: "\(apiBaseURL)/models") {
-            var req = URLRequest(url: url)
-            req.setValue("dev-bypass", forHTTPHeaderField: "X-API-Key")
-            if let (data, _) = try? await URLSession.shared.data(for: req),
-               let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any] {
-                if let p = json["providers"] as? [[String: Any]] {
-                    providers = p
-                    providerCount = p.filter { $0["available"] as? Bool == true }.count
-                }
-                if let m = json["total_models"] as? Int {
-                    modelCount = m
-                }
-            }
+        // Models/providers (typed)
+        if let resp = try? await api.models() {
+            providers = resp.providers ?? []
+            providerCount = providers.filter { $0.available ?? false }.count
+            modelCount = resp.total_models ?? 0
         }
 
         // NDI status
-        if let url = URL(string: "\(apiBaseURL)/cc/ndi") {
-            var req = URLRequest(url: url)
-            req.setValue("dev-bypass", forHTTPHeaderField: "X-API-Key")
-            if let (data, _) = try? await URLSession.shared.data(for: req),
-               let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any] {
-                ndiStatus = json
-            }
-        }
+        ndiStatus = try? await api.ndi()
     }
 }
 
@@ -1337,8 +1246,7 @@ struct InfraView: View {
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 struct MenuBarView: View {
-    @State private var agents: [AgentDTO] = []
-    @AppStorage("apiBaseURL") private var apiBaseURL = AppConfig.defaultAPIBaseURL
+    @ObservedObject private var store = RheaStore.shared
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
@@ -1348,18 +1256,18 @@ struct MenuBarView: View {
                     .foregroundStyle(.white)
                 Spacer()
                 Circle()
-                    .fill(agents.isEmpty ? Color.red : Color.green)
+                    .fill(store.connectionAlive ? Color.green : Color.red)
                     .frame(width: 6, height: 6)
             }
 
             Divider()
 
-            if agents.isEmpty {
+            if store.agents.isEmpty {
                 Text("connecting...")
                     .font(.system(size: 10, design: .monospaced))
                     .foregroundStyle(.secondary)
             } else {
-                ForEach(agents) { agent in
+                ForEach(store.agents) { agent in
                     HStack(spacing: 8) {
                         Circle()
                             .fill(agent.alive ? RheaTheme.green : RheaTheme.red)
@@ -1381,36 +1289,17 @@ struct MenuBarView: View {
             Divider()
 
             HStack {
-                let totalTokens = agents.reduce(0) { $0 + $1.T_day }
-                let totalCost = agents.reduce(0.0) { $0 + $1.dollar_day }
-                Text("T:\(formatTokens(totalTokens))")
+                Text("T:\(store.formatTokens(store.totalTokens))")
                     .font(.system(size: 10, weight: .bold, design: .monospaced))
                     .foregroundStyle(.white.opacity(0.5))
                 Spacer()
-                Text("$\(String(format: "%.2f", totalCost))")
+                Text("$\(String(format: "%.2f", store.totalCost))")
                     .font(.system(size: 10, weight: .bold, design: .monospaced))
                     .foregroundStyle(RheaTheme.amber)
             }
         }
         .padding(12)
         .frame(width: 220)
-        .task { await fetch() }
-    }
-
-    func fetch() async {
-        guard let url = URL(string: "\(apiBaseURL)/agents/status") else { return }
-        do {
-            let (data, _) = try await URLSession.shared.data(from: url)
-            struct Resp: Codable { let agents: [String: AgentDTO] }
-            let resp = try JSONDecoder().decode(Resp.self, from: data)
-            agents = resp.agents.values.sorted { $0.name < $1.name }
-        } catch {}
-    }
-
-    func formatTokens(_ n: Int) -> String {
-        if n >= 1_000_000 { return "\(n / 1_000_000)M" }
-        if n >= 1_000 { return "\(n / 1_000)K" }
-        return "\(n)"
     }
 }
 #endif
