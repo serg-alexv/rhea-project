@@ -3,6 +3,28 @@
 import { useEffect, useState, useCallback, useRef } from 'react'
 import { TRIBUNAL_API, TRIBUNAL_API_KEY } from '@/lib/config'
 
+// ─── Tauri Native Bindings (no-op in browser) ───────────────────────
+const isTauri = typeof window !== 'undefined' && '__TAURI__' in window
+
+async function sendNotification(title: string, body: string) {
+  if (!isTauri) return
+  try {
+    const { isPermissionGranted, requestPermission, sendNotification: notify } =
+      await import('@tauri-apps/plugin-notification')
+    let granted = await isPermissionGranted()
+    if (!granted) granted = (await requestPermission()) === 'granted'
+    if (granted) notify({ title, body })
+  } catch { /* browser fallback — silent */ }
+}
+
+async function listenGlobalShortcut(handler: (key: string) => void) {
+  if (!isTauri) return
+  try {
+    const { listen } = await import('@tauri-apps/api/event')
+    listen<string>('global-shortcut', (e) => handler(e.payload))
+  } catch { /* browser fallback — silent */ }
+}
+
 // ─── Types ────────────────────────────────────────────────────────────
 
 type AgentStatus = {
@@ -193,10 +215,8 @@ function TribunalPane() {
 }
 
 function HistoryPanel({ history }: { history: HistoryEntry[] }) {
-  // TODO(human): Implement history item expansion logic
-  // When a user clicks a history entry, what should expand?
-  // Options: inline expand with full response, slide-out detail panel,
-  // or modal with full tribunal results + rewind button
+  // Inline expand: click to toggle full response. Chosen over modal/slide-out
+  // because it keeps context visible and doesn't interrupt the monitoring flow.
   const [expanded, setExpanded] = useState<number | null>(null)
 
   return (
@@ -257,6 +277,7 @@ export default function CommandCentre() {
   const [history, setHistory] = useState<HistoryEntry[]>([])
   const [office, setOffice] = useState<OfficeMsg[]>([])
   const [connected, setConnected] = useState(false)
+  const prevAlive = useRef<Record<string, boolean>>({})
 
   const refresh = useCallback(async () => {
     try {
@@ -268,7 +289,21 @@ export default function CommandCentre() {
       ])
 
       if (agentRes.status === 'fulfilled' && agentRes.value?.agents) {
-        setAgents(Object.values(agentRes.value.agents) as AgentStatus[])
+        const newAgents = Object.values(agentRes.value.agents) as AgentStatus[]
+        // Notify on agent status changes (skip first load)
+        if (Object.keys(prevAlive.current).length > 0) {
+          for (const a of newAgents) {
+            const was = prevAlive.current[a.name]
+            if (was !== undefined && was !== a.alive) {
+              sendNotification(
+                `Agent ${a.name}`,
+                a.alive ? `${a.name} is back online` : `${a.name} went offline`
+              )
+            }
+          }
+        }
+        prevAlive.current = Object.fromEntries(newAgents.map(a => [a.name, a.alive]))
+        setAgents(newAgents)
       }
       if (radioRes.status === 'fulfilled') setRadio(radioRes.value?.radio || [])
       if (historyRes.status === 'fulfilled') setHistory(historyRes.value?.history || [])
@@ -282,6 +317,13 @@ export default function CommandCentre() {
   useEffect(() => {
     refresh()
     const id = setInterval(refresh, 5000)
+    // Listen for global shortcuts from Tauri (Rust emits 'global-shortcut' event)
+    listenGlobalShortcut((key) => {
+      if (key.includes('KeyT')) {
+        // Focus tribunal input
+        document.querySelector<HTMLInputElement>('[placeholder*="claim"]')?.focus()
+      }
+    })
     return () => clearInterval(id)
   }, [refresh])
 
