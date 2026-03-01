@@ -7,19 +7,51 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		06E656822071248B625AE0D7 /* TribunalClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2831EB795B13A29C6A189D1E /* TribunalClient.swift */; };
 		2020B120A5A6D7B940111F12 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A61BE59C6096A226D41463FC /* Assets.xcassets */; };
 		4888EF75F029CEA9FA61270B /* RheaKit in Frameworks */ = {isa = PBXBuildFile; productRef = FC51B905A12BD3ACD3E9B223 /* RheaKit */; };
+		705E204FBECE5C9D71948BB3 /* KeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D837731C33367F5AF137C0 /* KeyboardView.swift */; };
 		81D0994B8A74B0BA6A033CA5 /* AnimatedTabBar in Frameworks */ = {isa = PBXBuildFile; productRef = 21730A08186D2C447AC4C412 /* AnimatedTabBar */; };
+		C0B17B6AA28A19A8FB0104CD /* KeyboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA402D4D7E8A8D3FC63332E7 /* KeyboardViewController.swift */; };
 		C46E4FDF7F0BF1DFD488CF9E /* ScreenPilotView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9ED40BFBC76E50BEA4CA59F /* ScreenPilotView.swift */; };
+		D1877F3684A23CE8DAF29C7A /* RheaKeyboard.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 2B2B4E882931341E39C435E2 /* RheaKeyboard.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		F607ED56C6138928646E0846 /* RheaPreviewApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9477E3C820DABB86E045F9C1 /* RheaPreviewApp.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		6CE5E9CE9D2826E27C1829D0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3EA7A58199DB1E038511B83F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 69F1254F70984F1B523B55CB;
+			remoteInfo = RheaKeyboard;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		EB55BE82A830276C02C0F124 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				D1877F3684A23CE8DAF29C7A /* RheaKeyboard.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		18D837731C33367F5AF137C0 /* KeyboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardView.swift; sourceTree = "<group>"; };
+		2831EB795B13A29C6A189D1E /* TribunalClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TribunalClient.swift; sourceTree = "<group>"; };
+		2B2B4E882931341E39C435E2 /* RheaKeyboard.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = RheaKeyboard.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		40F5D3F7CE5129EE551FD58A /* RheaKit */ = {isa = PBXFileReference; lastKnownFileType = folder; name = RheaKit; path = ../../packages/RheaKit; sourceTree = SOURCE_ROOT; };
 		9477E3C820DABB86E045F9C1 /* RheaPreviewApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RheaPreviewApp.swift; sourceTree = "<group>"; };
 		A61BE59C6096A226D41463FC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A9ED40BFBC76E50BEA4CA59F /* ScreenPilotView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenPilotView.swift; sourceTree = "<group>"; };
 		D25F13868401944C1A1E978A /* RheaApp.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = RheaApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		EA402D4D7E8A8D3FC63332E7 /* KeyboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -48,6 +80,7 @@
 			children = (
 				3076B063CEB5B4ACCFD6DBC4 /* Packages */,
 				EEA2260F0C4414BB91DAADCF /* Sources */,
+				B304770D2747396A96EFED90 /* Sources */,
 				9531D99E19050B15226ADC13 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -56,11 +89,12 @@
 			isa = PBXGroup;
 			children = (
 				D25F13868401944C1A1E978A /* RheaApp.app */,
+				2B2B4E882931341E39C435E2 /* RheaKeyboard.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		EEA2260F0C4414BB91DAADCF /* Sources */ = {
+		B304770D2747396A96EFED90 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
 				A61BE59C6096A226D41463FC /* Assets.xcassets */,
@@ -71,9 +105,37 @@
 			path = ../RheaPreview.swiftpm/Sources;
 			sourceTree = "<group>";
 		};
+		EEA2260F0C4414BB91DAADCF /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				18D837731C33367F5AF137C0 /* KeyboardView.swift */,
+				EA402D4D7E8A8D3FC63332E7 /* KeyboardViewController.swift */,
+				2831EB795B13A29C6A189D1E /* TribunalClient.swift */,
+			);
+			name = Sources;
+			path = ../RheaKeyboard/Sources;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		69F1254F70984F1B523B55CB /* RheaKeyboard */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C5B2AF38B0E239520DBCBEDD /* Build configuration list for PBXNativeTarget "RheaKeyboard" */;
+			buildPhases = (
+				F1C1F671FB70E38F3F306301 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = RheaKeyboard;
+			packageProductDependencies = (
+			);
+			productName = RheaKeyboard;
+			productReference = 2B2B4E882931341E39C435E2 /* RheaKeyboard.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		9E4653AE2F39DFCEE36D8E1B /* RheaApp */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 27CFE5363D3CDA52C592D294 /* Build configuration list for PBXNativeTarget "RheaApp" */;
@@ -81,10 +143,12 @@
 				90312DB8296142B3F7B94F13 /* Sources */,
 				1EC37FB7920C186A82C659F7 /* Resources */,
 				7BD4504B1BE6F0C72534143A /* Frameworks */,
+				EB55BE82A830276C02C0F124 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				AA1935C53D5F46EC07A443DB /* PBXTargetDependency */,
 			);
 			name = RheaApp;
 			packageProductDependencies = (
@@ -104,6 +168,10 @@
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 2620;
 				TargetAttributes = {
+					69F1254F70984F1B523B55CB = {
+						DevelopmentTeam = 398XACWZ7G;
+						ProvisioningStyle = Automatic;
+					};
 					9E4653AE2F39DFCEE36D8E1B = {
 						DevelopmentTeam = 398XACWZ7G;
 						ProvisioningStyle = Automatic;
@@ -129,6 +197,7 @@
 			projectRoot = "";
 			targets = (
 				9E4653AE2F39DFCEE36D8E1B /* RheaApp */,
+				69F1254F70984F1B523B55CB /* RheaKeyboard */,
 			);
 		};
 /* End PBXProject section */
@@ -154,7 +223,25 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		F1C1F671FB70E38F3F306301 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				705E204FBECE5C9D71948BB3 /* KeyboardView.swift in Sources */,
+				C0B17B6AA28A19A8FB0104CD /* KeyboardViewController.swift in Sources */,
+				06E656822071248B625AE0D7 /* TribunalClient.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		AA1935C53D5F46EC07A443DB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 69F1254F70984F1B523B55CB /* RheaKeyboard */;
+			targetProxy = 6CE5E9CE9D2826E27C1829D0 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		1FB180CC3F0E2424B76AD462 /* Release */ = {
@@ -217,9 +304,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = RheaApp.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 13;
 				DEVELOPMENT_TEAM = 398XACWZ7G;
 				INFOPLIST_FILE = Info.plist;
 				INFOPLIST_GENERATION_MODE = GeneratedByXcode;
@@ -239,9 +327,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = RheaApp.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 13;
 				DEVELOPMENT_TEAM = 398XACWZ7G;
 				INFOPLIST_FILE = Info.plist;
 				INFOPLIST_GENERATION_MODE = GeneratedByXcode;
@@ -256,6 +345,28 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
+		};
+		D77B8E759F6D93CB6F36E67C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = RheaKeyboard.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 13;
+				DEVELOPMENT_TEAM = 398XACWZ7G;
+				INFOPLIST_FILE = "RheaKeyboard-Info.plist";
+				INFOPLIST_GENERATION_MODE = GeneratedByXcode;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.rhea.preview.keyboard;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
 		};
 		D89CC450AAFEB1C17837F745 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -320,6 +431,28 @@
 			};
 			name = Debug;
 		};
+		E1F873151BEABA09D91BB582 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = RheaKeyboard.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 13;
+				DEVELOPMENT_TEAM = 398XACWZ7G;
+				INFOPLIST_FILE = "RheaKeyboard-Info.plist";
+				INFOPLIST_GENERATION_MODE = GeneratedByXcode;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.rhea.preview.keyboard;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -337,6 +470,15 @@
 			buildConfigurations = (
 				D89CC450AAFEB1C17837F745 /* Debug */,
 				1FB180CC3F0E2424B76AD462 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		C5B2AF38B0E239520DBCBEDD /* Build configuration list for PBXNativeTarget "RheaKeyboard" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E1F873151BEABA09D91BB582 /* Debug */,
+				D77B8E759F6D93CB6F36E67C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;

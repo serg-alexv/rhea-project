@@ -1835,6 +1835,67 @@ class DialogRequest(BaseModel):
     sender: str = "human"
 
 
+# ─── KEYBOARD: Quick actions (single model, fast) ───────────────────────
+class KeyboardQuickRequest(BaseModel):
+    text: str = Field(..., min_length=1, max_length=5000)
+    action: str = "translate"  # translate, rewrite, grammar, summarize, explain, freeform
+    target_lang: str = ""      # for translate: "ja", "es", "fr", "ru", "de", "zh", "ar", "ko"
+    style: str = ""            # for rewrite: "formal", "casual", "shorter", "longer"
+
+_KEYBOARD_SYSTEM_PROMPTS = {
+    "translate": "You are a professional translator. Translate the text accurately to {lang}. Output ONLY the translation, nothing else.",
+    "rewrite": "Rewrite the following text in a {style} style. Output ONLY the rewritten text.",
+    "grammar": "Fix grammar and spelling errors in the following text. Output ONLY the corrected text. If already correct, return it unchanged.",
+    "summarize": "Summarize the following text in 1-2 sentences. Output ONLY the summary.",
+    "explain": "Explain the following text simply and clearly in 2-3 sentences. Output ONLY the explanation.",
+    "freeform": "You are Rhea, a helpful assistant. Answer concisely.",
+}
+
+_LANG_NAMES = {
+    "ja": "Japanese", "es": "Spanish", "fr": "French", "ru": "Russian",
+    "de": "German", "zh": "Chinese", "ar": "Arabic", "ko": "Korean",
+    "pt": "Portuguese", "it": "Italian", "nl": "Dutch", "tr": "Turkish",
+    "hi": "Hindi", "th": "Thai", "vi": "Vietnamese", "uk": "Ukrainian",
+    "pl": "Polish", "sv": "Swedish", "he": "Hebrew", "en": "English",
+}
+
+@app.post("/keyboard/quick")
+async def keyboard_quick(req: KeyboardQuickRequest):
+    """Single-model fast response for keyboard quick actions.
+    No consensus, no tribunal — just one cheap model, maximum speed."""
+    t0 = time.time()
+    bridge = get_bridge()
+
+    system_template = _KEYBOARD_SYSTEM_PROMPTS.get(req.action, _KEYBOARD_SYSTEM_PROMPTS["freeform"])
+    if req.action == "translate":
+        lang_name = _LANG_NAMES.get(req.target_lang, req.target_lang or "English")
+        system = system_template.format(lang=lang_name)
+    elif req.action == "rewrite":
+        system = system_template.format(style=req.style or "clearer")
+    else:
+        system = system_template
+
+    result = await asyncio.get_event_loop().run_in_executor(
+        None,
+        lambda: bridge.ask_default(
+            prompt=req.text,
+            system=system,
+            temperature=0.3,
+            max_tokens=1024,
+        ),
+    )
+
+    elapsed = time.time() - t0
+    _log_api_call("/keyboard/quick", {"action": req.action, "text_len": len(req.text)}, elapsed, "ok" if not result.error else "error")
+
+    return {
+        "text": result.text if not result.error else f"Error: {result.error}",
+        "model": result.model,
+        "elapsed_s": round(elapsed, 2),
+        "action": req.action,
+    }
+
+
 @app.post("/dialog")
 async def dialog_endpoint(req: DialogRequest):
     """Human dialog — sends to tribunal (k=2, cheap) and returns consensus."""
