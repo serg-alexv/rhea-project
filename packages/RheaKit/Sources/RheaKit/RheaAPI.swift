@@ -27,6 +27,15 @@ public final class RheaAPI: @unchecked Sendable {
         try? keychain.set(key, key: "api-key")
     }
 
+    /// Attach auth to a request: prefer JWT Bearer, fall back to API key.
+    private func applyAuth(_ request: inout URLRequest) {
+        if let jwt = AuthManager.shared.token {
+            request.setValue("Bearer \(jwt)", forHTTPHeaderField: "Authorization")
+        } else {
+            request.setValue(apiKey, forHTTPHeaderField: "X-API-Key")
+        }
+    }
+
     public var baseURL: String {
         UserDefaults.standard.string(forKey: "apiBaseURL")
             ?? AppConfig.defaultAPIBaseURL
@@ -40,7 +49,7 @@ public final class RheaAPI: @unchecked Sendable {
         }
         var request = URLRequest(url: url)
         if auth {
-            request.setValue(apiKey, forHTTPHeaderField: "X-API-Key")
+            applyAuth(&request)
         }
         let (data, response) = try await session.data(for: request)
         guard let http = response as? HTTPURLResponse, http.statusCode < 300 else {
@@ -58,7 +67,7 @@ public final class RheaAPI: @unchecked Sendable {
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         if auth {
-            request.setValue(apiKey, forHTTPHeaderField: "X-API-Key")
+            applyAuth(&request)
         }
         request.httpBody = try JSONEncoder().encode(body)
         let (data, response) = try await session.data(for: request)

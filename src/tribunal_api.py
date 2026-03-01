@@ -91,6 +91,10 @@ app = FastAPI(
 # Expose Aletheia read-only endpoints under /api/aletheia (mirrors rhead /aletheia)
 app.include_router(aletheia_router, prefix="/aletheia")
 
+# Auth (signup/login/profile)
+from auth_api import auth_router
+app.include_router(auth_router, prefix="/auth")
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -192,16 +196,28 @@ if not TRIBUNAL_API_KEYS:
     _dev_key = "dev-" + secrets.token_hex(16)
     TRIBUNAL_API_KEYS.add(_dev_key)
 
-# Always accept dev-bypass in local mode (Atlas frontend default key)
-TRIBUNAL_API_KEYS.add("dev-bypass")
+# Accept dev-bypass only in local dev mode (not in production)
+if os.environ.get("FLY_APP_NAME") is None:
+    TRIBUNAL_API_KEYS.add("dev-bypass")
 
 
-async def verify_api_key(x_api_key: str = Header(None, alias="X-API-Key")):
+async def verify_api_key(
+    x_api_key: str = Header(None, alias="X-API-Key"),
+    authorization: str = Header(None, alias="Authorization"),
+):
+    # Accept JWT Bearer token (from auth_api signup/login)
+    if authorization and authorization.startswith("Bearer "):
+        try:
+            from auth_api import _decode_token
+            _decode_token(authorization[7:])
+            return  # valid JWT — allow through
+        except Exception:
+            pass  # fall through to API key check
+
     if not TRIBUNAL_API_KEYS:
-        # FAIL-CLOSED: No keys configured means no one gets in.
         raise HTTPException(status_code=401, detail="API is locked: No keys configured in TRIBUNAL_API_KEYS")
     if not x_api_key or x_api_key not in TRIBUNAL_API_KEYS:
-        raise HTTPException(status_code=401, detail="Invalid or missing API key")
+        raise HTTPException(status_code=401, detail="Invalid or missing API key. Sign up at /auth/signup")
 
 
 # ---------------------------------------------------------------------------
