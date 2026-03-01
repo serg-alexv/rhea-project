@@ -383,10 +383,7 @@ private class OAuthPresentationContext: NSObject, ASWebAuthenticationPresentatio
 
 public struct BillingView: View {
     @ObservedObject private var auth = AuthManager.shared
-    @State private var plans: [[String: Any]] = []
     @State private var keys: [[String: Any]] = []
-    @State private var usage: [String: Any] = [:]
-    @State private var loadingCheckout = false
 
     public init() {}
 
@@ -405,12 +402,12 @@ public struct BillingView: View {
                     }
                     Spacer()
                     if auth.plan == "free" {
-                        Button("Upgrade") {
-                            // TODO(human): implement upgrade flow
-                        }
-                        .buttonStyle(.borderedProminent)
-                        .tint(RheaTheme.accent)
-                        .controlSize(.small)
+                        Text("Free tier")
+                            .font(.caption2)
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 4)
+                            .background(RheaTheme.card)
+                            .clipShape(Capsule())
                     }
                 }
             }
