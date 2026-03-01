@@ -98,7 +98,16 @@ class NDIPulse {
 
         DispatchQueue.global(qos: .utility).async { [weak self] in
             let task = Process()
-            task.executableURL = URL(fileURLWithPath: "/usr/bin/python3")
+            // Use pyenv python3 (3.11+) instead of system python3 (3.9)
+            // System python3 fails on `str | None` type syntax
+            let pythonCandidates = [
+                "\(NSHomeDirectory())/.pyenv/versions/3.11.9/bin/python3",
+                "/opt/homebrew/bin/python3",
+                "/usr/local/bin/python3",
+                "/usr/bin/python3",
+            ]
+            let pythonPath = pythonCandidates.first { FileManager.default.fileExists(atPath: $0) } ?? "/usr/bin/python3"
+            task.executableURL = URL(fileURLWithPath: pythonPath)
             task.arguments = ["-c", script]
             let pipe = Pipe()
             task.standardOutput = pipe

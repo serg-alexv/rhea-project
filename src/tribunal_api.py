@@ -100,10 +100,14 @@ app.include_router(auth_router, prefix="/auth")
 from billing import billing_router, validate_api_key as validate_billing_key, check_quota, record_usage
 app.include_router(billing_router)
 
+# Workflow engine (automation DAG execution)
+from workflow_engine import workflow_router
+app.include_router(workflow_router, prefix="/workflows")
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
-    allow_methods=["POST", "GET"],
+    allow_methods=["POST", "GET", "DELETE"],
     allow_headers=["*"],
 )
 

@@ -13,6 +13,8 @@ Requires: libndi.dylib installed on the system.
   Windows: Processing.NDI.Lib.x64.dll
 """
 
+from __future__ import annotations
+
 import ctypes
 import ctypes.util
 import os
@@ -21,6 +23,7 @@ import time
 import struct
 import platform
 from pathlib import Path
+from typing import Optional
 
 # ─── Library Loading ──────────────────────────────────────────────────
 

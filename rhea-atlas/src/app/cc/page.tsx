@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState, useCallback, useRef } from 'react'
+import Link from 'next/link'
 // CC talks directly to tribunal_api.py on port 8400, not Themis on 8000
 const CC_API = process.env.NEXT_PUBLIC_CC_API ?? 'http://localhost:8400'
 const CC_API_KEY = process.env.NEXT_PUBLIC_CC_API_KEY ?? 'dev-bypass'
@@ -411,6 +412,19 @@ export default function CommandCentre() {
           {ndi?.available && <> | NDI {ndi.sources_on_network ?? 0} src</>}
           {' '}| 5s poll
         </span>
+      </div>
+
+      {/* Tab bar */}
+      <div className="border-b border-white/[0.06] px-4 flex items-center gap-0 shrink-0">
+        <div className="px-4 py-2 text-xs font-medium text-cyan-400 border-b-2 border-cyan-400">
+          Monitor
+        </div>
+        <Link
+          href="/cc/automation"
+          className="px-4 py-2 text-xs font-medium text-white/40 hover:text-white/60 transition-colors border-b-2 border-transparent"
+        >
+          Automation
+        </Link>
       </div>
 
       {/* 3-column layout */}
