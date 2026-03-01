@@ -73,6 +73,16 @@ type OfficeMsg = {
   response: string
 }
 
+type NDIStatus = {
+  available: boolean
+  version?: string
+  cpu_supported?: boolean
+  library_path?: string
+  sources_on_network?: number
+  sources?: { name: string; url: string }[]
+  error?: string
+}
+
 // ─── API Helpers ──────────────────────────────────────────────────────
 
 const headers = { 'X-API-Key': TRIBUNAL_API_KEY, 'Content-Type': 'application/json' }
@@ -269,6 +279,62 @@ function OfficePanel({ messages }: { messages: OfficeMsg[] }) {
   )
 }
 
+function NDIPanel({ ndi }: { ndi: NDIStatus | null }) {
+  const [broadcasting, setBroadcasting] = useState(false)
+
+  const sendTest = async () => {
+    setBroadcasting(true)
+    try {
+      await fetch(`${TRIBUNAL_API}/cc/ndi/send-test`, {
+        method: 'POST', headers,
+        body: JSON.stringify({ name: 'Rhea Command Centre', duration: 10 }),
+      })
+    } catch { /* silent */ }
+    setTimeout(() => setBroadcasting(false), 10000)
+  }
+
+  if (!ndi) return null
+
+  return (
+    <div className="space-y-2">
+      <h2 className="text-xs font-bold uppercase tracking-widest text-cyan-400/80 mb-3">
+        NDI
+        <span className={`ml-2 text-[10px] ${ndi.available ? 'text-emerald-400' : 'text-red-400'}`}>
+          {ndi.available ? `v${ndi.version?.split(' ').pop() || '?'}` : 'OFFLINE'}
+        </span>
+      </h2>
+      {ndi.available ? (
+        <div className="space-y-2">
+          <div className="flex items-center gap-2 text-xs">
+            <span className="text-white/40">Sources:</span>
+            <span className="font-mono text-white/80">{ndi.sources_on_network ?? 0}</span>
+            <button onClick={sendTest} disabled={broadcasting}
+              className="ml-auto px-2 py-1 bg-purple-600/30 hover:bg-purple-600/50 text-purple-300 rounded text-[10px] transition-colors disabled:opacity-30">
+              {broadcasting ? 'Broadcasting...' : 'Test Pattern'}
+            </button>
+          </div>
+          {(ndi.sources || []).length > 0 && (
+            <div className="space-y-1">
+              {ndi.sources!.map((s, i) => (
+                <div key={i} className="flex items-center gap-2 p-1.5 rounded bg-white/[0.03] text-xs">
+                  <div className="w-1.5 h-1.5 rounded-full bg-purple-400 shadow-[0_0_6px_rgba(168,85,247,0.5)]" />
+                  <span className="font-mono text-white/80">{s.name}</span>
+                  <span className="text-white/20 text-[10px] ml-auto truncate max-w-32">{s.url}</span>
+                </div>
+              ))}
+            </div>
+          )}
+          {(ndi.sources || []).length === 0 && (
+            <div className="text-white/20 italic text-[11px]">No NDI sources on network — hit Test Pattern to broadcast</div>
+          )}
+        </div>
+      ) : (
+        <div className="text-white/30 text-xs">{ndi.error || 'NDI runtime not installed'}</div>
+      )}
+    </div>
+  )
+}
+
 // ─── Main Layout ──────────────────────────────────────────────────────
 
 export default function CommandCentre() {
@@ -276,16 +342,18 @@ export default function CommandCentre() {
   const [radio, setRadio] = useState<RadioEvent[]>([])
   const [history, setHistory] = useState<HistoryEntry[]>([])
   const [office, setOffice] = useState<OfficeMsg[]>([])
+  const [ndi, setNdi] = useState<NDIStatus | null>(null)
   const [connected, setConnected] = useState(false)
   const prevAlive = useRef<Record<string, boolean>>({})
 
   const refresh = useCallback(async () => {
     try {
-      const [agentRes, radioRes, historyRes, officeRes] = await Promise.allSettled([
+      const [agentRes, radioRes, historyRes, officeRes, ndiRes] = await Promise.allSettled([
         api('/agents/status'),
         api('/cc/radio?limit=50'),
         api('/cc/history?limit=30'),
         api('/cc/office?limit=20'),
+        api('/cc/ndi'),
       ])
 
       if (agentRes.status === 'fulfilled' && agentRes.value?.agents) {
@@ -308,6 +376,7 @@ export default function CommandCentre() {
       if (radioRes.status === 'fulfilled') setRadio(radioRes.value?.radio || [])
       if (historyRes.status === 'fulfilled') setHistory(historyRes.value?.history || [])
       if (officeRes.status === 'fulfilled') setOffice(officeRes.value?.messages || [])
+      if (ndiRes.status === 'fulfilled') setNdi(ndiRes.value as NDIStatus)
       setConnected(true)
     } catch {
       setConnected(false)
@@ -334,16 +403,19 @@ export default function CommandCentre() {
         <div className={`w-2 h-2 rounded-full ${connected ? 'bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.5)]' : 'bg-red-500'}`} />
         <h1 className="text-sm font-bold tracking-wider text-white/80">RHEA COMMAND CENTRE</h1>
         <span className="text-[10px] text-white/20 ml-auto font-mono">
-          {agents.filter(a => a.alive).length}/{agents.length} agents | 5s poll
+          {agents.filter(a => a.alive).length}/{agents.length} agents
+          {ndi?.available && <> | NDI {ndi.sources_on_network ?? 0} src</>}
+          {' '}| 5s poll
         </span>
       </div>
 
       {/* 3-column layout */}
       <div className="flex h-[calc(100vh-41px)]">
-        {/* Left sidebar: Agents + Governor */}
-        <div className="w-56 shrink-0 border-r border-white/[0.06] p-3 overflow-y-auto">
+        {/* Left sidebar: Agents + Governor + NDI */}
+        <div className="w-56 shrink-0 border-r border-white/[0.06] p-3 overflow-y-auto space-y-4">
           <AgentsSidebar agents={agents} />
           <GovernorStats agents={agents} />
+          <NDIPanel ndi={ndi} />
         </div>
 
         {/* Center: Radio Feed */}
