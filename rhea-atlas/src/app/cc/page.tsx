@@ -1,7 +1,9 @@
 'use client'
 
 import { useEffect, useState, useCallback, useRef } from 'react'
-import { TRIBUNAL_API, TRIBUNAL_API_KEY } from '@/lib/config'
+// CC talks directly to tribunal_api.py on port 8400, not Themis on 8000
+const CC_API = process.env.NEXT_PUBLIC_CC_API ?? 'http://localhost:8400'
+const CC_API_KEY = process.env.NEXT_PUBLIC_CC_API_KEY ?? 'dev-bypass'
 
 // ─── Tauri Native Bindings (no-op in browser) ───────────────────────
 const isTauri = typeof window !== 'undefined' && '__TAURI__' in window
@@ -85,8 +87,8 @@ type NDIStatus = {
 
 // ─── API Helpers ──────────────────────────────────────────────────────
 
-const headers = { 'X-API-Key': TRIBUNAL_API_KEY, 'Content-Type': 'application/json' }
-const api = (path: string) => fetch(`${TRIBUNAL_API}${path}`, { headers }).then(r => r.json())
+const headers = { 'X-API-Key': CC_API_KEY, 'Content-Type': 'application/json' }
+const api = (path: string) => fetch(`${CC_API}${path}`, { headers }).then(r => r.json())
 
 // ─── Pace Colors ──────────────────────────────────────────────────────
 
@@ -180,7 +182,7 @@ function TribunalPane() {
     if (!prompt.trim() || loading) return
     setLoading(true)
     try {
-      const res = await fetch(`${TRIBUNAL_API}/tribunal`, {
+      const res = await fetch(`${CC_API}/tribunal`, {
         method: 'POST', headers,
         body: JSON.stringify({ prompt, k: 3, mode: 'chairman' }),
       })
@@ -285,7 +287,7 @@ function NDIPanel({ ndi }: { ndi: NDIStatus | null }) {
   const sendTest = async () => {
     setBroadcasting(true)
     try {
-      await fetch(`${TRIBUNAL_API}/cc/ndi/send-test`, {
+      await fetch(`${CC_API}/cc/ndi/send-test`, {
         method: 'POST', headers,
         body: JSON.stringify({ name: 'Rhea Command Centre', duration: 10 }),
       })
@@ -397,7 +399,7 @@ export default function CommandCentre() {
   }, [refresh])
 
   return (
-    <div className="min-h-screen bg-[#0a0a0f] text-white">
+    <div className="fixed inset-0 z-[200] bg-[#0a0a0f] text-white overflow-hidden flex flex-col">
       {/* Header */}
       <div className="border-b border-white/[0.06] px-4 py-2 flex items-center gap-3">
         <div className={`w-2 h-2 rounded-full ${connected ? 'bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.5)]' : 'bg-red-500'}`} />
@@ -410,21 +412,21 @@ export default function CommandCentre() {
       </div>
 
       {/* 3-column layout */}
-      <div className="flex h-[calc(100vh-41px)]">
+      <div className="flex flex-1 overflow-hidden">
         {/* Left sidebar: Agents + Governor + NDI */}
-        <div className="w-56 shrink-0 border-r border-white/[0.06] p-3 overflow-y-auto space-y-4">
+        <div className="w-56 shrink-0 border-r border-white/[0.06] p-3 overflow-y-auto space-y-4 h-full">
           <AgentsSidebar agents={agents} />
           <GovernorStats agents={agents} />
           <NDIPanel ndi={ndi} />
         </div>
 
         {/* Center: Radio Feed */}
-        <div className="flex-1 border-r border-white/[0.06] p-3 min-w-0">
+        <div className="flex-1 border-r border-white/[0.06] p-3 min-w-0 h-full">
           <RadioFeed events={radio} />
         </div>
 
         {/* Right: Tribunal + History + Office */}
-        <div className="w-96 shrink-0 p-3 overflow-y-auto space-y-4">
+        <div className="w-96 shrink-0 p-3 overflow-y-auto space-y-4 h-full">
           <TribunalPane />
           <HistoryPanel history={history} />
           <OfficePanel messages={office} />
