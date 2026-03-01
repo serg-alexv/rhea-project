@@ -7,8 +7,11 @@ options:
 
 packages:
   Pow:
-    url: https://github.com/EmergeTools/Pow
+    url: https://github.com/serg-alexv/Pow
     from: "1.0.0"
+  AnimatedTabBar:
+    url: https://github.com/serg-alexv/AnimatedTabBar
+    from: "0.0.1"
 
 targets:
   RheaApp:
@@ -31,6 +34,7 @@ targets:
         release: {}
     dependencies:
       - package: Pow
+      - package: AnimatedTabBar
     info:
       path: Info.plist
       properties:

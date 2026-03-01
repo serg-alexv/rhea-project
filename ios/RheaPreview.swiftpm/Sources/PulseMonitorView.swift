@@ -8,34 +8,14 @@ struct PulseQueueSummary: Codable {
     let _updated: String?
 }
 
-struct PulseAgentDTO: Codable {
-    let name: String
-    let alive: Bool
-    let pace: String
-    let mode: String
-    let billing_mode: String
-    let T_day: Int
-    let dollar_day: Double
-    let floor_gap: Int
-    let lease_token: Int
-    let lease_expired: Bool
-    let lease_expires_at: String?
-    let office_status: String
-    let pending_msgs: Int
-    let tasks_open: Int
-    let tasks_claimed: Int
-    let last_activity: String?
-    let last_feed: String?
-}
-
 struct PulseUnifiedResponse: Codable {
     let _ts: String
-    let agents: [String: PulseAgentDTO]
+    let agents: [String: AgentDTO]
 }
 
 struct PulseMonitorView: View {
     @State private var summary: PulseQueueSummary? = nil
-    @State private var agents: [String: PulseAgentDTO] = [:]
+    @State private var agents: [String: AgentDTO] = [:]
     @State private var loading = true
     @State private var lastAction = "idle"
     @State private var pollTimer: Timer? = nil

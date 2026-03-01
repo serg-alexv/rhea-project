@@ -32,7 +32,7 @@ struct TeamChatView: View {
     @State private var prevItemCount = 0
     @State private var showBubbles = false  // toggle: console vs bubble view
     @State private var showAgentSheet = false
-    @State private var knownAgents: [RadioAgentInfo] = []
+    @State private var knownAgents: [AgentDTO] = []
     @State private var wakingAgent: String? = nil
     @AppStorage("apiBaseURL") private var apiBaseURL = AppConfig.defaultAPIBaseURL
     @AppStorage("table_rex") private var tableRex = true
@@ -541,57 +541,18 @@ struct TeamChatView: View {
 
     // MARK: - Agent Networking
 
-    struct UnifiedAgentDTO: Codable {
-        let name: String
-        let alive: Bool
-        let pace: String
-        let mode: String
-        let billing_mode: String
-        let T_day: Int
-        let dollar_day: Double
-        let floor_gap: Int
-        let lease_token: Int
-        let lease_expired: Bool
-        let lease_expires_at: String?
-        let office_status: String
-        let pending_msgs: Int
-        let tasks_open: Int
-        let tasks_claimed: Int
-        let last_activity: String?
-        let last_feed: String?
-    }
-
-    struct UnifiedStatusResponse: Codable {
+    struct TeamUnifiedStatusResponse: Codable {
         let _ts: String
-        let agents: [String: UnifiedAgentDTO]
+        let agents: [String: AgentDTO]
     }
 
     func fetchAgents() async {
         guard let url = URL(string: "\(apiBaseURL)/agents/status") else { return }
         do {
             let (data, _) = try await URLSession.shared.data(from: url)
-            let resp = try JSONDecoder().decode(UnifiedStatusResponse.self, from: data)
+            let resp = try JSONDecoder().decode(TeamUnifiedStatusResponse.self, from: data)
             withAnimation {
-                knownAgents = resp.agents.values.map { dto in
-                    RadioAgentInfo(
-                        name: dto.name,
-                        alive: dto.alive,
-                        pace: dto.pace,
-                        mode: dto.mode,
-                        billingMode: dto.billing_mode,
-                        tDay: dto.T_day,
-                        dollarDay: dto.dollar_day,
-                        floorGap: dto.floor_gap,
-                        leaseToken: dto.lease_token,
-                        leaseExpired: dto.lease_expired,
-                        officeStatus: dto.office_status,
-                        pendingMsgs: dto.pending_msgs,
-                        tasksOpen: dto.tasks_open,
-                        tasksClaimed: dto.tasks_claimed,
-                        lastActivity: dto.last_activity,
-                        lastFeed: dto.last_feed ?? ""
-                    )
-                }.sorted { $0.name < $1.name }
+                knownAgents = resp.agents.values.sorted { $0.name < $1.name }
             }
         } catch {
             print("[RadioAgents] fetch error: \(error)")
@@ -787,28 +748,6 @@ struct ConsoleLine: View {
         }
         return stripped
     }
-}
-
-// MARK: - Agent Status Model
-
-struct RadioAgentInfo: Identifiable {
-    var id: String { name }
-    let name: String
-    let alive: Bool
-    let pace: String
-    let mode: String
-    let billingMode: String
-    let tDay: Int
-    let dollarDay: Double
-    let floorGap: Int
-    let leaseToken: Int
-    let leaseExpired: Bool
-    let officeStatus: String
-    let pendingMsgs: Int
-    let tasksOpen: Int
-    let tasksClaimed: Int
-    let lastActivity: String?
-    let lastFeed: String
 }
 
 // MARK: - Bubble Line (chat-style, v1 restored)

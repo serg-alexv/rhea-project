@@ -63,8 +63,11 @@ pub fn run() {
 
             // ─── Global Shortcuts ──────────────────────────────────
             // CmdOrCtrl+Shift+R = focus/show Command Centre
+            // Wrapped in match: plugin may fail on macOS without accessibility
+            // permissions or if underlying global-hotkey can't init (os error 2).
+            // App must not crash — shortcuts are a nice-to-have, not critical.
             use tauri_plugin_global_shortcut::ShortcutState;
-            app.handle().plugin(
+            match app.handle().plugin(
                 tauri_plugin_global_shortcut::Builder::new()
                     .with_handler(move |app, shortcut, event| {
                         if event.state() == ShortcutState::Pressed {
@@ -81,7 +84,10 @@ pub fn run() {
                         }
                     })
                     .build(),
-            )?;
+            ) {
+                Ok(_) => log::info!("global-shortcut plugin initialized"),
+                Err(e) => log::warn!("global-shortcut plugin unavailable (non-fatal): {e}"),
+            }
 
             Ok(())
         })
