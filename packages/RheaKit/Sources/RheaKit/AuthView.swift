@@ -10,6 +10,7 @@ public class AuthManager: ObservableObject {
     @Published public var email: String? = nil
     @Published public var plan: String = "free"
     @Published public var queriesUsed: Int = 0
+    @Published public var didSkipAuth: Bool = false
 
     private let keychain = Keychain(service: "com.rhea.preview")
 
@@ -32,8 +33,13 @@ public class AuthManager: ObservableObject {
         email = nil
         plan = "free"
         queriesUsed = 0
+        didSkipAuth = false
         keychain["jwt_token"] = nil
         keychain["user_email"] = nil
+    }
+
+    public func skipLogin() {
+        didSkipAuth = true
     }
 
     /// Attach auth header to a URLRequest
@@ -41,7 +47,7 @@ public class AuthManager: ObservableObject {
         if let token = token {
             request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         } else {
-            // Fallback for local dev
+            // Fallback for local dev — will be rejected in production
             request.setValue("dev-bypass", forHTTPHeaderField: "X-API-Key")
         }
     }
@@ -64,11 +70,16 @@ public struct AuthView: View {
         VStack(spacing: 20) {
             Spacer()
 
-            // Logo
+            // Logo — nabla (∇) as brand mark
             VStack(spacing: 8) {
-                Image(systemName: "scalemass.fill")
-                    .font(.system(size: 48))
-                    .foregroundStyle(RheaTheme.accent)
+                Text("∇")
+                    .font(.system(size: 72, weight: .thin, design: .serif))
+                    .foregroundStyle(
+                        LinearGradient(
+                            colors: [RheaTheme.accent, RheaTheme.accent.opacity(0.5)],
+                            startPoint: .top, endPoint: .bottom
+                        )
+                    )
                 Text("Rhea")
                     .font(.system(size: 34, weight: .bold, design: .rounded))
                     .foregroundStyle(.white)
@@ -132,10 +143,9 @@ public struct AuthView: View {
 
             Spacer()
 
-            // Skip for now
+            // Skip for now (works offline / local dev only)
             Button("Continue without account") {
-                // Use dev-bypass, no token stored
-                auth.logout()
+                auth.skipLogin()
             }
             .font(.caption)
             .foregroundStyle(.secondary.opacity(0.6))
