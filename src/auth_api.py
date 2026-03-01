@@ -172,6 +172,32 @@ def profile(user: dict = Depends(_current_user)):
 def logout():
     return {"detail": "Logged out. Discard your token client-side."}
 
+@auth_router.get("/test")
+def auth_test_page():
+    """Serve a simple OAuth test page for browser-based testing."""
+    from fastapi.responses import HTMLResponse
+    google_ok = "enabled" if GOOGLE_CLIENT_ID else "not configured"
+    ms_ok = "enabled" if MICROSOFT_CLIENT_ID else "not configured"
+    return HTMLResponse(f"""<!DOCTYPE html>
+<html><head><title>Rhea Auth Test</title>
+<style>body{{font-family:system-ui;background:#0a0a0a;color:#e0e0e0;padding:2rem}}
+.btn{{display:inline-block;padding:.8rem 1.5rem;margin:.5rem;border-radius:8px;text-decoration:none;font-size:1rem;font-weight:600}}
+.google{{background:#4285f4;color:#fff}}.ms{{background:#00a4ef;color:#fff}}.apple{{background:#333;color:#fff}}
+.status{{font-size:.85rem;color:#888;margin-left:.5rem}}
+h1{{color:#fff}}pre{{background:#111;padding:1rem;border-radius:8px;overflow-x:auto}}</style></head>
+<body><h1>Rhea Auth Test</h1>
+<p>Click a provider to test the OAuth flow (web mode):</p>
+<a class="btn google" href="/auth/google?callback=web">Google</a><span class="status">{google_ok}</span><br>
+<a class="btn ms" href="/auth/microsoft?callback=web">Microsoft</a><span class="status">{ms_ok}</span><br>
+<a class="btn apple" onclick="alert('Apple Sign In requires iOS native — test on device')" href="#">Apple</a>
+<span class="status">iOS only</span>
+<h3>Token</h3>
+<pre id="tok">No token yet</pre>
+<script>
+window.addEventListener('message',e=>{{if(e.data&&e.data.type==='oauth')document.getElementById('tok').textContent=JSON.stringify(e.data,null,2)}});
+let t=localStorage.getItem('rhea_token');if(t)document.getElementById('tok').textContent='Stored: '+t;
+</script></body></html>""")
+
 # ---------------------------------------------------------------------------
 # Usage increment helper (called from tribunal middleware)
 # ---------------------------------------------------------------------------
@@ -202,10 +228,26 @@ def _oauth_find_or_create(email: str, provider: str) -> tuple[int, str]:
     return uid, _make_token(uid, email)
 
 
-def _oauth_redirect_with_token(token: str, email: str, error: str = "") -> RedirectResponse:
-    """Build redirect to rhea://oauth?token=...&email=..."""
+def _oauth_redirect_with_token(token: str, email: str, error: str = "", callback: str = "rhea://oauth"):
+    """Redirect to iOS deep link or serve web landing page with token."""
+    from fastapi.responses import HTMLResponse
     params = {"token": token, "email": email} if not error else {"error": error}
-    return RedirectResponse(f"rhea://oauth?{urllib.parse.urlencode(params)}")
+    # iOS deep link
+    if callback.startswith("rhea://"):
+        return RedirectResponse(f"rhea://oauth?{urllib.parse.urlencode(params)}")
+    # Web: serve a page that stores the token and closes
+    if error:
+        return HTMLResponse(f"<h2>OAuth Error</h2><p>{error}</p>")
+    return HTMLResponse(f"""<!DOCTYPE html>
+<html><head><title>Rhea — Signed In</title>
+<style>body{{font-family:system-ui;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;background:#0a0a0a;color:#e0e0e0}}
+.card{{background:#1a1a2e;padding:2rem 3rem;border-radius:12px;text-align:center}}
+.ok{{color:#4ade80;font-size:2rem}}</style></head>
+<body><div class="card"><div class="ok">&#10003;</div><h2>Signed in as {email}</h2>
+<p>Token stored. You can close this tab.</p>
+<script>localStorage.setItem('rhea_token','{token}');localStorage.setItem('rhea_email','{email}');
+if(window.opener)window.opener.postMessage({{type:'oauth',token:'{token}',email:'{email}'}},'*');</script>
+</div></body></html>""")
 
 
 # ---------------------------------------------------------------------------
@@ -301,7 +343,7 @@ async def google_callback(code: str = "", error: str = "", state: str = "rhea://
             return _oauth_redirect_with_token("", "", error="no_email")
 
     _, jwt_token = _oauth_find_or_create(email, "google")
-    return _oauth_redirect_with_token(jwt_token, email)
+    return _oauth_redirect_with_token(jwt_token, email, callback=state)
 
 
 # ---------------------------------------------------------------------------
@@ -363,4 +405,4 @@ async def microsoft_callback(code: str = "", error: str = "", state: str = "rhea
             return _oauth_redirect_with_token("", "", error="no_email")
 
     _, jwt_token = _oauth_find_or_create(email, "microsoft")
-    return _oauth_redirect_with_token(jwt_token, email)
+    return _oauth_redirect_with_token(jwt_token, email, callback=state)
