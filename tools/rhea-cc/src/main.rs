@@ -1,22 +1,23 @@
 //! rhea — Rhea Command Centre TUI binary
 //!
-//! Three-pane terminal dashboard: agents | radio | tasks+tribunal
+//! Three-pane terminal dashboard with full controls.
 //! Talks to tribunal_api.py on localhost:8400.
 //!
-//! Usage: rhea [--api http://host:port]
+//! Usage: rhea
+//!        RHEA_API=http://host:port rhea
 
 use std::io;
 use std::time::{Duration, Instant};
 
 use anyhow::Result;
 use crossterm::{
-    event::{self, Event, KeyCode, KeyModifiers},
+    event::{self, Event, KeyCode, KeyEvent, KeyModifiers},
     execute,
     terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
 };
 use ratatui::{
     prelude::*,
-    widgets::{Block, Borders, Paragraph, Wrap, List, ListItem},
+    widgets::{Block, Borders, Paragraph, Wrap, List, ListItem, Scrollbar, ScrollbarOrientation, ScrollbarState},
 };
 use serde::Deserialize;
 
@@ -41,6 +42,8 @@ struct AgentStatus {
     #[serde(default)]
     tasks_open: Option<i64>,
     #[serde(default)]
+    tasks_claimed: Option<i64>,
+    #[serde(default)]
     budget_cap: Option<f64>,
     #[serde(default)]
     budget_remaining: Option<f64>,
@@ -48,6 +51,10 @@ struct AgentStatus {
     forecast: Option<String>,
     #[serde(default)]
     hard_fail: Option<bool>,
+    #[serde(default)]
+    lease_expired: Option<bool>,
+    #[serde(default)]
+    last_activity: Option<String>,
 }
 
 #[derive(Debug, Deserialize)]
@@ -57,13 +64,15 @@ struct AgentsResponse {
     agents: std::collections::HashMap<String, AgentStatus>,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Clone)]
 struct TaskSummary {
     total: i64,
     counts: std::collections::HashMap<String, i64>,
     active_by_priority: std::collections::HashMap<String, i64>,
     #[serde(default)]
     stale_count: Option<i64>,
+    #[serde(default)]
+    claimed_by_agent: Option<std::collections::HashMap<String, i64>>,
 }
 
 #[derive(Debug, Deserialize, Clone)]
@@ -76,34 +85,85 @@ struct FeedItem {
     text: String,
     #[serde(default)]
     r#type: String,
+    #[serde(default)]
+    receiver: Option<String>,
 }
 
 #[derive(Debug, Deserialize)]
 struct FeedResponse {
     items: Vec<FeedItem>,
+    #[allow(dead_code)]
     total: i64,
 }
 
+#[derive(Debug, Deserialize, Clone)]
+struct TaskItem {
+    #[serde(default)]
+    id: Option<String>,
+    #[serde(default)]
+    title: String,
+    #[serde(default)]
+    status: String,
+    #[serde(default)]
+    priority: String,
+    #[serde(default)]
+    agent: String,
+}
+
+#[derive(Debug, Deserialize)]
+struct TaskListResponse {
+    tasks: Vec<TaskItem>,
+}
+
 // ─── App state ────────────────────────────────────────────────────────
+
+#[derive(PartialEq, Clone, Copy)]
+enum Panel {
+    Agents,
+    Radio,
+    Tasks,
+    Tribunal,
+}
+
+#[derive(PartialEq)]
+enum InputMode {
+    Normal,
+    TribunalInput,
+    RadioCompose,
+    TaskCreate,
+}
 
 struct AppState {
     api_base: String,
     agents: Vec<AgentStatus>,
     tasks: Option<TaskSummary>,
+    task_list: Vec<TaskItem>,
     radio: Vec<FeedItem>,
     status_msg: String,
+
+    // Tribunal
     tribunal_input: String,
     tribunal_result: String,
-    focus: Focus,
+
+    // Radio composer
+    radio_input: String,
+
+    // Task creator
+    task_input: String,
+
+    // Navigation
+    active_panel: Panel,
+    input_mode: InputMode,
+    agent_cursor: usize,
+    radio_scroll: usize,
+    task_scroll: usize,
+
     running: bool,
     last_poll: Instant,
+    show_task_list: bool,
 }
 
-#[derive(PartialEq)]
-enum Focus {
-    Dashboard,
-    Tribunal,
-}
+const PANELS: [Panel; 4] = [Panel::Agents, Panel::Radio, Panel::Tasks, Panel::Tribunal];
 
 impl AppState {
     fn new(api_base: String) -> Self {
@@ -111,101 +171,158 @@ impl AppState {
             api_base,
             agents: vec![],
             tasks: None,
+            task_list: vec![],
             radio: vec![],
             status_msg: "starting...".into(),
             tribunal_input: String::new(),
             tribunal_result: String::new(),
-            focus: Focus::Dashboard,
+            radio_input: String::new(),
+            task_input: String::new(),
+            active_panel: Panel::Agents,
+            input_mode: InputMode::Normal,
+            agent_cursor: 0,
+            radio_scroll: 0,
+            task_scroll: 0,
             running: true,
             last_poll: Instant::now() - Duration::from_secs(60),
+            show_task_list: false,
         }
+    }
+
+    fn selected_agent(&self) -> Option<&AgentStatus> {
+        self.agents.get(self.agent_cursor)
     }
 }
 
 // ─── API calls ────────────────────────────────────────────────────────
 
+fn client() -> reqwest::Client {
+    reqwest::Client::builder()
+        .timeout(Duration::from_secs(5))
+        .build()
+        .unwrap()
+}
+
 async fn fetch_agents(api: &str) -> Result<Vec<AgentStatus>> {
-    let resp: AgentsResponse = reqwest::Client::new()
+    let resp: AgentsResponse = client()
         .get(format!("{api}/agents/status"))
         .header("X-API-Key", "dev-bypass")
-        .timeout(Duration::from_secs(5))
-        .send()
-        .await?
-        .json()
-        .await?;
+        .send().await?.json().await?;
     let mut agents: Vec<AgentStatus> = resp.agents.into_values().collect();
     agents.sort_by(|a, b| a.name.cmp(&b.name));
     Ok(agents)
 }
 
 async fn fetch_tasks(api: &str) -> Result<TaskSummary> {
-    let resp: TaskSummary = reqwest::Client::new()
-        .get(format!("{api}/tasks/summary"))
+    Ok(client().get(format!("{api}/tasks/summary"))
         .header("X-API-Key", "dev-bypass")
-        .timeout(Duration::from_secs(5))
-        .send()
-        .await?
-        .json()
-        .await?;
-    Ok(resp)
+        .send().await?.json().await?)
+}
+
+async fn fetch_task_list(api: &str) -> Result<Vec<TaskItem>> {
+    let resp: TaskListResponse = client()
+        .get(format!("{api}/tasks"))
+        .header("X-API-Key", "dev-bypass")
+        .send().await?.json().await?;
+    Ok(resp.tasks)
 }
 
 async fn fetch_radio(api: &str) -> Result<Vec<FeedItem>> {
-    let resp: FeedResponse = reqwest::Client::new()
+    let resp: FeedResponse = client()
         .get(format!("{api}/feed"))
         .header("X-API-Key", "dev-bypass")
-        .timeout(Duration::from_secs(5))
-        .send()
-        .await?
-        .json()
-        .await?;
+        .send().await?.json().await?;
     Ok(resp.items)
 }
 
 async fn wake_agent(api: &str, agent: &str) -> Result<()> {
-    reqwest::Client::new()
-        .post(format!("{api}/agents/wake/{agent}"))
+    client().post(format!("{api}/agents/wake/{agent}"))
         .header("X-API-Key", "dev-bypass")
-        .timeout(Duration::from_secs(5))
-        .send()
-        .await?;
+        .send().await?;
+    Ok(())
+}
+
+async fn ping_agent(api: &str, agent: &str) -> Result<()> {
+    let body = serde_json::json!({
+        "sender": "human",
+        "text": format!("PING {agent}"),
+        "type": "radio"
+    });
+    client().post(format!("{api}/feed/push"))
+        .header("X-API-Key", "dev-bypass")
+        .json(&body)
+        .send().await?;
+    Ok(())
+}
+
+async fn send_radio(api: &str, text: &str) -> Result<()> {
+    let body = serde_json::json!({
+        "sender": "human",
+        "receiver": "all",
+        "type": "radio",
+        "text": text
+    });
+    client().post(format!("{api}/feed/push"))
+        .header("X-API-Key", "dev-bypass")
+        .json(&body)
+        .send().await?;
+    Ok(())
+}
+
+async fn create_task(api: &str, title: &str) -> Result<()> {
+    let url = format!("{api}/tasks?title={}&priority=P1&agent=rex",
+        urlencoding::encode(title));
+    client().post(&url)
+        .header("X-API-Key", "dev-bypass")
+        .send().await?;
     Ok(())
 }
 
 async fn submit_tribunal(api: &str, claim: &str) -> Result<String> {
     let body = serde_json::json!({"prompt": claim, "mode": "tribunal"});
-    let resp: serde_json::Value = reqwest::Client::new()
+    let resp: serde_json::Value = reqwest::Client::builder()
+        .timeout(Duration::from_secs(30))
+        .build()?
         .post(format!("{api}/tribunal"))
         .header("X-API-Key", "dev-bypass")
-        .header("Content-Type", "application/json")
-        .timeout(Duration::from_secs(30))
         .json(&body)
-        .send()
-        .await?
-        .json()
-        .await?;
+        .send().await?.json().await?;
     let agreement = resp["agreement_score"].as_f64().unwrap_or(0.0);
     let confidence = resp["confidence"].as_f64().unwrap_or(0.0);
     let verdict = resp["response"].as_str().unwrap_or("no response");
     let models = resp["models_used"]
         .as_array()
-        .map(|a| {
-            a.iter()
-                .filter_map(|v| v.as_str())
-                .collect::<Vec<_>>()
-                .join(", ")
-        })
+        .map(|a| a.iter().filter_map(|v| v.as_str()).collect::<Vec<_>>().join(", "))
         .unwrap_or_default();
     Ok(format!(
         "Agreement: {:.0}% | Confidence: {:.0}%\nModels: {}\n\n{}",
-        agreement * 100.0,
-        confidence * 100.0,
-        models,
-        &verdict[..verdict.len().min(300)]
+        agreement * 100.0, confidence * 100.0, models,
+        &verdict[..verdict.len().min(500)]
     ))
 }
 
-// ─── UI rendering ─────────────────────────────────────────────────────
+// ─── Rendering ────────────────────────────────────────────────────────
+
+fn now_hms() -> String {
+    let d = std::time::SystemTime::now()
+        .duration_since(std::time::UNIX_EPOCH).unwrap().as_secs();
+    let s = (d % 86400) as u32;
+    format!("{:02}:{:02}:{:02}", s / 3600, (s % 3600) / 60, s % 60)
+}
+
+fn format_tokens(n: i64) -> String {
+    if n >= 1_000_000 { format!("{}M", n / 1_000_000) }
+    else if n >= 1_000 { format!("{}K", n / 1_000) }
+    else { format!("{n}") }
+}
+
+fn panel_border(active: Panel, this: Panel) -> Style {
+    if active == this {
+        Style::default().fg(Color::Cyan)
+    } else {
+        Style::default().fg(Color::Rgb(40, 40, 60))
+    }
+}
 
 fn draw(frame: &mut Frame, state: &AppState) {
     let outer = Layout::default()
@@ -216,7 +333,6 @@ fn draw(frame: &mut Frame, state: &AppState) {
     let main_area = outer[0];
     let status_area = outer[1];
 
-    // Three columns: agents | radio | right (tasks + tribunal)
     let cols = Layout::default()
         .direction(Direction::Horizontal)
         .constraints([
@@ -229,42 +345,53 @@ fn draw(frame: &mut Frame, state: &AppState) {
     draw_agents(frame, cols[0], state);
     draw_radio(frame, cols[1], state);
 
-    // Right column: tasks top, tribunal bottom
     let right = Layout::default()
         .direction(Direction::Vertical)
         .constraints([Constraint::Percentage(40), Constraint::Percentage(60)])
         .split(cols[2]);
-    draw_tasks(frame, right[0], state);
+
+    if state.show_task_list {
+        draw_task_list(frame, right[0], state);
+    } else {
+        draw_tasks(frame, right[0], state);
+    }
     draw_tribunal(frame, right[1], state);
 
-    // Status bar
+    // Status bar with context-sensitive help
+    let help = match state.input_mode {
+        InputMode::Normal => match state.active_panel {
+            Panel::Agents => "↑↓:select  Enter:wake  p:ping  w:wake-all  Tab:next  t:tribunal  m:radio  n:task  l:list  q:quit",
+            Panel::Radio => "↑↓:scroll  m:compose  Tab:next  q:quit",
+            Panel::Tasks => "↑↓:scroll  n:new-task  l:toggle-list  Tab:next  q:quit",
+            Panel::Tribunal => "t:input  Tab:next  q:quit",
+        },
+        InputMode::TribunalInput => "Enter:submit  Esc:cancel",
+        InputMode::RadioCompose => "Enter:send  Esc:cancel",
+        InputMode::TaskCreate => "Enter:create  Esc:cancel",
+    };
+
     let status = Paragraph::new(Line::from(vec![
-        Span::styled(" q", Style::default().fg(Color::Yellow).bold()),
-        Span::raw(":quit "),
-        Span::styled("r", Style::default().fg(Color::Yellow).bold()),
-        Span::raw(":refresh "),
-        Span::styled("w", Style::default().fg(Color::Yellow).bold()),
-        Span::raw(":wake "),
-        Span::styled("t", Style::default().fg(Color::Yellow).bold()),
-        Span::raw(":tribunal "),
-        Span::styled("Esc", Style::default().fg(Color::Yellow).bold()),
-        Span::raw(":back  "),
-        Span::styled(&state.status_msg, Style::default().fg(Color::DarkGray)),
+        Span::styled(format!(" {} ", now_hms()), Style::default().fg(Color::DarkGray)),
+        Span::styled(help, Style::default().fg(Color::Rgb(100, 100, 130))),
+        Span::styled(format!("  {}", state.status_msg), Style::default().fg(Color::DarkGray)),
     ]))
-    .style(Style::default().bg(Color::Rgb(20, 20, 30)));
+    .style(Style::default().bg(Color::Rgb(15, 15, 25)));
     frame.render_widget(status, status_area);
 }
 
 fn draw_agents(frame: &mut Frame, area: Rect, state: &AppState) {
+    let title = format!(" AGENTS ({}) ", state.agents.len());
     let block = Block::default()
-        .title(" AGENTS ")
+        .title(title)
         .title_style(Style::default().fg(Color::Cyan).bold())
         .borders(Borders::ALL)
-        .border_style(Style::default().fg(Color::Rgb(40, 40, 60)));
+        .border_style(panel_border(state.active_panel, Panel::Agents));
 
     if state.agents.is_empty() {
-        let p = Paragraph::new("No data").style(Style::default().fg(Color::DarkGray)).block(block);
-        frame.render_widget(p, area);
+        frame.render_widget(
+            Paragraph::new("No data").style(Style::default().fg(Color::DarkGray)).block(block),
+            area,
+        );
         return;
     }
 
@@ -273,7 +400,8 @@ fn draw_agents(frame: &mut Frame, area: Rect, state: &AppState) {
     let mut total_cost: f64 = 0.0;
     let mut alive = 0;
 
-    for a in &state.agents {
+    for (i, a) in state.agents.iter().enumerate() {
+        let is_selected = state.active_panel == Panel::Agents && i == state.agent_cursor;
         let dot_color = match a.pace.as_str() {
             "green" => Color::Green,
             "yellow" => Color::Yellow,
@@ -285,90 +413,63 @@ fn draw_agents(frame: &mut Frame, area: Rect, state: &AppState) {
             "cooldown" => Color::Yellow,
             _ => Color::Red,
         };
-        let tok = a.t_day;
-        total_tok += tok;
+        total_tok += a.t_day;
         total_cost += a.dollar_day;
-        if a.alive {
-            alive += 1;
-        }
-        let tok_str = if tok >= 1_000_000 {
-            format!("{}M", tok / 1_000_000)
-        } else if tok >= 1_000 {
-            format!("{}K", tok / 1_000)
-        } else {
-            format!("{}", tok)
-        };
+        if a.alive { alive += 1; }
+
+        let tok_str = format_tokens(a.t_day);
         let pending = a.pending_msgs.unwrap_or(0);
-        let pend_str = if pending > 0 {
-            format!(" [{}msg]", pending)
-        } else {
-            String::new()
-        };
+        let pend_str = if pending > 0 { format!(" [{pending}✉]") } else { String::new() };
+        let tasks = a.tasks_open.unwrap_or(0);
+        let task_str = if tasks > 0 { format!(" {tasks}T") } else { String::new() };
+
+        let cursor = if is_selected { "▸" } else { " " };
 
         let line = Line::from(vec![
+            Span::styled(cursor, Style::default().fg(Color::Cyan)),
             Span::styled(format!("{dot} "), Style::default().fg(dot_color)),
             Span::styled(format!("{:<8}", a.name), Style::default().fg(Color::White).bold()),
-            Span::styled(format!(" {:<9}", a.mode), Style::default().fg(mode_color)),
-            Span::styled(format!(" {:>6}", tok_str), Style::default().fg(Color::Cyan)),
+            Span::styled(format!(" {:<8}", a.mode), Style::default().fg(mode_color)),
+            Span::styled(format!(" {:>5}", tok_str), Style::default().fg(Color::Cyan)),
             Span::styled(format!(" ${:.2}", a.dollar_day), Style::default().fg(Color::Yellow)),
             Span::styled(pend_str, Style::default().fg(Color::Yellow)),
+            Span::styled(task_str, Style::default().fg(Color::Rgb(100, 100, 140))),
         ]);
-        items.push(ListItem::new(line));
+        let style = if is_selected {
+            Style::default().bg(Color::Rgb(30, 30, 50))
+        } else {
+            Style::default()
+        };
+        items.push(ListItem::new(line).style(style));
 
-        // Budget gauge if applicable
+        // Budget bar
         if let Some(cap) = a.budget_cap {
             if cap > 0.0 {
-                let used = if let Some(rem) = a.budget_remaining {
-                    ((cap - rem) / cap).clamp(0.0, 1.0)
-                } else {
-                    (a.dollar_day / cap).clamp(0.0, 1.0)
-                };
-                let gauge_color = if used < 0.6 {
-                    Color::Green
-                } else if used < 0.85 {
-                    Color::Yellow
-                } else {
-                    Color::Red
-                };
-                let rem_str = a
-                    .budget_remaining
-                    .map(|r| format!("${:.2} left", r))
-                    .unwrap_or_default();
-                let gauge_line = Line::from(vec![
+                let used = a.budget_remaining
+                    .map(|rem| ((cap - rem) / cap).clamp(0.0, 1.0))
+                    .unwrap_or_else(|| (a.dollar_day / cap).clamp(0.0, 1.0));
+                let gc = if used < 0.6 { Color::Green } else if used < 0.85 { Color::Yellow } else { Color::Red };
+                let filled = (used * 14.0) as usize;
+                let empty = 14 - filled;
+                let rem_str = a.budget_remaining.map(|r| format!("${r:.1}")).unwrap_or_default();
+                items.push(ListItem::new(Line::from(vec![
                     Span::raw("  "),
-                    Span::styled(
-                        "▓".repeat((used * 16.0) as usize),
-                        Style::default().fg(gauge_color),
-                    ),
-                    Span::styled(
-                        "░".repeat(16 - (used * 16.0) as usize),
-                        Style::default().fg(Color::Rgb(40, 40, 50)),
-                    ),
+                    Span::styled("▓".repeat(filled), Style::default().fg(gc)),
+                    Span::styled("░".repeat(empty), Style::default().fg(Color::Rgb(30, 30, 45))),
                     Span::styled(format!(" {rem_str}"), Style::default().fg(Color::DarkGray)),
-                ]);
-                items.push(ListItem::new(gauge_line));
+                ])));
             }
         }
     }
 
-    // Summary line
-    let total_str = if total_tok >= 1_000_000 {
-        format!("{}M", total_tok / 1_000_000)
-    } else if total_tok >= 1_000 {
-        format!("{}K", total_tok / 1_000)
-    } else {
-        format!("{}", total_tok)
-    };
-    items.push(ListItem::new(Line::from("")));
+    // Separator + summary
+    items.push(ListItem::new(Line::from(
+        Span::styled("─".repeat(30), Style::default().fg(Color::Rgb(40, 40, 60)))
+    )));
     items.push(ListItem::new(Line::from(vec![
         Span::styled(
-            format!(
-                " Σ {} tok ${:.2} | {}/{} alive",
-                total_str,
-                total_cost,
-                alive,
-                state.agents.len()
-            ),
+            format!(" Σ {} tok ${:.2} | {}/{} alive",
+                format_tokens(total_tok), total_cost, alive, state.agents.len()),
             Style::default().fg(Color::White).bold(),
         ),
     ])));
@@ -378,60 +479,84 @@ fn draw_agents(frame: &mut Frame, area: Rect, state: &AppState) {
 }
 
 fn draw_radio(frame: &mut Frame, area: Rect, state: &AppState) {
+    let title = format!(" RADIO ({}) ", state.radio.len());
     let block = Block::default()
-        .title(" RADIO ")
+        .title(title)
         .title_style(Style::default().fg(Color::Cyan).bold())
         .borders(Borders::ALL)
-        .border_style(Style::default().fg(Color::Rgb(40, 40, 60)));
+        .border_style(panel_border(state.active_panel, Panel::Radio));
+
+    let inner = block.inner(area);
+    let inner_height = inner.height as usize;
+
+    // If in compose mode, reserve bottom 3 lines for input
+    let (list_area, compose_area) = if state.input_mode == InputMode::RadioCompose {
+        let chunks = Layout::default()
+            .direction(Direction::Vertical)
+            .constraints([Constraint::Min(1), Constraint::Length(3)])
+            .split(inner);
+        (chunks[0], Some(chunks[1]))
+    } else {
+        (inner, None)
+    };
+
+    frame.render_widget(block, area);
 
     if state.radio.is_empty() {
-        let p = Paragraph::new("No radio events")
-            .style(Style::default().fg(Color::DarkGray))
-            .block(block);
-        frame.render_widget(p, area);
-        return;
-    }
+        frame.render_widget(
+            Paragraph::new("No radio events").style(Style::default().fg(Color::DarkGray)),
+            list_area,
+        );
+    } else {
+        let avail = list_area.height as usize;
+        let scroll = state.radio_scroll.min(state.radio.len().saturating_sub(avail));
+        let start = state.radio.len().saturating_sub(avail + scroll);
+        let end = state.radio.len().saturating_sub(scroll);
+        let visible = &state.radio[start..end];
 
-    let inner_height = area.height.saturating_sub(2) as usize;
-    let start = state.radio.len().saturating_sub(inner_height);
-    let visible = &state.radio[start..];
-
-    let items: Vec<ListItem> = visible
-        .iter()
-        .map(|item| {
-            let ts = if item.ts.len() >= 19 {
-                &item.ts[11..19]
-            } else {
-                "        "
-            };
+        let items: Vec<ListItem> = visible.iter().map(|item| {
+            let ts = if item.ts.len() >= 19 { &item.ts[11..19] } else { "        " };
             let sender = item.sender.to_uppercase();
-            let sender_color = match sender.as_str() {
+            let sc = match sender.as_str() {
                 "REX" => Color::Cyan,
                 "ORION" => Color::Magenta,
                 "GEMINI" => Color::Yellow,
                 "HUMAN" => Color::Green,
                 "RELAY" => Color::Rgb(255, 165, 0),
+                "TRIBUNAL" | "TRIBUN" => Color::Rgb(0, 200, 200),
                 _ => Color::Gray,
             };
             let text = item.text.replace('\n', " ");
-            let text = if text.len() > 100 {
-                format!("{}…", &text[..100])
+            let text = if text.len() > 120 { format!("{}…", &text[..120]) } else { text };
+            let recv = item.receiver.as_deref().unwrap_or("");
+            let arrow = if !recv.is_empty() && recv != "all" {
+                format!("→{} ", recv.to_uppercase())
             } else {
-                text
+                String::new()
             };
             ListItem::new(Line::from(vec![
                 Span::styled(format!("{ts} "), Style::default().fg(Color::DarkGray)),
-                Span::styled(
-                    format!("{:<6}", &sender[..sender.len().min(6)]),
-                    Style::default().fg(sender_color).bold(),
-                ),
-                Span::styled(format!(" {text}"), Style::default().fg(Color::Rgb(180, 180, 200))),
+                Span::styled(format!("{:<6}", &sender[..sender.len().min(6)]), Style::default().fg(sc).bold()),
+                Span::styled(arrow, Style::default().fg(sc).dim()),
+                Span::styled(text, Style::default().fg(Color::Rgb(180, 180, 200))),
             ]))
-        })
-        .collect();
+        }).collect();
 
-    let list = List::new(items).block(block);
-    frame.render_widget(list, area);
+        frame.render_widget(List::new(items), list_area);
+    }
+
+    // Radio compose box
+    if let Some(ca) = compose_area {
+        let input_block = Block::default()
+            .title(" Broadcast ")
+            .borders(Borders::ALL)
+            .border_style(Style::default().fg(Color::Yellow));
+        let cursor = if state.radio_input.is_empty() { "type message..." } else { &state.radio_input };
+        let p = Paragraph::new(Span::styled(cursor, Style::default().fg(
+            if state.radio_input.is_empty() { Color::DarkGray } else { Color::White }
+        ))).block(input_block);
+        frame.render_widget(p, ca);
+    }
 }
 
 fn draw_tasks(frame: &mut Frame, area: Rect, state: &AppState) {
@@ -439,76 +564,150 @@ fn draw_tasks(frame: &mut Frame, area: Rect, state: &AppState) {
         .title(" TASKS ")
         .title_style(Style::default().fg(Color::Cyan).bold())
         .borders(Borders::ALL)
-        .border_style(Style::default().fg(Color::Rgb(40, 40, 60)));
+        .border_style(panel_border(state.active_panel, Panel::Tasks));
+
+    if state.input_mode == InputMode::TaskCreate {
+        let inner = block.inner(area);
+        frame.render_widget(block, area);
+        let chunks = Layout::default()
+            .direction(Direction::Vertical)
+            .constraints([Constraint::Min(1), Constraint::Length(3)])
+            .split(inner);
+
+        // Show summary above
+        if let Some(ref t) = state.tasks {
+            let text = format!("Total: {} | Open: {} | Claimed: {} | Done: {}",
+                t.total,
+                t.counts.get("open").unwrap_or(&0),
+                t.counts.get("claimed").unwrap_or(&0),
+                t.counts.get("done").unwrap_or(&0),
+            );
+            frame.render_widget(
+                Paragraph::new(text).style(Style::default().fg(Color::Rgb(120, 120, 150))),
+                chunks[0],
+            );
+        }
+
+        // Task create input
+        let input_block = Block::default()
+            .title(" New Task (P1) ")
+            .borders(Borders::ALL)
+            .border_style(Style::default().fg(Color::Yellow));
+        let cursor = if state.task_input.is_empty() { "task title..." } else { &state.task_input };
+        frame.render_widget(
+            Paragraph::new(Span::styled(cursor, Style::default().fg(
+                if state.task_input.is_empty() { Color::DarkGray } else { Color::White }
+            ))).block(input_block),
+            chunks[1],
+        );
+        return;
+    }
 
     let text = if let Some(ref t) = state.tasks {
         let counts = &t.counts;
         let mut lines = vec![
             Line::from(vec![
                 Span::styled("Total:   ", Style::default().fg(Color::DarkGray)),
-                Span::styled(format!("{}", t.total), Style::default().fg(Color::White)),
+                Span::styled(format!("{}", t.total), Style::default().fg(Color::White).bold()),
             ]),
             Line::from(vec![
                 Span::styled("Open:    ", Style::default().fg(Color::DarkGray)),
-                Span::styled(
-                    format!("{}", counts.get("open").unwrap_or(&0)),
-                    Style::default().fg(Color::Green),
-                ),
+                Span::styled(format!("{}", counts.get("open").unwrap_or(&0)),
+                    Style::default().fg(Color::Green)),
             ]),
             Line::from(vec![
                 Span::styled("Claimed: ", Style::default().fg(Color::DarkGray)),
-                Span::styled(
-                    format!("{}", counts.get("claimed").unwrap_or(&0)),
-                    Style::default().fg(Color::Cyan),
-                ),
+                Span::styled(format!("{}", counts.get("claimed").unwrap_or(&0)),
+                    Style::default().fg(Color::Cyan)),
             ]),
             Line::from(vec![
                 Span::styled("Done:    ", Style::default().fg(Color::DarkGray)),
-                Span::styled(
-                    format!("{}", counts.get("done").unwrap_or(&0)),
-                    Style::default().fg(Color::DarkGray),
-                ),
+                Span::styled(format!("{}", counts.get("done").unwrap_or(&0)),
+                    Style::default().fg(Color::DarkGray)),
+            ]),
+            Line::from(vec![
+                Span::styled("Blocked: ", Style::default().fg(Color::DarkGray)),
+                Span::styled(format!("{}", counts.get("blocked").unwrap_or(&0)),
+                    Style::default().fg(if *counts.get("blocked").unwrap_or(&0) > 0 { Color::Red } else { Color::DarkGray })),
             ]),
         ];
         if !t.active_by_priority.is_empty() {
-            let parts: String = t
-                .active_by_priority
-                .iter()
-                .map(|(k, v)| format!("{k}={v}"))
-                .collect::<Vec<_>>()
-                .join(" ");
+            let parts: String = t.active_by_priority.iter()
+                .map(|(k, v)| format!("{k}={v}")).collect::<Vec<_>>().join(" ");
             lines.push(Line::from(Span::styled(
-                format!("Priority: {parts}"),
-                Style::default().fg(Color::Yellow),
-            )));
+                format!("Active:  {parts}"), Style::default().fg(Color::Yellow))));
+        }
+        if let Some(ref claimed) = t.claimed_by_agent {
+            lines.push(Line::from(""));
+            lines.push(Line::from(Span::styled("By agent:", Style::default().fg(Color::Rgb(80, 80, 110)))));
+            for (agent, count) in claimed {
+                lines.push(Line::from(vec![
+                    Span::styled(format!("  {:<10}", agent), Style::default().fg(Color::White)),
+                    Span::styled(format!("{count}"), Style::default().fg(Color::Cyan)),
+                ]));
+            }
         }
         let stale = t.stale_count.unwrap_or(0);
         if stale > 0 {
             lines.push(Line::from(Span::styled(
-                format!("⚠ {stale} stale"),
-                Style::default().fg(Color::Red).bold(),
-            )));
+                format!("⚠ {stale} stale"), Style::default().fg(Color::Red).bold())));
         }
         Text::from(lines)
     } else {
         Text::styled("No data", Style::default().fg(Color::DarkGray))
     };
 
-    let p = Paragraph::new(text).block(block);
-    frame.render_widget(p, area);
+    frame.render_widget(Paragraph::new(text).block(block), area);
+}
+
+fn draw_task_list(frame: &mut Frame, area: Rect, state: &AppState) {
+    let block = Block::default()
+        .title(" TASK LIST (l:toggle) ")
+        .title_style(Style::default().fg(Color::Cyan).bold())
+        .borders(Borders::ALL)
+        .border_style(panel_border(state.active_panel, Panel::Tasks));
+
+    if state.task_list.is_empty() {
+        frame.render_widget(
+            Paragraph::new("No tasks").style(Style::default().fg(Color::DarkGray)).block(block),
+            area,
+        );
+        return;
+    }
+
+    let items: Vec<ListItem> = state.task_list.iter().map(|t| {
+        let status_color = match t.status.as_str() {
+            "open" => Color::Green,
+            "claimed" => Color::Cyan,
+            "done" => Color::DarkGray,
+            "blocked" => Color::Red,
+            _ => Color::Gray,
+        };
+        let pri_color = match t.priority.as_str() {
+            "P0" => Color::Red,
+            "P1" => Color::Yellow,
+            _ => Color::DarkGray,
+        };
+        let title = if t.title.len() > 40 { format!("{}…", &t.title[..40]) } else { t.title.clone() };
+        ListItem::new(Line::from(vec![
+            Span::styled(format!("{:<2}", t.priority), Style::default().fg(pri_color)),
+            Span::styled(format!(" {:<7}", t.status), Style::default().fg(status_color)),
+            Span::styled(format!(" {:<6}", t.agent), Style::default().fg(Color::Rgb(100, 100, 140))),
+            Span::styled(format!(" {title}"), Style::default().fg(Color::White)),
+        ]))
+    }).collect();
+
+    frame.render_widget(List::new(items).block(block), area);
 }
 
 fn draw_tribunal(frame: &mut Frame, area: Rect, state: &AppState) {
-    let border_color = if state.focus == Focus::Tribunal {
-        Color::Cyan
-    } else {
-        Color::Rgb(40, 40, 60)
-    };
+    let is_input = state.input_mode == InputMode::TribunalInput;
     let block = Block::default()
         .title(" TRIBUNAL ")
         .title_style(Style::default().fg(Color::Cyan).bold())
         .borders(Borders::ALL)
-        .border_style(Style::default().fg(border_color));
+        .border_style(if is_input { Style::default().fg(Color::Yellow) }
+            else { panel_border(state.active_panel, Panel::Tribunal) });
 
     let inner = block.inner(area);
     frame.render_widget(block, area);
@@ -518,41 +717,208 @@ fn draw_tribunal(frame: &mut Frame, area: Rect, state: &AppState) {
         .constraints([Constraint::Length(3), Constraint::Min(1)])
         .split(inner);
 
-    // Input line
-    let input_block = Block::default()
-        .borders(Borders::ALL)
-        .border_style(Style::default().fg(if state.focus == Focus::Tribunal {
-            Color::Yellow
-        } else {
-            Color::Rgb(40, 40, 50)
-        }));
-    let input_text = if state.tribunal_input.is_empty() && state.focus != Focus::Tribunal {
-        Paragraph::new(Span::styled(
-            "Press t to enter claim...",
-            Style::default().fg(Color::DarkGray),
-        ))
+    // Input
+    let ib = Block::default().borders(Borders::ALL)
+        .border_style(Style::default().fg(if is_input { Color::Yellow } else { Color::Rgb(40, 40, 50) }));
+    let input_text = if state.tribunal_input.is_empty() && !is_input {
+        Paragraph::new(Span::styled("t to evaluate claim...", Style::default().fg(Color::DarkGray)))
     } else {
-        Paragraph::new(Span::styled(
-            &state.tribunal_input,
-            Style::default().fg(Color::White),
-        ))
+        Paragraph::new(Span::styled(&state.tribunal_input, Style::default().fg(Color::White)))
     };
-    frame.render_widget(input_text.block(input_block), chunks[0]);
+    frame.render_widget(input_text.block(ib), chunks[0]);
 
     // Result
-    let result = Paragraph::new(state.tribunal_result.as_str())
-        .style(Style::default().fg(Color::Rgb(180, 180, 200)))
-        .wrap(Wrap { trim: true });
-    frame.render_widget(result, chunks[1]);
+    frame.render_widget(
+        Paragraph::new(state.tribunal_result.as_str())
+            .style(Style::default().fg(Color::Rgb(180, 180, 200)))
+            .wrap(Wrap { trim: true }),
+        chunks[1],
+    );
 }
 
-// ─── Main loop ────────────────────────────────────────────────────────
+// ─── Input handling ───────────────────────────────────────────────────
+
+async fn handle_key(state: &mut AppState, key: KeyEvent) {
+    match state.input_mode {
+        InputMode::Normal => handle_normal(state, key).await,
+        InputMode::TribunalInput => handle_text_input(state, key, InputTarget::Tribunal).await,
+        InputMode::RadioCompose => handle_text_input(state, key, InputTarget::Radio).await,
+        InputMode::TaskCreate => handle_text_input(state, key, InputTarget::Task).await,
+    }
+}
+
+enum InputTarget { Tribunal, Radio, Task }
+
+async fn handle_text_input(state: &mut AppState, key: KeyEvent, target: InputTarget) {
+    match key.code {
+        KeyCode::Esc => {
+            state.input_mode = InputMode::Normal;
+        }
+        KeyCode::Enter => {
+            match target {
+                InputTarget::Tribunal => {
+                    let claim = state.tribunal_input.clone();
+                    if !claim.trim().is_empty() {
+                        state.tribunal_input.clear();
+                        state.tribunal_result = "Evaluating...".into();
+                        state.input_mode = InputMode::Normal;
+                        match submit_tribunal(&state.api_base, &claim).await {
+                            Ok(r) => state.tribunal_result = r,
+                            Err(e) => state.tribunal_result = format!("Error: {e}"),
+                        }
+                    }
+                }
+                InputTarget::Radio => {
+                    let msg = state.radio_input.clone();
+                    if !msg.trim().is_empty() {
+                        state.radio_input.clear();
+                        state.input_mode = InputMode::Normal;
+                        match send_radio(&state.api_base, &msg).await {
+                            Ok(_) => state.status_msg = "radio sent".into(),
+                            Err(e) => state.status_msg = format!("radio err: {e}"),
+                        }
+                        // Refresh radio feed
+                        if let Ok(r) = fetch_radio(&state.api_base).await { state.radio = r; }
+                    }
+                }
+                InputTarget::Task => {
+                    let title = state.task_input.clone();
+                    if !title.trim().is_empty() {
+                        state.task_input.clear();
+                        state.input_mode = InputMode::Normal;
+                        match create_task(&state.api_base, &title).await {
+                            Ok(_) => state.status_msg = "task created".into(),
+                            Err(e) => state.status_msg = format!("task err: {e}"),
+                        }
+                        // Refresh tasks
+                        if let Ok(t) = fetch_tasks(&state.api_base).await { state.tasks = Some(t); }
+                        if state.show_task_list {
+                            if let Ok(tl) = fetch_task_list(&state.api_base).await { state.task_list = tl; }
+                        }
+                    }
+                }
+            }
+        }
+        KeyCode::Backspace => {
+            match target {
+                InputTarget::Tribunal => { state.tribunal_input.pop(); }
+                InputTarget::Radio => { state.radio_input.pop(); }
+                InputTarget::Task => { state.task_input.pop(); }
+            }
+        }
+        KeyCode::Char(c) => {
+            match target {
+                InputTarget::Tribunal => state.tribunal_input.push(c),
+                InputTarget::Radio => state.radio_input.push(c),
+                InputTarget::Task => state.task_input.push(c),
+            }
+        }
+        _ => {}
+    }
+}
+
+async fn handle_normal(state: &mut AppState, key: KeyEvent) {
+    match key.code {
+        KeyCode::Char('q') | KeyCode::Char('Q') => state.running = false,
+        KeyCode::Char('c') if key.modifiers.contains(KeyModifiers::CONTROL) => state.running = false,
+
+        // Tab: cycle panels
+        KeyCode::Tab => {
+            let idx = PANELS.iter().position(|p| *p == state.active_panel).unwrap_or(0);
+            state.active_panel = PANELS[(idx + 1) % PANELS.len()];
+        }
+        KeyCode::BackTab => {
+            let idx = PANELS.iter().position(|p| *p == state.active_panel).unwrap_or(0);
+            state.active_panel = PANELS[(idx + PANELS.len() - 1) % PANELS.len()];
+        }
+
+        // Refresh
+        KeyCode::Char('r') | KeyCode::Char('R') => {
+            state.last_poll = Instant::now() - Duration::from_secs(60);
+            state.status_msg = "refreshing...".into();
+        }
+
+        // Mode entries
+        KeyCode::Char('t') => {
+            state.active_panel = Panel::Tribunal;
+            state.input_mode = InputMode::TribunalInput;
+        }
+        KeyCode::Char('m') => {
+            state.active_panel = Panel::Radio;
+            state.input_mode = InputMode::RadioCompose;
+        }
+        KeyCode::Char('n') => {
+            state.active_panel = Panel::Tasks;
+            state.input_mode = InputMode::TaskCreate;
+        }
+        KeyCode::Char('l') => {
+            state.show_task_list = !state.show_task_list;
+            if state.show_task_list && state.task_list.is_empty() {
+                if let Ok(tl) = fetch_task_list(&state.api_base).await { state.task_list = tl; }
+            }
+        }
+
+        // Wake all
+        KeyCode::Char('w') | KeyCode::Char('W') => {
+            let api = state.api_base.clone();
+            for agent in ["REX", "ORION", "GEMINI", "HYPERION"] {
+                let _ = wake_agent(&api, agent).await;
+            }
+            state.status_msg = "wake sent to all".into();
+        }
+
+        // Navigation (context-dependent)
+        KeyCode::Up | KeyCode::Char('k') => match state.active_panel {
+            Panel::Agents => {
+                if state.agent_cursor > 0 { state.agent_cursor -= 1; }
+            }
+            Panel::Radio => { state.radio_scroll += 1; }
+            Panel::Tasks => { state.task_scroll = state.task_scroll.saturating_sub(1); }
+            _ => {}
+        },
+        KeyCode::Down | KeyCode::Char('j') => match state.active_panel {
+            Panel::Agents => {
+                if state.agent_cursor + 1 < state.agents.len() { state.agent_cursor += 1; }
+            }
+            Panel::Radio => { state.radio_scroll = state.radio_scroll.saturating_sub(1); }
+            Panel::Tasks => { state.task_scroll += 1; }
+            _ => {}
+        },
+
+        // Agent actions
+        KeyCode::Enter => {
+            if state.active_panel == Panel::Agents {
+                if let Some(a) = state.selected_agent() {
+                    let name = a.name.clone();
+                    let _ = wake_agent(&state.api_base, &name).await;
+                    state.status_msg = format!("wake {name}");
+                }
+            }
+        }
+        KeyCode::Char('p') => {
+            if state.active_panel == Panel::Agents {
+                if let Some(a) = state.selected_agent() {
+                    let name = a.name.clone();
+                    let _ = ping_agent(&state.api_base, &name).await;
+                    state.status_msg = format!("ping {name}");
+                }
+            }
+        }
+
+        // Home/End for radio
+        KeyCode::Home => { state.radio_scroll = state.radio.len(); }
+        KeyCode::End => { state.radio_scroll = 0; }
+
+        _ => {}
+    }
+}
+
+// ─── Main ─────────────────────────────────────────────────────────────
 
 #[tokio::main]
 async fn main() -> Result<()> {
     let api = std::env::var("RHEA_API").unwrap_or_else(|_| "http://localhost:8400".into());
 
-    // Terminal setup
     enable_raw_mode()?;
     let mut stdout = io::stdout();
     execute!(stdout, EnterAlternateScreen)?;
@@ -563,12 +929,17 @@ async fn main() -> Result<()> {
     let poll_interval = Duration::from_secs(5);
 
     while state.running {
-        // Poll data every 5s
         if state.last_poll.elapsed() >= poll_interval {
             state.last_poll = Instant::now();
             let api = state.api_base.clone();
             match fetch_agents(&api).await {
-                Ok(a) => state.agents = a,
+                Ok(a) => {
+                    // Clamp cursor
+                    if state.agent_cursor >= a.len() && !a.is_empty() {
+                        state.agent_cursor = a.len() - 1;
+                    }
+                    state.agents = a;
+                }
                 Err(e) => state.status_msg = format!("agents: {e}"),
             }
             match fetch_tasks(&api).await {
@@ -579,82 +950,23 @@ async fn main() -> Result<()> {
                 Ok(r) => state.radio = r,
                 Err(e) => state.status_msg = format!("radio: {e}"),
             }
+            if state.show_task_list {
+                if let Ok(tl) = fetch_task_list(&api).await { state.task_list = tl; }
+            }
             let alive = state.agents.iter().filter(|a| a.alive).count();
             let total = state.agents.len();
-            let now = {
-                let d = std::time::SystemTime::now()
-                    .duration_since(std::time::UNIX_EPOCH)
-                    .unwrap()
-                    .as_secs();
-                let secs = (d % 86400) as u32;
-                let h = secs / 3600;
-                let m = (secs % 3600) / 60;
-                let s = secs % 60;
-                format!("{h:02}:{m:02}:{s:02}")
-            };
-            state.status_msg = format!("{now} | {alive}/{total} alive | poll ok");
+            state.status_msg = format!("{}/{} alive | poll ok", alive, total);
         }
 
         terminal.draw(|frame| draw(frame, &state))?;
 
-        // Non-blocking event poll (100ms tick)
         if event::poll(Duration::from_millis(100))? {
             if let Event::Key(key) = event::read()? {
-                match state.focus {
-                    Focus::Dashboard => match key.code {
-                        KeyCode::Char('q') => state.running = false,
-                        KeyCode::Char('c') if key.modifiers.contains(KeyModifiers::CONTROL) => {
-                            state.running = false
-                        }
-                        KeyCode::Char('r') => {
-                            state.last_poll = Instant::now() - Duration::from_secs(60);
-                            state.status_msg = "refreshing...".into();
-                        }
-                        KeyCode::Char('w') => {
-                            let api = state.api_base.clone();
-                            for agent in ["REX", "ORION", "GEMINI", "HYPERION"] {
-                                let _ = wake_agent(&api, agent).await;
-                            }
-                            state.status_msg = "wake sent to all agents".into();
-                        }
-                        KeyCode::Char('t') => {
-                            state.focus = Focus::Tribunal;
-                        }
-                        _ => {}
-                    },
-                    Focus::Tribunal => match key.code {
-                        KeyCode::Esc => {
-                            state.focus = Focus::Dashboard;
-                        }
-                        KeyCode::Enter => {
-                            if !state.tribunal_input.trim().is_empty() {
-                                let claim = state.tribunal_input.clone();
-                                state.tribunal_input.clear();
-                                state.tribunal_result = "Evaluating...".into();
-                                state.focus = Focus::Dashboard;
-                                let api = state.api_base.clone();
-                                match submit_tribunal(&api, &claim).await {
-                                    Ok(r) => state.tribunal_result = r,
-                                    Err(e) => {
-                                        state.tribunal_result = format!("Error: {e}")
-                                    }
-                                }
-                            }
-                        }
-                        KeyCode::Backspace => {
-                            state.tribunal_input.pop();
-                        }
-                        KeyCode::Char(c) => {
-                            state.tribunal_input.push(c);
-                        }
-                        _ => {}
-                    },
-                }
+                handle_key(&mut state, key).await;
             }
         }
     }
 
-    // Cleanup
     disable_raw_mode()?;
     execute!(terminal.backend_mut(), LeaveAlternateScreen)?;
     Ok(())
