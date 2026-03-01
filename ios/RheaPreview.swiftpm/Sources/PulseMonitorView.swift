@@ -92,7 +92,9 @@ struct PulseMonitorView: View {
                 .foregroundStyle(.white)
 
             TextField("flicker note", text: $flickerNote)
+                #if os(iOS)
                 .textInputAutocapitalization(.never)
+                #endif
                 .autocorrectionDisabled()
                 .padding(.horizontal, 10)
                 .padding(.vertical, 8)

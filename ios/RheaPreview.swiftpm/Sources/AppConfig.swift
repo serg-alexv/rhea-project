@@ -1,8 +1,8 @@
 import SwiftUI
 
 enum AppConfig {
-    /// Production Cloud Run URL (always reachable from any network).
-    static let productionAPIBaseURL = "https://rhea-tribunal-api-145767756165.europe-west1.run.app"
+    /// Production Fly.io URL (always reachable from any network).
+    static let productionAPIBaseURL = "https://rhea-tribunal.fly.dev"
 
     static let defaultAtlasBaseURL = "http://localhost:3000"
 
