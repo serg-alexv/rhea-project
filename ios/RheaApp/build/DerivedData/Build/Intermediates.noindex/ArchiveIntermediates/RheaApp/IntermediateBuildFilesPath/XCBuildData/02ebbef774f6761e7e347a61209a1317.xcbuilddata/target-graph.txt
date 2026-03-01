@@ -1,9 +1,0 @@
-Target dependency graph (4 targets)
-Target 'RheaApp' in project 'RheaApp'
-➜ Explicit dependency on target 'Pow' in project 'Pow'
-Target 'Pow' in project 'Pow'
-➜ Explicit dependency on target 'Pow' in project 'Pow'
-➜ Explicit dependency on target 'Pow_Pow' in project 'Pow'
-Target 'Pow' in project 'Pow'
-➜ Explicit dependency on target 'Pow_Pow' in project 'Pow'
-Target 'Pow_Pow' in project 'Pow' (no dependencies)

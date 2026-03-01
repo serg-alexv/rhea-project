@@ -1,0 +1,40 @@
+{
+  "": {
+    "swift-dependencies": "/Users/sa/rh.1/ios/RheaPreview.swiftpm/.build/arm64-apple-macosx/debug/RheaPreview.build/master.swiftdeps"
+  },
+  "/Users/sa/rh.1/ios/RheaPreview.swiftpm/Sources/AtlasWebView.swift": {
+    "dependencies": "/Users/sa/rh.1/ios/RheaPreview.swiftpm/.build/arm64-apple-macosx/debug/RheaPreview.build/AtlasWebView.d",
+    "object": "/Users/sa/rh.1/ios/RheaPreview.swiftpm/.build/arm64-apple-macosx/debug/RheaPreview.build/AtlasWebView.swift.o",
+    "swiftmodule": "/Users/sa/rh.1/ios/RheaPreview.swiftpm/.build/arm64-apple-macosx/debug/RheaPreview.build/AtlasWebView~partial.swiftmodule",
+    "swift-dependencies": "/Users/sa/rh.1/ios/RheaPreview.swiftpm/.build/arm64-apple-macosx/debug/RheaPreview.build/AtlasWebView.swiftdeps",
+    "diagnostics": "/Users/sa/rh.1/ios/RheaPreview.swiftpm/.build/arm64-apple-macosx/debug/RheaPreview.build/AtlasWebView.dia"
+  },
+  "/Users/sa/rh.1/ios/RheaPreview.swiftpm/Sources/GovernorView.swift": {
+    "dependencies": "/Users/sa/rh.1/ios/RheaPreview.swiftpm/.build/arm64-apple-macosx/debug/RheaPreview.build/GovernorView.d",
+    "object": "/Users/sa/rh.1/ios/RheaPreview.swiftpm/.build/arm64-apple-macosx/debug/RheaPreview.build/GovernorView.swift.o",
+    "swiftmodule": "/Users/sa/rh.1/ios/RheaPreview.swiftpm/.build/arm64-apple-macosx/debug/RheaPreview.build/GovernorView~partial.swiftmodule",
+    "swift-dependencies": "/Users/sa/rh.1/ios/RheaPreview.swiftpm/.build/arm64-apple-macosx/debug/RheaPreview.build/GovernorView.swiftdeps",
+    "diagnostics": "/Users/sa/rh.1/ios/RheaPreview.swiftpm/.build/arm64-apple-macosx/debug/RheaPreview.build/GovernorView.dia"
+  },
+  "/Users/sa/rh.1/ios/RheaPreview.swiftpm/Sources/RheaPreviewApp.swift": {
+    "dependencies": "/Users/sa/rh.1/ios/RheaPreview.swiftpm/.build/arm64-apple-macosx/debug/RheaPreview.build/RheaPreviewApp.d",
+    "object": "/Users/sa/rh.1/ios/RheaPreview.swiftpm/.build/arm64-apple-macosx/debug/RheaPreview.build/RheaPreviewApp.swift.o",
+    "swiftmodule": "/Users/sa/rh.1/ios/RheaPreview.swiftpm/.build/arm64-apple-macosx/debug/RheaPreview.build/RheaPreviewApp~partial.swiftmodule",
+    "swift-dependencies": "/Users/sa/rh.1/ios/RheaPreview.swiftpm/.build/arm64-apple-macosx/debug/RheaPreview.build/RheaPreviewApp.swiftdeps",
+    "diagnostics": "/Users/sa/rh.1/ios/RheaPreview.swiftpm/.build/arm64-apple-macosx/debug/RheaPreview.build/RheaPreviewApp.dia"
+  },
+  "/Users/sa/rh.1/ios/RheaPreview.swiftpm/Sources/TasksView.swift": {
+    "dependencies": "/Users/sa/rh.1/ios/RheaPreview.swiftpm/.build/arm64-apple-macosx/debug/RheaPreview.build/TasksView.d",
+    "object": "/Users/sa/rh.1/ios/RheaPreview.swiftpm/.build/arm64-apple-macosx/debug/RheaPreview.build/TasksView.swift.o",
+    "swiftmodule": "/Users/sa/rh.1/ios/RheaPreview.swiftpm/.build/arm64-apple-macosx/debug/RheaPreview.build/TasksView~partial.swiftmodule",
+    "swift-dependencies": "/Users/sa/rh.1/ios/RheaPreview.swiftpm/.build/arm64-apple-macosx/debug/RheaPreview.build/TasksView.swiftdeps",
+    "diagnostics": "/Users/sa/rh.1/ios/RheaPreview.swiftpm/.build/arm64-apple-macosx/debug/RheaPreview.build/TasksView.dia"
+  },
+  "/Users/sa/rh.1/ios/RheaPreview.swiftpm/Sources/Theme.swift": {
+    "dependencies": "/Users/sa/rh.1/ios/RheaPreview.swiftpm/.build/arm64-apple-macosx/debug/RheaPreview.build/Theme.d",
+    "object": "/Users/sa/rh.1/ios/RheaPreview.swiftpm/.build/arm64-apple-macosx/debug/RheaPreview.build/Theme.swift.o",
+    "swiftmodule": "/Users/sa/rh.1/ios/RheaPreview.swiftpm/.build/arm64-apple-macosx/debug/RheaPreview.build/Theme~partial.swiftmodule",
+    "swift-dependencies": "/Users/sa/rh.1/ios/RheaPreview.swiftpm/.build/arm64-apple-macosx/debug/RheaPreview.build/Theme.swiftdeps",
+    "diagnostics": "/Users/sa/rh.1/ios/RheaPreview.swiftpm/.build/arm64-apple-macosx/debug/RheaPreview.build/Theme.dia"
+  }
+}
