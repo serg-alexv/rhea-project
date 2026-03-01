@@ -5,6 +5,7 @@ token_governor.py — Dual-rail token governor for all Rhea agents.
 Upper bound: don't exceed daily budget cap
 Lower bound: T_day == 0 = HARD FAIL
 Below floor trajectory → auto-transition to compact recovery mode
+Anti-idle floor: minimum daily token spend — diagnostic, not enforcer
 
 Absorbed from:
   - Orion P0 mandate (RELAY_20260227_165546)
@@ -16,6 +17,7 @@ Usage:
     gov = Governor("rex")
     status = gov.check()   # → {pace, forecast, mode, T_day, $_day, ...}
     gov.enforce()           # → throttles or triggers compact recovery
+    floor = gov.check_floor()  # → {below_floor, deficit, recovery_suggestion}
 """
 
 import json
@@ -55,6 +57,29 @@ MIN_DAILY_TOKENS = {
     "shared":  50,
 }
 
+# --- Anti-idle floor: absolute minimum daily token spend ---
+# If an agent spends fewer than FLOOR tokens in a day, it's considered idle.
+# This is a diagnostic threshold (detection only, no automatic enforcement).
+# Default: 1000 tokens/day. Configurable per agent and via billing policy JSON.
+DEFAULT_FLOOR = 1000
+FLOOR_THRESHOLDS = {
+    "rex":    1000,    # subscription agent — must show life
+    "orion":  1000,    # API-billed — active contributor
+    "gemini":  500,    # lighter workload expected
+    "shared":  200,    # shared pool — lower bar
+}
+
+# Recovery suggestions per mode: low-cost actions to break idle state
+FLOOR_RECOVERY_SUGGESTIONS = [
+    "run bridge status probe",
+    "check task queue",
+    "send heartbeat to radio",
+    "scan outbox for pending relays",
+    "run check.sh invariant check",
+    "poll governor state and log",
+    "update LEARNING_FEED with any observation",
+]
+
 # Provider → agent mapping
 AGENT_MAP = {
     "openai": "orion",
@@ -81,10 +106,11 @@ def _load_billing_policy() -> dict[str, dict[str, Any]]:
     """
     policy: dict[str, dict[str, Any]] = {}
 
-    for agent in set(BUDGET_CAPS.keys()) | set(MIN_DAILY_TOKENS.keys()):
+    for agent in set(BUDGET_CAPS.keys()) | set(MIN_DAILY_TOKENS.keys()) | set(FLOOR_THRESHOLDS.keys()):
         policy[agent] = {
             "billing_mode": _default_billing_mode(agent),
             "budget_cap": float(BUDGET_CAPS.get(agent, 0.0)),
+            "floor_threshold": FLOOR_THRESHOLDS.get(agent, DEFAULT_FLOOR),
         }
 
     if not BILLING_POLICY_PATH.exists():
@@ -106,6 +132,7 @@ def _load_billing_policy() -> dict[str, dict[str, Any]]:
             {
                 "billing_mode": _default_billing_mode(a),
                 "budget_cap": float(BUDGET_CAPS.get(a, 0.0)),
+                "floor_threshold": FLOOR_THRESHOLDS.get(a, DEFAULT_FLOOR),
             },
         )
 
@@ -120,6 +147,11 @@ def _load_billing_policy() -> dict[str, dict[str, Any]]:
             if "budget_cap" in spec:
                 try:
                     cur["budget_cap"] = float(spec.get("budget_cap"))
+                except Exception:
+                    pass
+            if "floor_threshold" in spec:
+                try:
+                    cur["floor_threshold"] = int(spec.get("floor_threshold"))
                 except Exception:
                     pass
 
@@ -142,6 +174,8 @@ class GovernorStatus:
     budget_remaining: float
     floor_expected: int # minimum tokens expected by now
     floor_gap: int      # how far below floor (0 = on track)
+    below_floor: bool   # anti-idle: T_day < floor threshold for the full day
+    floor_threshold: int  # the floor threshold for this agent
     hour: int           # current hour (0-23)
     hard_fail: bool     # T_day == 0 at EOD check
 
@@ -165,6 +199,7 @@ class Governor:
         if self.is_subscription:
             self.budget_cap = 0.0
         self.min_daily = MIN_DAILY_TOKENS.get(self.agent, 100)
+        self.floor_threshold = int(cfg.get("floor_threshold", FLOOR_THRESHOLDS.get(self.agent, DEFAULT_FLOOR)))
 
     def check(self) -> GovernorStatus:
         """Read logs, compute current status."""
@@ -254,6 +289,9 @@ class Governor:
         # Hard fail check (only meaningful at EOD)
         hard_fail = (T_day == 0 and hour >= 23)
 
+        # Anti-idle floor: is the agent below the absolute daily floor?
+        below_floor = T_day < self.floor_threshold
+
         status = GovernorStatus(
             agent=self.agent,
             billing_mode=self.billing_mode,
@@ -267,6 +305,8 @@ class Governor:
             budget_remaining=round(budget_remaining, 4),
             floor_expected=floor_expected,
             floor_gap=floor_gap,
+            below_floor=below_floor,
+            floor_threshold=self.floor_threshold,
             hour=hour,
             hard_fail=hard_fail,
         )
@@ -321,6 +361,35 @@ class Governor:
         message = random.choice(messages)
 
         return {"status": s.__dict__, "action": action, "message": message}
+
+    def check_floor(self) -> dict:
+        """
+        Anti-idle floor check. Returns diagnostic info about whether this agent
+        is below the minimum daily token spend threshold.
+
+        Returns:
+            below_floor: bool — whether agent is under the floor
+            deficit: int — how many tokens below the floor (0 if at or above)
+            recovery_suggestion: str — a low-cost action to break idle state
+            floor_threshold: int — the configured floor for this agent
+            T_day: int — tokens spent today
+        """
+        s = self.check()
+        deficit = max(0, self.floor_threshold - s.T_day)
+        below = s.T_day < self.floor_threshold
+
+        # Pick a recovery suggestion — deterministic by hour so it's stable
+        # within the same hour but rotates across the day
+        suggestion_idx = (s.hour + hash(self.agent)) % len(FLOOR_RECOVERY_SUGGESTIONS)
+        suggestion = FLOOR_RECOVERY_SUGGESTIONS[suggestion_idx] if below else ""
+
+        return {
+            "below_floor": below,
+            "deficit": deficit,
+            "recovery_suggestion": suggestion,
+            "floor_threshold": self.floor_threshold,
+            "T_day": s.T_day,
+        }
 
     # --- Data aggregation ---
 
@@ -456,13 +525,28 @@ if __name__ == "__main__":
                 billing_str = "subscription"
             else:
                 billing_str = f"api ${s['dollar_day']:>7.3f}/${s['budget_cap']:.1f}"
+            idle_flag = " IDLE" if s.get("below_floor") else ""
             print(
                 f"  {pace_icon} {name.upper():8s}  "
                 f"T={s['T_day']:>8,} tok  {billing_str:22s}  "
-                f"mode:{s['mode']:8s}  gap:{s['floor_gap']}"
+                f"mode:{s['mode']:8s}  gap:{s['floor_gap']}  "
+                f"floor:{s.get('floor_threshold', '?')}{idle_flag}"
+            )
+    elif agent == "floor":
+        # Show floor status for all agents
+        for name in ["rex", "orion", "gemini", "shared"]:
+            gov = Governor(name)
+            f = gov.check_floor()
+            status = "IDLE" if f["below_floor"] else "OK"
+            suggestion = f"  → {f['recovery_suggestion']}" if f["recovery_suggestion"] else ""
+            print(
+                f"  {name.upper():8s}  {status:4s}  "
+                f"T={f['T_day']:>8,}/{f['floor_threshold']:>5,} tok  "
+                f"deficit:{f['deficit']:>5,}{suggestion}"
             )
     else:
         gov = Governor(agent)
         result = gov.enforce()
+        result["floor"] = gov.check_floor()
         s = result["status"]
         print(json.dumps(result, indent=2))
