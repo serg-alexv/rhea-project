@@ -1,52 +1,51 @@
-
 # Python
 .venv/
 __pycache__/
 *.pyc
 .pytest_cache/
+*.egg-info/
 
 # macOS
 .DS_Store
 
-# Env
+# Environment / secrets
 .env
 .env.*
+*.env.local
 
+# IDE
+.idea/
+.vscode/
+
+# Claude Code
 .claude/settings.local.json
 
+# Entire.io (snapshots are runtime, not source)
 .entire/snapshots/
 .entire/chat_extracts.json
+
+# Firebase
 firebase/service-account.json
+service-account.json
+firebase-debug.log
+.firebase/
 
-# --- Rhea local runtime junk ---
+# Firecrawl cache
+.firecrawl/
+
+# Rhea runtime state
+.rhea/
 STOP
 logs/
 .watcher/
 gemini/
-firebase-debug.log
 GEMINI.md
-.idea/
-ops/Archive.zip
-ops/virtual-office/relay_chain.jsonl
-ops/virtual-office/**/observations.jsonl
-ops/virtual-office/**/watcher_state.json
-ops/virtual-office/leases/*.json
-ops/virtual-office/snapshots/*.json
-ops/virtual-office/inbox/*.md
-ops/virtual-office/outbox/*.md
-rhea-nexus/memories/
-*.pdf
 
-# local runtime artifacts
-logs/
+# Virtual office runtime
 ops/virtual-office/
-STOP
-gemini/
-.watcher/
-.idea/
-firebase-debug.log
+ops/Archive.zip
 
-# iOS/macOS build artifacts
+# iOS / macOS build artifacts
 ios/RheaApp/build/
 play/build/
 **/DerivedData/
@@ -59,18 +58,22 @@ play/build/
 **/.build/
 **/SourcePackages/
 
-# SQLite databases (runtime data)
+# SQLite databases (runtime data, not source)
 *.db
 *.db-shm
 *.db-wal
 
-# local experiments
+# Node
+node_modules/
+dist/
+*.log
+
+# Local experiments
 docs/experimental/
 team/
-
 alpha2-*.sh
 alpha2-*.py
 rhea-project/docs/*.audit
-service-account.json
-\n# Junk\nnode_modules/\ndist/\n*.log\n*.bak\n.env\n
-.env
+rhea-nexus/memories/
+*.pdf
+*.bak
