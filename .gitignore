@@ -46,6 +46,12 @@ gemini/
 .idea/
 firebase-debug.log
 
+# iOS build artifacts
+ios/RheaApp/build/
+ios/RheaApp/RheaApp.xcodeproj/xcuserdata/
+ios/RheaApp/RheaApp.xcodeproj/project.xcworkspace/xcuserdata/
+*.xcuserstate
+
 # SQLite databases (runtime data)
 *.db
 *.db-shm

@@ -1,38 +1,29 @@
-# RHEA ACTIVE STATE (v3.3)
-> Date: 2026-02-28 | Agent: REX (Opus 4.6) | Mode: SOVEREIGN
+# RHEA ACTIVE STATE (v3.4)
+> Date: 2026-03-01 | Agent: REX (Opus 4.6) | Mode: SOVEREIGN
 
 ## System
 - **CHECK:** `bash scripts/rhea/check.sh` → OK
-- **GIT:** `stage4-release` — 69 commits today
-- **D-METRIC:** ~269 — HEALTHY
+- **GIT:** `stage4-release`
+- **Cloud Run:** rev 19 LIVE (13 modules + litellm)
 
-## Architecture
-- **Cloud:** GCR + Firebase + Redis Cloud + Oracle Free
-- **Bridge:** src/rhea_bridge.py — 6 providers, 31 models, 4 tiers
-- **Themis (:8000):** rhead.py → /aletheia/*
-- **Tribunal (:8400):** + /agents/status (unified, new)
+## Surfaces (all live)
+- **Tribunal (:8400):** 54+ endpoints + 7 supervisor endpoints
 - **Atlas (:3000):** Next.js — live
+- **Rust TUI:** /opt/homebrew/bin/rhea (1.5MB, sessions panel)
+- **iOS:** build 9 archived, ad hoc distribution ready
+- **Tauri:** wraps /cc as native window
 
-## Aletheia — LIVE (7 proofs)
-- Capture: 3 hooks in tribunal_api.py
-- Read: 9 endpoints (/stats,proofs,search,chain,verify,submit,dedup,ontology)
-- Storage: data/proof.db + friends/aletheia/
+## Aletheia — LIVE (11 proofs)
+- 9 endpoints, dedup+ontology, proof.db
 
-## iOS App — IN PROGRESS
-- Radio (SSE + composer), Governor, Pulse, Dialog tabs
-- TestFlight pipeline built — upload blocked on URLs
-- 14 deps forked to serg-alexv (supply chain sovereign)
+## iOS — PLAY UI CLOSED (build 9)
+- 12 Swift files, 8 tabs, TestFlight join link active
+- ASC metadata stale: developer="Face Emotion Recognition" → needs "TimeLabs NPO"
 
-## Absorbed Today
-- Entire.io → lib_rhea_hooks.sh (ADR-016)
-- python-dotenv → env_loader.py
-- Bonsai/ZMQ → archive/absorbed/
-- OpenClaw → patterns only (ADR-015), no runtime dep
+## New: Process Supervisor
+- src/rhea_supervisor.py — PTY-backed agent sessions
+- spawn/kill/input/output via API, integrated in TUI
 
-## Blocked
-- TestFlight: needs Marketing URL + Privacy Policy URL
-- Gemini key expired — Dialog tab dead
-- 13+ stale tasks in queue (Orion diagnosed)
-- Share Extension: workspace contention
-
-## Full day log: docs/TODAY_2026-02-28.md
+## Next
+- Entity registration (TimeLabs NPO) → ASC developer name fix
+- Residency pathway (Georgia immediate / Portugal D8 long-term)
