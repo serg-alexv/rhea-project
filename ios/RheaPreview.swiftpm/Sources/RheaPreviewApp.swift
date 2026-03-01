@@ -60,6 +60,8 @@ private struct MainTabShell: View {
         if revealLevel >= 3 {
             list.append(TabDescriptor(icon: "globe", label: "Atlas", view: AnyView(AtlasView())))
             list.append(TabDescriptor(icon: "dot.radiowaves.left.and.right", label: "Pulse", view: AnyView(PulseMonitorView())))
+            list.append(TabDescriptor(icon: "atom", label: "Bio", view: AnyView(BioRendererView())))
+            list.append(TabDescriptor(icon: "shield.lefthalf.filled", label: "Relay", view: AnyView(RelayPrivacyView())))
         }
         list.append(TabDescriptor(icon: "slider.horizontal.3", label: "Settings", view: AnyView(SettingsView())))
         return list
