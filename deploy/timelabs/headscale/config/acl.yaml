@@ -1,0 +1,54 @@
+## Rhea Mesh ACL Policy
+## Controls which nodes can communicate with each other.
+##
+## Groups:
+##   - agents: Rex, Orion, Gemini, Hyperion — AI agent nodes
+##   - admin: Human operator devices
+##   - ios: Mobile app instances
+##
+## All agents can talk to each other (mesh).
+## iOS clients can reach agents and admin.
+## Admin can reach everything.
+
+groups:
+  group:agents:
+    - "rex"
+    - "orion"
+    - "gemini"
+    - "hyperion"
+    - "b2"
+  group:admin:
+    - "sa-mac"
+    - "sa-iphone"
+  group:ios:
+    - "rhea-ios-*"
+
+acls:
+  # Agents can talk to each other
+  - action: accept
+    src:
+      - "group:agents"
+    dst:
+      - "group:agents:*"
+
+  # Admin can reach everything
+  - action: accept
+    src:
+      - "group:admin"
+    dst:
+      - "*:*"
+
+  # iOS clients can reach agents and use exit nodes
+  - action: accept
+    src:
+      - "group:ios"
+    dst:
+      - "group:agents:*"
+      - "autogroup:internet:*"
+
+  # All nodes can use DNS
+  - action: accept
+    src:
+      - "*"
+    dst:
+      - "autogroup:dns:*"

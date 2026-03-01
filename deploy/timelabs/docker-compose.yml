@@ -1,0 +1,84 @@
+## Rhea Self-Hosted Network Stack — timelabs.ru
+##
+## 4 Services:
+##   1. Headscale — coordination server (replaces Tailscale SaaS)
+##   2. DERP relay — NAT traversal relay for mobile clients
+##   3. WireGuard — fallback direct tunnel endpoint
+##   4. Headscale UI — admin web interface
+##
+## Deploy: ssh root@timelabs.ru
+##   docker compose up -d
+##
+## No Tailscale subscription. No third-party VPN. Own infrastructure.
+
+version: "3.9"
+
+services:
+  # ── 1. Headscale — Tailscale-compatible coordination server ──
+  headscale:
+    image: headscale/headscale:0.25
+    container_name: rhea-headscale
+    restart: unless-stopped
+    command: serve
+    volumes:
+      - ./headscale/config:/etc/headscale
+      - ./headscale/data:/var/lib/headscale
+    ports:
+      - "443:443"       # gRPC + HTTPS (clients connect here)
+      - "8080:8080"     # Metrics
+    environment:
+      TZ: Europe/Moscow
+
+  # ── 2. DERP relay — NAT traversal for mobile/firewalled clients ──
+  derp:
+    image: ghcr.io/tailscale/derper:latest
+    container_name: rhea-derp
+    restart: unless-stopped
+    ports:
+      - "3478:3478/udp"   # STUN
+      - "8443:443"        # DERP over HTTPS
+    environment:
+      DERP_DOMAIN: derp.timelabs.ru
+      DERP_CERT_MODE: manual
+      DERP_ADDR: ":443"
+      DERP_STUN: "true"
+      DERP_HTTP_PORT: "-1"
+      DERP_VERIFY_CLIENTS: "false"
+    volumes:
+      - ./certs:/app/certs
+
+  # ── 3. WireGuard — direct tunnel endpoint (fallback) ──
+  wireguard:
+    image: linuxserver/wireguard:latest
+    container_name: rhea-wireguard
+    restart: unless-stopped
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    environment:
+      PUID: 1000
+      PGID: 1000
+      TZ: Europe/Moscow
+      SERVERURL: wg.timelabs.ru
+      SERVERPORT: 51820
+      PEERS: rhea-ios,rhea-mac,rhea-backup
+      PEERDNS: 1.1.1.1
+      INTERNAL_SUBNET: 10.13.13.0
+      ALLOWEDIPS: 0.0.0.0/0
+    volumes:
+      - ./wireguard/config:/config
+      - /lib/modules:/lib/modules
+    ports:
+      - "51820:51820/udp"
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1
+
+  # ── 4. Headscale UI — web admin panel ──
+  headscale-ui:
+    image: ghcr.io/gurucomputing/headscale-ui:latest
+    container_name: rhea-headscale-ui
+    restart: unless-stopped
+    ports:
+      - "9090:443"
+    environment:
+      HEADSCALE_URL: https://headscale.timelabs.ru
