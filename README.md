@@ -302,19 +302,27 @@ rhea-project/
 
 ## Support
 
-BTC: `bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh`
+BTC: `your-btc-address-here`
 
 All donations go toward server costs and development.
 
 ## Licenses
 
-| Component | License |
-|:----------|:--------|
-| Rhea | Proprietary |
-| TailscaleKit | BSD-3-Clause |
-| WireGuard-Go | MIT |
-| Headscale | BSD-3-Clause |
-| 3Dmol.js | BSD-3-Clause |
+| Component | License | Source |
+|:----------|:--------|:-------|
+| Rhea | Proprietary | this repo |
+| TailscaleKit / libtailscale | BSD-3-Clause | [tailscale/libtailscale](https://github.com/tailscale/libtailscale) |
+| WireGuard-Go | MIT | [WireGuard/wireguard-go](https://github.com/WireGuard/wireguard-go) |
+| Headscale | BSD-3-Clause | [juanfont/headscale](https://github.com/juanfont/headscale) |
+| 3Dmol.js | BSD-3-Clause | [3dmol/3Dmol.js](https://github.com/3dmol/3Dmol.js) |
+| GRDB.swift | MIT | [groue/GRDB.swift](https://github.com/groue/GRDB.swift) |
+| KeychainAccess | MIT | [kishikawakatsumi/KeychainAccess](https://github.com/kishikawakatsumi/KeychainAccess) |
+| swift-markdown-ui | MIT | [gonzalezreal/swift-markdown-ui](https://github.com/gonzalezreal/swift-markdown-ui) |
+| Starscream | Apache-2.0 | [daltoniam/Starscream](https://github.com/daltoniam/Starscream) |
+| swift-collections | Apache-2.0 | [apple/swift-collections](https://github.com/apple/swift-collections) |
+| Pow | MIT | [EmergeTools/Pow](https://github.com/EmergeTools/Pow) |
+| Ruliad Explorer | Internal | `friends/ruliad/explorer/` — Wolfram-inspired ontology engine |
+| Aletheia | Internal | `friends/aletheia/` — proof store, community hypotheses |
 
 ---
 
