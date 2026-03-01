@@ -2860,6 +2860,111 @@ async def wake_agent(agent: str):
 
 
 # ---------------------------------------------------------------------------
+# Supervisor — process multiplexer for agent CLI sessions
+# ---------------------------------------------------------------------------
+
+try:
+    from rhea_supervisor import supervisor as _sv
+    _SV_AVAILABLE = True
+except ImportError:
+    _sv = None
+    _SV_AVAILABLE = False
+
+
+class SpawnRequest(BaseModel):
+    agent: str = "rex"
+    label: str = ""
+    cmd: list[str] = []
+    prompt: str = ""
+
+
+class InputRequest(BaseModel):
+    text: str
+
+
+@app.get("/supervisor/sessions")
+async def supervisor_list_sessions():
+    if not _SV_AVAILABLE:
+        raise HTTPException(503, "Supervisor not available")
+    return {"sessions": _sv.list_sessions()}
+
+
+@app.post("/supervisor/spawn", dependencies=[Depends(verify_api_key)])
+async def supervisor_spawn(req: SpawnRequest):
+    if not _SV_AVAILABLE:
+        raise HTTPException(503, "Supervisor not available")
+    try:
+        session = _sv.spawn(
+            agent=req.agent,
+            label=req.label,
+            cmd=req.cmd or None,
+            prompt=req.prompt or None,
+        )
+        _broadcast_event({
+            "id": f"sv-spawn-{session.id}",
+            "type": "supervisor",
+            "sender": "supervisor",
+            "text": f"Spawned {req.agent} session {session.id} (PID {session.pid})",
+            "ts": datetime.now(timezone.utc).isoformat(),
+        })
+        return session.to_dict()
+    except ValueError as e:
+        raise HTTPException(400, str(e))
+
+
+@app.get("/supervisor/session/{session_id}")
+async def supervisor_get_session(session_id: str):
+    if not _SV_AVAILABLE:
+        raise HTTPException(503, "Supervisor not available")
+    s = _sv.get_session(session_id)
+    if not s:
+        raise HTTPException(404, "Session not found")
+    return s
+
+
+@app.get("/supervisor/output/{session_id}")
+async def supervisor_output(session_id: str, lines: int = 50):
+    if not _SV_AVAILABLE:
+        raise HTTPException(503, "Supervisor not available")
+    output = _sv.get_output(session_id, last_n=lines)
+    return {"session_id": session_id, "lines": output, "count": len(output)}
+
+
+@app.post("/supervisor/input/{session_id}", dependencies=[Depends(verify_api_key)])
+async def supervisor_input(session_id: str, req: InputRequest):
+    if not _SV_AVAILABLE:
+        raise HTTPException(503, "Supervisor not available")
+    ok = _sv.send_input(session_id, req.text)
+    if not ok:
+        raise HTTPException(400, "Session not running or not found")
+    return {"ok": True}
+
+
+@app.post("/supervisor/kill/{session_id}", dependencies=[Depends(verify_api_key)])
+async def supervisor_kill(session_id: str):
+    if not _SV_AVAILABLE:
+        raise HTTPException(503, "Supervisor not available")
+    ok = _sv.kill(session_id)
+    if ok:
+        _broadcast_event({
+            "id": f"sv-kill-{session_id}",
+            "type": "supervisor",
+            "sender": "supervisor",
+            "text": f"Killed session {session_id}",
+            "ts": datetime.now(timezone.utc).isoformat(),
+        })
+    return {"ok": ok}
+
+
+@app.post("/supervisor/cleanup", dependencies=[Depends(verify_api_key)])
+async def supervisor_cleanup():
+    if not _SV_AVAILABLE:
+        raise HTTPException(503, "Supervisor not available")
+    count = _sv.cleanup_dead()
+    return {"removed": count}
+
+
+# ---------------------------------------------------------------------------
 # Direct execution
 # ---------------------------------------------------------------------------
 
