@@ -141,7 +141,15 @@ curl localhost:8400/aletheia/verify/ale_1709...
 
 ## Quick Start
 
-### Server (Python)
+### One-liner (any Unix machine)
+
+```bash
+curl -sL https://raw.githubusercontent.com/serg-alexv/rhea-project/main/deploy/setup.sh | bash
+```
+
+This installs Python (if needed), creates a virtualenv, installs deps, generates `.env`, initializes databases, and starts the server on `:8400`.
+
+### Manual
 
 ```bash
 git clone https://github.com/serg-alexv/rhea-project.git
@@ -297,9 +305,39 @@ rhea-project/
 | Headscale | BSD-3-Clause |
 | 3Dmol.js | BSD-3-Clause |
 
+## Pricing
+
+| Plan | Queries/mo | Models | API Keys | Price |
+|:-----|:-----------|:-------|:---------|:------|
+| **Free** | 100 | 1 | 0 | $0 |
+| **Pro** | 10,000 | 5 (consensus) | 3 | $29/mo |
+| **Enterprise** | Unlimited | All + custom | 10 | $99/mo |
+
+Payment: Stripe (card) or BTC (BTCPay Server).
+
+API: `POST /billing/checkout` for Stripe, `POST /billing/btcpay` for BTC invoices.
+
+## Support the Project
+
+BTC: `bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh`
+
+All donations go toward server costs and development. Current infrastructure runs on free/minimal tiers (Fly.io, GCP Cloud Run, Oracle ARM).
+
+## Deployments
+
+| Surface | URL | Provider |
+|:--------|:----|:---------|
+| Tribunal API | [rhea-tribunal.fly.dev](https://rhea-tribunal.fly.dev) | Fly.io |
+| Tribunal API (EU) | [rhea-tribunal-api-*.run.app](https://rhea-tribunal-api-145767756165.europe-west1.run.app/health) | GCP Cloud Run |
+| iOS Beta | [TestFlight](https://testflight.apple.com/join/BNya22Jg) | Apple |
+| Release | [v1.0.0](https://github.com/serg-alexv/rhea-project/releases/tag/v1.0.0) | GitHub |
+| Mesh Control | headscale.timelabs.ru | timelabs.ru |
+
 ## Links
 
+- Source: [github.com/serg-alexv/rhea-project](https://github.com/serg-alexv/rhea-project)
 - Production: [rhea-tribunal.fly.dev](https://rhea-tribunal.fly.dev)
+- Cloud Run (EU): [rhea-tribunal-api-*.europe-west1.run.app](https://rhea-tribunal-api-145767756165.europe-west1.run.app/health)
 - TestFlight: [testflight.apple.com/join/BNya22Jg](https://testflight.apple.com/join/BNya22Jg)
 - Release: [v1.0.0](https://github.com/serg-alexv/rhea-project/releases/tag/v1.0.0)
 
