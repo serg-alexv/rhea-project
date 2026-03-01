@@ -39,8 +39,8 @@ private struct MainTabShell: View {
 
     private var tabs: [TabDescriptor] {
         var list: [TabDescriptor] = [
-            TabDescriptor(icon: "text.bubble", label: "Dialog", view: AnyView(DialogView())),
-            TabDescriptor(icon: "bubble.left.and.bubble.right", label: "Team", view: AnyView(TeamChatView())),
+            TabDescriptor(icon: "scalemass", label: "Tribunal", view: AnyView(DialogView())),
+            TabDescriptor(icon: "antenna.radiowaves.left.and.right", label: "Radio", view: AnyView(TeamChatView())),
         ]
         if revealLevel >= 2 {
             list.append(TabDescriptor(icon: "gauge.with.dots.needle.33percent", label: "Governor", view: AnyView(GovernorView())))
@@ -49,7 +49,6 @@ private struct MainTabShell: View {
         if revealLevel >= 3 {
             list.append(TabDescriptor(icon: "globe", label: "Atlas", view: AnyView(AtlasView())))
             list.append(TabDescriptor(icon: "dot.radiowaves.left.and.right", label: "Pulse", view: AnyView(PulseMonitorView())))
-            list.append(TabDescriptor(icon: "rectangle.inset.filled.and.person.filled", label: "Pilot", view: AnyView(ScreenPilotView())))
         }
         list.append(TabDescriptor(icon: "slider.horizontal.3", label: "Settings", view: AnyView(SettingsView())))
         return list
