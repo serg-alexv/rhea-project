@@ -6,7 +6,6 @@ import RheaKit
 struct RheaPreviewApp: App {
     @AppStorage("hasEnteredIntent") private var hasEnteredIntent = false
     @AppStorage("intentRevealLevel") private var intentRevealLevel = 1
-    @AppStorage("skipAuth") private var skipAuth = false
     @StateObject private var auth = AuthManager.shared
     @State private var selectedTab = 0
 
@@ -17,14 +16,8 @@ struct RheaPreviewApp: App {
     var body: some Scene {
         WindowGroup {
             Group {
-                if !auth.isLoggedIn && !skipAuth {
+                if !auth.isLoggedIn && !auth.didSkipAuth {
                     AuthView()
-                        .onReceive(auth.objectWillChange) { _ in
-                            // "Continue without account" sets token=nil, which triggers skipAuth
-                            if !auth.isLoggedIn {
-                                skipAuth = true
-                            }
-                        }
                 } else if hasEnteredIntent {
                     MainTabShell(selectedTab: $selectedTab, revealLevel: intentRevealLevel)
                 } else {
