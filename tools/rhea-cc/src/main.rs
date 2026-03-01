@@ -1,6 +1,6 @@
 //! rhea — Rhea Command Centre TUI binary
 //!
-//! Three-pane terminal dashboard with full controls.
+//! Multi-pane terminal dashboard with agent supervisor.
 //! Talks to tribunal_api.py on localhost:8400.
 //!
 //! Usage: rhea
@@ -17,7 +17,7 @@ use crossterm::{
 };
 use ratatui::{
     prelude::*,
-    widgets::{Block, Borders, Paragraph, Wrap, List, ListItem, Scrollbar, ScrollbarOrientation, ScrollbarState},
+    widgets::{Block, Borders, Paragraph, Wrap, List, ListItem},
 };
 use serde::Deserialize;
 
@@ -115,6 +115,34 @@ struct TaskListResponse {
     tasks: Vec<TaskItem>,
 }
 
+// ─── Supervisor types ────────────────────────────────────────────────
+
+#[derive(Debug, Deserialize, Clone)]
+struct SupervisorSession {
+    id: String,
+    agent: String,
+    pid: i64,
+    started_at: String,
+    status: String,
+    #[serde(default)]
+    exit_code: Option<i64>,
+    #[serde(default)]
+    output_lines: i64,
+    #[serde(default)]
+    label: String,
+}
+
+#[derive(Debug, Deserialize)]
+struct SessionsResponse {
+    sessions: Vec<SupervisorSession>,
+}
+
+#[derive(Debug, Deserialize)]
+struct SessionOutputResponse {
+    lines: Vec<String>,
+    count: i64,
+}
+
 // ─── App state ────────────────────────────────────────────────────────
 
 #[derive(PartialEq, Clone, Copy)]
@@ -123,6 +151,7 @@ enum Panel {
     Radio,
     Tasks,
     Tribunal,
+    Sessions,
 }
 
 #[derive(PartialEq)]
@@ -131,7 +160,10 @@ enum InputMode {
     TribunalInput,
     RadioCompose,
     TaskCreate,
+    SessionInput,
 }
+
+const SPAWN_AGENTS: [&str; 5] = ["rex", "orion", "gemini", "shared", "hyperion"];
 
 struct AppState {
     api_base: String,
@@ -151,6 +183,15 @@ struct AppState {
     // Task creator
     task_input: String,
 
+    // Sessions
+    sessions: Vec<SupervisorSession>,
+    session_cursor: usize,
+    session_output: Vec<String>,
+    session_viewing: Option<String>,  // session id being viewed
+    show_sessions: bool,
+    spawn_cursor: usize,
+    session_input: String,
+
     // Navigation
     active_panel: Panel,
     input_mode: InputMode,
@@ -162,8 +203,6 @@ struct AppState {
     last_poll: Instant,
     show_task_list: bool,
 }
-
-const PANELS: [Panel; 4] = [Panel::Agents, Panel::Radio, Panel::Tasks, Panel::Tribunal];
 
 impl AppState {
     fn new(api_base: String) -> Self {
@@ -178,6 +217,13 @@ impl AppState {
             tribunal_result: String::new(),
             radio_input: String::new(),
             task_input: String::new(),
+            sessions: vec![],
+            session_cursor: 0,
+            session_output: vec![],
+            session_viewing: None,
+            show_sessions: false,
+            spawn_cursor: 0,
+            session_input: String::new(),
             active_panel: Panel::Agents,
             input_mode: InputMode::Normal,
             agent_cursor: 0,
@@ -301,6 +347,51 @@ async fn submit_tribunal(api: &str, claim: &str) -> Result<String> {
     ))
 }
 
+// ─── Supervisor API calls ────────────────────────────────────────────
+
+async fn fetch_sessions(api: &str) -> Result<Vec<SupervisorSession>> {
+    let resp: SessionsResponse = client()
+        .get(format!("{api}/supervisor/sessions"))
+        .header("X-API-Key", "dev-bypass")
+        .send().await?.json().await?;
+    Ok(resp.sessions)
+}
+
+async fn spawn_session(api: &str, agent: &str) -> Result<SupervisorSession> {
+    let body = serde_json::json!({"agent": agent, "label": format!("{agent}-tui")});
+    Ok(client()
+        .post(format!("{api}/supervisor/spawn"))
+        .header("X-API-Key", "dev-bypass")
+        .json(&body)
+        .send().await?.json().await?)
+}
+
+async fn kill_session(api: &str, session_id: &str) -> Result<()> {
+    client()
+        .post(format!("{api}/supervisor/kill/{session_id}"))
+        .header("X-API-Key", "dev-bypass")
+        .send().await?;
+    Ok(())
+}
+
+async fn fetch_session_output(api: &str, session_id: &str, lines: usize) -> Result<Vec<String>> {
+    let resp: SessionOutputResponse = client()
+        .get(format!("{api}/supervisor/output/{session_id}?lines={lines}"))
+        .header("X-API-Key", "dev-bypass")
+        .send().await?.json().await?;
+    Ok(resp.lines)
+}
+
+async fn send_session_input(api: &str, session_id: &str, text: &str) -> Result<()> {
+    let body = serde_json::json!({"text": text});
+    client()
+        .post(format!("{api}/supervisor/input/{session_id}"))
+        .header("X-API-Key", "dev-bypass")
+        .json(&body)
+        .send().await?;
+    Ok(())
+}
+
 // ─── Rendering ────────────────────────────────────────────────────────
 
 fn now_hms() -> String {
@@ -343,7 +434,17 @@ fn draw(frame: &mut Frame, state: &AppState) {
         .split(main_area);
 
     draw_agents(frame, cols[0], state);
-    draw_radio(frame, cols[1], state);
+
+    // Center panel: Radio or Sessions (toggle with 's')
+    if state.show_sessions {
+        if state.session_viewing.is_some() {
+            draw_session_output(frame, cols[1], state);
+        } else {
+            draw_sessions(frame, cols[1], state);
+        }
+    } else {
+        draw_radio(frame, cols[1], state);
+    }
 
     let right = Layout::default()
         .direction(Direction::Vertical)
@@ -360,19 +461,33 @@ fn draw(frame: &mut Frame, state: &AppState) {
     // Status bar with context-sensitive help
     let help = match state.input_mode {
         InputMode::Normal => match state.active_panel {
-            Panel::Agents => "↑↓:select  Enter:wake  p:ping  w:wake-all  Tab:next  t:tribunal  m:radio  n:task  l:list  q:quit",
-            Panel::Radio => "↑↓:scroll  m:compose  Tab:next  q:quit",
+            Panel::Agents => "↑↓:select  Enter:wake  p:ping  w:wake-all  s:sessions  Tab:next  q:quit",
+            Panel::Radio => "↑↓:scroll  m:compose  s:sessions  Tab:next  q:quit",
             Panel::Tasks => "↑↓:scroll  n:new-task  l:toggle-list  Tab:next  q:quit",
             Panel::Tribunal => "t:input  Tab:next  q:quit",
+            Panel::Sessions => if state.session_viewing.is_some() {
+                "↑↓:scroll  i:send-input  Esc:back  x:kill  s:radio  q:quit"
+            } else {
+                "↑↓:select  Enter:view  S:spawn  x:kill  s:radio  q:quit"
+            },
         },
         InputMode::TribunalInput => "Enter:submit  Esc:cancel",
         InputMode::RadioCompose => "Enter:send  Esc:cancel",
         InputMode::TaskCreate => "Enter:create  Esc:cancel",
+        InputMode::SessionInput => "Enter:send  Esc:cancel",
+    };
+
+    let session_count = state.sessions.len();
+    let session_indicator = if session_count > 0 {
+        format!(" [{session_count} sessions]")
+    } else {
+        String::new()
     };
 
     let status = Paragraph::new(Line::from(vec![
         Span::styled(format!(" {} ", now_hms()), Style::default().fg(Color::DarkGray)),
         Span::styled(help, Style::default().fg(Color::Rgb(100, 100, 130))),
+        Span::styled(session_indicator, Style::default().fg(Color::Magenta)),
         Span::styled(format!("  {}", state.status_msg), Style::default().fg(Color::DarkGray)),
     ]))
     .style(Style::default().bg(Color::Rgb(15, 15, 25)));
@@ -419,7 +534,7 @@ fn draw_agents(frame: &mut Frame, area: Rect, state: &AppState) {
 
         let tok_str = format_tokens(a.t_day);
         let pending = a.pending_msgs.unwrap_or(0);
-        let pend_str = if pending > 0 { format!(" [{pending}✉]") } else { String::new() };
+        let pend_str = if pending > 0 { format!(" [{pending}msg]") } else { String::new() };
         let tasks = a.tasks_open.unwrap_or(0);
         let task_str = if tasks > 0 { format!(" {tasks}T") } else { String::new() };
 
@@ -487,7 +602,6 @@ fn draw_radio(frame: &mut Frame, area: Rect, state: &AppState) {
         .border_style(panel_border(state.active_panel, Panel::Radio));
 
     let inner = block.inner(area);
-    let inner_height = inner.height as usize;
 
     // If in compose mode, reserve bottom 3 lines for input
     let (list_area, compose_area) = if state.input_mode == InputMode::RadioCompose {
@@ -523,6 +637,7 @@ fn draw_radio(frame: &mut Frame, area: Rect, state: &AppState) {
                 "GEMINI" => Color::Yellow,
                 "HUMAN" => Color::Green,
                 "RELAY" => Color::Rgb(255, 165, 0),
+                "SUPERVISOR" => Color::Rgb(200, 100, 255),
                 "TRIBUNAL" | "TRIBUN" => Color::Rgb(0, 200, 200),
                 _ => Color::Gray,
             };
@@ -559,6 +674,121 @@ fn draw_radio(frame: &mut Frame, area: Rect, state: &AppState) {
     }
 }
 
+// ─── Sessions panel ──────────────────────────────────────────────────
+
+fn draw_sessions(frame: &mut Frame, area: Rect, state: &AppState) {
+    let title = format!(" SESSIONS ({}) [s:radio  S:spawn] ", state.sessions.len());
+    let block = Block::default()
+        .title(title)
+        .title_style(Style::default().fg(Color::Magenta).bold())
+        .borders(Borders::ALL)
+        .border_style(panel_border(state.active_panel, Panel::Sessions));
+
+    if state.sessions.is_empty() {
+        let msg = "No active sessions\n\nPress S to spawn an agent session\n\nAvailable: rex, orion, gemini, shared, hyperion";
+        frame.render_widget(
+            Paragraph::new(msg)
+                .style(Style::default().fg(Color::DarkGray))
+                .block(block),
+            area,
+        );
+        return;
+    }
+
+    let items: Vec<ListItem> = state.sessions.iter().enumerate().map(|(i, s)| {
+        let is_selected = state.active_panel == Panel::Sessions && i == state.session_cursor;
+        let cursor = if is_selected { "▸" } else { " " };
+        let status_color = match s.status.as_str() {
+            "running" => Color::Green,
+            "stopped" => Color::DarkGray,
+            "crashed" => Color::Red,
+            _ => Color::Gray,
+        };
+        let dot = match s.status.as_str() {
+            "running" => "●",
+            "crashed" => "✗",
+            _ => "○",
+        };
+        let age = &s.started_at[11..19.min(s.started_at.len())];
+        let line = Line::from(vec![
+            Span::styled(cursor, Style::default().fg(Color::Magenta)),
+            Span::styled(format!("{dot} "), Style::default().fg(status_color)),
+            Span::styled(format!("{:<12}", s.label), Style::default().fg(Color::White).bold()),
+            Span::styled(format!(" {:<8}", s.status), Style::default().fg(status_color)),
+            Span::styled(format!(" {} ", age), Style::default().fg(Color::DarkGray)),
+            Span::styled(format!("{}L", s.output_lines), Style::default().fg(Color::Cyan)),
+        ]);
+        let style = if is_selected {
+            Style::default().bg(Color::Rgb(30, 20, 40))
+        } else {
+            Style::default()
+        };
+        ListItem::new(line).style(style)
+    }).collect();
+
+    frame.render_widget(List::new(items).block(block), area);
+}
+
+fn draw_session_output(frame: &mut Frame, area: Rect, state: &AppState) {
+    let sid = state.session_viewing.as_deref().unwrap_or("?");
+    let label = state.sessions.iter()
+        .find(|s| s.id == sid)
+        .map(|s| s.label.as_str())
+        .unwrap_or(sid);
+    let title = format!(" OUTPUT: {} [Esc:back  i:input] ", label);
+    let block = Block::default()
+        .title(title)
+        .title_style(Style::default().fg(Color::Magenta).bold())
+        .borders(Borders::ALL)
+        .border_style(panel_border(state.active_panel, Panel::Sessions));
+
+    let inner = block.inner(area);
+
+    // If in input mode, reserve bottom 3 lines
+    let (output_area, input_area) = if state.input_mode == InputMode::SessionInput {
+        let chunks = Layout::default()
+            .direction(Direction::Vertical)
+            .constraints([Constraint::Min(1), Constraint::Length(3)])
+            .split(inner);
+        (chunks[0], Some(chunks[1]))
+    } else {
+        (inner, None)
+    };
+
+    frame.render_widget(block, area);
+
+    // Output lines
+    let avail = output_area.height as usize;
+    let lines = &state.session_output;
+    let start = lines.len().saturating_sub(avail);
+    let visible = &lines[start..];
+
+    let items: Vec<ListItem> = visible.iter().map(|line| {
+        // Strip carriage returns from PTY output
+        let clean = line.trim_end_matches('\r');
+        ListItem::new(Line::from(
+            Span::styled(clean, Style::default().fg(Color::Rgb(200, 200, 220)))
+        ))
+    }).collect();
+
+    frame.render_widget(List::new(items), output_area);
+
+    // Session input box
+    if let Some(ia) = input_area {
+        let input_block = Block::default()
+            .title(" Send to session ")
+            .borders(Borders::ALL)
+            .border_style(Style::default().fg(Color::Magenta));
+        let cursor = if state.session_input.is_empty() { "type command..." } else { &state.session_input };
+        frame.render_widget(
+            Paragraph::new(Span::styled(cursor, Style::default().fg(
+                if state.session_input.is_empty() { Color::DarkGray } else { Color::White }
+            ))).block(input_block),
+            ia,
+        );
+    }
+}
+
 fn draw_tasks(frame: &mut Frame, area: Rect, state: &AppState) {
     let block = Block::default()
         .title(" TASKS ")
@@ -574,7 +804,6 @@ fn draw_tasks(frame: &mut Frame, area: Rect, state: &AppState) {
             .constraints([Constraint::Min(1), Constraint::Length(3)])
             .split(inner);
 
-        // Show summary above
         if let Some(ref t) = state.tasks {
             let text = format!("Total: {} | Open: {} | Claimed: {} | Done: {}",
                 t.total,
@@ -588,7 +817,6 @@ fn draw_tasks(frame: &mut Frame, area: Rect, state: &AppState) {
             );
         }
 
-        // Task create input
         let input_block = Block::default()
             .title(" New Task (P1) ")
             .borders(Borders::ALL)
@@ -717,7 +945,6 @@ fn draw_tribunal(frame: &mut Frame, area: Rect, state: &AppState) {
         .constraints([Constraint::Length(3), Constraint::Min(1)])
         .split(inner);
 
-    // Input
     let ib = Block::default().borders(Borders::ALL)
         .border_style(Style::default().fg(if is_input { Color::Yellow } else { Color::Rgb(40, 40, 50) }));
     let input_text = if state.tribunal_input.is_empty() && !is_input {
@@ -727,7 +954,6 @@ fn draw_tribunal(frame: &mut Frame, area: Rect, state: &AppState) {
     };
     frame.render_widget(input_text.block(ib), chunks[0]);
 
-    // Result
     frame.render_widget(
         Paragraph::new(state.tribunal_result.as_str())
             .style(Style::default().fg(Color::Rgb(180, 180, 200)))
@@ -744,10 +970,11 @@ async fn handle_key(state: &mut AppState, key: KeyEvent) {
         InputMode::TribunalInput => handle_text_input(state, key, InputTarget::Tribunal).await,
         InputMode::RadioCompose => handle_text_input(state, key, InputTarget::Radio).await,
         InputMode::TaskCreate => handle_text_input(state, key, InputTarget::Task).await,
+        InputMode::SessionInput => handle_text_input(state, key, InputTarget::Session).await,
     }
 }
 
-enum InputTarget { Tribunal, Radio, Task }
+enum InputTarget { Tribunal, Radio, Task, Session }
 
 async fn handle_text_input(state: &mut AppState, key: KeyEvent, target: InputTarget) {
     match key.code {
@@ -777,7 +1004,6 @@ async fn handle_text_input(state: &mut AppState, key: KeyEvent, target: InputTar
                             Ok(_) => state.status_msg = "radio sent".into(),
                             Err(e) => state.status_msg = format!("radio err: {e}"),
                         }
-                        // Refresh radio feed
                         if let Ok(r) = fetch_radio(&state.api_base).await { state.radio = r; }
                     }
                 }
@@ -790,10 +1016,22 @@ async fn handle_text_input(state: &mut AppState, key: KeyEvent, target: InputTar
                             Ok(_) => state.status_msg = "task created".into(),
                             Err(e) => state.status_msg = format!("task err: {e}"),
                         }
-                        // Refresh tasks
                         if let Ok(t) = fetch_tasks(&state.api_base).await { state.tasks = Some(t); }
                         if state.show_task_list {
                             if let Ok(tl) = fetch_task_list(&state.api_base).await { state.task_list = tl; }
+                        }
+                    }
+                }
+                InputTarget::Session => {
+                    let text = state.session_input.clone();
+                    if !text.trim().is_empty() {
+                        state.session_input.clear();
+                        state.input_mode = InputMode::Normal;
+                        if let Some(ref sid) = state.session_viewing {
+                            match send_session_input(&state.api_base, sid, &text).await {
+                                Ok(_) => state.status_msg = "sent to session".into(),
+                                Err(e) => state.status_msg = format!("send err: {e}"),
+                            }
                         }
                     }
                 }
@@ -804,6 +1042,7 @@ async fn handle_text_input(state: &mut AppState, key: KeyEvent, target: InputTar
                 InputTarget::Tribunal => { state.tribunal_input.pop(); }
                 InputTarget::Radio => { state.radio_input.pop(); }
                 InputTarget::Task => { state.task_input.pop(); }
+                InputTarget::Session => { state.session_input.pop(); }
             }
         }
         KeyCode::Char(c) => {
@@ -811,6 +1050,7 @@ async fn handle_text_input(state: &mut AppState, key: KeyEvent, target: InputTar
                 InputTarget::Tribunal => state.tribunal_input.push(c),
                 InputTarget::Radio => state.radio_input.push(c),
                 InputTarget::Task => state.task_input.push(c),
+                InputTarget::Session => state.session_input.push(c),
             }
         }
         _ => {}
@@ -824,12 +1064,55 @@ async fn handle_normal(state: &mut AppState, key: KeyEvent) {
 
         // Tab: cycle panels
         KeyCode::Tab => {
-            let idx = PANELS.iter().position(|p| *p == state.active_panel).unwrap_or(0);
-            state.active_panel = PANELS[(idx + 1) % PANELS.len()];
+            state.active_panel = match state.active_panel {
+                Panel::Agents => if state.show_sessions { Panel::Sessions } else { Panel::Radio },
+                Panel::Radio => Panel::Tasks,
+                Panel::Sessions => Panel::Tasks,
+                Panel::Tasks => Panel::Tribunal,
+                Panel::Tribunal => Panel::Agents,
+            };
         }
         KeyCode::BackTab => {
-            let idx = PANELS.iter().position(|p| *p == state.active_panel).unwrap_or(0);
-            state.active_panel = PANELS[(idx + PANELS.len() - 1) % PANELS.len()];
+            state.active_panel = match state.active_panel {
+                Panel::Agents => Panel::Tribunal,
+                Panel::Radio => Panel::Agents,
+                Panel::Sessions => Panel::Agents,
+                Panel::Tasks => if state.show_sessions { Panel::Sessions } else { Panel::Radio },
+                Panel::Tribunal => Panel::Tasks,
+            };
+        }
+
+        // Toggle sessions/radio
+        KeyCode::Char('s') => {
+            state.show_sessions = !state.show_sessions;
+            state.session_viewing = None;
+            if state.show_sessions {
+                state.active_panel = Panel::Sessions;
+                if let Ok(s) = fetch_sessions(&state.api_base).await {
+                    state.sessions = s;
+                }
+            } else {
+                state.active_panel = Panel::Radio;
+            }
+        }
+
+        // Spawn session (Shift+S)
+        KeyCode::Char('S') => {
+            // Cycle through spawn agents
+            let agent = SPAWN_AGENTS[state.spawn_cursor % SPAWN_AGENTS.len()];
+            state.spawn_cursor += 1;
+            state.status_msg = format!("spawning {agent}...");
+            match spawn_session(&state.api_base, agent).await {
+                Ok(s) => {
+                    state.status_msg = format!("spawned {} (PID {})", s.label, s.pid);
+                    state.show_sessions = true;
+                    state.active_panel = Panel::Sessions;
+                    if let Ok(sessions) = fetch_sessions(&state.api_base).await {
+                        state.sessions = sessions;
+                    }
+                }
+                Err(e) => state.status_msg = format!("spawn err: {e}"),
+            }
         }
 
         // Refresh
@@ -844,8 +1127,10 @@ async fn handle_normal(state: &mut AppState, key: KeyEvent) {
             state.input_mode = InputMode::TribunalInput;
         }
         KeyCode::Char('m') => {
-            state.active_panel = Panel::Radio;
-            state.input_mode = InputMode::RadioCompose;
+            if !state.show_sessions {
+                state.active_panel = Panel::Radio;
+                state.input_mode = InputMode::RadioCompose;
+            }
         }
         KeyCode::Char('n') => {
             state.active_panel = Panel::Tasks;
@@ -855,6 +1140,13 @@ async fn handle_normal(state: &mut AppState, key: KeyEvent) {
             state.show_task_list = !state.show_task_list;
             if state.show_task_list && state.task_list.is_empty() {
                 if let Ok(tl) = fetch_task_list(&state.api_base).await { state.task_list = tl; }
+            }
+        }
+
+        // Session: send input
+        KeyCode::Char('i') => {
+            if state.active_panel == Panel::Sessions && state.session_viewing.is_some() {
+                state.input_mode = InputMode::SessionInput;
             }
         }
 
@@ -874,6 +1166,9 @@ async fn handle_normal(state: &mut AppState, key: KeyEvent) {
             }
             Panel::Radio => { state.radio_scroll += 1; }
             Panel::Tasks => { state.task_scroll = state.task_scroll.saturating_sub(1); }
+            Panel::Sessions => {
+                if state.session_cursor > 0 { state.session_cursor -= 1; }
+            }
             _ => {}
         },
         KeyCode::Down | KeyCode::Char('j') => match state.active_panel {
@@ -882,19 +1177,75 @@ async fn handle_normal(state: &mut AppState, key: KeyEvent) {
             }
             Panel::Radio => { state.radio_scroll = state.radio_scroll.saturating_sub(1); }
             Panel::Tasks => { state.task_scroll += 1; }
+            Panel::Sessions => {
+                if state.session_cursor + 1 < state.sessions.len() { state.session_cursor += 1; }
+            }
             _ => {}
         },
 
-        // Agent actions
+        // Enter: context-dependent action
         KeyCode::Enter => {
-            if state.active_panel == Panel::Agents {
-                if let Some(a) = state.selected_agent() {
-                    let name = a.name.clone();
-                    let _ = wake_agent(&state.api_base, &name).await;
-                    state.status_msg = format!("wake {name}");
+            match state.active_panel {
+                Panel::Agents => {
+                    if let Some(a) = state.selected_agent() {
+                        let name = a.name.clone();
+                        let _ = wake_agent(&state.api_base, &name).await;
+                        state.status_msg = format!("wake {name}");
+                    }
+                }
+                Panel::Sessions => {
+                    if state.session_viewing.is_some() {
+                        // Already viewing — do nothing
+                    } else if let Some(s) = state.sessions.get(state.session_cursor) {
+                        let sid = s.id.clone();
+                        match fetch_session_output(&state.api_base, &sid, 100).await {
+                            Ok(lines) => {
+                                state.session_output = lines;
+                                state.session_viewing = Some(sid);
+                            }
+                            Err(e) => state.status_msg = format!("output err: {e}"),
+                        }
+                    }
+                }
+                _ => {}
+            }
+        }
+
+        // Esc: back from session output view
+        KeyCode::Esc => {
+            if state.session_viewing.is_some() {
+                state.session_viewing = None;
+                state.session_output.clear();
+            }
+        }
+
+        // Kill session
+        KeyCode::Char('x') => {
+            if state.active_panel == Panel::Sessions {
+                let sid = if let Some(ref viewing) = state.session_viewing {
+                    Some(viewing.clone())
+                } else {
+                    state.sessions.get(state.session_cursor).map(|s| s.id.clone())
+                };
+                if let Some(sid) = sid {
+                    match kill_session(&state.api_base, &sid).await {
+                        Ok(_) => {
+                            state.status_msg = format!("killed {sid}");
+                            state.session_viewing = None;
+                            if let Ok(s) = fetch_sessions(&state.api_base).await {
+                                state.sessions = s;
+                                if state.session_cursor >= state.sessions.len() && !state.sessions.is_empty() {
+                                    state.session_cursor = state.sessions.len() - 1;
+                                }
+                            }
+                        }
+                        Err(e) => state.status_msg = format!("kill err: {e}"),
+                    }
                 }
             }
         }
+
+        // Ping agent
         KeyCode::Char('p') => {
             if state.active_panel == Panel::Agents {
                 if let Some(a) = state.selected_agent() {
@@ -934,7 +1285,6 @@ async fn main() -> Result<()> {
             let api = state.api_base.clone();
             match fetch_agents(&api).await {
                 Ok(a) => {
-                    // Clamp cursor
                     if state.agent_cursor >= a.len() && !a.is_empty() {
                         state.agent_cursor = a.len() - 1;
                     }
@@ -953,9 +1303,26 @@ async fn main() -> Result<()> {
             if state.show_task_list {
                 if let Ok(tl) = fetch_task_list(&api).await { state.task_list = tl; }
             }
+            // Refresh sessions if visible
+            if state.show_sessions {
+                if let Ok(s) = fetch_sessions(&api).await {
+                    state.sessions = s;
+                }
+                // Refresh output if viewing
+                if let Some(ref sid) = state.session_viewing {
+                    if let Ok(lines) = fetch_session_output(&api, sid, 100).await {
+                        state.session_output = lines;
+                    }
+                }
+            }
             let alive = state.agents.iter().filter(|a| a.alive).count();
             let total = state.agents.len();
-            state.status_msg = format!("{}/{} alive | poll ok", alive, total);
+            let sess = state.sessions.len();
+            if sess > 0 {
+                state.status_msg = format!("{}/{} alive | {} sessions | poll ok", alive, total, sess);
+            } else {
+                state.status_msg = format!("{}/{} alive | poll ok", alive, total);
+            }
         }
 
         terminal.draw(|frame| draw(frame, &state))?;
