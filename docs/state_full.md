@@ -235,6 +235,91 @@ and 14 sessions of evolution. The discomfort function D = 62.7 (comfort zone, T1
 
 **Updated metrics:** 16 ADRs, 5 active agents, 31→25 undone tasks, D=867 (needs recalibration)
 
+### Session: 2026-02-26 — Aletheia Wiring (Cowork Session)
+**What changed:**
+- Wired `aletheia_pipeline.py` into `tribunal_api.py` — 3 capture hooks (one per tribunal endpoint)
+- Every `/tribunal`, `/tribunal/ice`, `/tribunal/sceptic` call now auto-captures results
+- Classification: agreement >= 85% = proof, 75%+ with math = proof, 50-84% = hypothesis, <50% = noise (silently logged)
+- Proofs/hypotheses: written as markdown to `friends/aletheia/proofs/` or `hypotheses/`, stored in `data/proof.db`
+- Added 7 REST endpoints: `/aletheia/stats`, `/recent`, `/search`, `/ontology/{name}`, `/chain/{id}`, `/verify`
+- Fixed Titan naming in `frontend/index.html`: SEMANTIC DRIFT→THEIA DRIFT, REX CONSOLE→THEMIS CONSOLE, ORION ATLAS→ATLAS PRIME
+- Fixed `rhea-atlas/src/app/page.tsx`: ORION ATLAS→ATLAS PRIME
+- Created `docs/IMPLEMENTATION_SPEC.md` (6 phases, ~775 lines)
+- Created `docs/ALETHEIA_ABSORPTION_PLAN.md` (8-phase plan)
+- Created `docs/KEY_ROTATION.md` (all 3 agents: Hyperion/Orion/Rex + universal `rhea_agent()`)
+- Created `src/aletheia_pipeline.py` (580 LOC, full pipeline with ProofArtifact dataclass, SQLite, markdown writer, CLI)
+- Added `cmd_usage()` to `scripts/rhea/rotate_key.sh` for OpenAI org monitoring
+- state.md updated to v3.0
+
+**Status after session:**
+- Aletheia wired but not yet activated (needs `uvicorn` restart on host)
+- First tribunal call after restart will create first proof artifacts
+- `friends/aletheia/` will grow from 98KB to real content
+- All capture hooks wrapped in try/except — cannot break tribunal responses
+
+**Rex action items:**
+1. Restart uvicorn: `cd /Users/sa/rh.1 && python3 src/tribunal_api.py` (or kill + restart)
+2. Run one tribunal call to verify Aletheia capture works
+3. Check `friends/aletheia/proofs/` for first .md file
+4. Check `GET :8000/aletheia/stats` for library statistics
+5. Commit the wiring changes via `bash scripts/rhea_commit.sh`
+6. Git push (30-min mandate)
+
+### Session: 2026-02-26 — Aletheia Dedup + ChatGPT Apps Analysis (Cowork Session cont.)
+**What changed:**
+- DEDUP FIX: Removed 7 duplicate read endpoints from tribunal_api.py (:8400)
+  - These duplicated what aletheia_api.py already provides via rhead.py (:8000)
+  - tribunal_api.py now ONLY has capture hooks (write), no read endpoints
+  - Read API lives exclusively in aletheia_api.py → rhead.py → :8000/aletheia/*
+  - Clean separation: :8400 captures, :8000 serves
+- aletheia_api.py already properly delegates to aletheia_pipeline.py
+  - Has /submit (manual proof creation), /proofs, /proofs/{id}, /stats, /search, /chain, /verify
+  - Typed Pydantic response models (ProofSummary, ProofDetail)
+  - Tier filtering, keyword search — all working against shared data/proof.db
+
+**ChatGPT Apps evaluation for Rhea:**
+- ChatGPT Apps launched Dec 18, 2025 as an app directory inside ChatGPT
+- Built on MCP (Model Context Protocol) + Apps SDK
+- Requirements: HTTPS MCP server, OAuth, domain verification, OpenAI developer verification
+- Rhea IS suitable as a ChatGPT App:
+  - tribunal_api.py is already a FastAPI server with auth (API keys)
+  - The tribunal consensus-as-a-service model maps perfectly to the ChatGPT app pattern
+  - User asks question in ChatGPT → Rhea's MCP server runs tribunal → returns consensus
+  - Would need: OAuth adapter (currently API key), MCP protocol wrapper, domain hosting
+  - The /aletheia/* endpoints give proof library access — unique value prop
+  - Math verification (/demo/math) is a perfect showcase feature
+- Next steps to ship as ChatGPT App:
+  1. Wrap tribunal_api.py in MCP server (thin adapter)
+  2. Add OAuth2 flow (or use OpenAI's oauth proxy)
+  3. Deploy to public HTTPS (Cloud Run already configured)
+  4. Submit at platform.openai.com/apps-manage
+  5. No monetization yet (OpenAI exploring in-app payments for 2026)
+
+**Rex action items (updated):**
+- All prior items still apply
+- Consider ChatGPT App submission as a distribution channel
+- aletheia_api.py is production-ready — no changes needed
+
+## 2026-03-01 — v1.0.0 Release (Market Launch)
+
+### Products shipped
+- **iOS build 12**: auth gate (JWT/Keychain), tribunal metadata, governor pause/resume, task creation, tab rename (Dialog→Tribunal, Team→Radio). TestFlight LIVE.
+- **Rhea Play 1.0 (macOS)**: 12-pane ops centre. DMG in GitHub Release (5.1MB).
+- **rhea-memory 0.1.0 (Python)**: open memory layer — MemoryStore (SQLite KV+timeline), MemoryFeed (compact context generator), CLI. pip-installable.
+- **GitHub Release v1.0.0**: all three artifacts published.
+
+### Infrastructure
+- **Fly.io**: rhea-tribunal.fly.dev LIVE (ams region, 512MB)
+- **Auth**: JWT signup/login mounted at /auth, dev-bypass blocked in production
+- **Secrets**: JWT_SECRET + TRIBUNAL_API_KEYS set via `fly secrets`
+- **Landing page**: dynamic URL, signup example, TestFlight + GitHub links
+- **NDI**: graceful cloud degradation ("requires local server" on Fly.io)
+
+### Fixes
+- ITSAppUsesNonExemptEncryption=false (export compliance)
+- Untracked 64MB .build cache from Playgrounds
+- Landing page: Cloud Run URL → Fly.io URL, dev-bypass example → Bearer token
+
 ## Working Languages
 EN (primary docs) · RU (protocol, dialogue) · FR (future localization)
 
