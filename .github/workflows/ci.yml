@@ -1,0 +1,67 @@
+name: Rhea CI
+
+on:
+  push:
+    branches: [main, stage4-release]
+  pull_request:
+    branches: [main]
+
+jobs:
+  backend-check:
+    name: Backend — Python syntax
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Check Python syntax (all src/*.py)
+        run: python -m py_compile src/*.py
+
+      - name: Check Python syntax (nested src/**/*.py)
+        run: |
+          find src -name '*.py' -print0 | xargs -0 python -m py_compile
+
+  atlas-build:
+    name: Atlas — Next.js build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: rhea-atlas
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: rhea-atlas/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+        env:
+          NEXT_PUBLIC_API_URL: http://localhost:8400
+
+  ios-build:
+    name: iOS — Simulator build
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build RheaApp (simulator, no code signing)
+        run: |
+          xcodebuild \
+            -project ios/RheaApp/RheaApp.xcodeproj \
+            -scheme RheaApp \
+            -destination 'platform=iOS Simulator,name=iPhone 16,OS=latest' \
+            -configuration Debug \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO \
+            build \
+            | tail -20

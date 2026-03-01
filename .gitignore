@@ -1,3 +1,6 @@
+# Secrets (NEVER track)
+.secrets/
+
 # Python
 .venv/
 __pycache__/
