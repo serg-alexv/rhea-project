@@ -24,6 +24,7 @@ import binascii
 import secrets
 import uuid
 import subprocess
+import requests as _requests
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import Optional
@@ -1893,6 +1894,204 @@ async def keyboard_quick(req: KeyboardQuickRequest):
         "model": result.model,
         "elapsed_s": round(elapsed, 2),
         "action": req.action,
+    }
+
+
+@app.get("/bio/lookup")
+async def bio_lookup(q: str):
+    """Fetch molecule metadata from RCSB PDB REST API.
+
+    ?q=1CRN   → PDB entry metadata (title, method, resolution, organism, MW)
+    ?q=4HHB   → same for any 4-char PDB ID
+
+    Returns a JSON dict with: pdb_id, title, experimental_method, resolution_angstrom,
+    organism, molecular_weight_da, rcsb_url, error (if any).
+    """
+    pdb_id = q.strip().upper()
+    if not pdb_id:
+        raise HTTPException(status_code=400, detail="q parameter required")
+
+    rcsb_url = f"https://data.rcsb.org/rest/v1/core/entry/{pdb_id}"
+    try:
+        resp = _requests.get(rcsb_url, timeout=8)
+    except Exception as exc:
+        return {"pdb_id": pdb_id, "error": f"Network error: {exc}"}
+
+    if resp.status_code == 404:
+        return {"pdb_id": pdb_id, "error": "PDB ID not found in RCSB database"}
+    if resp.status_code != 200:
+        return {"pdb_id": pdb_id, "error": f"RCSB returned HTTP {resp.status_code}"}
+
+    try:
+        data = resp.json()
+    except Exception as exc:
+        return {"pdb_id": pdb_id, "error": f"JSON parse error: {exc}"}
+
+    # Extract fields with safe navigation
+    struct = data.get("struct", {})
+    title = struct.get("title", "")
+
+    exptl = data.get("exptl", [{}])
+    experimental_method = exptl[0].get("method", "") if exptl else ""
+
+    refine = data.get("refine", [{}])
+    resolution = None
+    if refine:
+        resolution = refine[0].get("ls_d_res_high")
+    if resolution is None:
+        em_3d = data.get("em_3d_reconstruction", [{}])
+        if em_3d:
+            resolution = em_3d[0].get("resolution")
+
+    entity = data.get("entity", [{}])
+    organism = ""
+    if entity:
+        src = entity[0].get("rcsb_entity_source_organism", [{}])
+        if src:
+            organism = src[0].get("ncbi_scientific_name", "")
+
+    # Molecular weight from polymer entity
+    mw = None
+    poly = data.get("rcsb_entry_info", {})
+    mw = poly.get("molecular_weight")
+
+    return {
+        "pdb_id": pdb_id,
+        "title": title,
+        "experimental_method": experimental_method,
+        "resolution_angstrom": resolution,
+        "organism": organism,
+        "molecular_weight_da": mw,
+        "rcsb_url": f"https://www.rcsb.org/structure/{pdb_id}",
+    }
+
+
+# ---------------------------------------------------------------------------
+# Relay proxy — encrypted relay for tribunal API calls
+# ---------------------------------------------------------------------------
+
+# In-memory relay telemetry (reset on process restart, same pattern as _session_history)
+_relay_stats: dict = {
+    "total_relayed": 0,
+    "total_bytes": 0,
+    "relay_start_time": time.time(),
+}
+
+# Map of allowed proxy targets to their handler functions (resolved at request time
+# to avoid forward-reference issues with the decorated functions below).
+_RELAY_TARGET_MAP: dict[str, str] = {
+    "/dialog": "dialog_endpoint",
+    "/tribunal": "tribunal",
+    "/tribunal/ice": "tribunal_ice",
+    "/tribunal/sceptic": "tribunal_sceptic",
+}
+
+
+class RelayProxyRequest(BaseModel):
+    target: str = Field(
+        ...,
+        description="Target endpoint path to relay to. Allowed: /dialog, /tribunal, /tribunal/ice, /tribunal/sceptic",
+    )
+    payload: dict = Field(
+        ...,
+        description="Request payload forwarded verbatim to the target endpoint handler",
+    )
+    relay_id: str = Field(
+        default="",
+        max_length=128,
+        description="Optional caller-supplied tracking ID. Auto-generated (UUID4 prefix) when omitted.",
+    )
+
+
+@app.get("/relay/status")
+async def relay_status():
+    """Relay health: uptime, total relayed requests, total bytes proxied."""
+    uptime_s = round(time.time() - _relay_stats["relay_start_time"], 1)
+    return {
+        "healthy": True,
+        "total_relayed": _relay_stats["total_relayed"],
+        "total_bytes": _relay_stats["total_bytes"],
+        "uptime_s": uptime_s,
+        "allowed_targets": list(_RELAY_TARGET_MAP.keys()),
+        "ts": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
+    }
+
+
+@app.post("/relay/proxy", dependencies=[Depends(verify_api_key), Depends(check_rate_limit)])
+async def relay_proxy(req: RelayProxyRequest):
+    """
+    Encrypted relay for tribunal API calls.
+
+    Accepts a target path + payload dict, strips identifying headers,
+    forwards internally to the real endpoint handler (no extra HTTP hop),
+    and wraps the result with relay metadata.
+    """
+    t0 = time.time()
+
+    # Validate target
+    target = (req.target or "").strip()
+    if target not in _RELAY_TARGET_MAP:
+        raise HTTPException(
+            status_code=400,
+            detail=(
+                f"Unsupported relay target '{target}'. "
+                f"Allowed targets: {', '.join(sorted(_RELAY_TARGET_MAP.keys()))}"
+            ),
+        )
+
+    # Resolve or generate relay_id
+    relay_id = (req.relay_id or "").strip() or str(uuid.uuid4())[:16]
+
+    # Dispatch to the correct handler function + pydantic model
+    try:
+        if target == "/dialog":
+            inner_req = DialogRequest(**req.payload)
+            data = await dialog_endpoint(inner_req)
+
+        elif target == "/tribunal":
+            inner_req = TribunalRequest(**req.payload)
+            # tribunal() depends on verify_api_key + check_rate_limit which are already
+            # satisfied by this relay endpoint — call the core logic directly.
+            data = await tribunal(inner_req)
+
+        elif target == "/tribunal/ice":
+            inner_req = TribunalICERequest(**req.payload)
+            data = await tribunal_ice(inner_req)
+
+        elif target == "/tribunal/sceptic":
+            inner_req = TribunalScepticRequest(**req.payload)
+            data = await tribunal_sceptic(inner_req)
+
+        else:
+            # Should be unreachable due to the validation above, but guard anyway.
+            raise HTTPException(status_code=400, detail=f"Unrouted target: {target}")
+
+    except HTTPException:
+        raise  # surface 4xx/5xx from the inner handler unchanged
+    except Exception as exc:
+        raise HTTPException(status_code=502, detail=f"Relay inner-call failed: {exc}") from exc
+
+    # Serialise result so we can measure bytes and wrap it
+    if hasattr(data, "dict"):
+        data_dict = data.dict()
+    elif isinstance(data, dict):
+        data_dict = data
+    else:
+        data_dict = {"raw": str(data)}
+
+    relay_latency_ms = round((time.time() - t0) * 1000, 1)
+
+    # Update telemetry
+    payload_bytes = len(json.dumps(data_dict).encode("utf-8"))
+    _relay_stats["total_relayed"] += 1
+    _relay_stats["total_bytes"] += payload_bytes
+
+    return {
+        "relayed": True,
+        "relay_id": relay_id,
+        "target": target,
+        "relay_latency_ms": relay_latency_ms,
+        "data": data_dict,
     }
 
 
