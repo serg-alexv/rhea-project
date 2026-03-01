@@ -46,7 +46,7 @@ _SUBSCRIBERS: list = []  # list of asyncio.Queue (one per SSE client)
 _RADIO_LOG: list = []  # in-memory log of pushed/broadcast messages (included in /feed)
 
 def _broadcast_event(event: dict):
-    """Push event to all connected SSE subscribers AND in-memory radio log."""
+    """Push event to all connected SSE subscribers AND in-memory radio log AND SQL."""
     _RADIO_LOG.append(event)
     # Cap in-memory log at 200 items
     if len(_RADIO_LOG) > 200:
@@ -59,6 +59,11 @@ def _broadcast_event(event: dict):
             dead.append(q)
     for q in dead:
         _SUBSCRIBERS.remove(q)
+    # SQL write-through
+    try:
+        rhea_db.persist_radio(event)
+    except Exception:
+        pass  # radio persistence must never break the event bus
 
 # Ensure src/ is importable
 sys.path.insert(0, str(Path(__file__).parent))
@@ -71,6 +76,7 @@ from rhea_profile_manager import profile_manager
 from rhea_visual_context import update_state, get_health_history
 import aletheia_pipeline as aletheia
 from aletheia_api import aletheia_router
+import rhea_db
 
 # ---------------------------------------------------------------------------
 # App setup
@@ -1156,6 +1162,12 @@ async def tribunal(req: TribunalRequest):
         "ontology": _active_ontology,
         "response": tribunal_response.dict(),
     })
+    # SQL write-through
+    rhea_db.persist_history(
+        step=len(_session_history) - 1, endpoint="/tribunal",
+        prompt=req.prompt, response_dict=tribunal_response.dict(),
+        ontology=_active_ontology,
+    )
 
     # ── Aletheia capture: persist as proof/hypothesis ──
     try:
@@ -1235,6 +1247,21 @@ async def tribunal_ice(req: TribunalICERequest):
         )
     except Exception as e:
         print(f"[aletheia] ICE capture error: {e}")
+
+    # Session history + SQL write-through for ICE
+    _session_history.append({
+        "step": len(_session_history),
+        "endpoint": "/tribunal/ice",
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "request": req.dict(),
+        "ontology": _active_ontology,
+        "response": ice_response.dict(),
+    })
+    rhea_db.persist_history(
+        step=len(_session_history) - 1, endpoint="/tribunal/ice",
+        prompt=req.prompt, response_dict=ice_response.dict(),
+        ontology=_active_ontology,
+    )
 
     return ice_response
 
@@ -1372,6 +1399,12 @@ async def tribunal_sceptic(req: TribunalScepticRequest):
         "ontology": _active_ontology,
         "response": sceptic_response.dict(),
     })
+    # SQL write-through
+    rhea_db.persist_history(
+        step=len(_session_history) - 1, endpoint="/tribunal/sceptic",
+        prompt=req.prompt, response_dict=sceptic_response.dict(),
+        ontology=_active_ontology,
+    )
 
     # ── Aletheia capture: sceptic results ──
     try:
@@ -1437,6 +1470,31 @@ async def session_rewind(req: SessionRewindRequest):
         "request": entry["request"],
         "response": entry["response"],
     }
+
+
+# ---------------------------------------------------------------------------
+# Command Centre — persistent SQL-backed endpoints
+# ---------------------------------------------------------------------------
+
+@app.get("/cc/history", dependencies=[Depends(verify_api_key)])
+async def cc_history(limit: int = 50, session_id: Optional[str] = None, type: Optional[str] = None):
+    """Persistent history from SQL — survives restarts."""
+    return {"history": rhea_db.query_history(limit=limit, session_id=session_id, type_filter=type)}
+
+@app.get("/cc/radio", dependencies=[Depends(verify_api_key)])
+async def cc_radio(limit: int = 100, since: Optional[str] = None):
+    """Persistent radio feed from SQL."""
+    return {"radio": rhea_db.query_radio(limit=limit, since=since)}
+
+@app.get("/cc/office", dependencies=[Depends(verify_api_key)])
+async def cc_office(limit: int = 50, agent: Optional[str] = None):
+    """Persistent office messages from SQL."""
+    return {"messages": rhea_db.query_office(limit=limit, agent=agent)}
+
+@app.get("/cc/sessions", dependencies=[Depends(verify_api_key)])
+async def cc_sessions(limit: int = 20):
+    """List all tribunal sessions with step counts."""
+    return {"sessions": rhea_db.query_sessions(limit=limit)}
 
 
 # ---------------------------------------------------------------------------
@@ -1664,6 +1722,12 @@ async def demo_math_domain(domain: str):
 
 @app.on_event("startup")
 async def startup():
+    # Initialize SQL persistence (rhea.db)
+    rhea_db.init_db()
+    rhea_db.start_session(rhea_db.get_session_id(), agent="tribunal")
+    migrated = rhea_db.migrate_office_jsonl()
+    if migrated:
+        print(f"[rhea_db] migrated {migrated} office messages from JSONL to SQL")
     # Print dev key if auto-generated
     if _keys_env == "":
         print(f"\n  Dev API key: {_dev_key}")
@@ -1806,6 +1870,191 @@ async def get_chat(after: str = "", limit: int = 50):
     return {"messages": messages}
 
 
+AXIOM_A0_ACTION_HINTS = (
+    "wake",
+    "boot",
+    "claim",
+    "deploy",
+    "ship",
+    "send",
+    "broadcast",
+    "push",
+    "fix",
+    "patch",
+    "implement",
+    "run",
+    "start",
+    "restart",
+    "sync",
+    "apply",
+    "execute",
+    "relay",
+    "done",
+)
+AXIOM_A0_REPORT_HINTS = (
+    "status",
+    "report",
+    "summary",
+    "state",
+    "monitor",
+    "metrics",
+    "logs",
+    "checked",
+    "verified",
+    "analysis",
+    "insight",
+    "snapshot",
+)
+AXIOM_A0_CONTROLLED_SENDERS = {"rex", "orion", "gemini", "hyperion", "gpt", "shared"}
+AXIOM_GATE_ENABLED = os.environ.get("RHEA_AXIOM_GATE", "1").strip().lower() not in {"0", "false", "off", "no"}
+AXIOM_HISTORY_LOG = _PROJECT_ROOT / "data" / "office.jsonl"
+
+
+def _parse_iso_ts(raw: str) -> datetime | None:
+    if not raw:
+        return None
+    text = str(raw).strip()
+    if text.endswith("Z"):
+        text = text[:-1] + "+00:00"
+    try:
+        dt = datetime.fromisoformat(text)
+    except Exception:
+        return None
+    if dt.tzinfo is None:
+        dt = dt.replace(tzinfo=timezone.utc)
+    return dt.astimezone(timezone.utc)
+
+
+def _semantic_text(rec: dict) -> str:
+    return str(rec.get("compressed") or rec.get("text") or "").strip()
+
+
+def _classify_a0_semantics(text: str) -> str:
+    low = (text or "").lower()
+    has_action = any(h in low for h in AXIOM_A0_ACTION_HINTS)
+    has_report = any(h in low for h in AXIOM_A0_REPORT_HINTS)
+    if has_action and not has_report:
+        return "push"
+    if has_report and not has_action:
+        return "report"
+    if has_action and has_report:
+        return "push"
+    return "unknown"
+
+
+def _load_sender_events(sender: str, limit: int = 200) -> list[dict]:
+    if not AXIOM_HISTORY_LOG.exists():
+        return []
+    s = str(sender).strip().lower()
+    out: list[dict] = []
+    for raw in AXIOM_HISTORY_LOG.read_text(encoding="utf-8", errors="replace").splitlines():
+        line = raw.strip()
+        if not line:
+            continue
+        try:
+            rec = json.loads(line)
+        except Exception:
+            continue
+        rec_sender = str(rec.get("sender", "")).strip().lower()
+        if rec_sender != s:
+            continue
+        ts_raw = str(rec.get("ts", "")).strip()
+        ts = _parse_iso_ts(ts_raw)
+        if ts is None:
+            continue
+        out.append(
+            {
+                "id": str(rec.get("id", "")),
+                "sender": rec_sender,
+                "receiver": str(rec.get("receiver", "")).strip().lower(),
+                "text": _semantic_text(rec),
+                "ts": ts,
+                "ts_raw": ts_raw,
+            }
+        )
+    out.sort(key=lambda r: r["ts"])
+    return out[-max(1, int(limit)) :]
+
+
+def _evaluate_a0_sender(sender: str, limit: int = 200) -> dict:
+    events = _load_sender_events(sender=sender, limit=limit)
+    last_push = None
+    last_report = None
+    last_event = events[-1] if events else None
+
+    for ev in events:
+        k = _classify_a0_semantics(ev["text"])
+        if k == "push":
+            last_push = ev
+        elif k == "report":
+            last_report = ev
+
+    if not last_event:
+        return {
+            "axiom": "A0",
+            "sender": str(sender).lower(),
+            "events_considered": 0,
+            "passed": False,
+            "last_action_type": "unknown",
+            "last_event_id": None,
+            "last_event_ts": None,
+            "last_event_text": None,
+            "rule": "pass iff last semantic act is PUSH/ACTION, not REPORT/STATUS",
+        }
+
+    last_kind = _classify_a0_semantics(last_event["text"])
+    if last_kind == "unknown":
+        if last_push and (not last_report or last_push["ts"] >= last_report["ts"]):
+            last_kind = "push"
+        elif last_report:
+            last_kind = "report"
+
+    return {
+        "axiom": "A0",
+        "sender": str(sender).lower(),
+        "events_considered": len(events),
+        "passed": bool(last_kind == "push"),
+        "last_action_type": last_kind,
+        "last_event_id": last_event.get("id"),
+        "last_event_ts": last_event.get("ts_raw"),
+        "last_event_text": str(last_event.get("text") or "")[:240],
+        "last_push_id": (last_push.get("id") if last_push else None),
+        "last_report_id": (last_report.get("id") if last_report else None),
+        "rule": "pass iff last semantic act is PUSH/ACTION, not REPORT/STATUS",
+    }
+
+
+@app.get("/axiom/check")
+async def axiom_check(agent: str = "orion", axiom: str = "A0", limit: int = 200):
+    a = str(axiom or "A0").upper().strip()
+    if a != "A0":
+        raise HTTPException(status_code=400, detail=f"Unsupported axiom: {axiom}")
+    return {"ok": True, "ts": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"), "result": _evaluate_a0_sender(agent, limit=max(1, int(limit)))}
+
+
+@app.get("/axiom/fleet")
+async def axiom_fleet(
+    agents: str = "rex,orion,gemini,hyperion,gpt,shared",
+    axiom: str = "A0",
+    limit: int = 200,
+):
+    a = str(axiom or "A0").upper().strip()
+    if a != "A0":
+        raise HTTPException(status_code=400, detail=f"Unsupported axiom: {axiom}")
+    names = [x.strip().lower() for x in str(agents).split(",") if x.strip()]
+    rows = [_evaluate_a0_sender(name, limit=max(1, int(limit))) for name in names]
+    passed_n = sum(1 for r in rows if r.get("passed"))
+    return {
+        "ok": True,
+        "ts": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
+        "axiom": "A0",
+        "passed_agents": passed_n,
+        "total_agents": len(rows),
+        "all_passed": passed_n == len(rows),
+        "results": rows,
+    }
+
+
 class OfficeMsg(BaseModel):
     sender: str
     receiver: str
@@ -1854,6 +2103,37 @@ def _decode_image_b64(raw: str, fallback_mime: str) -> tuple[bytes, str]:
 @app.post("/office/send")
 async def office_send(msg: OfficeMsg):
     """Send agent→agent message. Sonnet-gated both directions (H₂O bond)."""
+    sender_norm = str(msg.sender or "").strip().lower()
+    preflight = {
+        "axiom": "A0",
+        "sender": sender_norm,
+        "skipped": True,
+        "reason": "sender_not_controlled_or_gate_disabled",
+    }
+    if AXIOM_GATE_ENABLED and sender_norm in AXIOM_A0_CONTROLLED_SENDERS:
+        preflight = _evaluate_a0_sender(sender_norm, limit=300)
+        preflight["skipped"] = False
+        if not preflight.get("passed", False):
+            block_event = {
+                "id": f"axiom-block-{secrets.token_hex(4)}",
+                "type": "axiom_block",
+                "sender": sender_norm,
+                "receiver": str(msg.receiver or "").strip().lower() or "unknown",
+                "text": f"A0 preflight blocked: sender={sender_norm} last_action={preflight.get('last_action_type','unknown')}",
+                "ts": datetime.now(timezone.utc).isoformat(),
+                "axiom": "A0",
+            }
+            _broadcast_event(block_event)
+            raise HTTPException(
+                status_code=409,
+                detail={
+                    "error": "A0 preflight failed",
+                    "axiom": "A0",
+                    "sender": sender_norm,
+                    "preflight": preflight,
+                },
+            )
+
     result = get_office().send(
         sender=msg.sender,
         receiver=msg.receiver,
@@ -1873,6 +2153,7 @@ async def office_send(msg: OfficeMsg):
         "relay_tokens": result.relay_tokens,
         "cost_usd": result.cost_usd,
         "ts": result.ts,
+        "axiom_preflight": preflight,
     }
 
 
@@ -1971,6 +2252,37 @@ async def office_send_shot(req: OfficeShot):
 @app.post("/office/broadcast")
 async def office_broadcast(msg: ChatMessage):
     """Broadcast to all agents. Each message Sonnet-gated."""
+    sender_norm = str(msg.sender or "").strip().lower()
+    preflight = {
+        "axiom": "A0",
+        "sender": sender_norm,
+        "skipped": True,
+        "reason": "sender_not_controlled_or_gate_disabled",
+    }
+    if AXIOM_GATE_ENABLED and sender_norm in AXIOM_A0_CONTROLLED_SENDERS:
+        preflight = _evaluate_a0_sender(sender_norm, limit=300)
+        preflight["skipped"] = False
+        if not preflight.get("passed", False):
+            block_event = {
+                "id": f"axiom-block-{secrets.token_hex(4)}",
+                "type": "axiom_block",
+                "sender": sender_norm,
+                "receiver": "all",
+                "text": f"A0 preflight blocked broadcast: sender={sender_norm} last_action={preflight.get('last_action_type','unknown')}",
+                "ts": datetime.now(timezone.utc).isoformat(),
+                "axiom": "A0",
+            }
+            _broadcast_event(block_event)
+            raise HTTPException(
+                status_code=409,
+                detail={
+                    "error": "A0 preflight failed",
+                    "axiom": "A0",
+                    "sender": sender_norm,
+                    "preflight": preflight,
+                },
+            )
+
     results = get_office().broadcast(sender=msg.sender, text=msg.text)
     for r in results:
         _broadcast_event({"id": r.id if hasattr(r, "id") else "", "type": "broadcast",
@@ -1979,7 +2291,7 @@ async def office_broadcast(msg: ChatMessage):
     return {"sent": len(results), "messages": [
         {"receiver": r.receiver, "response": r.response, "cost_usd": r.cost_usd}
         for r in results
-    ]}
+    ], "axiom_preflight": preflight}
 
 
 @app.get("/office/history")

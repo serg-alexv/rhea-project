@@ -319,8 +319,14 @@ class Office:
     # ------------------------------------------------------------------
 
     def _log(self, msg: OfficeMessage) -> None:
-        """Append to office.jsonl."""
-        self._append_log(asdict(msg))
+        """Append to office.jsonl + SQL write-through."""
+        record = asdict(msg)
+        self._append_log(record)
+        try:
+            from rhea_db import persist_office_message
+            persist_office_message(record)
+        except Exception:
+            pass  # SQL persistence must never break the office
 
     def _append_log(self, record: dict) -> None:
         """Append any dict to the office log."""
