@@ -11,8 +11,8 @@ import WebKit
 ///   - Color by chain, secondary structure, or element
 ///   - "Ask about this molecule" — tribunal-powered analysis panel
 ///
-/// The renderer runs entirely client-side — 3Dmol.js loaded from CDN,
-/// no server-side computation needed. PDB files fetched from RCSB.
+/// The renderer runs entirely client-side — 3Dmol.js bundled locally (no CDN),
+/// no server-side computation needed. PDB files fetched from RCSB (public domain).
 public struct BioRendererView: View {
     @AppStorage("apiBaseURL") private var apiBaseURL = "http://localhost:8400"
 
@@ -577,6 +577,16 @@ struct BioWebView: NSViewRepresentable {
 }
 #endif
 
+// MARK: - Bundled 3Dmol.js (no CDN dependency)
+
+private let _bundled3DmolJS: String = {
+    guard let url = Bundle.module.url(forResource: "3Dmol-min", withExtension: "js"),
+          let js = try? String(contentsOf: url) else {
+        return "/* 3Dmol.js bundle missing */"
+    }
+    return js
+}()
+
 // MARK: - 3Dmol.js HTML Template
 
 private func bioHTML(moleculeID: String, isSMILES: Bool, style: String, colorScheme: String) -> String {
@@ -668,7 +678,7 @@ private func bioHTML(moleculeID: String, isSMILES: Bool, style: String, colorSch
                 max-width: 80vw;
             }
         </style>
-        <script src="https://3Dmol.org/build/3Dmol-min.js"></script>
+        <script>\(_bundled3DmolJS)</script>
     </head>
     <body>
         <div id="viewer"></div>

@@ -27,7 +27,7 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.rhea.preview
         DEVELOPMENT_TEAM: "398XACWZ7G"
         MARKETING_VERSION: "1.0"
-        CURRENT_PROJECT_VERSION: "13"
+        CURRENT_PROJECT_VERSION: "14"
         INFOPLIST_GENERATION_MODE: GeneratedByXcode
         CODE_SIGN_STYLE: Automatic
         SWIFT_VERSION: "5.9"
@@ -39,6 +39,7 @@ targets:
     dependencies:
       - package: RheaKit
       - package: AnimatedTabBar
+      - target: RheaTunnel
       - target: RheaKeyboard
     info:
       path: Info.plist
@@ -55,6 +56,31 @@ targets:
         CFBundleShortVersionString: $(MARKETING_VERSION)
         CFBundleVersion: $(CURRENT_PROJECT_VERSION)
 
+  RheaTunnel:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: ../RheaTunnel/Sources
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.rhea.preview.tunnel
+        DEVELOPMENT_TEAM: "398XACWZ7G"
+        MARKETING_VERSION: "1.0"
+        CURRENT_PROJECT_VERSION: "14"
+        CODE_SIGN_STYLE: Automatic
+        SWIFT_VERSION: "5.9"
+        INFOPLIST_GENERATION_MODE: GeneratedByXcode
+        CODE_SIGN_ENTITLEMENTS: RheaTunnel.entitlements
+    info:
+      path: RheaTunnel-Info.plist
+      properties:
+        CFBundleDisplayName: Rhea Tunnel
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.networkextension.packet-tunnel
+          NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).PacketTunnelProvider
+
   RheaKeyboard:
     type: app-extension
     platform: iOS
@@ -65,7 +91,7 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.rhea.preview.keyboard
         DEVELOPMENT_TEAM: "398XACWZ7G"
         MARKETING_VERSION: "1.0"
-        CURRENT_PROJECT_VERSION: "13"
+        CURRENT_PROJECT_VERSION: "14"
         CODE_SIGN_STYLE: Automatic
         SWIFT_VERSION: "5.9"
         INFOPLIST_GENERATION_MODE: GeneratedByXcode
