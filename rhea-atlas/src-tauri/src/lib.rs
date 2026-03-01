@@ -1,5 +1,4 @@
 use tauri::{
-    image::Image,
     menu::{MenuBuilder, MenuItemBuilder},
     tray::TrayIconBuilder,
     Emitter, Manager,
@@ -9,7 +8,6 @@ use tauri::{
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_notification::init())
-        .plugin(tauri_plugin_global_shortcut::Builder::new().build())
         .setup(|app| {
             if cfg!(debug_assertions) {
                 app.handle().plugin(
@@ -32,9 +30,7 @@ pub fn run() {
                 .build()?;
 
             let _tray = TrayIconBuilder::new()
-                .icon(Image::from_path("icons/32x32.png").unwrap_or_else(|_| {
-                    app.default_window_icon().cloned().unwrap()
-                }))
+                .icon(app.default_window_icon().cloned().unwrap())
                 .tooltip("Rhea Command Centre")
                 .menu(&menu)
                 .on_menu_event(move |app, event| match event.id().as_ref() {
