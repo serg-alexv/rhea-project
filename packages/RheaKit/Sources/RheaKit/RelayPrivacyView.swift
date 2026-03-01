@@ -15,8 +15,10 @@ public struct RelayPrivacyView: View {
     @AppStorage("apiBaseURL") private var apiBaseURL = AppConfig.defaultAPIBaseURL
 
     @StateObject private var tunnel = TunnelManager.shared
+    @StateObject private var mesh = MeshManager.shared
 
     @AppStorage("dpiPreset") private var dpiPreset = "gentle"
+    @AppStorage("meshControlURL") private var meshControlURL = "https://headscale.timelabs.ru"
 
     @State private var connectionStatus = "Checking..."
     @State private var publicIP = "..."
@@ -49,6 +51,9 @@ public struct RelayPrivacyView: View {
 
                     // DPI bypass
                     dpiCard
+
+                    // Mesh network
+                    meshCard
 
                     // VPN tunnel
                     vpnCard
@@ -256,6 +261,79 @@ public struct RelayPrivacyView: View {
         }
     }
 
+    private var meshCard: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                Image(systemName: "point.3.connected.trianglepath.dotted")
+                    .foregroundStyle(mesh.isConnected ? RheaTheme.green : RheaTheme.accent)
+                Text("MESH NETWORK")
+                    .font(.system(size: 11, weight: .bold, design: .monospaced))
+                    .foregroundStyle(.white)
+                Spacer()
+                Button {
+                    Task {
+                        if mesh.isConnected {
+                            await mesh.disconnect()
+                        } else {
+                            let config = MeshManager.MeshConfig(controlURL: meshControlURL)
+                            try? await mesh.connect(config: config)
+                        }
+                    }
+                } label: {
+                    Text(mesh.isConnected ? "DISCONNECT" : "CONNECT")
+                        .font(.system(size: 10, weight: .bold, design: .monospaced))
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 4)
+                        .background(
+                            RoundedRectangle(cornerRadius: 6)
+                                .fill(mesh.isConnected ? RheaTheme.red.opacity(0.3) : RheaTheme.green.opacity(0.3))
+                        )
+                        .foregroundStyle(mesh.isConnected ? RheaTheme.red : RheaTheme.green)
+                }
+            }
+
+            HStack(spacing: 16) {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("STATUS")
+                        .font(.system(size: 9, weight: .bold, design: .monospaced))
+                        .foregroundStyle(.secondary)
+                    HStack(spacing: 4) {
+                        Circle()
+                            .fill(mesh.isConnected ? RheaTheme.green : .secondary)
+                            .frame(width: 6, height: 6)
+                        Text(mesh.statusText.uppercased())
+                            .font(.system(size: 10, weight: .bold, design: .monospaced))
+                            .foregroundStyle(mesh.isConnected ? RheaTheme.green : .secondary)
+                    }
+                }
+                if let ip = mesh.meshIP {
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("MESH IP")
+                            .font(.system(size: 9, weight: .bold, design: .monospaced))
+                            .foregroundStyle(.secondary)
+                        Text(ip)
+                            .font(.system(size: 10, weight: .bold, design: .monospaced))
+                            .foregroundStyle(RheaTheme.accent)
+                    }
+                }
+            }
+
+            Text("Agent-to-agent mesh via Headscale. Each node gets a stable IP on rhea.mesh. No Tailscale subscription.")
+                .font(.system(size: 11))
+                .foregroundStyle(.secondary)
+
+            HStack(spacing: 4) {
+                Text("CONTROL:")
+                    .font(.system(size: 9, weight: .bold, design: .monospaced))
+                    .foregroundStyle(.secondary)
+                Text(meshControlURL.replacingOccurrences(of: "https://", with: ""))
+                    .font(.system(size: 9, design: .monospaced))
+                    .foregroundStyle(.white.opacity(0.7))
+            }
+        }
+        .glassCard()
+    }
+
     private var vpnCard: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
@@ -340,6 +418,7 @@ public struct RelayPrivacyView: View {
             privacyRow(icon: "network", label: "DNS-over-HTTPS", status: dohProvider.capitalized, color: RheaTheme.green)
             privacyRow(icon: "arrow.triangle.branch", label: "API Relay", status: relayEnabled ? "Active" : "Off", color: relayEnabled ? RheaTheme.green : .secondary)
             privacyRow(icon: "wand.and.stars", label: "DPI Bypass", status: dpiPreset == "off" ? "Off" : dpiPreset.capitalized, color: dpiPreset != "off" ? RheaTheme.green : .secondary)
+            privacyRow(icon: "point.3.connected.trianglepath.dotted", label: "Mesh Network", status: mesh.isConnected ? "Active" : "Off", color: mesh.isConnected ? RheaTheme.green : .secondary)
             privacyRow(
                 icon: "shield.lefthalf.filled",
                 label: "Full VPN",
