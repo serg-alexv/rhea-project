@@ -2815,6 +2815,8 @@ async def unified_agent_status():
             "budget_remaining": gov.get("budget_remaining", 0.0),
             "floor_expected": gov.get("floor_expected", 0),
             "floor_gap": gov.get("floor_gap", 0),
+            "below_floor": gov.get("below_floor", False),
+            "floor_threshold": gov.get("floor_threshold", 0),
             "hour": gov.get("hour", 0),
             "hard_fail": gov.get("hard_fail", False),
             # Office fields
