@@ -55,6 +55,10 @@ targets:
         CFBundleDisplayName: Rhea
         CFBundleShortVersionString: $(MARKETING_VERSION)
         CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        CFBundleURLTypes:
+          - CFBundleURLSchemes:
+              - rhea
+            CFBundleURLName: com.rhea.oauth
 
   RheaTunnel:
     type: app-extension

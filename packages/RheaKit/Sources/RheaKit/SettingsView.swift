@@ -30,6 +30,9 @@ public struct SettingsView: View {
             Form {
                 Section("Account") {
                     AccountBadge()
+                    NavigationLink("Billing & Usage") {
+                        BillingView()
+                    }
                 }
 
                 Section("Atlas Web URL") {

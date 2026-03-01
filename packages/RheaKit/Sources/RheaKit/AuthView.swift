@@ -1,5 +1,6 @@
 import SwiftUI
 import KeychainAccess
+import AuthenticationServices
 
 // MARK: - Auth Manager
 
@@ -10,6 +11,7 @@ public class AuthManager: ObservableObject {
     @Published public var email: String? = nil
     @Published public var plan: String = "free"
     @Published public var queriesUsed: Int = 0
+    @Published public var queryLimit: Int = 100
     @Published public var didSkipAuth: Bool = false
 
     private let keychain = Keychain(service: "com.rhea.preview")
@@ -19,6 +21,7 @@ public class AuthManager: ObservableObject {
     private init() {
         token = keychain["jwt_token"]
         email = keychain["user_email"]
+        if token != nil { fetchProfile() }
     }
 
     public func save(token: String, email: String) {
@@ -26,6 +29,7 @@ public class AuthManager: ObservableObject {
         self.email = email
         keychain["jwt_token"] = token
         keychain["user_email"] = email
+        fetchProfile()
     }
 
     public func logout() {
@@ -33,6 +37,7 @@ public class AuthManager: ObservableObject {
         email = nil
         plan = "free"
         queriesUsed = 0
+        queryLimit = 100
         didSkipAuth = false
         keychain["jwt_token"] = nil
         keychain["user_email"] = nil
@@ -47,8 +52,41 @@ public class AuthManager: ObservableObject {
         if let token = token {
             request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         } else {
-            // Fallback for local dev — will be rejected in production
             request.setValue("dev-bypass", forHTTPHeaderField: "X-API-Key")
+        }
+    }
+
+    /// Fetch profile from backend to sync plan + usage
+    public func fetchProfile() {
+        guard let token = token else { return }
+        let base = UserDefaults.standard.string(forKey: "apiBaseURL") ?? AppConfig.defaultAPIBaseURL
+        guard let url = URL(string: "\(base)/auth/profile") else { return }
+        var req = URLRequest(url: url)
+        req.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        URLSession.shared.dataTask(with: req) { [weak self] data, response, _ in
+            guard let data = data,
+                  let http = response as? HTTPURLResponse, http.statusCode == 200,
+                  let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else { return }
+            DispatchQueue.main.async {
+                if let plan = json["plan"] as? String { self?.plan = plan }
+                if let usage = json["usage"] as? [String: Any] {
+                    self?.queriesUsed = usage["queries"] as? Int ?? 0
+                    self?.queryLimit = usage["limit"] as? Int ?? 100
+                }
+            }
+        }.resume()
+    }
+
+    /// Handle OAuth callback URL (rhea://oauth?token=...&email=...)
+    public func handleOAuthURL(_ url: URL) {
+        guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
+              let items = components.queryItems else { return }
+        let params = Dictionary(uniqueKeysWithValues: items.compactMap { item in
+            item.value.map { (item.name, $0) }
+        })
+        if let token = params["token"], !token.isEmpty,
+           let email = params["email"] {
+            save(token: token, email: email)
         }
     }
 }
@@ -89,6 +127,22 @@ public struct AuthView: View {
             }
 
             Spacer()
+
+            // OAuth buttons
+            VStack(spacing: 12) {
+                AppleSignInButton(apiBaseURL: apiBaseURL)
+                OAuthButton(provider: "Google", icon: "globe", color: .white, apiBaseURL: apiBaseURL)
+                OAuthButton(provider: "Microsoft", icon: "building.2", color: Color(red: 0, green: 0.47, blue: 0.84), apiBaseURL: apiBaseURL)
+            }
+            .padding(.horizontal, 24)
+
+            // Divider
+            HStack {
+                Rectangle().fill(RheaTheme.cardBorder).frame(height: 1)
+                Text("or email").font(.caption2).foregroundStyle(.secondary)
+                Rectangle().fill(RheaTheme.cardBorder).frame(height: 1)
+            }
+            .padding(.horizontal, 24)
 
             // Form
             VStack(spacing: 14) {
@@ -201,6 +255,302 @@ public struct AuthView: View {
                 }
             }
         }.resume()
+    }
+}
+
+// MARK: - Apple Sign In
+
+struct AppleSignInButton: View {
+    let apiBaseURL: String
+    @ObservedObject private var auth = AuthManager.shared
+
+    var body: some View {
+        SignInWithAppleButton(.signIn) { request in
+            request.requestedScopes = [.email, .fullName]
+        } onCompletion: { result in
+            switch result {
+            case .success(let authorization):
+                handleAppleAuth(authorization)
+            case .failure:
+                break
+            }
+        }
+        .signInWithAppleButtonStyle(.white)
+        .frame(maxWidth: .infinity)
+        .frame(height: 50)
+        .clipShape(RoundedRectangle(cornerRadius: 12))
+    }
+
+    private func handleAppleAuth(_ authorization: ASAuthorization) {
+        guard let credential = authorization.credential as? ASAuthorizationAppleIDCredential,
+              let identityTokenData = credential.identityToken,
+              let identityToken = String(data: identityTokenData, encoding: .utf8) else { return }
+
+        // Send Apple identity token to our backend for verification
+        guard let url = URL(string: "\(apiBaseURL)/auth/apple") else { return }
+        var req = URLRequest(url: url)
+        req.httpMethod = "POST"
+        req.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        let body: [String: Any] = [
+            "identity_token": identityToken,
+            "email": credential.email ?? "",
+            "full_name": [credential.fullName?.givenName, credential.fullName?.familyName]
+                .compactMap { $0 }.joined(separator: " "),
+        ]
+        req.httpBody = try? JSONSerialization.data(withJSONObject: body)
+
+        URLSession.shared.dataTask(with: req) { data, response, _ in
+            guard let data = data,
+                  let http = response as? HTTPURLResponse, http.statusCode < 300,
+                  let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+                  let token = json["token"] as? String,
+                  let email = json["email"] as? String else { return }
+            DispatchQueue.main.async {
+                auth.save(token: token, email: email)
+            }
+        }.resume()
+    }
+}
+
+// MARK: - OAuth Button
+
+struct OAuthButton: View {
+    let provider: String
+    let icon: String
+    let color: Color
+    let apiBaseURL: String
+
+    @ObservedObject private var auth = AuthManager.shared
+    @State private var loading = false
+
+    var body: some View {
+        Button(action: startOAuth) {
+            HStack(spacing: 10) {
+                if loading {
+                    ProgressView().tint(.white).controlSize(.small)
+                } else {
+                    Image(systemName: icon)
+                }
+                Text("Continue with \(provider)")
+                    .font(.system(size: 15, weight: .semibold))
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 13)
+            .foregroundStyle(provider == "Google" ? .black : .white)
+            .background(RoundedRectangle(cornerRadius: 12).fill(color))
+        }
+        .disabled(loading)
+    }
+
+    private func startOAuth() {
+        loading = true
+        let providerPath = provider.lowercased()
+        guard let authURL = URL(string: "\(apiBaseURL)/auth/\(providerPath)?callback=rhea://oauth") else {
+            loading = false
+            return
+        }
+        let session = ASWebAuthenticationSession(
+            url: authURL,
+            callbackURLScheme: "rhea"
+        ) { callbackURL, error in
+            DispatchQueue.main.async {
+                loading = false
+                if let url = callbackURL {
+                    auth.handleOAuthURL(url)
+                }
+            }
+        }
+        #if os(iOS)
+        session.presentationContextProvider = OAuthPresentationContext.shared
+        session.prefersEphemeralWebBrowserSession = false
+        #endif
+        session.start()
+    }
+}
+
+#if os(iOS)
+private class OAuthPresentationContext: NSObject, ASWebAuthenticationPresentationContextProviding {
+    static let shared = OAuthPresentationContext()
+    func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
+        let scenes = UIApplication.shared.connectedScenes
+        let windowScene = scenes.first as? UIWindowScene
+        return windowScene?.windows.first ?? ASPresentationAnchor()
+    }
+}
+#endif
+
+// MARK: - Billing View
+
+public struct BillingView: View {
+    @ObservedObject private var auth = AuthManager.shared
+    @State private var plans: [[String: Any]] = []
+    @State private var keys: [[String: Any]] = []
+    @State private var usage: [String: Any] = [:]
+    @State private var loadingCheckout = false
+
+    public init() {}
+
+    public var body: some View {
+        List {
+            // Current plan
+            Section("Current Plan") {
+                HStack {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(auth.plan.uppercased())
+                            .font(.system(.title2, design: .rounded, weight: .bold))
+                            .foregroundStyle(planColor)
+                        Text(planDescription)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                    Spacer()
+                    if auth.plan == "free" {
+                        Button("Upgrade") {
+                            // TODO(human): implement upgrade flow
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .tint(RheaTheme.accent)
+                        .controlSize(.small)
+                    }
+                }
+            }
+
+            // Usage
+            Section("Usage This Month") {
+                VStack(alignment: .leading, spacing: 8) {
+                    HStack {
+                        Text("\(auth.queriesUsed)")
+                            .font(.system(.title, design: .monospaced, weight: .bold))
+                        Text("/ \(auth.queryLimit == -1 ? "∞" : "\(auth.queryLimit)")")
+                            .font(.system(.body, design: .monospaced))
+                            .foregroundStyle(.secondary)
+                        Spacer()
+                        Text("queries")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+
+                    if auth.queryLimit > 0 {
+                        GeometryReader { geo in
+                            ZStack(alignment: .leading) {
+                                RoundedRectangle(cornerRadius: 4)
+                                    .fill(RheaTheme.card)
+                                    .frame(height: 6)
+                                RoundedRectangle(cornerRadius: 4)
+                                    .fill(usageColor)
+                                    .frame(width: geo.size.width * usageRatio, height: 6)
+                            }
+                        }
+                        .frame(height: 6)
+                    }
+                }
+            }
+
+            // API Keys
+            Section("API Keys") {
+                if auth.plan == "free" {
+                    Text("Upgrade to Pro for API key access")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                } else {
+                    ForEach(keys.indices, id: \.self) { i in
+                        let key = keys[i]
+                        HStack {
+                            VStack(alignment: .leading) {
+                                Text(key["key"] as? String ?? "")
+                                    .font(.system(.caption, design: .monospaced))
+                                Text(key["label"] as? String ?? "")
+                                    .font(.caption2)
+                                    .foregroundStyle(.secondary)
+                            }
+                            Spacer()
+                            if key["active"] as? Bool == true {
+                                Circle().fill(RheaTheme.green).frame(width: 8, height: 8)
+                            } else {
+                                Circle().fill(RheaTheme.red).frame(width: 8, height: 8)
+                            }
+                        }
+                    }
+                    if keys.isEmpty {
+                        Text("No API keys yet")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+            }
+
+            // Plans comparison
+            Section("Available Plans") {
+                PlanRow(name: "Free", price: "$0", features: "100 queries/mo · 1 model")
+                PlanRow(name: "Pro", price: "$29/mo", features: "10K queries/mo · 5 models · 3 API keys")
+                PlanRow(name: "Enterprise", price: "$99/mo", features: "Unlimited · All models · 10 keys · Reseller")
+            }
+        }
+        .scrollContentBackground(.hidden)
+        .background(RheaTheme.bg)
+        .navigationTitle("Billing")
+        .task { await loadBillingData() }
+        .refreshable { await loadBillingData() }
+    }
+
+    private var planColor: Color {
+        switch auth.plan {
+        case "pro": return .purple
+        case "enterprise": return .orange
+        default: return RheaTheme.accent
+        }
+    }
+
+    private var planDescription: String {
+        switch auth.plan {
+        case "pro": return "Multi-model consensus · API access"
+        case "enterprise": return "Unlimited · White-label · Reseller"
+        default: return "100 queries/month · Single model"
+        }
+    }
+
+    private var usageRatio: CGFloat {
+        guard auth.queryLimit > 0 else { return 0 }
+        return min(1.0, CGFloat(auth.queriesUsed) / CGFloat(auth.queryLimit))
+    }
+
+    private var usageColor: Color {
+        if usageRatio > 0.9 { return RheaTheme.red }
+        if usageRatio > 0.7 { return .orange }
+        return RheaTheme.green
+    }
+
+    private func loadBillingData() async {
+        auth.fetchProfile()
+        do {
+            let keysData = try await RheaAPI.shared.get("/billing/keys", auth: true)
+            if let json = try? JSONSerialization.jsonObject(with: keysData) as? [String: Any],
+               let k = json["keys"] as? [[String: Any]] {
+                await MainActor.run { keys = k }
+            }
+        } catch {}
+    }
+}
+
+struct PlanRow: View {
+    let name: String
+    let price: String
+    let features: String
+
+    var body: some View {
+        HStack {
+            VStack(alignment: .leading, spacing: 2) {
+                Text(name)
+                    .font(.system(.body, design: .rounded, weight: .semibold))
+                Text(features)
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+            }
+            Spacer()
+            Text(price)
+                .font(.system(.caption, design: .monospaced, weight: .bold))
+                .foregroundStyle(RheaTheme.accent)
+        }
     }
 }
 
