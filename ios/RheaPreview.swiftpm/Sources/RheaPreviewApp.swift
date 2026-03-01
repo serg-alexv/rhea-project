@@ -1,4 +1,5 @@
 import SwiftUI
+import AnimatedTabBar
 
 @main
 struct RheaPreviewApp: App {
@@ -24,43 +25,71 @@ struct RheaPreviewApp: App {
     }
 }
 
+// MARK: - Tab descriptor for dynamic tab configuration
+private struct TabDescriptor {
+    let icon: String
+    let label: String
+    let view: AnyView
+}
+
 private struct MainTabShell: View {
     @Binding var selectedTab: Int
     let revealLevel: Int
 
+    private var tabs: [TabDescriptor] {
+        var list: [TabDescriptor] = [
+            TabDescriptor(icon: "text.bubble", label: "Dialog", view: AnyView(DialogView())),
+            TabDescriptor(icon: "bubble.left.and.bubble.right", label: "Team", view: AnyView(TeamChatView())),
+        ]
+        if revealLevel >= 2 {
+            list.append(TabDescriptor(icon: "gauge.with.dots.needle.33percent", label: "Governor", view: AnyView(GovernorView())))
+            list.append(TabDescriptor(icon: "checklist", label: "Tasks", view: AnyView(TasksView())))
+        }
+        if revealLevel >= 3 {
+            list.append(TabDescriptor(icon: "globe", label: "Atlas", view: AnyView(AtlasView())))
+            list.append(TabDescriptor(icon: "dot.radiowaves.left.and.right", label: "Pulse", view: AnyView(PulseMonitorView())))
+            list.append(TabDescriptor(icon: "rectangle.inset.filled.and.person.filled", label: "Pilot", view: AnyView(ScreenPilotView())))
+        }
+        list.append(TabDescriptor(icon: "slider.horizontal.3", label: "Settings", view: AnyView(SettingsView())))
+        return list
+    }
+
+    /// Clamp selectedTab to valid range when revealLevel changes
+    private var safeIndex: Int {
+        min(max(selectedTab, 0), tabs.count - 1)
+    }
+
     var body: some View {
-        TabView(selection: $selectedTab) {
-            DialogView()
-                .tabItem { Label("Dialog", systemImage: "text.bubble") }
-                .tag(0)
+        VStack(spacing: 0) {
+            // Page content
+            tabs[safeIndex].view
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
 
-            TeamChatView()
-                .tabItem { Label("Team", systemImage: "bubble.left.and.bubble.right") }
-                .tag(1)
-
-            if revealLevel >= 2 {
-                GovernorView()
-                    .tabItem { Label("Governor", systemImage: "gauge.with.dots.needle.33percent") }
-                    .tag(2)
-
-                TasksView()
-                    .tabItem { Label("Tasks", systemImage: "checklist") }
-                    .tag(3)
+            // Animated tab bar
+            AnimatedTabBar(selectedIndex: $selectedTab, views: tabs.map { tab in
+                VStack(spacing: 2) {
+                    Image(systemName: tab.icon)
+                        .font(.system(size: 18))
+                    Text(tab.label)
+                        .font(.system(size: 9, weight: .medium, design: .monospaced))
+                }
+            })
+            .barColor(RheaTheme.card)
+            .selectedColor(RheaTheme.accent)
+            .unselectedColor(.gray)
+            .ballColor(RheaTheme.accent)
+            .verticalPadding(12)
+            .cornerRadius(0)
+            .ballTrajectory(.parabolic)
+            .ballAnimation(.spring(duration: 0.4, bounce: 0.2))
+            .indentAnimation(.spring(duration: 0.4, bounce: 0.1))
+        }
+        .background(RheaTheme.bg)
+        .onChange(of: tabs.count) {
+            // Clamp if tab count changes
+            if selectedTab >= tabs.count {
+                selectedTab = tabs.count - 1
             }
-
-            if revealLevel >= 3 {
-                AtlasView()
-                    .tabItem { Label("Atlas", systemImage: "globe") }
-                    .tag(4)
-
-                PulseMonitorView()
-                    .tabItem { Label("Pulse", systemImage: "dot.radiowaves.left.and.right") }
-                    .tag(5)
-            }
-
-            SettingsView()
-                .tabItem { Label("Settings", systemImage: "slider.horizontal.3") }
-                .tag(6)
         }
     }
 }

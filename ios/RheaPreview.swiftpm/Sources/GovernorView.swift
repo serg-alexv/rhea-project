@@ -2,44 +2,27 @@ import SwiftUI
 import Charts
 import Pow
 
-struct AgentStatus: Codable, Identifiable {
-    var id: String { name }
-    let name: String
-    let alive: Bool
-    let pace: String
-    let forecast: String?
-    let mode: String
-    let billing_mode: String?
-    let upper_rail_enabled: Bool?
-    let T_day: Int
-    let dollar_day: Double
-    let budget_cap: Double?
-    let budget_remaining: Double?
-    let floor_expected: Int?
-    let floor_gap: Int
-    let hour: Int?
-    let hard_fail: Bool
-    // Office enrichment
-    let office_status: String?
-    let pending_msgs: Int?
-    let tasks_open: Int?
-    let tasks_claimed: Int?
-    let last_activity: String?
-
-    // Compat: old code uses .agent
-    var agent: String { name }
+// MARK: - Token Burn Data Point
+struct BurnPoint: Identifiable {
+    let id = UUID()
+    let ts: Date
+    let tokens: Int
 }
 
 struct GovernorView: View {
-    @State private var agents: [AgentStatus] = []
+    @State private var agents: [AgentDTO] = []
     @State private var loading = true
     @State private var refreshCount = 0
+    @State private var burnHistory: [BurnPoint] = []
+    @State private var pollTimer: Timer? = nil
     @AppStorage("apiBaseURL") private var apiBaseURL = AppConfig.defaultAPIBaseURL
+
+    private let maxBurnPoints = 60 // 5 minutes at 5s intervals
 
     var body: some View {
         NavigationStack {
             ScrollView {
-                if loading {
+                if loading && agents.isEmpty {
                     ProgressView()
                         .frame(maxWidth: .infinity, minHeight: 300)
                 } else if agents.isEmpty {
@@ -47,6 +30,9 @@ struct GovernorView: View {
                                            description: Text("Governor API not reachable"))
                 } else {
                     LazyVStack(spacing: 14) {
+                        // Token burn chart
+                        tokenBurnChart
+
                         // Summary header
                         summaryHeader
 
@@ -65,14 +51,86 @@ struct GovernorView: View {
             .toolbarColorScheme(.dark, for: .navigationBar)
             #endif
             .refreshable { await fetch() }
-            .task { await fetch() }
+            .task {
+                await fetch()
+                startPolling()
+            }
+            .onDisappear { stopPolling() }
         }
+    }
+
+    // MARK: - Token Burn Chart
+    var tokenBurnChart: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text("TOKEN BURN (5 min)")
+                .font(.system(.caption2, design: .monospaced, weight: .bold))
+                .foregroundStyle(RheaTheme.accent.opacity(0.7))
+
+            if burnHistory.count >= 2 {
+                Chart(burnHistory) { point in
+                    LineMark(
+                        x: .value("Time", point.ts),
+                        y: .value("Tokens", point.tokens)
+                    )
+                    .foregroundStyle(RheaTheme.accent)
+                    .interpolationMethod(.catmullRom)
+
+                    AreaMark(
+                        x: .value("Time", point.ts),
+                        y: .value("Tokens", point.tokens)
+                    )
+                    .foregroundStyle(
+                        LinearGradient(
+                            colors: [RheaTheme.accent.opacity(0.3), RheaTheme.accent.opacity(0.0)],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
+                    )
+                    .interpolationMethod(.catmullRom)
+                }
+                .chartXAxis {
+                    AxisMarks(values: .automatic(desiredCount: 3)) { _ in
+                        AxisGridLine().foregroundStyle(.white.opacity(0.05))
+                        AxisValueLabel().foregroundStyle(.secondary)
+                    }
+                }
+                .chartYAxis {
+                    AxisMarks(position: .leading, values: .automatic(desiredCount: 3)) { _ in
+                        AxisGridLine().foregroundStyle(.white.opacity(0.05))
+                        AxisValueLabel().foregroundStyle(.secondary)
+                    }
+                }
+                .chartYScale(domain: .automatic(includesZero: false))
+                .frame(height: 80)
+            } else {
+                HStack {
+                    Spacer()
+                    Text("Collecting data...")
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                    Spacer()
+                }
+                .frame(height: 80)
+            }
+        }
+        .glassCard()
+    }
+
+    private func startPolling() {
+        pollTimer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { _ in
+            Task { await fetch() }
+        }
+    }
+
+    private func stopPolling() {
+        pollTimer?.invalidate()
+        pollTimer = nil
     }
 
     var summaryHeader: some View {
         let totalTokens = agents.reduce(0) { $0 + $1.T_day }
         let totalCost = agents.reduce(0.0) { $0 + $1.dollar_day }
-        let stableCount = agents.filter { $0.mode == "normal" && !$0.hard_fail }.count
+        let stableCount = agents.filter { $0.mode == "normal" && !$0.isHardFail }.count
         let onTrackCount = agents.filter { $0.floor_gap <= 0 }.count
 
         return VStack(alignment: .leading, spacing: 8) {
@@ -93,7 +151,7 @@ struct GovernorView: View {
 
     struct GovernorUnifiedResponse: Codable {
         let _ts: String
-        let agents: [String: AgentStatus]
+        let agents: [String: AgentDTO]
     }
 
     func fetch() async {
@@ -103,9 +161,19 @@ struct GovernorView: View {
         do {
             let (data, _) = try await URLSession.shared.data(from: url)
             let resp = try JSONDecoder().decode(GovernorUnifiedResponse.self, from: data)
+            let sorted = resp.agents.values.sorted { $0.agent < $1.agent }
             withAnimation(.spring(duration: 0.4)) {
-                agents = resp.agents.values.sorted { $0.agent < $1.agent }
+                agents = sorted
                 refreshCount += 1
+            }
+            // Append to burn history for the chart
+            let totalTokens = sorted.reduce(0) { $0 + $1.T_day }
+            let point = BurnPoint(ts: Date(), tokens: totalTokens)
+            withAnimation(.easeInOut(duration: 0.3)) {
+                burnHistory.append(point)
+                if burnHistory.count > maxBurnPoints {
+                    burnHistory.removeFirst(burnHistory.count - maxBurnPoints)
+                }
             }
         } catch {
             agents = []
@@ -140,13 +208,17 @@ struct MetricPill: View {
 
 // MARK: - AgentCard
 struct AgentCard: View {
-    let status: AgentStatus
+    let status: AgentDTO
     @State private var appeared = false
     @State private var actionInProgress: String? = nil
     @AppStorage("apiBaseURL") private var apiBaseURL = AppConfig.defaultAPIBaseURL
 
-    var budgetFraction: Double {
+    /// Fraction of budget used: prefers (cap - remaining)/cap, falls back to dollar_day/cap
+    var budgetRemainingFraction: Double {
         guard let cap = status.budget_cap, cap > 0 else { return 0 }
+        if let remaining = status.budget_remaining {
+            return min(max((cap - remaining) / cap, 0), 1.0)
+        }
         return min(status.dollar_day / cap, 1.0)
     }
 
@@ -175,20 +247,26 @@ struct AgentCard: View {
                         Capsule().fill(RheaTheme.modeColor(status.mode).opacity(0.25))
                     )
                     .foregroundStyle(RheaTheme.modeColor(status.mode))
-                    .changeEffect(.shake(rate: .fast), value: status.mode, isEnabled: status.mode == "hard_fail")
+                    .changeEffect(.shake(rate: .fast), value: status.mode, isEnabled: status.isHardFail)
             }
 
-            // Budget gauge (only for API-billed agents with budget_cap > 0)
-            if (status.budget_cap ?? 0) > 0 {
+            // Budget gauge — shows budget_remaining/budget_cap when available, falls back to dollar_day/budget_cap
+            if let cap = status.budget_cap, cap > 0 {
                 VStack(alignment: .leading, spacing: 6) {
                     HStack {
                         Text("Budget")
                             .font(.caption)
                             .foregroundStyle(.secondary)
                         Spacer()
-                        Text("$\(String(format: "%.2f", status.dollar_day)) / $\(String(format: "%.0f", status.budget_cap ?? 0))")
-                            .font(.system(.caption, design: .monospaced))
-                            .foregroundStyle(.white.opacity(0.7))
+                        if let remaining = status.budget_remaining {
+                            Text("$\(String(format: "%.2f", remaining)) left of $\(String(format: "%.0f", cap))")
+                                .font(.system(.caption, design: .monospaced))
+                                .foregroundStyle(.white.opacity(0.7))
+                        } else {
+                            Text("$\(String(format: "%.2f", status.dollar_day)) / $\(String(format: "%.0f", cap))")
+                                .font(.system(.caption, design: .monospaced))
+                                .foregroundStyle(.white.opacity(0.7))
+                        }
                     }
 
                     GeometryReader { geo in
@@ -196,11 +274,11 @@ struct AgentCard: View {
                             RoundedRectangle(cornerRadius: 4)
                                 .fill(.white.opacity(0.08))
                             RoundedRectangle(cornerRadius: 4)
-                                .fill(budgetFraction < 0.6 ? RheaTheme.green :
-                                      budgetFraction < 0.85 ? RheaTheme.amber :
+                                .fill(budgetRemainingFraction < 0.6 ? RheaTheme.green :
+                                      budgetRemainingFraction < 0.85 ? RheaTheme.amber :
                                       RheaTheme.red)
-                                .frame(width: geo.size.width * budgetFraction)
-                                .animation(.spring(duration: 0.6), value: budgetFraction)
+                                .frame(width: geo.size.width * budgetRemainingFraction)
+                                .animation(.spring(duration: 0.6), value: budgetRemainingFraction)
                         }
                     }
                     .frame(height: 6)
@@ -236,8 +314,31 @@ struct AgentCard: View {
             HStack(spacing: 16) {
                 StatChip(icon: "number", text: formatTokens(status.T_day))
                 StatChip(icon: "clock", text: "h\(status.hour ?? 0)")
+                if let forecast = status.forecast, !forecast.isEmpty {
+                    StatChip(icon: "chart.line.uptrend.xyaxis", text: forecast, color: RheaTheme.accent)
+                }
                 if status.floor_gap > 0 {
                     StatChip(icon: "arrow.down.to.line", text: "gap:\(status.floor_gap)", color: RheaTheme.amber)
+                }
+                Spacer()
+            }
+
+            // Floor trajectory row
+            HStack(spacing: 8) {
+                if let floorExp = status.floor_expected {
+                    Text("floor: \(formatTokens(floorExp))")
+                        .font(.system(.caption2, design: .monospaced))
+                        .foregroundStyle(.secondary)
+                    if status.floor_gap > 0 {
+                        Text("gap: \(status.floor_gap)")
+                            .font(.system(.caption2, design: .monospaced))
+                            .foregroundStyle(RheaTheme.amber)
+                    }
+                }
+                if let rail = status.upper_rail_enabled, rail {
+                    Text("RAIL")
+                        .font(.system(.caption2, design: .monospaced, weight: .bold))
+                        .foregroundStyle(RheaTheme.red.opacity(0.8))
                 }
                 Spacer()
                 Text(status.floor_gap > 0 ? "behind floor" : "on track")
