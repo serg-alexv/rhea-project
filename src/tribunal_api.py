@@ -1422,6 +1422,7 @@ You own your data, your models, your keys. Rhea serves you &mdash; not the other
     <a href="/models">Models</a>
     <a href="/aletheia/stats">Aletheia</a>
     <a href="https://testflight.apple.com/join/BNya22Jg">TestFlight</a>
+    <a href="/play-ui">Play UI</a>
   </div>
   <div class="f-links" style="margin-top:.5rem">
     <a href="/terms">Terms</a>
@@ -1574,7 +1575,7 @@ async def terms():
   <li>Maintain and promptly update your account information.</li>
   <li>Keep your password and API keys confidential and not share them with any third party.</li>
   <li>Accept responsibility for all activities that occur under your account.</li>
-  <li>Notify us immediately at support@rhea-project.org if you suspect unauthorised access.</li>
+  <li>Notify us immediately at timelabs.ad@gmail.com if you suspect unauthorised access.</li>
 </ul>
 <p>Accounts are personal. You may not transfer or sell your account. We reserve the right to terminate accounts that violate these Terms.</p>
 
@@ -1603,7 +1604,7 @@ async def terms():
 <p>TO THE FULLEST EXTENT PERMITTED BY APPLICABLE LAW, TIMELABS AND ITS OFFICERS, DIRECTORS, AGENTS, AND PARTNERS SHALL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, OR ANY LOSS OF PROFITS OR REVENUES, WHETHER INCURRED DIRECTLY OR INDIRECTLY, OR ANY LOSS OF DATA, USE, GOODWILL, OR OTHER INTANGIBLE LOSSES, RESULTING FROM YOUR ACCESS TO OR USE OF (OR INABILITY TO ACCESS OR USE) THE SERVICE.</p>
 
 <h2>8. Termination</h2>
-<p>You may terminate your account at any time by contacting support@rhea-project.org. We may suspend or terminate your access immediately, without notice, if you breach these Terms. Upon termination, your right to use the Service ceases immediately. You may request an export of your stored proofs before termination.</p>
+<p>You may terminate your account at any time by contacting timelabs.ad@gmail.com. We may suspend or terminate your access immediately, without notice, if you breach these Terms. Upon termination, your right to use the Service ceases immediately. You may request an export of your stored proofs before termination.</p>
 
 <h2>9. Governing Law</h2>
 <p>These Terms are governed by and construed in accordance with the laws of the European Union and the Republic of the Netherlands, without regard to conflict-of-law principles. Any disputes shall be submitted to the exclusive jurisdiction of the courts of Amsterdam, the Netherlands. If any provision of these Terms is found unenforceable, the remaining provisions shall remain in full force.</p>
@@ -1612,7 +1613,7 @@ async def terms():
 <p>We may update these Terms from time to time. Material changes will be communicated via email or a prominent notice on the platform at least 14 days before taking effect. Your continued use of the Service after the effective date constitutes acceptance of the revised Terms.</p>
 
 <h2>Contact</h2>
-<p>Questions about these Terms? Email <a href="mailto:support@rhea-project.org">support@rhea-project.org</a> or open an issue on <a href="https://github.com/serg-alexv/rhea-project">GitHub</a>.</p>
+<p>Questions about these Terms? Email <a href="mailto:timelabs.ad@gmail.com">timelabs.ad@gmail.com</a> or open an issue on <a href="https://github.com/serg-alexv/rhea-project">GitHub</a>.</p>
 """
     html = _PAGE_STYLE.format(title="Terms of Service", body=body)
     return HTMLResponse(content=html)
@@ -1680,7 +1681,7 @@ async def privacy():
   <li><strong>Objection:</strong> object to processing based on legitimate interests.</li>
   <li><strong>Withdraw consent:</strong> where processing is based on consent, you may withdraw it at any time.</li>
 </ul>
-<p>To exercise any right, email <a href="mailto:support@rhea-project.org">support@rhea-project.org</a>. We will respond within 30 days. You also have the right to lodge a complaint with your national data protection authority.</p>
+<p>To exercise any right, email <a href="mailto:timelabs.ad@gmail.com">timelabs.ad@gmail.com</a>. We will respond within 30 days. You also have the right to lodge a complaint with your national data protection authority.</p>
 
 <h2>8. Data Retention</h2>
 <p>Account data is retained while your account is active. Deleted accounts are purged within 30 days. Server logs (IP, timestamps) are retained for 30 days. Aletheia proof data is retained indefinitely unless you delete it or your account.</p>
@@ -1692,7 +1693,7 @@ async def privacy():
 <p>We may update this policy. Material changes will be communicated by email at least 14 days before taking effect. The current version is always available at <a href="/privacy">/privacy</a>.</p>
 
 <h2>Contact</h2>
-<p>Data controller: TimeLabs NPO. Privacy enquiries: <a href="mailto:support@rhea-project.org">support@rhea-project.org</a>.</p>
+<p>Data controller: TimeLabs NPO. Privacy enquiries: <a href="mailto:timelabs.ad@gmail.com">timelabs.ad@gmail.com</a>.</p>
 """
     html = _PAGE_STYLE.format(title="Privacy Policy", body=body)
     return HTMLResponse(content=html)
@@ -1733,7 +1734,7 @@ async def security():
 <h2>Responsible Disclosure</h2>
 <p>If you discover a security vulnerability in Rhea, we ask that you report it responsibly:</p>
 <ul>
-  <li>Email <a href="mailto:support@rhea-project.org">support@rhea-project.org</a> with subject line "Security Disclosure".</li>
+  <li>Email <a href="mailto:timelabs.ad@gmail.com">timelabs.ad@gmail.com</a> with subject line "Security Disclosure".</li>
   <li>Include a description of the vulnerability, steps to reproduce, and your assessment of impact.</li>
   <li>Allow us 90 days to investigate and remediate before public disclosure.</li>
   <li>We will acknowledge receipt within 48 hours and aim to resolve critical issues within 14 days.</li>
@@ -1783,7 +1784,7 @@ async def community():
   <li>Star and watch the <a href="https://github.com/serg-alexv/rhea-project">GitHub repository</a> for updates.</li>
   <li>Open issues for bugs, feature requests, or questions.</li>
   <li>Try the iOS beta on <a href="https://testflight.apple.com/join/BNya22Jg">TestFlight</a> and leave feedback.</li>
-  <li>Email us at <a href="mailto:support@rhea-project.org">support@rhea-project.org</a> for partnership or research enquiries.</li>
+  <li>Email us at <a href="mailto:timelabs.ad@gmail.com">timelabs.ad@gmail.com</a> for partnership or research enquiries.</li>
 </ul>
 """
     html = _PAGE_STYLE.format(title="Community", body=body)
@@ -1940,7 +1941,7 @@ async def contact():
 
 <h2>General Support</h2>
 <p>For questions about your account, billing, API access, or platform features:</p>
-<p><a href="mailto:support@rhea-project.org">support@rhea-project.org</a></p>
+<p><a href="mailto:timelabs.ad@gmail.com">timelabs.ad@gmail.com</a></p>
 <p>We aim to respond within 2 business days. For faster answers to technical questions, GitHub Issues are monitored daily.</p>
 
 <h2>GitHub Issues</h2>
@@ -1949,16 +1950,75 @@ async def contact():
 <p>Please search existing issues before opening a new one. Include reproduction steps and relevant error messages when reporting bugs.</p>
 
 <h2>Security Disclosures</h2>
-<p>Please do not report security vulnerabilities via public GitHub issues. Email us directly at <a href="mailto:support@rhea-project.org">support@rhea-project.org</a> with "Security Disclosure" in the subject line. See our <a href="/security">Security page</a> for the full responsible disclosure policy.</p>
+<p>Please do not report security vulnerabilities via public GitHub issues. Email us directly at <a href="mailto:timelabs.ad@gmail.com">timelabs.ad@gmail.com</a> with "Security Disclosure" in the subject line. See our <a href="/security">Security page</a> for the full responsible disclosure policy.</p>
 
 <h2>Research and Partnerships</h2>
-<p>Rhea is operated by TimeLabs NPO, a non-profit organisation focused on open tools for knowledge verification. If you are a researcher, institution, or organisation interested in collaboration, grant applications, or integration partnerships, reach out at <a href="mailto:support@rhea-project.org">support@rhea-project.org</a> with a brief description of your interest.</p>
+<p>Rhea is operated by TimeLabs NPO, a non-profit organisation focused on open tools for knowledge verification. If you are a researcher, institution, or organisation interested in collaboration, grant applications, or integration partnerships, reach out at <a href="mailto:timelabs.ad@gmail.com">timelabs.ad@gmail.com</a> with a brief description of your interest.</p>
 
 <h2>About TimeLabs NPO</h2>
 <p>TimeLabs NPO is the legal entity behind the Rhea platform. It was founded to support open, auditable infrastructure for multi-model AI consensus and knowledge provenance. The organisation is non-profit: revenue from the managed platform covers infrastructure costs and supports continued open-source development.</p>
 <p>We believe the tools for verifying knowledge should be accessible, transparent, and under community control — not locked behind proprietary systems.</p>
 """
     html = _PAGE_STYLE.format(title="Contact", body=body)
+    return HTMLResponse(content=html)
+
+
+@app.get("/play-ui")
+async def play_ui_page():
+    """Rhea Play UI — absorbed from webqit/playui (MIT, abandoned Nov 2023)."""
+    from fastapi.responses import HTMLResponse
+    body = """
+<h1>Rhea Play UI</h1>
+<p class="subtitle">Absorbed from <a href="https://github.com/webqit/playui">webqit/playui</a> &bull; MIT License &bull; Maintained by TimeLabs NPO</p>
+
+<h2>What is Rhea Play UI?</h2>
+<p>Play UI was a modern UI suite covering layout, design, and <strong>UI physics</strong> &mdash; animations, events, gestures, and UI geometry.
+It introduced <strong>Async DOM</strong> and offered ready-to-use web components. The original project by WebQit was abandoned in November 2023.</p>
+<p>TimeLabs NPO absorbed the project under MIT license. It is now <strong>Rhea Play UI</strong> &mdash; maintained, evolved, and integrated into the Rhea ecosystem.</p>
+
+<h2>Packages</h2>
+<ul>
+<li><strong>playui-js</strong> &mdash; jQuery-inspired DOM &amp; UI abstraction. Resilient, performant, succinct API: <code>.html()</code>, <code>.play()</code>, <code>.on()</code>, <code>.off()</code></li>
+<li><strong>playui-element</strong> &mdash; Custom elements with Observer API and OOHTML. Build web components with zero ergonomic overhead.</li>
+<li><strong>playui-form</strong> &mdash; Declarative form handling and validation.</li>
+</ul>
+
+<h2>Key Features</h2>
+<ul>
+<li><strong>Async DOM:</strong> Non-blocking DOM operations. Read and write without layout thrashing.</li>
+<li><strong>UI Physics:</strong> Web Animations API (WAAPI) integration. Gestures, scroll events, intersection geometry.</li>
+<li><strong>Observer API:</strong> Reactive state management with fine-grained subscriptions.</li>
+<li><strong>Web Components:</strong> Standards-based custom elements. No framework lock-in.</li>
+<li><strong>Zero Dependencies:</strong> Pure JavaScript. No build step required for CDN usage.</li>
+</ul>
+
+<h2>How Rhea uses Play UI</h2>
+<p>The Rhea Keyboard extension and Atlas web dashboard leverage Play UI's async DOM layer for responsive tribunal interactions.
+When a claim enters the verification pipeline, Play UI handles the real-time UI updates &mdash; consensus scores, agreement bars,
+and divergence indicators &mdash; without blocking the main thread.</p>
+<p>The Keyboard's &lt;5 MB footprint is possible because Play UI replaces heavier alternatives (React, Vue) with a standards-based,
+tree-shakeable core that produces the same reactive UI with a fraction of the bundle.</p>
+
+<h2>Installation</h2>
+<p>CDN (no build step):</p>
+<p><code>&lt;script src="https://unpkg.com/@webqit/playui-js/dist/main.js"&gt;&lt;/script&gt;</code></p>
+<p>NPM:</p>
+<p><code>npm i @webqit/playui-js @webqit/playui-element @webqit/playui-form</code></p>
+
+<h2>Roadmap under TimeLabs NPO</h2>
+<ul>
+<li><span class="tag" style="background:rgba(48,209,88,.1);color:#30d158">Active</span> Security audit and dependency cleanup</li>
+<li><span class="tag" style="background:rgba(0,113,227,.1);color:#0071e3">Planned</span> TypeScript type definitions</li>
+<li><span class="tag" style="background:rgba(0,113,227,.1);color:#0071e3">Planned</span> Integration with Rhea Tribunal API for reactive verification UI</li>
+<li><span class="tag" style="background:rgba(191,90,242,.1);color:#bf5af2">Future</span> Publish as <code>@rhea/playui-*</code> on npm</li>
+</ul>
+
+<h2>License</h2>
+<p>MIT License. Original work &copy; WebQit. Maintained by TimeLabs NPO since 2026.</p>
+<p><a href="https://github.com/webqit/playui">Original repository</a> &bull;
+<a href="https://github.com/serg-alexv/rhea-project">Rhea project</a></p>
+"""
+    html = _PAGE_STYLE.format(title="Rhea Play UI", body=body)
     return HTMLResponse(content=html)
 
 
