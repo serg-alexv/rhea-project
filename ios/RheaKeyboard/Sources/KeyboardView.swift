@@ -47,6 +47,7 @@ struct KeyboardView: View {
         case actions  = "Quick"
         case tribunal = "Tribunal"
         case builder  = "Builder"
+        case logic    = "Logic"
 
         var icon: String {
             switch self {
@@ -54,8 +55,19 @@ struct KeyboardView: View {
             case .actions:  return "bolt.fill"
             case .tribunal: return "scalemass.fill"
             case .builder:  return "puzzlepiece.fill"
+            case .logic:    return "function"
             }
         }
+    }
+
+    // Logic mode state
+    @State private var logicPalette: LogicPalette = .operators
+    enum LogicPalette: String, CaseIterable {
+        case operators = "∧∨¬"
+        case greek     = "αβγ"
+        case sets      = "∈∪∩"
+        case math      = "∑∫∂"
+        case sub       = "x₁₂"
     }
 
     // Colors (local — no RheaKit import in extensions)
@@ -93,6 +105,7 @@ struct KeyboardView: View {
                 case .actions:  quickActions
                 case .tribunal: tribunalInput
                 case .builder:  builderView
+                case .logic:    logicView
                 }
             }
         }
@@ -905,6 +918,105 @@ struct KeyboardView: View {
             Spacer()
         }
         .padding(.horizontal, 12)
+    }
+
+    // MARK: - Logic Mode — Greek letters, operators, sets, math symbols
+
+    private let logicSymbols: [LogicPalette: [String]] = [
+        .operators: ["∧","∨","¬","→","←","↔","⊕","∀","∃","⊤","⊥","⊢","⊨","⇒","⇐","⇔"],
+        .greek:     ["α","β","γ","δ","ε","ζ","η","θ","λ","μ","ν","ξ","π","ρ","σ","φ","χ","ψ","ω","Γ","Δ","Θ","Λ","Σ","Φ","Ψ","Ω"],
+        .sets:      ["∈","∉","⊂","⊃","⊆","⊇","∪","∩","∅","ℕ","ℤ","ℚ","ℝ","ℂ","∖","×"],
+        .math:      ["∑","∏","∫","∂","∞","√","≈","≠","≤","≥","±","·","÷","°","⁰","¹","²","³","ⁿ"],
+        .sub:       ["₀","₁","₂","₃","₄","₅","₆","₇","₈","₉","₊","₋","₌","₍","₎","ₙ"],
+    ]
+
+    private var logicView: some View {
+        VStack(spacing: 2) {
+            // Palette selector
+            HStack(spacing: 0) {
+                ForEach(LogicPalette.allCases, id: \.self) { pal in
+                    Button {
+                        withAnimation(.easeInOut(duration: 0.12)) { logicPalette = pal }
+                    } label: {
+                        Text(pal.rawValue)
+                            .font(.system(size: 13, weight: logicPalette == pal ? .bold : .regular))
+                            .padding(.horizontal, 10)
+                            .padding(.vertical, 6)
+                            .foregroundStyle(logicPalette == pal ? accent : .secondary)
+                            .background(logicPalette == pal ? accent.opacity(0.12) : .clear)
+                            .clipShape(Capsule())
+                    }
+                }
+                Spacer()
+                Button { switchKeyboard() } label: {
+                    Image(systemName: "globe").font(.system(size: 14))
+                        .foregroundStyle(.secondary)
+                }
+                .padding(.trailing, 8)
+            }
+            .padding(.horizontal, 8)
+            .padding(.top, 4)
+
+            // Symbol grid
+            let syms = logicSymbols[logicPalette] ?? []
+            let columns = min(syms.count, 9)
+            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 3), count: columns), spacing: 3) {
+                ForEach(Array(syms.enumerated()), id: \.offset) { _, sym in
+                    Button {
+                        insertText(sym)
+                    } label: {
+                        Text(sym)
+                            .font(.system(size: 20))
+                            .frame(maxWidth: .infinity, minHeight: 36)
+                            .background(
+                                RoundedRectangle(cornerRadius: 6)
+                                    .fill(keyBg)
+                            )
+                            .foregroundStyle(.white)
+                    }
+                }
+            }
+            .padding(.horizontal, 6)
+
+            // Bottom row: space, backspace, return
+            HStack(spacing: 6) {
+                Button { insertText("(") } label: {
+                    Text("(").font(.system(size: 16, weight: .bold))
+                        .frame(width: 36, height: 34)
+                        .background(RoundedRectangle(cornerRadius: 6).fill(keyBg))
+                        .foregroundStyle(.white)
+                }
+                Button { insertText(")") } label: {
+                    Text(")").font(.system(size: 16, weight: .bold))
+                        .frame(width: 36, height: 34)
+                        .background(RoundedRectangle(cornerRadius: 6).fill(keyBg))
+                        .foregroundStyle(.white)
+                }
+                Button { insertText(" ") } label: {
+                    Text("space")
+                        .font(.system(size: 12, weight: .medium, design: .monospaced))
+                        .frame(maxWidth: .infinity, minHeight: 34)
+                        .background(RoundedRectangle(cornerRadius: 6).fill(keyBg.opacity(0.7)))
+                        .foregroundStyle(.secondary)
+                }
+                Button { deleteBackward() } label: {
+                    Image(systemName: "delete.left")
+                        .font(.system(size: 16))
+                        .frame(width: 44, height: 34)
+                        .background(RoundedRectangle(cornerRadius: 6).fill(keyBg))
+                        .foregroundStyle(.secondary)
+                }
+                Button { insertText("\n") } label: {
+                    Image(systemName: "return")
+                        .font(.system(size: 14))
+                        .frame(width: 44, height: 34)
+                        .background(RoundedRectangle(cornerRadius: 6).fill(accent.opacity(0.2)))
+                        .foregroundStyle(accent)
+                }
+            }
+            .padding(.horizontal, 6)
+            .padding(.bottom, 4)
+        }
     }
 
     private func tierLabel(_ tier: String) -> String {
