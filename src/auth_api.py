@@ -222,6 +222,116 @@ def profile(user: dict = Depends(_current_user)):
 def logout():
     return {"detail": "Logged out. Discard your token client-side."}
 
+@auth_router.get("/login-page")
+def login_page():
+    """Serve the full web login/signup page."""
+    from fastapi.responses import HTMLResponse
+    google_ok = bool(GOOGLE_CLIENT_ID)
+    ms_ok = bool(MICROSOFT_CLIENT_ID)
+    apple_ok = bool(APPLE_SERVICES_ID)
+    return HTMLResponse(f"""<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sign In &mdash; Rhea</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{{margin:0;padding:0;box-sizing:border-box}}
+:root{{--bg:#000;--card:#111118;--border:rgba(255,255,255,.08);--text:#f5f5f7;--muted:#86868b;
+  --accent:#0071e3;--green:#30d158;--radius:20px}}
+body{{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);
+  display:flex;align-items:center;justify-content:center;min-height:100vh;padding:2rem;
+  -webkit-font-smoothing:antialiased}}
+a{{color:var(--accent);text-decoration:none}}
+.card{{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:2.5rem;max-width:400px;width:100%}}
+.card h1{{font-size:1.6rem;font-weight:700;text-align:center;margin-bottom:.3rem}}
+.card .sub{{text-align:center;color:var(--muted);font-size:.82rem;margin-bottom:1.5rem}}
+.oauth-btn{{display:flex;align-items:center;gap:.7rem;padding:.65rem 1rem;border-radius:12px;
+  border:1px solid var(--border);background:rgba(255,255,255,.03);color:var(--text);
+  font-size:.82rem;font-weight:500;text-decoration:none;transition:.2s;width:100%;margin-bottom:.5rem}}
+.oauth-btn:hover{{background:rgba(255,255,255,.07);text-decoration:none}}
+.oauth-btn.disabled{{opacity:.35;pointer-events:none}}
+.sep{{display:flex;align-items:center;gap:.8rem;margin:1.2rem 0;color:var(--muted);font-size:.7rem}}
+.sep div{{flex:1;height:1px;background:var(--border)}}
+.form-row{{display:flex;gap:.4rem;margin-bottom:.5rem}}
+.form-row input{{flex:1;padding:.55rem .8rem;border-radius:10px;border:1px solid var(--border);
+  background:rgba(255,255,255,.04);color:var(--text);font-size:.82rem;font-family:inherit}}
+.form-row input:focus{{outline:none;border-color:var(--accent)}}
+.btn{{display:inline-flex;align-items:center;justify-content:center;padding:.55rem 1.2rem;
+  border-radius:10px;font-size:.82rem;font-weight:500;cursor:pointer;border:none;
+  background:var(--accent);color:#fff;transition:.2s}}
+.btn:hover{{filter:brightness(1.1)}}
+.msg{{margin-top:1rem;padding:.8rem;border-radius:10px;font-size:.78rem;text-align:center;display:none}}
+.msg.ok{{display:block;background:rgba(48,209,88,.08);border:1px solid rgba(48,209,88,.2);color:var(--green)}}
+.msg.err{{display:block;background:rgba(255,69,58,.08);border:1px solid rgba(255,69,58,.2);color:#ff453a}}
+.footer{{text-align:center;margin-top:1.5rem;font-size:.7rem;color:#444}}
+</style></head>
+<body>
+<div class="card">
+  <h1>Sign in to Rhea</h1>
+  <div class="sub">100 free credits on signup. All platforms.</div>
+  <a class="oauth-btn{'' if google_ok else ' disabled'}" href="/auth/google?callback=web">
+    <svg viewBox="0 0 24 24" width="18" height="18"><path fill="#4285f4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/><path fill="#34a853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#fbbc05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18A10.96 10.96 0 0 0 1 12c0 1.77.42 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#ea4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+    Continue with Google</a>
+  <a class="oauth-btn{'' if ms_ok else ' disabled'}" href="/auth/microsoft?callback=web">
+    <svg viewBox="0 0 24 24" width="16" height="16"><rect fill="#f25022" x="1" y="1" width="10" height="10"/><rect fill="#00a4ef" x="1" y="13" width="10" height="10"/><rect fill="#7fba00" x="13" y="1" width="10" height="10"/><rect fill="#ffb900" x="13" y="13" width="10" height="10"/></svg>
+    Continue with Microsoft</a>
+  <a class="oauth-btn{'' if apple_ok else ' disabled'}" href="/auth/apple?callback=web">
+    <svg viewBox="0 0 24 24" width="16" height="16" fill="#fff"><path d="M17.05 20.28c-.98.95-2.05.88-3.08.4-1.09-.5-2.08-.48-3.24 0-1.44.62-2.2.44-3.06-.4C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg>
+    Continue with Apple</a>
+  <div class="sep"><div></div>or<div></div></div>
+  <div id="mode-switch" style="display:flex;gap:.5rem;margin-bottom:.8rem">
+    <button class="btn" style="flex:1;font-size:.75rem" onclick="setMode('login')">Sign In</button>
+    <button class="btn" style="flex:1;font-size:.75rem;background:transparent;border:1px solid var(--border);color:var(--text)"
+      onclick="setMode('signup')">Sign Up</button>
+  </div>
+  <form onsubmit="return doAuth(event)">
+    <div class="form-row"><input id="em" type="email" placeholder="you@example.com" required></div>
+    <div class="form-row"><input id="pw" type="password" placeholder="Password" required minlength="6"></div>
+    <button class="btn" style="width:100%" type="submit" id="submit-btn">Sign In</button>
+  </form>
+  <div id="msg" class="msg"></div>
+  <div class="footer">&copy; 2026 timelabs npo &mdash; <a href="/">Back to Rhea</a></div>
+</div>
+<script>
+let mode='login';
+function setMode(m){{
+  mode=m;
+  document.getElementById('submit-btn').textContent=m==='login'?'Sign In':'Create Account';
+  const btns=document.querySelectorAll('#mode-switch .btn');
+  btns[0].style.background=m==='login'?'var(--accent)':'transparent';
+  btns[0].style.border=m==='login'?'none':'1px solid var(--border)';
+  btns[0].style.color=m==='login'?'#fff':'var(--text)';
+  btns[1].style.background=m==='signup'?'var(--accent)':'transparent';
+  btns[1].style.border=m==='signup'?'none':'1px solid var(--border)';
+  btns[1].style.color=m==='signup'?'#fff':'var(--text)';
+}}
+async function doAuth(e){{
+  e.preventDefault();
+  const em=document.getElementById('em').value,pw=document.getElementById('pw').value;
+  const msg=document.getElementById('msg');
+  msg.className='msg';msg.style.display='none';
+  try{{
+    const ep=mode==='signup'?'/auth/signup':'/auth/login';
+    const r=await fetch(ep,{{method:'POST',headers:{{'Content-Type':'application/json'}},body:JSON.stringify({{email:em,password:pw}})}});
+    const d=await r.json();
+    if(!r.ok)throw new Error(d.detail||'Request failed');
+    const token=d.token||d.access_token;
+    if(token){{
+      localStorage.setItem('rhea_token',token);localStorage.setItem('rhea_email',em);
+      msg.className='msg ok';msg.textContent=mode==='signup'?'Account created! 100 free credits.':'Signed in!';
+      msg.style.display='block';
+      if(window.opener)window.opener.postMessage({{type:'oauth',token,email:em}},'*');
+      setTimeout(()=>window.location='/',1500);
+    }}else{{
+      msg.className='msg ok';msg.textContent=d.detail||'Success';msg.style.display='block';
+    }}
+  }}catch(err){{
+    msg.className='msg err';msg.textContent=err.message;msg.style.display='block';
+  }}
+}}
+</script>
+</body></html>""")
+
 @auth_router.get("/test")
 def auth_test_page():
     """Serve a simple OAuth test page for browser-based testing."""
