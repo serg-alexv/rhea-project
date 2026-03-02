@@ -39,8 +39,41 @@ from rhea_cli import __version__
 ORG = "timelabs"
 REPOS = ["rhea-project", "rhea-memory", "rhea-play", "rhea-ios", "rhea-keyboard", "rhea-atlas", "rhea-tutorials", ".github"]
 FLY_APP = "rhea-tribunal"
-API_LOCAL = os.environ.get("RHEA_API", "http://localhost:8400")
 API_CLOUD = f"https://{FLY_APP}.fly.dev"
+_DEFAULT_LOCAL = "http://localhost:8400"
+
+# ---------------------------------------------------------------------------
+# Persistent config  (~/.rhea/config.json)
+# ---------------------------------------------------------------------------
+def _config_path() -> Path:
+    return Path.home() / ".rhea" / "config.json"
+
+def _load_config() -> dict:
+    p = _config_path()
+    if p.exists():
+        try:
+            return json.loads(p.read_text())
+        except (json.JSONDecodeError, OSError):
+            pass
+    return {}
+
+def _save_config(cfg: dict) -> None:
+    p = _config_path()
+    p.parent.mkdir(parents=True, exist_ok=True)
+    p.write_text(json.dumps(cfg, indent=2) + "\n")
+
+def _active_api_base() -> str:
+    """Resolve API base: env var > persisted config > default local."""
+    env = os.environ.get("RHEA_API")
+    if env:
+        return env
+    cfg = _load_config()
+    target = cfg.get("target", "local")
+    if target == "cloud":
+        return API_CLOUD
+    return cfg.get("local_url", _DEFAULT_LOCAL)
+
+API_LOCAL = _active_api_base()
 
 # When installed via pip/brew, REPO_ROOT points to wherever the user runs from.
 # For repo-local operations (check, commit), we look for the repo root via git.
@@ -133,6 +166,7 @@ def _api(endpoint, method="GET", base=None, data=None, timeout=15):
 def cli(ctx, cloud):
     """rhea -- control plane for the Rhea agent coordination OS."""
     ctx.ensure_object(dict)
+    # --cloud flag overrides persisted config; otherwise use persisted target
     ctx.obj["api_base"] = API_CLOUD if cloud else API_LOCAL
 
 
@@ -952,39 +986,165 @@ def cowork_ask(ctx, claim, ice):
 
 
 # ===========================================================================
-# SWITCH -- Cloud/Localhost toggle
+# MODE -- Persistent target + process mode switching
 # ===========================================================================
-@cli.command("local")
-@click.pass_context
-def switch_local(ctx):
-    """Switch API target to localhost:8400."""
-    os.environ["RHEA_API"] = "http://localhost:8400"
-    console.print("[green]● LOCAL[/green]  http://localhost:8400")
-    # Test connection
-    try:
-        r = requests.get("http://localhost:8400/health", timeout=3)
-        if r.status_code == 200:
-            console.print("[green]  connected[/green]")
-        else:
-            console.print(f"[yellow]  HTTP {r.status_code}[/yellow]")
-    except Exception:
-        console.print("[red]  unreachable[/red]")
+@cli.group()
+def mode():
+    """Switch API target (local/cloud) and process mode (fg/bg)."""
+    pass
 
 
-@cli.command("cloud")
-@click.pass_context
-def switch_cloud(ctx):
-    """Switch API target to rhea-tribunal.fly.dev."""
-    os.environ["RHEA_API"] = API_CLOUD
-    console.print(f"[cyan]● CLOUD[/cyan]  {API_CLOUD}")
+def _test_endpoint(url: str, label: str) -> None:
     try:
-        r = requests.get(f"{API_CLOUD}/health", timeout=5)
+        r = requests.get(f"{url}/health", timeout=4)
         if r.status_code == 200:
-            console.print("[green]  connected[/green]")
+            console.print(f"  [green]connected[/green]  {label}")
         else:
-            console.print(f"[yellow]  HTTP {r.status_code}[/yellow]")
+            console.print(f"  [yellow]HTTP {r.status_code}[/yellow]  {label}")
     except Exception:
-        console.print("[red]  unreachable[/red]")
+        console.print(f"  [red]unreachable[/red]  {label}")
+
+
+@mode.command("show")
+def mode_show():
+    """Show current mode and config."""
+    cfg = _load_config()
+    target = cfg.get("target", "local")
+    local_url = cfg.get("local_url", _DEFAULT_LOCAL)
+    process = cfg.get("process", "fg")
+    pid = cfg.get("bg_pid")
+
+    base = API_CLOUD if target == "cloud" else local_url
+    target_color = "cyan" if target == "cloud" else "green"
+    proc_color = "yellow" if process == "bg" else "white"
+
+    console.print(Panel(
+        f"  target:  [{target_color}]{target.upper()}[/{target_color}]  {base}\n"
+        f"  process: [{proc_color}]{process.upper()}[/{proc_color}]"
+        + (f"  pid={pid}" if pid else "") + "\n"
+        f"  config:  {_config_path()}",
+        title="[bold]rhea mode[/bold]", border_style="blue",
+    ))
+    _test_endpoint(base, target)
+
+
+@mode.command("local")
+@click.option("--url", default=None, help="Custom local URL (default: localhost:8400)")
+def mode_local(url):
+    """Switch API target to localhost (persisted)."""
+    cfg = _load_config()
+    cfg["target"] = "local"
+    if url:
+        cfg["local_url"] = url
+    _save_config(cfg)
+    base = url or cfg.get("local_url", _DEFAULT_LOCAL)
+    console.print(f"[green]● LOCAL[/green]  {base}  [dim](saved)[/dim]")
+    _test_endpoint(base, "local")
+
+
+@mode.command("cloud")
+def mode_cloud():
+    """Switch API target to rhea-tribunal.fly.dev (persisted)."""
+    cfg = _load_config()
+    cfg["target"] = "cloud"
+    _save_config(cfg)
+    console.print(f"[cyan]● CLOUD[/cyan]  {API_CLOUD}  [dim](saved)[/dim]")
+    _test_endpoint(API_CLOUD, "cloud")
+
+
+@mode.command("bg")
+@click.option("--interval", default=30, help="Monitor refresh interval in seconds")
+def mode_bg(interval):
+    """Start background monitor daemon (writes to ~/.rhea/monitor.log)."""
+    cfg = _load_config()
+    old_pid = cfg.get("bg_pid")
+    if old_pid:
+        try:
+            os.kill(old_pid, 0)
+            console.print(f"[yellow]Monitor already running (pid {old_pid}). Use 'rhea mode fg' to stop it.[/yellow]")
+            return
+        except OSError:
+            pass  # stale pid, proceed
+
+    log_path = Path.home() / ".rhea" / "monitor.log"
+    log_path.parent.mkdir(parents=True, exist_ok=True)
+    base = API_CLOUD if cfg.get("target") == "cloud" else cfg.get("local_url", _DEFAULT_LOCAL)
+
+    # Fork a background monitor process
+    pid = os.fork()
+    if pid == 0:
+        # Child: detach and run monitor loop
+        os.setsid()
+        sys.stdin.close()
+        with open(log_path, "a") as logf:
+            logf.write(f"\n--- monitor started {datetime.now().isoformat()} target={base} ---\n")
+            while True:
+                try:
+                    r = requests.get(f"{base}/health", timeout=5)
+                    data = r.json() if r.status_code == 200 else {}
+                    status = "UP" if r.status_code == 200 else f"HTTP_{r.status_code}"
+                    uptime = data.get("uptime_hours", "?")
+                    models = data.get("models_available", "?")
+                    logf.write(f"{datetime.now().strftime('%H:%M:%S')} {status} uptime={uptime}h models={models}\n")
+                    logf.flush()
+                except Exception as e:
+                    logf.write(f"{datetime.now().strftime('%H:%M:%S')} DOWN {e}\n")
+                    logf.flush()
+                time.sleep(interval)
+        sys.exit(0)
+    else:
+        # Parent: save pid and report
+        cfg["process"] = "bg"
+        cfg["bg_pid"] = pid
+        _save_config(cfg)
+        console.print(f"[green]● BG[/green]  monitor pid={pid}  log={log_path}")
+
+
+@mode.command("fg")
+def mode_fg():
+    """Stop background monitor and switch to foreground mode."""
+    cfg = _load_config()
+    pid = cfg.get("bg_pid")
+    if pid:
+        try:
+            os.kill(pid, 15)  # SIGTERM
+            console.print(f"[yellow]Stopped monitor pid={pid}[/yellow]")
+        except OSError:
+            console.print(f"[dim]Monitor pid={pid} already stopped[/dim]")
+    cfg["process"] = "fg"
+    cfg.pop("bg_pid", None)
+    _save_config(cfg)
+    console.print("[green]● FG[/green]  foreground mode  [dim](saved)[/dim]")
+
+
+@mode.command("status")
+def mode_status():
+    """Quick health check on both targets."""
+    console.print("[bold]Health check:[/bold]")
+    _test_endpoint(_DEFAULT_LOCAL, "local")
+    _test_endpoint(API_CLOUD, "cloud")
+
+
+# Keep backwards-compatible top-level aliases
+@cli.command("local", hidden=True)
+def switch_local():
+    """[alias] Switch to local target."""
+    cfg = _load_config()
+    cfg["target"] = "local"
+    _save_config(cfg)
+    base = cfg.get("local_url", _DEFAULT_LOCAL)
+    console.print(f"[green]● LOCAL[/green]  {base}  [dim](saved)[/dim]")
+    _test_endpoint(base, "local")
+
+
+@cli.command("cloud", hidden=True)
+def switch_cloud():
+    """[alias] Switch to cloud target."""
+    cfg = _load_config()
+    cfg["target"] = "cloud"
+    _save_config(cfg)
+    console.print(f"[cyan]● CLOUD[/cyan]  {API_CLOUD}  [dim](saved)[/dim]")
+    _test_endpoint(API_CLOUD, "cloud")
 
 
 # ===========================================================================
