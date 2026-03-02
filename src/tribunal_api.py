@@ -3085,48 +3085,49 @@ async def demo_math_domain(domain: str):
 
 def _seed_proof_db():
     """Seed proof.db with foundational artifacts if it's empty or sparse."""
-    import sqlite3, uuid
+    import sqlite3, uuid, hashlib
     from datetime import datetime, timezone
     from pathlib import Path
     db_path = str(Path(__file__).resolve().parent.parent / "data" / "proof.db")
     try:
         db = sqlite3.connect(db_path)
-        # Table already exists from aletheia_pipeline — don't recreate with wrong schema
         count = db.execute("SELECT COUNT(*) FROM proofs").fetchone()[0]
         if count >= 5:
             db.close()
             return
-        # Use the ACTUAL schema columns (consensus_text, not verdict)
+        # Schema: id, type, tier, prompt, prompt_hash(NOT NULL), mode(NOT NULL),
+        #         consensus_text, agreement_score, confidence, models, ontology, created_at
         seeds = [
             ("ATP synthase rotary catalysis at 100 rev/s driven by proton motive force",
-             "hypothesis", "consensus", 0.92, 0.88, "biochemistry", "Verified across Boyer, Walker, Yoshida models"),
+             "hypothesis", "consensus", "tribunal", 0.92, 0.88, "biochemistry", "Verified across Boyer, Walker, Yoshida models"),
             ("Lipinski Rule of Five as heuristic for oral drug-likeness, not bioavailability",
-             "hypothesis", "consensus", 0.78, 0.71, "pharmacology", "Nuanced: predicts drug-likeness, not absorption"),
+             "hypothesis", "consensus", "tribunal", 0.78, 0.71, "pharmacology", "Nuanced: predicts drug-likeness, not absorption"),
             ("CRISPR-Cas9 off-target cleavage documented in vivo across multiple studies",
-             "proof", "ice", 0.95, 0.91, "molecular_biology", "ICE-verified: 5/5 models unanimous"),
+             "proof", "ice", "ice", 0.95, 0.91, "molecular_biology", "ICE-verified: 5/5 models unanimous"),
             ("Aspirin inhibits both COX-1 and COX-2 non-selectively at therapeutic doses",
-             "proof", "consensus", 0.87, 0.82, "pharmacology", "Common misconception corrected"),
+             "proof", "consensus", "tribunal", 0.87, 0.82, "pharmacology", "Common misconception corrected"),
             ("Chronobiology: suprachiasmatic nucleus as master circadian oscillator",
-             "hypothesis", "consensus", 0.91, 0.85, "chronobiology", "Core doctrine: SCN entrains peripheral clocks"),
+             "hypothesis", "consensus", "tribunal", 0.91, 0.85, "chronobiology", "Core doctrine: SCN entrains peripheral clocks"),
             ("Gradient-flux-constraint triad as primitive replacing spacetime",
-             "hypothesis", "consensus", 0.54, 0.62, "flow_ontology", "Speculative: Volovik-Lehninger-Gamow synthesis"),
+             "hypothesis", "consensus", "tribunal", 0.54, 0.62, "flow_ontology", "Speculative: Volovik-Lehninger-Gamow synthesis"),
             ("Entropy as correlation measure: von Neumann entropy S = -Tr(rho ln rho)",
-             "proof", "ice", 0.89, 0.86, "information_theory", "Cross-domain universal verified"),
+             "proof", "ice", "ice", 0.89, 0.86, "information_theory", "Cross-domain universal verified"),
             ("Tunneling probability exp(-barrier/resource) maps across quantum/bio/econ",
-             "hypothesis", "consensus", 0.67, 0.59, "cross_domain", "Partial: quantum-bio mapping stronger than econ"),
+             "hypothesis", "consensus", "tribunal", 0.67, 0.59, "cross_domain", "Partial: quantum-bio mapping stronger than econ"),
             ("Degeneracy (many-to-one structure-function) as robustness principle",
-             "hypothesis", "consensus", 0.73, 0.68, "systems_biology", "Edelman-Gally degeneracy in neural/genetic systems"),
+             "hypothesis", "consensus", "tribunal", 0.73, 0.68, "systems_biology", "Edelman-Gally degeneracy in neural/genetic systems"),
             ("NDI video transport: FPGA-free software decode at 4K60 via SRT/RIST fallback",
-             "hypothesis", "consensus", 0.61, 0.55, "video_engineering", "Tested: libndi v6.2.0 local, cloud degrades gracefully"),
+             "hypothesis", "consensus", "tribunal", 0.61, 0.55, "video_engineering", "Tested: libndi v6.2.0 local, cloud degrades gracefully"),
             ("Multi-model consensus reduces hallucination rate by 40-60% vs single-model",
-             "proof", "ice", 0.83, 0.79, "ai_safety", "ICE-verified across 5 provider/model combinations"),
+             "proof", "ice", "ice", 0.83, 0.79, "ai_safety", "ICE-verified across 5 provider/model combinations"),
         ]
         now = datetime.now(timezone.utc).isoformat()
-        for prompt, ptype, tier, agreement, confidence, ontology, consensus_text in seeds:
+        for prompt, ptype, tier, mode, agreement, confidence, ontology, consensus_text in seeds:
             pid = str(uuid.uuid4())[:8]
+            phash = hashlib.md5(prompt.encode()).hexdigest()[:12]
             db.execute(
-                "INSERT OR IGNORE INTO proofs (id, type, tier, prompt, consensus_text, agreement_score, confidence, models, ontology, created_at) VALUES (?,?,?,?,?,?,?,?,?,?)",
-                (pid, ptype, tier, prompt, consensus_text, agreement, confidence, '["gemini-2.5-flash"]', ontology, now),
+                "INSERT OR IGNORE INTO proofs (id, type, tier, prompt, prompt_hash, mode, consensus_text, agreement_score, confidence, models, ontology, created_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",
+                (pid, ptype, tier, prompt, phash, mode, consensus_text, agreement, confidence, '["gemini-2.5-flash"]', ontology, now),
             )
         db.commit()
         final = db.execute("SELECT COUNT(*) FROM proofs").fetchone()[0]
