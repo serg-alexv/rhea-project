@@ -31,7 +31,8 @@
 - **NDI:** libndi v6.2.0 local, graceful cloud degradation
 
 ## Pending
-- Apple Network Extension entitlement (NOT YET REQUESTED — need to submit at developer.apple.com/contact/request/network-extension)
+- Apple Hotspot Helper entitlement — SUBMITTED 2026-03-02 (screenshot proof, confirmation page seen)
+- Apple Network Extension entitlement (NOT YET REQUESTED — submit at developer.apple.com/contact/request/network-extension)
 - Entity registration (timelabs npo) → ASC developer name
 - PyPI publish for rhea-memory
 - App Store submission
