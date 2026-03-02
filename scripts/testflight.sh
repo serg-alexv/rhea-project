@@ -2,15 +2,7 @@
 # testflight.sh — Archive + Export + Upload to TestFlight
 # Usage: bash scripts/testflight.sh [--upload]
 #   Without --upload: archive + export only (open in Xcode Organizer)
-#   With --upload: full pipeline to App Store Connect (requires API key)
-#
-# API Key setup (one time):
-#   1. App Store Connect → Users → Keys → Generate API Key
-#   2. Save .p8 file to ~/private/keys/AuthKey_XXXX.p8
-#   3. Set env vars or edit below:
-#      export ASC_KEY_ID="your-key-id"
-#      export ASC_ISSUER_ID="your-issuer-id"
-#      export ASC_KEY_PATH="~/private/keys/AuthKey_XXXX.p8"
+#   With --upload: archive + upload directly to App Store Connect via xcodebuild
 
 set -euo pipefail
 
@@ -20,7 +12,9 @@ IOS_DIR="$PROJECT_ROOT/ios/RheaApp"
 BUILD_DIR="$IOS_DIR/build"
 ARCHIVE_PATH="$BUILD_DIR/RheaApp.xcarchive"
 EXPORT_PATH="$BUILD_DIR/export"
+UPLOAD_PATH="$BUILD_DIR/upload"
 EXPORT_OPTIONS="$IOS_DIR/ExportOptions.plist"
+UPLOAD_OPTIONS="$IOS_DIR/UploadOptions.plist"
 TEAM_ID="398XACWZ7G"
 
 # --- Colors ---
@@ -72,47 +66,41 @@ if [ ! -d "$ARCHIVE_PATH" ]; then
 fi
 log "Archive succeeded: $ARCHIVE_PATH"
 
-# --- Step 4: Export IPA ---
-log "Exporting IPA..."
-rm -rf "$EXPORT_PATH"
-xcodebuild -exportArchive \
-    -archivePath "$ARCHIVE_PATH" \
-    -exportPath "$EXPORT_PATH" \
-    -exportOptionsPlist "$EXPORT_OPTIONS" \
-    -allowProvisioningUpdates \
-    2>&1 | grep -E "(EXPORT|error:)" || true
-
-IPA_PATH="$EXPORT_PATH/RheaApp.ipa"
-if [ ! -f "$IPA_PATH" ]; then
-    err "Export FAILED."
-    exit 1
-fi
-log "IPA exported: $IPA_PATH ($(du -h "$IPA_PATH" | cut -f1))"
-
-# --- Step 5: Upload or open Organizer ---
+# --- Step 4: Upload or Export ---
 if [[ "${1:-}" == "--upload" ]]; then
-    KEY_ID="${ASC_KEY_ID:-}"
-    ISSUER_ID="${ASC_ISSUER_ID:-}"
-    KEY_PATH="${ASC_KEY_PATH:-}"
-
-    if [ -z "$KEY_ID" ] || [ -z "$ISSUER_ID" ] || [ -z "$KEY_PATH" ]; then
-        warn "API key not configured. Set ASC_KEY_ID, ASC_ISSUER_ID, ASC_KEY_PATH env vars."
-        warn "Opening Xcode Organizer instead — use Distribute App manually."
-        open "$ARCHIVE_PATH"
-        exit 0
-    fi
-
+    # Direct upload via xcodebuild (uses Xcode's stored Apple ID credentials)
     log "Uploading to App Store Connect..."
-    xcrun altool --upload-app \
-        -f "$IPA_PATH" \
-        -t ios \
-        --apiKey "$KEY_ID" \
-        --apiIssuer "$ISSUER_ID" \
-        2>&1
+    rm -rf "$UPLOAD_PATH"
+    xcodebuild -exportArchive \
+        -archivePath "$ARCHIVE_PATH" \
+        -exportPath "$UPLOAD_PATH" \
+        -exportOptionsPlist "$UPLOAD_OPTIONS" \
+        -allowProvisioningUpdates \
+        2>&1 | grep -E "(Progress|Upload|EXPORT|error:)" || true
 
-    log "Upload complete! Check App Store Connect → TestFlight for processing status."
+    if [ $? -eq 0 ]; then
+        log "Upload complete! Check App Store Connect → TestFlight for processing status."
+    else
+        err "Upload failed. Opening Organizer as fallback..."
+        open "$ARCHIVE_PATH"
+    fi
 else
-    log "Opening Xcode Organizer (use --upload flag for automatic upload)..."
+    # Export IPA locally
+    log "Exporting IPA..."
+    rm -rf "$EXPORT_PATH"
+    xcodebuild -exportArchive \
+        -archivePath "$ARCHIVE_PATH" \
+        -exportPath "$EXPORT_PATH" \
+        -exportOptionsPlist "$EXPORT_OPTIONS" \
+        -allowProvisioningUpdates \
+        2>&1 | grep -E "(EXPORT|error:)" || true
+
+    IPA_PATH="$EXPORT_PATH/RheaApp.ipa"
+    if [ -f "$IPA_PATH" ]; then
+        log "IPA exported: $IPA_PATH ($(du -h "$IPA_PATH" | cut -f1))"
+    else
+        warn "Export failed. Opening Organizer..."
+    fi
     open "$ARCHIVE_PATH"
 fi
 
