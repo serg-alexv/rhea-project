@@ -15,6 +15,22 @@ public struct SettingsView: View {
     @AppStorage("table_shared") private var tableShared = false
     @AppStorage("family_visibility_only") private var familyVisibilityOnly = false
     @AppStorage("family_send_mode") private var familySendMode = true
+    @AppStorage("pane_ops") private var paneOps = true
+    @AppStorage("pane_tribunal") private var paneTribunal = true
+    @AppStorage("pane_secrets") private var paneSecrets = true
+    @AppStorage("pane_bio") private var paneBio = true
+    @AppStorage("pane_radio") private var paneRadio = false
+    @AppStorage("pane_tasks") private var paneTasks = true
+    @AppStorage("pane_governor") private var paneGovernor = true
+    @AppStorage("pane_tools") private var paneTools = true
+    @AppStorage("pane_dpi") private var paneDpi = false
+    @AppStorage("pane_aletheia") private var paneAletheia = true
+    @AppStorage("pane_history") private var paneHistory = false
+    @AppStorage("pane_processes") private var paneProcesses = false
+    @AppStorage("pane_models") private var paneModels = true
+    @AppStorage("pane_ruliad") private var paneRuliad = false
+    @AppStorage("pane_nodes") private var paneNodes = false
+    @AppStorage("pane_settings") private var paneSettings = true
     @State private var draftAtlas = ""
     @State private var draftAPI = ""
     @State private var connectionStatus: ConnectionStatus = .unknown
@@ -176,6 +192,25 @@ public struct SettingsView: View {
                     Toggle("SHARED seat", isOn: $tableShared)
                 }
 
+                Section("Visible Tabs") {
+                    paneAlwaysOn("square.grid.2x2", "ops")
+                    paneToggle("text.bubble", "tribunal", $paneTribunal)
+                    paneToggle("lock.shield", "secrets", $paneSecrets)
+                    paneToggle("atom", "bio", $paneBio)
+                    paneToggle("waveform", "radio", $paneRadio)
+                    paneToggle("checklist", "tasks", $paneTasks)
+                    paneToggle("gauge.with.dots.needle.33percent", "governor", $paneGovernor)
+                    paneToggle("keyboard", "tools", $paneTools)
+                    paneToggle("checkmark.seal", "aletheia", $paneAletheia)
+                    paneToggle("cpu", "models", $paneModels)
+                    paneToggle("clock.arrow.circlepath", "history", $paneHistory)
+                    paneToggle("terminal", "processes", $paneProcesses)
+                    paneToggle("function", "ruliad", $paneRuliad)
+                    paneToggle("eye.trianglebadge.exclamationmark", "dpi", $paneDpi)
+                    paneToggle("point.3.connected.trianglepath.dotted", "nodes", $paneNodes)
+                    paneAlwaysOn("slider.horizontal.3", "settings")
+                }
+
                 Section("Family Visibility Scope") {
                     Toggle("Show only active table scope", isOn: $familyVisibilityOnly)
                     Toggle("Send composer to table seats (not broadcast)", isOn: $familySendMode)
@@ -242,5 +277,31 @@ public struct SettingsView: View {
         let trimmed = raw.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { return fallback }
         return trimmed.hasSuffix("/") ? String(trimmed.dropLast()) : trimmed
+    }
+
+    private func paneToggle(_ icon: String, _ name: String, _ binding: Binding<Bool>) -> some View {
+        Toggle(isOn: binding) {
+            HStack(spacing: 6) {
+                Image(systemName: icon)
+                    .font(.system(size: 12, design: .monospaced))
+                Text(name)
+                    .font(.system(size: 12, design: .monospaced))
+            }
+        }
+    }
+
+    private func paneAlwaysOn(_ icon: String, _ name: String) -> some View {
+        HStack {
+            Image(systemName: icon)
+                .font(.system(size: 12, design: .monospaced))
+                .foregroundStyle(.secondary)
+            Text(name)
+                .font(.system(size: 12, design: .monospaced))
+                .foregroundStyle(.secondary)
+            Spacer()
+            Text("(always visible)")
+                .font(.system(size: 10, design: .monospaced))
+                .foregroundStyle(.tertiary)
+        }
     }
 }

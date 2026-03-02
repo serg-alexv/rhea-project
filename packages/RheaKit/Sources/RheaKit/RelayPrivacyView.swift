@@ -26,6 +26,7 @@ public struct RelayPrivacyView: View {
     @State private var latencyMs: Int?
     @State private var isChecking = false
     @State private var vpnError: String?
+    @State private var selectedTab = 0 // 0=Privacy, 1=Wallet
 
     private let dohProviders: [(id: String, name: String, url: String)] = [
         ("cloudflare", "Cloudflare", "https://1.1.1.1/dns-query"),
@@ -38,33 +39,35 @@ public struct RelayPrivacyView: View {
 
     public var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(spacing: 14) {
-                    // Status card
-                    statusCard
-
-                    // Relay toggle
-                    relayCard
-
-                    // DNS-over-HTTPS
-                    dnsCard
-
-                    // DPI bypass
-                    dpiCard
-
-                    // Mesh network
-                    meshCard
-
-                    // VPN tunnel
-                    vpnCard
-
-                    // Privacy info
-                    infoCard
+            VStack(spacing: 0) {
+                // Inner tab picker
+                Picker("Section", selection: $selectedTab) {
+                    Text("Privacy").tag(0)
+                    Text("Wallet").tag(1)
                 }
-                .padding(16)
+                .pickerStyle(.segmented)
+                .padding(.horizontal, 16)
+                .padding(.top, 8)
+
+                if selectedTab == 0 {
+                    ScrollView {
+                        VStack(spacing: 14) {
+                            statusCard
+                            relayCard
+                            dnsCard
+                            dpiCard
+                            meshCard
+                            vpnCard
+                            infoCard
+                        }
+                        .padding(16)
+                    }
+                } else {
+                    WalletView()
+                }
             }
             .background(RheaTheme.bg)
-            .navigationTitle("Relay")
+            .navigationTitle("SECRETS")
             #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)
             #endif
