@@ -4831,10 +4831,9 @@ async def wallet_balance(chain: str):
         if not addr:
             raise HTTPException(404, "BTC wallet not configured")
         try:
-            async with httpx.AsyncClient(timeout=10) as client:
-                r = await client.get(f"https://blockchain.info/q/addressbalance/{addr}")
-                satoshis = int(r.text.strip())
-                return {"chain": "btc", "balance": satoshis / 1e8, "unit": "BTC", "satoshis": satoshis}
+            r = _requests.get(f"https://blockchain.info/q/addressbalance/{addr}", timeout=10)
+            satoshis = int(r.text.strip())
+            return {"chain": "btc", "balance": satoshis / 1e8, "unit": "BTC", "satoshis": satoshis}
         except Exception as e:
             return {"chain": "btc", "balance": None, "error": str(e)}
     elif chain in ("eth", "usdt"):
