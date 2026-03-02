@@ -34,4 +34,4 @@ COPY data/proof.db /tmp/seed_proof.db
 EXPOSE 8400
 
 # On boot: seed proof.db if volume is empty/tiny, then start
-CMD ["bash", "-c", "if [ ! -f /app/data/proof.db ] || [ $(stat -c%s /app/data/proof.db 2>/dev/null || echo 0) -lt 10000 ]; then cp /tmp/seed_proof.db /app/data/proof.db; echo '[seed] proof.db seeded from baseline'; fi && python3 src/tribunal_api.py"]
+CMD ["bash", "-c", "SEED_COUNT=$(python3 -c \"import sqlite3;c=sqlite3.connect('/app/data/proof.db');print(c.execute('SELECT COUNT(*) FROM proofs').fetchone()[0])\" 2>/dev/null || echo 0); if [ \"$SEED_COUNT\" -lt 5 ]; then cp /tmp/seed_proof.db /app/data/proof.db; echo \"[seed] proof.db seeded ($SEED_COUNT -> 11 artifacts)\"; fi && python3 src/tribunal_api.py"]

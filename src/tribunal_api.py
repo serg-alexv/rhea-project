@@ -1144,19 +1144,29 @@ footer .f-copy{{color:#333;font-size:.68rem;letter-spacing:.04em}}
 <div class="reveal stagger-2" style="text-align:center;margin-top:3rem">
   <div style="font-size:.65rem;font-weight:600;text-transform:uppercase;letter-spacing:.15em;color:var(--accent);margin-bottom:1rem">
     Built by TimeLabs NPO &mdash; powered by</div>
-  <div style="display:flex;justify-content:center;align-items:center;gap:2rem;flex-wrap:wrap;opacity:.55">
-    <span style="font-size:.75rem;font-weight:500;color:var(--muted);letter-spacing:.02em">
+  <div style="display:flex;justify-content:center;align-items:center;gap:1.5rem;flex-wrap:wrap;opacity:.55">
+    <span style="font-size:.7rem;font-weight:500;color:var(--muted)">
       <span style="color:#cc785c">&#x25C8;</span> Anthropic</span>
-    <span style="font-size:.75rem;font-weight:500;color:var(--muted);letter-spacing:.02em">
+    <span style="font-size:.7rem;font-weight:500;color:var(--muted)">
       <span style="color:#10a37f">&#x25C9;</span> OpenAI</span>
-    <span style="font-size:.75rem;font-weight:500;color:var(--muted);letter-spacing:.02em">
+    <span style="font-size:.7rem;font-weight:500;color:var(--muted)">
       <span style="color:#4285f4">G</span><span style="color:#ea4335">o</span><span style="color:#fbbc05">o</span><span style="color:#4285f4">g</span><span style="color:#34a853">l</span><span style="color:#ea4335">e</span></span>
-    <span style="font-size:.75rem;font-weight:500;color:var(--muted);letter-spacing:.02em">
+    <span style="font-size:.7rem;font-weight:500;color:var(--muted)">
+      <span style="color:#4285f4">&#x25C6;</span> DeepMind</span>
+    <span style="font-size:.7rem;font-weight:500;color:var(--muted)">
       <span style="color:#0668E1">&#x221E;</span> Meta</span>
-    <span style="font-size:.75rem;font-weight:500;color:var(--muted);letter-spacing:.02em">
+    <span style="font-size:.7rem;font-weight:500;color:var(--muted)">
       <span style="color:#FF6F00">&#x26A1;</span> Groq</span>
-    <span style="font-size:.75rem;font-weight:500;color:var(--muted);letter-spacing:.02em">
+    <span style="font-size:.7rem;font-weight:500;color:var(--muted)">
       <span style="color:#E91E63">&#x25CE;</span> Cerebras</span>
+    <span style="font-size:.7rem;font-weight:500;color:var(--muted)">
+      <span style="color:#D82C20">&#x25A3;</span> Redis</span>
+    <span style="font-size:.7rem;font-weight:500;color:var(--muted)">
+      <span style="color:#F80000">&#x25CF;</span> Oracle</span>
+    <span style="font-size:.7rem;font-weight:500;color:var(--muted)">
+      <span style="color:#FFCA28">&#x25B2;</span> Firebase</span>
+    <span style="font-size:.7rem;font-weight:500;color:var(--muted)">
+      <span style="color:#00AEEF">&#x25C7;</span> NDI</span>
   </div>
 </div>
 </section>
@@ -1383,6 +1393,24 @@ footer .f-copy{{color:#333;font-size:.68rem;letter-spacing:.04em}}
     <span class="p-icon">&#x1F4E6;</span>
     <div class="p-name">Python</div>
     <div class="p-sub">pip install rhea-memory</div>
+  </div>
+</div>
+<!-- Cross-platform infrastructure promise -->
+<div class="reveal stagger-2" style="margin-top:2rem;max-width:900px;margin-left:auto;margin-right:auto">
+  <div class="glass-card" style="padding:1.5rem 2rem">
+    <div style="font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);margin-bottom:.6rem">
+      Desktop &amp; Mobile AI Terminal &mdash; teleportation via cloud</div>
+    <div style="display:flex;gap:1rem;flex-wrap:wrap;font-size:.68rem;color:var(--muted)">
+      <span>&#x1F4BE; Cloud SQL/WAL</span>
+      <span>&#x25A3; Redis state sync</span>
+      <span>&#x25CF; Oracle free tier</span>
+      <span>&#x25B2; Firebase realtime</span>
+      <span>&#x25C7; NDI video bridge</span>
+      <span>&#x1F511; E2E encrypted</span>
+    </div>
+    <div style="font-size:.68rem;color:#555;margin-top:.5rem">
+      Start a session on your Mac &rarr; continue on iPhone &rarr; finish on Windows CLI.
+      All state synced through cloud WAL. Zero setup.</div>
   </div>
 </div>
 </section>
