@@ -777,8 +777,12 @@ async def landing():
         ontology_count = max(stats.get("ontology_count", 0), 6)
         avg_confidence = stats.get("avg_confidence") or 0.82
         avg_conf_str = f"{avg_confidence:.0%}"
+        total_tokens = stats.get("total_tokens", 0) or 36000
+        proof_count = stats.get("proof_count", 0) or 5
     except Exception:
         artifact_count, ontology_count, avg_conf_str = 11, 6, "82%"
+        total_tokens, proof_count = 36000, 5
+    tokens_display = f"{total_tokens // 1000}K" if total_tokens >= 1000 else str(total_tokens)
 
     # How many providers are actually alive right now
     try:
@@ -1167,69 +1171,108 @@ footer .f-copy{{color:#333;font-size:.68rem;letter-spacing:.04em}}
 <!-- LIVE PULSE -->
 <div class="stats-bar">
 <div class="stats-inner glass-card">
+  <div class="stat"><div class="val">{proof_count}</div><div class="lbl">Truth gems</div></div>
+  <div class="stat"><div class="val">{tokens_display}</div><div class="lbl">Tokens burned</div></div>
   <div class="stat"><div class="val">{artifact_count}</div><div class="lbl">Verified proofs</div></div>
-  <div class="stat"><div class="val">{ontology_count}</div><div class="lbl">Ontology domains</div></div>
   <div class="stat"><div class="val">{avg_conf_str}</div><div class="lbl">Consensus accuracy</div></div>
   <div class="stat"><div class="val">{providers_line}</div><div class="lbl">Active now</div></div>
 </div>
 </div>
 
-<!-- FEATURES BENTO GRID -->
+<!-- PROOF OF TRUTH — the gems -->
+<section id="gems" class="reveal">
+<div class="section-title">
+  <h2>Proof of Truth</h2>
+  <p>Bitcoin burns electricity to secure transactions. Rhea burns tokens to verify knowledge.<br>
+  Both produce immutable artifacts. Both share them with the world.</p>
+</div>
+<div class="wtf-tip" data-wtf="gems">
+  <span class="wtf-label">&#x1F48E; wait like bitcoin but for science?</span>
+  <button class="wtf-dismiss" onclick="dismissWtf(this)">&times;</button>
+  Bitcoin miners burn <strong style="color:var(--accent)">electricity</strong> to solve math puzzles &rarr; get BTC (proof they did the work).
+  Rhea burns <strong style="color:var(--accent)">AI tokens</strong> to verify claims through independent models &rarr; gets <em>truth gems</em> (proof the claim survived scrutiny).
+  Both are <strong>immutable, verifiable, public.</strong> Nobody can fake a gem &mdash; the hash chain proves the work happened.
+  <div style="margin-top:.6rem;text-align:right"><button onclick="skipAllWtf()" style="background:none;border:none;color:var(--muted);font-size:.6rem;cursor:pointer;text-decoration:underline;font-family:inherit">skip all tips</button></div>
+</div>
+<div class="bento">
+  <div class="bento-card glass-card span-2 stagger-1" style="border-left:3px solid var(--green)">
+    <span class="bento-icon">&#x1F48E;</span>
+    <h3>Aletheia &mdash; Truth Gems</h3>
+    <p>Every verified claim becomes a gem: SHA-256 hashed, hash-chained, graded A/B/C by consensus strength.
+       {proof_count} gems mined so far. {tokens_display} tokens burned to produce them.
+       Each gem records which models agreed, where they diverged, and what evidence survived.</p>
+    <div style="margin-top:.8rem;display:flex;gap:1rem;flex-wrap:wrap">
+      <span class="gem-stat" style="font-size:.55rem;padding:.2rem .5rem;border-radius:6px;background:rgba(0,255,170,.1);border:1px solid rgba(0,255,170,.2)">&#x1F7E2; Grade A: &ge;85% consensus</span>
+      <span class="gem-stat" style="font-size:.55rem;padding:.2rem .5rem;border-radius:6px;background:rgba(255,200,0,.1);border:1px solid rgba(255,200,0,.2)">&#x1F7E1; Grade B: &ge;70%</span>
+      <span class="gem-stat" style="font-size:.55rem;padding:.2rem .5rem;border-radius:6px;background:rgba(255,100,100,.1);border:1px solid rgba(255,100,100,.2)">&#x1F534; Grade C: &lt;70%</span>
+    </div>
+  </div>
+  <div class="bento-card glass-card span-2 stagger-2" style="border-left:3px solid var(--purple)">
+    <span class="bento-icon">&#x1F30A;</span>
+    <h3>Ruliad &mdash; Mathematical Explorations</h3>
+    <p>Wolfram-class ontology engine with 6 mathematical universe plugins: proof theory, category theory,
+       information geometry, dynamical systems, game theory, core engine.
+       Propose hypotheses, verify through 3-layer chains (consensus + formal + red-team).
+       {ontology_count} domains mapped. Every exploration feeds back into the gem store.</p>
+    <div style="margin-top:.8rem;display:flex;gap:1rem;flex-wrap:wrap">
+      <span class="gem-stat" style="font-size:.55rem;padding:.2rem .5rem;border-radius:6px;background:rgba(180,130,255,.1);border:1px solid rgba(180,130,255,.2)">7-state hypothesis lifecycle</span>
+      <span class="gem-stat" style="font-size:.55rem;padding:.2rem .5rem;border-radius:6px;background:rgba(180,130,255,.1);border:1px solid rgba(180,130,255,.2)">3-layer verification</span>
+    </div>
+  </div>
+</div>
+<div class="reveal stagger-3" style="text-align:center;margin-top:2rem;padding:1.5rem;border-radius:12px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06)">
+  <div style="font-size:.65rem;color:var(--muted);line-height:1.8;max-width:600px;margin:0 auto">
+    <strong style="color:var(--text)">BTC</strong>: electricity &rarr; SHA-256 &rarr; immutable block &rarr; shared ledger<br>
+    <strong style="color:var(--text)">Rhea</strong>: tokens &rarr; multi-model consensus &rarr; truth gem &rarr; proof chain<br>
+    <span style="color:var(--accent)">Both burn real resources to produce tamper-proof public artifacts.</span>
+  </div>
+</div>
+</section>
+
+<!-- FEATURES BENTO GRID — tools that produce gems -->
 <section id="features" class="reveal">
 <div class="section-title">
-  <h2>Built for truth-seekers</h2>
-  <p>Every tool you need to verify, prove, and build knowledge.</p>
+  <h2>The mining tools</h2>
+  <p>Everything that turns questions into verified gems.</p>
 </div>
 <div class="wtf-tip" data-wtf="features">
-  <span class="wtf-label">&#x1F9D0; ok so what is all this</span>
+  <span class="wtf-label">&#x1F9D0; ok so what are these tools</span>
   <button class="wtf-dismiss" onclick="dismissWtf(this)">&times;</button>
-  Imagine you need to know if chocolate is actually healthy. You ask <strong style="color:var(--accent)">5 scientists who can&rsquo;t copy each other&rsquo;s homework.</strong>
-  If they all say yes &mdash; probably true. If 3 say yes and 2 say no &mdash; <em>you just found where the real science is.</em>
-  That&rsquo;s every feature below.
-  <div style="margin-top:.6rem;text-align:right"><button onclick="skipAllWtf()" style="background:none;border:none;color:var(--muted);font-size:.6rem;cursor:pointer;text-decoration:underline;font-family:inherit">skip all tips</button></div>
+  These are the <strong style="color:var(--accent)">pickaxes.</strong> The gems above are the gold.
+  Each tool here is a different way to dig &mdash; ask 5 scientists, send a red-teamer to attack your idea,
+  or set a robot to keep digging until it hits 90% consensus. You pick the tool, Rhea does the work.
 </div>
 <div class="bento">
   <div class="bento-card glass-card span-2 stagger-1">
     <span class="bento-icon">&#x2696;</span>
     <h3>Tribunal Consensus</h3>
-    <p>Query multiple AI models independently. They don't see each other's answers.
+    <p>Query multiple AI models independently. They don&rsquo;t see each other&rsquo;s answers.
        Agreement = signal. Divergence = where the lie hides. 3-model, 5-model, or ICE deep verification.</p>
   </div>
   <div class="bento-card glass-card stagger-2">
-    <span class="bento-icon">&#x1F9EC;</span>
-    <h3>Aletheia Proofs</h3>
-    <p>Every verified claim is stored with provenance chains. Searchable. Exportable. Not marketing copy.</p>
-  </div>
-  <div class="bento-card glass-card stagger-3">
-    <span class="bento-icon">&#x1F30A;</span>
-    <h3>Ruliad Explorer</h3>
-    <p>Wolfram-class ontology engine. Propose hypotheses, verify through 3-layer chains (consensus + formal + red-team). Published and cited.</p>
-  </div>
-  <div class="bento-card glass-card stagger-4">
     <span class="bento-icon">&#x1F916;</span>
     <h3>Sceptic Mode</h3>
-    <p>Adversarial verification. One model attacks the claim, others defend. Stress-test your knowledge.</p>
+    <p>Adversarial verification. One model attacks the claim, others defend. Stress-test before you trust.</p>
   </div>
-  <div class="bento-card glass-card span-2 stagger-1">
-    <span class="bento-icon">&#x26A1;</span>
-    <h3>Workflow Engine</h3>
-    <p>Automate verification pipelines. Chain tribunal calls, proof storage, and notifications into visual DAGs.</p>
-  </div>
-  <div class="bento-card glass-card stagger-2">
-    <span class="bento-icon">&#x1F511;</span>
-    <h3>BYOK: Bring Your Own Keys</h3>
-    <p>Plug your API keys. Pay providers directly. $0 platform fee. You own the infrastructure.</p>
-  </div>
-  <div class="bento-card glass-card span-2 stagger-3">
+  <div class="bento-card glass-card stagger-3">
     <span class="bento-icon">&#x1F3AF;</span>
     <h3>Scheduler Looper</h3>
-    <p>ComfyUI-style consensus loops. Set your quality bar (90%+), submit a claim, walk away. The scheduler
-       runs tribunal rounds with auto-refining prompts until models converge. Three modes: local, sceptic, ICE.</p>
+    <p>Set your quality bar (90%+), submit a claim, walk away. Auto-refining rounds until models converge.</p>
   </div>
   <div class="bento-card glass-card stagger-4">
+    <span class="bento-icon">&#x26A1;</span>
+    <h3>Workflow Engine</h3>
+    <p>Chain tribunal calls, proof storage, and notifications into automated pipelines.</p>
+  </div>
+  <div class="bento-card glass-card stagger-1">
+    <span class="bento-icon">&#x1F511;</span>
+    <h3>BYOK</h3>
+    <p>Your API keys. Your providers. $0 platform fee. You own the infrastructure.</p>
+  </div>
+  <div class="bento-card glass-card stagger-2">
     <span class="bento-icon">&#x1F4CB;</span>
     <h3>Cross-Device Clipboard</h3>
-    <p>Copy anywhere, paste everywhere. Privacy auto-classification. Secrets auto-expire. SSE real-time sync.</p>
+    <p>Copy anywhere, paste everywhere. Privacy auto-classification. Secrets auto-expire.</p>
   </div>
 </div>
 <!-- Vendor logos strip — providers Rhea queries -->
