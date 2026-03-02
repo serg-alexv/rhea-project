@@ -19,6 +19,7 @@ Usage:
 
 import json
 import os
+import random
 import re
 import time
 import uuid
@@ -30,6 +31,51 @@ from datetime import datetime, timezone
 from pathlib import Path
 from statistics import median
 from typing import Optional
+
+
+# ---------------------------------------------------------------------------
+# Backoff with jitter (absorbed from CockroachDB Cortex)
+# Prevents thundering herd when multiple tribunal calls retry simultaneously.
+# ---------------------------------------------------------------------------
+
+@dataclass
+class BackoffConfig:
+    min_period: float = 0.5   # seconds
+    max_period: float = 30.0
+    max_retries: int = 3      # 0 = infinite
+
+class Backoff:
+    """Exponential backoff with jitter within a doubling range."""
+    def __init__(self, cfg: BackoffConfig):
+        self.cfg = cfg
+        self.num_retries = 0
+        self._delay_min = cfg.min_period
+        self._delay_max = min(cfg.min_period * 2, cfg.max_period)
+
+    def ongoing(self) -> bool:
+        return self.cfg.max_retries == 0 or self.num_retries < self.cfg.max_retries
+
+    def next_delay(self) -> float:
+        self.num_retries += 1
+        if self._delay_min >= self._delay_max:
+            return self._delay_min
+        sleep = self._delay_min + random.random() * (self._delay_max - self._delay_min)
+        if self._delay_max < self.cfg.max_period:
+            self._delay_min = min(self._delay_min * 2, self.cfg.max_period)
+            self._delay_max = min(self._delay_max * 2, self.cfg.max_period)
+        return sleep
+
+    def wait(self):
+        time.sleep(self.next_delay())
+
+# Retry configs per use case
+BACKOFF_CHEAP = BackoffConfig(min_period=0.5, max_period=10.0, max_retries=3)
+BACKOFF_TRIBUNAL = BackoffConfig(min_period=1.0, max_period=30.0, max_retries=5)
+
+def _is_retryable(e: Exception) -> bool:
+    """Check if an error is transient and worth retrying."""
+    msg = str(e).lower()
+    return any(kw in msg for kw in ("429", "rate limit", "timeout", "connection", "502", "503", "overloaded"))
 
 # Disable litellm logging to keep dashboard clean
 litellm.set_verbose = False
@@ -986,13 +1032,29 @@ class RheaBridge:
             else:
                 litellm_model = model
 
-            response = litellm.completion(
-                model=litellm_model,
-                messages=messages,
-                temperature=temperature_eff,
-                max_tokens=max_tokens_eff,
-                **extra_kwargs,
-            )
+            # Retry with jitter backoff on transient errors (429, timeout, 502/503)
+            backoff_cfg = BACKOFF_TRIBUNAL if (mode and "tribunal" in mode) else BACKOFF_CHEAP
+            backoff = Backoff(backoff_cfg)
+            last_err = None
+            response = None
+            while True:
+                try:
+                    response = litellm.completion(
+                        model=litellm_model,
+                        messages=messages,
+                        temperature=temperature_eff,
+                        max_tokens=max_tokens_eff,
+                        **extra_kwargs,
+                    )
+                    break  # success
+                except Exception as retry_err:
+                    last_err = retry_err
+                    if _is_retryable(retry_err) and backoff.ongoing():
+                        delay = backoff.next_delay()
+                        print(f"[bridge] Retryable error on {model}: {retry_err} — backoff {delay:.1f}s (attempt {backoff.num_retries})")
+                        time.sleep(delay)
+                    else:
+                        raise  # non-retryable or exhausted retries
 
             text = response.choices[0].message.content
             usage = getattr(response, 'usage', {})

@@ -286,8 +286,22 @@ RATE_LIMIT_DAILY = int(os.environ.get("TRIBUNAL_DAILY_LIMIT", "1000"))
 _rate_buckets: dict[str, list[float]] = {}
 
 
-async def check_rate_limit(x_api_key: str = Header(None, alias="X-API-Key")):
-    key = x_api_key or "anonymous"
+async def check_rate_limit(
+    x_api_key: str = Header(None, alias="X-API-Key"),
+    authorization: str = Header(None, alias="Authorization"),
+):
+    # Key on JWT user_id when available, else API key, else anonymous
+    key = "anonymous"
+    if authorization and authorization.startswith("Bearer "):
+        try:
+            from auth_api import _decode_token
+            payload = _decode_token(authorization[7:])
+            key = f"user:{payload.get('sub', 'unknown')}"
+        except Exception:
+            pass  # fall through to API key or anonymous
+    if key == "anonymous" and x_api_key:
+        key = f"key:{x_api_key}"
+
     now = time.time()
     if key not in _rate_buckets:
         _rate_buckets[key] = []
@@ -798,7 +812,9 @@ async def landing():
     else:
         multi_note += " (multi-model consensus activates with 2+ providers)"
 
-    url = os.environ.get("FLY_APP_NAME") and "https://rhea-tribunal.fly.dev" or "http://localhost:8400"
+    url = os.environ.get("RHEA_TRIBUNAL_URL") or (
+        "https://rhea-tribunal.fly.dev" if os.environ.get("FLY_APP_NAME") else "http://localhost:8400"
+    )
     providers_line = f"{n_providers} model{'s' if n_providers != 1 else ''} live" if n_providers > 0 else "warming up"
     btc_addr = os.environ.get("BTC_DONATION_ADDRESS", "")
     eth_addr = os.environ.get("ETH_DONATION_ADDRESS", "")
