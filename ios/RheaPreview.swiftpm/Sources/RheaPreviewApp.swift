@@ -82,8 +82,8 @@ enum PlayPane: String, CaseIterable, Identifiable {
     /// Default visibility when no user preference is set
     var defaultVisible: Bool {
         switch self {
-        case .ops, .tribunal, .secrets, .bio, .tasks, .governor, .aletheia, .models, .settings: return true
-        case .chains, .radio, .history, .ruliad: return false
+        case .ops, .tribunal, .secrets, .bio, .tasks, .governor, .models, .settings: return true
+        case .aletheia, .chains, .radio, .history, .ruliad: return false
         }
     }
 
@@ -97,7 +97,8 @@ enum PlayPane: String, CaseIterable, Identifiable {
             }
             // Default level-based gating
             switch pane {
-            case .chains, .radio, .history, .ruliad: return level >= 3
+            case .aletheia, .ruliad: return false  // hidden until data exists
+            case .chains, .radio, .history: return level >= 3
             default: return level >= 2 || pane.defaultVisible
             }
         }
