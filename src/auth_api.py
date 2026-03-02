@@ -413,8 +413,13 @@ def _oauth_redirect_with_token(token: str, email: str, error: str = "", callback
 <body><div class="card"><div class="ok">&#10003;</div><h2>Signed in as {email}</h2>
 <p style="color:#6b7280;font-size:.9rem">100 free credits granted.</p>
 <div class="principle"><em>The infrastructure owner controls who's admin, not the application.</em><br>You own your data, your models, your keys. Rhea serves you — not the other way around.</div>
+<p id="countdown" style="margin-top:1rem;color:#6b7280;font-size:.8rem">Redirecting in <span id="sec">3</span>s...</p>
+<a href="/" style="display:inline-block;margin-top:.8rem;padding:.6rem 1.5rem;background:#0071e3;color:#fff;border-radius:8px;font-size:.85rem;font-weight:500;text-decoration:none">Continue to Rhea</a>
 <script>localStorage.setItem('rhea_token','{token}');localStorage.setItem('rhea_email','{email}');
-if(window.opener)window.opener.postMessage({{type:'oauth',token:'{token}',email:'{email}'}},'*');</script>
+if(window.opener)window.opener.postMessage({{type:'oauth',token:'{token}',email:'{email}'}},'*');
+let s=3;const el=document.getElementById('sec');
+const iv=setInterval(()=>{{s--;el.textContent=s;if(s<=0){{clearInterval(iv);window.location='/'}}}},1000);
+</script>
 </div></body></html>""")
 
 
