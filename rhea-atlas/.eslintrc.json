@@ -1,5 +1,5 @@
 {
   "extends": ["next/core-web-vitals"],
-  "ignorePatterns": [".next/**", "out/**", "build/**", "next-env.d.ts"],
+  "ignorePatterns": [".next/**", "out/**", "build/**", "next-env.d.ts", "src-tauri/target/**"],
   "rules": {}
 }
