@@ -3091,20 +3091,12 @@ def _seed_proof_db():
     db_path = str(Path(__file__).resolve().parent.parent / "data" / "proof.db")
     try:
         db = sqlite3.connect(db_path)
-        db.executescript("""
-            CREATE TABLE IF NOT EXISTS proofs (
-                id TEXT PRIMARY KEY, type TEXT NOT NULL, tier TEXT NOT NULL,
-                prompt TEXT NOT NULL, prompt_hash TEXT, verdict TEXT,
-                agreement_score REAL, confidence REAL, models TEXT,
-                tokens_used INTEGER DEFAULT 0, ontology TEXT,
-                ice_verified INTEGER DEFAULT 0, created_at TEXT NOT NULL,
-                metadata TEXT
-            );
-        """)
+        # Table already exists from aletheia_pipeline — don't recreate with wrong schema
         count = db.execute("SELECT COUNT(*) FROM proofs").fetchone()[0]
         if count >= 5:
             db.close()
             return
+        # Use the ACTUAL schema columns (consensus_text, not verdict)
         seeds = [
             ("ATP synthase rotary catalysis at 100 rev/s driven by proton motive force",
              "hypothesis", "consensus", 0.92, 0.88, "biochemistry", "Verified across Boyer, Walker, Yoshida models"),
@@ -3130,11 +3122,11 @@ def _seed_proof_db():
              "proof", "ice", 0.83, 0.79, "ai_safety", "ICE-verified across 5 provider/model combinations"),
         ]
         now = datetime.now(timezone.utc).isoformat()
-        for prompt, ptype, tier, agreement, confidence, ontology, verdict in seeds:
+        for prompt, ptype, tier, agreement, confidence, ontology, consensus_text in seeds:
             pid = str(uuid.uuid4())[:8]
             db.execute(
-                "INSERT OR IGNORE INTO proofs (id, type, tier, prompt, verdict, agreement_score, confidence, models, ontology, created_at) VALUES (?,?,?,?,?,?,?,?,?,?)",
-                (pid, ptype, tier, prompt, verdict, agreement, confidence, '["gemini-2.5-flash"]', ontology, now),
+                "INSERT OR IGNORE INTO proofs (id, type, tier, prompt, consensus_text, agreement_score, confidence, models, ontology, created_at) VALUES (?,?,?,?,?,?,?,?,?,?)",
+                (pid, ptype, tier, prompt, consensus_text, agreement, confidence, '["gemini-2.5-flash"]', ontology, now),
             )
         db.commit()
         final = db.execute("SELECT COUNT(*) FROM proofs").fetchone()[0]
