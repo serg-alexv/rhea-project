@@ -2800,24 +2800,24 @@ async def session_rewind(req: SessionRewindRequest):
 # Command Centre — persistent SQL-backed endpoints
 # ---------------------------------------------------------------------------
 
-@app.get("/cc/history", dependencies=[Depends(verify_api_key)])
+@app.get("/cc/history")
 async def cc_history(limit: int = 50, session_id: Optional[str] = None, type: Optional[str] = None):
-    """Persistent history from SQL — survives restarts."""
+    """Persistent history from SQL — survives restarts. Public read-only."""
     return {"history": rhea_db.query_history(limit=limit, session_id=session_id, type_filter=type)}
 
-@app.get("/cc/radio", dependencies=[Depends(verify_api_key)])
+@app.get("/cc/radio")
 async def cc_radio(limit: int = 100, since: Optional[str] = None):
-    """Persistent radio feed from SQL."""
+    """Persistent radio feed from SQL. Public read-only."""
     return {"radio": rhea_db.query_radio(limit=limit, since=since)}
 
-@app.get("/cc/office", dependencies=[Depends(verify_api_key)])
+@app.get("/cc/office")
 async def cc_office(limit: int = 50, agent: Optional[str] = None):
-    """Persistent office messages from SQL."""
+    """Persistent office messages from SQL. Public read-only."""
     return {"messages": rhea_db.query_office(limit=limit, agent=agent)}
 
-@app.get("/cc/sessions", dependencies=[Depends(verify_api_key)])
+@app.get("/cc/sessions")
 async def cc_sessions(limit: int = 20):
-    """List all tribunal sessions with step counts."""
+    """List all tribunal sessions with step counts. Public read-only."""
     return {"sessions": rhea_db.query_sessions(limit=limit)}
 
 @app.get("/cc/ndi", dependencies=[Depends(verify_api_key)])
