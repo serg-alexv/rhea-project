@@ -3087,7 +3087,8 @@ def _seed_proof_db():
     """Seed proof.db with foundational artifacts if it's empty or sparse."""
     import sqlite3, uuid
     from datetime import datetime, timezone
-    db_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "proof.db")
+    from pathlib import Path
+    db_path = str(Path(__file__).resolve().parent.parent / "data" / "proof.db")
     try:
         db = sqlite3.connect(db_path)
         db.executescript("""
