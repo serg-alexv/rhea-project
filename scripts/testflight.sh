@@ -27,14 +27,15 @@ log() { echo -e "${GREEN}[testflight]${NC} $*"; }
 warn() { echo -e "${AMBER}[testflight]${NC} $*"; }
 err() { echo -e "${RED}[testflight]${NC} $*" >&2; }
 
-# --- Auto-increment build number ---
+# --- Auto-increment build number + sync marketing version ---
 bump_build() {
     local yml="$IOS_DIR/project.yml"
     local current
     current=$(grep "CURRENT_PROJECT_VERSION" "$yml" | head -1 | sed 's/.*: *"\{0,1\}\([0-9]*\)"\{0,1\}/\1/')
     local next=$((current + 1))
     sed -i '' "s/CURRENT_PROJECT_VERSION: .*/CURRENT_PROJECT_VERSION: \"$next\"/" "$yml"
-    log "Build number: $current → $next" >&2
+    sed -i '' "s/MARKETING_VERSION: .*/MARKETING_VERSION: \"1.0.$next\"/" "$yml"
+    log "Build number: $current → $next (v1.0.$next)" >&2
     echo "$next"
 }
 
