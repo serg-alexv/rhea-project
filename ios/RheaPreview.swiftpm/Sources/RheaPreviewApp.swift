@@ -52,6 +52,7 @@ private struct MainTabShell: View {
             list.append(TabDescriptor(icon: "dollarsign.circle", label: "Budget", view: AnyView(GovernorView())))
             list.append(TabDescriptor(icon: "checklist", label: "Tasks", view: AnyView(TasksView())))
             list.append(TabDescriptor(icon: "bubble.left.and.bubble.right", label: "Office", view: AnyView(OfficeView())))
+            list.append(TabDescriptor(icon: "shield.lefthalf.filled", label: "Privacy", view: AnyView(RelayPrivacyView())))
         }
         if revealLevel >= 3 {
             // Level 3: specialist tools
