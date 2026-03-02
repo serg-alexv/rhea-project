@@ -773,12 +773,12 @@ async def landing():
         from aletheia_pipeline import AletheiaCapturePipeline
         pipe = AletheiaCapturePipeline()
         stats = pipe.get_stats()
-        proof_count = stats.get("proof_count", 0)
+        artifact_count = stats.get("total_artifacts", 0)
         ontology_count = stats.get("ontology_count", 0)
         avg_confidence = stats.get("avg_confidence")
         avg_conf_str = f"{avg_confidence:.0%}" if avg_confidence else "—"
     except Exception:
-        proof_count, ontology_count, avg_conf_str = 0, 0, "—"
+        artifact_count, ontology_count, avg_conf_str = 0, 0, "—"
 
     # How many providers are actually alive right now
     try:
@@ -797,26 +797,41 @@ async def landing():
     url = os.environ.get("FLY_APP_NAME") and "https://rhea-tribunal.fly.dev" or "http://localhost:8400"
     providers_line = f"{n_providers} model{'s' if n_providers != 1 else ''} live" if n_providers > 0 else "warming up"
     btc_addr = os.environ.get("BTC_DONATION_ADDRESS", "")
-    btc_section = ""
+    eth_addr = os.environ.get("ETH_DONATION_ADDRESS", "")
+    crypto_gates = []
     if btc_addr:
-        btc_section = f"""
+        crypto_gates.append(("&#x20BF;", "Bitcoin (BTC)", btc_addr, "var(--orange)", "On-chain BTC"))
+    if eth_addr:
+        crypto_gates.append(("&#x039E;", "Ethereum (ETH)", eth_addr, "var(--purple)", "ETH mainnet"))
+        crypto_gates.append(("&#x20AE;", "USDT (ERC-20)", eth_addr, "var(--green)", "Same ETH address"))
+    crypto_section = ""
+    if crypto_gates:
+        cards = ""
+        for icon, name, addr, color, note in crypto_gates:
+            cards += f"""
+    <div class="glass-card" style="padding:1.5rem;text-align:center">
+      <div style="font-size:1.8rem;margin-bottom:.6rem">{icon}</div>
+      <div style="font-size:.75rem;font-weight:600;color:{color};margin-bottom:.6rem">{name}</div>
+      <div class="crypto-addr" style="font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--accent);
+        word-break:break-all;padding:.6rem;background:rgba(0,113,227,.05);border-radius:8px;
+        border:1px solid rgba(0,113,227,.12);margin-bottom:.5rem;cursor:pointer"
+        onclick="navigator.clipboard.writeText('{addr}');this.style.borderColor='var(--green)';
+        this.querySelector('.copy-hint').textContent='Copied!'">
+        {addr}<div class="copy-hint" style="color:var(--muted);font-size:.6rem;margin-top:.3rem">Click to copy</div>
+      </div>
+      <div style="font-size:.6rem;color:var(--muted)">{note}</div>
+    </div>"""
+        crypto_section = f"""
 <section class="reveal" id="support">
 <div class="section-title">
   <h2>Support the project</h2>
   <p>Rhea is built by independent researchers. Every sat helps.</p>
 </div>
-<div style="max-width:500px;margin:0 auto;text-align:center">
-  <div class="glass-card" style="padding:2rem">
-    <div style="font-size:2rem;margin-bottom:1rem">&#x20BF;</div>
-    <div style="font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--accent);
-      word-break:break-all;padding:.8rem;background:rgba(0,113,227,.06);border-radius:8px;
-      border:1px solid rgba(0,113,227,.15);margin-bottom:1rem;cursor:pointer"
-      onclick="navigator.clipboard.writeText('{btc_addr}');this.style.borderColor='var(--green)';
-      this.insertAdjacentHTML('afterend','<div style=\\'color:var(--green);font-size:.7rem;margin-top:.3rem\\'>Copied!</div>')">
-      {btc_addr}
-    </div>
-    <div style="font-size:.7rem;color:var(--muted)">Click to copy &bull; On-chain BTC &bull; BTCPay webhook auto-credits your account</div>
-  </div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;max-width:800px;margin:0 auto">
+  {cards}
+</div>
+<div style="text-align:center;margin-top:1rem;font-size:.65rem;color:var(--muted)">
+  Payments auto-credit your Rhea account via BTCPay webhook
 </div>
 </section>"""
     html = f"""<!DOCTYPE html>
@@ -1079,7 +1094,7 @@ footer .f-copy{{color:#333;font-size:.68rem;letter-spacing:.04em}}
 <!-- ANIMATED STATS -->
 <div class="stats-bar">
 <div class="stats-inner glass-card">
-  <div class="stat"><div class="val">{proof_count}</div><div class="lbl">Proofs stored</div></div>
+  <div class="stat"><div class="val">{artifact_count}</div><div class="lbl">Verified artifacts</div></div>
   <div class="stat"><div class="val">{ontology_count}</div><div class="lbl">Ontologies</div></div>
   <div class="stat"><div class="val">{avg_conf_str}</div><div class="lbl">Avg confidence</div></div>
   <div class="stat"><div class="val">{providers_line}</div><div class="lbl">Right now</div></div>
@@ -1105,53 +1120,98 @@ footer .f-copy{{color:#333;font-size:.68rem;letter-spacing:.04em}}
     <p>Every verified claim is stored with provenance chains. Searchable. Exportable. Not marketing copy.</p>
   </div>
   <div class="bento-card glass-card stagger-3">
+    <span class="bento-icon">&#x1F30A;</span>
+    <h3>Ruliad Explorer</h3>
+    <p>Wolfram-class ontology engine. Propose hypotheses, verify through 3-layer chains (consensus + formal + red-team). Published and cited.</p>
+  </div>
+  <div class="bento-card glass-card stagger-4">
     <span class="bento-icon">&#x1F916;</span>
     <h3>Sceptic Mode</h3>
     <p>Adversarial verification. One model attacks the claim, others defend. Stress-test your knowledge.</p>
   </div>
-  <div class="bento-card glass-card stagger-4">
+  <div class="bento-card glass-card span-2 stagger-1">
     <span class="bento-icon">&#x26A1;</span>
     <h3>Workflow Engine</h3>
-    <p>Automate verification pipelines. Chain tribunal calls, proof storage, and notifications into DAGs.</p>
+    <p>Automate verification pipelines. Chain tribunal calls, proof storage, and notifications into visual DAGs.</p>
   </div>
-  <div class="bento-card glass-card stagger-1">
+  <div class="bento-card glass-card stagger-2">
     <span class="bento-icon">&#x1F511;</span>
     <h3>BYOK: Bring Your Own Keys</h3>
     <p>Plug your API keys. Pay providers directly. $0 platform fee. You own the infrastructure.</p>
   </div>
 </div>
+<!-- Vendor logos strip -->
+<div class="reveal stagger-2" style="display:flex;justify-content:center;align-items:center;gap:2.5rem;flex-wrap:wrap;margin-top:3rem;opacity:.5">
+  <div style="display:flex;align-items:center;gap:.5rem;font-size:.72rem;color:var(--muted)">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="11" stroke="#cc785c" stroke-width="1.5"/><path d="M12 3C7 3 3 7.5 3 12s4 9 9 9c1.5 0 3-3 3-9s-1.5-9-3-9z" stroke="#cc785c" stroke-width="1.2"/></svg>
+    Anthropic</div>
+  <div style="display:flex;align-items:center;gap:.5rem;font-size:.72rem;color:var(--muted)">
+    <svg width="18" height="18" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="none" stroke="#10a37f" stroke-width="1.5"/><path d="M12 6v6l4 2" stroke="#10a37f" stroke-width="1.5" stroke-linecap="round"/></svg>
+    OpenAI</div>
+  <div style="display:flex;align-items:center;gap:.5rem;font-size:.72rem;color:var(--muted)">
+    <svg width="18" height="18" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285f4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34a853"/></svg>
+    Google</div>
+  <div style="display:flex;align-items:center;gap:.5rem;font-size:.72rem;color:var(--muted)">
+    <svg width="18" height="18" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" fill="none" stroke="#0668E1" stroke-width="1.5"/><path d="M9 8h6v8H9z" fill="none" stroke="#0668E1" stroke-width="1"/></svg>
+    Meta</div>
+  <div style="display:flex;align-items:center;gap:.5rem;font-size:.72rem;color:var(--muted)">
+    <svg width="18" height="18" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" fill="none" stroke="#FF6F00" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Groq</div>
+  <div style="display:flex;align-items:center;gap:.5rem;font-size:.72rem;color:var(--muted)">
+    <svg width="18" height="18" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke="#E91E63" stroke-width="1.5"/><circle cx="12" cy="12" r="4" fill="none" stroke="#E91E63" stroke-width="1"/></svg>
+    Cerebras</div>
+</div>
 </section>
 
-<!-- COMFYUI INTEGRATION PREVIEW -->
+<!-- RHEA KEYBOARD + COMFYUI WORKFLOWS -->
 <section class="reveal">
 <div class="section-title">
-  <h2>Coming: ComfyUI Integration</h2>
-  <p>Visual node-based workflow editor for Rhea's verification cycles.</p>
+  <h2>Lightweight tools, not bloatware</h2>
+  <p>A mobile keyboard. A visual workflow editor. Not a many-GB monster on your device.</p>
 </div>
-<div class="comfy-preview glass-card" style="max-width:800px;margin:0 auto">
-  <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.5rem">
-    <span style="font-size:.65rem;font-weight:600;color:var(--orange);text-transform:uppercase;letter-spacing:.1em">
-      Planned Integration</span>
-    <span style="font-size:.6rem;color:var(--muted)">&bull; Visual DAG editor as a CC tab</span>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;max-width:900px;margin:0 auto">
+  <!-- Keyboard -->
+  <div class="glass-card" style="padding:2rem">
+    <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:1rem">
+      <span style="font-size:1.5rem">&#x2328;&#xFE0F;</span>
+      <div>
+        <div style="font-size:.85rem;font-weight:600">Rhea Keyboard</div>
+        <div style="font-size:.65rem;color:var(--green)">iOS Extension &bull; &lt;5 MB</div>
+      </div>
+    </div>
+    <p style="font-size:.78rem;color:var(--muted);line-height:1.5">
+      A mobile keyboard extension that brings Rhea consensus directly into any text field.
+      Type a claim, tap verify &mdash; get agreement score without leaving your app.
+      Ships as part of the iOS app. No separate download.</p>
   </div>
-  <p style="font-size:.82rem;color:var(--muted);line-height:1.5;margin-bottom:1.5rem">
-    ComfyUI-style node graph for building multi-step verification workflows.
-    Drag nodes, connect edges, run consensus cycles visually.</p>
-  <div class="node-graph">
-    <div class="comfy-node" style="border-color:var(--green);color:var(--green);background:rgba(48,209,88,.08)">
-      &#x25B6; Input Claim</div>
-    <div class="comfy-edge"></div>
-    <div class="comfy-node" style="border-color:var(--accent);color:var(--accent);background:rgba(0,113,227,.08)">
-      &#x2696; Tribunal k=3</div>
-    <div class="comfy-edge"></div>
-    <div class="comfy-node" style="border-color:var(--orange);color:var(--orange);background:rgba(255,159,10,.08)">
-      &#x1F914; Sceptic Probe</div>
-    <div class="comfy-edge"></div>
-    <div class="comfy-node" style="border-color:var(--purple);color:var(--purple);background:rgba(191,90,242,.08)">
-      &#x1F4BE; Aletheia Store</div>
-    <div class="comfy-edge"></div>
-    <div class="comfy-node" style="border-color:var(--cyan);color:var(--cyan);background:rgba(100,210,255,.08)">
-      &#x2705; Output Proof</div>
+  <!-- ComfyUI -->
+  <div class="glass-card" style="padding:2rem">
+    <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:1rem">
+      <span style="font-size:1.5rem">&#x1F3A8;</span>
+      <div>
+        <div style="font-size:.85rem;font-weight:600">ComfyUI Workflows</div>
+        <div style="font-size:.65rem;color:var(--orange)">Planned &bull; CC Tab</div>
+      </div>
+    </div>
+    <p style="font-size:.78rem;color:var(--muted);line-height:1.5;margin-bottom:1rem">
+      Visual node-based workflow editor for verification cycles.
+      Drag nodes, connect edges, run consensus pipelines &mdash; all in the browser, zero install.</p>
+    <div class="node-graph">
+      <div class="comfy-node" style="border-color:var(--green);color:var(--green);background:rgba(48,209,88,.08)">
+        &#x25B6; Claim</div>
+      <div class="comfy-edge"></div>
+      <div class="comfy-node" style="border-color:var(--accent);color:var(--accent);background:rgba(0,113,227,.08)">
+        &#x2696; Tribunal</div>
+      <div class="comfy-edge"></div>
+      <div class="comfy-node" style="border-color:var(--purple);color:var(--purple);background:rgba(191,90,242,.08)">
+        &#x1F4BE; Proof</div>
+    </div>
+  </div>
+</div>
+<div style="text-align:center;margin-top:1.2rem">
+  <div class="glass-card" style="display:inline-flex;align-items:center;gap:1rem;padding:.8rem 1.5rem;font-size:.75rem;color:var(--muted)">
+    <span>Rhea Play (macOS ops centre) ships as a separate native app &mdash;</span>
+    <a href="https://github.com/serg-alexv/rhea-project/releases" style="color:var(--accent)">Download DMG</a>
   </div>
 </div>
 </section>
@@ -1292,22 +1352,19 @@ footer .f-copy{{color:#333;font-size:.68rem;letter-spacing:.04em}}
     <div class="p-sub">curl + Bearer token</div>
   </div>
   <div class="plat-card glass-card stagger-1">
+    <span class="p-icon">&#x1FA9F;</span>
+    <div class="p-name">Windows</div>
+    <div class="p-sub">CLI + Python package</div>
+  </div>
+  <div class="plat-card glass-card stagger-2">
+    <span class="p-icon">&#x1F427;</span>
+    <div class="p-name">Linux</div>
+    <div class="p-sub">CLI + Docker + Python</div>
+  </div>
+  <div class="plat-card glass-card stagger-3">
     <span class="p-icon">&#x1F4E6;</span>
     <div class="p-name">Python</div>
     <div class="p-sub">pip install rhea-memory</div>
-  </div>
-</div>
-</section>
-
-<!-- KEYBOARD + PLAYUI LEGACY NOTE -->
-<section class="reveal">
-<div class="legacy-bar glass-card">
-  <div class="legacy-icon">&#x2328;&#xFE0F;</div>
-  <div class="legacy-text">
-    <h3>Keyboard &amp; Play UI</h3>
-    <p>The iOS Keyboard extension and Play macOS UI SDK continue as separate legacy products.
-    They ship independently and are available in their respective app stores.
-    The Rhea platform builds on top of their foundation.</p>
   </div>
 </div>
 </section>
@@ -1331,7 +1388,7 @@ footer .f-copy{{color:#333;font-size:.68rem;letter-spacing:.04em}}
 </section>
 
 <!-- BTC SUPPORT -->
-{btc_section}
+{crypto_section}
 
 <!-- PRINCIPLE -->
 <div class="principle-bar reveal">
@@ -1355,9 +1412,18 @@ You own your data, your models, your keys. Rhea serves you &mdash; not the other
     <a href="/community">Community</a>
     <a href="/docs">Docs</a>
     <a href="/contact">Contact</a>
+    <a href="#" onclick="return false" style="cursor:default">Manage cookies</a>
+    <a href="#" onclick="return false" style="cursor:default">My personal information</a>
   </div>
-  <div class="f-copy">&#x2207; &gt; 0 &#x2228; &#x22A5; &mdash; gradient positive or bottom<br>
-  &copy; 2026 TimeLabs NPO</div>
+  <div class="f-links" style="margin-top:.6rem;font-size:.72rem">
+    <span style="color:#444">General: <a href="mailto:timelabs.ad@gmail.com" style="color:#555">timelabs.ad@gmail.com</a></span>
+    <span style="color:#444">Support: <a href="mailto:support@rhea-project.org" style="color:#555">support@rhea-project.org</a></span>
+  </div>
+  <div class="f-copy" style="margin-top:1rem">
+    <span id="nabla-explain" style="transition:opacity .6s ease;display:inline-block">
+      &#x2207; &gt; 0 &#x2228; &#x22A5; &mdash; gradient positive or bottom</span><br>
+    &copy; 2026 TimeLabs NPO
+  </div>
 </footer>
 
 <!-- Scroll reveal + stats counter animation -->
@@ -1381,7 +1447,35 @@ You own your data, your models, your keys. Rhea serves you &mdash; not the other
       }};
       requestAnimationFrame(step)
     }}
-  }})
+  }});
+
+  // Rotating nabla explanations — every 30s with flash
+  const nablaEl=document.getElementById('nabla-explain');
+  if(nablaEl){{
+    const explanations=[
+      '\u2207 > 0 \u2228 \u22A5 \u2014 gradient positive or bottom',
+      '\u2207 > 0 \u2014 if the system improves, it lives',
+      '\u2207 = 0 \u2014 stasis is indistinguishable from death',
+      '\u22A5 \u2014 bottom: the program that never returns',
+      '\u2207f \u00B7 dr > 0 \u2014 movement along the gradient = progress',
+      '\u2202S/\u2202t \u2265 0 \u2014 entropy never decreases; channel it',
+      'Rhea tricked Kronos \u2014 time devours discrete, not continuous',
+      '\u222B\u2207\u00B7F dV = \u222EF\u00B7dA \u2014 divergence theorem: local flow = boundary flux',
+      'consensus \u2260 truth, but divergence reveals where truth hides',
+      '\u0394G < 0 \u2014 spontaneous processes decrease free energy',
+      'K\u1D62 = [products]/[reactants] \u2014 equilibrium is not stillness',
+      'The map is not the territory \u2014 but gradient is the compass',
+    ];
+    let idx=0;
+    setInterval(()=>{{
+      nablaEl.style.opacity='0';
+      setTimeout(()=>{{
+        idx=(idx+1)%explanations.length;
+        nablaEl.textContent=explanations[idx];
+        nablaEl.style.opacity='1';
+      }},400);
+    }},30000);
+  }}
 }})()
 </script>
 
