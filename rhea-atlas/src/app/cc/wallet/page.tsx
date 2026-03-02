@@ -14,14 +14,46 @@ interface WalletAddress {
   icon: string;
 }
 
-// TODO(human): Implement the fetchBalances function that checks on-chain balances
-// for each wallet address via public block explorer APIs.
-// It should return a map of { address: balance_string }.
-// Consider: etherscan.io API for ETH/USDT, blockchain.info for BTC.
-// Handle rate limits and cache results for 60 seconds.
+// On-chain balance cache (60s TTL)
+const balanceCache: Record<string, { value: string; ts: number }> = {};
+const CACHE_TTL = 60000;
+
+async function fetchBalance(symbol: string, address: string): Promise<string> {
+  const key = `${symbol}:${address}`;
+  const cached = balanceCache[key];
+  if (cached && Date.now() - cached.ts < CACHE_TTL) return cached.value;
+
+  try {
+    let balance = "—";
+    if (symbol === "BTC") {
+      const r = await fetch(`https://blockchain.info/q/addressbalance/${address}?confirmations=1`);
+      if (r.ok) {
+        const sats = parseInt(await r.text());
+        balance = (sats / 1e8).toFixed(8) + " BTC";
+      }
+    } else if (symbol === "ETH") {
+      // Public Ethereum RPC — eth_getBalance
+      const r = await fetch("https://eth.llamarpc.com", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ jsonrpc: "2.0", method: "eth_getBalance", params: [address, "latest"], id: 1 }),
+      });
+      if (r.ok) {
+        const data = await r.json();
+        const wei = parseInt(data.result, 16);
+        balance = (wei / 1e18).toFixed(6) + " ETH";
+      }
+    }
+    balanceCache[key] = { value: balance, ts: Date.now() };
+    return balance;
+  } catch {
+    return "—";
+  }
+}
 
 export default function WalletPage() {
   const [addresses, setAddresses] = useState<WalletAddress[]>([]);
+  const [balances, setBalances] = useState<Record<string, string>>({});
   const [credits, setCredits] = useState<{balance: number; plan: string} | null>(null);
   const [copied, setCopied] = useState<string | null>(null);
 
@@ -55,6 +87,17 @@ export default function WalletPage() {
       },
     ];
     setAddresses(knownAddresses);
+
+    // Fetch on-chain balances (BTC + ETH only, USDT shares ETH address)
+    Promise.all([
+      fetchBalance("BTC", knownAddresses[0].address),
+      fetchBalance("ETH", knownAddresses[1].address),
+    ]).then(([btc, eth]) => {
+      setBalances({
+        [knownAddresses[0].address + ":BTC"]: btc,
+        [knownAddresses[1].address + ":ETH"]: eth,
+      });
+    });
 
     // Fetch user credits if authenticated
     const token = typeof window !== "undefined" ? localStorage.getItem("rhea_token") : null;
@@ -141,12 +184,17 @@ export default function WalletPage() {
                   </div>
                   <div className="text-[10px] text-white/20 mt-0.5">{w.network}</div>
                 </div>
-                <div className="text-xs text-white/20 group-hover:text-white/50 transition-colors shrink-0">
-                  {copied === w.address ? (
-                    <span className="text-green-400">Copied!</span>
-                  ) : (
-                    "Click to copy"
-                  )}
+                <div className="text-right shrink-0">
+                  <div className="text-xs font-mono text-white/30">
+                    {balances[`${w.address}:${w.symbol}`] || ""}
+                  </div>
+                  <div className="text-[10px] text-white/20 group-hover:text-white/50 transition-colors">
+                    {copied === w.address ? (
+                      <span className="text-green-400">Copied!</span>
+                    ) : (
+                      "Click to copy"
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
