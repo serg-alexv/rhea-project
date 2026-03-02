@@ -7,7 +7,7 @@
 - **Fly.io:** rhea-tribunal.fly.dev LIVE (JWT auth, dev-bypass blocked)
 
 ## Products (all shipped)
-- **iOS:** build 12, TestFlight LIVE, auth gate + 8 tabs
+- **iOS:** build 26 (v1.0.26), TestFlight LIVE, auth gate + 13 tabs
 - **Play (macOS):** v1.0 DMG shipped, 12-pane ops centre
 - **rhea-memory:** Python package, pip-installable, CLI ready
 - **Landing:** rhea-tribunal.fly.dev with signup + OAuth
@@ -31,7 +31,7 @@
 - **NDI:** libndi v6.2.0 local, graceful cloud degradation
 
 ## Pending
-- Apple Network Extension entitlement (submitted)
+- Apple Network Extension entitlement (NOT YET REQUESTED — need to submit at developer.apple.com/contact/request/network-extension)
 - Entity registration (timelabs npo) → ASC developer name
 - PyPI publish for rhea-memory
 - App Store submission
