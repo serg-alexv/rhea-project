@@ -588,9 +588,16 @@ def monitor(ctx, interval):
             t.add_column("Agent")
             t.add_column("Status")
             t.add_column("Tokens", justify="right")
-            for a in agents_data["agents"]:
+            agents_list = agents_data["agents"]
+            if isinstance(agents_list, dict):
+                iterator = agents_list.items()
+            elif isinstance(agents_list, list):
+                iterator = ((a.get("name", "?"), a) for a in agents_list if isinstance(a, dict))
+            else:
+                iterator = []
+            for name, a in iterator:
                 sc = "green" if a.get("status") == "active" else "red"
-                t.add_row(a.get("name", "?"), f"[{sc}]{a.get('status', '?')}[/{sc}]", str(a.get("total_tokens", 0)))
+                t.add_row(name, f"[{sc}]{a.get('status', '?')}[/{sc}]", str(a.get("total_tokens", 0)))
             layout["agents"].update(Panel(t, title="Agents"))
         else:
             layout["agents"].update(Panel("[dim]no data[/dim]", title="Agents"))

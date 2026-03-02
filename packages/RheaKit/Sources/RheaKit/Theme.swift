@@ -9,6 +9,9 @@ public enum RheaTheme {
     public static let green = Color(red: 0.30, green: 0.90, blue: 0.50)
     public static let amber = Color(red: 1.0, green: 0.78, blue: 0.20)
     public static let red = Color(red: 1.0, green: 0.35, blue: 0.35)
+    public static let purple = Color(red: 0.70, green: 0.50, blue: 1.0)
+    public static let muted = Color.white.opacity(0.5)
+    public static let text = Color.white
 
     // MARK: - Mode colors
     public static func modeColor(_ mode: String) -> Color {

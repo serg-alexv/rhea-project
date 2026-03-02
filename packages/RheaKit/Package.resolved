@@ -1,15 +1,6 @@
 {
   "pins" : [
     {
-      "identity" : "animatedtabbar",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/serg-alexv/AnimatedTabBar",
-      "state" : {
-        "revision" : "34a3d2cac54d086de0f3f705022d8e8c95ddbb87",
-        "version" : "0.1.6"
-      }
-    },
-    {
       "identity" : "grdb.swift",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/groue/GRDB.swift",

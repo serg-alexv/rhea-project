@@ -33,6 +33,7 @@ public struct BioRendererView: View {
 
     // Copy/export
     @State private var snapshotCopied = false
+    @State private var crossDeviceSynced = false
 
     // Metadata panel
     @State private var metaTitle: String? = nil
@@ -85,7 +86,7 @@ public struct BioRendererView: View {
             #endif
             .toolbar {
                 ToolbarItemGroup(placement: .primaryAction) {
-                    // Copy 3D snapshot to clipboard
+                    // Copy 3D snapshot to local clipboard
                     Button {
                         captureSnapshot()
                     } label: {
@@ -93,7 +94,17 @@ public struct BioRendererView: View {
                             .font(.system(size: 14))
                             .foregroundStyle(snapshotCopied ? RheaTheme.green : RheaTheme.accent)
                     }
-                    .help("Copy 3D view to clipboard")
+                    .help("Copy 3D view to local clipboard")
+
+                    // Cross-device sync — push snapshot + metadata to Rhea clipboard
+                    Button {
+                        captureAndSync()
+                    } label: {
+                        Image(systemName: crossDeviceSynced ? "checkmark.icloud.fill" : "icloud.and.arrow.up")
+                            .font(.system(size: 14))
+                            .foregroundStyle(crossDeviceSynced ? RheaTheme.green : RheaTheme.purple)
+                    }
+                    .help("Sync to all devices via Rhea clipboard")
 
                     // Copy analysis text
                     if let text = analysisText {
@@ -427,6 +438,69 @@ public struct BioRendererView: View {
             }
         }
         #endif
+    }
+
+    // MARK: - Cross-Device Sync (Bio curves → Rhea clipboard → any device)
+
+    /// Captures the 3D view as PNG and pushes it to the Rhea clipboard API
+    /// so it appears on all connected devices (desktop, mobile, web).
+    private func captureAndSync() {
+        guard let webView = webViewRef.webView else { return }
+        let config = WKSnapshotConfiguration()
+        webView.takeSnapshot(with: config) { image, error in
+            guard let image = image, error == nil else { return }
+
+            // Get PNG data
+            #if os(iOS)
+            guard let pngData = image.pngData() else { return }
+            let deviceName = UIDevice.current.name
+            #else
+            guard let tiff = image.tiffRepresentation,
+                  let bitmap = NSBitmapImageRep(data: tiff),
+                  let pngData = bitmap.representation(using: .png, properties: [:]) else { return }
+            let deviceName = Host.current().localizedName ?? "Mac"
+            #endif
+
+            let base64 = pngData.base64EncodedString()
+            let label = isSmilesMode ? "SMILES: \(currentID)" : "PDB: \(currentID)"
+
+            // Push to Rhea clipboard API
+            guard let url = URL(string: "\(apiBaseURL)/clipboard") else { return }
+            var req = URLRequest(url: url)
+            req.httpMethod = "POST"
+            req.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            let payload: [String: Any] = [
+                "content": "data:image/png;base64,\(base64)",
+                "content_type": "image/bio-snapshot",
+                "content_preview": "[\(label)] \(renderStyle) / \(colorScheme)",
+                "device_name": deviceName,
+                "privacy": "normal",
+                "metadata": [
+                    "molecule_id": currentID,
+                    "is_smiles": isSmilesMode,
+                    "render_style": renderStyle,
+                    "color_scheme": colorScheme,
+                    "meta_title": metaTitle ?? "",
+                    "meta_organism": metaOrganism ?? ""
+                ]
+            ]
+            req.httpBody = try? JSONSerialization.data(withJSONObject: payload)
+
+            URLSession.shared.dataTask(with: req) { _, response, _ in
+                DispatchQueue.main.async {
+                    if let http = response as? HTTPURLResponse, http.statusCode < 300 {
+                        withAnimation { crossDeviceSynced = true }
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                            withAnimation { crossDeviceSynced = false }
+                        }
+                        #if os(iOS)
+                        let gen = UINotificationFeedbackGenerator()
+                        gen.notificationOccurred(.success)
+                        #endif
+                    }
+                }
+            }.resume()
+        }
     }
 
     // MARK: - Actions

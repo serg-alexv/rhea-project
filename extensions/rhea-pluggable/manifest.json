@@ -1,0 +1,18 @@
+{
+  "name": "rhea-pluggable",
+  "description": "Extension entrypoint so other Timelabs-NPO repos can register with the Rhea host",
+  "version": "0.1.0",
+  "compatibility": {
+    "rhea": ">=2.0",
+    "timelabs": "org"
+  },
+  "dependencies": [
+    "flyctl",
+    "redis",
+    "google-cloud-sdk",
+    "firebase-tools"
+  ],
+  "scripts": {
+    "sync": "./extensions/rhea-pluggable/sync-timelabs.sh"
+  }
+}

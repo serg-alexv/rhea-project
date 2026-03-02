@@ -74,6 +74,9 @@ diagnostics/
 *.tar.gz
 
 # iOS / macOS build artifacts
+*.dmg
+*.ipa
+*.pkg
 ios/RheaApp/build/
 play/build/
 **/DerivedData/
