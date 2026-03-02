@@ -1,0 +1,410 @@
+[
+  {
+    "id": "1CRN",
+    "name": "Crambin",
+    "category": "protein",
+    "scene": {
+      "camera_distance": 0.85,
+      "rotation_x": 15,
+      "rotation_y": -30,
+      "rotation_z": 0,
+      "zoom_level": 1.1
+    },
+    "recommended_style": "cartoon",
+    "recommended_color": "secondary structure",
+    "recommended_bg": "Dark",
+    "optimal_layout": "2x2",
+    "focal_points": [
+      {
+        "name": "Alpha-helix bundle",
+        "description": "Two parallel alpha-helices forming the core hydrophobic scaffold",
+        "approximate_position": "center"
+      },
+      {
+        "name": "Disulfide bridges",
+        "description": "Three disulfide bonds (Cys3-Cys40, Cys4-Cys32, Cys16-Cys26) stabilizing the fold",
+        "approximate_position": "right"
+      },
+      {
+        "name": "Beta-sheet region",
+        "description": "Small antiparallel beta-sheet at the C-terminal end",
+        "approximate_position": "bottom"
+      }
+    ],
+    "composition_notes": "Slight tilt around Y-axis reveals all three structural elements simultaneously. At 46 residues, crambin fits well as a compact reference structure in multi-panel layouts."
+  },
+  {
+    "id": "1BNA",
+    "name": "B-DNA Dodecamer",
+    "category": "nucleic",
+    "scene": {
+      "camera_distance": 1.1,
+      "rotation_x": 5,
+      "rotation_y": -20,
+      "rotation_z": 0,
+      "zoom_level": 0.95
+    },
+    "recommended_style": "cartoon",
+    "recommended_color": "chain",
+    "recommended_bg": "gradient-dark",
+    "optimal_layout": "1x2",
+    "focal_points": [
+      {
+        "name": "Major groove",
+        "description": "Wide, deep major groove exposing Watson-Crick base pairs for protein recognition",
+        "approximate_position": "center"
+      },
+      {
+        "name": "Minor groove",
+        "description": "Narrower minor groove, target for small-molecule binding and AT-rich bending",
+        "approximate_position": "center"
+      },
+      {
+        "name": "Helix termini",
+        "description": "5' and 3' ends of the dodecamer showing blunt-end stacking geometry",
+        "approximate_position": "top"
+      }
+    ],
+    "composition_notes": "Orient the helical axis vertically with a slight Y-rotation to show both groove depths simultaneously. Chain coloring on complementary strands maximizes visual distinction of the antiparallel duplex."
+  },
+  {
+    "id": "4HHB",
+    "name": "Hemoglobin",
+    "category": "protein",
+    "scene": {
+      "camera_distance": 1.3,
+      "rotation_x": 20,
+      "rotation_y": 45,
+      "rotation_z": 0,
+      "zoom_level": 0.9
+    },
+    "recommended_style": "cartoon",
+    "recommended_color": "chain",
+    "recommended_bg": "Dark",
+    "optimal_layout": "1x1",
+    "focal_points": [
+      {
+        "name": "Heme groups",
+        "description": "Four iron-containing porphyrin rings, one per subunit, each capable of binding O2",
+        "approximate_position": "center"
+      },
+      {
+        "name": "Alpha-beta interface",
+        "description": "Alpha1-beta1 and alpha2-beta2 dimeric interfaces critical for cooperative oxygen binding",
+        "approximate_position": "center"
+      },
+      {
+        "name": "T-state central cavity",
+        "description": "Central solvent channel between tetramers, site of 2,3-BPG allosteric regulation",
+        "approximate_position": "center"
+      }
+    ],
+    "composition_notes": "A 45-degree Y-rotation with modest X-tilt displays the pseudo-D2 symmetry of the alpha2-beta2 tetramer. Chain coloring is essential to distinguish the four subunits in the cooperative assembly."
+  },
+  {
+    "id": "5WE4",
+    "name": "ATP Synthase",
+    "category": "enzyme",
+    "scene": {
+      "camera_distance": 2.0,
+      "rotation_x": 10,
+      "rotation_y": 0,
+      "rotation_z": 0,
+      "zoom_level": 0.7
+    },
+    "recommended_style": "surface",
+    "recommended_color": "chain",
+    "recommended_bg": "gradient-dark",
+    "optimal_layout": "1x1",
+    "focal_points": [
+      {
+        "name": "F1 catalytic head",
+        "description": "Alpha3-beta3 hexameric ring with central gamma shaft; site of ATP synthesis via binding-change mechanism",
+        "approximate_position": "top"
+      },
+      {
+        "name": "c-ring rotor",
+        "description": "Membrane-embedded c-subunit ring driven by proton translocation; rotation transmitted to gamma subunit",
+        "approximate_position": "bottom"
+      },
+      {
+        "name": "Peripheral stalk",
+        "description": "b2-delta stator connecting F1 head to Fo membrane domain, preventing co-rotation",
+        "approximate_position": "right"
+      }
+    ],
+    "composition_notes": "Orient the rotational axis vertically to convey the architectural logic of the proton turbine. Surface rendering communicates the massive scale (~530 kDa) better than cartoon at this molecular weight."
+  },
+  {
+    "id": "6LU7",
+    "name": "SARS-CoV-2 Mpro",
+    "category": "viral",
+    "scene": {
+      "camera_distance": 1.2,
+      "rotation_x": 0,
+      "rotation_y": 30,
+      "rotation_z": 10,
+      "zoom_level": 1.0
+    },
+    "recommended_style": "cartoon",
+    "recommended_color": "secondary structure",
+    "recommended_bg": "Dark",
+    "optimal_layout": "2x2",
+    "focal_points": [
+      {
+        "name": "Active site cleft",
+        "description": "Catalytic dyad Cys145-His41 at the interface of domains I and II; primary drug-binding pocket",
+        "approximate_position": "center"
+      },
+      {
+        "name": "Dimerization interface",
+        "description": "Domain III N-finger contact essential for productive active site geometry; dimer is the obligate form",
+        "approximate_position": "left"
+      },
+      {
+        "name": "Domain III helical bundle",
+        "description": "Unique alpha-helical domain absent from related 3CLpro enzymes; allosteric regulation site",
+        "approximate_position": "bottom"
+      }
+    ],
+    "composition_notes": "A 30-degree Y-rotation exposes the substrate-binding cleft between domains I and II. Secondary-structure coloring highlights the distinctive all-beta domains I/II versus the helical domain III."
+  },
+  {
+    "id": "1GFL",
+    "name": "Green Fluorescent Protein (GFP)",
+    "category": "protein",
+    "scene": {
+      "camera_distance": 1.0,
+      "rotation_x": 0,
+      "rotation_y": 0,
+      "rotation_z": 0,
+      "zoom_level": 1.05
+    },
+    "recommended_style": "cartoon",
+    "recommended_color": "secondary structure",
+    "recommended_bg": "Black",
+    "optimal_layout": "2x2",
+    "focal_points": [
+      {
+        "name": "Beta-barrel scaffold",
+        "description": "11-stranded beta-barrel protecting the chromophore from solvent quenching",
+        "approximate_position": "center"
+      },
+      {
+        "name": "Chromophore",
+        "description": "Autocatalytically formed 4-(p-hydroxybenzylidene)imidazolidin-5-one from Ser65-Tyr66-Gly67",
+        "approximate_position": "center"
+      },
+      {
+        "name": "Central alpha-helix",
+        "description": "Internal helix threading the barrel axis, carrying the chromophore at its center",
+        "approximate_position": "center"
+      }
+    ],
+    "composition_notes": "Orient the barrel axis vertically for the canonical top-down view showing 11-fold beta symmetry, or tilt 90 degrees for the side view revealing the central helix and chromophore position."
+  },
+  {
+    "id": "1AO6",
+    "name": "Insulin Hexamer",
+    "category": "protein",
+    "scene": {
+      "camera_distance": 1.4,
+      "rotation_x": 15,
+      "rotation_y": 0,
+      "rotation_z": 0,
+      "zoom_level": 0.9
+    },
+    "recommended_style": "cartoon",
+    "recommended_color": "chain",
+    "recommended_bg": "gradient-dark",
+    "optimal_layout": "2x2",
+    "focal_points": [
+      {
+        "name": "Zinc coordination site",
+        "description": "Two zinc ions on the 3-fold axis, each octahedrally coordinated by His10 from three B-chains",
+        "approximate_position": "center"
+      },
+      {
+        "name": "Trimer-trimer interface",
+        "description": "Hydrophobic and polar contacts between the two R3 trimers forming the hexameric assembly",
+        "approximate_position": "center"
+      },
+      {
+        "name": "B-chain helix",
+        "description": "Central B-chain alpha-helix (B9-B19) forming the hexamer core and zinc ligand geometry",
+        "approximate_position": "top"
+      }
+    ],
+    "composition_notes": "View along the C3 axis (top-down) to display the 6-fold ring symmetry; a slight X-tilt reveals the zinc sites at the central channel. Chain coloring distinguishes A and B chains across all six subunits."
+  },
+  {
+    "id": "3PQR",
+    "name": "p53-DNA Complex",
+    "category": "complex",
+    "scene": {
+      "camera_distance": 1.5,
+      "rotation_x": 10,
+      "rotation_y": -25,
+      "rotation_z": 0,
+      "zoom_level": 0.85
+    },
+    "recommended_style": "cartoon",
+    "recommended_color": "chain",
+    "recommended_bg": "Dark",
+    "optimal_layout": "1x2",
+    "focal_points": [
+      {
+        "name": "DNA-binding domain contact",
+        "description": "Loop-sheet-helix motif and two loops (L2, L3) inserting into DNA major groove at the response element",
+        "approximate_position": "center"
+      },
+      {
+        "name": "Tetramerization domain",
+        "description": "Dimer-of-dimers interface critical for cooperative DNA binding and tumor-suppressor function",
+        "approximate_position": "top"
+      },
+      {
+        "name": "Response element DNA",
+        "description": "Two half-site 5'-RRRCWWGYYY-3' repeats contacted by the p53 tetramer in the consensus response element",
+        "approximate_position": "bottom"
+      }
+    ],
+    "composition_notes": "Tilt slightly along X to show both the protein tetramer and the DNA double helix in a single view. Chain coloring is critical to distinguish the four p53 subunits from the DNA strands."
+  },
+  {
+    "id": "1JFF",
+    "name": "Glutamine Synthetase",
+    "category": "enzyme",
+    "scene": {
+      "camera_distance": 1.8,
+      "rotation_x": 5,
+      "rotation_y": 0,
+      "rotation_z": 0,
+      "zoom_level": 0.75
+    },
+    "recommended_style": "surface",
+    "recommended_color": "chain",
+    "recommended_bg": "gradient-dark",
+    "optimal_layout": "1x1",
+    "focal_points": [
+      {
+        "name": "Dodecameric ring",
+        "description": "Two stacked hexameric rings forming the large cylindrical assembly (~600 kDa), with 12 active sites",
+        "approximate_position": "center"
+      },
+      {
+        "name": "Active site tunnels",
+        "description": "12 bifunnel active sites at subunit interfaces, each binding two Mn2+ ions and substrates",
+        "approximate_position": "center"
+      },
+      {
+        "name": "Ring-ring interface",
+        "description": "Hydrophobic contacts between the two hexameric rings with pseudo-D6 symmetry",
+        "approximate_position": "center"
+      }
+    ],
+    "composition_notes": "View along the 6-fold symmetry axis (top-down) to reveal the double-ring architecture and the 12 active-site entrances. Surface rendering best communicates the massive cylindrical form of this 12-mer."
+  },
+  {
+    "id": "2POR",
+    "name": "OmpF Porin",
+    "category": "membrane",
+    "scene": {
+      "camera_distance": 1.2,
+      "rotation_x": 0,
+      "rotation_y": 0,
+      "rotation_z": 0,
+      "zoom_level": 1.0
+    },
+    "recommended_style": "cartoon",
+    "recommended_color": "secondary structure",
+    "recommended_bg": "Navy",
+    "optimal_layout": "2x2",
+    "focal_points": [
+      {
+        "name": "Beta-barrel channels",
+        "description": "Three 18-stranded beta-barrel pores, each forming a water-filled channel for passive ion and small-molecule transport",
+        "approximate_position": "center"
+      },
+      {
+        "name": "Eyelet constriction",
+        "description": "Narrowest region of each pore formed by loop L3 folding inward, size-selectivity filter (~1 nm)",
+        "approximate_position": "center"
+      },
+      {
+        "name": "Trimer interface",
+        "description": "Hydrophobic membrane-facing belt and inter-monomer contacts forming the stable trimeric assembly",
+        "approximate_position": "center"
+      }
+    ],
+    "composition_notes": "Orient perpendicular to the membrane plane (top-down view along pore axes) to show the trimeric barrel arrangement. Navy background evokes the lipid bilayer environment and improves visual contrast of beta-barrel topology."
+  },
+  {
+    "id": "1ATP",
+    "name": "Adenylate Kinase + ATP",
+    "category": "enzyme",
+    "scene": {
+      "camera_distance": 1.0,
+      "rotation_x": 0,
+      "rotation_y": -40,
+      "rotation_z": 10,
+      "zoom_level": 1.1
+    },
+    "recommended_style": "cartoon",
+    "recommended_color": "secondary structure",
+    "recommended_bg": "Dark",
+    "optimal_layout": "2x2",
+    "focal_points": [
+      {
+        "name": "AMPbind domain",
+        "description": "Mobile substrate-binding domain for AMP; undergoes large hinge closure (~30 degrees) upon substrate binding",
+        "approximate_position": "left"
+      },
+      {
+        "name": "LID domain",
+        "description": "ATP-binding lid domain covering the active site and completing the catalytic geometry upon closure",
+        "approximate_position": "top"
+      },
+      {
+        "name": "CORE domain",
+        "description": "Central alpha/beta scaffold providing the fixed structural platform for the two mobile domains",
+        "approximate_position": "center"
+      }
+    ],
+    "composition_notes": "A -40 Y-rotation exposes the hinge axis between LID and CORE domains, making the conformational change trajectory evident. This enzyme is ideal for illustrating induced-fit domain motion in catalysis."
+  },
+  {
+    "id": "3NIR",
+    "name": "CRISPR-Cas9",
+    "category": "nucleic",
+    "scene": {
+      "camera_distance": 1.6,
+      "rotation_x": 10,
+      "rotation_y": 20,
+      "rotation_z": 0,
+      "zoom_level": 0.85
+    },
+    "recommended_style": "cartoon",
+    "recommended_color": "chain",
+    "recommended_bg": "gradient-dark",
+    "optimal_layout": "1x1",
+    "focal_points": [
+      {
+        "name": "RuvC-HNH nuclease domains",
+        "description": "Two endonuclease domains cleaving non-template and template DNA strands respectively; cleavage creates blunt DSB",
+        "approximate_position": "center"
+      },
+      {
+        "name": "Guide RNA scaffold",
+        "description": "sgRNA repeat:anti-repeat duplex and nexus hairpin anchoring the guide in the recognition lobe",
+        "approximate_position": "top"
+      },
+      {
+        "name": "PAM-interacting domain",
+        "description": "C-terminal PAM-interacting (PI) domain reading the 5'-NGG-3' PAM sequence for target selection",
+        "approximate_position": "right"
+      }
+    ],
+    "composition_notes": "A 20-degree Y-rotation combined with slight X-tilt reveals the bilobed architecture (recognition lobe + nuclease lobe) and the guide RNA threading through the central channel. Chain coloring distinguishes Cas9 protein from guide RNA and target DNA."
+  }
+]

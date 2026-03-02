@@ -1,0 +1,653 @@
+[
+  {
+    "id": "1CRN",
+    "name": "Crambin",
+    "animations": [
+      {
+        "name": "slow_rotation",
+        "type": "rotation",
+        "duration_ms": 8000,
+        "keyframes": [
+          { "time_pct": 0,   "rotation_x": 0,   "rotation_y": 0,   "rotation_z": 0,  "zoom": 1.0, "style": "cartoon", "color_scheme": "spectrum" },
+          { "time_pct": 25,  "rotation_x": 5,   "rotation_y": 90,  "rotation_z": 0,  "zoom": 1.0 },
+          { "time_pct": 50,  "rotation_x": 0,   "rotation_y": 180, "rotation_z": 0,  "zoom": 1.0 },
+          { "time_pct": 75,  "rotation_x": -5,  "rotation_y": 270, "rotation_z": 0,  "zoom": 1.0 },
+          { "time_pct": 100, "rotation_x": 0,   "rotation_y": 360, "rotation_z": 0,  "zoom": 1.0 }
+        ],
+        "easing": "linear",
+        "loop": true,
+        "description": "Full 360-degree Y-axis rotation revealing all three disulfide bonds and the compact hydrophobic core of this 46-residue plant seed protein."
+      },
+      {
+        "name": "disulfide_zoom",
+        "type": "zoom",
+        "duration_ms": 5000,
+        "keyframes": [
+          { "time_pct": 0,   "rotation_x": 0,   "rotation_y": 0,   "rotation_z": 0,  "zoom": 1.0, "style": "cartoon",  "color_scheme": "spectrum" },
+          { "time_pct": 40,  "rotation_x": 20,  "rotation_y": 45,  "rotation_z": 0,  "zoom": 1.8, "style": "stick",    "color_scheme": "element" },
+          { "time_pct": 70,  "rotation_x": 20,  "rotation_y": 45,  "rotation_z": 0,  "zoom": 2.4 },
+          { "time_pct": 100, "rotation_x": 20,  "rotation_y": 45,  "rotation_z": 0,  "zoom": 2.4, "style": "ball+stick","color_scheme": "element" }
+        ],
+        "easing": "ease-in-out",
+        "loop": false,
+        "description": "Zooms into the three disulfide bridges (Cys3-Cys40, Cys4-Cys32, Cys16-Cys26) that make crambin extraordinarily stable for its size."
+      },
+      {
+        "name": "style_transition",
+        "type": "style_transition",
+        "duration_ms": 6000,
+        "keyframes": [
+          { "time_pct": 0,   "rotation_x": 15,  "rotation_y": 30,  "rotation_z": 0,  "zoom": 1.2, "style": "sphere",   "color_scheme": "chain" },
+          { "time_pct": 33,  "rotation_x": 15,  "rotation_y": 60,  "rotation_z": 0,  "zoom": 1.2, "style": "cartoon",  "color_scheme": "secondary_structure" },
+          { "time_pct": 66,  "rotation_x": 15,  "rotation_y": 90,  "rotation_z": 0,  "zoom": 1.2, "style": "stick",    "color_scheme": "element" },
+          { "time_pct": 100, "rotation_x": 15,  "rotation_y": 120, "rotation_z": 0,  "zoom": 1.2, "style": "surface",  "color_scheme": "hydrophobicity" }
+        ],
+        "easing": "ease-in-out",
+        "loop": false,
+        "description": "Morphs through four representation styles — VDW spheres to cartoon to sticks to hydrophobic surface — illustrating how protein visualization choices reveal different structural information."
+      }
+    ],
+    "hero_animation": "disulfide_zoom",
+    "transition_pairs": [
+      { "from_pdb": "1CRN", "to_pdb": "1BNA",  "transition_type": "style_morph",  "description": "Protein-to-nucleic-acid contrast — compact folded chain dissolving into extended double helix." },
+      { "from_pdb": "1CRN", "to_pdb": "1GFL",  "transition_type": "size_scale",   "description": "Small stable protein expanding into GFP barrel — scale of fold complexity." }
+    ]
+  },
+  {
+    "id": "1BNA",
+    "name": "B-DNA Dodecamer",
+    "animations": [
+      {
+        "name": "helix_spin",
+        "type": "spin",
+        "duration_ms": 10000,
+        "keyframes": [
+          { "time_pct": 0,   "rotation_x": 80,  "rotation_y": 0,   "rotation_z": 0,  "zoom": 1.0, "style": "cartoon",   "color_scheme": "chain" },
+          { "time_pct": 100, "rotation_x": 80,  "rotation_y": 360, "rotation_z": 0,  "zoom": 1.0 }
+        ],
+        "easing": "linear",
+        "loop": true,
+        "description": "Top-down axial spin showing the 10.5 base-pair-per-turn B-form helix geometry and the major/minor groove width characteristic of canonical B-DNA."
+      },
+      {
+        "name": "groove_zoom",
+        "type": "zoom",
+        "duration_ms": 7000,
+        "keyframes": [
+          { "time_pct": 0,   "rotation_x": 0,   "rotation_y": 0,   "rotation_z": 0,  "zoom": 1.0, "style": "cartoon",    "color_scheme": "chain" },
+          { "time_pct": 30,  "rotation_x": 20,  "rotation_y": 30,  "rotation_z": 0,  "zoom": 1.5, "style": "stick",      "color_scheme": "element" },
+          { "time_pct": 60,  "rotation_x": 30,  "rotation_y": 60,  "rotation_z": 0,  "zoom": 2.2, "style": "ball+stick", "color_scheme": "element" },
+          { "time_pct": 100, "rotation_x": 30,  "rotation_y": 60,  "rotation_z": 0,  "zoom": 2.8, "style": "ball+stick", "color_scheme": "nucleic_acid_type" }
+        ],
+        "easing": "ease-in-out",
+        "loop": false,
+        "description": "Zooms into the major groove where transcription factors bind, revealing the chemical readout surface — base-specific hydrogen bond donors and acceptors accessible without strand separation."
+      },
+      {
+        "name": "base_pair_reveal",
+        "type": "highlight_sequence",
+        "duration_ms": 9000,
+        "keyframes": [
+          { "time_pct": 0,   "rotation_x": 0,   "rotation_y": 0,   "rotation_z": 0,  "zoom": 1.3, "style": "stick", "color_scheme": "element" },
+          { "time_pct": 20,  "rotation_x": 5,   "rotation_y": 40,  "rotation_z": 0,  "zoom": 1.5 },
+          { "time_pct": 50,  "rotation_x": 10,  "rotation_y": 100, "rotation_z": 0,  "zoom": 1.8 },
+          { "time_pct": 80,  "rotation_x": 5,   "rotation_y": 160, "rotation_z": 0,  "zoom": 1.5 },
+          { "time_pct": 100, "rotation_x": 0,   "rotation_y": 200, "rotation_z": 0,  "zoom": 1.3 }
+        ],
+        "easing": "ease-in-out",
+        "loop": false,
+        "description": "Slow orbit while stepping through base pairs from 5' to 3' end, highlighting each Watson-Crick pair in sequence — CGCGAATTCGCG dodecamer showing AT-rich flexibility in the center."
+      }
+    ],
+    "hero_animation": "helix_spin",
+    "transition_pairs": [
+      { "from_pdb": "1BNA", "to_pdb": "3NIR", "transition_type": "scale_and_reveal",  "description": "Free DNA expanding into CRISPR complex — naked duplex becoming guided-RNA-bound substrate." },
+      { "from_pdb": "1BNA", "to_pdb": "3PQR", "transition_type": "protein_docking",   "description": "DNA double helix acquiring p53 tetramer — transcription factor recognition event." }
+    ]
+  },
+  {
+    "id": "4HHB",
+    "name": "Hemoglobin",
+    "animations": [
+      {
+        "name": "t_to_r_state",
+        "type": "morph",
+        "duration_ms": 12000,
+        "keyframes": [
+          { "time_pct": 0,   "rotation_x": 15,  "rotation_y": 0,   "rotation_z": 0,  "zoom": 1.0, "style": "cartoon", "color_scheme": "chain" },
+          { "time_pct": 25,  "rotation_x": 15,  "rotation_y": 45,  "rotation_z": 0,  "zoom": 1.1, "style": "cartoon", "color_scheme": "chain" },
+          { "time_pct": 50,  "rotation_x": 10,  "rotation_y": 90,  "rotation_z": 5,  "zoom": 1.2, "style": "cartoon", "color_scheme": "b_factor" },
+          { "time_pct": 75,  "rotation_x": 5,   "rotation_y": 135, "rotation_z": 0,  "zoom": 1.1, "style": "cartoon", "color_scheme": "chain" },
+          { "time_pct": 100, "rotation_x": 15,  "rotation_y": 180, "rotation_z": 0,  "zoom": 1.0, "style": "cartoon", "color_scheme": "chain" }
+        ],
+        "easing": "ease-in-out",
+        "loop": false,
+        "description": "Simulates the T-state (tense, deoxy) to R-state (relaxed, oxy) quaternary conformational change — the alpha1-beta2 interface rotates 15 degrees, the basis of cooperative oxygen binding and the Bohr effect."
+      },
+      {
+        "name": "heme_zoom",
+        "type": "zoom",
+        "duration_ms": 8000,
+        "keyframes": [
+          { "time_pct": 0,   "rotation_x": 15,  "rotation_y": 0,   "rotation_z": 0,  "zoom": 1.0, "style": "cartoon",    "color_scheme": "chain" },
+          { "time_pct": 35,  "rotation_x": 25,  "rotation_y": 45,  "rotation_z": 0,  "zoom": 1.8, "style": "stick",      "color_scheme": "element" },
+          { "time_pct": 65,  "rotation_x": 30,  "rotation_y": 60,  "rotation_z": 0,  "zoom": 2.5, "style": "ball+stick", "color_scheme": "element" },
+          { "time_pct": 100, "rotation_x": 30,  "rotation_y": 60,  "rotation_z": 0,  "zoom": 3.0, "style": "ball+stick", "color_scheme": "element" }
+        ],
+        "easing": "ease-in-out",
+        "loop": false,
+        "description": "Zooms from the tetrameric overview into a single heme group, revealing the porphyrin ring, the central iron atom, and the proximal histidine (His87) coordinating iron — the O2-binding site."
+      },
+      {
+        "name": "symmetry_showcase",
+        "type": "rotation",
+        "duration_ms": 10000,
+        "keyframes": [
+          { "time_pct": 0,   "rotation_x": 0,   "rotation_y": 0,   "rotation_z": 0,  "zoom": 1.0, "style": "surface", "color_scheme": "chain" },
+          { "time_pct": 20,  "rotation_x": 90,  "rotation_y": 0,   "rotation_z": 0,  "zoom": 1.0 },
+          { "time_pct": 40,  "rotation_x": 0,   "rotation_y": 90,  "rotation_z": 0,  "zoom": 1.0 },
+          { "time_pct": 60,  "rotation_x": 0,   "rotation_y": 180, "rotation_z": 0,  "zoom": 1.0 },
+          { "time_pct": 80,  "rotation_x": 45,  "rotation_y": 270, "rotation_z": 45, "zoom": 1.0 },
+          { "time_pct": 100, "rotation_x": 0,   "rotation_y": 360, "rotation_z": 0,  "zoom": 1.0 }
+        ],
+        "easing": "ease-in-out",
+        "loop": true,
+        "description": "Rotates through three principal axes to demonstrate the pseudo-D2 (222) symmetry of the alpha2-beta2 tetramer — two alpha and two beta subunits arranged around three mutually perpendicular 2-fold axes."
+      }
+    ],
+    "hero_animation": "t_to_r_state",
+    "transition_pairs": [
+      { "from_pdb": "4HHB", "to_pdb": "5WE4", "transition_type": "scale_reveal",    "description": "Allosteric tetramer scaling up to rotary molecular machine — both use quaternary structure for cooperative function." },
+      { "from_pdb": "4HHB", "to_pdb": "1AO6", "transition_type": "symmetry_morph",  "description": "D2-symmetric tetramer dissolving into D3-symmetric insulin hexamer — contrasting oligomeric symmetry groups." }
+    ]
+  },
+  {
+    "id": "5WE4",
+    "name": "ATP Synthase",
+    "animations": [
+      {
+        "name": "central_axis_rotation",
+        "type": "spin",
+        "duration_ms": 15000,
+        "keyframes": [
+          { "time_pct": 0,   "rotation_x": 80,  "rotation_y": 0,   "rotation_z": 0,  "zoom": 1.0, "style": "cartoon", "color_scheme": "chain" },
+          { "time_pct": 33,  "rotation_x": 80,  "rotation_y": 120, "rotation_z": 0,  "zoom": 1.0 },
+          { "time_pct": 66,  "rotation_x": 80,  "rotation_y": 240, "rotation_z": 0,  "zoom": 1.0 },
+          { "time_pct": 100, "rotation_x": 80,  "rotation_y": 360, "rotation_z": 0,  "zoom": 1.0 }
+        ],
+        "easing": "linear",
+        "loop": true,
+        "description": "Top-down axial view showing the F0 rotor c-ring (10-15 subunits depending on organism) spinning — the central gamma subunit rotates 120 degrees per ATP synthesized, driving conformational changes in each F1 beta subunit."
+      },
+      {
+        "name": "stalk_zoom",
+        "type": "zoom",
+        "duration_ms": 9000,
+        "keyframes": [
+          { "time_pct": 0,   "rotation_x": 10,  "rotation_y": 0,   "rotation_z": 0,  "zoom": 0.8, "style": "cartoon", "color_scheme": "chain" },
+          { "time_pct": 40,  "rotation_x": 10,  "rotation_y": 20,  "rotation_z": 0,  "zoom": 1.4, "style": "cartoon", "color_scheme": "chain" },
+          { "time_pct": 70,  "rotation_x": 15,  "rotation_y": 30,  "rotation_z": 0,  "zoom": 2.0 },
+          { "time_pct": 100, "rotation_x": 15,  "rotation_y": 30,  "rotation_z": 0,  "zoom": 2.5, "style": "surface", "color_scheme": "hydrophobicity" }
+        ],
+        "easing": "ease-in-out",
+        "loop": false,
+        "description": "Zooms into the central stalk (gamma-delta-epsilon) that couples proton flow through F0 to ATP synthesis in F1 — the rotating axle at the heart of the chemiosmotic mechanism (Mitchell's Nobel prize)."
+      },
+      {
+        "name": "full_complex_reveal",
+        "type": "rotation",
+        "duration_ms": 12000,
+        "keyframes": [
+          { "time_pct": 0,   "rotation_x": 0,   "rotation_y": 0,   "rotation_z": 0,  "zoom": 0.7, "style": "surface", "color_scheme": "chain" },
+          { "time_pct": 25,  "rotation_x": 30,  "rotation_y": 90,  "rotation_z": 0,  "zoom": 0.8 },
+          { "time_pct": 50,  "rotation_x": 20,  "rotation_y": 180, "rotation_z": 0,  "zoom": 0.9 },
+          { "time_pct": 75,  "rotation_x": 10,  "rotation_y": 270, "rotation_z": 0,  "zoom": 0.8 },
+          { "time_pct": 100, "rotation_x": 0,   "rotation_y": 360, "rotation_z": 0,  "zoom": 0.7 }
+        ],
+        "easing": "ease-in-out",
+        "loop": true,
+        "description": "Slow orbit of the entire ~600 kDa complex from membrane-embedded F0 base through the peripheral stalk to the F1 catalytic head — the largest rotary molecular machine, ~8 nm tall."
+      }
+    ],
+    "hero_animation": "central_axis_rotation",
+    "transition_pairs": [
+      { "from_pdb": "5WE4", "to_pdb": "1JFF", "transition_type": "active_site_zoom", "description": "ATP synthase making ATP, then zooming to glutamine synthetase consuming ATP — both are large oligomeric nitrogen/energy metabolism machines." },
+      { "from_pdb": "5WE4", "to_pdb": "4HHB", "transition_type": "scale_reveal",     "description": "Rotary machine scaling down to allosteric tetramer — contrasting mechanical vs. conformational mechanisms." }
+    ]
+  },
+  {
+    "id": "6LU7",
+    "name": "SARS-CoV-2 Main Protease (Mpro)",
+    "animations": [
+      {
+        "name": "dimer_symmetry",
+        "type": "rotation",
+        "duration_ms": 10000,
+        "keyframes": [
+          { "time_pct": 0,   "rotation_x": 0,   "rotation_y": 0,   "rotation_z": 0,  "zoom": 1.0, "style": "cartoon", "color_scheme": "chain" },
+          { "time_pct": 25,  "rotation_x": 0,   "rotation_y": 90,  "rotation_z": 0,  "zoom": 1.0 },
+          { "time_pct": 50,  "rotation_x": 90,  "rotation_y": 0,   "rotation_z": 0,  "zoom": 1.0 },
+          { "time_pct": 75,  "rotation_x": 0,   "rotation_y": 270, "rotation_z": 0,  "zoom": 1.0 },
+          { "time_pct": 100, "rotation_x": 0,   "rotation_y": 360, "rotation_z": 0,  "zoom": 1.0 }
+        ],
+        "easing": "ease-in-out",
+        "loop": true,
+        "description": "Showcases the functional C2-symmetric homodimer — both active sites are exposed and catalytically competent only in the dimeric form, making dimer disruption a drug target strategy."
+      },
+      {
+        "name": "active_site_zoom",
+        "type": "zoom",
+        "duration_ms": 8000,
+        "keyframes": [
+          { "time_pct": 0,   "rotation_x": 0,   "rotation_y": 0,   "rotation_z": 0,  "zoom": 1.0, "style": "cartoon",    "color_scheme": "chain" },
+          { "time_pct": 30,  "rotation_x": 15,  "rotation_y": 30,  "rotation_z": 0,  "zoom": 1.5, "style": "cartoon",    "color_scheme": "chain" },
+          { "time_pct": 60,  "rotation_x": 20,  "rotation_y": 45,  "rotation_z": 0,  "zoom": 2.2, "style": "stick",      "color_scheme": "element" },
+          { "time_pct": 100, "rotation_x": 20,  "rotation_y": 45,  "rotation_z": 0,  "zoom": 3.0, "style": "ball+stick", "color_scheme": "element" }
+        ],
+        "easing": "ease-in-out",
+        "loop": false,
+        "description": "Zooms into the cysteine protease active site at the domain I-II cleft — the catalytic dyad (Cys145-His41) visible in stick representation, plus the oxyanion hole stabilizing the tetrahedral transition state. Target of Paxlovid (nirmatrelvir)."
+      },
+      {
+        "name": "inhibitor_highlight",
+        "type": "highlight_sequence",
+        "duration_ms": 9000,
+        "keyframes": [
+          { "time_pct": 0,   "rotation_x": 10,  "rotation_y": 0,   "rotation_z": 0,  "zoom": 1.2, "style": "cartoon", "color_scheme": "chain" },
+          { "time_pct": 25,  "rotation_x": 15,  "rotation_y": 30,  "rotation_z": 0,  "zoom": 1.6, "style": "stick",   "color_scheme": "element" },
+          { "time_pct": 60,  "rotation_x": 20,  "rotation_y": 50,  "rotation_z": 0,  "zoom": 2.5, "style": "stick",   "color_scheme": "element" },
+          { "time_pct": 100, "rotation_x": 20,  "rotation_y": 50,  "rotation_z": 0,  "zoom": 2.8, "style": "surface", "color_scheme": "hydrophobicity" }
+        ],
+        "easing": "ease-in-out",
+        "loop": false,
+        "description": "Transitions to surface hydrophobicity view of the active-site pocket, revealing the S1 (Glu166), S2, and S4 subsites that define substrate specificity for the Leu-Gln|Ser-Ala-Gly recognition sequence — basis for structure-based drug design."
+      }
+    ],
+    "hero_animation": "active_site_zoom",
+    "transition_pairs": [
+      { "from_pdb": "6LU7", "to_pdb": "3NIR", "transition_type": "therapeutic_pair",  "description": "Two landmark COVID-era/CRISPR therapeutic targets — viral protease to bacterial endonuclease — the new era of precision medicine tools." },
+      { "from_pdb": "6LU7", "to_pdb": "3PQR", "transition_type": "dna_binding_pair",  "description": "Cysteine protease to p53 tumor suppressor — two therapeutic targets of fundamentally different mechanism." }
+    ]
+  },
+  {
+    "id": "1GFL",
+    "name": "Green Fluorescent Protein (GFP)",
+    "animations": [
+      {
+        "name": "barrel_spin",
+        "type": "spin",
+        "duration_ms": 8000,
+        "keyframes": [
+          { "time_pct": 0,   "rotation_x": 80,  "rotation_y": 0,   "rotation_z": 0,  "zoom": 1.1, "style": "cartoon", "color_scheme": "secondary_structure" },
+          { "time_pct": 100, "rotation_x": 80,  "rotation_y": 360, "rotation_z": 0,  "zoom": 1.1 }
+        ],
+        "easing": "linear",
+        "loop": true,
+        "description": "Top-down view of the 11-strand beta-barrel spinning, showing the perfectly symmetric cylindrical fold that encloses and protects the chromophore — the 'lantern' architecture. The barrel shields the chromophore from solvent quenching."
+      },
+      {
+        "name": "chromophore_zoom",
+        "type": "zoom",
+        "duration_ms": 9000,
+        "keyframes": [
+          { "time_pct": 0,   "rotation_x": 20,  "rotation_y": 0,   "rotation_z": 0,  "zoom": 1.0, "style": "cartoon",    "color_scheme": "secondary_structure" },
+          { "time_pct": 30,  "rotation_x": 25,  "rotation_y": 30,  "rotation_z": 0,  "zoom": 1.6, "style": "cartoon",    "color_scheme": "secondary_structure" },
+          { "time_pct": 60,  "rotation_x": 30,  "rotation_y": 45,  "rotation_z": 0,  "zoom": 2.4, "style": "stick",      "color_scheme": "element" },
+          { "time_pct": 100, "rotation_x": 30,  "rotation_y": 45,  "rotation_z": 0,  "zoom": 3.2, "style": "ball+stick", "color_scheme": "element" }
+        ],
+        "easing": "ease-in-out",
+        "loop": false,
+        "description": "Dives through the beta barrel shell into the autocatalytically formed chromophore (Ser65-Tyr66-Gly67 cyclization) — the p-hydroxybenzylideneimidazolinone chromophore visible in ball-and-stick, the pi-conjugated system responsible for 488nm absorption and 507nm emission."
+      },
+      {
+        "name": "surface_charge",
+        "type": "style_transition",
+        "duration_ms": 7000,
+        "keyframes": [
+          { "time_pct": 0,   "rotation_x": 15,  "rotation_y": 0,   "rotation_z": 0,  "zoom": 1.0, "style": "cartoon", "color_scheme": "spectrum" },
+          { "time_pct": 40,  "rotation_x": 15,  "rotation_y": 60,  "rotation_z": 0,  "zoom": 1.0, "style": "surface", "color_scheme": "electrostatic" },
+          { "time_pct": 70,  "rotation_x": 15,  "rotation_y": 120, "rotation_z": 0,  "zoom": 1.0, "style": "surface", "color_scheme": "electrostatic" },
+          { "time_pct": 100, "rotation_x": 15,  "rotation_y": 180, "rotation_z": 0,  "zoom": 1.0, "style": "surface", "color_scheme": "hydrophobicity" }
+        ],
+        "easing": "ease-in-out",
+        "loop": false,
+        "description": "Transitions from rainbow cartoon to electrostatic surface to hydrophobic surface — revealing the charge distribution that governs GFP's behavior as a fusion tag in different cellular compartments."
+      }
+    ],
+    "hero_animation": "chromophore_zoom",
+    "transition_pairs": [
+      { "from_pdb": "1GFL", "to_pdb": "1CRN", "transition_type": "size_scale",       "description": "GFP (27 kDa) to crambin (4.7 kDa) — the most-used reporter shrinking to the smallest well-studied protein." },
+      { "from_pdb": "1GFL", "to_pdb": "4HHB", "transition_type": "oligomer_expand",  "description": "Monomeric GFP barrel expanding to hemoglobin tetramer — reporter protein meets oxygen carrier." }
+    ]
+  },
+  {
+    "id": "1AO6",
+    "name": "Insulin Hexamer",
+    "animations": [
+      {
+        "name": "d3_symmetry",
+        "type": "rotation",
+        "duration_ms": 12000,
+        "keyframes": [
+          { "time_pct": 0,   "rotation_x": 70,  "rotation_y": 0,   "rotation_z": 0,  "zoom": 1.0, "style": "cartoon", "color_scheme": "chain" },
+          { "time_pct": 20,  "rotation_x": 70,  "rotation_y": 60,  "rotation_z": 0,  "zoom": 1.0 },
+          { "time_pct": 40,  "rotation_x": 70,  "rotation_y": 120, "rotation_z": 0,  "zoom": 1.0 },
+          { "time_pct": 60,  "rotation_x": 70,  "rotation_y": 180, "rotation_z": 0,  "zoom": 1.0 },
+          { "time_pct": 80,  "rotation_x": 70,  "rotation_y": 240, "rotation_z": 0,  "zoom": 1.0 },
+          { "time_pct": 100, "rotation_x": 70,  "rotation_y": 360, "rotation_z": 0,  "zoom": 1.0 }
+        ],
+        "easing": "linear",
+        "loop": true,
+        "description": "Top-down axial view showing the D3 (32) hexameric symmetry — three equivalent dimers arranged around a 3-fold axis, each dimer engaging a zinc ion at the center — the storage form in pancreatic beta-cell granules."
+      },
+      {
+        "name": "zinc_site_zoom",
+        "type": "zoom",
+        "duration_ms": 8000,
+        "keyframes": [
+          { "time_pct": 0,   "rotation_x": 10,  "rotation_y": 0,   "rotation_z": 0,  "zoom": 1.0, "style": "cartoon",    "color_scheme": "chain" },
+          { "time_pct": 35,  "rotation_x": 40,  "rotation_y": 30,  "rotation_z": 0,  "zoom": 1.8, "style": "stick",      "color_scheme": "element" },
+          { "time_pct": 70,  "rotation_x": 50,  "rotation_y": 30,  "rotation_z": 0,  "zoom": 2.5 },
+          { "time_pct": 100, "rotation_x": 50,  "rotation_y": 30,  "rotation_z": 0,  "zoom": 3.2, "style": "ball+stick", "color_scheme": "element" }
+        ],
+        "easing": "ease-in-out",
+        "loop": false,
+        "description": "Zooms into the central zinc coordination site — two zinc ions each coordinated by three His10 residues from three chains in octahedral geometry — zinc is essential for hexamer stability during biosynthesis and pharmaceutical formulation."
+      },
+      {
+        "name": "chain_reveal",
+        "type": "highlight_sequence",
+        "duration_ms": 10000,
+        "keyframes": [
+          { "time_pct": 0,   "rotation_x": 20,  "rotation_y": 0,   "rotation_z": 0,  "zoom": 1.0, "style": "cartoon", "color_scheme": "chain" },
+          { "time_pct": 17,  "rotation_x": 20,  "rotation_y": 60,  "rotation_z": 0,  "zoom": 1.1 },
+          { "time_pct": 33,  "rotation_x": 20,  "rotation_y": 120, "rotation_z": 0,  "zoom": 1.1 },
+          { "time_pct": 50,  "rotation_x": 20,  "rotation_y": 180, "rotation_z": 0,  "zoom": 1.1 },
+          { "time_pct": 67,  "rotation_x": 20,  "rotation_y": 240, "rotation_z": 0,  "zoom": 1.1 },
+          { "time_pct": 83,  "rotation_x": 20,  "rotation_y": 300, "rotation_z": 0,  "zoom": 1.1 },
+          { "time_pct": 100, "rotation_x": 20,  "rotation_y": 360, "rotation_z": 0,  "zoom": 1.0, "style": "surface", "color_scheme": "chain" }
+        ],
+        "easing": "ease-in-out",
+        "loop": false,
+        "description": "Orbits through all six chains (A1-B1, A2-B2, A3-B3) then reveals surface — emphasizing how three equivalent AB dimers assemble into the compact hexamer that enables slow-release pharmacokinetics in long-acting insulin formulations."
+      }
+    ],
+    "hero_animation": "d3_symmetry",
+    "transition_pairs": [
+      { "from_pdb": "1AO6", "to_pdb": "4HHB", "transition_type": "symmetry_morph",   "description": "D3 insulin hexamer to D2 hemoglobin tetramer — allosteric oxygen carrier vs. hormonal storage form." },
+      { "from_pdb": "1AO6", "to_pdb": "1JFF", "transition_type": "oligomer_compare",  "description": "Zinc-stabilized hexamer to dodecameric glutamine synthetase — two large oligomeric metabolic enzymes with central metal coordination." }
+    ]
+  },
+  {
+    "id": "3PQR",
+    "name": "p53-DNA Complex",
+    "animations": [
+      {
+        "name": "tetramer_on_dna",
+        "type": "rotation",
+        "duration_ms": 12000,
+        "keyframes": [
+          { "time_pct": 0,   "rotation_x": 0,   "rotation_y": 0,   "rotation_z": 0,  "zoom": 0.9, "style": "cartoon", "color_scheme": "chain" },
+          { "time_pct": 25,  "rotation_x": 20,  "rotation_y": 90,  "rotation_z": 0,  "zoom": 1.0 },
+          { "time_pct": 50,  "rotation_x": 0,   "rotation_y": 180, "rotation_z": 0,  "zoom": 0.9 },
+          { "time_pct": 75,  "rotation_x": -20, "rotation_y": 270, "rotation_z": 0,  "zoom": 1.0 },
+          { "time_pct": 100, "rotation_x": 0,   "rotation_y": 360, "rotation_z": 0,  "zoom": 0.9 }
+        ],
+        "easing": "ease-in-out",
+        "loop": true,
+        "description": "Full orbit of the p53 tetramer wrapping around the response element DNA — two dimers bound to a 20-bp half-site each, the quarter-sites RRRCWWGYYY (R=purine, W=AT, Y=pyrimidine) recognized by the sequence-specific DNA-binding domain."
+      },
+      {
+        "name": "dbd_zoom",
+        "type": "zoom",
+        "duration_ms": 9000,
+        "keyframes": [
+          { "time_pct": 0,   "rotation_x": 10,  "rotation_y": 0,   "rotation_z": 0,  "zoom": 0.9, "style": "cartoon",    "color_scheme": "chain" },
+          { "time_pct": 30,  "rotation_x": 20,  "rotation_y": 30,  "rotation_z": 0,  "zoom": 1.5, "style": "cartoon",    "color_scheme": "chain" },
+          { "time_pct": 60,  "rotation_x": 25,  "rotation_y": 50,  "rotation_z": 0,  "zoom": 2.2, "style": "stick",      "color_scheme": "element" },
+          { "time_pct": 100, "rotation_x": 25,  "rotation_y": 50,  "rotation_z": 0,  "zoom": 3.0, "style": "ball+stick", "color_scheme": "element" }
+        ],
+        "easing": "ease-in-out",
+        "loop": false,
+        "description": "Zooms into the L3 loop and helix-turn-helix making sequence-specific contacts with the major groove — Arg248 and Arg273, two of the most frequently mutated hotspot residues in human cancer, visible inserting into the major groove."
+      },
+      {
+        "name": "mutation_hotspot_highlight",
+        "type": "highlight_sequence",
+        "duration_ms": 11000,
+        "keyframes": [
+          { "time_pct": 0,   "rotation_x": 15,  "rotation_y": 0,   "rotation_z": 0,  "zoom": 1.0, "style": "cartoon", "color_scheme": "chain" },
+          { "time_pct": 20,  "rotation_x": 15,  "rotation_y": 45,  "rotation_z": 0,  "zoom": 1.3, "style": "cartoon", "color_scheme": "b_factor" },
+          { "time_pct": 50,  "rotation_x": 20,  "rotation_y": 90,  "rotation_z": 0,  "zoom": 1.8, "style": "stick",   "color_scheme": "element" },
+          { "time_pct": 80,  "rotation_x": 25,  "rotation_y": 120, "rotation_z": 0,  "zoom": 2.4 },
+          { "time_pct": 100, "rotation_x": 25,  "rotation_y": 120, "rotation_z": 0,  "zoom": 2.4, "style": "surface", "color_scheme": "hydrophobicity" }
+        ],
+        "easing": "ease-in-out",
+        "loop": false,
+        "description": "Zooms to the six hotspot mutation positions (R175H, G245S, R248W, R248Q, R249S, R273H) colored by B-factor flexibility — showing how cancer mutations cluster at the DNA-contact surface and metal-coordination site."
+      }
+    ],
+    "hero_animation": "tetramer_on_dna",
+    "transition_pairs": [
+      { "from_pdb": "3PQR", "to_pdb": "1BNA", "transition_type": "protein_departure",  "description": "p53 releasing DNA — protein dissociates to reveal free B-DNA, mimicking transcription factor unbinding." },
+      { "from_pdb": "3PQR", "to_pdb": "3NIR", "transition_type": "dna_binding_pair",   "description": "Sequence-specific transcription factor to CRISPR guided endonuclease — two fundamentally different mechanisms of targeted DNA recognition." }
+    ]
+  },
+  {
+    "id": "1JFF",
+    "name": "Glutamine Synthetase",
+    "animations": [
+      {
+        "name": "dodecamer_spin",
+        "type": "spin",
+        "duration_ms": 15000,
+        "keyframes": [
+          { "time_pct": 0,   "rotation_x": 85,  "rotation_y": 0,   "rotation_z": 0,  "zoom": 0.8, "style": "cartoon", "color_scheme": "chain" },
+          { "time_pct": 100, "rotation_x": 85,  "rotation_y": 360, "rotation_z": 0,  "zoom": 0.8 }
+        ],
+        "easing": "linear",
+        "loop": true,
+        "description": "Top-down axial view of the D6h-symmetric dodecamer — two stacked hexameric rings with 6-fold symmetry — one of the largest and most symmetric metabolic enzymes, the central hub of nitrogen metabolism in all organisms."
+      },
+      {
+        "name": "active_site_zoom",
+        "type": "zoom",
+        "duration_ms": 9000,
+        "keyframes": [
+          { "time_pct": 0,   "rotation_x": 10,  "rotation_y": 0,   "rotation_z": 0,  "zoom": 0.8, "style": "cartoon",    "color_scheme": "chain" },
+          { "time_pct": 30,  "rotation_x": 20,  "rotation_y": 30,  "rotation_z": 0,  "zoom": 1.3, "style": "cartoon",    "color_scheme": "chain" },
+          { "time_pct": 60,  "rotation_x": 25,  "rotation_y": 50,  "rotation_z": 0,  "zoom": 2.0, "style": "stick",      "color_scheme": "element" },
+          { "time_pct": 100, "rotation_x": 25,  "rotation_y": 50,  "rotation_z": 0,  "zoom": 2.8, "style": "ball+stick", "color_scheme": "element" }
+        ],
+        "easing": "ease-in-out",
+        "loop": false,
+        "description": "Zooms into one of the 12 active sites at the interface between adjacent subunits in the same ring — the two Mn2+ ions visible coordinating glutamate and ATP for the glutamine + ADP + Pi synthesis reaction — a key antibiotic target."
+      },
+      {
+        "name": "symmetry_showcase",
+        "type": "rotation",
+        "duration_ms": 14000,
+        "keyframes": [
+          { "time_pct": 0,   "rotation_x": 0,   "rotation_y": 0,   "rotation_z": 0,  "zoom": 0.8, "style": "surface", "color_scheme": "chain" },
+          { "time_pct": 20,  "rotation_x": 45,  "rotation_y": 60,  "rotation_z": 0,  "zoom": 0.8 },
+          { "time_pct": 40,  "rotation_x": 90,  "rotation_y": 0,   "rotation_z": 0,  "zoom": 0.8 },
+          { "time_pct": 60,  "rotation_x": 45,  "rotation_y": 180, "rotation_z": 0,  "zoom": 0.8 },
+          { "time_pct": 80,  "rotation_x": 0,   "rotation_y": 270, "rotation_z": 0,  "zoom": 0.8 },
+          { "time_pct": 100, "rotation_x": 0,   "rotation_y": 360, "rotation_z": 0,  "zoom": 0.8 }
+        ],
+        "easing": "ease-in-out",
+        "loop": true,
+        "description": "Slow orbit through all principal views revealing the stacked-ring dodecameric architecture — side view shows two hexameric discs, top view shows 6-fold symmetry, 45-degree view shows the interring contacts and the funnel-shaped active site pores."
+      }
+    ],
+    "hero_animation": "dodecamer_spin",
+    "transition_pairs": [
+      { "from_pdb": "1JFF", "to_pdb": "5WE4", "transition_type": "energy_coupling",   "description": "Glutamine synthetase consuming ATP to fix nitrogen, transitioning to ATP synthase making ATP — the nitrogen/energy cycle." },
+      { "from_pdb": "1JFF", "to_pdb": "1AO6", "transition_type": "oligomer_compare",  "description": "Dodecameric ring system contrasted with hexameric insulin — both use zinc-coordinated symmetry but at radically different scales." }
+    ]
+  },
+  {
+    "id": "2POR",
+    "name": "OmpF Porin",
+    "animations": [
+      {
+        "name": "membrane_view_spin",
+        "type": "spin",
+        "duration_ms": 10000,
+        "keyframes": [
+          { "time_pct": 0,   "rotation_x": 85,  "rotation_y": 0,   "rotation_z": 0,  "zoom": 1.0, "style": "cartoon", "color_scheme": "secondary_structure" },
+          { "time_pct": 100, "rotation_x": 85,  "rotation_y": 360, "rotation_z": 0,  "zoom": 1.0 }
+        ],
+        "easing": "linear",
+        "loop": true,
+        "description": "Top-down view through the lumen of the trimeric porin — three identical 16-strand beta-barrel channels visible as hollow cylinders, each ~7 Angstrom diameter at the eyelet — the size cutoff for passive diffusion of antibiotics and nutrients."
+      },
+      {
+        "name": "channel_zoom",
+        "type": "zoom",
+        "duration_ms": 9000,
+        "keyframes": [
+          { "time_pct": 0,   "rotation_x": 10,  "rotation_y": 0,   "rotation_z": 0,  "zoom": 1.0, "style": "cartoon",    "color_scheme": "secondary_structure" },
+          { "time_pct": 30,  "rotation_x": 60,  "rotation_y": 20,  "rotation_z": 0,  "zoom": 1.5, "style": "cartoon",    "color_scheme": "secondary_structure" },
+          { "time_pct": 60,  "rotation_x": 80,  "rotation_y": 30,  "rotation_z": 0,  "zoom": 2.2, "style": "stick",      "color_scheme": "element" },
+          { "time_pct": 100, "rotation_x": 80,  "rotation_y": 30,  "rotation_z": 0,  "zoom": 3.0, "style": "surface",    "color_scheme": "electrostatic" }
+        ],
+        "easing": "ease-in-out",
+        "loop": false,
+        "description": "Tilts to axial view and zooms into one beta-barrel channel, revealing the constriction zone (the 'eyelet') at half-membrane depth and the electrostatic potential surface — the alternating charged residues at the eyelet create the transverse electric field that drives cation selectivity."
+      },
+      {
+        "name": "trimer_symmetry",
+        "type": "rotation",
+        "duration_ms": 11000,
+        "keyframes": [
+          { "time_pct": 0,   "rotation_x": 20,  "rotation_y": 0,   "rotation_z": 0,  "zoom": 1.0, "style": "surface", "color_scheme": "chain" },
+          { "time_pct": 33,  "rotation_x": 20,  "rotation_y": 120, "rotation_z": 0,  "zoom": 1.0 },
+          { "time_pct": 66,  "rotation_x": 20,  "rotation_y": 240, "rotation_z": 0,  "zoom": 1.0 },
+          { "time_pct": 100, "rotation_x": 20,  "rotation_y": 360, "rotation_z": 0,  "zoom": 1.0 }
+        ],
+        "easing": "linear",
+        "loop": true,
+        "description": "Rotating around the 3-fold symmetry axis of the trimer — showing how the three subunits associate via an extensive hydrophobic belt at the membrane-exposed surface, which is critical for correct outer membrane insertion by the BAM complex."
+      }
+    ],
+    "hero_animation": "channel_zoom",
+    "transition_pairs": [
+      { "from_pdb": "2POR", "to_pdb": "5WE4", "transition_type": "membrane_compare",  "description": "Passive channel protein to active membrane-embedded rotary machine — both are integral outer/inner membrane proteins but radically different functional mechanisms." },
+      { "from_pdb": "2POR", "to_pdb": "1BNA", "transition_type": "scale_contrast",    "description": "Membrane-spanning protein trimer dissolving to expose the DNA strand inside — illustrating the range of structural biology targets." }
+    ]
+  },
+  {
+    "id": "1ATP",
+    "name": "Adenylate Kinase",
+    "animations": [
+      {
+        "name": "open_closed_morph",
+        "type": "morph",
+        "duration_ms": 10000,
+        "keyframes": [
+          { "time_pct": 0,   "rotation_x": 15,  "rotation_y": 0,   "rotation_z": 0,  "zoom": 1.1, "style": "cartoon", "color_scheme": "secondary_structure" },
+          { "time_pct": 25,  "rotation_x": 15,  "rotation_y": 45,  "rotation_z": 0,  "zoom": 1.2, "style": "cartoon", "color_scheme": "b_factor" },
+          { "time_pct": 50,  "rotation_x": 15,  "rotation_y": 90,  "rotation_z": 0,  "zoom": 1.3, "style": "cartoon", "color_scheme": "b_factor" },
+          { "time_pct": 75,  "rotation_x": 15,  "rotation_y": 135, "rotation_z": 0,  "zoom": 1.2, "style": "cartoon", "color_scheme": "secondary_structure" },
+          { "time_pct": 100, "rotation_x": 15,  "rotation_y": 0,   "rotation_z": 0,  "zoom": 1.1, "style": "cartoon", "color_scheme": "secondary_structure" }
+        ],
+        "easing": "ease-in-out",
+        "loop": true,
+        "description": "Simulates the large-scale conformational change between open (apo) and closed (substrate-bound) states — the LID domain (residues 122-159) closes 20 Angstroms over the ATP binding site upon substrate binding, essential for the phosphoryl transfer reaction (ATP + AMP -> 2 ADP)."
+      },
+      {
+        "name": "active_site_zoom",
+        "type": "zoom",
+        "duration_ms": 8000,
+        "keyframes": [
+          { "time_pct": 0,   "rotation_x": 15,  "rotation_y": 0,   "rotation_z": 0,  "zoom": 1.1, "style": "cartoon",    "color_scheme": "secondary_structure" },
+          { "time_pct": 35,  "rotation_x": 20,  "rotation_y": 30,  "rotation_z": 0,  "zoom": 1.7, "style": "stick",      "color_scheme": "element" },
+          { "time_pct": 70,  "rotation_x": 25,  "rotation_y": 45,  "rotation_z": 0,  "zoom": 2.4 },
+          { "time_pct": 100, "rotation_x": 25,  "rotation_y": 45,  "rotation_z": 0,  "zoom": 3.2, "style": "ball+stick", "color_scheme": "element" }
+        ],
+        "easing": "ease-in-out",
+        "loop": false,
+        "description": "Zooms into the P-loop (phosphate binding loop, GXXXXGKS/T motif) and the Mg2+-ATP coordination — the catalytic mechanism requires the LID domain closing to exclude water, preventing futile ATP hydrolysis during the phosphoryl transfer."
+      },
+      {
+        "name": "domain_highlight",
+        "type": "highlight_sequence",
+        "duration_ms": 11000,
+        "keyframes": [
+          { "time_pct": 0,   "rotation_x": 10,  "rotation_y": 0,   "rotation_z": 0,  "zoom": 1.1, "style": "cartoon", "color_scheme": "chain" },
+          { "time_pct": 25,  "rotation_x": 15,  "rotation_y": 60,  "rotation_z": 0,  "zoom": 1.2, "style": "cartoon", "color_scheme": "spectrum" },
+          { "time_pct": 50,  "rotation_x": 20,  "rotation_y": 120, "rotation_z": 0,  "zoom": 1.4, "style": "cartoon", "color_scheme": "b_factor" },
+          { "time_pct": 75,  "rotation_x": 15,  "rotation_y": 180, "rotation_z": 0,  "zoom": 1.3, "style": "cartoon", "color_scheme": "spectrum" },
+          { "time_pct": 100, "rotation_x": 10,  "rotation_y": 240, "rotation_z": 0,  "zoom": 1.1, "style": "surface", "color_scheme": "hydrophobicity" }
+        ],
+        "easing": "ease-in-out",
+        "loop": false,
+        "description": "Steps through the three functional domains colored by B-factor: CORE (residues 1-29, 68-120, 160-214), LID (122-159), and AMPbind (30-67) — the high-B regions in LID and AMPbind correspond to the large-amplitude motions detected by NMR and single-molecule FRET."
+      }
+    ],
+    "hero_animation": "open_closed_morph",
+    "transition_pairs": [
+      { "from_pdb": "1ATP", "to_pdb": "5WE4", "transition_type": "nucleotide_theme",  "description": "Adenylate kinase managing ATP/ADP/AMP equilibrium, transitioning to ATP synthase producing ATP — sequential steps in adenine nucleotide homeostasis." },
+      { "from_pdb": "1ATP", "to_pdb": "6LU7", "transition_type": "enzyme_pair",       "description": "Two enzymes with large conformational changes upon substrate binding — adenylate kinase and Mpro as examples of substrate-induced fit." }
+    ]
+  },
+  {
+    "id": "3NIR",
+    "name": "CRISPR-Cas9",
+    "animations": [
+      {
+        "name": "guide_rna_zoom",
+        "type": "zoom",
+        "duration_ms": 10000,
+        "keyframes": [
+          { "time_pct": 0,   "rotation_x": 10,  "rotation_y": 0,   "rotation_z": 0,  "zoom": 0.8, "style": "cartoon",    "color_scheme": "chain" },
+          { "time_pct": 25,  "rotation_x": 15,  "rotation_y": 30,  "rotation_z": 0,  "zoom": 1.2, "style": "cartoon",    "color_scheme": "chain" },
+          { "time_pct": 55,  "rotation_x": 20,  "rotation_y": 55,  "rotation_z": 0,  "zoom": 1.9, "style": "stick",      "color_scheme": "element" },
+          { "time_pct": 80,  "rotation_x": 25,  "rotation_y": 65,  "rotation_z": 0,  "zoom": 2.7 },
+          { "time_pct": 100, "rotation_x": 25,  "rotation_y": 65,  "rotation_z": 0,  "zoom": 3.2, "style": "ball+stick", "color_scheme": "nucleic_acid_type" }
+        ],
+        "easing": "ease-in-out",
+        "loop": false,
+        "description": "Zooms from the full 160 kDa complex into the seed region of the guide RNA:DNA heteroduplex — the 12 PAM-proximal base pairs whose complementarity is interrogated first — mismatch here aborts cleavage, explaining the specificity mechanism."
+      },
+      {
+        "name": "nuclease_domains",
+        "type": "rotation",
+        "duration_ms": 12000,
+        "keyframes": [
+          { "time_pct": 0,   "rotation_x": 10,  "rotation_y": 0,   "rotation_z": 0,  "zoom": 0.9, "style": "cartoon", "color_scheme": "chain" },
+          { "time_pct": 20,  "rotation_x": 15,  "rotation_y": 72,  "rotation_z": 0,  "zoom": 0.9 },
+          { "time_pct": 40,  "rotation_x": 10,  "rotation_y": 144, "rotation_z": 0,  "zoom": 0.9 },
+          { "time_pct": 60,  "rotation_x": 5,   "rotation_y": 216, "rotation_z": 0,  "zoom": 0.9 },
+          { "time_pct": 80,  "rotation_x": 10,  "rotation_y": 288, "rotation_z": 0,  "zoom": 0.9 },
+          { "time_pct": 100, "rotation_x": 10,  "rotation_y": 360, "rotation_z": 0,  "zoom": 0.9 }
+        ],
+        "easing": "ease-in-out",
+        "loop": true,
+        "description": "Slow orbit of the full Cas9-gRNA-DNA ternary complex, passing through views highlighting the RuvC and HNH nuclease domains (each cuts one strand) and the recognition lobe containing the PAM-interacting domain — the bilobed architecture apparent from every angle."
+      },
+      {
+        "name": "pam_to_cut_site",
+        "type": "highlight_sequence",
+        "duration_ms": 13000,
+        "keyframes": [
+          { "time_pct": 0,   "rotation_x": 10,  "rotation_y": 0,   "rotation_z": 0,  "zoom": 0.9, "style": "cartoon",    "color_scheme": "chain" },
+          { "time_pct": 15,  "rotation_x": 12,  "rotation_y": 20,  "rotation_z": 0,  "zoom": 1.1, "style": "cartoon",    "color_scheme": "chain" },
+          { "time_pct": 35,  "rotation_x": 18,  "rotation_y": 40,  "rotation_z": 0,  "zoom": 1.6, "style": "stick",      "color_scheme": "element" },
+          { "time_pct": 60,  "rotation_x": 22,  "rotation_y": 55,  "rotation_z": 0,  "zoom": 2.2, "style": "stick",      "color_scheme": "element" },
+          { "time_pct": 80,  "rotation_x": 25,  "rotation_y": 65,  "rotation_z": 0,  "zoom": 2.8 },
+          { "time_pct": 100, "rotation_x": 25,  "rotation_y": 65,  "rotation_z": 0,  "zoom": 3.0, "style": "ball+stick", "color_scheme": "element" }
+        ],
+        "easing": "ease-in-out",
+        "loop": false,
+        "description": "Zooms from the PAM recognition site (NGG read by Arg1333/Arg1335 in the PI domain) along the guide RNA-DNA hybrid toward the cleavage position 3 bp upstream of the PAM — the blunt-ended DSB created by HNH + RuvC acting on opposite strands."
+      }
+    ],
+    "hero_animation": "guide_rna_zoom",
+    "transition_pairs": [
+      { "from_pdb": "3NIR", "to_pdb": "1BNA", "transition_type": "dna_release",       "description": "CRISPR complex releasing cleaved DNA — the severed duplex retreating from the guide RNA, mimicking product release after double-strand break." },
+      { "from_pdb": "3NIR", "to_pdb": "3PQR", "transition_type": "dna_recognition",   "description": "CRISPR RNA-guided targeting vs. p53 protein sequence recognition — two entirely different molecular strategies for finding a specific genomic locus." }
+    ]
+  }
+]

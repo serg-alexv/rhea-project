@@ -1,0 +1,417 @@
+[
+  {
+    "id": "1CRN",
+    "name": "Crambin",
+    "primary_material": {
+      "style": "cartoon",
+      "color_scheme": "ss",
+      "opacity": 1.0,
+      "surface_type": null
+    },
+    "secondary_material": {
+      "style": "stick",
+      "color_scheme": "atom",
+      "opacity": 0.85
+    },
+    "highlight_material": {
+      "style": "sphere",
+      "color_scheme": "atom",
+      "residue_selection": "CYS 3, CYS 4, CYS 16, CYS 26, CYS 32, CYS 40"
+    },
+    "color_palette": [
+      "#E8594A",
+      "#4A90D9",
+      "#A0A0A0",
+      "#F5C842",
+      "#2ECC71"
+    ],
+    "surface_properties": {
+      "roughness": 0.45,
+      "metallic": 0.0,
+      "emission": 0.05,
+      "transparency": 0.0
+    },
+    "artistic_notes": "Crambin's three disulfide bonds define its fold; emphasize them as golden spheres against the secondary structure ribbon. The compact 46-residue frame rewards tight framing with high-contrast ss coloring to reveal its helix-sheet topology."
+  },
+  {
+    "id": "1BNA",
+    "name": "B-DNA Dodecamer",
+    "primary_material": {
+      "style": "stick",
+      "color_scheme": "atom",
+      "opacity": 1.0,
+      "surface_type": null
+    },
+    "secondary_material": {
+      "style": "surface",
+      "color_scheme": "residue",
+      "opacity": 0.18,
+      "surface_type": "SES"
+    },
+    "highlight_material": {
+      "style": "sphere",
+      "color_scheme": "atom",
+      "residue_selection": "G 1, C 24, A 6, T 19"
+    },
+    "color_palette": [
+      "#4A90D9",
+      "#E8594A",
+      "#F5C842",
+      "#2ECC71",
+      "#1A1A2E"
+    ],
+    "surface_properties": {
+      "roughness": 0.30,
+      "metallic": 0.08,
+      "emission": 0.0,
+      "transparency": 0.18
+    },
+    "artistic_notes": "The canonical B-form double helix is best presented as ball-and-stick with CPK coloring so the phosphate backbone (orange P) and base pairs (purine/pyrimidine planes) read distinctly. A faint SES surface overlay communicates the major/minor groove geometry without obscuring atomic detail."
+  },
+  {
+    "id": "4HHB",
+    "name": "Hemoglobin",
+    "primary_material": {
+      "style": "cartoon",
+      "color_scheme": "chain",
+      "opacity": 1.0,
+      "surface_type": null
+    },
+    "secondary_material": {
+      "style": "surface",
+      "color_scheme": "chain",
+      "opacity": 0.22,
+      "surface_type": "SES"
+    },
+    "highlight_material": {
+      "style": "stick",
+      "color_scheme": "atom",
+      "residue_selection": "HEM A, HEM B, HEM C, HEM D"
+    },
+    "color_palette": [
+      "#C0392B",
+      "#8E44AD",
+      "#2980B9",
+      "#27AE60",
+      "#D4AC0D"
+    ],
+    "surface_properties": {
+      "roughness": 0.50,
+      "metallic": 0.05,
+      "emission": 0.08,
+      "transparency": 0.22
+    },
+    "artistic_notes": "Color each of the four subunits (alpha1, alpha2, beta1, beta2) a distinct hue so the tetrameric assembly reads at a glance, then accent the four heme porphyrin rings as stick-and-atom detail in gold. The slight emission on the heme irons captures the iron's biologically active character."
+  },
+  {
+    "id": "5WE4",
+    "name": "ATP Synthase",
+    "primary_material": {
+      "style": "surface",
+      "color_scheme": "chain",
+      "opacity": 0.82,
+      "surface_type": "SES"
+    },
+    "secondary_material": {
+      "style": "cartoon",
+      "color_scheme": "ss",
+      "opacity": 0.55
+    },
+    "highlight_material": {
+      "style": "sphere",
+      "color_scheme": "atom",
+      "residue_selection": "ATP, ADP, Pi binding sites on beta subunits"
+    },
+    "color_palette": [
+      "#1ABC9C",
+      "#3498DB",
+      "#9B59B6",
+      "#E67E22",
+      "#ECF0F1"
+    ],
+    "surface_properties": {
+      "roughness": 0.60,
+      "metallic": 0.12,
+      "emission": 0.04,
+      "transparency": 0.18
+    },
+    "artistic_notes": "ATP synthase's rotary mechanism is the visual story; use per-chain SES surface to delineate the F1 head, central stalk, and Fo membrane ring as distinct assemblies. Semi-transparent surface over internal cartoon reveals the rotating gamma subunit axis and catalytic beta-subunit conformational asymmetry."
+  },
+  {
+    "id": "6LU7",
+    "name": "SARS-CoV-2 Main Protease (Mpro)",
+    "primary_material": {
+      "style": "cartoon",
+      "color_scheme": "spectrum",
+      "opacity": 1.0,
+      "surface_type": null
+    },
+    "secondary_material": {
+      "style": "surface",
+      "color_scheme": "bfactor",
+      "opacity": 0.20,
+      "surface_type": "SES"
+    },
+    "highlight_material": {
+      "style": "stick",
+      "color_scheme": "atom",
+      "residue_selection": "HIS 41, CYS 145, N3 ligand"
+    },
+    "color_palette": [
+      "#6C3483",
+      "#1F618D",
+      "#148F77",
+      "#B7950B",
+      "#922B21"
+    ],
+    "surface_properties": {
+      "roughness": 0.42,
+      "metallic": 0.0,
+      "emission": 0.06,
+      "transparency": 0.20
+    },
+    "artistic_notes": "Render the homodimer with a cool-to-warm spectrum ribbon so domain I, II, and III map from blue to red, immediately communicating the three-domain architecture. The catalytic dyad (His41/Cys145) and the bound N3 inhibitor should be rendered as atomic sticks in the active site cleft to emphasize drug-binding context."
+  },
+  {
+    "id": "1GFL",
+    "name": "Green Fluorescent Protein (GFP)",
+    "primary_material": {
+      "style": "cartoon",
+      "color_scheme": "ss",
+      "opacity": 1.0,
+      "surface_type": null
+    },
+    "secondary_material": {
+      "style": "surface",
+      "color_scheme": "atom",
+      "opacity": 0.15,
+      "surface_type": "VDW"
+    },
+    "highlight_material": {
+      "style": "sphere",
+      "color_scheme": "atom",
+      "residue_selection": "SER 65, TYR 66, GLY 67"
+    },
+    "color_palette": [
+      "#27AE60",
+      "#A9DFBF",
+      "#F9E79F",
+      "#D5F5E3",
+      "#1E8449"
+    ],
+    "surface_properties": {
+      "roughness": 0.25,
+      "metallic": 0.0,
+      "emission": 0.35,
+      "transparency": 0.15
+    },
+    "artistic_notes": "GFP's eleven-strand beta-barrel is its signature; render it with ss coloring so the barrel staves read as blue sheets enclosing the chromophore. A high emission value (0.35) on the Ser65-Tyr66-Gly67 chromophore triad mimics its actual fluorescence and is the key visual hook for any publication figure."
+  },
+  {
+    "id": "1AO6",
+    "name": "Insulin Hexamer",
+    "primary_material": {
+      "style": "cartoon",
+      "color_scheme": "chain",
+      "opacity": 1.0,
+      "surface_type": null
+    },
+    "secondary_material": {
+      "style": "surface",
+      "color_scheme": "chain",
+      "opacity": 0.25,
+      "surface_type": "SAS"
+    },
+    "highlight_material": {
+      "style": "sphere",
+      "color_scheme": "atom",
+      "residue_selection": "ZN 901, ZN 902, HIS B10 (all chains)"
+    },
+    "color_palette": [
+      "#2471A3",
+      "#48C9B0",
+      "#F4D03F",
+      "#AF7AC5",
+      "#EC7063"
+    ],
+    "surface_properties": {
+      "roughness": 0.38,
+      "metallic": 0.15,
+      "emission": 0.10,
+      "transparency": 0.25
+    },
+    "artistic_notes": "The insulin hexamer arranges as three dimers around two axial zinc ions; assign each dimer pair a distinct hue and render zinc atoms as large metallic spheres (metallic 0.15, emission 0.10) to emphasize the coordination center that drives hexamer stability. SAS overlay communicates the overall globular storage form."
+  },
+  {
+    "id": "3PQR",
+    "name": "p53 Tumor Suppressor — DNA Complex",
+    "primary_material": {
+      "style": "cartoon",
+      "color_scheme": "chain",
+      "opacity": 1.0,
+      "surface_type": null
+    },
+    "secondary_material": {
+      "style": "stick",
+      "color_scheme": "atom",
+      "opacity": 0.90
+    },
+    "highlight_material": {
+      "style": "sphere",
+      "color_scheme": "atom",
+      "residue_selection": "ARG 248, ARG 273, DNA recognition half-sites"
+    },
+    "color_palette": [
+      "#E74C3C",
+      "#2C3E50",
+      "#3498DB",
+      "#F39C12",
+      "#ECF0F1"
+    ],
+    "surface_properties": {
+      "roughness": 0.52,
+      "metallic": 0.0,
+      "emission": 0.04,
+      "transparency": 0.0
+    },
+    "artistic_notes": "Render the p53 tetramer in warm red/orange tones and the DNA duplex as dark blue sticks to create an immediate protein-DNA contrast that conveys transcriptional regulation. The hotspot contact residues Arg248 and Arg273 deserve large sphere rendering at the protein-DNA interface to highlight the oncogenic mutation context."
+  },
+  {
+    "id": "1JFF",
+    "name": "Glutamine Synthetase",
+    "primary_material": {
+      "style": "surface",
+      "color_scheme": "chain",
+      "opacity": 0.78,
+      "surface_type": "SES"
+    },
+    "secondary_material": {
+      "style": "cartoon",
+      "color_scheme": "ss",
+      "opacity": 0.60
+    },
+    "highlight_material": {
+      "style": "stick",
+      "color_scheme": "atom",
+      "residue_selection": "AMP-PNP, Mn2+ ions, active site loops"
+    },
+    "color_palette": [
+      "#117A65",
+      "#1A5276",
+      "#6C3483",
+      "#7D6608",
+      "#922B21"
+    ],
+    "surface_properties": {
+      "roughness": 0.55,
+      "metallic": 0.08,
+      "emission": 0.03,
+      "transparency": 0.22
+    },
+    "artistic_notes": "Glutamine synthetase's twelve identical subunits form two face-to-face hexameric rings; assign each subunit a stepped hue within a cool palette and render from slightly above the ring axis to showcase the twelve-fold symmetry. Per-chain SES surfaces reveal the active site tunnels leading to the buried catalytic centers."
+  },
+  {
+    "id": "2POR",
+    "name": "OmpF Porin",
+    "primary_material": {
+      "style": "cartoon",
+      "color_scheme": "ss",
+      "opacity": 1.0,
+      "surface_type": null
+    },
+    "secondary_material": {
+      "style": "surface",
+      "color_scheme": "bfactor",
+      "opacity": 0.28,
+      "surface_type": "SES"
+    },
+    "highlight_material": {
+      "style": "stick",
+      "color_scheme": "residue",
+      "residue_selection": "ARG 42, ARG 82, ARG 132, LYS 16 (constriction zone L3 loop)"
+    },
+    "color_palette": [
+      "#1F618D",
+      "#148F77",
+      "#7D3C98",
+      "#B9770E",
+      "#717D7E"
+    ],
+    "surface_properties": {
+      "roughness": 0.48,
+      "metallic": 0.0,
+      "emission": 0.0,
+      "transparency": 0.28
+    },
+    "artistic_notes": "OmpF's beta-barrel trimer is ideally viewed down the pore axis so all three channels are visible simultaneously; ss coloring makes the 16-strand antiparallel barrel staves instantly legible against coil-colored external loops. The bfactor-tinted SES overlay highlights the flexible L3 constriction loop that gates ion passage."
+  },
+  {
+    "id": "1ATP",
+    "name": "Adenylate Kinase",
+    "primary_material": {
+      "style": "cartoon",
+      "color_scheme": "spectrum",
+      "opacity": 1.0,
+      "surface_type": null
+    },
+    "secondary_material": {
+      "style": "surface",
+      "color_scheme": "spectrum",
+      "opacity": 0.18,
+      "surface_type": "SAS"
+    },
+    "highlight_material": {
+      "style": "stick",
+      "color_scheme": "atom",
+      "residue_selection": "AP5A bisubstrate analog, GLY 10-GLY 15 P-loop, ARG 188"
+    },
+    "color_palette": [
+      "#1ABC9C",
+      "#2980B9",
+      "#8E44AD",
+      "#E67E22",
+      "#C0392B"
+    ],
+    "surface_properties": {
+      "roughness": 0.40,
+      "metallic": 0.0,
+      "emission": 0.05,
+      "transparency": 0.18
+    },
+    "artistic_notes": "Adenylate kinase is the textbook conformational switch enzyme; render the open and closed states side-by-side using spectrum coloring so the hinge motion from N-terminus (blue) to C-terminus (red) is immediately apparent. Highlight the P-loop (GXXXXGK motif) and the AP5A transition-state analog to anchor the catalytic mechanism visually."
+  },
+  {
+    "id": "3NIR",
+    "name": "CRISPR-Cas9",
+    "primary_material": {
+      "style": "surface",
+      "color_scheme": "chain",
+      "opacity": 0.75,
+      "surface_type": "SES"
+    },
+    "secondary_material": {
+      "style": "cartoon",
+      "color_scheme": "ss",
+      "opacity": 0.50
+    },
+    "highlight_material": {
+      "style": "stick",
+      "color_scheme": "atom",
+      "residue_selection": "HIS 840, ASN 863, HNH domain, RuvC domain active sites, PAM duplex"
+    },
+    "color_palette": [
+      "#2E86AB",
+      "#A23B72",
+      "#F18F01",
+      "#C73E1D",
+      "#3B1F2B"
+    ],
+    "surface_properties": {
+      "roughness": 0.58,
+      "metallic": 0.06,
+      "emission": 0.04,
+      "transparency": 0.25
+    },
+    "artistic_notes": "CRISPR-Cas9 wraps around DNA like a clam; assign the Cas9 protein a warm amber surface and render the sgRNA and target DNA in contrasting cool blues so the nucleic acid cargo is immediately distinguishable from the protein chassis. The HNH and RuvC nuclease active sites should be lit with stick-atom detail inside the semi-transparent surface to communicate the dual-scissor cleavage mechanism."
+  }
+]
