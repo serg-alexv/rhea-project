@@ -15,4 +15,4 @@ if [ "$SEED_COUNT" -lt 5 ]; then
     echo "[seed] proof.db seeded ($SEED_COUNT -> 11 artifacts)"
 fi
 
-exec python3 src/tribunal_api.py
+exec uvicorn tribunal_api:app --host 0.0.0.0 --port 8400 --workers 2

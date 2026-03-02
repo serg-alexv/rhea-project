@@ -34,6 +34,13 @@ COPY src/ndi_bridge.py src/
 # Create runtime directories
 RUN mkdir -p logs data
 
+# Stage proof.db seed outside the volume mount path
+COPY data/proof.db /tmp/seed_proof.db
+
+# Entrypoint handles proof.db seeding before server start
+COPY scripts/docker-entrypoint.sh /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
+
 WORKDIR /app/src
 
 EXPOSE 8400
@@ -41,4 +48,4 @@ EXPOSE 8400
 HEALTHCHECK --interval=30s --timeout=5s --retries=3 \
     CMD python3 -c "import urllib.request; urllib.request.urlopen('http://localhost:8400/health')"
 
-CMD ["uvicorn", "tribunal_api:app", "--host", "0.0.0.0", "--port", "8400", "--workers", "2"]
+CMD ["/app/entrypoint.sh"]

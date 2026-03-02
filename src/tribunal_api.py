@@ -843,8 +843,8 @@ async def landing():
     </span>
   </div>
   <div style="font-size:.65rem;color:var(--muted)">
-    95% credits your account instantly. 5% funds impact above. No middlemen.<br>
-    <span style="color:var(--accent)">First payment auto-creates your account</span> &mdash;
+    95% becomes your credits instantly. 5% funds the impact above. No middlemen.<br>
+    <span style="color:var(--accent)">First payment auto-creates your profile</span> &mdash;
     patron key derived from tx hash, redeemable anytime.
   </div>
 </div>
@@ -1189,51 +1189,83 @@ footer .f-copy{{color:#333;font-size:.68rem;letter-spacing:.04em}}
 <!-- KEYBOARD ABSORBS COMFYUI PIPELINE -->
 <section class="reveal">
 <div class="section-title">
-  <h2>Full pipeline in &lt;5 MB</h2>
-  <p>The keyboard absorbs the entire ComfyUI workflow engine. Type a claim &mdash; the pipeline runs server-side.</p>
+  <h2>Full pipeline in &lt;5 MB. Free.</h2>
+  <p>Type a claim anywhere. The keyboard sends it to Rhea&rsquo;s servers. You get back verified science.</p>
 </div>
-<div style="max-width:900px;margin:0 auto">
-  <div class="glass-card" style="padding:2.5rem">
-    <div style="display:flex;gap:2rem;align-items:flex-start;flex-wrap:wrap">
-      <!-- The absorption concept -->
+<div style="max-width:960px;margin:0 auto">
+  <!-- Examples showcase -->
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;margin-bottom:1.5rem">
+    <div class="glass-card stagger-1" style="padding:1.2rem">
+      <div style="font-size:.6rem;color:var(--green);font-weight:600;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.5rem">Drug Discovery</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--text);background:rgba(48,209,88,.04);
+        border:1px solid rgba(48,209,88,.12);border-radius:8px;padding:.7rem;margin-bottom:.5rem;line-height:1.5">
+        <span style="color:var(--muted)">&gt;</span> &ldquo;Aspirin inhibits COX-2 selectively at low doses&rdquo;<br>
+        <span style="color:var(--orange)">&#x25B6;</span> <strong>Agreement: 34%</strong> &mdash; COX-1 and COX-2 both inhibited non-selectively<br>
+        <span style="color:var(--green)">&#x2713;</span> Sceptic found 3 contradicting sources
+      </div>
+      <div style="font-size:.6rem;color:var(--muted)">Caught a common pharmacology misconception in 4 seconds</div>
+    </div>
+    <div class="glass-card stagger-2" style="padding:1.2rem">
+      <div style="font-size:.6rem;color:var(--accent);font-weight:600;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.5rem">Molecular Biology</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--text);background:rgba(0,113,227,.04);
+        border:1px solid rgba(0,113,227,.12);border-radius:8px;padding:.7rem;margin-bottom:.5rem;line-height:1.5">
+        <span style="color:var(--muted)">&gt;</span> &ldquo;CRISPR-Cas9 has no off-target effects in vivo&rdquo;<br>
+        <span style="color:var(--orange)">&#x25B6;</span> <strong>Agreement: 12%</strong> &mdash; off-target cleavage well documented<br>
+        <span style="color:var(--green)">&#x2713;</span> 5 models unanimous: claim is dangerous misinformation
+      </div>
+      <div style="font-size:.6rem;color:var(--muted)">Prevented a false safety claim from entering a grant proposal</div>
+    </div>
+    <div class="glass-card stagger-3" style="padding:1.2rem">
+      <div style="font-size:.6rem;color:var(--purple);font-weight:600;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.5rem">Grant Writing</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--text);background:rgba(191,90,242,.04);
+        border:1px solid rgba(191,90,242,.12);border-radius:8px;padding:.7rem;margin-bottom:.5rem;line-height:1.5">
+        <span style="color:var(--muted)">&gt;</span> &ldquo;Lipinski&rsquo;s Rule of Five predicts oral bioavailability&rdquo;<br>
+        <span style="color:var(--green)">&#x25B6;</span> <strong>Agreement: 78%</strong> &mdash; valid heuristic, not absolute<br>
+        <span style="color:var(--accent)">&#x2713;</span> Nuance preserved: &ldquo;predicts drug-likeness, not bioavailability directly&rdquo;
+      </div>
+      <div style="font-size:.6rem;color:var(--muted)">Refined a claim from &ldquo;mostly right&rdquo; to &ldquo;precisely right&rdquo;</div>
+    </div>
+  </div>
+  <!-- Pipeline visual -->
+  <div class="glass-card" style="padding:2rem">
+    <div style="display:flex;gap:2rem;align-items:center;flex-wrap:wrap">
       <div style="flex:1;min-width:280px">
-        <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:1rem">
+        <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.8rem">
           <span style="font-size:1.8rem">&#x2328;&#xFE0F;</span>
           <div>
             <div style="font-size:1rem;font-weight:700">Rhea Keyboard</div>
-            <div style="font-size:.65rem;color:var(--green)">iOS Extension &bull; &lt;5 MB &bull; zero dependencies</div>
+            <div style="font-size:.65rem;color:var(--green)">iOS Extension &bull; &lt;5 MB &bull; zero dependencies &bull; <strong>FREE</strong></div>
           </div>
         </div>
-        <p style="font-size:.82rem;color:var(--muted);line-height:1.6;margin-bottom:1rem">
-          The keyboard is a <strong style="color:var(--text)">thin client</strong> that triggers the full
-          ComfyUI verification pipeline running on Rhea&rsquo;s servers. You type a claim in any text field,
-          tap verify &mdash; the server runs the complete node graph: claim &rarr; tribunal &rarr; sceptic &rarr; proof.
-          Result drops back into your keyboard in seconds.</p>
-        <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+        <p style="font-size:.82rem;color:var(--muted);line-height:1.6;margin-bottom:.8rem">
+          A <strong style="color:var(--text)">thin client</strong> that sends claims to the full
+          ComfyUI verification pipeline on Rhea&rsquo;s servers. Type in any text field, tap verify.
+          The server runs the complete node graph. Result drops back in seconds.</p>
+        <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.8rem">
+          <span style="padding:.25rem .6rem;border-radius:6px;font-size:.6rem;font-weight:600;
+            background:rgba(48,209,88,.12);color:var(--green);border:1px solid rgba(48,209,88,.2)">100 free queries/month</span>
           <span style="padding:.25rem .6rem;border-radius:6px;font-size:.6rem;font-weight:500;
-            background:rgba(48,209,88,.08);color:var(--green);border:1px solid rgba(48,209,88,.15)">No GPU needed</span>
-          <span style="padding:.25rem .6rem;border-radius:6px;font-size:.6rem;font-weight:500;
-            background:rgba(0,113,227,.08);color:var(--accent);border:1px solid rgba(0,113,227,.15)">Server-side pipeline</span>
+            background:rgba(0,113,227,.08);color:var(--accent);border:1px solid rgba(0,113,227,.15)">No GPU needed</span>
           <span style="padding:.25rem .6rem;border-radius:6px;font-size:.6rem;font-weight:500;
             background:rgba(191,90,242,.08);color:var(--purple);border:1px solid rgba(191,90,242,.15)">Works in any app</span>
         </div>
       </div>
-      <!-- Visual pipeline -->
-      <div style="flex:0 0 280px">
-        <div style="font-size:.6rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.8rem">
-          Pipeline runs server-side</div>
-        <div class="node-graph" style="flex-direction:column;align-items:stretch;gap:.4rem">
+      <!-- Pipeline nodes -->
+      <div style="flex:0 0 260px">
+        <div style="font-size:.55rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.6rem">
+          Your claim travels through</div>
+        <div class="node-graph" style="flex-direction:column;align-items:stretch;gap:.35rem">
           <div class="comfy-node" style="border-color:var(--green);color:var(--green);background:rgba(48,209,88,.08);width:100%;justify-content:center">
-            &#x2328;&#xFE0F; Keyboard Input</div>
-          <div style="text-align:center;color:var(--border);font-size:.7rem">&#x25BC;</div>
+            &#x2328;&#xFE0F; You type a claim</div>
+          <div style="text-align:center;color:var(--border);font-size:.6rem">&#x25BC;</div>
           <div class="comfy-node" style="border-color:var(--accent);color:var(--accent);background:rgba(0,113,227,.08);width:100%;justify-content:center">
-            &#x2696; Multi-Model Tribunal</div>
-          <div style="text-align:center;color:var(--border);font-size:.7rem">&#x25BC;</div>
+            &#x2696; 3&ndash;5 AI models debate it</div>
+          <div style="text-align:center;color:var(--border);font-size:.6rem">&#x25BC;</div>
           <div class="comfy-node" style="border-color:var(--orange);color:var(--orange);background:rgba(255,159,10,.08);width:100%;justify-content:center">
-            &#x1F916; Sceptic Attack</div>
-          <div style="text-align:center;color:var(--border);font-size:.7rem">&#x25BC;</div>
+            &#x1F916; Sceptic tries to destroy it</div>
+          <div style="text-align:center;color:var(--border);font-size:.6rem">&#x25BC;</div>
           <div class="comfy-node" style="border-color:var(--purple);color:var(--purple);background:rgba(191,90,242,.08);width:100%;justify-content:center">
-            &#x1F4BE; Aletheia Proof</div>
+            &#x1F4BE; Surviving claims become proofs</div>
         </div>
       </div>
     </div>
@@ -1331,8 +1363,8 @@ footer .f-copy{{color:#333;font-size:.68rem;letter-spacing:.04em}}
 <section id="auth" class="reveal">
 <div style="max-width:480px;margin:0 auto;text-align:center">
   <div class="glass-card" style="padding:2.5rem">
-    <h2 style="font-size:1.6rem;font-weight:700;margin-bottom:.4rem">Create your account</h2>
-    <p style="color:var(--muted);font-size:.82rem;margin-bottom:1.5rem">One account across all platforms</p>
+    <h2 style="font-size:1.6rem;font-weight:700;margin-bottom:.4rem">Join Rhea</h2>
+    <p style="color:var(--muted);font-size:.82rem;margin-bottom:1.5rem">One profile across all platforms. 100 free credits on signup.</p>
     <div style="display:flex;flex-direction:column;gap:.5rem;margin-bottom:1rem">
       <a href="/auth/google?callback=web" style="display:flex;align-items:center;gap:.7rem;padding:.65rem 1rem;
         border-radius:12px;border:1px solid var(--border);background:rgba(255,255,255,.03);
