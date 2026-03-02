@@ -1,4 +1,4 @@
-import create from 'zustand';
+import { create } from 'zustand';
 
 export type ViewId = 'atlas-prime' | 'atlas-mesh' | 'theia-drift' | 'system-pw';
 

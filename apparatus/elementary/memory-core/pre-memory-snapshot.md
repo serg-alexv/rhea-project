@@ -66,7 +66,7 @@
 ## 7. Tools & Services
 - Entire.io: auto-commit strategy, snapshots, session tracking
 - LogRocket: bquken/rhea, free tier (1000 sessions/mo, 1mo retention, $0)
-- GitHub: serg-alexv/rhea-project, Gemini code review enabled
+- GitHub: timelabs-npo/rhea-project, Gemini code review enabled
 - Firebase: planned as Entire.IO duplicate safety layer
 - Chrome: AppleScript+JS automation available (see chrome-automation.md)
 - Watcher daemon: scripts/watcher-start.sh (PID monitor, macOS notifications)

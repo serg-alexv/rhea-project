@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<!-- saved from url=(0030)https://rhea-tribunal.fly.dev/ -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Rhea</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'SF Mono',SFMono-Regular,Menlo,Consolas,monospace;
+  background:#050505;color:#c0c0c0;display:flex;justify-content:center;padding:3rem 1.5rem}
+main{max-width:600px;width:100%}
+.mark{font-size:2.8rem;color:#fff;letter-spacing:-.05em;margin-bottom:.2rem}
+.epithet{color:#555;font-size:.85rem;margin-bottom:2.5rem;line-height:1.5}
+.axiom{color:#ff4400;font-size:1.1rem;margin:2rem 0;padding:.8rem 1.2rem;
+  border-left:2px solid #ff4400;letter-spacing:.02em}
+.axiom small{color:#444;display:block;margin-top:.3rem;font-size:.75rem}
+.live{display:flex;gap:1.5rem;margin:2rem 0;flex-wrap:wrap}
+.live .v{font-size:1.6rem;color:#fff;font-weight:600}
+.live .k{color:#444;font-size:.65rem;text-transform:uppercase;letter-spacing:.15em}
+.live .cell{min-width:80px}
+h2{font-size:.7rem;color:#333;margin:2.5rem 0 .8rem;text-transform:uppercase;
+  letter-spacing:.2em;font-weight:400}
+pre{background:#0a0a0a;padding:1rem;border-radius:4px;overflow-x:auto;
+  font-size:.78rem;line-height:1.6;margin:.5rem 0;border:1px solid #151515}
+code{color:#888}.g{color:#4a7}.r{color:#a44}.w{color:#ddd}
+a{color:#666;text-decoration:none;border-bottom:1px solid #222}
+a:hover{color:#fff;border-color:#444}
+.hunt{color:#666;font-size:.8rem;line-height:1.7;margin:1.5rem 0}
+.hunt em{color:#999;font-style:normal}
+.foot{margin-top:4rem;color:#222;font-size:.65rem;text-align:center;letter-spacing:.1em}
+</style></head>
+<body><main>
+
+<div class="mark">Rhea</div>
+<p class="epithet">The titan who tricked Time.<br>
+Now she spins the Toile.</p>
+
+<div class="axiom">∇ &gt; 0 ∨ ⊥
+<small>gradient positive or bottom — settle and you're prey</small></div>
+
+<div class="live">
+<div class="cell"><div class="v">0</div><div class="k">proofs</div></div>
+<div class="cell"><div class="v">0</div><div class="k">ontologies</div></div>
+<div class="cell"><div class="v">—</div><div class="k">confidence</div></div>
+<div class="cell"><div class="v">1 model live</div><div class="k">right now</div></div>
+</div>
+
+<h2>Pull a thread</h2>
+<pre><code><span class="g">curl</span> <span class="w">"https://rhea-tribunal.fly.dev/aletheia/search?q=hemoglobin"</span>
+
+<span class="g">curl</span> <span class="w">"https://rhea-tribunal.fly.dev/aletheia/stats"</span>
+
+<span class="g">curl</span> -X POST https://rhea-tribunal.fly.dev/tribunal \
+  -H <span class="w">"Content-Type: application/json"</span> \
+  -H <span class="w">"Authorization: Bearer YOUR_TOKEN"</span> \
+  -d <span class="w">'{"prompt":"ATP synthase uses rotary catalysis"}'</span></code></pre>
+
+<h2>What the spider does</h2>
+<p class="hunt">
+You throw a claim into the web.<br>
+Rhea sends it to <em>1 independent model</em> — they don't see each other.<br>
+Agreement = signal. Divergence = where the lie hides.<br>
+Every kill is stored in <em>Aletheia</em> — provenance chains, not marketing copy.</p>
+
+<h2>Endpoints</h2>
+<pre><code><span class="g">GET </span> /aletheia/search?q=   search the web
+<span class="g">GET </span> /aletheia/stats       what's caught
+<span class="g">GET </span> /aletheia/proofs      all kills
+<span class="g">GET </span> /agents/status        who's hunting
+<span class="g">POST</span> /tribunal             verify a claim
+<span class="g">POST</span> /tribunal/ice         deep verification
+<span class="g">GET </span> /health               pulse</code></pre>
+
+<h2>Get started</h2>
+<pre><code><span class="g">curl</span> -X POST https://rhea-tribunal.fly.dev/auth/signup \
+  -H <span class="w">"Content-Type: application/json"</span> \
+  -d <span class="w">'{"email":"you@example.com","password":"your-password"}'</span>
+
+<span class="r"># Returns: {"token": "eyJ..."}</span>
+<span class="r"># Use in Authorization: Bearer YOUR_TOKEN</span></code></pre>
+
+<p class="hunt">
+<em>iOS app</em>: <a href="https://testflight.apple.com/join/BNya22Jg">TestFlight</a><br>
+<em>macOS app</em>: <a href="https://github.com/timelabs-npo/rhea-project/releases">GitHub Releases</a><br>
+<em>Memory package</em>: <code>pip install packages/rhea-memory/</code>
+</p>
+
+<h2>Anatomy</h2>
+<pre><code>FastAPI · SQLite WAL · Gemini 2.5 Flash · Fly.io
+Built by a biochemist and three AI agents.
+<a href="https://github.com/timelabs-npo/rhea-project">src</a> · <a href="https://github.com/timelabs-npo/rhea-project/releases">releases</a></code></pre>
+
+<div class="foot">∇ &gt; 0 ∨ ⊥</div>
+</main></body></html>

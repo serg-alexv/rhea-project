@@ -17,11 +17,18 @@ const AtlasScene      = dynamic(() => import('@/components/atlas/AtlasScene'), {
 const MagneticNebula  = dynamic(() => import('@/components/atlas/MagneticNebula'), { ssr: false })
 const AgentRoster     = dynamic(() => import('@/components/AgentRoster'),     { ssr: false })
 const MnemosyneWhisper = dynamic(() => import('@/components/MnemosyneWhisper'), { ssr: false })
+const BioViewer = dynamic(() => import('@/components/BioViewer'), { ssr: false })
 
-const IS_DEV = typeof window !== 'undefined' &&
-  (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+function useDevHost() {
+  const [isDevHost, setIsDevHost] = useState(false)
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    setIsDevHost(window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+  }, [])
+  return isDevHost
+}
 
-type UiSchema = 'prime' | 'mesh'
+type UiSchema = 'prime' | 'mesh' | 'bio'
 let PANEL_Z = 30
 
 type ColorProfile = 'tribunal' | 'ice' | 'ember' | 'mono'
@@ -519,11 +526,13 @@ function SystemPWZone({
   uiSchema,
   visibleZones,
   managed,
+  isDevHost,
 }: {
   selectedNode: string
   uiSchema: UiSchema
   visibleZones: number
   managed?: FloatingPanelManaged
+  isDevHost: boolean
 }) {
   const dMetric = useAtlasStore((s: AtlasState) => s.dMetric)
   const apiHealthy = useAtlasStore((s: AtlasState) => s.apiHealthy)
@@ -545,7 +554,7 @@ function SystemPWZone({
   return (
     <FloatingPanel panelId="system-pw" position={managed ? 'w-[32rem]' : 'bottom-8 left-1/2 -translate-x-1/2 w-[32rem]'} managed={managed}>
       <div className="flex items-center justify-between mb-3">
-        <h2 className="text-[10px] font-bold uppercase tracking-widest text-gray-500">{IS_DEV ? <>System&apos;s P&amp;W</> : 'Console'}</h2>
+        <h2 className="text-[10px] font-bold uppercase tracking-widest text-gray-500">{isDevHost ? <>System&apos;s P&amp;W</> : 'Console'}</h2>
         <span className="text-[9px] font-mono text-cyan-300/60">extended zone</span>
       </div>
       <div className="grid grid-cols-2 gap-2 text-[9px] font-mono mb-2">
@@ -568,10 +577,10 @@ function SystemPWZone({
         ))}
       </div>
       <div className="rounded-xl border border-white/5 bg-black/30 p-3 text-[10px] font-mono text-cyan-100/60 leading-relaxed">
-        <div className="text-gray-500 mb-1">{IS_DEV ? <>p&amp;w&gt; orbit status --zone atlas</> : 'console> status --zone atlas'}</div>
+        <div className="text-gray-500 mb-1">{isDevHost ? <>p&amp;w&gt; orbit status --zone atlas</> : 'console> status --zone atlas'}</div>
         <div className="mb-1">focus={selectedNode.toLowerCase().replace(/\s+/g, '-')} :: atlas synced :: schema={uiSchema}</div>
         <div className="mb-2">active_island={activeIslandId ?? 'none'} :: active_session={activeSessionId ?? 'none'}</div>
-        <div className="text-gray-500 mb-1">{IS_DEV ? <>p&amp;w&gt; tail tribunal --last</> : 'console> tail --last'}</div>
+        <div className="text-gray-500 mb-1">{isDevHost ? <>p&amp;w&gt; tail tribunal --last</> : 'console> tail --last'}</div>
         <div className="line-clamp-2">{last?.query ? `${last.mode}/${last.ontology} :: ${last.query}` : 'No tribunal sessions yet.'}</div>
         <div className="mt-2 text-[9px] text-gray-500">tip: use the Atlas `Agents &amp; Providers` panel (`coach/ops/compact`) for fast routing and operator hints.</div>
       </div>
@@ -860,6 +869,7 @@ export default function Home() {
   const [dockLayout, setDockLayout] = useState<Record<ManagedPanelId, PanelDockState>>(DEFAULT_DOCK_LAYOUT)
   const [focusedPanel, setFocusedPanel] = useState<ManagedPanelId | null>('council')
   const [uiIdle, setUiIdle] = useState(false)
+  const isDevHost = useDevHost()
   const sessionHistory = useAtlasStore((s: AtlasState) => s.sessionHistory)
   const dMetric = useAtlasStore((s: AtlasState) => s.dMetric)
   const consensusScore = useAtlasStore((s: AtlasState) => s.consensusScore)
@@ -1065,14 +1075,14 @@ export default function Home() {
         </FloatingPanel>
 
         {/* Top-right: Council Pulse */}
-        <FloatingPanel key="council" position="w-64" managed={managedPanelProps('council', IS_DEV ? 'Council Pulse' : 'System Status')}>
-          <h2 className="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-3">{IS_DEV ? 'Council Pulse' : 'System Status'}</h2>
+        <FloatingPanel key="council" position="w-64" managed={managedPanelProps('council', isDevHost ? 'Council Pulse' : 'System Status')}>
+          <h2 className="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-3">{isDevHost ? 'Council Pulse' : 'System Status'}</h2>
           <div className="flex items-center gap-3">
             <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-            <span className="text-[10px] font-mono text-gray-400">{IS_DEV ? 'GEMINI 3.1 :: SYNC' : 'SYNC'}</span>
+            <span className="text-[10px] font-mono text-gray-400">{isDevHost ? 'GEMINI 3.1 :: SYNC' : 'SYNC'}</span>
           </div>
-          <div className="mt-3 grid grid-cols-2 gap-1">
-            {(['prime', 'mesh'] as UiSchema[]).map((schema) => (
+          <div className="mt-3 grid grid-cols-3 gap-1">
+            {(['prime', 'mesh', 'bio'] as UiSchema[]).map((schema) => (
               <span key={schema} className="group relative">
                 <button
                   onClick={() => setUiSchema(schema)}
@@ -1080,10 +1090,10 @@ export default function Home() {
                     uiSchema === schema ? 'border-cyan-500/40 bg-cyan-500/10 text-cyan-400' : 'border-white/5 bg-black/20 text-gray-600'
                   }`}
                 >
-                  {schema === 'prime' ? 'Atlas Prime' : 'Atlas Mesh'}
+                  {schema === 'prime' ? 'Atlas Prime' : schema === 'mesh' ? 'Atlas Mesh' : 'Bio'}
                 </button>
                 <span className="pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 bg-black/90 border border-white/10 text-white/60 text-[9px] px-2.5 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-[300]">
-                  Prime: Node clusters · Mesh: Connected graph
+                  {schema === 'prime' ? 'Prime: Node clusters' : schema === 'mesh' ? 'Mesh: Connected graph' : 'Bio: Molecular viewer (3Dmol.js)'}
                 </span>
               </span>
             ))}
@@ -1092,7 +1102,7 @@ export default function Home() {
             {([
               ['Timeline', showTimeline, setShowTimeline, 'View and rewind your research session history'],
               ['Research', showResearch, setShowResearch, 'Open the research panel to query the Tribunal'],
-              [IS_DEV ? 'P&W' : 'Console', showRex, setShowRex, undefined],
+              [isDevHost ? 'P&W' : 'Console', showRex, setShowRex, undefined],
               ['Memory', showMemory, setShowMemory, undefined],
               ['Agents', showAgents, setShowAgents, undefined],
             ] as [string, boolean, React.Dispatch<React.SetStateAction<boolean>>, string | undefined][]).map(([label, on, setOn, tip]) => (
@@ -1116,7 +1126,7 @@ export default function Home() {
               href={`${API_BASE}/app/`}
               className="rounded-lg px-2 py-1 text-[9px] font-mono uppercase tracking-widest border border-white/5 bg-black/20 text-gray-400 hover:text-white/70"
             >
-              {IS_DEV ? <>System&apos;s P&amp;W</> : 'Console'}
+              {isDevHost ? <>System&apos;s P&amp;W</> : 'Console'}
             </a>
             <a
               href="/semantic-drift.html"
@@ -1170,7 +1180,7 @@ export default function Home() {
         />
       )}
       {showRex && (
-        <SystemPWZone selectedNode={selectedNode} uiSchema={uiSchema} visibleZones={visibleZones} managed={managedPanelProps('pw', IS_DEV ? "System's P&W" : 'Console')} />
+        <SystemPWZone selectedNode={selectedNode} uiSchema={uiSchema} visibleZones={visibleZones} managed={managedPanelProps('pw', isDevHost ? "System's P&W" : 'Console')} isDevHost={isDevHost} />
       )}
       {showMemory && (
         <MemoryMapZone
@@ -1193,7 +1203,9 @@ export default function Home() {
       )}
 
       {/* ─── 3-D canvas — full-screen background ─── */}
-      {uiSchema === 'mesh' ? (
+      {uiSchema === 'bio' ? (
+        <div className="absolute inset-0 z-0"><BioViewer /></div>
+      ) : uiSchema === 'mesh' ? (
         <div className="absolute inset-0 z-0 cursor-crosshair"><AtlasScene /></div>
       ) : (
         <div className="absolute inset-0 z-0 cursor-crosshair">

@@ -3,7 +3,7 @@
 ##
 ## Run on timelabs.ru via SSH:
 ##   ssh root@timelabs.ru
-##   curl -sL https://raw.githubusercontent.com/serg-alexv/rhea-project/stage4-release/deploy/timelabs/setup.sh | bash
+##   curl -sL https://raw.githubusercontent.com/timelabs-npo/rhea-project/stage4-release/deploy/timelabs/setup.sh | bash
 ##
 ## Or copy this directory and run:
 ##   scp -r deploy/timelabs/ root@timelabs.ru:/opt/rhea/

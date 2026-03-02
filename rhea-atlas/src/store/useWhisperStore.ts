@@ -1,4 +1,4 @@
-import create from 'zustand';
+import { create } from 'zustand';
 import { useAtlasStore, AtlasState, SessionEntry } from '@/store/useAtlasStore';
 import { WHISPERS_BY_MOOD, MoodCategory, Whisper } from '@/data/whispers';
 

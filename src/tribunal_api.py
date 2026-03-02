@@ -1059,7 +1059,7 @@ footer .f-copy{{color:#333;font-size:.68rem;letter-spacing:.04em}}
     <a href="#pricing">Pricing</a>
     <a href="#platforms">Apps</a>
     <a href="/health">Status</a>
-    <a href="https://github.com/serg-alexv/rhea-project">GitHub</a>
+    <a href="https://github.com/timelabs-npo/rhea-project">GitHub</a>
     <!-- Compact auth widget -->
     <div class="auth-widget">
       <div class="auth-trigger"><span class="dot"></span> Sign In</div>
@@ -1277,7 +1277,7 @@ footer .f-copy{{color:#333;font-size:.68rem;letter-spacing:.04em}}
       <div>
         <div style="font-size:.78rem;font-weight:600">Rhea Play</div>
         <div style="font-size:.65rem;color:var(--muted)">Native macOS + iOS ops centre &mdash;
-          <a href="https://github.com/serg-alexv/rhea-project/releases" style="color:var(--accent)">Download</a></div>
+          <a href="https://github.com/timelabs-npo/rhea-project/releases" style="color:var(--accent)">Download</a></div>
       </div>
     </div>
     <div class="glass-card" style="flex:1;padding:1rem 1.2rem;display:flex;align-items:center;gap:.8rem;min-width:250px">
@@ -1413,7 +1413,7 @@ footer .f-copy{{color:#333;font-size:.68rem;letter-spacing:.04em}}
   <div class="plat-card glass-card stagger-2">
     <span class="p-icon">&#x1F4BB;</span>
     <div class="p-name">macOS</div>
-    <div class="p-sub"><a href="https://github.com/serg-alexv/rhea-project/releases">Download DMG</a></div>
+    <div class="p-sub"><a href="https://github.com/timelabs-npo/rhea-project/releases">Download DMG</a></div>
   </div>
   <div class="plat-card glass-card stagger-3">
     <span class="p-icon">&#x1F310;</span>
@@ -1491,7 +1491,7 @@ You own your data, your models, your keys. Rhea serves you &mdash; not the other
 <!-- FOOTER -->
 <footer>
   <div class="f-links">
-    <a href="https://github.com/serg-alexv/rhea-project">GitHub</a>
+    <a href="https://github.com/timelabs-npo/rhea-project">GitHub</a>
     <a href="/health">Status</a>
     <a href="/models">Models</a>
     <a href="/aletheia/stats">Aletheia</a>
@@ -1687,7 +1687,7 @@ async def terms():
 <p>We may update these Terms from time to time. Material changes will be communicated via email or a prominent notice on the platform at least 14 days before taking effect. Your continued use of the Service after the effective date constitutes acceptance of the revised Terms.</p>
 
 <h2>Contact</h2>
-<p>Questions about these Terms? Email <a href="mailto:timelabs.ad@gmail.com">timelabs.ad@gmail.com</a> or open an issue on <a href="https://github.com/serg-alexv/rhea-project">GitHub</a>.</p>
+<p>Questions about these Terms? Email <a href="mailto:timelabs.ad@gmail.com">timelabs.ad@gmail.com</a> or open an issue on <a href="https://github.com/timelabs-npo/rhea-project">GitHub</a>.</p>
 """
     html = _PAGE_STYLE.format(title="Terms of Service", body=body)
     return HTMLResponse(content=html)
@@ -1829,7 +1829,7 @@ async def community():
 
 <h2>Open Source Foundation</h2>
 <p>Rhea is built on an open-source foundation. The core tribunal engine, Aletheia proof pipeline, multi-provider bridge, and mobile client libraries are publicly available on GitHub. We believe the infrastructure for verifying knowledge should be auditable and forkable.</p>
-<p><a href="https://github.com/serg-alexv/rhea-project">github.com/serg-alexv/rhea-project</a> — source code, issues, and pull requests.</p>
+<p><a href="https://github.com/timelabs-npo/rhea-project">github.com/timelabs-npo/rhea-project</a> — source code, issues, and pull requests.</p>
 
 <h2>The Team</h2>
 <p>Rhea is built by a small team of humans and AI agents working in a shared virtual office. The current roster includes three AI collaborators:</p>
@@ -1843,7 +1843,7 @@ async def community():
 <h2>Apps and Releases</h2>
 <ul>
   <li><strong>iOS (TestFlight):</strong> <a href="https://testflight.apple.com/join/BNya22Jg">testflight.apple.com/join/BNya22Jg</a> — Native iOS app with Tribunal, Aletheia, Governor, and Atlas tabs. JWT auth with Keychain storage.</li>
-  <li><strong>macOS (Play):</strong> <a href="https://github.com/serg-alexv/rhea-project/releases">GitHub Releases</a> — 12-pane native macOS operations centre. Download the DMG from the latest release.</li>
+  <li><strong>macOS (Play):</strong> <a href="https://github.com/timelabs-npo/rhea-project/releases">GitHub Releases</a> — 12-pane native macOS operations centre. Download the DMG from the latest release.</li>
   <li><strong>Python package:</strong> <code>pip install rhea-memory</code> — SQLite-backed memory store with CLI for agents and scripts.</li>
   <li><strong>Web (Atlas):</strong> Live at <a href="https://rhea-tribunal.fly.dev">rhea-tribunal.fly.dev</a> — The API and dashboard, deployed on Fly.io AMS.</li>
 </ul>
@@ -1855,7 +1855,7 @@ async def community():
 <h2>Get Involved</h2>
 <p>The best ways to engage with the community:</p>
 <ul>
-  <li>Star and watch the <a href="https://github.com/serg-alexv/rhea-project">GitHub repository</a> for updates.</li>
+  <li>Star and watch the <a href="https://github.com/timelabs-npo/rhea-project">GitHub repository</a> for updates.</li>
   <li>Open issues for bugs, feature requests, or questions.</li>
   <li>Try the iOS beta on <a href="https://testflight.apple.com/join/BNya22Jg">TestFlight</a> and leave feedback.</li>
   <li>Email us at <a href="mailto:timelabs.ad@gmail.com">timelabs.ad@gmail.com</a> for partnership or research enquiries.</li>
@@ -2020,7 +2020,7 @@ async def contact():
 
 <h2>GitHub Issues</h2>
 <p>Bug reports, feature requests, and technical questions are best handled via GitHub Issues where the community and the team can collaborate:</p>
-<p><a href="https://github.com/serg-alexv/rhea-project/issues">github.com/serg-alexv/rhea-project/issues</a></p>
+<p><a href="https://github.com/timelabs-npo/rhea-project/issues">github.com/timelabs-npo/rhea-project/issues</a></p>
 <p>Please search existing issues before opening a new one. Include reproduction steps and relevant error messages when reporting bugs.</p>
 
 <h2>Security Disclosures</h2>

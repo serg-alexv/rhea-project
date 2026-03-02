@@ -15,6 +15,7 @@
     "@xyflow/react": "^12.10.1",
     "framer-motion": "^12.34.3",
     "next": "15.5.12",
+    "pdfjs-dist": "^4.9.155",
     "react": "^19",
     "react-dom": "^19",
     "three": "^0.162.0",

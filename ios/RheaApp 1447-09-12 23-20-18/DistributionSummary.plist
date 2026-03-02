@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>RheaApp.ipa</key>
+	<array>
+		<dict>
+			<key>architectures</key>
+			<array>
+				<string>arm64</string>
+			</array>
+			<key>buildNumber</key>
+			<string>13</string>
+			<key>certificate</key>
+			<dict>
+				<key>SHA1</key>
+				<string>BE84DA0A4DA0C8A2C096F063B5543EA0D80B7409</string>
+				<key>dateExpires</key>
+				<string>22/09/1448 AH</string>
+				<key>type</key>
+				<string>Cloud Managed Apple Distribution</string>
+			</dict>
+			<key>embeddedBinaries</key>
+			<array>
+				<dict>
+					<key>architectures</key>
+					<array>
+						<string>arm64</string>
+					</array>
+					<key>buildNumber</key>
+					<string>13</string>
+					<key>certificate</key>
+					<dict>
+						<key>SHA1</key>
+						<string>BE84DA0A4DA0C8A2C096F063B5543EA0D80B7409</string>
+						<key>dateExpires</key>
+						<string>22/09/1448 AH</string>
+						<key>type</key>
+						<string>Cloud Managed Apple Distribution</string>
+					</dict>
+					<key>entitlements</key>
+					<dict>
+						<key>application-identifier</key>
+						<string>398XACWZ7G.com.rhea.preview.keyboard</string>
+						<key>com.apple.developer.team-identifier</key>
+						<string>398XACWZ7G</string>
+						<key>get-task-allow</key>
+						<false/>
+						<key>keychain-access-groups</key>
+						<array>
+							<string>398XACWZ7G.com.rhea.preview</string>
+						</array>
+					</dict>
+					<key>name</key>
+					<string>RheaKeyboard.appex</string>
+					<key>profile</key>
+					<dict>
+						<key>UUID</key>
+						<string>9f967b2a-33ec-4c63-97e5-99d96cad1819</string>
+						<key>dateExpires</key>
+						<string>22/09/1448 AH</string>
+						<key>name</key>
+						<string>iOS Team Ad Hoc Provisioning Profile: com.rhea.preview.keyboard</string>
+					</dict>
+					<key>team</key>
+					<dict>
+						<key>id</key>
+						<string>398XACWZ7G</string>
+						<key>name</key>
+						<string>TAIMLABS, OOO</string>
+					</dict>
+					<key>versionNumber</key>
+					<string>1.0</string>
+				</dict>
+			</array>
+			<key>entitlements</key>
+			<dict>
+				<key>application-identifier</key>
+				<string>398XACWZ7G.com.rhea.preview</string>
+				<key>com.apple.developer.team-identifier</key>
+				<string>398XACWZ7G</string>
+				<key>get-task-allow</key>
+				<false/>
+				<key>keychain-access-groups</key>
+				<array>
+					<string>398XACWZ7G.com.rhea.preview</string>
+				</array>
+			</dict>
+			<key>name</key>
+			<string>RheaApp.app</string>
+			<key>profile</key>
+			<dict>
+				<key>UUID</key>
+				<string>a67e76ce-fec9-4eef-b72a-ca9fb298ea68</string>
+				<key>dateExpires</key>
+				<string>22/09/1448 AH</string>
+				<key>name</key>
+				<string>iOS Team Ad Hoc Provisioning Profile: com.rhea.preview</string>
+			</dict>
+			<key>team</key>
+			<dict>
+				<key>id</key>
+				<string>398XACWZ7G</string>
+				<key>name</key>
+				<string>TAIMLABS, OOO</string>
+			</dict>
+			<key>versionNumber</key>
+			<string>1.0</string>
+		</dict>
+	</array>
+</dict>
+</plist>

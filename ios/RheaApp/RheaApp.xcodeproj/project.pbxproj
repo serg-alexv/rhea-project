@@ -8,17 +8,31 @@
 
 /* Begin PBXBuildFile section */
 		06E656822071248B625AE0D7 /* TribunalClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2831EB795B13A29C6A189D1E /* TribunalClient.swift */; };
+		145A3BB626553141E8FA200A /* CommandCentreLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = B938A34423FB72064979B8A6 /* CommandCentreLayout.swift */; };
 		2020B120A5A6D7B940111F12 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A61BE59C6096A226D41463FC /* Assets.xcassets */; };
 		4888EF75F029CEA9FA61270B /* RheaKit in Frameworks */ = {isa = PBXBuildFile; productRef = FC51B905A12BD3ACD3E9B223 /* RheaKit */; };
 		705E204FBECE5C9D71948BB3 /* KeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D837731C33367F5AF137C0 /* KeyboardView.swift */; };
+		7078EC9E0A472B633A8369D2 /* RheaTunnel.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 9574E18377E1F632476B4C07 /* RheaTunnel.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		752D3D8F5093C312F95F3B6D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A61BE59C6096A226D41463FC /* Assets.xcassets */; };
 		81D0994B8A74B0BA6A033CA5 /* AnimatedTabBar in Frameworks */ = {isa = PBXBuildFile; productRef = 21730A08186D2C447AC4C412 /* AnimatedTabBar */; };
+		8E73ED5F5FC02885676DC830 /* RheaKit in Frameworks */ = {isa = PBXBuildFile; productRef = E8DAE4868EC16BBBD478263A /* RheaKit */; };
+		AB9582A76076614E803D469A /* PacketTunnelProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02CF84DA502BA4D1F2705083 /* PacketTunnelProvider.swift */; };
+		B1CBB9EDD48631F873E83CD3 /* MenuBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C709DD65D53B2C1556F7B5F /* MenuBarView.swift */; };
 		C0B17B6AA28A19A8FB0104CD /* KeyboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA402D4D7E8A8D3FC63332E7 /* KeyboardViewController.swift */; };
 		C46E4FDF7F0BF1DFD488CF9E /* ScreenPilotView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9ED40BFBC76E50BEA4CA59F /* ScreenPilotView.swift */; };
+		CD6AD05EF3419775A612BB37 /* CommandCentreApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B6E1E09FE6D90D1F384770 /* CommandCentreApp.swift */; };
 		D1877F3684A23CE8DAF29C7A /* RheaKeyboard.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 2B2B4E882931341E39C435E2 /* RheaKeyboard.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		F607ED56C6138928646E0846 /* RheaPreviewApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9477E3C820DABB86E045F9C1 /* RheaPreviewApp.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		44973ABE10E54E1B10A07DDE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3EA7A58199DB1E038511B83F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7C5044BC51AE5ABE13364E3E;
+			remoteInfo = RheaTunnel;
+		};
 		6CE5E9CE9D2826E27C1829D0 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 3EA7A58199DB1E038511B83F /* Project object */;
@@ -35,6 +49,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
+				7078EC9E0A472B633A8369D2 /* RheaTunnel.appex in Embed Foundation Extensions */,
 				D1877F3684A23CE8DAF29C7A /* RheaKeyboard.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
@@ -43,14 +58,20 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		02CF84DA502BA4D1F2705083 /* PacketTunnelProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PacketTunnelProvider.swift; sourceTree = "<group>"; };
 		18D837731C33367F5AF137C0 /* KeyboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardView.swift; sourceTree = "<group>"; };
+		1C709DD65D53B2C1556F7B5F /* MenuBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarView.swift; sourceTree = "<group>"; };
 		2831EB795B13A29C6A189D1E /* TribunalClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TribunalClient.swift; sourceTree = "<group>"; };
 		2B2B4E882931341E39C435E2 /* RheaKeyboard.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = RheaKeyboard.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		40F5D3F7CE5129EE551FD58A /* RheaKit */ = {isa = PBXFileReference; lastKnownFileType = folder; name = RheaKit; path = ../../packages/RheaKit; sourceTree = SOURCE_ROOT; };
+		60B6E1E09FE6D90D1F384770 /* CommandCentreApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommandCentreApp.swift; sourceTree = "<group>"; };
 		9477E3C820DABB86E045F9C1 /* RheaPreviewApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RheaPreviewApp.swift; sourceTree = "<group>"; };
+		9574E18377E1F632476B4C07 /* RheaTunnel.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = RheaTunnel.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		A61BE59C6096A226D41463FC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A9ED40BFBC76E50BEA4CA59F /* ScreenPilotView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenPilotView.swift; sourceTree = "<group>"; };
+		B938A34423FB72064979B8A6 /* CommandCentreLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommandCentreLayout.swift; sourceTree = "<group>"; };
 		D25F13868401944C1A1E978A /* RheaApp.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = RheaApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D7401CE7A9398C02EF5E69F0 /* RheaCommandCentre.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RheaCommandCentre.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EA402D4D7E8A8D3FC63332E7 /* KeyboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -64,9 +85,26 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		CE1E9395F4E44D3CBCF097E7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8E73ED5F5FC02885676DC830 /* RheaKit in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0407F85E4226D8F3F8F872BD /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				02CF84DA502BA4D1F2705083 /* PacketTunnelProvider.swift */,
+			);
+			name = Sources;
+			path = ../RheaTunnel/Sources;
+			sourceTree = "<group>";
+		};
 		3076B063CEB5B4ACCFD6DBC4 /* Packages */ = {
 			isa = PBXGroup;
 			children = (
@@ -81,6 +119,7 @@
 				3076B063CEB5B4ACCFD6DBC4 /* Packages */,
 				EEA2260F0C4414BB91DAADCF /* Sources */,
 				B304770D2747396A96EFED90 /* Sources */,
+				0407F85E4226D8F3F8F872BD /* Sources */,
 				9531D99E19050B15226ADC13 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -89,7 +128,9 @@
 			isa = PBXGroup;
 			children = (
 				D25F13868401944C1A1E978A /* RheaApp.app */,
+				D7401CE7A9398C02EF5E69F0 /* RheaCommandCentre.app */,
 				2B2B4E882931341E39C435E2 /* RheaKeyboard.appex */,
+				9574E18377E1F632476B4C07 /* RheaTunnel.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -98,6 +139,9 @@
 			isa = PBXGroup;
 			children = (
 				A61BE59C6096A226D41463FC /* Assets.xcassets */,
+				60B6E1E09FE6D90D1F384770 /* CommandCentreApp.swift */,
+				B938A34423FB72064979B8A6 /* CommandCentreLayout.swift */,
+				1C709DD65D53B2C1556F7B5F /* MenuBarView.swift */,
 				9477E3C820DABB86E045F9C1 /* RheaPreviewApp.swift */,
 				A9ED40BFBC76E50BEA4CA59F /* ScreenPilotView.swift */,
 			);
@@ -136,6 +180,43 @@
 			productReference = 2B2B4E882931341E39C435E2 /* RheaKeyboard.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
+		7C5044BC51AE5ABE13364E3E /* RheaTunnel */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2D69BB89CE62952DDD768BA3 /* Build configuration list for PBXNativeTarget "RheaTunnel" */;
+			buildPhases = (
+				2EBC31B99B55F2E8D8FA98A9 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = RheaTunnel;
+			packageProductDependencies = (
+			);
+			productName = RheaTunnel;
+			productReference = 9574E18377E1F632476B4C07 /* RheaTunnel.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		976F418A8F8565B07077E82A /* RheaCommandCentre */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F69A42ED0B1998F1839501A4 /* Build configuration list for PBXNativeTarget "RheaCommandCentre" */;
+			buildPhases = (
+				114EB985C5E0D6AFA4258FC2 /* Sources */,
+				DA8DC9AC2944F781FB68DC83 /* Resources */,
+				CE1E9395F4E44D3CBCF097E7 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = RheaCommandCentre;
+			packageProductDependencies = (
+				E8DAE4868EC16BBBD478263A /* RheaKit */,
+			);
+			productName = RheaCommandCentre;
+			productReference = D7401CE7A9398C02EF5E69F0 /* RheaCommandCentre.app */;
+			productType = "com.apple.product-type.application";
+		};
 		9E4653AE2F39DFCEE36D8E1B /* RheaApp */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 27CFE5363D3CDA52C592D294 /* Build configuration list for PBXNativeTarget "RheaApp" */;
@@ -148,6 +229,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				C08B821BF3946261BA87769A /* PBXTargetDependency */,
 				AA1935C53D5F46EC07A443DB /* PBXTargetDependency */,
 			);
 			name = RheaApp;
@@ -169,6 +251,14 @@
 				LastUpgradeCheck = 2620;
 				TargetAttributes = {
 					69F1254F70984F1B523B55CB = {
+						DevelopmentTeam = 398XACWZ7G;
+						ProvisioningStyle = Automatic;
+					};
+					7C5044BC51AE5ABE13364E3E = {
+						DevelopmentTeam = 398XACWZ7G;
+						ProvisioningStyle = Automatic;
+					};
+					976F418A8F8565B07077E82A = {
 						DevelopmentTeam = 398XACWZ7G;
 						ProvisioningStyle = Automatic;
 					};
@@ -197,7 +287,9 @@
 			projectRoot = "";
 			targets = (
 				9E4653AE2F39DFCEE36D8E1B /* RheaApp */,
+				976F418A8F8565B07077E82A /* RheaCommandCentre */,
 				69F1254F70984F1B523B55CB /* RheaKeyboard */,
+				7C5044BC51AE5ABE13364E3E /* RheaTunnel */,
 			);
 		};
 /* End PBXProject section */
@@ -211,9 +303,35 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		DA8DC9AC2944F781FB68DC83 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				752D3D8F5093C312F95F3B6D /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		114EB985C5E0D6AFA4258FC2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CD6AD05EF3419775A612BB37 /* CommandCentreApp.swift in Sources */,
+				145A3BB626553141E8FA200A /* CommandCentreLayout.swift in Sources */,
+				B1CBB9EDD48631F873E83CD3 /* MenuBarView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2EBC31B99B55F2E8D8FA98A9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AB9582A76076614E803D469A /* PacketTunnelProvider.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		90312DB8296142B3F7B94F13 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -241,9 +359,36 @@
 			target = 69F1254F70984F1B523B55CB /* RheaKeyboard */;
 			targetProxy = 6CE5E9CE9D2826E27C1829D0 /* PBXContainerItemProxy */;
 		};
+		C08B821BF3946261BA87769A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7C5044BC51AE5ABE13364E3E /* RheaTunnel */;
+			targetProxy = 44973ABE10E54E1B10A07DDE /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		0A233AF0545727D90E4EE52F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 15;
+				DEVELOPMENT_TEAM = 398XACWZ7G;
+				INFOPLIST_FILE = "CommandCentre-Info.plist";
+				INFOPLIST_GENERATION_MODE = GeneratedByXcode;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.rhea.commandcentre;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.9;
+			};
+			name = Release;
+		};
 		1FB180CC3F0E2424B76AD462 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -293,7 +438,6 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
@@ -307,7 +451,7 @@
 				CODE_SIGN_ENTITLEMENTS = RheaApp.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 13;
+				CURRENT_PROJECT_VERSION = 15;
 				DEVELOPMENT_TEAM = 398XACWZ7G;
 				INFOPLIST_FILE = Info.plist;
 				INFOPLIST_GENERATION_MODE = GeneratedByXcode;
@@ -323,6 +467,28 @@
 			};
 			name = Release;
 		};
+		382DF06965953E719F519B6A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = RheaTunnel.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 15;
+				DEVELOPMENT_TEAM = 398XACWZ7G;
+				INFOPLIST_FILE = "RheaTunnel-Info.plist";
+				INFOPLIST_GENERATION_MODE = GeneratedByXcode;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.rhea.preview.tunnel;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
 		38FA0BA58297B4DFA62F2480 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -330,7 +496,7 @@
 				CODE_SIGN_ENTITLEMENTS = RheaApp.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 13;
+				CURRENT_PROJECT_VERSION = 15;
 				DEVELOPMENT_TEAM = 398XACWZ7G;
 				INFOPLIST_FILE = Info.plist;
 				INFOPLIST_GENERATION_MODE = GeneratedByXcode;
@@ -351,7 +517,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = RheaKeyboard.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 13;
+				CURRENT_PROJECT_VERSION = 15;
 				DEVELOPMENT_TEAM = 398XACWZ7G;
 				INFOPLIST_FILE = "RheaKeyboard-Info.plist";
 				INFOPLIST_GENERATION_MODE = GeneratedByXcode;
@@ -424,7 +590,6 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -436,7 +601,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = RheaKeyboard.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 13;
+				CURRENT_PROJECT_VERSION = 15;
 				DEVELOPMENT_TEAM = 398XACWZ7G;
 				INFOPLIST_FILE = "RheaKeyboard-Info.plist";
 				INFOPLIST_GENERATION_MODE = GeneratedByXcode;
@@ -453,6 +618,50 @@
 			};
 			name = Debug;
 		};
+		E70C858750A91271D9DB6FA6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 15;
+				DEVELOPMENT_TEAM = 398XACWZ7G;
+				INFOPLIST_FILE = "CommandCentre-Info.plist";
+				INFOPLIST_GENERATION_MODE = GeneratedByXcode;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.rhea.commandcentre;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.9;
+			};
+			name = Debug;
+		};
+		FA8A8E663C468DB3D92F9823 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = RheaTunnel.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 15;
+				DEVELOPMENT_TEAM = 398XACWZ7G;
+				INFOPLIST_FILE = "RheaTunnel-Info.plist";
+				INFOPLIST_GENERATION_MODE = GeneratedByXcode;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.rhea.preview.tunnel;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -461,6 +670,15 @@
 			buildConfigurations = (
 				38FA0BA58297B4DFA62F2480 /* Debug */,
 				318D7404B531F0E0F805AA57 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		2D69BB89CE62952DDD768BA3 /* Build configuration list for PBXNativeTarget "RheaTunnel" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				382DF06965953E719F519B6A /* Debug */,
+				FA8A8E663C468DB3D92F9823 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
@@ -479,6 +697,15 @@
 			buildConfigurations = (
 				E1F873151BEABA09D91BB582 /* Debug */,
 				D77B8E759F6D93CB6F36E67C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		F69A42ED0B1998F1839501A4 /* Build configuration list for PBXNativeTarget "RheaCommandCentre" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E70C858750A91271D9DB6FA6 /* Debug */,
+				0A233AF0545727D90E4EE52F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
@@ -508,6 +735,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 2C972866174AB8ED11995967 /* XCRemoteSwiftPackageReference "AnimatedTabBar" */;
 			productName = AnimatedTabBar;
+		};
+		E8DAE4868EC16BBBD478263A /* RheaKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = RheaKit;
 		};
 		FC51B905A12BD3ACD3E9B223 /* RheaKit */ = {
 			isa = XCSwiftPackageProductDependency;
