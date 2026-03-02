@@ -5399,6 +5399,14 @@ async def share_delete(token: str, request: Request):
 
 
 # ---------------------------------------------------------------------------
+# Static frontend (Atlas) — served as catch-all AFTER all API routes
+# ---------------------------------------------------------------------------
+_STATIC_DIR = Path(__file__).parent.parent / "static_frontend"
+if _STATIC_DIR.is_dir():
+    from fastapi.staticfiles import StaticFiles
+    app.mount("/", StaticFiles(directory=str(_STATIC_DIR), html=True), name="static")
+
+# ---------------------------------------------------------------------------
 # Direct execution
 # ---------------------------------------------------------------------------
 

@@ -20,9 +20,43 @@ interface DesignNode {
   parentId?: string
 }
 
+interface HistoryEntry {
+  nodes: DesignNode[]
+  selectedIds: Set<string>
+}
+
+interface SavedDesign {
+  name: string
+  timestamp: number
+  nodes: DesignNode[]
+}
+
+const STORAGE_KEY = 'rhea-design-saved'
+const AUTOSAVE_KEY = 'rhea-design-autosave'
+const GRID_SIZE = 8
+
 // ─── Helpers ─────────────────────────────────────────────────────────
 
 const uid = () => Math.random().toString(36).slice(2, 10)
+
+function snapToGrid(v: number): number {
+  return Math.round(v / GRID_SIZE) * GRID_SIZE
+}
+
+function cloneNode(node: DesignNode, offsetX = 20, offsetY = 20): DesignNode {
+  return { ...node, id: uid(), x: node.x + offsetX, y: node.y + offsetY, props: { ...node.props }, children: [...node.children] }
+}
+
+function loadSavedDesigns(): SavedDesign[] {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY)
+    return raw ? JSON.parse(raw) : []
+  } catch { return [] }
+}
+
+function saveSavedDesigns(designs: SavedDesign[]) {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(designs)) } catch {}
+}
 
 const COMPONENT_PALETTE: { label: string; items: { type: SwiftComponent; icon: string; w: number; h: number }[] }[] = [
   {
@@ -181,11 +215,12 @@ extension Color {
 
 // ─── Node Renderer (Canvas) ─────────────────────────────────────────
 
-function NodeRenderer({ node, selected, onSelect, onDragStart }: {
+function NodeRenderer({ node, selected, onSelect, onDragStart, zIndex }: {
   node: DesignNode
   selected: boolean
-  onSelect: () => void
+  onSelect: (e: React.MouseEvent) => void
   onDragStart: (e: React.MouseEvent) => void
+  zIndex: number
 }) {
   const p = node.props
   const isStack = ['VStack', 'HStack', 'ZStack'].includes(node.type)
@@ -206,6 +241,7 @@ function NodeRenderer({ node, selected, onSelect, onDragStart }: {
     justifyContent: 'center',
     overflow: 'hidden',
     userSelect: 'none',
+    zIndex,
   }
 
   let content: React.ReactNode = null
@@ -278,7 +314,7 @@ function NodeRenderer({ node, selected, onSelect, onDragStart }: {
   return (
     <div
       style={{ ...baseStyle, backgroundColor: bgColor }}
-      onMouseDown={(e) => { e.stopPropagation(); onSelect(); onDragStart(e) }}
+      onMouseDown={(e) => { e.stopPropagation(); onSelect(e); onDragStart(e) }}
     >
       {content}
     </div>
@@ -373,14 +409,87 @@ function Inspector({ node, onChange, onDelete }: {
   )
 }
 
+// ─── Toolbar Button ─────────────────────────────────────────────────
+
+function ToolBtn({ label, icon, onClick, active, disabled, tooltip }: {
+  label?: string; icon: string; onClick: () => void; active?: boolean; disabled?: boolean; tooltip?: string
+}) {
+  return (
+    <button
+      onClick={onClick}
+      disabled={disabled}
+      title={tooltip || label}
+      style={{
+        padding: '4px 8px', background: active ? '#007AFF' : '#1e293b',
+        border: '1px solid #334155', borderRadius: 4, color: disabled ? '#475569' : '#e2e8f0',
+        fontSize: 12, cursor: disabled ? 'default' : 'pointer', display: 'flex', alignItems: 'center', gap: 4,
+        opacity: disabled ? 0.5 : 1,
+      }}
+    >
+      <span style={{ fontSize: 13 }}>{icon}</span>
+      {label && <span>{label}</span>}
+    </button>
+  )
+}
+
+// ─── Save/Load Modal ────────────────────────────────────────────────
+
+function SaveLoadModal({ onClose, onLoad }: {
+  onClose: () => void
+  onLoad: (nodes: DesignNode[]) => void
+}) {
+  const [designs, setDesigns] = useState<SavedDesign[]>([])
+
+  useEffect(() => { setDesigns(loadSavedDesigns()) }, [])
+
+  function handleDelete(idx: number) {
+    const next = designs.filter((_, i) => i !== idx)
+    saveSavedDesigns(next)
+    setDesigns(next)
+  }
+
+  return (
+    <div style={{ position: 'fixed', inset: 0, zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.6)' }} onClick={onClose}>
+      <div onClick={e => e.stopPropagation()} style={{ width: 380, maxHeight: '60vh', background: '#1e293b', borderRadius: 12, border: '1px solid #334155', padding: 16, overflowY: 'auto' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+          <h3 style={{ fontSize: 14, fontWeight: 600, color: '#f8fafc', margin: 0 }}>Saved Designs</h3>
+          <button onClick={onClose} style={{ background: 'none', border: 'none', color: '#94a3b8', fontSize: 16, cursor: 'pointer' }}>x</button>
+        </div>
+        {designs.length === 0 ? (
+          <div style={{ fontSize: 12, color: '#64748b', padding: 16, textAlign: 'center' }}>No saved designs yet. Use the save button to store your current design.</div>
+        ) : (
+          designs.map((d, i) => (
+            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 0', borderBottom: '1px solid #334155' }}>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontSize: 13, color: '#e2e8f0' }}>{d.name}</div>
+                <div style={{ fontSize: 10, color: '#64748b' }}>{new Date(d.timestamp).toLocaleString()} — {d.nodes.length} components</div>
+              </div>
+              <button onClick={() => { onLoad(d.nodes); onClose() }} style={{ padding: '3px 10px', background: '#007AFF', border: 'none', borderRadius: 4, color: '#fff', fontSize: 11, cursor: 'pointer' }}>Load</button>
+              <button onClick={() => handleDelete(i)} style={{ padding: '3px 8px', background: '#dc2626', border: 'none', borderRadius: 4, color: '#fff', fontSize: 11, cursor: 'pointer' }}>x</button>
+            </div>
+          ))
+        )}
+      </div>
+    </div>
+  )
+}
+
 // ─── Main Page ───────────────────────────────────────────────────────
 
 export default function DesignPage() {
   const [nodes, setNodes] = useState<DesignNode[]>([])
-  const [selectedId, setSelectedId] = useState<string | null>(null)
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
   const [showCode, setShowCode] = useState(false)
-  const [dragState, setDragState] = useState<{ id: string; offsetX: number; offsetY: number } | null>(null)
+  const [dragState, setDragState] = useState<{ ids: string[]; offsets: Map<string, { ox: number; oy: number }> } | null>(null)
   const [deviceFrame, setDeviceFrame] = useState<'iphone15' | 'iphone_se' | 'ipad'>('iphone15')
+  const [snapEnabled, setSnapEnabled] = useState(false)
+  const [showSaveLoad, setShowSaveLoad] = useState(false)
+
+  // Undo/redo stacks
+  const [history, setHistory] = useState<HistoryEntry[]>([])
+  const [historyIndex, setHistoryIndex] = useState(-1)
+  const isUndoRedoRef = useRef(false)
+
   const canvasRef = useRef<HTMLDivElement>(null)
 
   const DEVICE_SIZES = {
@@ -390,11 +499,86 @@ export default function DesignPage() {
   }
 
   const device = DEVICE_SIZES[deviceFrame]
-  const selected = nodes.find(n => n.id === selectedId) || null
+  const selectedId = selectedIds.size === 1 ? Array.from(selectedIds)[0] : null
+  const selected = selectedId ? nodes.find(n => n.id === selectedId) || null : null
 
   // Root-level nodes (no parent)
   const rootIds = nodes.filter(n => !n.parentId).map(n => n.id)
 
+  // ─── History management ─────────────────────────────────────────
+  const pushHistory = useCallback((newNodes: DesignNode[], newSelectedIds: Set<string>) => {
+    if (isUndoRedoRef.current) { isUndoRedoRef.current = false; return }
+    setHistory(prev => {
+      const truncated = prev.slice(0, historyIndex + 1)
+      const entry: HistoryEntry = { nodes: newNodes.map(n => ({ ...n, props: { ...n.props }, children: [...n.children] })), selectedIds: new Set(newSelectedIds) }
+      const next = [...truncated, entry]
+      if (next.length > 100) next.shift()
+      return next
+    })
+    setHistoryIndex(prev => prev + 1)
+  }, [historyIndex])
+
+  // Track node changes for history (skip during drag for perf)
+  const prevNodesRef = useRef<string>('')
+  useEffect(() => {
+    if (dragState) return
+    const sig = JSON.stringify(nodes)
+    if (sig !== prevNodesRef.current) {
+      prevNodesRef.current = sig
+      pushHistory(nodes, selectedIds)
+    }
+  }, [nodes, selectedIds, dragState, pushHistory])
+
+  function undo() {
+    if (historyIndex <= 0) return
+    const prev = history[historyIndex - 1]
+    if (!prev) return
+    isUndoRedoRef.current = true
+    setHistoryIndex(i => i - 1)
+    setNodes(prev.nodes.map(n => ({ ...n, props: { ...n.props }, children: [...n.children] })))
+    setSelectedIds(new Set(prev.selectedIds))
+  }
+
+  function redo() {
+    if (historyIndex >= history.length - 1) return
+    const next = history[historyIndex + 1]
+    if (!next) return
+    isUndoRedoRef.current = true
+    setHistoryIndex(i => i + 1)
+    setNodes(next.nodes.map(n => ({ ...n, props: { ...n.props }, children: [...n.children] })))
+    setSelectedIds(new Set(next.selectedIds))
+  }
+
+  // ─── Auto-save to localStorage ──────────────────────────────────
+  useEffect(() => {
+    try { localStorage.setItem(AUTOSAVE_KEY, JSON.stringify(nodes)) } catch {}
+  }, [nodes])
+
+  // Load autosave on mount
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(AUTOSAVE_KEY)
+      if (raw) {
+        const parsed = JSON.parse(raw)
+        if (Array.isArray(parsed) && parsed.length > 0) setNodes(parsed)
+      }
+    } catch {}
+  }, [])
+
+  // ─── Save/Load ──────────────────────────────────────────────────
+  function saveDesign() {
+    const name = `Design ${new Date().toLocaleString()}`
+    const designs = loadSavedDesigns()
+    designs.push({ name, timestamp: Date.now(), nodes: nodes.map(n => ({ ...n, props: { ...n.props }, children: [...n.children] })) })
+    saveSavedDesigns(designs)
+  }
+
+  function loadDesign(loadedNodes: DesignNode[]) {
+    setNodes(loadedNodes)
+    setSelectedIds(new Set())
+  }
+
+  // ─── Node operations ───────────────────────────────────────────
   function addNode(type: SwiftComponent, w: number, h: number) {
     const id = uid()
     const newNode: DesignNode = {
@@ -408,13 +592,12 @@ export default function DesignPage() {
       children: [],
     }
     setNodes(prev => [...prev, newNode])
-    setSelectedId(id)
+    setSelectedIds(new Set([id]))
   }
 
   function updateProps(id: string, props: Record<string, string | number | boolean>) {
     setNodes(prev => prev.map(n => {
       if (n.id !== id) return n
-      // Handle position/size via __x, __y, __w, __h pseudo-props
       const { __x, __y, __w, __h, ...rest } = props as any
       return {
         ...n,
@@ -427,27 +610,88 @@ export default function DesignPage() {
     }))
   }
 
-  function deleteNode(id: string) {
-    setNodes(prev => prev.filter(n => n.id !== id))
-    if (selectedId === id) setSelectedId(null)
+  function deleteSelected() {
+    if (selectedIds.size === 0) return
+    setNodes(prev => prev.filter(n => !selectedIds.has(n.id)))
+    setSelectedIds(new Set())
   }
 
+  function deleteNode(id: string) {
+    setNodes(prev => prev.filter(n => n.id !== id))
+    setSelectedIds(prev => { const s = new Set(prev); s.delete(id); return s })
+  }
+
+  function duplicateSelected() {
+    if (selectedIds.size === 0) return
+    const newIds: string[] = []
+    setNodes(prev => {
+      const toClone = prev.filter(n => selectedIds.has(n.id))
+      const clones = toClone.map(n => {
+        const c = cloneNode(n)
+        newIds.push(c.id)
+        return c
+      })
+      return [...prev, ...clones]
+    })
+    setTimeout(() => setSelectedIds(new Set(newIds)), 0)
+  }
+
+  // ─── Layer ordering ─────────────────────────────────────────────
+  function bringForward() {
+    if (selectedIds.size === 0) return
+    setNodes(prev => {
+      const next = [...prev]
+      for (let i = next.length - 2; i >= 0; i--) {
+        if (selectedIds.has(next[i].id) && !selectedIds.has(next[i + 1].id)) {
+          ;[next[i], next[i + 1]] = [next[i + 1], next[i]]
+        }
+      }
+      return next
+    })
+  }
+
+  function sendBackward() {
+    if (selectedIds.size === 0) return
+    setNodes(prev => {
+      const next = [...prev]
+      for (let i = 1; i < next.length; i++) {
+        if (selectedIds.has(next[i].id) && !selectedIds.has(next[i - 1].id)) {
+          ;[next[i], next[i - 1]] = [next[i - 1], next[i]]
+        }
+      }
+      return next
+    })
+  }
+
+  // ─── Drag (supports multi-select) ──────────────────────────────
   function handleDragStart(id: string, e: React.MouseEvent) {
-    const node = nodes.find(n => n.id === id)
-    if (!node || !canvasRef.current) return
+    if (!canvasRef.current) return
     const rect = canvasRef.current.getBoundingClientRect()
-    setDragState({ id, offsetX: e.clientX - rect.left - node.x, offsetY: e.clientY - rect.top - node.y })
+    const dragIds = selectedIds.has(id) ? Array.from(selectedIds) : [id]
+    const offsets = new Map<string, { ox: number; oy: number }>()
+    for (const did of dragIds) {
+      const node = nodes.find(n => n.id === did)
+      if (node) offsets.set(did, { ox: e.clientX - rect.left - node.x, oy: e.clientY - rect.top - node.y })
+    }
+    setDragState({ ids: dragIds, offsets })
   }
 
   const handleMouseMove = useCallback((e: MouseEvent) => {
     if (!dragState || !canvasRef.current) return
     const rect = canvasRef.current.getBoundingClientRect()
-    const x = Math.round(e.clientX - rect.left - dragState.offsetX)
-    const y = Math.round(e.clientY - rect.top - dragState.offsetY)
-    setNodes(prev => prev.map(n => n.id === dragState.id ? { ...n, x, y } : n))
-  }, [dragState])
+    setNodes(prev => prev.map(n => {
+      const off = dragState.offsets.get(n.id)
+      if (!off) return n
+      let x = Math.round(e.clientX - rect.left - off.ox)
+      let y = Math.round(e.clientY - rect.top - off.oy)
+      if (snapEnabled) { x = snapToGrid(x); y = snapToGrid(y) }
+      return { ...n, x, y }
+    }))
+  }, [dragState, snapEnabled])
 
-  const handleMouseUp = useCallback(() => setDragState(null), [])
+  const handleMouseUp = useCallback(() => {
+    if (dragState) setDragState(null)
+  }, [dragState])
 
   useEffect(() => {
     if (dragState) {
@@ -463,22 +707,49 @@ export default function DesignPage() {
     navigator.clipboard.writeText(swiftCode)
   }
 
-  // Keyboard shortcuts
+  // ─── Selection handler ──────────────────────────────────────────
+  function handleSelect(id: string, e: React.MouseEvent) {
+    if (e.shiftKey) {
+      setSelectedIds(prev => {
+        const next = new Set(prev)
+        if (next.has(id)) next.delete(id)
+        else next.add(id)
+        return next
+      })
+    } else {
+      setSelectedIds(new Set([id]))
+    }
+  }
+
+  // ─── Keyboard shortcuts ─────────────────────────────────────────
   useEffect(() => {
     function handleKey(e: KeyboardEvent) {
+      const isInput = document.activeElement?.tagName === 'INPUT' || document.activeElement?.tagName === 'SELECT' || document.activeElement?.tagName === 'TEXTAREA'
+      if (isInput) return
+
+      const meta = e.metaKey || e.ctrlKey
+
       if (e.key === 'Delete' || e.key === 'Backspace') {
-        if (selectedId && document.activeElement?.tagName !== 'INPUT' && document.activeElement?.tagName !== 'SELECT') {
-          deleteNode(selectedId)
-        }
+        if (selectedIds.size > 0) { e.preventDefault(); deleteSelected() }
       }
-      if (e.key === 'Escape') setSelectedId(null)
+      if (e.key === 'Escape') setSelectedIds(new Set())
+      if (meta && e.key === 'z' && !e.shiftKey) { e.preventDefault(); undo() }
+      if (meta && e.key === 'z' && e.shiftKey) { e.preventDefault(); redo() }
+      if (meta && e.key === 'd') { e.preventDefault(); duplicateSelected() }
+      if (meta && e.key === ']') { e.preventDefault(); bringForward() }
+      if (meta && e.key === '[') { e.preventDefault(); sendBackward() }
+      if (meta && e.key === 's') { e.preventDefault(); saveDesign() }
     }
     window.addEventListener('keydown', handleKey)
     return () => window.removeEventListener('keydown', handleKey)
   })
 
+  const tbSep = <div style={{ width: 1, height: 20, background: '#334155' }} />
+
   return (
     <div style={{ display: 'flex', height: '100vh', background: '#0f172a', color: '#e2e8f0', fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro", sans-serif' }}>
+
+      {showSaveLoad && <SaveLoadModal onClose={() => setShowSaveLoad(false)} onLoad={loadDesign} />}
 
       {/* Left: Component Palette */}
       <div style={{ width: 200, borderRight: '1px solid #1e293b', padding: 12, overflowY: 'auto', flexShrink: 0 }}>
@@ -518,12 +789,49 @@ export default function DesignPage() {
             {Object.entries(DEVICE_SIZES).map(([key, v]) => <option key={key} value={key}>{v.label} ({v.w}×{v.h})</option>)}
           </select>
         </div>
+
+        {/* Layer list */}
+        <div style={{ marginTop: 16, borderTop: '1px solid #1e293b', paddingTop: 12 }}>
+          <div style={{ fontSize: 10, textTransform: 'uppercase', letterSpacing: 1, color: '#64748b', marginBottom: 6 }}>Layers</div>
+          {nodes.length === 0 && <div style={{ fontSize: 11, color: '#475569' }}>No layers</div>}
+          {[...nodes].reverse().map((n, ri) => {
+            const zIdx = nodes.length - 1 - ri
+            return (
+              <div
+                key={n.id}
+                onClick={(e) => handleSelect(n.id, e as any)}
+                style={{
+                  padding: '3px 6px', marginBottom: 2, borderRadius: 4, fontSize: 11, cursor: 'pointer',
+                  background: selectedIds.has(n.id) ? '#1e3a5f' : 'transparent',
+                  color: selectedIds.has(n.id) ? '#60a5fa' : '#94a3b8',
+                  display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                }}
+              >
+                <span>{n.type}</span>
+                <span style={{ fontSize: 9, color: '#475569' }}>z{zIdx}</span>
+              </div>
+            )
+          })}
+        </div>
       </div>
 
       {/* Center: Canvas */}
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         {/* Toolbar */}
-        <div style={{ height: 40, borderBottom: '1px solid #1e293b', display: 'flex', alignItems: 'center', padding: '0 12px', gap: 8 }}>
+        <div style={{ height: 40, borderBottom: '1px solid #1e293b', display: 'flex', alignItems: 'center', padding: '0 8px', gap: 4 }}>
+          <ToolBtn icon="↩" onClick={undo} disabled={historyIndex <= 0} tooltip="Undo (Cmd+Z)" />
+          <ToolBtn icon="↪" onClick={redo} disabled={historyIndex >= history.length - 1} tooltip="Redo (Cmd+Shift+Z)" />
+          {tbSep}
+          <ToolBtn icon="⊞" label="Save" onClick={saveDesign} tooltip="Save design (Cmd+S)" />
+          <ToolBtn icon="⊟" label="Load" onClick={() => setShowSaveLoad(true)} tooltip="Load saved design" />
+          {tbSep}
+          <ToolBtn icon="⊡" onClick={() => setSnapEnabled(!snapEnabled)} active={snapEnabled} tooltip={`Snap to ${GRID_SIZE}px grid (${snapEnabled ? 'ON' : 'OFF'})`} label="Snap" />
+          {tbSep}
+          <ToolBtn icon="⧉" onClick={duplicateSelected} disabled={selectedIds.size === 0} tooltip="Duplicate (Cmd+D)" />
+          <ToolBtn icon="⬆" onClick={bringForward} disabled={selectedIds.size === 0} tooltip="Bring forward (Cmd+])" />
+          <ToolBtn icon="⬇" onClick={sendBackward} disabled={selectedIds.size === 0} tooltip="Send backward (Cmd+[)" />
+          <ToolBtn icon="✕" onClick={deleteSelected} disabled={selectedIds.size === 0} tooltip="Delete (Del)" />
+          {tbSep}
           <button onClick={() => setShowCode(!showCode)} style={{ padding: '4px 12px', background: showCode ? '#007AFF' : '#1e293b', border: '1px solid #334155', borderRadius: 4, color: '#e2e8f0', fontSize: 12, cursor: 'pointer' }}>
             {showCode ? '← Canvas' : 'SwiftUI Code'}
           </button>
@@ -531,6 +839,7 @@ export default function DesignPage() {
             <button onClick={copyCode} style={{ padding: '4px 12px', background: '#1e293b', border: '1px solid #334155', borderRadius: 4, color: '#e2e8f0', fontSize: 12, cursor: 'pointer' }}>Copy</button>
           )}
           <div style={{ flex: 1 }} />
+          {selectedIds.size > 1 && <span style={{ fontSize: 11, color: '#60a5fa' }}>{selectedIds.size} selected</span>}
           <span style={{ fontSize: 11, color: '#64748b' }}>{nodes.length} component{nodes.length !== 1 ? 's' : ''}</span>
         </div>
 
@@ -559,7 +868,7 @@ export default function DesignPage() {
                 {/* Canvas area */}
                 <div
                   ref={canvasRef}
-                  onClick={() => setSelectedId(null)}
+                  onClick={() => setSelectedIds(new Set())}
                   style={{
                     position: 'relative',
                     width: device.w,
@@ -569,13 +878,25 @@ export default function DesignPage() {
                     overflow: 'hidden',
                   }}
                 >
-                  {nodes.map(node => (
+                  {/* Grid overlay */}
+                  {snapEnabled && (
+                    <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 0, opacity: 0.15 }}>
+                      <defs>
+                        <pattern id="grid8" width={GRID_SIZE} height={GRID_SIZE} patternUnits="userSpaceOnUse">
+                          <path d={`M ${GRID_SIZE} 0 L 0 0 0 ${GRID_SIZE}`} fill="none" stroke="#007AFF" strokeWidth="0.5" />
+                        </pattern>
+                      </defs>
+                      <rect width="100%" height="100%" fill="url(#grid8)" />
+                    </svg>
+                  )}
+                  {nodes.map((node, idx) => (
                     <NodeRenderer
                       key={node.id}
                       node={node}
-                      selected={node.id === selectedId}
-                      onSelect={() => setSelectedId(node.id)}
+                      selected={selectedIds.has(node.id)}
+                      onSelect={(e) => handleSelect(node.id, e)}
                       onDragStart={(e) => handleDragStart(node.id, e)}
+                      zIndex={idx + 1}
                     />
                   ))}
                   {nodes.length === 0 && (
@@ -601,9 +922,32 @@ export default function DesignPage() {
         <h3 style={{ fontSize: 13, fontWeight: 600, color: '#f8fafc', margin: '0 0 12px' }}>Inspector</h3>
         {selected ? (
           <Inspector node={selected} onChange={updateProps} onDelete={deleteNode} />
+        ) : selectedIds.size > 1 ? (
+          <div style={{ fontSize: 12, color: '#60a5fa' }}>{selectedIds.size} components selected. Use toolbar to move, duplicate, or delete.</div>
         ) : (
           <div style={{ fontSize: 12, color: '#64748b' }}>Select a component to edit its properties</div>
         )}
+
+        {/* Keyboard shortcuts reference */}
+        <div style={{ marginTop: 24, borderTop: '1px solid #1e293b', paddingTop: 12 }}>
+          <div style={{ fontSize: 10, textTransform: 'uppercase', letterSpacing: 1, color: '#64748b', marginBottom: 8 }}>Shortcuts</div>
+          {[
+            ['Cmd+Z', 'Undo'],
+            ['Cmd+Shift+Z', 'Redo'],
+            ['Cmd+D', 'Duplicate'],
+            ['Cmd+S', 'Save'],
+            ['Cmd+]', 'Bring forward'],
+            ['Cmd+[', 'Send backward'],
+            ['Shift+Click', 'Multi-select'],
+            ['Del', 'Delete'],
+            ['Esc', 'Deselect'],
+          ].map(([key, desc]) => (
+            <div key={key} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10, color: '#64748b', marginBottom: 3 }}>
+              <span style={{ color: '#94a3b8', fontFamily: 'monospace' }}>{key}</span>
+              <span>{desc}</span>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   )

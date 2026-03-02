@@ -54,10 +54,19 @@ const COLOR_SCHEMES: { key: string; label: string }[] = [
 const PANEL_LAYOUTS = ['1x1', '1x2', '2x1', '2x2'] as const
 type PanelLayout = typeof PANEL_LAYOUTS[number]
 
+const BG_PRESETS = [
+  { key: '#0a0a0f', label: 'Dark' },
+  { key: '#ffffff', label: 'White' },
+  { key: '#000000', label: 'Black' },
+  { key: '#1a1a2e', label: 'Navy' },
+  { key: 'gradient-dark', label: 'Grad Dark' },
+  { key: 'gradient-light', label: 'Grad Light' },
+]
+
 /* ── types ── */
 interface Annotation {
   id: string
-  type: 'label' | 'arrow'
+  type: 'label' | 'arrow' | 'scale' | 'measure'
   x: number
   y: number
   text: string
@@ -65,6 +74,21 @@ interface Annotation {
   targetY?: number
   color: string
   fontSize: number
+  scaleLength?: number   /* pixels for scale bar */
+  scaleAngstroms?: number /* real-world angstroms */
+  distanceA?: number     /* measured distance in angstroms */
+}
+
+interface SavedFigure {
+  id: string
+  name: string
+  timestamp: number
+  layout: PanelLayout
+  panels: FigurePanel[]
+  caption: string
+  figureTitle: string
+  sections: ArticleSection[]
+  thumbnail?: string
 }
 
 interface FigurePanel {
@@ -115,14 +139,29 @@ export default function PaperPage() {
   const [figureTitle, setFigureTitle] = useState('Figure 1')
 
   /* annotation tool */
-  type Tool = 'none' | 'label' | 'arrow'
+  type Tool = 'none' | 'label' | 'arrow' | 'scale' | 'measure'
   const [tool, setTool] = useState<Tool>('none')
   const [arrowStart, setArrowStart] = useState<{ x: number; y: number } | null>(null)
+  const [measureStart, setMeasureStart] = useState<{ x: number; y: number } | null>(null)
   const [labelText, setLabelText] = useState('Label')
   const [annColor, setAnnColor] = useState('#ffffff')
   const [annFontSize, setAnnFontSize] = useState(14)
   const [dragging, setDragging] = useState<string | null>(null)
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 })
+
+  /* save/load figures */
+  const [savedFigures, setSavedFigures] = useState<SavedFigure[]>([])
+  const [showSavedPanel, setShowSavedPanel] = useState(false)
+
+  /* rotation sync */
+  const [rotationSync, setRotationSync] = useState(false)
+
+  /* file upload ref */
+  const fileInputRef = useRef<HTMLInputElement>(null)
+
+  /* figure numbering (article mode) */
+  const [figureCounter, setFigureCounter] = useState(1)
+  const [figureRefs, setFigureRefs] = useState<{ num: number; title: string; caption: string }[]>([])
 
   /* article state */
   const [mode, setMode] = useState<'figure' | 'article'>('figure')
@@ -143,6 +182,14 @@ export default function PaperPage() {
     s.src = 'https://3dmol.org/build/3Dmol-min.js'
     s.onload = () => setMolReady(true)
     document.head.appendChild(s)
+  }, [])
+
+  /* load saved figures from localStorage */
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem('rhea_saved_figures')
+      if (raw) setSavedFigures(JSON.parse(raw))
+    } catch (_e) { /* ignore */ }
   }, [])
 
   /* set active panel */
@@ -186,10 +233,19 @@ export default function PaperPage() {
     }
     container.innerHTML = ''
 
+    const actualBg = panel.bgColor.startsWith('gradient') ? '#000000' : panel.bgColor
     const viewer = window.$3Dmol.createViewer(container, {
-      backgroundColor: panel.bgColor,
+      backgroundColor: actualBg,
       antialias: true,
     })
+    /* apply gradient via CSS if needed */
+    if (panel.bgColor === 'gradient-dark') {
+      container.style.background = 'linear-gradient(180deg, #0a0a2e 0%, #0a0a0f 100%)'
+    } else if (panel.bgColor === 'gradient-light') {
+      container.style.background = 'linear-gradient(180deg, #e8eaf0 0%, #c0c4d0 100%)'
+    } else {
+      container.style.background = ''
+    }
     viewersRef.current[panel.id] = viewer
 
     if (panel.pdbId) {
@@ -235,6 +291,196 @@ export default function PaperPage() {
       viewer.setStyle({}, s)
     }
     viewer.render()
+  }
+
+  /* ── rotation sync ── */
+  useEffect(() => {
+    if (!rotationSync || !molReady) return
+    const ids = panels.map(p => p.id)
+    if (ids.length < 2) return
+
+    let syncing = false
+    const interval = setInterval(() => {
+      if (syncing) return
+      const primary = viewersRef.current[ids[0]]
+      if (!primary) return
+      try {
+        const view = primary.getView()
+        if (!view) return
+        syncing = true
+        for (let i = 1; i < ids.length; i++) {
+          const v = viewersRef.current[ids[i]]
+          if (v) { v.setView(view); v.render() }
+        }
+        syncing = false
+      } catch (_e) { syncing = false }
+    }, 100)
+    return () => clearInterval(interval)
+  }, [rotationSync, molReady, panels])
+
+  /* ── file upload handler ── */
+  function handleFileUpload(file: File) {
+    if (!activePanel || !molReady) return
+    const ext = file.name.split('.').pop()?.toLowerCase()
+    const format = ext === 'cif' ? 'cif' : 'pdb'
+    const reader = new FileReader()
+    reader.onload = (ev) => {
+      const data = ev.target?.result as string
+      if (!data) return
+      const container = containerRefs.current[activePanel]
+      if (!container) return
+      /* clear and recreate viewer */
+      if (viewersRef.current[activePanel]) {
+        try { viewersRef.current[activePanel].clear() } catch (_e) { /* */ }
+      }
+      container.innerHTML = ''
+      const panel = panels.find(p => p.id === activePanel)
+      const bgc = panel?.bgColor?.startsWith('gradient') ? '#000000' : (panel?.bgColor || bg)
+      const viewer = window.$3Dmol.createViewer(container, { backgroundColor: bgc, antialias: true })
+      viewersRef.current[activePanel] = viewer
+      viewer.addModel(data, format)
+      applyStyle(viewer, panel?.style || 'cartoon', panel?.colorScheme || 'spectrum')
+      viewer.zoomTo()
+      viewer.render()
+      /* update panel label with file name */
+      const shortName = file.name.replace(/\.(pdb|cif)$/i, '').substring(0, 12).toUpperCase()
+      setPanels(prev => prev.map(p => p.id === activePanel ? { ...p, pdbId: `FILE:${shortName}` } : p))
+    }
+    reader.readAsText(file)
+  }
+
+  function handleFileDrop(e: React.DragEvent, panelIdx: string) {
+    e.preventDefault()
+    e.stopPropagation()
+    setActivePanel(panelIdx)
+    const file = e.dataTransfer.files?.[0]
+    if (file && /\.(pdb|cif)$/i.test(file.name)) {
+      /* small delay to let activePanel update */
+      setTimeout(() => handleFileUpload(file), 50)
+    }
+  }
+
+  function handleDragOver(e: React.DragEvent) {
+    e.preventDefault()
+    e.stopPropagation()
+  }
+
+  /* ── save / load figures ── */
+  function saveFigure() {
+    /* generate thumbnail from first panel */
+    let thumbnail = ''
+    try {
+      const viewer = viewersRef.current[panels[0]?.id]
+      if (viewer) thumbnail = viewer.pngURI()
+    } catch (_e) { /* */ }
+
+    const fig: SavedFigure = {
+      id: `fig_${Date.now()}`,
+      name: figureTitle || `Figure ${savedFigures.length + 1}`,
+      timestamp: Date.now(),
+      layout,
+      panels: panels.map(p => ({ ...p })),
+      caption,
+      figureTitle,
+      sections: sections.map(s => ({ ...s })),
+      thumbnail,
+    }
+    const updated = [...savedFigures, fig]
+    setSavedFigures(updated)
+    try { localStorage.setItem('rhea_saved_figures', JSON.stringify(updated)) } catch (_e) { /* */ }
+  }
+
+  function loadFigure(fig: SavedFigure) {
+    setLayout(fig.layout)
+    setPanels(fig.panels.map(p => ({ ...p, annotations: [...(p.annotations || [])] })))
+    setCaption(fig.caption)
+    setFigureTitle(fig.figureTitle)
+    setSections(fig.sections.map(s => ({ ...s })))
+    setShowSavedPanel(false)
+    /* re-init viewers after state updates */
+    setTimeout(() => {
+      fig.panels.forEach(p => {
+        if (p.pdbId && !p.pdbId.startsWith('FILE:')) {
+          initViewer(p)
+        }
+      })
+    }, 200)
+  }
+
+  function deleteSavedFigure(figId: string) {
+    const updated = savedFigures.filter(f => f.id !== figId)
+    setSavedFigures(updated)
+    try { localStorage.setItem('rhea_saved_figures', JSON.stringify(updated)) } catch (_e) { /* */ }
+  }
+
+  /* ── change background color ── */
+  function changeBgColor(color: string) {
+    setPanels(prev => prev.map(p => p.id === activePanel ? { ...p, bgColor: color } : p))
+    const viewer = viewersRef.current[activePanel]
+    if (viewer) {
+      const actualBg = color.startsWith('gradient') ? '#000000' : color
+      viewer.setBackgroundColor(actualBg)
+      viewer.render()
+    }
+    /* apply gradient via CSS */
+    const container = containerRefs.current[activePanel]
+    if (container) {
+      if (color === 'gradient-dark') {
+        container.style.background = 'linear-gradient(180deg, #0a0a2e 0%, #0a0a0f 100%)'
+      } else if (color === 'gradient-light') {
+        container.style.background = 'linear-gradient(180deg, #e8eaf0 0%, #c0c4d0 100%)'
+      } else {
+        container.style.background = ''
+      }
+    }
+  }
+
+  /* ── estimate angstroms per pixel from viewer zoom ── */
+  function estimateScale(panelIdx: string): number {
+    const viewer = viewersRef.current[panelIdx]
+    if (!viewer) return 1
+    try {
+      const slab = viewer.getView()
+      /* slab[4] is the zoom distance; approximate: angstroms/pixel ~ zoomDist / containerWidth */
+      const container = containerRefs.current[panelIdx]
+      const w = container?.clientWidth || 400
+      const zoomDist = slab?.[4] || 50
+      return zoomDist / (w * 0.5)
+    } catch (_e) { return 0.1 }
+  }
+
+  /* ── add scale bar annotation ── */
+  function addScaleBar(panelIdx: string) {
+    const scale = estimateScale(panelIdx) /* angstroms per pixel */
+    const targetAngstroms = 10
+    const pixelLength = targetAngstroms / scale
+    const container = containerRefs.current[panelIdx]
+    const w = container?.clientWidth || 400
+    const h = container?.clientHeight || 300
+    const ann: Annotation = {
+      id: newId(),
+      type: 'scale',
+      x: w - pixelLength - 30,
+      y: h - 30,
+      text: `${targetAngstroms} A`,
+      targetX: w - 30,
+      targetY: h - 30,
+      color: annColor,
+      fontSize: annFontSize,
+      scaleLength: pixelLength,
+      scaleAngstroms: targetAngstroms,
+    }
+    setPanels(prev => prev.map(p =>
+      p.id === panelIdx ? { ...p, annotations: [...p.annotations, ann] } : p
+    ))
+  }
+
+  /* ── add figure to reference list (article mode) ── */
+  function addFigureRef() {
+    const num = figureCounter
+    setFigureRefs(prev => [...prev, { num, title: figureTitle, caption }])
+    setFigureTitle(`Figure ${num + 1}`)
+    setFigureCounter(num + 1)
   }
 
   /* ── load PDB into active panel ── */
@@ -299,6 +545,33 @@ export default function PaperPage() {
           p.id === panelIdx ? { ...p, annotations: [...p.annotations, ann] } : p
         ))
         setArrowStart(null)
+        setTool('none')
+      }
+    } else if (tool === 'scale') {
+      addScaleBar(panelIdx)
+      setTool('none')
+    } else if (tool === 'measure') {
+      if (!measureStart) {
+        setMeasureStart({ x, y })
+      } else {
+        /* compute distance in angstroms using pixel distance and scale */
+        const dx = x - measureStart.x
+        const dy = y - measureStart.y
+        const pixelDist = Math.sqrt(dx * dx + dy * dy)
+        const scale = estimateScale(panelIdx)
+        const distA = pixelDist * scale
+        const ann: Annotation = {
+          id: newId(), type: 'measure',
+          x: measureStart.x, y: measureStart.y,
+          targetX: x, targetY: y,
+          text: `${distA.toFixed(1)} A`,
+          color: annColor, fontSize: annFontSize,
+          distanceA: distA,
+        }
+        setPanels(prev => prev.map(p =>
+          p.id === panelIdx ? { ...p, annotations: [...p.annotations, ann] } : p
+        ))
+        setMeasureStart(null)
         setTool('none')
       }
     }
@@ -452,6 +725,55 @@ export default function PaperPage() {
               ctx.fillStyle = ann.color
               ctx.fillText(ann.text, ax + 4, ay - 6)
             }
+          } else if (ann.type === 'scale' && ann.targetX !== undefined && ann.targetY !== undefined) {
+            const tx = x + ann.targetX
+            const ty = y + ann.targetY
+            /* Main bar */
+            ctx.strokeStyle = ann.color
+            ctx.lineWidth = 3
+            ctx.beginPath(); ctx.moveTo(ax, ay); ctx.lineTo(tx, ty); ctx.stroke()
+            /* End ticks */
+            ctx.lineWidth = 2
+            ctx.beginPath(); ctx.moveTo(ax, ay - 5); ctx.lineTo(ax, ay + 5); ctx.stroke()
+            ctx.beginPath(); ctx.moveTo(tx, ty - 5); ctx.lineTo(tx, ty + 5); ctx.stroke()
+            /* Label */
+            if (ann.text) {
+              ctx.font = `bold ${ann.fontSize}px system-ui`
+              ctx.textAlign = 'center'
+              const midX = (ax + tx) / 2
+              ctx.fillStyle = 'rgba(0,0,0,0.7)'
+              const tw = ctx.measureText(ann.text).width + 8
+              ctx.fillRect(midX - tw / 2, ay - ann.fontSize - 6, tw, ann.fontSize + 4)
+              ctx.fillStyle = ann.color
+              ctx.fillText(ann.text, midX, ay - ann.fontSize / 2)
+              ctx.textAlign = 'left'
+            }
+          } else if (ann.type === 'measure' && ann.targetX !== undefined && ann.targetY !== undefined) {
+            const tx = x + ann.targetX
+            const ty = y + ann.targetY
+            /* Dashed line */
+            ctx.strokeStyle = ann.color
+            ctx.lineWidth = 1.5
+            ctx.setLineDash([4, 3])
+            ctx.beginPath(); ctx.moveTo(ax, ay); ctx.lineTo(tx, ty); ctx.stroke()
+            ctx.setLineDash([])
+            /* Endpoint dots */
+            ctx.fillStyle = ann.color
+            ctx.beginPath(); ctx.arc(ax, ay, 3, 0, Math.PI * 2); ctx.fill()
+            ctx.beginPath(); ctx.arc(tx, ty, 3, 0, Math.PI * 2); ctx.fill()
+            /* Distance label at midpoint */
+            if (ann.text) {
+              ctx.font = `bold ${ann.fontSize}px system-ui`
+              ctx.textAlign = 'center'
+              const midX = (ax + tx) / 2
+              const midY = (ay + ty) / 2
+              const tw = ctx.measureText(ann.text).width + 8
+              ctx.fillStyle = 'rgba(0,0,0,0.8)'
+              ctx.fillRect(midX - tw / 2, midY - ann.fontSize, tw, ann.fontSize + 4)
+              ctx.fillStyle = ann.color
+              ctx.fillText(ann.text, midX, midY - ann.fontSize / 2 + 5)
+              ctx.textAlign = 'left'
+            }
           }
         }
       }
@@ -577,6 +899,22 @@ export default function PaperPage() {
           ))}
         </div>
 
+        {/* Save / Load */}
+        <button onClick={saveFigure} style={{
+          padding: '5px 12px', borderRadius: 6, border: `1px solid ${amber}44`,
+          background: `${amber}11`, color: amber, cursor: 'pointer',
+          fontSize: 12, fontFamily: 'monospace', fontWeight: 600,
+        }}>
+          Save
+        </button>
+        <button onClick={() => setShowSavedPanel(!showSavedPanel)} style={{
+          padding: '5px 12px', borderRadius: 6, border: `1px solid ${muted}44`,
+          background: `${muted}11`, color: muted, cursor: 'pointer',
+          fontSize: 12, fontFamily: 'monospace', fontWeight: 600, position: 'relative' as const,
+        }}>
+          Load{savedFigures.length > 0 ? ` (${savedFigures.length})` : ''}
+        </button>
+
         {/* Export */}
         <button onClick={exportFigure} style={{
           padding: '5px 12px', borderRadius: 6, border: `1px solid ${green}44`,
@@ -593,6 +931,55 @@ export default function PaperPage() {
           Share
         </button>
       </header>
+
+      {/* ── SAVED FIGURES PANEL ── */}
+      {showSavedPanel && (
+        <div style={{
+          position: 'absolute', top: 50, right: 16, zIndex: 100,
+          width: 320, maxHeight: 400, overflowY: 'auto',
+          background: card, border: `1px solid ${border}`, borderRadius: 8,
+          boxShadow: '0 8px 32px rgba(0,0,0,0.5)', padding: 12,
+        }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+            <span style={{ fontSize: 12, fontWeight: 700, fontFamily: 'monospace', color: '#e2e8f0' }}>Saved Figures</span>
+            <button onClick={() => setShowSavedPanel(false)} style={{
+              background: 'none', border: 'none', color: muted, cursor: 'pointer', fontSize: 16,
+            }}>x</button>
+          </div>
+          {savedFigures.length === 0 ? (
+            <div style={{ color: muted, fontSize: 11, fontFamily: 'monospace', textAlign: 'center' as const, padding: 16 }}>
+              No saved figures yet
+            </div>
+          ) : (
+            savedFigures.map(fig => (
+              <div key={fig.id} style={{
+                display: 'flex', gap: 8, alignItems: 'center', padding: 8,
+                borderBottom: `1px solid ${border}`, marginBottom: 4,
+              }}>
+                {fig.thumbnail && (
+                  <img src={fig.thumbnail} alt="" style={{ width: 48, height: 36, borderRadius: 4, objectFit: 'cover' as const }} />
+                )}
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ fontSize: 11, fontWeight: 600, color: '#e2e8f0', fontFamily: 'monospace', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' as const }}>
+                    {fig.name}
+                  </div>
+                  <div style={{ fontSize: 9, color: muted, fontFamily: 'monospace' }}>
+                    {new Date(fig.timestamp).toLocaleDateString()} {fig.layout} {fig.panels.length}p
+                  </div>
+                </div>
+                <button onClick={() => loadFigure(fig)} style={{
+                  padding: '3px 8px', background: `${accent}22`, border: `1px solid ${accent}44`,
+                  borderRadius: 4, color: accent, cursor: 'pointer', fontSize: 10, fontFamily: 'monospace',
+                }}>Load</button>
+                <button onClick={() => deleteSavedFigure(fig.id)} style={{
+                  padding: '3px 6px', background: 'none', border: `1px solid ${red}44`,
+                  borderRadius: 4, color: red, cursor: 'pointer', fontSize: 10, fontFamily: 'monospace',
+                }}>x</button>
+              </div>
+            ))
+          )}
+        </div>
+      )}
 
       {mode === 'figure' ? (
         <div style={{ display: 'flex', height: 'calc(100vh - 50px)' }}>
@@ -620,6 +1007,21 @@ export default function PaperPage() {
                   color: '#fff', cursor: 'pointer', fontSize: 12, fontWeight: 600,
                 }}>Load</button>
               </div>
+              {/* File upload */}
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept=".pdb,.cif"
+                style={{ display: 'none' }}
+                onChange={e => { const f = e.target.files?.[0]; if (f) handleFileUpload(f); e.target.value = '' }}
+              />
+              <button onClick={() => fileInputRef.current?.click()} style={{
+                width: '100%', marginTop: 6, padding: '5px 8px', background: card,
+                border: `1px dashed ${border}`, borderRadius: 6, color: muted,
+                cursor: 'pointer', fontSize: 11, fontFamily: 'monospace',
+              }}>
+                Upload .pdb / .cif file
+              </button>
             </div>
 
             {/* Presets */}
@@ -673,6 +1075,26 @@ export default function PaperPage() {
               </div>
             </div>
 
+            {/* Background color */}
+            <div style={{ marginBottom: 16 }}>
+              <label style={{ fontSize: 10, fontWeight: 700, fontFamily: 'monospace', color: muted, display: 'block', marginBottom: 6 }}>BACKGROUND</label>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
+                {BG_PRESETS.map(b => (
+                  <button key={b.key} onClick={() => changeBgColor(b.key)} style={{
+                    padding: '3px 8px',
+                    background: b.key.startsWith('gradient') ? 'linear-gradient(90deg, #333, #666)' : b.key,
+                    border: `1px solid ${ap?.bgColor === b.key ? accent : border}`,
+                    borderRadius: 4,
+                    color: (b.key === '#ffffff' || b.key === 'gradient-light') ? '#333' : '#fff',
+                    cursor: 'pointer', fontSize: 10, fontFamily: 'monospace',
+                    minWidth: 32, textAlign: 'center' as const,
+                  }}>
+                    {b.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
             {/* Panel layout */}
             <div style={{ marginBottom: 16 }}>
               <label style={{ fontSize: 10, fontWeight: 700, fontFamily: 'monospace', color: muted, display: 'block', marginBottom: 6 }}>PANEL LAYOUT</label>
@@ -690,10 +1112,25 @@ export default function PaperPage() {
               </div>
             </div>
 
+            {/* Rotation sync (multi-panel) */}
+            {panels.length > 1 && (
+              <div style={{ marginBottom: 16 }}>
+                <button onClick={() => setRotationSync(!rotationSync)} style={{
+                  width: '100%', padding: '5px 10px',
+                  background: rotationSync ? `${green}22` : card,
+                  border: `1px solid ${rotationSync ? green : border}`,
+                  borderRadius: 6, color: rotationSync ? green : muted,
+                  cursor: 'pointer', fontSize: 11, fontFamily: 'monospace', fontWeight: 600,
+                }}>
+                  {rotationSync ? 'Rotation Sync ON' : 'Rotation Sync OFF'}
+                </button>
+              </div>
+            )}
+
             {/* Annotation tools */}
             <div style={{ marginBottom: 16 }}>
               <label style={{ fontSize: 10, fontWeight: 700, fontFamily: 'monospace', color: muted, display: 'block', marginBottom: 6 }}>ANNOTATIONS</label>
-              <div style={{ display: 'flex', gap: 4, marginBottom: 8 }}>
+              <div style={{ display: 'flex', gap: 4, marginBottom: 4, flexWrap: 'wrap' }}>
                 <button onClick={() => setTool(tool === 'label' ? 'none' : 'label')} style={{
                   padding: '4px 10px', background: tool === 'label' ? `${green}33` : card,
                   border: `1px solid ${tool === 'label' ? green : border}`,
@@ -716,6 +1153,24 @@ export default function PaperPage() {
                   cursor: 'pointer', fontSize: 11, fontFamily: 'monospace',
                 }}>
                   Clear
+                </button>
+              </div>
+              <div style={{ display: 'flex', gap: 4, marginBottom: 8 }}>
+                <button onClick={() => setTool(tool === 'scale' ? 'none' : 'scale')} style={{
+                  padding: '4px 10px', background: tool === 'scale' ? `${accent}33` : card,
+                  border: `1px solid ${tool === 'scale' ? accent : border}`,
+                  borderRadius: 4, color: tool === 'scale' ? accent : muted,
+                  cursor: 'pointer', fontSize: 11, fontFamily: 'monospace',
+                }}>
+                  Scale Bar
+                </button>
+                <button onClick={() => { setTool(tool === 'measure' ? 'none' : 'measure'); setMeasureStart(null) }} style={{
+                  padding: '4px 10px', background: tool === 'measure' ? `${accent}33` : card,
+                  border: `1px solid ${tool === 'measure' ? accent : border}`,
+                  borderRadius: 4, color: tool === 'measure' ? accent : muted,
+                  cursor: 'pointer', fontSize: 11, fontFamily: 'monospace',
+                }}>
+                  Measure
                 </button>
               </div>
 
@@ -748,6 +1203,8 @@ export default function PaperPage() {
                 borderRadius: 6, marginBottom: 16, fontSize: 11, color: green, fontFamily: 'monospace',
               }}>
                 {tool === 'label' ? 'Click on figure to place label' :
+                 tool === 'scale' ? 'Click on figure to place scale bar' :
+                 tool === 'measure' ? (measureStart ? 'Click second point to measure' : 'Click first point to measure') :
                  arrowStart ? 'Click arrow end point' : 'Click arrow start point'}
               </div>
             )}
@@ -813,6 +1270,8 @@ export default function PaperPage() {
               {panels.map((panel) => (
                 <div key={panel.id}
                   onClick={() => setActivePanel(panel.id)}
+                  onDrop={(e) => handleFileDrop(e, panel.id)}
+                  onDragOver={handleDragOver}
                   style={{
                     position: 'relative',
                     border: `2px solid ${activePanel === panel.id ? accent : border}`,
@@ -867,7 +1326,7 @@ export default function PaperPage() {
                       textAlign: 'center', color: muted, fontSize: 12, fontFamily: 'monospace',
                     }}>
                       <div style={{ fontSize: 32, marginBottom: 8, opacity: 0.2 }}>+</div>
-                      <div>Enter PDB ID to load structure</div>
+                      <div>Enter PDB ID or drop .pdb/.cif file</div>
                     </div>
                   )}
 
@@ -943,12 +1402,82 @@ export default function PaperPage() {
                             )}
                           </g>
                         )}
+                        {/* Scale bar */}
+                        {ann.type === 'scale' && ann.targetX !== undefined && ann.targetY !== undefined && (
+                          <g
+                            style={{ pointerEvents: 'all', cursor: 'move' }}
+                            onMouseDown={(e) => handleAnnMouseDown(e, ann.id, panel.id)}
+                            onDoubleClick={(e) => { e.stopPropagation(); deleteAnnotation(ann.id, panel.id) }}
+                          >
+                            {/* Main bar */}
+                            <line x1={ann.x} y1={ann.y} x2={ann.targetX} y2={ann.targetY}
+                              stroke={ann.color} strokeWidth={3} />
+                            {/* End ticks */}
+                            <line x1={ann.x} y1={ann.y - 5} x2={ann.x} y2={ann.y + 5}
+                              stroke={ann.color} strokeWidth={2} />
+                            <line x1={ann.targetX} y1={ann.targetY - 5} x2={ann.targetX} y2={ann.targetY + 5}
+                              stroke={ann.color} strokeWidth={2} />
+                            {/* Label */}
+                            <rect
+                              x={(ann.x + ann.targetX) / 2 - ann.text.length * ann.fontSize * 0.31 - 4}
+                              y={ann.y - ann.fontSize - 6}
+                              width={ann.text.length * ann.fontSize * 0.62 + 8}
+                              height={ann.fontSize + 4}
+                              fill="rgba(0,0,0,0.7)" rx={3}
+                            />
+                            <text
+                              x={(ann.x + ann.targetX) / 2}
+                              y={ann.y - ann.fontSize / 2 + 1}
+                              fill={ann.color} fontSize={ann.fontSize}
+                              fontWeight="bold" fontFamily="system-ui, sans-serif"
+                              textAnchor="middle"
+                            >
+                              {ann.text}
+                            </text>
+                          </g>
+                        )}
+                        {/* Measurement line */}
+                        {ann.type === 'measure' && ann.targetX !== undefined && ann.targetY !== undefined && (
+                          <g
+                            style={{ pointerEvents: 'all', cursor: 'move' }}
+                            onMouseDown={(e) => handleAnnMouseDown(e, ann.id, panel.id)}
+                            onDoubleClick={(e) => { e.stopPropagation(); deleteAnnotation(ann.id, panel.id) }}
+                          >
+                            {/* Dashed measurement line */}
+                            <line x1={ann.x} y1={ann.y} x2={ann.targetX} y2={ann.targetY}
+                              stroke={ann.color} strokeWidth={1.5} strokeDasharray="4 3" />
+                            {/* Endpoint dots */}
+                            <circle cx={ann.x} cy={ann.y} r={3} fill={ann.color} />
+                            <circle cx={ann.targetX} cy={ann.targetY} r={3} fill={ann.color} />
+                            {/* Distance label at midpoint */}
+                            <rect
+                              x={(ann.x + ann.targetX) / 2 - ann.text.length * ann.fontSize * 0.31 - 4}
+                              y={(ann.y + ann.targetY) / 2 - ann.fontSize}
+                              width={ann.text.length * ann.fontSize * 0.62 + 8}
+                              height={ann.fontSize + 4}
+                              fill="rgba(0,0,0,0.8)" rx={3}
+                            />
+                            <text
+                              x={(ann.x + ann.targetX) / 2}
+                              y={(ann.y + ann.targetY) / 2 - ann.fontSize / 2 + 5}
+                              fill={ann.color} fontSize={ann.fontSize}
+                              fontWeight="bold" fontFamily="system-ui, sans-serif"
+                              textAnchor="middle"
+                            >
+                              {ann.text}
+                            </text>
+                          </g>
+                        )}
                       </g>
                     ))}
 
-                    {/* Arrow preview line */}
+                    {/* Arrow preview dot */}
                     {tool === 'arrow' && arrowStart && (
                       <circle cx={arrowStart.x} cy={arrowStart.y} r={4} fill={green} opacity={0.8} />
+                    )}
+                    {/* Measure preview dot */}
+                    {tool === 'measure' && measureStart && (
+                      <circle cx={measureStart.x} cy={measureStart.y} r={4} fill={accent} opacity={0.8} />
                     )}
                   </svg>
                 </div>
@@ -1021,13 +1550,52 @@ export default function PaperPage() {
             />
           </div>
 
+          {/* Add current figure to reference list */}
+          <div style={{ marginBottom: 24, display: 'flex', gap: 8, alignItems: 'center' }}>
+            <button onClick={addFigureRef} style={{
+              padding: '6px 14px', background: `${accent}22`, border: `1px solid ${accent}44`,
+              borderRadius: 6, color: accent, cursor: 'pointer',
+              fontSize: 12, fontFamily: 'monospace', fontWeight: 600,
+            }}>
+              + Add Fig. {figureCounter} Reference
+            </button>
+            <span style={{ fontSize: 11, color: muted, fontFamily: 'monospace' }}>
+              (Registers current figure title and caption)
+            </span>
+          </div>
+
+          {/* Figure reference list */}
+          {figureRefs.length > 0 && (
+            <div style={{ marginBottom: 24 }}>
+              <label style={{ fontSize: 11, fontWeight: 700, fontFamily: 'monospace', color: accent, display: 'block', marginBottom: 6 }}>FIGURE LIST</label>
+              <div style={{ padding: 12, background: card, border: `1px solid ${border}`, borderRadius: 8 }}>
+                {figureRefs.map((ref, i) => (
+                  <div key={i} style={{
+                    display: 'flex', gap: 8, alignItems: 'baseline',
+                    padding: '4px 0', borderBottom: i < figureRefs.length - 1 ? `1px solid ${border}` : 'none',
+                  }}>
+                    <span style={{ fontSize: 12, fontWeight: 700, color: accent, fontFamily: 'monospace', whiteSpace: 'nowrap' as const }}>
+                      Fig. {ref.num}
+                    </span>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontSize: 12, fontWeight: 600, color: '#e2e8f0' }}>{ref.title}</div>
+                      {ref.caption && (
+                        <div style={{ fontSize: 11, color: muted, marginTop: 2 }}>{ref.caption.substring(0, 100)}{ref.caption.length > 100 ? '...' : ''}</div>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* Figure reference hint */}
           <div style={{
             padding: '12px 16px', background: `${accent}08`, border: `1px solid ${accent}22`,
             borderRadius: 8, fontSize: 12, color: muted, fontFamily: 'monospace', lineHeight: 1.6,
           }}>
-            Switch to Figure mode to create molecular figures. Reference them in your text as (Fig. 1A), (Fig. 1B), etc.
-            Export figures as PNG from Figure mode, then include them in your manuscript.
+            Switch to Figure mode to create molecular figures. Use &quot;+ Add Fig. Reference&quot; to register each figure.
+            Reference them in your text as (Fig. 1A), (Fig. 1B), etc.
           </div>
         </div>
       )}

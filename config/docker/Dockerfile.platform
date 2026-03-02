@@ -34,6 +34,9 @@ COPY src/task_queue.py src/
 COPY src/rhea_supervisor.py src/
 COPY src/workflow_engine.py src/
 
+# Copy pre-built Atlas static frontend
+COPY rhea-atlas-out/ static_frontend/
+
 # Create runtime directories
 RUN mkdir -p logs data
 
