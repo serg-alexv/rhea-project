@@ -31,6 +31,9 @@ public struct BioRendererView: View {
     @State private var analysisExpanded = false
     @State private var analysisError: String? = nil
 
+    // Copy/export
+    @State private var snapshotCopied = false
+
     // Metadata panel
     @State private var metaTitle: String? = nil
     @State private var metaMethod: String? = nil
@@ -78,7 +81,38 @@ public struct BioRendererView: View {
             .navigationTitle("Bio")
             #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)
+            .toolbarColorScheme(.dark, for: .navigationBar)
             #endif
+            .toolbar {
+                ToolbarItemGroup(placement: .primaryAction) {
+                    // Copy 3D snapshot to clipboard
+                    Button {
+                        captureSnapshot()
+                    } label: {
+                        Image(systemName: snapshotCopied ? "checkmark.circle.fill" : "camera.fill")
+                            .font(.system(size: 14))
+                            .foregroundStyle(snapshotCopied ? RheaTheme.green : RheaTheme.accent)
+                    }
+                    .help("Copy 3D view to clipboard")
+
+                    // Copy analysis text
+                    if let text = analysisText {
+                        Button {
+                            #if os(iOS)
+                            UIPasteboard.general.string = "[\(currentID)] \(text)"
+                            #else
+                            NSPasteboard.general.clearContents()
+                            NSPasteboard.general.setString("[\(currentID)] \(text)", forType: .string)
+                            #endif
+                        } label: {
+                            Image(systemName: "doc.on.doc")
+                                .font(.system(size: 13))
+                                .foregroundStyle(RheaTheme.green)
+                        }
+                        .help("Copy analysis text")
+                    }
+                }
+            }
         }
     }
 
@@ -361,6 +395,39 @@ public struct BioRendererView: View {
         ("Dopamine",  "NCCc1ccc(O)c(O)c1"),
         ("Glucose",   "OC[C@H]1OC(O)[C@H](O)[C@@H](O)[C@@H]1O"),
     ]
+
+    // MARK: - Snapshot Copy (cross-device via clipboard sync)
+
+    private func captureSnapshot() {
+        guard let webView = webViewRef.webView else { return }
+
+        #if os(iOS)
+        let config = WKSnapshotConfiguration()
+        webView.takeSnapshot(with: config) { image, error in
+            guard let image = image, error == nil else { return }
+            UIPasteboard.general.image = image
+            withAnimation { snapshotCopied = true }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                withAnimation { snapshotCopied = false }
+            }
+            // Haptic feedback
+            let generator = UINotificationFeedbackGenerator()
+            generator.notificationOccurred(.success)
+        }
+        #else
+        let config = WKSnapshotConfiguration()
+        webView.takeSnapshot(with: config) { image, error in
+            guard let image = image, error == nil else { return }
+            let pb = NSPasteboard.general
+            pb.clearContents()
+            pb.writeObjects([image])
+            withAnimation { snapshotCopied = true }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                withAnimation { snapshotCopied = false }
+            }
+        }
+        #endif
+    }
 
     // MARK: - Actions
 
