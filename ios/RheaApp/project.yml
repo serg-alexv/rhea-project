@@ -27,7 +27,7 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.rhea.preview
         DEVELOPMENT_TEAM: "398XACWZ7G"
         MARKETING_VERSION: "1.0"
-        CURRENT_PROJECT_VERSION: "18"
+        CURRENT_PROJECT_VERSION: "19"
         INFOPLIST_GENERATION_MODE: GeneratedByXcode
         CODE_SIGN_STYLE: Automatic
         SWIFT_VERSION: "5.9"
@@ -41,6 +41,7 @@ targets:
       - package: AnimatedTabBar
       - target: RheaTunnel
       - target: RheaKeyboard
+      - target: RheaShare
     info:
       path: Info.plist
       properties:
@@ -70,7 +71,7 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.rhea.preview.tunnel
         DEVELOPMENT_TEAM: "398XACWZ7G"
         MARKETING_VERSION: "1.0"
-        CURRENT_PROJECT_VERSION: "18"
+        CURRENT_PROJECT_VERSION: "19"
         CODE_SIGN_STYLE: Automatic
         SWIFT_VERSION: "5.9"
         INFOPLIST_GENERATION_MODE: GeneratedByXcode
@@ -100,7 +101,7 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.rhea.commandcentre
         DEVELOPMENT_TEAM: "398XACWZ7G"
         MARKETING_VERSION: "1.0"
-        CURRENT_PROJECT_VERSION: "18"
+        CURRENT_PROJECT_VERSION: "19"
         MACOSX_DEPLOYMENT_TARGET: "14.0"
         CODE_SIGN_STYLE: Automatic
         SWIFT_VERSION: "5.9"
@@ -129,7 +130,7 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.rhea.preview.keyboard
         DEVELOPMENT_TEAM: "398XACWZ7G"
         MARKETING_VERSION: "1.0"
-        CURRENT_PROJECT_VERSION: "18"
+        CURRENT_PROJECT_VERSION: "19"
         CODE_SIGN_STYLE: Automatic
         SWIFT_VERSION: "5.9"
         INFOPLIST_GENERATION_MODE: GeneratedByXcode
@@ -148,3 +149,32 @@ targets:
             PrimaryLanguage: en
             PrefersRightToLeft: false
             IsASCIICapable: true
+
+  RheaShare:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: ../RheaShare/Sources
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.rhea.preview.share
+        DEVELOPMENT_TEAM: "398XACWZ7G"
+        MARKETING_VERSION: "1.0"
+        CURRENT_PROJECT_VERSION: "19"
+        CODE_SIGN_STYLE: Automatic
+        SWIFT_VERSION: "5.9"
+        INFOPLIST_GENERATION_MODE: GeneratedByXcode
+        CODE_SIGN_ENTITLEMENTS: RheaShare.entitlements
+    info:
+      path: RheaShare-Info.plist
+      properties:
+        CFBundleDisplayName: Rhea Selector
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.share-services
+          NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).ShareViewController
+          NSExtensionAttributes:
+            NSExtensionActivationRule:
+              NSExtensionActivationSupportsText: true
+              NSExtensionActivationSupportsWebURLWithMaxCount: 1
