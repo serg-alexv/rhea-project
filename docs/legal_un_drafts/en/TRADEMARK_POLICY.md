@@ -1,7 +1,7 @@
 # TRADEMARK POLICY (Draft)
 
 ## 1) Covered Marks
-Project names, logos, icons, and visual identity associated with TimeLabs NPO and Rhea.
+Project names, logos, icons, and visual identity associated with timelabs npo and Rhea.
 
 ## 2) Allowed Without Prior Approval
 - Accurate nominative reference (for example: “compatible with Rhea”).

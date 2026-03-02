@@ -1,7 +1,7 @@
 # Cookie Policy
 
 **Rhea Research Platform**
-TimeLabs NPO
+timelabs npo
 Last updated: 2026-02-26
 
 ---

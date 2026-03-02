@@ -32,6 +32,6 @@
 
 ## Pending
 - Apple Network Extension entitlement (submitted)
-- Entity registration (TimeLabs NPO) → ASC developer name
+- Entity registration (timelabs npo) → ASC developer name
 - PyPI publish for rhea-memory
 - App Store submission

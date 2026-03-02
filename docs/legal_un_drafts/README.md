@@ -1,6 +1,6 @@
-# TimeLabs NPO Legal Draft Pack (UN Languages)
+# timelabs npo Legal Draft Pack (UN Languages)
 
-This folder contains turnkey legal/governance drafts for the TimeLabs NPO open experiment in all 6 official UN languages:
+This folder contains turnkey legal/governance drafts for the timelabs npo open experiment in all 6 official UN languages:
 
 - Arabic (`ar`)
 - Chinese (`zh`)

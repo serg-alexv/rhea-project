@@ -1,7 +1,7 @@
 # GOVERNANCE (Brouillon)
 
 ## 1) Mission
-TimeLabs NPO exploite Rhea comme expérience ouverte non commerciale au service de la recherche scientifique et de l’intérêt public.
+timelabs npo exploite Rhea comme expérience ouverte non commerciale au service de la recherche scientifique et de l’intérêt public.
 
 ## 2) Rôles
 - Stewards : alignement missionnel, décisions juridiques/éthiques, arbitrage final.

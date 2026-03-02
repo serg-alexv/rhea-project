@@ -1,14 +1,14 @@
 # Security Policy
 
 **Rhea Research Platform**
-TimeLabs NPO
+timelabs npo
 Last updated: 2026-02-26
 
 ---
 
 ## 1. Our Commitment
 
-TimeLabs NPO takes security seriously. Rhea handles scientific research queries and, when accounts are enabled, user credentials. We are committed to fixing confirmed vulnerabilities promptly and working transparently with the security community.
+timelabs npo takes security seriously. Rhea handles scientific research queries and, when accounts are enabled, user credentials. We are committed to fixing confirmed vulnerabilities promptly and working transparently with the security community.
 
 ---
 
@@ -25,7 +25,7 @@ This policy covers:
 - Third-party AI provider APIs (OpenAI, Anthropic, Google, etc.) — report those to the respective provider
 - Issues in GitHub's own infrastructure
 - Attacks requiring physical access to our systems
-- Social engineering attacks on TimeLabs NPO team members
+- Social engineering attacks on timelabs npo team members
 
 ---
 
@@ -91,7 +91,7 @@ For Critical and High severity, we will deploy hotfixes to `main` and notify aff
 
 ## 7. Bug Bounty
 
-TimeLabs NPO is a **non-profit organization**. We do not currently offer monetary bug bounties.
+timelabs npo is a **non-profit organization**. We do not currently offer monetary bug bounties.
 
 We do offer:
 - **Public credit** in release notes and the repository's SECURITY acknowledgments (unless you prefer anonymity)

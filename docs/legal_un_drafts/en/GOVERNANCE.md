@@ -1,7 +1,7 @@
 # GOVERNANCE (Draft)
 
 ## 1) Mission
-TimeLabs NPO runs Rhea as a non-commercial open experiment serving scientific and public-interest research.
+timelabs npo runs Rhea as a non-commercial open experiment serving scientific and public-interest research.
 
 ## 2) Roles
 - Stewards: mission alignment, legal/ethical decisions, final escalation.

@@ -1,7 +1,7 @@
 # GOVERNANCE (Borrador)
 
 ## 1) Misión
-TimeLabs NPO opera Rhea como experimento abierto no comercial para investigación científica y de interés público.
+timelabs npo opera Rhea como experimento abierto no comercial para investigación científica y de interés público.
 
 ## 2) Roles
 - Stewards: alineación con misión, decisiones legales/éticas, escalamiento final.

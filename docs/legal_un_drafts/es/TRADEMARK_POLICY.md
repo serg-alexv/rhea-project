@@ -1,7 +1,7 @@
 # TRADEMARK POLICY (Borrador)
 
 ## 1) Marcas cubiertas
-Nombres de proyecto, logos, iconos e identidad visual de TimeLabs NPO y Rhea.
+Nombres de proyecto, logos, iconos e identidad visual de timelabs npo y Rhea.
 
 ## 2) Uso permitido sin autorización previa
 - Referencia nominativa exacta (ej.: «compatible con Rhea»).

@@ -846,7 +846,7 @@ function RheaFooter() {
           ))}
           <span className="mx-2 text-white/15">·</span>
           <span className="group relative inline-block cursor-default text-[9px] font-mono text-white/[0.22] tracking-wide">
-            © 2026 TimeLabs NPO
+            © 2026 timelabs npo
             <span className="pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 bg-black/90 border border-white/10 text-white/60 text-[9px] px-2.5 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-[300]">
               Non-Profit Samurai&apos;s Squad
             </span>

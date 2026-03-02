@@ -210,5 +210,5 @@ All third-party dependencies carry compatible licenses (MIT, BSD-3-Clause, Apach
 </p>
 
 <p align="center">
-  <sub><em>TimeLabs NPO</em></sub>
+  <sub><em>timelabs npo</em></sub>
 </p>

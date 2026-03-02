@@ -1,7 +1,7 @@
 # GOVERNANCE（草案）
 
 ## 1）使命
-TimeLabs NPO 将 Rhea 作为非商业开放实验运行，用于科学研究与公共利益场景。
+timelabs npo 将 Rhea 作为非商业开放实验运行，用于科学研究与公共利益场景。
 
 ## 2）角色
 - Stewards：使命一致性、法律/伦理决策、最终升级处理。

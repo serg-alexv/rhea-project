@@ -1,7 +1,7 @@
 # TRADEMARK POLICY（草案）
 
 ## 1）覆盖范围
-TimeLabs NPO 与 Rhea 相关的项目名称、Logo、图标和视觉识别。
+timelabs npo 与 Rhea 相关的项目名称、Logo、图标和视觉识别。
 
 ## 2）无需预先许可的使用
 - 准确的指称性使用（如“兼容 Rhea”）。

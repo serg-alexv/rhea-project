@@ -1,7 +1,7 @@
 # TRADEMARK POLICY (Brouillon)
 
 ## 1) Marques couvertes
-Noms du projet, logos, icônes et identité visuelle associés à TimeLabs NPO et Rhea.
+Noms du projet, logos, icônes et identité visuelle associés à timelabs npo et Rhea.
 
 ## 2) Usages autorisés sans approbation préalable
 - Référence nominative exacte (ex. : « compatible avec Rhea »).

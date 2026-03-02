@@ -1158,7 +1158,7 @@ footer .f-copy{{color:#333;font-size:.68rem;letter-spacing:.04em}}
 <!-- Vendor logos strip — providers Rhea queries -->
 <div class="reveal stagger-2" style="text-align:center;margin-top:3rem">
   <div style="font-size:.65rem;font-weight:600;text-transform:uppercase;letter-spacing:.15em;color:var(--accent);margin-bottom:1rem">
-    Built by TimeLabs NPO &mdash; powered by</div>
+    Built by timelabs npo &mdash; powered by</div>
   <div style="display:flex;justify-content:center;align-items:center;gap:1.5rem;flex-wrap:wrap;opacity:.55">
     <span style="font-size:.7rem;font-weight:500;color:var(--muted)">
       <span style="color:#cc785c">&#x25C8;</span> Anthropic</span>
@@ -1514,7 +1514,7 @@ You own your data, your models, your keys. Rhea serves you &mdash; not the other
   <div class="f-copy" style="margin-top:1rem">
     <span id="nabla-explain" style="transition:opacity .6s ease;display:inline-block">
       &#x2207; &gt; 0 &#x2228; &#x22A5; &mdash; gradient positive or bottom</span><br>
-    &copy; 2026 TimeLabs NPO
+    &copy; 2026 timelabs npo
   </div>
 </footer>
 
@@ -1627,7 +1627,7 @@ footer{{text-align:center;padding:2.5rem 2rem;border-top:1px solid var(--border)
 </a>
 {body}
 </div>
-<footer>&copy; 2026 TimeLabs NPO</footer>
+<footer>&copy; 2026 timelabs npo</footer>
 </body></html>"""
 
 
@@ -1637,10 +1637,10 @@ async def terms():
     from fastapi.responses import HTMLResponse
     body = """
 <h1>Terms of Service</h1>
-<p class="subtitle">TimeLabs NPO &bull; Effective date: 1 January 2026 &bull; Last updated: 1 March 2026</p>
+<p class="subtitle">timelabs npo &bull; Effective date: 1 January 2026 &bull; Last updated: 1 March 2026</p>
 
 <h2>1. Acceptance of Terms</h2>
-<p>By accessing or using the Rhea platform, its APIs, mobile applications, or any associated services (collectively, the "Service"), you agree to be bound by these Terms of Service ("Terms"). If you do not agree to these Terms, do not use the Service. These Terms constitute a legally binding agreement between you and TimeLabs NPO ("TimeLabs", "we", "us").</p>
+<p>By accessing or using the Rhea platform, its APIs, mobile applications, or any associated services (collectively, the "Service"), you agree to be bound by these Terms of Service ("Terms"). If you do not agree to these Terms, do not use the Service. These Terms constitute a legally binding agreement between you and timelabs npo ("TimeLabs", "we", "us").</p>
 
 <h2>2. Accounts</h2>
 <p>To access most features of the Service, you must create an account. You agree to:</p>
@@ -1699,10 +1699,10 @@ async def privacy():
     from fastapi.responses import HTMLResponse
     body = """
 <h1>Privacy Policy</h1>
-<p class="subtitle">TimeLabs NPO &bull; Effective date: 1 January 2026 &bull; GDPR-compliant</p>
+<p class="subtitle">timelabs npo &bull; Effective date: 1 January 2026 &bull; GDPR-compliant</p>
 
 <h2>1. Who We Are</h2>
-<p>TimeLabs NPO ("TimeLabs", "we", "us") operates the Rhea multi-model consensus platform. We are committed to protecting your personal data and processing it lawfully, fairly, and transparently in accordance with the General Data Protection Regulation (GDPR) and applicable national data protection laws.</p>
+<p>timelabs npo ("TimeLabs", "we", "us") operates the Rhea multi-model consensus platform. We are committed to protecting your personal data and processing it lawfully, fairly, and transparently in accordance with the General Data Protection Regulation (GDPR) and applicable national data protection laws.</p>
 
 <h2>2. Data We Collect</h2>
 <p>We collect the minimum data necessary to operate the Service:</p>
@@ -1767,7 +1767,7 @@ async def privacy():
 <p>We may update this policy. Material changes will be communicated by email at least 14 days before taking effect. The current version is always available at <a href="/privacy">/privacy</a>.</p>
 
 <h2>Contact</h2>
-<p>Data controller: TimeLabs NPO. Privacy enquiries: <a href="mailto:timelabs.ad@gmail.com">timelabs.ad@gmail.com</a>.</p>
+<p>Data controller: timelabs npo. Privacy enquiries: <a href="mailto:timelabs.ad@gmail.com">timelabs.ad@gmail.com</a>.</p>
 """
     html = _PAGE_STYLE.format(title="Privacy Policy", body=body)
     return HTMLResponse(content=html)
@@ -2011,7 +2011,7 @@ async def contact():
     from fastapi.responses import HTMLResponse
     body = """
 <h1>Contact</h1>
-<p class="subtitle">TimeLabs NPO &bull; We're a small team — we read every message.</p>
+<p class="subtitle">timelabs npo &bull; We're a small team — we read every message.</p>
 
 <h2>General Support</h2>
 <p>For questions about your account, billing, API access, or platform features:</p>
@@ -2027,10 +2027,10 @@ async def contact():
 <p>Please do not report security vulnerabilities via public GitHub issues. Email us directly at <a href="mailto:timelabs.ad@gmail.com">timelabs.ad@gmail.com</a> with "Security Disclosure" in the subject line. See our <a href="/security">Security page</a> for the full responsible disclosure policy.</p>
 
 <h2>Research and Partnerships</h2>
-<p>Rhea is operated by TimeLabs NPO, a non-profit organisation focused on open tools for knowledge verification. If you are a researcher, institution, or organisation interested in collaboration, grant applications, or integration partnerships, reach out at <a href="mailto:timelabs.ad@gmail.com">timelabs.ad@gmail.com</a> with a brief description of your interest.</p>
+<p>Rhea is operated by timelabs npo, a non-profit organisation focused on open tools for knowledge verification. If you are a researcher, institution, or organisation interested in collaboration, grant applications, or integration partnerships, reach out at <a href="mailto:timelabs.ad@gmail.com">timelabs.ad@gmail.com</a> with a brief description of your interest.</p>
 
-<h2>About TimeLabs NPO</h2>
-<p>TimeLabs NPO is the legal entity behind the Rhea platform. It was founded to support open, auditable infrastructure for multi-model AI consensus and knowledge provenance. The organisation is non-profit: revenue from the managed platform covers infrastructure costs and supports continued open-source development.</p>
+<h2>About timelabs npo</h2>
+<p>timelabs npo is the legal entity behind the Rhea platform. It was founded to support open, auditable infrastructure for multi-model AI consensus and knowledge provenance. The organisation is non-profit: revenue from the managed platform covers infrastructure costs and supports continued open-source development.</p>
 <p>We believe the tools for verifying knowledge should be accessible, transparent, and under community control — not locked behind proprietary systems.</p>
 """
     html = _PAGE_STYLE.format(title="Contact", body=body)
@@ -2043,12 +2043,12 @@ async def play_ui_page():
     from fastapi.responses import HTMLResponse
     body = """
 <h1>Rhea Play UI</h1>
-<p class="subtitle">A TimeLabs NPO project &bull; MIT License &bull; Originally <a href="https://github.com/webqit/playui">webqit/playui</a></p>
+<p class="subtitle">A timelabs npo project &bull; MIT License &bull; Originally <a href="https://github.com/webqit/playui">webqit/playui</a></p>
 
 <h2>What is Rhea Play UI?</h2>
 <p>A modern UI suite covering layout, design, and <strong>UI physics</strong> &mdash; animations, events, gestures, and UI geometry.
 It introduced <strong>Async DOM</strong> (non-blocking DOM reads and writes) and offers ready-to-use web components with zero framework lock-in.</p>
-<p>The original project by WebQit was abandoned in November 2023. TimeLabs NPO absorbed it under MIT license.
+<p>The original project by WebQit was abandoned in November 2023. timelabs npo absorbed it under MIT license.
 It is now <strong>Rhea Play UI</strong> &mdash; maintained, evolved, and integrated into the Rhea verification ecosystem.</p>
 
 <h2>Packages</h2>
@@ -2092,7 +2092,7 @@ tree-shakeable core that produces the same reactive UI with a fraction of the bu
 </ul>
 
 <h2>License</h2>
-<p>MIT License. Original work &copy; WebQit. Maintained by TimeLabs NPO since 2026.</p>
+<p>MIT License. Original work &copy; WebQit. Maintained by timelabs npo since 2026.</p>
 <p><a href="https://github.com/webqit/playui">Original repository (archived)</a></p>
 """
     html = _PAGE_STYLE.format(title="Rhea Play UI", body=body)

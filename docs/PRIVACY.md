@@ -1,14 +1,14 @@
 # Privacy Policy
 
 **Rhea Research Platform**
-TimeLabs NPO
+timelabs npo
 Last updated: 2026-02-26
 
 ---
 
 ## 1. Who We Are
 
-Rhea is operated by **TimeLabs NPO**, a non-profit scientific research organization. This policy explains what data we collect, why, and how we protect it.
+Rhea is operated by **timelabs npo**, a non-profit scientific research organization. This policy explains what data we collect, why, and how we protect it.
 
 Contact: **celestica201@gmail.com**
 Repository: github.com/serg-alexv/rhea-project
