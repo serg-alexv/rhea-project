@@ -125,12 +125,12 @@ public final class RheaAPI: @unchecked Sendable {
     }
 
     public func ontologies() async throws -> [[String: Any]] {
-        let json = try await getJSON("/ontology")
+        let json = try await getJSON("/ontology", auth: true)
         return json["ontologies"] as? [[String: Any]] ?? []
     }
 
     public func ontologyDetail(_ name: String) async throws -> [[String: Any]] {
-        let json = try await getJSON("/ontology/\(name)")
+        let json = try await getJSON("/ontology/\(name)", auth: true)
         return json["hypotheses"] as? [[String: Any]] ?? []
     }
 
