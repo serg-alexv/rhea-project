@@ -2225,11 +2225,14 @@ struct NDIFlowView: View {
 
 struct MenuBarView: View {
     @ObservedObject private var store = RheaStore.shared
+    @AppStorage("apiBaseURL") private var apiBaseURL = AppConfig.defaultAPIBaseURL
+    private let api = RheaAPI.shared
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
+            // Header + CC toggle
             HStack {
-                Text("RHEA PLAY")
+                Text("RHEA")
                     .font(.system(size: 10, weight: .black, design: .monospaced))
                     .foregroundStyle(.white)
                 Spacer()
@@ -2238,34 +2241,73 @@ struct MenuBarView: View {
                     .frame(width: 6, height: 6)
             }
 
+            // Show/Hide CC + quick actions
+            HStack(spacing: 6) {
+                Button {
+                    NSApp.activate(ignoringOtherApps: true)
+                    if let w = NSApp.windows.first(where: { $0.title.contains("Rhea") && $0.level == .normal }) {
+                        w.makeKeyAndOrderFront(nil)
+                    }
+                } label: {
+                    Label("SHOW CC", systemImage: "macwindow")
+                        .font(.system(size: 9, weight: .bold, design: .monospaced))
+                }
+                .buttonStyle(.plain)
+                .foregroundStyle(RheaTheme.accent)
+
+                Spacer()
+
+                Button {
+                    NSApp.hide(nil)
+                } label: {
+                    Image(systemName: "eye.slash")
+                        .font(.system(size: 10))
+                }
+                .buttonStyle(.plain)
+                .foregroundStyle(.secondary)
+            }
+
             Divider()
 
+            // Agent roster with wake buttons
             if store.agents.isEmpty {
                 Text("connecting...")
                     .font(.system(size: 10, design: .monospaced))
                     .foregroundStyle(.secondary)
             } else {
                 ForEach(store.agents) { agent in
-                    HStack(spacing: 8) {
+                    HStack(spacing: 6) {
                         Circle()
                             .fill(agent.alive ? RheaTheme.green : RheaTheme.red)
                             .frame(width: 6, height: 6)
 
                         Text(agent.name.lowercased())
-                            .font(.system(size: 11, weight: .semibold, design: .monospaced))
+                            .font(.system(size: 10, weight: .semibold, design: .monospaced))
                             .foregroundStyle(.white)
 
                         Spacer()
 
                         Text(agent.mode)
-                            .font(.system(size: 9, design: .monospaced))
+                            .font(.system(size: 8, design: .monospaced))
                             .foregroundStyle(RheaTheme.modeColor(agent.mode))
+
+                        if !agent.alive {
+                            Button {
+                                Task { _ = try? await api.wakeAgent(agent.name) }
+                            } label: {
+                                Image(systemName: "bolt.fill")
+                                    .font(.system(size: 8))
+                                    .foregroundStyle(RheaTheme.amber)
+                            }
+                            .buttonStyle(.plain)
+                        }
                     }
                 }
             }
 
             Divider()
 
+            // Totals
             HStack {
                 Text("T:\(store.formatTokens(store.totalTokens))")
                     .font(.system(size: 10, weight: .bold, design: .monospaced))
@@ -2275,8 +2317,42 @@ struct MenuBarView: View {
                     .font(.system(size: 10, weight: .bold, design: .monospaced))
                     .foregroundStyle(RheaTheme.amber)
             }
+
+            Divider()
+
+            // Connection switcher
+            HStack(spacing: 6) {
+                Button {
+                    apiBaseURL = "http://localhost:8400"
+                } label: {
+                    Text("LOCAL")
+                        .font(.system(size: 8, weight: .bold, design: .monospaced))
+                        .foregroundStyle(apiBaseURL.contains("localhost") ? RheaTheme.green : .secondary)
+                }
+                .buttonStyle(.plain)
+
+                Button {
+                    apiBaseURL = "https://rhea-tribunal.fly.dev"
+                } label: {
+                    Text("CLOUD")
+                        .font(.system(size: 8, weight: .bold, design: .monospaced))
+                        .foregroundStyle(apiBaseURL.contains("fly.dev") ? RheaTheme.accent : .secondary)
+                }
+                .buttonStyle(.plain)
+
+                Spacer()
+
+                Button {
+                    NSApp.terminate(nil)
+                } label: {
+                    Text("QUIT")
+                        .font(.system(size: 8, weight: .bold, design: .monospaced))
+                        .foregroundStyle(RheaTheme.red.opacity(0.6))
+                }
+                .buttonStyle(.plain)
+            }
         }
         .padding(12)
-        .frame(width: 220)
+        .frame(width: 240)
     }
 }
