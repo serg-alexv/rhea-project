@@ -89,6 +89,26 @@ def init_db() -> None:
         );
         CREATE INDEX IF NOT EXISTS idx_office_ts ON office_messages(ts);
         CREATE INDEX IF NOT EXISTS idx_office_sender ON office_messages(sender);
+
+        CREATE TABLE IF NOT EXISTS clipboard (
+            id TEXT PRIMARY KEY,
+            user_id TEXT NOT NULL,
+            device_id TEXT NOT NULL DEFAULT '',
+            device_name TEXT DEFAULT '',
+            content_type TEXT NOT NULL DEFAULT 'text',
+            content TEXT NOT NULL,
+            content_preview TEXT,
+            content_hash TEXT,
+            privacy TEXT DEFAULT 'normal',
+            ttl_seconds INTEGER,
+            pinned INTEGER DEFAULT 0,
+            source_app TEXT DEFAULT '',
+            created_at TEXT NOT NULL,
+            expires_at TEXT
+        );
+        CREATE INDEX IF NOT EXISTS idx_clip_user ON clipboard(user_id, created_at DESC);
+        CREATE INDEX IF NOT EXISTS idx_clip_hash ON clipboard(content_hash);
+        CREATE INDEX IF NOT EXISTS idx_clip_expires ON clipboard(expires_at);
     """)
     conn.commit()
 
@@ -258,6 +278,126 @@ def query_sessions(limit: int = 20) -> list[dict]:
         (limit,),
     ).fetchall()
     return [dict(r) for r in rows]
+
+
+# ─── Clipboard Write-Through ─────────────────────────────────────────
+
+import re as _re
+
+_SENSITIVE_PATTERNS = [
+    _re.compile(r"\b\d{4}[\s-]?\d{4}[\s-]?\d{4}[\s-]?\d{4}\b"),  # credit card
+    _re.compile(r"\b(sk|pk|api|token|secret|password|bearer)[_-]?\w{16,}", _re.I),  # API keys/tokens
+    _re.compile(r"-----BEGIN (RSA |EC |OPENSSH )?PRIVATE KEY-----"),  # PEM keys
+    _re.compile(r"\b[A-Za-z0-9+/]{40,}={0,2}\b"),  # long base64 (likely secrets)
+]
+
+
+def _classify_privacy(content: str) -> tuple[str, Optional[int]]:
+    """Auto-classify clipboard content privacy level. Returns (privacy, ttl_seconds)."""
+    for pat in _SENSITIVE_PATTERNS:
+        if pat.search(content):
+            return "secret", 30
+    return "normal", None
+
+
+def persist_clipboard(clip: dict) -> dict:
+    """Insert a clipboard entry. Deduplicates by content_hash within 60s window."""
+    import hashlib, uuid
+    conn = _get_conn()
+    content = clip.get("content", "")
+    content_hash = hashlib.sha256(content.encode("utf-8", errors="replace")).hexdigest()[:16]
+    user_id = clip.get("user_id", "anon")
+
+    # Dedup: skip if same hash from same user within last 60 seconds
+    recent = conn.execute(
+        "SELECT id FROM clipboard WHERE user_id=? AND content_hash=? AND created_at > datetime('now', '-60 seconds')",
+        (user_id, content_hash),
+    ).fetchone()
+    if recent:
+        return {"id": recent["id"], "deduplicated": True}
+
+    # Auto-classify privacy if not provided
+    privacy = clip.get("privacy")
+    ttl = clip.get("ttl_seconds")
+    if not privacy:
+        privacy, auto_ttl = _classify_privacy(content)
+        if ttl is None:
+            ttl = auto_ttl
+
+    now = datetime.now(timezone.utc).isoformat()
+    expires_at = None
+    if ttl:
+        from datetime import timedelta
+        expires_at = (datetime.now(timezone.utc) + timedelta(seconds=ttl)).isoformat()
+
+    clip_id = clip.get("id") or uuid.uuid4().hex[:12]
+    preview = content[:120] if privacy != "secret" else "[redacted]"
+
+    conn.execute(
+        """INSERT INTO clipboard (id, user_id, device_id, device_name, content_type,
+           content, content_preview, content_hash, privacy, ttl_seconds, pinned,
+           source_app, created_at, expires_at)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+        (clip_id, user_id, clip.get("device_id", ""), clip.get("device_name", ""),
+         clip.get("content_type", "text"), content, preview, content_hash,
+         privacy, ttl, clip.get("pinned", 0), clip.get("source_app", ""),
+         now, expires_at),
+    )
+    conn.commit()
+    return {"id": clip_id, "privacy": privacy, "ttl_seconds": ttl, "expires_at": expires_at, "deduplicated": False}
+
+
+def query_clipboard(user_id: str, limit: int = 50, content_type: Optional[str] = None,
+                    pinned_only: bool = False) -> list[dict]:
+    """Query clipboard history for a user, excluding expired entries."""
+    conn = _get_conn()
+    # Clean expired entries first
+    conn.execute("DELETE FROM clipboard WHERE expires_at IS NOT NULL AND expires_at < datetime('now')")
+    conn.commit()
+
+    sql = "SELECT * FROM clipboard WHERE user_id = ?"
+    params: list = [user_id]
+    if content_type:
+        sql += " AND content_type = ?"
+        params.append(content_type)
+    if pinned_only:
+        sql += " AND pinned = 1"
+    sql += " ORDER BY created_at DESC LIMIT ?"
+    params.append(limit)
+    rows = conn.execute(sql, params).fetchall()
+    return [dict(r) for r in rows]
+
+
+def get_clipboard_latest(user_id: str) -> Optional[dict]:
+    """Get the latest clipboard entry for a user."""
+    results = query_clipboard(user_id, limit=1)
+    return results[0] if results else None
+
+
+def delete_clipboard(user_id: str, clip_id: str) -> bool:
+    conn = _get_conn()
+    cur = conn.execute("DELETE FROM clipboard WHERE id = ? AND user_id = ?", (clip_id, user_id))
+    conn.commit()
+    return cur.rowcount > 0
+
+
+def clear_clipboard(user_id: str, before: Optional[str] = None) -> int:
+    conn = _get_conn()
+    if before:
+        cur = conn.execute("DELETE FROM clipboard WHERE user_id = ? AND created_at < ? AND pinned = 0",
+                           (user_id, before))
+    else:
+        cur = conn.execute("DELETE FROM clipboard WHERE user_id = ? AND pinned = 0", (user_id,))
+    conn.commit()
+    return cur.rowcount
+
+
+def pin_clipboard(user_id: str, clip_id: str, pinned: bool = True) -> bool:
+    conn = _get_conn()
+    cur = conn.execute("UPDATE clipboard SET pinned = ?, expires_at = NULL WHERE id = ? AND user_id = ?",
+                       (1 if pinned else 0, clip_id, user_id))
+    conn.commit()
+    return cur.rowcount > 0
 
 
 # ─── JSONL Migration ──────────────────────────────────────────────────

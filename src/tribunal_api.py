@@ -1056,9 +1056,9 @@ footer .f-copy{{color:#333;font-size:.68rem;letter-spacing:.04em}}
   <div class="nav-brand">Rhea</div>
   <div class="nav-links">
     <a href="#features">Features</a>
+    <a href="#clipboard">Clipboard</a>
     <a href="#pricing">Pricing</a>
     <a href="#platforms">Apps</a>
-    <a href="/docs">Docs</a>
     <!-- Compact auth widget -->
     <div class="auth-widget">
       <div class="auth-trigger"><span class="dot"></span> Sign In</div>
@@ -1286,6 +1286,62 @@ footer .f-copy{{color:#333;font-size:.68rem;letter-spacing:.04em}}
         <div style="font-size:.65rem;color:var(--muted)">Cross-platform web UI &mdash; Windows, Linux, any browser</div>
       </div>
     </div>
+  </div>
+</div>
+</section>
+
+<!-- CLIPBOARD SYNC -->
+<section id="clipboard" class="reveal">
+<div class="section-title">
+  <h2>One clipboard.<br>Every device.</h2>
+  <p>Copy on your Mac. Paste on Windows. Replay anything. Secrets auto-expire.</p>
+</div>
+<div style="max-width:960px;margin:0 auto">
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem;margin-bottom:1.5rem">
+    <div class="glass-card stagger-1" style="padding:1.5rem">
+      <div style="font-size:1.5rem;margin-bottom:.8rem">&#x1F4CB;</div>
+      <h3 style="font-size:.95rem;font-weight:700;margin-bottom:.4rem">Cross-Device Sync</h3>
+      <p style="font-size:.78rem;color:var(--muted);line-height:1.6">Copy a URL on your phone, paste it on your laptop.
+        Real-time SSE push &mdash; no polling, no delays. Works across macOS, iOS, Windows, and Linux.</p>
+    </div>
+    <div class="glass-card stagger-2" style="padding:1.5rem">
+      <div style="font-size:1.5rem;margin-bottom:.8rem">&#x23F0;</div>
+      <h3 style="font-size:.95rem;font-weight:700;margin-bottom:.4rem">History &amp; Replay</h3>
+      <p style="font-size:.78rem;color:var(--muted);line-height:1.6">Every clip saved with timestamp, source device, and app.
+        Search your clipboard history. Pin important clips. Replay any entry from the last 30 days.</p>
+    </div>
+    <div class="glass-card stagger-3" style="padding:1.5rem">
+      <div style="font-size:1.5rem;margin-bottom:.8rem">&#x1F510;</div>
+      <h3 style="font-size:.95rem;font-weight:700;margin-bottom:.4rem">Privacy by Default</h3>
+      <p style="font-size:.78rem;color:var(--muted);line-height:1.6">Auto-detects passwords, API keys, and credit card numbers.
+        Sensitive content gets a 30-second TTL and E2E encryption. You control what persists.</p>
+    </div>
+  </div>
+  <!-- How it works -->
+  <div class="glass-card" style="padding:1.5rem 2rem">
+    <div style="display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;justify-content:center">
+      <div style="text-align:center;min-width:120px">
+        <div style="font-size:1.8rem;margin-bottom:.3rem">&#xF8FF;</div>
+        <div style="font-size:.65rem;color:var(--muted)">macOS &bull; iOS</div>
+        <div style="font-size:.55rem;color:var(--green)">Built into Rhea app</div>
+      </div>
+      <div style="font-size:.9rem;color:var(--accent)">&#x21C4;</div>
+      <div style="text-align:center;min-width:120px">
+        <div style="font-size:1.8rem;margin-bottom:.3rem">&#x2601;&#xFE0F;</div>
+        <div style="font-size:.65rem;color:var(--muted)">Rhea Cloud</div>
+        <div style="font-size:.55rem;color:var(--accent)">E2E encrypted</div>
+      </div>
+      <div style="font-size:.9rem;color:var(--accent)">&#x21C4;</div>
+      <div style="text-align:center;min-width:120px">
+        <div style="font-size:1.8rem;margin-bottom:.3rem">&#x1FA9F;</div>
+        <div style="font-size:.65rem;color:var(--muted)">Windows &bull; Linux</div>
+        <div style="font-size:.55rem;color:var(--green)">pip install rhea-clipboard</div>
+      </div>
+    </div>
+  </div>
+  <div style="text-align:center;margin-top:1rem">
+    <a href="#auth" class="btn btn-primary" style="font-size:.82rem">Get Clipboard Sync Free</a>
+    <span style="font-size:.65rem;color:var(--muted);margin-left:.8rem">Included in all plans &bull; 100 free clips/day</span>
   </div>
 </div>
 </section>
@@ -4833,6 +4889,220 @@ async def wallet_balance(chain: str):
         return {"chain": chain, "balance": None, "note": "Use etherscan API with your own key for ETH balance"}
     else:
         raise HTTPException(400, f"Unknown chain: {chain}")
+
+
+# ---------------------------------------------------------------------------
+# Clipboard — cross-device sync with privacy and replay
+# ---------------------------------------------------------------------------
+
+class ClipboardPush(BaseModel):
+    content: str
+    content_type: str = "text"  # text, url, image, code, file
+    device_id: str = ""
+    device_name: str = ""
+    privacy: Optional[str] = None  # normal, sensitive, secret (auto-classified if None)
+    ttl_seconds: Optional[int] = None
+    source_app: str = ""
+
+class ClipboardUpdate(BaseModel):
+    pinned: Optional[bool] = None
+
+_CLIPBOARD_SUBSCRIBERS: list = []  # SSE subscribers for clipboard events
+
+def _broadcast_clipboard(user_id: str, event: dict):
+    """Push clipboard event to SSE subscribers for this user."""
+    dead = []
+    for uid, q in _CLIPBOARD_SUBSCRIBERS:
+        if uid == user_id:
+            try:
+                q.put_nowait(event)
+            except asyncio.QueueFull:
+                dead.append((uid, q))
+    for item in dead:
+        _CLIPBOARD_SUBSCRIBERS.remove(item)
+
+
+@app.post("/clipboard", dependencies=[Depends(verify_api_key)])
+async def clipboard_push(
+    req: ClipboardPush,
+    authorization: Optional[str] = Header(None, alias="Authorization"),
+):
+    """Push a clipboard entry. Auto-classifies privacy. Deduplicates within 60s."""
+    user_id = "anon"
+    if authorization and authorization.startswith("Bearer "):
+        try:
+            user = _current_user(type("C", (), {"credentials": authorization[7:]})())
+            user_id = str(user["id"])
+        except Exception:
+            pass
+
+    result = rhea_db.persist_clipboard({
+        "user_id": user_id,
+        "content": req.content,
+        "content_type": req.content_type,
+        "device_id": req.device_id,
+        "device_name": req.device_name,
+        "privacy": req.privacy,
+        "ttl_seconds": req.ttl_seconds,
+        "source_app": req.source_app,
+    })
+
+    if not result.get("deduplicated"):
+        _broadcast_clipboard(user_id, {
+            "type": "clipboard_push",
+            "clip_id": result["id"],
+            "content_type": req.content_type,
+            "device": req.device_name or req.device_id,
+            "privacy": result.get("privacy", "normal"),
+            "ts": datetime.now(timezone.utc).isoformat(),
+        })
+
+    return result
+
+
+@app.get("/clipboard", dependencies=[Depends(verify_api_key)])
+async def clipboard_list(
+    limit: int = 50,
+    content_type: Optional[str] = None,
+    pinned: bool = False,
+    authorization: Optional[str] = Header(None, alias="Authorization"),
+):
+    """List clipboard history. Expired entries are auto-cleaned."""
+    user_id = "anon"
+    if authorization and authorization.startswith("Bearer "):
+        try:
+            user = _current_user(type("C", (), {"credentials": authorization[7:]})())
+            user_id = str(user["id"])
+        except Exception:
+            pass
+    clips = rhea_db.query_clipboard(user_id, limit=limit, content_type=content_type, pinned_only=pinned)
+    return {"clips": clips, "count": len(clips), "user_id": user_id}
+
+
+@app.get("/clipboard/latest", dependencies=[Depends(verify_api_key)])
+async def clipboard_latest(
+    authorization: Optional[str] = Header(None, alias="Authorization"),
+):
+    """Get the most recent clipboard entry (for paste on another device)."""
+    user_id = "anon"
+    if authorization and authorization.startswith("Bearer "):
+        try:
+            user = _current_user(type("C", (), {"credentials": authorization[7:]})())
+            user_id = str(user["id"])
+        except Exception:
+            pass
+    clip = rhea_db.get_clipboard_latest(user_id)
+    if not clip:
+        return {"clip": None}
+    return {"clip": clip}
+
+
+@app.get("/clipboard/stream", dependencies=[Depends(verify_api_key)])
+async def clipboard_stream(
+    authorization: Optional[str] = Header(None, alias="Authorization"),
+):
+    """SSE stream — real-time clipboard sync across devices."""
+    user_id = "anon"
+    if authorization and authorization.startswith("Bearer "):
+        try:
+            user = _current_user(type("C", (), {"credentials": authorization[7:]})())
+            user_id = str(user["id"])
+        except Exception:
+            pass
+
+    q: asyncio.Queue = asyncio.Queue(maxsize=64)
+    entry = (user_id, q)
+    _CLIPBOARD_SUBSCRIBERS.append(entry)
+
+    async def event_generator():
+        try:
+            yield f"data: {json.dumps({'type': 'connected', 'user_id': user_id})}\n\n"
+            while True:
+                try:
+                    event = await asyncio.wait_for(q.get(), timeout=30)
+                    yield f"data: {json.dumps(event)}\n\n"
+                except asyncio.TimeoutError:
+                    yield f": keepalive\n\n"
+        finally:
+            if entry in _CLIPBOARD_SUBSCRIBERS:
+                _CLIPBOARD_SUBSCRIBERS.remove(entry)
+
+    return StreamingResponse(event_generator(), media_type="text/event-stream",
+                           headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"})
+
+
+@app.delete("/clipboard/{clip_id}", dependencies=[Depends(verify_api_key)])
+async def clipboard_delete(
+    clip_id: str,
+    authorization: Optional[str] = Header(None, alias="Authorization"),
+):
+    """Delete a single clipboard entry."""
+    user_id = "anon"
+    if authorization and authorization.startswith("Bearer "):
+        try:
+            user = _current_user(type("C", (), {"credentials": authorization[7:]})())
+            user_id = str(user["id"])
+        except Exception:
+            pass
+    ok = rhea_db.delete_clipboard(user_id, clip_id)
+    if not ok:
+        raise HTTPException(404, "Clip not found or not yours")
+    return {"deleted": clip_id}
+
+
+@app.delete("/clipboard", dependencies=[Depends(verify_api_key)])
+async def clipboard_clear(
+    before: Optional[str] = None,
+    authorization: Optional[str] = Header(None, alias="Authorization"),
+):
+    """Clear all clipboard history (pinned entries preserved). Optional ?before= ISO timestamp."""
+    user_id = "anon"
+    if authorization and authorization.startswith("Bearer "):
+        try:
+            user = _current_user(type("C", (), {"credentials": authorization[7:]})())
+            user_id = str(user["id"])
+        except Exception:
+            pass
+    count = rhea_db.clear_clipboard(user_id, before=before)
+    return {"cleared": count}
+
+
+@app.post("/clipboard/{clip_id}/pin", dependencies=[Depends(verify_api_key)])
+async def clipboard_pin(
+    clip_id: str,
+    authorization: Optional[str] = Header(None, alias="Authorization"),
+):
+    """Pin a clipboard entry (prevents expiration and clear)."""
+    user_id = "anon"
+    if authorization and authorization.startswith("Bearer "):
+        try:
+            user = _current_user(type("C", (), {"credentials": authorization[7:]})())
+            user_id = str(user["id"])
+        except Exception:
+            pass
+    ok = rhea_db.pin_clipboard(user_id, clip_id, pinned=True)
+    if not ok:
+        raise HTTPException(404, "Clip not found")
+    return {"pinned": clip_id}
+
+
+@app.post("/clipboard/{clip_id}/unpin", dependencies=[Depends(verify_api_key)])
+async def clipboard_unpin(
+    clip_id: str,
+    authorization: Optional[str] = Header(None, alias="Authorization"),
+):
+    """Unpin a clipboard entry."""
+    user_id = "anon"
+    if authorization and authorization.startswith("Bearer "):
+        try:
+            user = _current_user(type("C", (), {"credentials": authorization[7:]})())
+            user_id = str(user["id"])
+        except Exception:
+            pass
+    ok = rhea_db.pin_clipboard(user_id, clip_id, pinned=False)
+    if not ok:
+        raise HTTPException(404, "Clip not found")
+    return {"unpinned": clip_id}
 
 
 # ---------------------------------------------------------------------------
