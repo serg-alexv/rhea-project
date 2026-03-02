@@ -30,6 +30,9 @@ COPY src/env_loader.py src/
 COPY src/auth_api.py src/
 COPY src/billing.py src/
 COPY src/ndi_bridge.py src/
+COPY src/task_queue.py src/
+COPY src/rhea_supervisor.py src/
+COPY src/workflow_engine.py src/
 
 # Create runtime directories
 RUN mkdir -p logs data
