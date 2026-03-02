@@ -204,6 +204,45 @@ def get_by_ontology(
     return pipeline.get_by_ontology(ontology, limit=limit)
 
 
+@aletheia_router.get("/gems")
+def list_gems(
+    min_agreement: float = Query(0.6, ge=0.0, le=1.0, description="Minimum agreement score"),
+    ontology: Optional[str] = Query(None, description="Filter by ontology domain"),
+    limit: int = Query(50, ge=1, le=200),
+):
+    """
+    Curated knowledge gems — verified proofs and hypotheses with high agreement.
+
+    Gems are the exportable, sellable, distributable artifacts.
+    Only proofs/hypotheses above the agreement threshold qualify.
+    Noise is always excluded.
+    """
+    all_items = pipeline.get_recent(limit=500, tier_filter=None)
+    gems = []
+    for item in all_items:
+        tier = item.get("tier", "")
+        if tier == "noise":
+            continue
+        score = item.get("agreement_score", 0)
+        if score < min_agreement:
+            continue
+        if ontology and item.get("ontology", "") != ontology:
+            continue
+        gems.append({
+            **item,
+            "gem_grade": "A" if score >= 0.85 else "B" if score >= 0.7 else "C",
+        })
+        if len(gems) >= limit:
+            break
+    return {
+        "gems": gems,
+        "count": len(gems),
+        "min_agreement": min_agreement,
+        "ontology_filter": ontology,
+        "grade_scale": {"A": ">=85% agreement", "B": ">=70%", "C": ">=60%"},
+    }
+
+
 @aletheia_router.post("/verify")
 def verify_consistency():
     """Verify DB <-> filesystem consistency (friends/aletheia/)."""
