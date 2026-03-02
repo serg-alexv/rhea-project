@@ -234,6 +234,18 @@ def deduct_credits_dynamic(user_id: int, cost: int, operation: str, ref_id: str 
             (user_id, -cost, new_balance, operation, ref_id, time.time())
         )
         db.commit()
+    # Mirror to CockroachDB for persistent cloud billing
+    try:
+        import crdb_store
+        crdb_store.log_billing(
+            user_id=str(user_id),
+            event_type=operation,
+            amount_usd=cost * 0.001,  # 1 credit ≈ $0.001
+            tokens_used=cost,
+            metadata={"ref_id": ref_id, "balance_after": new_balance},
+        )
+    except Exception:
+        pass  # CRDB logging must never block billing
     return new_balance
 
 
