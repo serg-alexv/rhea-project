@@ -208,9 +208,8 @@ export default function PapersPage() {
 
     if (activeTool === 'note' || activeTool === 'ontology') return // wait for input
 
-    // Auto-execute for tribunal and aletheia
     executeAnnotation(text, page, activeTool)
-  }, [activeTool, ontologyPick])
+  }, [activeTool])
 
   const executeAnnotation = async (text: string, page: number, tool: AnnotationTool) => {
     const id = crypto.randomUUID()
