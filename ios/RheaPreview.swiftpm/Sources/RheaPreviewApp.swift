@@ -34,7 +34,7 @@ struct RheaPreviewApp: App {
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 enum PlayPane: String, CaseIterable, Identifiable {
-    case ops, tribunal, secrets, bio, radio, tasks, governor, tools, dpi, nodes, aletheia, history, processes, models, ruliad, settings
+    case ops, tribunal, secrets, bio, tasks, governor, aletheia, models, chains, radio, history, ruliad, settings
     var id: String { rawValue }
 
     var label: String {
@@ -43,16 +43,13 @@ enum PlayPane: String, CaseIterable, Identifiable {
         case .tribunal: return "TRIBUNAL"
         case .secrets: return "SECRETS"
         case .bio: return "BIO"
-        case .radio: return "RADIO"
         case .tasks: return "TASKS"
         case .governor: return "GOVERNOR"
-        case .tools: return "TOOLS"
-        case .dpi: return "DPI"
-        case .nodes: return "NODES"
         case .aletheia: return "ALETHEIA"
-        case .history: return "HISTORY"
-        case .processes: return "PROCS"
         case .models: return "MODELS"
+        case .chains: return "CHAINS"
+        case .radio: return "RADIO"
+        case .history: return "HISTORY"
         case .ruliad: return "RULIAD"
         case .settings: return "CONFIG"
         }
@@ -64,16 +61,13 @@ enum PlayPane: String, CaseIterable, Identifiable {
         case .tribunal: return "text.bubble"
         case .secrets: return "lock.shield"
         case .bio: return "atom"
-        case .radio: return "waveform"
         case .tasks: return "checklist"
         case .governor: return "gauge.with.dots.needle.33percent"
-        case .tools: return "keyboard"
-        case .dpi: return "eye.trianglebadge.exclamationmark"
-        case .nodes: return "point.3.connected.trianglepath.dotted"
         case .aletheia: return "checkmark.seal"
-        case .history: return "clock.arrow.circlepath"
-        case .processes: return "terminal"
         case .models: return "cpu"
+        case .chains: return "point.3.connected.trianglepath.dotted"
+        case .radio: return "waveform"
+        case .history: return "clock.arrow.circlepath"
         case .ruliad: return "function"
         case .settings: return "slider.horizontal.3"
         }
@@ -88,8 +82,8 @@ enum PlayPane: String, CaseIterable, Identifiable {
     /// Default visibility when no user preference is set
     var defaultVisible: Bool {
         switch self {
-        case .ops, .tribunal, .secrets, .bio, .tasks, .governor, .tools, .aletheia, .models, .settings: return true
-        case .radio, .dpi, .nodes, .history, .processes, .ruliad: return false
+        case .ops, .tribunal, .secrets, .bio, .tasks, .governor, .aletheia, .models, .settings: return true
+        case .chains, .radio, .history, .ruliad: return false
         }
     }
 
@@ -103,8 +97,7 @@ enum PlayPane: String, CaseIterable, Identifiable {
             }
             // Default level-based gating
             switch pane {
-            case .radio, .history, .processes, .ruliad: return level >= 3
-            case .dpi, .nodes: return false
+            case .chains, .radio, .history, .ruliad: return level >= 3
             default: return level >= 2 || pane.defaultVisible
             }
         }
@@ -264,16 +257,13 @@ private struct PlayShell: View {
             case .tribunal: DialogView()
             case .secrets: RelayPrivacyView()
             case .bio: BioRendererView()
-            case .radio: TeamChatView()
             case .tasks: TasksView()
             case .governor: GovernorView()
-            case .tools: ToolsHubView()
-            case .dpi: DPIView()
-            case .nodes: NodeEditorView()
             case .aletheia: AletheiaView()
-            case .history: HistoryView()
-            case .processes: ProcessesView()
             case .models: ModelsView()
+            case .chains: ChainsView()
+            case .radio: TeamChatView()
+            case .history: HistoryView()
             case .ruliad: RuliadView()
             case .settings: SettingsView()
             }

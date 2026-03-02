@@ -19,17 +19,14 @@ public struct SettingsView: View {
     @AppStorage("pane_tribunal") private var paneTribunal = true
     @AppStorage("pane_secrets") private var paneSecrets = true
     @AppStorage("pane_bio") private var paneBio = true
-    @AppStorage("pane_radio") private var paneRadio = false
     @AppStorage("pane_tasks") private var paneTasks = true
     @AppStorage("pane_governor") private var paneGovernor = true
-    @AppStorage("pane_tools") private var paneTools = true
-    @AppStorage("pane_dpi") private var paneDpi = false
     @AppStorage("pane_aletheia") private var paneAletheia = true
-    @AppStorage("pane_history") private var paneHistory = false
-    @AppStorage("pane_processes") private var paneProcesses = false
     @AppStorage("pane_models") private var paneModels = true
+    @AppStorage("pane_chains") private var paneChains = false
+    @AppStorage("pane_radio") private var paneRadio = false
+    @AppStorage("pane_history") private var paneHistory = false
     @AppStorage("pane_ruliad") private var paneRuliad = false
-    @AppStorage("pane_nodes") private var paneNodes = false
     @AppStorage("pane_settings") private var paneSettings = true
     @State private var draftAtlas = ""
     @State private var draftAPI = ""
@@ -197,17 +194,14 @@ public struct SettingsView: View {
                     paneToggle("text.bubble", "tribunal", $paneTribunal)
                     paneToggle("lock.shield", "secrets", $paneSecrets)
                     paneToggle("atom", "bio", $paneBio)
-                    paneToggle("waveform", "radio", $paneRadio)
                     paneToggle("checklist", "tasks", $paneTasks)
                     paneToggle("gauge.with.dots.needle.33percent", "governor", $paneGovernor)
-                    paneToggle("keyboard", "tools", $paneTools)
                     paneToggle("checkmark.seal", "aletheia", $paneAletheia)
                     paneToggle("cpu", "models", $paneModels)
+                    paneToggle("point.3.connected.trianglepath.dotted", "chains", $paneChains)
+                    paneToggle("waveform", "radio", $paneRadio)
                     paneToggle("clock.arrow.circlepath", "history", $paneHistory)
-                    paneToggle("terminal", "processes", $paneProcesses)
                     paneToggle("function", "ruliad", $paneRuliad)
-                    paneToggle("eye.trianglebadge.exclamationmark", "dpi", $paneDpi)
-                    paneToggle("point.3.connected.trianglepath.dotted", "nodes", $paneNodes)
                     paneAlwaysOn("slider.horizontal.3", "settings")
                 }
 
