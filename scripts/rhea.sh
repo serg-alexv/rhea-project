@@ -25,8 +25,15 @@ case "$sub" in
   flow)      bash scripts/rhea/check.sh && python3 scripts/rhea_orchestrate.py flow ;;
   tribunal)  python3 src/rhea_bridge.py tribunal "$@" ;;
   
+  # Ops — full control plane
+  ops)       python3 src/rhea_ops.py "$@" ;;
+  org)       python3 src/rhea_ops.py org "$@" ;;
+  fly)       python3 src/rhea_ops.py fly "$@" ;;
+  api)       python3 src/rhea_ops.py api "$@" ;;
+  monitor)   python3 src/rhea_ops.py monitor "$@" ;;
+
   # Audit & Safety
-  audit)     
+  audit)
              log_info "Verifying Audit Ledger..."
              python3 ops/rex_pager.py verify
              log_info "Recent Audit Reports:"
@@ -46,8 +53,28 @@ case "$sub" in
              ;;
 
   help|--help|-h)
-    echo "Rhea Unified CLI (v2.1)"
-    echo "Usage: ./scripts/rhea.sh <command> [args]"
+    echo "rhea — unified control plane (v3.0)"
+    echo "Usage: rhea <command> [args]"
+    echo ""
+    echo "Control Plane (rhea-ops):"
+    echo "  ops [subcommand]      Full CLI (run 'rhea ops --help' for all)"
+    echo "  org status            All repos with licenses, topics, stars"
+    echo "  org license [--fix]   Audit/fix MIT license across org"
+    echo "  org create NAME       Create new repo in org"
+    echo "  org topics REPO [t…]  View/set repo topics"
+    echo "  fly status            Fly.io machine status"
+    echo "  fly deploy            Deploy to Fly.io"
+    echo "  fly secrets           List/set/unset secrets"
+    echo "  fly logs              Tail cloud logs"
+    echo "  fly ssh [cmd]         SSH into Fly machine"
+    echo "  api health            Health check (local + cloud)"
+    echo "  api tribunal CLAIM    Submit claim for verification"
+    echo "  api history [-n 20]   Query session history"
+    echo "  api radio [-n 30]     Query radio feed"
+    echo "  api agents            Agent roster and status"
+    echo "  api office [-n 20]    Office messages"
+    echo "  api governor          Token budgets and spending"
+    echo "  monitor [--interval]  Live terminal dashboard"
     echo ""
     echo "Agent Operations:"
     echo "  status                Show agent snapshot & inventory"
@@ -58,6 +85,7 @@ case "$sub" in
     echo "  bootstrap             Verify repo invariants and .env"
     echo "  check                 Verify systemic invariants"
     echo "  audit                 Verify ledger integrity & reports"
+    echo "  commit MSG            Quick commit + push"
     echo ""
     echo "Safety:"
     echo "  stop                  Emergency kill-switch (create STOP)"
