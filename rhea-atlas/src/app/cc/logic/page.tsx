@@ -137,7 +137,93 @@ export default function LogicPage() {
     inputRef.current?.focus()
   }, [formula, pushToHistory])
 
-  // TODO(human): implement evaluateFormula — see Learn by Doing below
+  const BRACKET_PAIRS: Record<string, string> = {
+    '(': ')', '[': ']', '{': '}', '⟨': '⟩', '⌈': '⌉', '⌊': '⌋', '⟦': '⟧',
+  }
+  const CLOSE_SET = Object.values(BRACKET_PAIRS)
+  const OPEN_SET = Object.keys(BRACKET_PAIRS)
+  const BINARY_LIST = '∧ ∨ → ← ↔ ⊕ ⊢ ⊨ ⇒ ⇐ ⇔ ∈ ∉ ⊂ ⊃ ⊆ ⊇ ∪ ∩ ∖ × ≈ ≠ ≤ ≥ ± · ÷'.split(' ')
+  const UNARY_LIST = ['¬', '∀', '∃', '∄']
+  const ALL_OPS_LIST = BINARY_LIST.concat(UNARY_LIST)
+  const isBinary = (c: string) => BINARY_LIST.includes(c)
+  const isUnary = (c: string) => UNARY_LIST.includes(c)
+  const isOp = (c: string) => ALL_OPS_LIST.includes(c)
+  const isOpen = (c: string) => OPEN_SET.includes(c)
+  const isClose = (c: string) => CLOSE_SET.includes(c)
+
+  function evaluateFormula(input: string): { valid: boolean; normalized?: string; error?: string } {
+    const s = input.trim()
+    if (!s) return { valid: false, error: 'Empty formula' }
+
+    // 1. Bracket balance
+    const stack: string[] = []
+    for (let i = 0; i < s.length; i++) {
+      const ch = s[i]
+      if (isOpen(ch)) {
+        stack.push(ch)
+      } else if (isClose(ch)) {
+        const last = stack.pop()
+        if (!last || BRACKET_PAIRS[last] !== ch) {
+          return { valid: false, error: `Unmatched '${ch}' at position ${i + 1}` }
+        }
+      }
+    }
+    if (stack.length > 0) {
+      return { valid: false, error: `Unclosed '${stack[stack.length - 1]}'` }
+    }
+
+    // 2. Tokenize for operator validation
+    const tokens: string[] = []
+    let buf = ''
+    for (const ch of s) {
+      if (ch === ' ') {
+        if (buf) { tokens.push(buf); buf = '' }
+        continue
+      }
+      if (isOp(ch) || isOpen(ch) || isClose(ch) || ch === '|' || ch === '‖') {
+        if (buf) { tokens.push(buf); buf = '' }
+        tokens.push(ch)
+      } else {
+        buf += ch
+      }
+    }
+    if (buf) tokens.push(buf)
+
+    // 3. Operator position checks
+    for (let i = 0; i < tokens.length; i++) {
+      const t = tokens[i]
+      if (isBinary(t)) {
+        if (i === 0) return { valid: false, error: `Binary operator '${t}' at start` }
+        if (i === tokens.length - 1) return { valid: false, error: `Binary operator '${t}' at end` }
+        const prev = tokens[i - 1]
+        if (isBinary(prev) || isUnary(prev)) {
+          return { valid: false, error: `Adjacent operators '${prev}' and '${t}'` }
+        }
+      }
+    }
+
+    // 4. Normalize: single space around binary ops, trim
+    let norm = s
+    for (let bi = 0; bi < BINARY_LIST.length; bi++) {
+      const op = BINARY_LIST[bi]
+      norm = norm.split(op).map(p => p.trim()).join(` ${op} `)
+    }
+    norm = norm.replace(/  +/g, ' ').trim()
+
+    return { valid: true, normalized: norm }
+  }
+
+  const [evalResult, setEvalResult] = useState<{ valid: boolean; normalized?: string; error?: string } | null>(null)
+
+  const runEvaluate = useCallback(() => {
+    if (!formula.trim()) return
+    const result = evaluateFormula(formula)
+    setEvalResult(result)
+    if (result.valid && result.normalized) {
+      setFormula(result.normalized)
+    }
+    pushToHistory()
+  }, [formula, pushToHistory])
 
   return (
     <div style={{ minHeight: '100vh', background: bg, color: '#e2e8f0', fontFamily: 'system-ui, -apple-system, sans-serif' }}>
@@ -178,6 +264,19 @@ export default function LogicPage() {
               </span>
               <div style={{ display: 'flex', gap: 6 }}>
                 <button
+                  onClick={runEvaluate}
+                  disabled={!formula}
+                  style={{
+                    background: evalResult?.valid ? `${green}22` : evalResult?.error ? '#ef444422' : `${accent}18`,
+                    border: `1px solid ${evalResult?.valid ? green : evalResult?.error ? '#ef4444' : accent}`,
+                    color: evalResult?.valid ? green : evalResult?.error ? '#ef4444' : accent,
+                    borderRadius: 6, padding: '4px 10px', cursor: formula ? 'pointer' : 'default',
+                    fontSize: 11, fontFamily: 'monospace', opacity: formula ? 1 : 0.4,
+                  }}
+                >
+                  Evaluate
+                </button>
+                <button
                   onClick={copyFormula}
                   disabled={!formula}
                   style={{
@@ -214,11 +313,23 @@ export default function LogicPage() {
               {formula || '∀x ∈ ℝ : P(x) → Q(x)'}
             </div>
 
+            {/* Eval feedback */}
+            {evalResult && (
+              <div style={{
+                fontSize: 12, fontFamily: 'monospace', marginTop: 6,
+                color: evalResult.valid ? green : '#ef4444',
+                padding: '4px 8px', borderRadius: 4,
+                background: evalResult.valid ? `${green}11` : '#ef444411',
+              }}>
+                {evalResult.valid ? 'Valid — normalized' : evalResult.error}
+              </div>
+            )}
+
             {/* Editable input */}
             <textarea
               ref={inputRef}
               value={formula}
-              onChange={e => setFormula(e.target.value)}
+              onChange={e => { setFormula(e.target.value); setEvalResult(null) }}
               onSelect={e => setCursorPos((e.target as HTMLTextAreaElement).selectionStart)}
               placeholder="Type or click symbols below..."
               spellCheck={false}
