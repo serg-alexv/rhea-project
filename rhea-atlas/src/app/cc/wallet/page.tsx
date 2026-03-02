@@ -125,7 +125,7 @@ export default function WalletPage() {
           <div>
             <h1 className="text-2xl font-bold tracking-tight">Wallet</h1>
             <p className="text-white/40 text-sm mt-1">
-              Receive crypto payments. 5% funds development, 95% credits your account.
+              Receive crypto. 95% becomes your credits. 5% funds real-world impact.
             </p>
           </div>
           <Link

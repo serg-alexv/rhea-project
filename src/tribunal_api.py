@@ -2044,18 +2044,19 @@ async def play_ui_page():
     from fastapi.responses import HTMLResponse
     body = """
 <h1>Rhea Play UI</h1>
-<p class="subtitle">Absorbed from <a href="https://github.com/webqit/playui">webqit/playui</a> &bull; MIT License &bull; Maintained by TimeLabs NPO</p>
+<p class="subtitle">A TimeLabs NPO project &bull; MIT License &bull; Originally <a href="https://github.com/webqit/playui">webqit/playui</a></p>
 
 <h2>What is Rhea Play UI?</h2>
-<p>Play UI was a modern UI suite covering layout, design, and <strong>UI physics</strong> &mdash; animations, events, gestures, and UI geometry.
-It introduced <strong>Async DOM</strong> and offered ready-to-use web components. The original project by WebQit was abandoned in November 2023.</p>
-<p>TimeLabs NPO absorbed the project under MIT license. It is now <strong>Rhea Play UI</strong> &mdash; maintained, evolved, and integrated into the Rhea ecosystem.</p>
+<p>A modern UI suite covering layout, design, and <strong>UI physics</strong> &mdash; animations, events, gestures, and UI geometry.
+It introduced <strong>Async DOM</strong> (non-blocking DOM reads and writes) and offers ready-to-use web components with zero framework lock-in.</p>
+<p>The original project by WebQit was abandoned in November 2023. TimeLabs NPO absorbed it under MIT license.
+It is now <strong>Rhea Play UI</strong> &mdash; maintained, evolved, and integrated into the Rhea verification ecosystem.</p>
 
 <h2>Packages</h2>
 <ul>
-<li><strong>playui-js</strong> &mdash; jQuery-inspired DOM &amp; UI abstraction. Resilient, performant, succinct API: <code>.html()</code>, <code>.play()</code>, <code>.on()</code>, <code>.off()</code></li>
-<li><strong>playui-element</strong> &mdash; Custom elements with Observer API and OOHTML. Build web components with zero ergonomic overhead.</li>
-<li><strong>playui-form</strong> &mdash; Declarative form handling and validation.</li>
+<li><strong>@timelabs/playui-js</strong> &mdash; jQuery-inspired DOM &amp; UI abstraction. Resilient, performant, succinct API: <code>.html()</code>, <code>.play()</code>, <code>.on()</code>, <code>.off()</code></li>
+<li><strong>@timelabs/playui-element</strong> &mdash; Custom elements with Observer API and OOHTML. Build web components with zero ergonomic overhead.</li>
+<li><strong>@timelabs/playui-form</strong> &mdash; Declarative form handling and validation.</li>
 </ul>
 
 <h2>Key Features</h2>
@@ -2077,21 +2078,23 @@ tree-shakeable core that produces the same reactive UI with a fraction of the bu
 <h2>Installation</h2>
 <p>CDN (no build step):</p>
 <p><code>&lt;script src="https://unpkg.com/@webqit/playui-js/dist/main.js"&gt;&lt;/script&gt;</code></p>
+<p style="font-size:.7rem;color:var(--muted)">TimeLabs CDN (coming soon): <code>unpkg.com/@timelabs/playui-js/dist/main.js</code></p>
 <p>NPM:</p>
 <p><code>npm i @webqit/playui-js @webqit/playui-element @webqit/playui-form</code></p>
+<p style="font-size:.7rem;color:var(--muted)">TimeLabs packages (coming soon): <code>npm i @timelabs/playui-js @timelabs/playui-element @timelabs/playui-form</code></p>
 
-<h2>Roadmap under TimeLabs NPO</h2>
+<h2>Roadmap</h2>
 <ul>
 <li><span class="tag" style="background:rgba(48,209,88,.1);color:#30d158">Active</span> Security audit and dependency cleanup</li>
+<li><span class="tag" style="background:rgba(48,209,88,.1);color:#30d158">Active</span> Fork and rebrand as <code>@timelabs/playui-*</code> on npm</li>
 <li><span class="tag" style="background:rgba(0,113,227,.1);color:#0071e3">Planned</span> TypeScript type definitions</li>
 <li><span class="tag" style="background:rgba(0,113,227,.1);color:#0071e3">Planned</span> Integration with Rhea Tribunal API for reactive verification UI</li>
-<li><span class="tag" style="background:rgba(191,90,242,.1);color:#bf5af2">Future</span> Publish as <code>@rhea/playui-*</code> on npm</li>
+<li><span class="tag" style="background:rgba(191,90,242,.1);color:#bf5af2">Future</span> Async DOM v2 with WASM acceleration</li>
 </ul>
 
 <h2>License</h2>
 <p>MIT License. Original work &copy; WebQit. Maintained by TimeLabs NPO since 2026.</p>
-<p><a href="https://github.com/webqit/playui">Original repository</a> &bull;
-<a href="https://github.com/serg-alexv/rhea-project">Rhea project</a></p>
+<p><a href="https://github.com/webqit/playui">Original repository (archived)</a></p>
 """
     html = _PAGE_STYLE.format(title="Rhea Play UI", body=body)
     return HTMLResponse(content=html)
