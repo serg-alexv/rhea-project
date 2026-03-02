@@ -831,7 +831,7 @@ async def landing():
   {cards}
 </div>
 <div style="text-align:center;margin-top:1rem;font-size:.65rem;color:var(--muted)">
-  Payments auto-credit your Rhea account via BTCPay webhook
+  5% funds development. 95% credits your account directly. No middlemen.
 </div>
 </section>"""
     html = f"""<!DOCTYPE html>
@@ -1140,78 +1140,96 @@ footer .f-copy{{color:#333;font-size:.68rem;letter-spacing:.04em}}
     <p>Plug your API keys. Pay providers directly. $0 platform fee. You own the infrastructure.</p>
   </div>
 </div>
-<!-- Vendor logos strip -->
-<div class="reveal stagger-2" style="display:flex;justify-content:center;align-items:center;gap:2.5rem;flex-wrap:wrap;margin-top:3rem;opacity:.5">
-  <div style="display:flex;align-items:center;gap:.5rem;font-size:.72rem;color:var(--muted)">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="11" stroke="#cc785c" stroke-width="1.5"/><path d="M12 3C7 3 3 7.5 3 12s4 9 9 9c1.5 0 3-3 3-9s-1.5-9-3-9z" stroke="#cc785c" stroke-width="1.2"/></svg>
-    Anthropic</div>
-  <div style="display:flex;align-items:center;gap:.5rem;font-size:.72rem;color:var(--muted)">
-    <svg width="18" height="18" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="none" stroke="#10a37f" stroke-width="1.5"/><path d="M12 6v6l4 2" stroke="#10a37f" stroke-width="1.5" stroke-linecap="round"/></svg>
-    OpenAI</div>
-  <div style="display:flex;align-items:center;gap:.5rem;font-size:.72rem;color:var(--muted)">
-    <svg width="18" height="18" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285f4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34a853"/></svg>
-    Google</div>
-  <div style="display:flex;align-items:center;gap:.5rem;font-size:.72rem;color:var(--muted)">
-    <svg width="18" height="18" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" fill="none" stroke="#0668E1" stroke-width="1.5"/><path d="M9 8h6v8H9z" fill="none" stroke="#0668E1" stroke-width="1"/></svg>
-    Meta</div>
-  <div style="display:flex;align-items:center;gap:.5rem;font-size:.72rem;color:var(--muted)">
-    <svg width="18" height="18" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" fill="none" stroke="#FF6F00" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    Groq</div>
-  <div style="display:flex;align-items:center;gap:.5rem;font-size:.72rem;color:var(--muted)">
-    <svg width="18" height="18" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke="#E91E63" stroke-width="1.5"/><circle cx="12" cy="12" r="4" fill="none" stroke="#E91E63" stroke-width="1"/></svg>
-    Cerebras</div>
+<!-- Vendor logos strip — providers Rhea queries -->
+<div class="reveal stagger-2" style="text-align:center;margin-top:3rem">
+  <div style="font-size:.65rem;font-weight:600;text-transform:uppercase;letter-spacing:.15em;color:var(--accent);margin-bottom:1rem">
+    Built by TimeLabs NPO &mdash; powered by</div>
+  <div style="display:flex;justify-content:center;align-items:center;gap:2rem;flex-wrap:wrap;opacity:.55">
+    <span style="font-size:.75rem;font-weight:500;color:var(--muted);letter-spacing:.02em">
+      <span style="color:#cc785c">&#x25C8;</span> Anthropic</span>
+    <span style="font-size:.75rem;font-weight:500;color:var(--muted);letter-spacing:.02em">
+      <span style="color:#10a37f">&#x25C9;</span> OpenAI</span>
+    <span style="font-size:.75rem;font-weight:500;color:var(--muted);letter-spacing:.02em">
+      <span style="color:#4285f4">G</span><span style="color:#ea4335">o</span><span style="color:#fbbc05">o</span><span style="color:#4285f4">g</span><span style="color:#34a853">l</span><span style="color:#ea4335">e</span></span>
+    <span style="font-size:.75rem;font-weight:500;color:var(--muted);letter-spacing:.02em">
+      <span style="color:#0668E1">&#x221E;</span> Meta</span>
+    <span style="font-size:.75rem;font-weight:500;color:var(--muted);letter-spacing:.02em">
+      <span style="color:#FF6F00">&#x26A1;</span> Groq</span>
+    <span style="font-size:.75rem;font-weight:500;color:var(--muted);letter-spacing:.02em">
+      <span style="color:#E91E63">&#x25CE;</span> Cerebras</span>
+  </div>
 </div>
 </section>
 
-<!-- RHEA KEYBOARD + COMFYUI WORKFLOWS -->
+<!-- KEYBOARD ABSORBS COMFYUI PIPELINE -->
 <section class="reveal">
 <div class="section-title">
-  <h2>Lightweight tools, not bloatware</h2>
-  <p>A mobile keyboard. A visual workflow editor. Not a many-GB monster on your device.</p>
+  <h2>Full pipeline in &lt;5 MB</h2>
+  <p>The keyboard absorbs the entire ComfyUI workflow engine. Type a claim &mdash; the pipeline runs server-side.</p>
 </div>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;max-width:900px;margin:0 auto">
-  <!-- Keyboard -->
-  <div class="glass-card" style="padding:2rem">
-    <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:1rem">
-      <span style="font-size:1.5rem">&#x2328;&#xFE0F;</span>
-      <div>
-        <div style="font-size:.85rem;font-weight:600">Rhea Keyboard</div>
-        <div style="font-size:.65rem;color:var(--green)">iOS Extension &bull; &lt;5 MB</div>
+<div style="max-width:900px;margin:0 auto">
+  <div class="glass-card" style="padding:2.5rem">
+    <div style="display:flex;gap:2rem;align-items:flex-start;flex-wrap:wrap">
+      <!-- The absorption concept -->
+      <div style="flex:1;min-width:280px">
+        <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:1rem">
+          <span style="font-size:1.8rem">&#x2328;&#xFE0F;</span>
+          <div>
+            <div style="font-size:1rem;font-weight:700">Rhea Keyboard</div>
+            <div style="font-size:.65rem;color:var(--green)">iOS Extension &bull; &lt;5 MB &bull; zero dependencies</div>
+          </div>
+        </div>
+        <p style="font-size:.82rem;color:var(--muted);line-height:1.6;margin-bottom:1rem">
+          The keyboard is a <strong style="color:var(--text)">thin client</strong> that triggers the full
+          ComfyUI verification pipeline running on Rhea&rsquo;s servers. You type a claim in any text field,
+          tap verify &mdash; the server runs the complete node graph: claim &rarr; tribunal &rarr; sceptic &rarr; proof.
+          Result drops back into your keyboard in seconds.</p>
+        <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+          <span style="padding:.25rem .6rem;border-radius:6px;font-size:.6rem;font-weight:500;
+            background:rgba(48,209,88,.08);color:var(--green);border:1px solid rgba(48,209,88,.15)">No GPU needed</span>
+          <span style="padding:.25rem .6rem;border-radius:6px;font-size:.6rem;font-weight:500;
+            background:rgba(0,113,227,.08);color:var(--accent);border:1px solid rgba(0,113,227,.15)">Server-side pipeline</span>
+          <span style="padding:.25rem .6rem;border-radius:6px;font-size:.6rem;font-weight:500;
+            background:rgba(191,90,242,.08);color:var(--purple);border:1px solid rgba(191,90,242,.15)">Works in any app</span>
+        </div>
+      </div>
+      <!-- Visual pipeline -->
+      <div style="flex:0 0 280px">
+        <div style="font-size:.6rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.8rem">
+          Pipeline runs server-side</div>
+        <div class="node-graph" style="flex-direction:column;align-items:stretch;gap:.4rem">
+          <div class="comfy-node" style="border-color:var(--green);color:var(--green);background:rgba(48,209,88,.08);width:100%;justify-content:center">
+            &#x2328;&#xFE0F; Keyboard Input</div>
+          <div style="text-align:center;color:var(--border);font-size:.7rem">&#x25BC;</div>
+          <div class="comfy-node" style="border-color:var(--accent);color:var(--accent);background:rgba(0,113,227,.08);width:100%;justify-content:center">
+            &#x2696; Multi-Model Tribunal</div>
+          <div style="text-align:center;color:var(--border);font-size:.7rem">&#x25BC;</div>
+          <div class="comfy-node" style="border-color:var(--orange);color:var(--orange);background:rgba(255,159,10,.08);width:100%;justify-content:center">
+            &#x1F916; Sceptic Attack</div>
+          <div style="text-align:center;color:var(--border);font-size:.7rem">&#x25BC;</div>
+          <div class="comfy-node" style="border-color:var(--purple);color:var(--purple);background:rgba(191,90,242,.08);width:100%;justify-content:center">
+            &#x1F4BE; Aletheia Proof</div>
+        </div>
       </div>
     </div>
-    <p style="font-size:.78rem;color:var(--muted);line-height:1.5">
-      A mobile keyboard extension that brings Rhea consensus directly into any text field.
-      Type a claim, tap verify &mdash; get agreement score without leaving your app.
-      Ships as part of the iOS app. No separate download.</p>
   </div>
-  <!-- ComfyUI -->
-  <div class="glass-card" style="padding:2rem">
-    <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:1rem">
-      <span style="font-size:1.5rem">&#x1F3A8;</span>
+  <!-- Play + Atlas note -->
+  <div style="display:flex;gap:1rem;margin-top:1rem;flex-wrap:wrap">
+    <div class="glass-card" style="flex:1;padding:1rem 1.2rem;display:flex;align-items:center;gap:.8rem;min-width:250px">
+      <span style="font-size:1.3rem">&#xF8FF;</span>
       <div>
-        <div style="font-size:.85rem;font-weight:600">ComfyUI Workflows</div>
-        <div style="font-size:.65rem;color:var(--orange)">Planned &bull; CC Tab</div>
+        <div style="font-size:.78rem;font-weight:600">Rhea Play</div>
+        <div style="font-size:.65rem;color:var(--muted)">Native macOS + iOS ops centre &mdash;
+          <a href="https://github.com/serg-alexv/rhea-project/releases" style="color:var(--accent)">Download</a></div>
       </div>
     </div>
-    <p style="font-size:.78rem;color:var(--muted);line-height:1.5;margin-bottom:1rem">
-      Visual node-based workflow editor for verification cycles.
-      Drag nodes, connect edges, run consensus pipelines &mdash; all in the browser, zero install.</p>
-    <div class="node-graph">
-      <div class="comfy-node" style="border-color:var(--green);color:var(--green);background:rgba(48,209,88,.08)">
-        &#x25B6; Claim</div>
-      <div class="comfy-edge"></div>
-      <div class="comfy-node" style="border-color:var(--accent);color:var(--accent);background:rgba(0,113,227,.08)">
-        &#x2696; Tribunal</div>
-      <div class="comfy-edge"></div>
-      <div class="comfy-node" style="border-color:var(--purple);color:var(--purple);background:rgba(191,90,242,.08)">
-        &#x1F4BE; Proof</div>
+    <div class="glass-card" style="flex:1;padding:1rem 1.2rem;display:flex;align-items:center;gap:.8rem;min-width:250px">
+      <span style="font-size:1.3rem">&#x1F310;</span>
+      <div>
+        <div style="font-size:.78rem;font-weight:600">Atlas Dashboard</div>
+        <div style="font-size:.65rem;color:var(--muted)">Cross-platform web UI &mdash; Windows, Linux, any browser</div>
+      </div>
     </div>
-  </div>
-</div>
-<div style="text-align:center;margin-top:1.2rem">
-  <div class="glass-card" style="display:inline-flex;align-items:center;gap:1rem;padding:.8rem 1.5rem;font-size:.75rem;color:var(--muted)">
-    <span>Rhea Play (macOS ops centre) ships as a separate native app &mdash;</span>
-    <a href="https://github.com/serg-alexv/rhea-project/releases" style="color:var(--accent)">Download DMG</a>
   </div>
 </div>
 </section>
@@ -1239,13 +1257,13 @@ footer .f-copy{{color:#333;font-size:.68rem;letter-spacing:.04em}}
   <div class="plan glass-card featured stagger-2">
     <div class="plan-name" style="color:var(--accent)">Pro</div>
     <div class="plan-price">$19 <small>/mo</small></div>
-    <div class="plan-desc">For researchers who need deeper consensus and adversarial testing.</div>
+    <div class="plan-desc">5-model ICE, sceptic mode, API key. Everything free-tier does, plus:</div>
     <ul class="plan-features">
       <li>2,000 credits/month</li>
-      <li>5-model ICE verification</li>
-      <li>Sceptic adversarial mode</li>
-      <li>Priority model routing</li>
-      <li>CLI + API key</li>
+      <li>5-model ICE deep verification</li>
+      <li>Sceptic adversarial stress-testing</li>
+      <li>Priority routing to faster models</li>
+      <li>API key + CLI access</li>
       <li>Email support</li>
     </ul>
     <a href="#auth" class="plan-cta primary">Start Pro Trial</a>
@@ -1359,7 +1377,7 @@ footer .f-copy{{color:#333;font-size:.68rem;letter-spacing:.04em}}
   <div class="plat-card glass-card stagger-2">
     <span class="p-icon">&#x1F427;</span>
     <div class="p-name">Linux</div>
-    <div class="p-sub">CLI + Docker + Python</div>
+    <div class="p-sub">RHEL &bull; Ubuntu &bull; Debian</div>
   </div>
   <div class="plat-card glass-card stagger-3">
     <span class="p-icon">&#x1F4E6;</span>
@@ -1416,8 +1434,7 @@ You own your data, your models, your keys. Rhea serves you &mdash; not the other
     <a href="#" onclick="return false" style="cursor:default">My personal information</a>
   </div>
   <div class="f-links" style="margin-top:.6rem;font-size:.72rem">
-    <span style="color:#444">General: <a href="mailto:timelabs.ad@gmail.com" style="color:#555">timelabs.ad@gmail.com</a></span>
-    <span style="color:#444">Support: <a href="mailto:support@rhea-project.org" style="color:#555">support@rhea-project.org</a></span>
+    <span style="color:#444">General &amp; Support: <a href="mailto:timelabs.ad@gmail.com" style="color:#555">timelabs.ad@gmail.com</a></span>
   </div>
   <div class="f-copy" style="margin-top:1rem">
     <span id="nabla-explain" style="transition:opacity .6s ease;display:inline-block">
@@ -1453,18 +1470,18 @@ You own your data, your models, your keys. Rhea serves you &mdash; not the other
   const nablaEl=document.getElementById('nabla-explain');
   if(nablaEl){{
     const explanations=[
-      '\u2207 > 0 \u2228 \u22A5 \u2014 gradient positive or bottom',
+      '\u2207 > 0 \u2228 \u22A5 \u2014 gradient positive or halt',
       '\u2207 > 0 \u2014 if the system improves, it lives',
       '\u2207 = 0 \u2014 stasis is indistinguishable from death',
-      '\u22A5 \u2014 bottom: the program that never returns',
-      '\u2207f \u00B7 dr > 0 \u2014 movement along the gradient = progress',
+      '\u2207f \u00B7 dr > 0 \u2014 move along the gradient = progress',
       '\u2202S/\u2202t \u2265 0 \u2014 entropy never decreases; channel it',
       'Rhea tricked Kronos \u2014 time devours discrete, not continuous',
-      '\u222B\u2207\u00B7F dV = \u222EF\u00B7dA \u2014 divergence theorem: local flow = boundary flux',
+      '\u222B\u2207\u00B7F dV = \u222EF\u00B7dA \u2014 local flow = boundary flux',
       'consensus \u2260 truth, but divergence reveals where truth hides',
-      '\u0394G < 0 \u2014 spontaneous processes decrease free energy',
+      '\u0394G < 0 \u2014 spontaneous reactions decrease free energy',
       'K\u1D62 = [products]/[reactants] \u2014 equilibrium is not stillness',
-      'The map is not the territory \u2014 but gradient is the compass',
+      'ATP synthase: \u2207\u03BCH+ drives rotary catalysis at 100 rev/s',
+      'three models agree \u2014 not proof, but a compass bearing',
     ];
     let idx=0;
     setInterval(()=>{{

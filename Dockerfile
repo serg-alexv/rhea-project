@@ -28,6 +28,9 @@ ENV PYTHONPATH="/app/src:/app/friends/ruliad/explorer:/app"
 # Create writable directories the app needs at runtime
 RUN mkdir -p /app/logs /app/data
 
+# Seed proof.db with development baseline (11 verified artifacts)
+COPY data/proof.db ./data/proof.db
+
 EXPOSE 8400
 
 CMD ["python3", "src/tribunal_api.py"]
