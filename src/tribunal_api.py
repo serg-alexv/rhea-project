@@ -1058,8 +1058,7 @@ footer .f-copy{{color:#333;font-size:.68rem;letter-spacing:.04em}}
     <a href="#features">Features</a>
     <a href="#pricing">Pricing</a>
     <a href="#platforms">Apps</a>
-    <a href="/health">Status</a>
-    <a href="https://github.com/timelabs-npo/rhea-project">GitHub</a>
+    <a href="/docs">Docs</a>
     <!-- Compact auth widget -->
     <div class="auth-widget">
       <div class="auth-trigger"><span class="dot"></span> Sign In</div>
@@ -1491,22 +1490,16 @@ You own your data, your models, your keys. Rhea serves you &mdash; not the other
 <!-- FOOTER -->
 <footer>
   <div class="f-links">
-    <a href="https://github.com/timelabs-npo/rhea-project">GitHub</a>
-    <a href="/health">Status</a>
-    <a href="/models">Models</a>
-    <a href="/aletheia/stats">Aletheia</a>
-    <a href="https://testflight.apple.com/join/BNya22Jg">TestFlight</a>
-    <a href="/play-ui">Play UI</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#features">Features</a>
+    <a href="#platforms">Apps</a>
+    <a href="/docs">Documentation</a>
+    <a href="https://github.com/timelabs-npo/rhea-project">Source</a>
   </div>
   <div class="f-links" style="margin-top:.5rem">
     <a href="/terms">Terms</a>
     <a href="/privacy">Privacy</a>
-    <a href="/security">Security</a>
-    <a href="/community">Community</a>
-    <a href="/docs">Docs</a>
-    <a href="/contact">Contact</a>
-    <a href="#" onclick="return false" style="cursor:default">Manage cookies</a>
-    <a href="#" onclick="return false" style="cursor:default">My personal information</a>
+    <a href="/health">System Status</a>
   </div>
   <div class="f-copy" style="margin-top:1rem">
     <span id="nabla-explain" style="transition:opacity .6s ease;display:inline-block">
