@@ -100,7 +100,9 @@ public struct ToolsHubView: View {
 private struct ClipboardContentView: View {
     var body: some View {
         ClipboardView()
+            #if os(iOS)
             .navigationBarHidden(true)
+            #endif
     }
 }
 
