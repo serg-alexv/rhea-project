@@ -8,7 +8,7 @@ Controls three planes from one command:
   3. Tribunal API (agents, history, radio, office, tribunal)
 
 Install:
-    brew tap timelabs-npo/tap && brew install rhea
+    brew tap timelabs/tap && brew install rhea
     # or: pip install rhea-cli
 """
 from __future__ import annotations
@@ -36,7 +36,7 @@ from rhea_cli import __version__
 # ---------------------------------------------------------------------------
 # Config
 # ---------------------------------------------------------------------------
-ORG = "timelabs-npo"
+ORG = "timelabs"
 REPOS = ["rhea-project", "rhea-memory", "rhea-play", "rhea-ios", "rhea-keyboard", "rhea-atlas", "rhea-tutorials", ".github"]
 FLY_APP = "rhea-tribunal"
 API_LOCAL = os.environ.get("RHEA_API", "http://localhost:8400")

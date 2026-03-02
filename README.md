@@ -4,7 +4,7 @@
 </p>
 
 <p align="center">
-  <a href="https://rhea-tribunal.fly.dev">Try it</a> · <a href="https://testflight.apple.com/join/BNya22Jg">iOS Beta</a> · <a href="https://github.com/timelabs-npo/rhea-project/releases/tag/v1.0.0">v1.0.0</a> · <a href="https://rhea-tribunal-api-145767756165.europe-west1.run.app/health">EU Mirror</a>
+  <a href="https://rhea-tribunal.fly.dev">Try it</a> · <a href="https://testflight.apple.com/join/BNya22Jg">iOS Beta</a> · <a href="https://github.com/timelabs/rhea-project/releases/tag/v1.0.0">v1.0.0</a> · <a href="https://rhea-tribunal-api-145767756165.europe-west1.run.app/health">EU Mirror</a>
 </p>
 
 ---
@@ -32,7 +32,7 @@ You submit a claim. Multiple AI models evaluate it independently. Rhea computes 
 ### Server (one command)
 
 ```bash
-curl -sL https://raw.githubusercontent.com/timelabs-npo/rhea-project/main/deploy/setup.sh | bash
+curl -sL https://raw.githubusercontent.com/timelabs/rhea-project/main/deploy/setup.sh | bash
 ```
 
 Works on macOS, Ubuntu, Debian, Alpine, Amazon Linux, Arch. Auto-detects your OS, installs Python 3.10+ if needed, creates a virtualenv, generates `.env`, starts the server on `:8400`.
@@ -40,7 +40,7 @@ Works on macOS, Ubuntu, Debian, Alpine, Amazon Linux, Arch. Auto-detects your OS
 ### Server (manual)
 
 ```bash
-git clone https://github.com/timelabs-npo/rhea-project.git
+git clone https://github.com/timelabs/rhea-project.git
 cd rhea-project
 python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
@@ -54,7 +54,7 @@ python3 src/tribunal_api.py
 <summary>Windows</summary>
 
 ```powershell
-git clone https://github.com/timelabs-npo/rhea-project.git
+git clone https://github.com/timelabs/rhea-project.git
 cd rhea-project
 python -m venv .venv
 .venv\Scripts\activate
@@ -179,7 +179,7 @@ rhea-project/
 ## Contributing
 
 ```bash
-git clone https://github.com/timelabs-npo/rhea-project.git
+git clone https://github.com/timelabs/rhea-project.git
 cd rhea-project
 python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
@@ -204,7 +204,7 @@ All third-party dependencies carry compatible licenses (MIT, BSD-3-Clause, Apach
 
 <p align="center">
   <sub>
-    <a href="https://github.com/timelabs-npo/rhea-project">github.com/timelabs-npo/rhea-project</a><br>
+    <a href="https://github.com/timelabs/rhea-project">github.com/timelabs/rhea-project</a><br>
     <a href="readme0.md">genesis</a> · <a href="docs/decisions.md">decisions</a> · <a href="docs/AI_COMPACT_LANG.md">protocol</a>
   </sub>
 </p>

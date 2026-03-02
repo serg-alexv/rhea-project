@@ -34,7 +34,7 @@ from rich.text import Text
 # ---------------------------------------------------------------------------
 # Config
 # ---------------------------------------------------------------------------
-ORG = "timelabs-npo"
+ORG = "timelabs"
 REPOS = ["rhea-project", "rhea-memory", "rhea-play", "rhea-ios", "rhea-tutorials", ".github"]
 FLY_APP = "rhea-tribunal"
 API_LOCAL = os.environ.get("RHEA_API", "http://localhost:8400")

@@ -1048,27 +1048,43 @@ footer .f-copy{{color:#333;font-size:.68rem;letter-spacing:.04em}}
   nav{{padding:0 1rem}}.plat-grid{{grid-template-columns:repeat(2,1fr)}}
   .legacy-bar{{flex-direction:column;text-align:center}}}}
 
-/* LANG TABS */
-.ltab{{background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:8px;
-  padding:.3rem .65rem;font-size:.65rem;font-weight:600;color:var(--muted);cursor:pointer;
-  font-family:'JetBrains Mono',monospace;transition:.2s}}
-.ltab:hover{{color:var(--text);border-color:var(--accent)}}
-.ltab.active{{background:var(--accent);color:#fff;border-color:var(--accent)}}
+/* LANG PICKER — navbar globe dropdown (handled inline + #lang-menu.open) */
 
-/* FLOATING WTF CARD — scroll-spawns, sticks, z-index overlay */
-#wtf-float{{position:fixed;bottom:1.2rem;right:1.2rem;z-index:90;max-width:340px;width:calc(100% - 2.4rem);
-  opacity:0;transform:translateY(40px) scale(.95);pointer-events:none;
-  transition:opacity .5s cubic-bezier(.16,1,.3,1),transform .5s cubic-bezier(.16,1,.3,1)}}
-#wtf-float.visible{{opacity:1;transform:none;pointer-events:all}}
-#wtf-float .wtf-inner{{background:rgba(10,10,18,.92);backdrop-filter:blur(30px) saturate(200%);
-  -webkit-backdrop-filter:blur(30px) saturate(200%);border:1px solid rgba(255,255,255,.12);
-  border-radius:16px;padding:1.2rem;box-shadow:0 24px 80px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.05)}}
-#wtf-float .wtf-close{{position:absolute;top:.6rem;right:.8rem;background:none;border:none;
-  color:var(--muted);font-size:1rem;cursor:pointer;padding:.2rem;line-height:1}}
-#wtf-float .wtf-close:hover{{color:var(--text)}}
-#wtf-float .wtf-progress{{position:absolute;top:0;left:0;height:2px;border-radius:2px 2px 0 0;
-  background:linear-gradient(90deg,var(--green),var(--accent),var(--purple));transition:width .3s}}
-@media(max-width:600px){{#wtf-float{{max-width:calc(100% - 1.6rem);right:.8rem;bottom:.8rem}}}}
+/* PER-SECTION WTF CARDS — inline contextual explainers */
+.wtf-tip{{max-width:680px;margin:0 auto 2rem;padding:1rem 1.4rem;position:relative;
+  background:rgba(10,10,18,.88);backdrop-filter:blur(20px) saturate(180%);
+  -webkit-backdrop-filter:blur(20px) saturate(180%);border:1px solid rgba(255,255,255,.1);
+  border-radius:14px;font-size:.82rem;line-height:1.6;color:var(--text);
+  opacity:0;transform:translateY(12px);transition:opacity .5s ease,transform .5s ease;
+  box-shadow:0 8px 32px rgba(0,0,0,.4)}}
+.wtf-tip.visible{{opacity:1;transform:none}}
+.wtf-tip.dismissed{{display:none}}
+.wtf-tip .wtf-label{{font-size:.55rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;
+  color:var(--green);margin-bottom:.4rem;display:flex;align-items:center;gap:.4rem}}
+.wtf-tip .wtf-dismiss{{position:absolute;top:.6rem;right:.8rem;background:none;border:none;
+  color:var(--muted);font-size:.9rem;cursor:pointer;padding:.2rem;line-height:1}}
+.wtf-tip .wtf-dismiss:hover{{color:var(--text)}}
+.wtf-skip-all{{text-align:center;margin:1rem 0}}
+.wtf-skip-all button{{background:none;border:1px solid var(--border);border-radius:8px;
+  color:var(--muted);font-size:.65rem;padding:.3rem .8rem;cursor:pointer;font-family:inherit;transition:.2s}}
+.wtf-skip-all button:hover{{color:var(--text);border-color:var(--accent)}}
+
+/* GDPR COOKIE BANNER */
+#gdpr-banner{{position:fixed;bottom:0;left:0;right:0;z-index:100;
+  background:rgba(10,10,18,.96);backdrop-filter:blur(24px);
+  -webkit-backdrop-filter:blur(24px);border-top:1px solid rgba(255,255,255,.1);
+  padding:1rem 2rem;display:flex;align-items:center;justify-content:center;gap:1.2rem;flex-wrap:wrap;
+  transform:translateY(100%);transition:transform .5s cubic-bezier(.16,1,.3,1);font-size:.78rem}}
+#gdpr-banner.visible{{transform:none}}
+#gdpr-banner p{{color:var(--muted);max-width:540px;margin:0;line-height:1.5}}
+#gdpr-banner a{{color:var(--accent)}}
+#gdpr-banner button{{border-radius:8px;padding:.45rem 1rem;font-size:.75rem;font-weight:600;
+  cursor:pointer;border:none;font-family:inherit;transition:.2s}}
+#gdpr-banner .gdpr-accept{{background:var(--accent);color:#fff}}
+#gdpr-banner .gdpr-decline{{background:rgba(255,255,255,.08);color:var(--text);border:1px solid var(--border)}}
+@media(max-width:600px){{.wtf-tip{{margin-left:1rem;margin-right:1rem}}}}
+#lang-menu.open{{display:block!important}}
+#lang-btn:hover{{color:var(--text)}}
 </style></head>
 <body>
 
@@ -1082,6 +1098,26 @@ footer .f-copy{{color:#333;font-size:.68rem;letter-spacing:.04em}}
     <a href="#scheduler">Scheduler</a>
     <a href="#pricing">Pricing</a>
     <a href="#platforms">Apps</a>
+    <!-- Language picker -->
+    <div class="lang-picker" style="position:relative">
+      <button id="lang-btn" style="background:none;border:none;cursor:pointer;padding:.3rem;color:var(--muted);transition:.2s;display:flex;align-items:center"
+        title="Language">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      </button>
+      <div id="lang-menu" style="position:absolute;top:calc(100% + .5rem);right:0;min-width:140px;background:rgba(10,10,18,.95);
+        backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.1);border-radius:12px;
+        padding:.5rem 0;box-shadow:0 16px 48px rgba(0,0,0,.5);display:none;z-index:50">
+        <a href="?lang=en" style="display:block;padding:.4rem 1rem;font-size:.75rem;color:var(--text);text-decoration:none" onmouseover="this.style.background='rgba(255,255,255,.06)'" onmouseout="this.style.background=''">&#x1F1EC;&#x1F1E7; English</a>
+        <a href="?lang=fr" style="display:block;padding:.4rem 1rem;font-size:.75rem;color:var(--text);text-decoration:none" onmouseover="this.style.background='rgba(255,255,255,.06)'" onmouseout="this.style.background=''">&#x1F1EB;&#x1F1F7; Fran&ccedil;ais</a>
+        <a href="?lang=pt" style="display:block;padding:.4rem 1rem;font-size:.75rem;color:var(--text);text-decoration:none" onmouseover="this.style.background='rgba(255,255,255,.06)'" onmouseout="this.style.background=''">&#x1F1E7;&#x1F1F7; Portugu&ecirc;s</a>
+        <a href="?lang=de" style="display:block;padding:.4rem 1rem;font-size:.75rem;color:var(--text);text-decoration:none" onmouseover="this.style.background='rgba(255,255,255,.06)'" onmouseout="this.style.background=''">&#x1F1E9;&#x1F1EA; Deutsch</a>
+        <a href="?lang=el" style="display:block;padding:.4rem 1rem;font-size:.75rem;color:var(--text);text-decoration:none" onmouseover="this.style.background='rgba(255,255,255,.06)'" onmouseout="this.style.background=''">&#x1F1EC;&#x1F1F7; &Epsilon;&lambda;&lambda;&eta;&nu;&iota;&kappa;&alpha;</a>
+        <a href="?lang=ka" style="display:block;padding:.4rem 1rem;font-size:.75rem;color:var(--text);text-decoration:none" onmouseover="this.style.background='rgba(255,255,255,.06)'" onmouseout="this.style.background=''">&#x1F1EC;&#x1F1EA; &#4325;&#4304;&#4320;&#4311;&#4323;&#4314;&#4312;</a>
+        <a href="?lang=ja" style="display:block;padding:.4rem 1rem;font-size:.75rem;color:var(--text);text-decoration:none" onmouseover="this.style.background='rgba(255,255,255,.06)'" onmouseout="this.style.background=''">&#x1F1EF;&#x1F1F5; &#26085;&#26412;&#35486;</a>
+        <a href="?lang=zh" style="display:block;padding:.4rem 1rem;font-size:.75rem;color:var(--text);text-decoration:none" onmouseover="this.style.background='rgba(255,255,255,.06)'" onmouseout="this.style.background=''">&#x1F1E8;&#x1F1F3; &#20013;&#25991;</a>
+        <a href="?lang=cs" style="display:block;padding:.4rem 1rem;font-size:.75rem;color:var(--text);text-decoration:none" onmouseover="this.style.background='rgba(255,255,255,.06)'" onmouseout="this.style.background=''">&#x1F1E8;&#x1F1FF; &#268;e&#353;tina</a>
+      </div>
+    </div>
     <!-- Compact auth widget -->
     <div class="auth-widget">
       <div class="auth-trigger"><span class="dot"></span> Sign In</div>
@@ -1143,6 +1179,14 @@ footer .f-copy{{color:#333;font-size:.68rem;letter-spacing:.04em}}
 <div class="section-title">
   <h2>Built for truth-seekers</h2>
   <p>Every tool you need to verify, prove, and build knowledge.</p>
+</div>
+<div class="wtf-tip" data-wtf="features">
+  <span class="wtf-label">&#x1F9D0; ok so what is all this</span>
+  <button class="wtf-dismiss" onclick="dismissWtf(this)">&times;</button>
+  Imagine you need to know if chocolate is actually healthy. You ask <strong style="color:var(--accent)">5 scientists who can&rsquo;t copy each other&rsquo;s homework.</strong>
+  If they all say yes &mdash; probably true. If 3 say yes and 2 say no &mdash; <em>you just found where the real science is.</em>
+  That&rsquo;s every feature below.
+  <div style="margin-top:.6rem;text-align:right"><button onclick="skipAllWtf()" style="background:none;border:none;color:var(--muted);font-size:.6rem;cursor:pointer;text-decoration:underline;font-family:inherit">skip all tips</button></div>
 </div>
 <div class="bento">
   <div class="bento-card glass-card span-2 stagger-1">
@@ -1220,10 +1264,17 @@ footer .f-copy{{color:#333;font-size:.68rem;letter-spacing:.04em}}
 </section>
 
 <!-- KEYBOARD ABSORBS COMFYUI PIPELINE -->
-<section class="reveal">
+<section id="keyboard" class="reveal">
 <div class="section-title">
   <h2>Full pipeline in &lt;5 MB. Free.</h2>
   <p>Type a claim anywhere. The keyboard sends it to Rhea&rsquo;s servers. You get back verified science.</p>
+</div>
+<div class="wtf-tip" data-wtf="keyboard">
+  <span class="wtf-label">&#x2328;&#xFE0F; wait the keyboard does what</span>
+  <button class="wtf-dismiss" onclick="dismissWtf(this)">&times;</button>
+  Your phone keyboard becomes a <strong style="color:var(--green)">portable lie detector.</strong>
+  Type &ldquo;vaccines cause autism&rdquo; and 5 AI brains check it before you can say &ldquo;peer review.&rdquo;
+  All in an app smaller than a selfie. <em>Free.</em>
 </div>
 <div style="max-width:960px;margin:0 auto">
   <!-- Examples showcase -->
@@ -1310,7 +1361,7 @@ footer .f-copy{{color:#333;font-size:.68rem;letter-spacing:.04em}}
       <div>
         <div style="font-size:.78rem;font-weight:600">Rhea Play</div>
         <div style="font-size:.65rem;color:var(--muted)">Native macOS + iOS ops centre &mdash;
-          <a href="https://github.com/timelabs-npo/rhea-project/releases" style="color:var(--accent)">Download</a></div>
+          <a href="https://github.com/timelabs/rhea-project/releases" style="color:var(--accent)">Download</a></div>
       </div>
     </div>
     <div class="glass-card" style="flex:1;padding:1rem 1.2rem;display:flex;align-items:center;gap:.8rem;min-width:250px">
@@ -1329,6 +1380,13 @@ footer .f-copy{{color:#333;font-size:.68rem;letter-spacing:.04em}}
 <div class="section-title">
   <h2>One clipboard.<br>Every device.</h2>
   <p>Copy on your Mac. Paste on Windows. Replay anything. Secrets auto-expire.</p>
+</div>
+<div class="wtf-tip" data-wtf="clipboard">
+  <span class="wtf-label">&#x1F4CB; passing notes in class but cooler</span>
+  <button class="wtf-dismiss" onclick="dismissWtf(this)">&times;</button>
+  Remember passing notes in class? This is that, but between your phone, laptop, and grandma&rsquo;s PC.
+  And the note <strong style="color:var(--orange)">self-destructs if it has a password on it.</strong>
+  <em>Spy stuff, basically.</em>
 </div>
 <div style="max-width:960px;margin:0 auto">
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem;margin-bottom:1.5rem">
@@ -1381,6 +1439,13 @@ footer .f-copy{{color:#333;font-size:.68rem;letter-spacing:.04em}}
 <div class="section-title">
   <h2>Set the bar.<br>Walk away.</h2>
   <p>Consensus loops run until your quality threshold is met. Like ComfyUI, but for truth.</p>
+</div>
+<div class="wtf-tip" data-wtf="scheduler">
+  <span class="wtf-label">&#x1F504; a washing machine for facts</span>
+  <button class="wtf-dismiss" onclick="dismissWtf(this)">&times;</button>
+  Like a washing machine for facts. Throw in a dirty claim, set the &ldquo;how clean&rdquo; dial to 90%,
+  press start. It <strong style="color:var(--purple)">keeps washing until it&rsquo;s sparkling.</strong>
+  You don&rsquo;t even have to watch. <em>Go eat a sandwich.</em>
 </div>
 <div style="max-width:960px;margin:0 auto">
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;margin-bottom:1.5rem">
@@ -1459,6 +1524,12 @@ footer .f-copy{{color:#333;font-size:.68rem;letter-spacing:.04em}}
   <h2>Start free. Scale when ready.</h2>
   <p>100 credits on signup. Bring your own keys for zero platform cost.</p>
 </div>
+<div class="wtf-tip" data-wtf="pricing">
+  <span class="wtf-label">&#x1F4B0; the money part</span>
+  <button class="wtf-dismiss" onclick="dismissWtf(this)">&times;</button>
+  100 free fact-checks when you sign up. After that &mdash; bring your own AI keys and <strong style="color:var(--green)">pay $0 forever.</strong>
+  We literally built a business model that lets you not pay us. <em>Your move.</em>
+</div>
 <!-- Two-tier focus -->
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;max-width:680px;margin:0 auto">
   <div class="plan glass-card stagger-1" style="padding:2.5rem">
@@ -1516,6 +1587,13 @@ footer .f-copy{{color:#333;font-size:.68rem;letter-spacing:.04em}}
   <h2>Available everywhere</h2>
   <p>One account. Every platform. Native experience.</p>
 </div>
+<div class="wtf-tip" data-wtf="platforms">
+  <span class="wtf-label">&#x1F4F1; runs on everything except toasters</span>
+  <button class="wtf-dismiss" onclick="dismissWtf(this)">&times;</button>
+  Works on your iPhone, your Mac, your browser, your terminal.
+  Basically if it has a screen and isn&rsquo;t a toaster, <strong style="color:var(--accent)">Rhea runs on it.</strong>
+  <em>One account, everywhere.</em>
+</div>
 <!-- Compact platform strip — verified links, SVG icons -->
 <div style="max-width:800px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:.8rem">
   <a href="https://testflight.apple.com/join/BNya22Jg" target="_blank" rel="noopener"
@@ -1526,7 +1604,7 @@ footer .f-copy{{color:#333;font-size:.68rem;letter-spacing:.04em}}
     <div style="font-size:.82rem;font-weight:600;color:var(--text)">iOS</div>
     <div style="font-size:.6rem;color:var(--green);margin-top:.2rem">TestFlight &rarr;</div>
   </a>
-  <a href="https://github.com/timelabs-npo/rhea-project/releases/tag/v1.0.0" target="_blank" rel="noopener"
+  <a href="https://github.com/timelabs/rhea-project/releases/tag/v1.0.0" target="_blank" rel="noopener"
      class="glass-card stagger-2" style="padding:1.4rem 1rem;text-align:center;text-decoration:none;transition:.3s"
      onmouseover="this.style.borderColor='rgba(255,255,255,.2)';this.style.transform='translateY(-3px)'"
      onmouseout="this.style.borderColor='';this.style.transform=''">
@@ -1554,10 +1632,16 @@ footer .f-copy{{color:#333;font-size:.68rem;letter-spacing:.04em}}
 </section>
 
 <!-- API -->
-<section class="reveal">
+<section id="api" class="reveal">
 <div class="section-title">
   <h2>Try it now</h2>
   <p>No SDK required. One curl to truth.</p>
+</div>
+<div class="wtf-tip" data-wtf="api">
+  <span class="wtf-label">&#x1F4BB; one command, that is it</span>
+  <button class="wtf-dismiss" onclick="dismissWtf(this)">&times;</button>
+  Copy this, paste it in your terminal, boom &mdash; you just asked 3 AIs if your science homework is right.
+  <strong style="color:var(--green)">Your teacher can&rsquo;t do that.</strong> <em>No SDK, no library, no drama.</em>
 </div>
 <div class="api-block glass-card">
 <pre><code><span class="g">curl</span> -X POST {url}/tribunal \\
@@ -1584,7 +1668,7 @@ You own your data, your models, your keys. Rhea serves you &mdash; not the other
     <a href="#features">Features</a>
     <a href="#platforms">Apps</a>
     <a href="/docs">Documentation</a>
-    <a href="https://github.com/timelabs-npo/rhea-project">Source</a>
+    <a href="https://github.com/timelabs/rhea-project">Source</a>
   </div>
   <div class="f-links" style="margin-top:.5rem">
     <a href="/terms">Terms</a>
@@ -1601,93 +1685,11 @@ You own your data, your models, your keys. Rhea serves you &mdash; not the other
   </div>
 </footer>
 
-<!-- FLOATING WTF CARD — scroll-spawns, z-index overlay, multilingual -->
-<div id="wtf-float">
-  <div class="wtf-inner">
-    <div class="wtf-progress" id="wtf-prog" style="width:0%"></div>
-    <button class="wtf-close" onclick="document.getElementById('wtf-float').classList.remove('visible')">&times;</button>
-    <div style="display:flex;flex-wrap:wrap;gap:.3rem;margin-bottom:.8rem">
-      <button class="ltab active" onclick="switchLang('en')">EN</button>
-      <button class="ltab" onclick="switchLang('fr')">FR</button>
-      <button class="ltab" onclick="switchLang('pt')">PT</button>
-      <button class="ltab" onclick="switchLang('de')">DE</button>
-      <button class="ltab" onclick="switchLang('el')">EL</button>
-      <button class="ltab" onclick="switchLang('ka')">KA</button>
-      <button class="ltab" onclick="switchLang('ja')">JA</button>
-      <button class="ltab" onclick="switchLang('zh')">ZH</button>
-      <button class="ltab" onclick="switchLang('cs')">CS</button>
-    </div>
-    <div class="lang-block" id="lang-en">
-      <div style="font-size:.6rem;color:var(--green);font-weight:600;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.4rem">ok so what is this</div>
-      <p style="font-size:.8rem;line-height:1.6;color:var(--text);margin:0">
-        You ask one friend if your drawing is good &mdash; they say yes.
-        <strong style="color:var(--accent)">Rhea asks 5 friends who can&rsquo;t hear each other.</strong>
-        All agree? Probably true. Disagree? <em>That&rsquo;s where it gets interesting.</em>
-      </p>
-    </div>
-    <div class="lang-block" id="lang-fr" style="display:none">
-      <div style="font-size:.6rem;color:var(--green);font-weight:600;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.4rem">c&rsquo;est quoi ce truc</div>
-      <p style="font-size:.8rem;line-height:1.6;color:var(--text);margin:0">
-        Tu demandes &agrave; un copain si ton dessin est beau &mdash; il dit oui.
-        <strong style="color:var(--accent)">Rh&eacute;a demande &agrave; 5 copains qui ne s&rsquo;entendent pas.</strong>
-        Tous d&rsquo;accord? Probablement vrai. Pas d&rsquo;accord? <em>C&rsquo;est l&agrave; que &ccedil;a devient int&eacute;ressant.</em>
-      </p>
-    </div>
-    <div class="lang-block" id="lang-pt" style="display:none">
-      <div style="font-size:.6rem;color:var(--green);font-weight:600;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.4rem">o que &eacute; isso</div>
-      <p style="font-size:.8rem;line-height:1.6;color:var(--text);margin:0">
-        Pergunta pra um amigo se o desenho ficou bom &mdash; ele diz sim.
-        <strong style="color:var(--accent)">Rhea pergunta pra 5 amigos que n&atilde;o se ouvem.</strong>
-        Todos concordam? Provavelmente verdade. Discordam? <em>A&iacute; fica interessante.</em>
-      </p>
-    </div>
-    <div class="lang-block" id="lang-de" style="display:none">
-      <div style="font-size:.6rem;color:var(--green);font-weight:600;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.4rem">was ist das hier</div>
-      <p style="font-size:.8rem;line-height:1.6;color:var(--text);margin:0">
-        Fragst du einen Freund ob dein Bild sch&ouml;n ist &mdash; er sagt ja.
-        <strong style="color:var(--accent)">Rhea fragt 5 Freunde die sich nicht h&ouml;ren.</strong>
-        Alle einig? Wahrscheinlich wahr. Uneinig? <em>Da wird es spannend.</em>
-      </p>
-    </div>
-    <div class="lang-block" id="lang-el" style="display:none">
-      <div style="font-size:.6rem;color:var(--green);font-weight:600;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.4rem">&tau;&iota; &epsilon;&iota;&nu;&alpha;&iota; &alpha;&upsilon;&tau;&omicron;</div>
-      <p style="font-size:.8rem;line-height:1.6;color:var(--text);margin:0">
-        &Rho;&omega;&tau;&alpha;&sigmaf; &epsilon;&nu;&alpha;&nu; &phi;&iota;&lambda;&omicron; &alpha;&nu; &eta; &zeta;&omega;&gamma;&rho;&alpha;&phi;&iota;&alpha; &sigma;&omicron;&upsilon; &epsilon;&iota;&nu;&alpha;&iota; &omicron;&mu;&omicron;&rho;&phi;&eta; &mdash; &lambda;&epsilon;&epsilon;&iota; &nu;&alpha;&iota;.
-        <strong style="color:var(--accent)">&Eta; Rhea &rho;&omega;&tau;&alpha;&epsilon;&iota; 5 &phi;&iota;&lambda;&omicron;&upsilon;&sigmaf; &pi;&omicron;&upsilon; &delta;&epsilon;&nu; &alpha;&kappa;&omicron;&upsilon;&nu;&epsilon; &omicron; &epsilon;&nu;&alpha;&sigmaf; &tau;&omicron;&nu; &alpha;&lambda;&lambda;&omicron;&nu;.</strong>
-      </p>
-    </div>
-    <div class="lang-block" id="lang-ka" style="display:none">
-      <div style="font-size:.6rem;color:var(--green);font-weight:600;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.4rem">&#4320;&#4304; &#4304;&#4320;&#4312;&#4321; &#4308;&#4321;</div>
-      <p style="font-size:.8rem;line-height:1.6;color:var(--text);margin:0">
-        &#4308;&#4320;&#4311; &#4315;&#4308;&#4306;&#4317;&#4305;&#4304;&#4320;&#4321; &#4308;&#4313;&#4312;&#4311;&#4334;&#4308;&#4305;&#4312; &mdash; &#4304;&#4315;&#4305;&#4317;&#4305;&#4321; &#4313;&#4312;.
-        <strong style="color:var(--accent)">Rhea &#4308;&#4313;&#4312;&#4311;&#4334;&#4308;&#4305;&#4304; 5-&#4321; &#4320;&#4317;&#4315;&#4314;&#4308;&#4305;&#4312;&#4330; &#4309;&#4308;&#4320; &#4312;&#4321;&#4315;&#4308;&#4316;&#4308;&#4316;.</strong>
-      </p>
-    </div>
-    <div class="lang-block" id="lang-ja" style="display:none">
-      <div style="font-size:.6rem;color:var(--green);font-weight:600;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.4rem">&#12371;&#12428;&#12399;&#20309;</div>
-      <p style="font-size:.8rem;line-height:1.6;color:var(--text);margin:0">
-        &#21451;&#36948;&#12395;&#32117;&#12364;&#19978;&#25163;&#12363;&#32862;&#12367;&mdash;&#12300;&#12358;&#12435;&#12301;&#12392;&#35328;&#12358;&#12290;
-        <strong style="color:var(--accent)">Rhea&#12399;&#20114;&#12356;&#12398;&#31572;&#12360;&#12364;&#32862;&#12371;&#12360;&#12394;&#12356;5&#20154;&#12395;&#32862;&#12367;&#12290;</strong>
-        &#20840;&#21729;&#21516;&#12376;?&#12362;&#12381;&#12425;&#12367;&#26412;&#24403;&#12290;&#36949;&#12358;?<em>&#12381;&#12371;&#12364;&#38754;&#30333;&#12356;&#12290;</em>
-      </p>
-    </div>
-    <div class="lang-block" id="lang-zh" style="display:none">
-      <div style="font-size:.6rem;color:var(--green);font-weight:600;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.4rem">&#36825;&#26159;&#20160;&#20040;</div>
-      <p style="font-size:.8rem;line-height:1.6;color:var(--text);margin:0">
-        &#38382;&#19968;&#20010;&#26379;&#21451;&#30011;&#22909;&#19981;&#22909;&mdash;&#20182;&#35828;&#22909;&#12290;
-        <strong style="color:var(--accent)">Rhea&#38382;5&#20010;&#20114;&#30456;&#21548;&#19981;&#21040;&#30340;&#26379;&#21451;&#12290;</strong>
-        &#37117;&#21516;&#24847;?&#21487;&#33021;&#26159;&#30495;&#30340;&#12290;&#19981;&#21516;&#24847;?<em>&#26377;&#36259;&#30340;&#37096;&#20998;&#22312;&#36825;&#37324;&#12290;</em>
-      </p>
-    </div>
-    <div class="lang-block" id="lang-cs" style="display:none">
-      <div style="font-size:.6rem;color:var(--green);font-weight:600;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.4rem">co je tohle</div>
-      <p style="font-size:.8rem;line-height:1.6;color:var(--text);margin:0">
-        Zept&aacute;&#353; se kamar&aacute;da jestli je obr&aacute;zek hezk&yacute; &mdash; &#345;ekne jo.
-        <strong style="color:var(--accent)">Rhea se zept&aacute; 5 kamar&aacute;d&#367; kte&#345;&iacute; se nesly&#353;&iacute;.</strong>
-        V&#353;ichni souhlasí? Asi pravda. Nesouhlasí? <em>Tam to za&ccedil;&iacute;n&aacute; b&yacute;t zaj&iacute;mav&eacute;.</em>
-      </p>
-    </div>
-  </div>
+<!-- GDPR COOKIE CONSENT -->
+<div id="gdpr-banner">
+  <p>We use cookies for authentication and analytics. See our <a href="/privacy">Privacy Policy</a>.</p>
+  <button class="gdpr-accept" onclick="acceptGdpr()">Accept</button>
+  <button class="gdpr-decline" onclick="declineGdpr()">Decline</button>
 </div>
 
 <!-- Scroll reveal + stats counter animation -->
@@ -1697,15 +1699,6 @@ You own your data, your models, your keys. Rhea serves you &mdash; not the other
     entries.forEach(e=>{{if(e.isIntersecting){{e.target.classList.add('visible');obs.unobserve(e.target)}}}})
   }},{{threshold:.15,rootMargin:'0px 0px -40px 0px'}});
   document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
-
-  // Language switcher
-  window.switchLang=function(code){{
-    document.querySelectorAll('.lang-block').forEach(b=>b.style.display='none');
-    const el=document.getElementById('lang-'+code);
-    if(el)el.style.display='block';
-    document.querySelectorAll('.ltab').forEach(t=>t.classList.remove('active'));
-    event.target.classList.add('active');
-  }};
 
   // Animate stat numbers
   document.querySelectorAll('.stat .val').forEach(el=>{{
@@ -1722,25 +1715,58 @@ You own your data, your models, your keys. Rhea serves you &mdash; not the other
     }}
   }});
 
-  // Floating WTF card — scroll spawn/despawn
-  const wtfFloat=document.getElementById('wtf-float');
-  const wtfProg=document.getElementById('wtf-prog');
-  let wtfDismissed=false;
-  if(wtfFloat){{
-    window.addEventListener('scroll',()=>{{
-      if(wtfDismissed)return;
-      const scrollPct=window.scrollY/(document.body.scrollHeight-window.innerHeight);
-      // Show after 15% scroll, hide at bottom 90%
-      if(scrollPct>0.15&&scrollPct<0.9){{
-        wtfFloat.classList.add('visible');
-        if(wtfProg)wtfProg.style.width=Math.round(scrollPct*100)+'%';
-      }}else{{
-        wtfFloat.classList.remove('visible');
-      }}
-    }},{{passive:true}});
-    // Close button sets dismissed
-    const closeBtn=wtfFloat.querySelector('.wtf-close');
-    if(closeBtn)closeBtn.addEventListener('click',()=>{{wtfDismissed=true}});
+  // Per-section WTF cards — IntersectionObserver reveals
+  const wtfSkipped=localStorage.getItem('rhea_wtf_skip')==='1';
+  const wtfDismissed=JSON.parse(localStorage.getItem('rhea_wtf_dismissed')||'{{}}');
+  if(!wtfSkipped){{
+    const wtfObs=new IntersectionObserver((entries)=>{{
+      entries.forEach(e=>{{
+        if(e.isIntersecting){{
+          const tip=e.target;
+          const key=tip.getAttribute('data-wtf');
+          if(!wtfDismissed[key]){{tip.classList.add('visible')}}
+          wtfObs.unobserve(tip);
+        }}
+      }})
+    }},{{threshold:.3}});
+    document.querySelectorAll('.wtf-tip').forEach(tip=>{{
+      const key=tip.getAttribute('data-wtf');
+      if(wtfDismissed[key])tip.classList.add('dismissed');
+      else wtfObs.observe(tip);
+    }});
+  }}else{{
+    document.querySelectorAll('.wtf-tip').forEach(t=>t.classList.add('dismissed'));
+  }}
+  window.dismissWtf=function(btn){{
+    const tip=btn.closest('.wtf-tip');
+    const key=tip.getAttribute('data-wtf');
+    tip.classList.add('dismissed');
+    wtfDismissed[key]='1';
+    localStorage.setItem('rhea_wtf_dismissed',JSON.stringify(wtfDismissed));
+  }};
+  window.skipAllWtf=function(){{
+    localStorage.setItem('rhea_wtf_skip','1');
+    document.querySelectorAll('.wtf-tip').forEach(t=>t.classList.add('dismissed'));
+  }};
+
+  // GDPR cookie consent
+  const gdprBanner=document.getElementById('gdpr-banner');
+  if(gdprBanner&&!localStorage.getItem('rhea_gdpr')){{
+    setTimeout(()=>gdprBanner.classList.add('visible'),1500);
+  }}
+  window.acceptGdpr=function(){{localStorage.setItem('rhea_gdpr','accept');gdprBanner.classList.remove('visible')}};
+  window.declineGdpr=function(){{localStorage.setItem('rhea_gdpr','decline');gdprBanner.classList.remove('visible')}};
+
+  // Language picker — navbar globe icon
+  const langData={{en:'English',fr:'Fran\u00e7ais',pt:'Portugu\u00eas',de:'Deutsch',el:'\u0395\u03bb\u03bb\u03b7\u03bd\u03b9\u03ba\u03ac',ka:'\u10e5\u10d0\u10e0\u10d7\u10e3\u10da\u10d8',ja:'\u65e5\u672c\u8a9e',zh:'\u4e2d\u6587',cs:'\u010ce\u0161tina'}};
+  const langMenu=document.getElementById('lang-menu');
+  const langBtn=document.getElementById('lang-btn');
+  if(langBtn&&langMenu){{
+    langBtn.addEventListener('click',(e)=>{{
+      e.stopPropagation();
+      langMenu.classList.toggle('open');
+    }});
+    document.addEventListener('click',()=>langMenu.classList.remove('open'));
   }}
 
   // Rotating nabla explanations — every 30s with flash
@@ -1889,7 +1915,7 @@ async def terms():
 <p>We may update these Terms from time to time. Material changes will be communicated via email or a prominent notice on the platform at least 14 days before taking effect. Your continued use of the Service after the effective date constitutes acceptance of the revised Terms.</p>
 
 <h2>Contact</h2>
-<p>Questions about these Terms? Email <a href="mailto:timelabs.ad@gmail.com">timelabs.ad@gmail.com</a> or open an issue on <a href="https://github.com/timelabs-npo/rhea-project">GitHub</a>.</p>
+<p>Questions about these Terms? Email <a href="mailto:timelabs.ad@gmail.com">timelabs.ad@gmail.com</a> or open an issue on <a href="https://github.com/timelabs/rhea-project">GitHub</a>.</p>
 """
     html = _PAGE_STYLE.format(title="Terms of Service", body=body)
     return HTMLResponse(content=html)
@@ -2031,7 +2057,7 @@ async def community():
 
 <h2>Open Source Foundation</h2>
 <p>Rhea is built on an open-source foundation. The core tribunal engine, Aletheia proof pipeline, multi-provider bridge, and mobile client libraries are publicly available on GitHub. We believe the infrastructure for verifying knowledge should be auditable and forkable.</p>
-<p><a href="https://github.com/timelabs-npo/rhea-project">github.com/timelabs-npo/rhea-project</a> — source code, issues, and pull requests.</p>
+<p><a href="https://github.com/timelabs/rhea-project">github.com/timelabs/rhea-project</a> — source code, issues, and pull requests.</p>
 
 <h2>The Team</h2>
 <p>Rhea is built by a small team of humans and AI agents working in a shared virtual office. The current roster includes three AI collaborators:</p>
@@ -2045,7 +2071,7 @@ async def community():
 <h2>Apps and Releases</h2>
 <ul>
   <li><strong>iOS (TestFlight):</strong> <a href="https://testflight.apple.com/join/BNya22Jg">testflight.apple.com/join/BNya22Jg</a> — Native iOS app with Tribunal, Aletheia, Governor, and Atlas tabs. JWT auth with Keychain storage.</li>
-  <li><strong>macOS (Play):</strong> <a href="https://github.com/timelabs-npo/rhea-project/releases">GitHub Releases</a> — 12-pane native macOS operations centre. Download the DMG from the latest release.</li>
+  <li><strong>macOS (Play):</strong> <a href="https://github.com/timelabs/rhea-project/releases">GitHub Releases</a> — 12-pane native macOS operations centre. Download the DMG from the latest release.</li>
   <li><strong>Python package:</strong> <code>pip install rhea-memory</code> — SQLite-backed memory store with CLI for agents and scripts.</li>
   <li><strong>Web (Atlas):</strong> Live at <a href="https://rhea-tribunal.fly.dev">rhea-tribunal.fly.dev</a> — The API and dashboard, deployed on Fly.io AMS.</li>
 </ul>
@@ -2057,7 +2083,7 @@ async def community():
 <h2>Get Involved</h2>
 <p>The best ways to engage with the community:</p>
 <ul>
-  <li>Star and watch the <a href="https://github.com/timelabs-npo/rhea-project">GitHub repository</a> for updates.</li>
+  <li>Star and watch the <a href="https://github.com/timelabs/rhea-project">GitHub repository</a> for updates.</li>
   <li>Open issues for bugs, feature requests, or questions.</li>
   <li>Try the iOS beta on <a href="https://testflight.apple.com/join/BNya22Jg">TestFlight</a> and leave feedback.</li>
   <li>Email us at <a href="mailto:timelabs.ad@gmail.com">timelabs.ad@gmail.com</a> for partnership or research enquiries.</li>
@@ -2222,7 +2248,7 @@ async def contact():
 
 <h2>GitHub Issues</h2>
 <p>Bug reports, feature requests, and technical questions are best handled via GitHub Issues where the community and the team can collaborate:</p>
-<p><a href="https://github.com/timelabs-npo/rhea-project/issues">github.com/timelabs-npo/rhea-project/issues</a></p>
+<p><a href="https://github.com/timelabs/rhea-project/issues">github.com/timelabs/rhea-project/issues</a></p>
 <p>Please search existing issues before opening a new one. Include reproduction steps and relevant error messages when reporting bugs.</p>
 
 <h2>Security Disclosures</h2>
