@@ -47,6 +47,67 @@ public struct SettingsView: View {
                         .foregroundStyle(.secondary)
                 }
 
+                Section("Server") {
+                    // One-tap cloud/localhost toggle
+                    HStack(spacing: 12) {
+                        Button {
+                            draftAPI = "http://localhost:8400"
+                            apiBaseURL = "http://localhost:8400"
+                            Task { await testConnection() }
+                        } label: {
+                            HStack(spacing: 4) {
+                                Image(systemName: "desktopcomputer")
+                                    .font(.system(size: 11))
+                                Text("Local")
+                                    .font(.system(size: 12, weight: .bold, design: .monospaced))
+                            }
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 8)
+                            .background(
+                                RoundedRectangle(cornerRadius: 8)
+                                    .fill(apiBaseURL.contains("localhost") ? RheaTheme.green.opacity(0.2) : .clear)
+                                    .overlay(RoundedRectangle(cornerRadius: 8)
+                                        .stroke(apiBaseURL.contains("localhost") ? RheaTheme.green : .secondary.opacity(0.3), lineWidth: 1))
+                            )
+                            .foregroundStyle(apiBaseURL.contains("localhost") ? RheaTheme.green : .secondary)
+                        }
+                        .buttonStyle(.plain)
+
+                        Button {
+                            draftAPI = AppConfig.productionAPIBaseURL
+                            apiBaseURL = AppConfig.productionAPIBaseURL
+                            Task { await testConnection() }
+                        } label: {
+                            HStack(spacing: 4) {
+                                Image(systemName: "cloud.fill")
+                                    .font(.system(size: 11))
+                                Text("Cloud")
+                                    .font(.system(size: 12, weight: .bold, design: .monospaced))
+                            }
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 8)
+                            .background(
+                                RoundedRectangle(cornerRadius: 8)
+                                    .fill(!apiBaseURL.contains("localhost") ? RheaTheme.accent.opacity(0.2) : .clear)
+                                    .overlay(RoundedRectangle(cornerRadius: 8)
+                                        .stroke(!apiBaseURL.contains("localhost") ? RheaTheme.accent : .secondary.opacity(0.3), lineWidth: 1))
+                            )
+                            .foregroundStyle(!apiBaseURL.contains("localhost") ? RheaTheme.accent : .secondary)
+                        }
+                        .buttonStyle(.plain)
+                    }
+
+                    HStack {
+                        connectionBadge
+                        Spacer()
+                        Text(apiBaseURL
+                            .replacingOccurrences(of: "https://", with: "")
+                            .replacingOccurrences(of: "http://", with: ""))
+                            .font(.system(size: 10, design: .monospaced))
+                            .foregroundStyle(.secondary)
+                    }
+                }
+
                 Section("API Base URL") {
                     TextField(AppConfig.productionAPIBaseURL, text: $draftAPI)
                         #if os(iOS)
@@ -54,21 +115,6 @@ public struct SettingsView: View {
                         .keyboardType(.URL)
                         #endif
                         .autocorrectionDisabled()
-
-                    HStack {
-                        Text("Used by Governor/Tasks/Radio tabs.")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                        Spacer()
-                        connectionBadge
-                    }
-
-                    Button("Use Cloud Run (production)") {
-                        draftAPI = AppConfig.productionAPIBaseURL
-                        apiBaseURL = AppConfig.productionAPIBaseURL
-                        Task { await testConnection() }
-                    }
-                    .font(.caption)
 
                     Button("Test Connection") {
                         Task { await testConnection() }
