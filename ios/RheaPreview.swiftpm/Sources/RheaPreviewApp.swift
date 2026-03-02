@@ -43,24 +43,18 @@ private struct MainTabShell: View {
 
     private var tabs: [TabDescriptor] {
         var list: [TabDescriptor] = [
-            // Level 1: core actions — human words, not agent jargon
-            TabDescriptor(icon: "checkmark.shield", label: "Verify", view: AnyView(DialogView())),
-            TabDescriptor(icon: "waveform", label: "Feed", view: AnyView(TeamChatView())),
+            // Level 1: unified ops dashboard (verify+feed+budget+office+health)
+            TabDescriptor(icon: "square.grid.2x2", label: "Ops", view: AnyView(OpsView())),
         ]
         if revealLevel >= 2 {
-            // Level 2: operations
-            list.append(TabDescriptor(icon: "dollarsign.circle", label: "Budget", view: AnyView(GovernorView())))
+            // Level 2: full feed + tasks + privacy
+            list.append(TabDescriptor(icon: "waveform", label: "Feed", view: AnyView(TeamChatView())))
             list.append(TabDescriptor(icon: "checklist", label: "Tasks", view: AnyView(TasksView())))
-            list.append(TabDescriptor(icon: "bubble.left.and.bubble.right", label: "Office", view: AnyView(OfficeView())))
             list.append(TabDescriptor(icon: "shield.lefthalf.filled", label: "Privacy", view: AnyView(RelayPrivacyView())))
-            list.append(TabDescriptor(icon: "bitcoinsign.circle", label: "Wallet", view: AnyView(WalletView())))
         }
         if revealLevel >= 3 {
-            // Level 3: specialist tools
+            // Level 3: live monitor web dashboard
             list.append(TabDescriptor(icon: "tv.and.mediabox", label: "Monitor", view: AnyView(MonitorWebView())))
-            list.append(TabDescriptor(icon: "atom", label: "Molecules", view: AnyView(BioRendererView())))
-            list.append(TabDescriptor(icon: "globe", label: "Atlas", view: AnyView(AtlasView())))
-            list.append(TabDescriptor(icon: "heart.text.square", label: "Health", view: AnyView(PulseMonitorView())))
         }
         list.append(TabDescriptor(icon: "gearshape", label: "Settings", view: AnyView(SettingsView())))
         return list

@@ -4,7 +4,14 @@ public enum AppConfig {
     /// Production Fly.io URL (always reachable from any network).
     public static let productionAPIBaseURL = "https://rhea-tribunal.fly.dev"
 
-    public static let defaultAtlasBaseURL = "http://localhost:3000"
+    /// Atlas web UI — same origin as API on production, localhost:3000 for local dev only
+    public static var defaultAtlasBaseURL: String {
+        #if targetEnvironment(simulator)
+        return "http://localhost:3000"
+        #else
+        return productionAPIBaseURL
+        #endif
+    }
 
     /// On simulator, localhost works for local dev. On device, use Cloud Run.
     public static var defaultAPIBaseURL: String {

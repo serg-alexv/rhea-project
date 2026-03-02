@@ -373,7 +373,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 15;
+				CURRENT_PROJECT_VERSION = 17;
 				DEVELOPMENT_TEAM = 398XACWZ7G;
 				INFOPLIST_FILE = "CommandCentre-Info.plist";
 				INFOPLIST_GENERATION_MODE = GeneratedByXcode;
@@ -451,7 +451,7 @@
 				CODE_SIGN_ENTITLEMENTS = RheaApp.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 15;
+				CURRENT_PROJECT_VERSION = 17;
 				DEVELOPMENT_TEAM = 398XACWZ7G;
 				INFOPLIST_FILE = Info.plist;
 				INFOPLIST_GENERATION_MODE = GeneratedByXcode;
@@ -472,7 +472,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = RheaTunnel.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 15;
+				CURRENT_PROJECT_VERSION = 17;
 				DEVELOPMENT_TEAM = 398XACWZ7G;
 				INFOPLIST_FILE = "RheaTunnel-Info.plist";
 				INFOPLIST_GENERATION_MODE = GeneratedByXcode;
@@ -496,7 +496,7 @@
 				CODE_SIGN_ENTITLEMENTS = RheaApp.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 15;
+				CURRENT_PROJECT_VERSION = 17;
 				DEVELOPMENT_TEAM = 398XACWZ7G;
 				INFOPLIST_FILE = Info.plist;
 				INFOPLIST_GENERATION_MODE = GeneratedByXcode;
@@ -517,7 +517,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = RheaKeyboard.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 15;
+				CURRENT_PROJECT_VERSION = 17;
 				DEVELOPMENT_TEAM = 398XACWZ7G;
 				INFOPLIST_FILE = "RheaKeyboard-Info.plist";
 				INFOPLIST_GENERATION_MODE = GeneratedByXcode;
@@ -601,7 +601,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = RheaKeyboard.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 15;
+				CURRENT_PROJECT_VERSION = 17;
 				DEVELOPMENT_TEAM = 398XACWZ7G;
 				INFOPLIST_FILE = "RheaKeyboard-Info.plist";
 				INFOPLIST_GENERATION_MODE = GeneratedByXcode;
@@ -624,7 +624,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 15;
+				CURRENT_PROJECT_VERSION = 17;
 				DEVELOPMENT_TEAM = 398XACWZ7G;
 				INFOPLIST_FILE = "CommandCentre-Info.plist";
 				INFOPLIST_GENERATION_MODE = GeneratedByXcode;
@@ -645,7 +645,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = RheaTunnel.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 15;
+				CURRENT_PROJECT_VERSION = 17;
 				DEVELOPMENT_TEAM = 398XACWZ7G;
 				INFOPLIST_FILE = "RheaTunnel-Info.plist";
 				INFOPLIST_GENERATION_MODE = GeneratedByXcode;
