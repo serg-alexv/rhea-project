@@ -43,8 +43,9 @@ private struct MainTabShell: View {
 
     private var tabs: [TabDescriptor] {
         var list: [TabDescriptor] = [
-            // Level 1: unified ops dashboard (verify+feed+budget+office+health)
+            // Level 1: unified ops dashboard + clipboard sync
             TabDescriptor(icon: "square.grid.2x2", label: "Ops", view: AnyView(OpsView())),
+            TabDescriptor(icon: "doc.on.clipboard", label: "Clipboard", view: AnyView(ClipboardView())),
         ]
         if revealLevel >= 2 {
             // Level 2: full feed + tasks + privacy
