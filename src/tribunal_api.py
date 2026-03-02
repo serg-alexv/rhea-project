@@ -110,6 +110,13 @@ try:
 except ImportError:
     pass
 
+# CockroachDB persistent store — init schema on startup
+try:
+    import crdb_store as crdb
+    crdb.init()
+except Exception:
+    crdb = None
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -4634,6 +4641,77 @@ async def tasks_reopen(task_id: str):
     if not task:
         raise HTTPException(status_code=404, detail="Task not found")
     return task
+
+
+# ---------------------------------------------------------------------------
+# CockroachDB cloud store — persistent tasks, workflows, billing
+# ---------------------------------------------------------------------------
+
+@app.get("/crdb/status")
+async def crdb_status():
+    """CockroachDB connection status."""
+    if crdb is None:
+        return {"status": "disabled", "reason": "crdb_store not loaded"}
+    return {"status": "ok" if crdb.available() else "disconnected"}
+
+
+@app.get("/crdb/tasks")
+async def crdb_tasks(status: Optional[str] = None, agent: Optional[str] = None, limit: int = 50):
+    """List persistent tasks from CockroachDB."""
+    if crdb is None:
+        raise HTTPException(503, "CockroachDB not available")
+    return {"tasks": crdb.list_tasks(status=status, agent=agent, limit=limit)}
+
+
+@app.post("/crdb/tasks")
+async def crdb_create_task(request: Request):
+    """Create/update a persistent task in CockroachDB."""
+    if crdb is None:
+        raise HTTPException(503, "CockroachDB not available")
+    body = await request.json()
+    return crdb.upsert_task(**body)
+
+
+@app.post("/crdb/tasks/{task_id}/claim")
+async def crdb_claim_task(task_id: str, request: Request):
+    body = await request.json()
+    if crdb is None:
+        raise HTTPException(503, "CockroachDB not available")
+    ok = crdb.claim_task(task_id, body.get("agent", "unknown"))
+    if not ok:
+        raise HTTPException(409, "Task not claimable")
+    return {"claimed": task_id}
+
+
+@app.post("/crdb/tasks/{task_id}/complete")
+async def crdb_complete_task(task_id: str, request: Request):
+    body = await request.json()
+    if crdb is None:
+        raise HTTPException(503, "CockroachDB not available")
+    crdb.complete_task(task_id, result=body.get("result", ""), error=body.get("error", ""))
+    return {"completed": task_id}
+
+
+@app.get("/crdb/workflows")
+async def crdb_workflows(limit: int = 50):
+    if crdb is None:
+        raise HTTPException(503, "CockroachDB not available")
+    return {"workflows": crdb.list_workflows(limit=limit)}
+
+
+@app.post("/crdb/workflows")
+async def crdb_save_workflow(request: Request):
+    if crdb is None:
+        raise HTTPException(503, "CockroachDB not available")
+    body = await request.json()
+    return crdb.save_workflow(**body)
+
+
+@app.get("/crdb/billing/{user_id}")
+async def crdb_billing(user_id: str):
+    if crdb is None:
+        raise HTTPException(503, "CockroachDB not available")
+    return crdb.billing_summary(user_id)
 
 
 @app.get("/quantum/summary")
