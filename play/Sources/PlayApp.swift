@@ -2227,76 +2227,132 @@ struct MenuBarView: View {
     @ObservedObject private var store = RheaStore.shared
     @AppStorage("apiBaseURL") private var apiBaseURL = AppConfig.defaultAPIBaseURL
     private let api = RheaAPI.shared
+    @State private var sessionCount = 0
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            // Header + CC toggle
-            HStack {
+        VStack(alignment: .leading, spacing: 5) {
+            // ── Header: RHEA + connection dot + show/hide ──
+            HStack(spacing: 6) {
                 Text("RHEA")
                     .font(.system(size: 10, weight: .black, design: .monospaced))
                     .foregroundStyle(.white)
-                Spacer()
                 Circle()
                     .fill(store.connectionAlive ? Color.green : Color.red)
                     .frame(width: 6, height: 6)
-            }
-
-            // Show/Hide CC + quick actions
-            HStack(spacing: 6) {
+                Spacer()
                 Button {
                     NSApp.activate(ignoringOtherApps: true)
                     if let w = NSApp.windows.first(where: { $0.title.contains("Rhea") && $0.level == .normal }) {
                         w.makeKeyAndOrderFront(nil)
                     }
                 } label: {
-                    Label("SHOW CC", systemImage: "macwindow")
-                        .font(.system(size: 9, weight: .bold, design: .monospaced))
+                    Text("CC")
+                        .font(.system(size: 8, weight: .bold, design: .monospaced))
+                        .padding(.horizontal, 5).padding(.vertical, 2)
+                        .background(Capsule().fill(RheaTheme.accent.opacity(0.2)))
                 }
                 .buttonStyle(.plain)
                 .foregroundStyle(RheaTheme.accent)
 
-                Spacer()
-
-                Button {
-                    NSApp.hide(nil)
-                } label: {
-                    Image(systemName: "eye.slash")
-                        .font(.system(size: 10))
+                Button { NSApp.hide(nil) } label: {
+                    Image(systemName: "eye.slash").font(.system(size: 9))
                 }
                 .buttonStyle(.plain)
                 .foregroundStyle(.secondary)
             }
 
-            Divider()
+            // ── Metrics strip ──
+            HStack(spacing: 0) {
+                metricCell("T/day", store.formatTokens(store.totalTokens), .white)
+                metricCell("$/day", String(format: "$%.2f", store.totalCost), RheaTheme.amber)
+                metricCell("ALIVE", "\(store.aliveCount)/\(store.agents.count)", store.aliveCount > 0 ? RheaTheme.green : RheaTheme.red)
+                metricCell("PROOFS", "\(store.proofCount)", RheaTheme.accent)
+            }
+            .padding(.vertical, 4)
+            .background(RoundedRectangle(cornerRadius: 6).fill(RheaTheme.card.opacity(0.5)))
 
-            // Agent roster with wake buttons
+            // ── Health row ──
+            if let h = store.health {
+                HStack(spacing: 8) {
+                    HStack(spacing: 3) {
+                        Text("PROV").font(.system(size: 7, design: .monospaced)).foregroundStyle(.secondary)
+                        Text("\(h.providers_available)/\(h.providers_total)")
+                            .font(.system(size: 9, weight: .bold, design: .monospaced))
+                            .foregroundStyle(h.providers_available > 0 ? RheaTheme.green : RheaTheme.red)
+                    }
+                    HStack(spacing: 3) {
+                        Text("MOD").font(.system(size: 7, design: .monospaced)).foregroundStyle(.secondary)
+                        Text("\(h.total_models)")
+                            .font(.system(size: 9, weight: .bold, design: .monospaced)).foregroundStyle(.white.opacity(0.6))
+                    }
+                    Spacer()
+                    Text(h.execution_profile.replacingOccurrences(of: "_", with: " ").uppercased())
+                        .font(.system(size: 7, weight: .bold, design: .monospaced))
+                        .foregroundStyle(profileColor(h.execution_profile))
+                        .padding(.horizontal, 4).padding(.vertical, 1)
+                        .background(Capsule().fill(profileColor(h.execution_profile).opacity(0.15)))
+                }
+            }
+
+            Divider().opacity(0.3)
+
+            // ── Agent roster ──
             if store.agents.isEmpty {
-                Text("connecting...")
-                    .font(.system(size: 10, design: .monospaced))
-                    .foregroundStyle(.secondary)
+                HStack {
+                    ProgressView().controlSize(.mini)
+                    Text("connecting...")
+                        .font(.system(size: 9, design: .monospaced))
+                        .foregroundStyle(.secondary)
+                }
             } else {
                 ForEach(store.agents) { agent in
-                    HStack(spacing: 6) {
+                    HStack(spacing: 5) {
                         Circle()
                             .fill(agent.alive ? RheaTheme.green : RheaTheme.red)
-                            .frame(width: 6, height: 6)
+                            .frame(width: 5, height: 5)
 
-                        Text(agent.name.lowercased())
-                            .font(.system(size: 10, weight: .semibold, design: .monospaced))
-                            .foregroundStyle(.white)
+                        Text(agent.name.prefix(6).lowercased())
+                            .font(.system(size: 9, weight: .semibold, design: .monospaced))
+                            .foregroundStyle(agent.alive ? .white : .white.opacity(0.4))
+                            .frame(width: 42, alignment: .leading)
+
+                        // Per-agent T_day
+                        if agent.T_day > 0 {
+                            Text(store.formatTokens(agent.T_day))
+                                .font(.system(size: 8, design: .monospaced))
+                                .foregroundStyle(.white.opacity(0.35))
+                        }
 
                         Spacer()
 
-                        Text(agent.mode)
-                            .font(.system(size: 8, design: .monospaced))
+                        // Office status
+                        if let os = agent.office_status, os != "idle" && os != "unknown" {
+                            Text(os.prefix(5).uppercased())
+                                .font(.system(size: 7, weight: .bold, design: .monospaced))
+                                .foregroundStyle(RheaTheme.amber.opacity(0.7))
+                        }
+
+                        // Pending messages badge
+                        if agent.pendingMsgs > 0 {
+                            Text("\(agent.pendingMsgs)")
+                                .font(.system(size: 7, weight: .bold, design: .monospaced))
+                                .foregroundStyle(.white)
+                                .padding(.horizontal, 3).padding(.vertical, 1)
+                                .background(Circle().fill(RheaTheme.red))
+                        }
+
+                        // Mode chip
+                        Text(agent.mode.prefix(4).uppercased())
+                            .font(.system(size: 7, weight: .bold, design: .monospaced))
                             .foregroundStyle(RheaTheme.modeColor(agent.mode))
 
+                        // Wake button for dead agents
                         if !agent.alive {
                             Button {
                                 Task { _ = try? await api.wakeAgent(agent.name) }
                             } label: {
                                 Image(systemName: "bolt.fill")
-                                    .font(.system(size: 8))
+                                    .font(.system(size: 7))
                                     .foregroundStyle(RheaTheme.amber)
                             }
                             .buttonStyle(.plain)
@@ -2305,46 +2361,91 @@ struct MenuBarView: View {
                 }
             }
 
-            Divider()
+            Divider().opacity(0.3)
 
-            // Totals
-            HStack {
-                Text("T:\(store.formatTokens(store.totalTokens))")
-                    .font(.system(size: 10, weight: .bold, design: .monospaced))
-                    .foregroundStyle(.white.opacity(0.5))
+            // ── Controls ──
+            HStack(spacing: 4) {
+                // Wake All dead agents
+                let deadAgents = store.agents.filter { !$0.alive }
+                if !deadAgents.isEmpty {
+                    Button {
+                        Task {
+                            for agent in deadAgents {
+                                _ = try? await api.wakeAgent(agent.name)
+                            }
+                            await store.refreshCore()
+                        }
+                    } label: {
+                        HStack(spacing: 2) {
+                            Image(systemName: "bolt.fill").font(.system(size: 7))
+                            Text("WAKE \(deadAgents.count)")
+                                .font(.system(size: 7, weight: .bold, design: .monospaced))
+                        }
+                        .foregroundStyle(RheaTheme.amber)
+                        .padding(.horizontal, 6).padding(.vertical, 3)
+                        .background(Capsule().fill(RheaTheme.amber.opacity(0.12)))
+                    }
+                    .buttonStyle(.plain)
+                }
+
+                // Refresh
+                Button {
+                    Task { await store.refreshCore(); await fetchSessionCount() }
+                } label: {
+                    Image(systemName: "arrow.clockwise")
+                        .font(.system(size: 9))
+                        .foregroundStyle(.secondary)
+                }
+                .buttonStyle(.plain)
+
                 Spacer()
-                Text("$\(String(format: "%.2f", store.totalCost))")
-                    .font(.system(size: 10, weight: .bold, design: .monospaced))
-                    .foregroundStyle(RheaTheme.amber)
+
+                // Session count if > 0
+                if sessionCount > 0 {
+                    HStack(spacing: 2) {
+                        Image(systemName: "terminal").font(.system(size: 7))
+                        Text("\(sessionCount)")
+                            .font(.system(size: 8, weight: .bold, design: .monospaced))
+                    }
+                    .foregroundStyle(RheaTheme.green.opacity(0.7))
+                }
             }
 
-            Divider()
+            Divider().opacity(0.3)
 
-            // Connection switcher
-            HStack(spacing: 6) {
+            // ── Connection switcher + quit ──
+            HStack(spacing: 4) {
                 Button {
                     apiBaseURL = "http://localhost:8400"
+                    Task { await store.refreshCore() }
                 } label: {
                     Text("LOCAL")
                         .font(.system(size: 8, weight: .bold, design: .monospaced))
                         .foregroundStyle(apiBaseURL.contains("localhost") ? RheaTheme.green : .secondary)
+                        .padding(.horizontal, 6).padding(.vertical, 3)
+                        .background(
+                            Capsule().fill(apiBaseURL.contains("localhost") ? RheaTheme.green.opacity(0.12) : .clear)
+                        )
                 }
                 .buttonStyle(.plain)
 
                 Button {
                     apiBaseURL = "https://rhea-tribunal.fly.dev"
+                    Task { await store.refreshCore() }
                 } label: {
                     Text("CLOUD")
                         .font(.system(size: 8, weight: .bold, design: .monospaced))
                         .foregroundStyle(apiBaseURL.contains("fly.dev") ? RheaTheme.accent : .secondary)
+                        .padding(.horizontal, 6).padding(.vertical, 3)
+                        .background(
+                            Capsule().fill(apiBaseURL.contains("fly.dev") ? RheaTheme.accent.opacity(0.12) : .clear)
+                        )
                 }
                 .buttonStyle(.plain)
 
                 Spacer()
 
-                Button {
-                    NSApp.terminate(nil)
-                } label: {
+                Button { NSApp.terminate(nil) } label: {
                     Text("QUIT")
                         .font(.system(size: 8, weight: .bold, design: .monospaced))
                         .foregroundStyle(RheaTheme.red.opacity(0.6))
@@ -2352,7 +2453,40 @@ struct MenuBarView: View {
                 .buttonStyle(.plain)
             }
         }
-        .padding(12)
-        .frame(width: 240)
+        .padding(10)
+        .frame(width: 260)
+        .task {
+            store.startPolling()
+            await fetchSessionCount()
+        }
+    }
+
+    // ── Helpers ──
+
+    private func metricCell(_ label: String, _ value: String, _ color: Color) -> some View {
+        VStack(spacing: 1) {
+            Text(value)
+                .font(.system(size: 10, weight: .bold, design: .monospaced))
+                .foregroundStyle(color)
+                .lineLimit(1)
+                .minimumScaleFactor(0.7)
+            Text(label)
+                .font(.system(size: 6, weight: .bold, design: .monospaced))
+                .foregroundStyle(.secondary)
+        }
+        .frame(maxWidth: .infinity)
+    }
+
+    private func profileColor(_ p: String) -> Color {
+        switch p {
+        case "safe_cheap": return RheaTheme.green
+        case "balanced": return RheaTheme.amber
+        case "deep": return .purple
+        default: return .secondary
+        }
+    }
+
+    private func fetchSessionCount() async {
+        sessionCount = ((try? await api.supervisorSessions()) ?? []).filter { $0.isAlive }.count
     }
 }

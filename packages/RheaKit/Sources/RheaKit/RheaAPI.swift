@@ -163,6 +163,8 @@ public final class RheaAPI: @unchecked Sendable {
 
     public func supervisorSessions() async throws -> [SupervisorSession] {
         let data = try await get("/supervisor/sessions", auth: true)
+        struct Resp: Codable { let sessions: [SupervisorSession] }
+        if let resp = try? JSONDecoder().decode(Resp.self, from: data) { return resp.sessions }
         return (try? JSONDecoder().decode([SupervisorSession].self, from: data)) ?? []
     }
 
