@@ -5,14 +5,38 @@
     "title": "The Tiny Titan: How a Seed Protein Launched the Atomic Age of Structural Biology",
     "abstract": "Crambin, a 46-residue protein from the Abyssinian cabbage seed, holds the record as one of the highest-resolution protein crystal structures ever solved. Its compact, disulfide-stabilized fold revealed that even the smallest proteins follow universal structural rules. This diminutive molecule became the benchmark against which crystallographic methods are still calibrated today.",
     "sections": [
-      { "type": "heading", "content": "A Protein Small Enough to Count Every Atom" },
-      { "type": "text", "content": "In 1981, Wayne Hendrickson and Martha Teeter pushed X-ray crystallography to its limit by solving crambin at 1.5 Å resolution—sharp enough to locate individual hydrogen atoms. Crambin is so small it fits comfortably inside a ribosome exit tunnel, yet its three-dimensional structure is as precisely engineered as any enzyme ten times its size." },
-      { "type": "figure-ref", "content": "See Fig. 1" },
-      { "type": "heading", "content": "Architecture of a Miniature Fortress" },
-      { "type": "text", "content": "Three disulfide bonds stitch crambin's backbone into a rigid cage, protecting it from desiccation and proteolytic attack in the harsh seed environment. Two short alpha-helices pack against a beta-hairpin in a motif that reappears across hundreds of plant defense proteins. This thionin-related scaffold proved that nature solved the protein-folding problem long before computers could simulate it." },
-      { "type": "figure-ref", "content": "See Fig. 2" },
-      { "type": "heading", "content": "A Standard Candle for Structural Science" },
-      { "type": "text", "content": "Because crambin diffracts to near-atomic resolution, it serves as the gold-standard test case for new crystallographic software, neutron diffraction experiments, and molecular-dynamics force fields. Every new generation of structure-determination algorithms validates itself against crambin before publication." }
+      {
+        "type": "heading",
+        "content": "A Protein Small Enough to Count Every Atom"
+      },
+      {
+        "type": "text",
+        "content": "In 1981, Wayne Hendrickson and Martha Teeter pushed X-ray crystallography to its limit by solving crambin at 1.5 Å resolution—sharp enough to locate individual hydrogen atoms. Crambin is so small it fits comfortably inside a ribosome exit tunnel, yet its three-dimensional structure is as precisely engineered as any enzyme ten times its size."
+      },
+      {
+        "type": "figure-ref",
+        "content": "See Fig. 1"
+      },
+      {
+        "type": "heading",
+        "content": "Architecture of a Miniature Fortress"
+      },
+      {
+        "type": "text",
+        "content": "Three disulfide bonds stitch crambin's backbone into a rigid cage, protecting it from desiccation and proteolytic attack in the harsh seed environment. Two short alpha-helices pack against a beta-hairpin in a motif that reappears across hundreds of plant defense proteins. This thionin-related scaffold proved that nature solved the protein-folding problem long before computers could simulate it."
+      },
+      {
+        "type": "figure-ref",
+        "content": "See Fig. 2"
+      },
+      {
+        "type": "heading",
+        "content": "A Standard Candle for Structural Science"
+      },
+      {
+        "type": "text",
+        "content": "Because crambin diffracts to near-atomic resolution, it serves as the gold-standard test case for new crystallographic software, neutron diffraction experiments, and molecular-dynamics force fields. Every new generation of structure-determination algorithms validates itself against crambin before publication."
+      }
     ],
     "figure_plan": [
       {
@@ -57,7 +81,11 @@
     ],
     "discovery_year": 1981,
     "significance": "Crambin demonstrated that protein structures could be solved to near-atomic precision, opening the door to understanding enzyme mechanisms and drug binding at the level of individual atoms. Its continued use as a benchmark has accelerated every subsequent generation of structural biology software.",
-    "related_molecules": ["4HHB", "1GFL", "1AO6"]
+    "related_molecules": [
+      "4HHB",
+      "1GFL",
+      "1AO6"
+    ]
   },
   {
     "id": "1BNA",
@@ -65,14 +93,38 @@
     "title": "The Double Helix in Atomic Detail: Reading Life's Master Blueprint at 1.9 Å",
     "abstract": "The B-DNA dodecamer (sequence CGCGAATTCGCG) is the definitive atomic portrait of the DNA double helix in its canonical B-form, the dominant conformation in living cells. Solved by Richard Dickerson's group in 1980, this 12-base-pair structure revealed how base-pair sequence subtly distorts the helix—a discovery that transformed our understanding of how proteins read the genetic code. The 'Dickerson dodecamer' remains the most-studied short DNA structure in history.",
     "sections": [
-      { "type": "heading", "content": "Watson and Crick Met Reality in 1980" },
-      { "type": "text", "content": "When Watson and Crick proposed the double helix in 1953, they worked from fiber diffraction data that gave a blurry average structure. The Dickerson dodecamer changed everything: here was a specific 12-base-pair sequence with every atom precisely located, revealing that the helix is not the uniform ladder of textbook diagrams but a subtly irregular, sequence-dependent structure." },
-      { "type": "figure-ref", "content": "See Fig. 1" },
-      { "type": "heading", "content": "Sequence Encodes More Than Just Information" },
-      { "type": "text", "content": "The central AATT tract in CGCGAATTCGCG adopts a narrow minor groove filled with a spine of hydration water molecules. This structural feature—first seen in 1BNA—is now recognized as the molecular basis for minor-groove binding proteins and small-molecule drugs like netropsin and distamycin. The sequence literally bends and narrows the groove in a way that proteins can read without even opening the helix." },
-      { "type": "figure-ref", "content": "See Fig. 2" },
-      { "type": "heading", "content": "The Foundations of Structural Genomics" },
-      { "type": "text", "content": "Crystallographic parameters extracted from 1BNA—rise per base pair, twist angle, propeller twist, roll, tilt—defined the vocabulary of DNA structural biology. Every DNA-protein complex deposited since 1981 is described using geometry derived from this single structure." }
+      {
+        "type": "heading",
+        "content": "Watson and Crick Met Reality in 1980"
+      },
+      {
+        "type": "text",
+        "content": "When Watson and Crick proposed the double helix in 1953, they worked from fiber diffraction data that gave a blurry average structure. The Dickerson dodecamer changed everything: here was a specific 12-base-pair sequence with every atom precisely located, revealing that the helix is not the uniform ladder of textbook diagrams but a subtly irregular, sequence-dependent structure."
+      },
+      {
+        "type": "figure-ref",
+        "content": "See Fig. 1"
+      },
+      {
+        "type": "heading",
+        "content": "Sequence Encodes More Than Just Information"
+      },
+      {
+        "type": "text",
+        "content": "The central AATT tract in CGCGAATTCGCG adopts a narrow minor groove filled with a spine of hydration water molecules. This structural feature—first seen in 1BNA—is now recognized as the molecular basis for minor-groove binding proteins and small-molecule drugs like netropsin and distamycin. The sequence literally bends and narrows the groove in a way that proteins can read without even opening the helix."
+      },
+      {
+        "type": "figure-ref",
+        "content": "See Fig. 2"
+      },
+      {
+        "type": "heading",
+        "content": "The Foundations of Structural Genomics"
+      },
+      {
+        "type": "text",
+        "content": "Crystallographic parameters extracted from 1BNA—rise per base pair, twist angle, propeller twist, roll, tilt—defined the vocabulary of DNA structural biology. Every DNA-protein complex deposited since 1981 is described using geometry derived from this single structure."
+      }
     ],
     "figure_plan": [
       {
@@ -117,7 +169,11 @@
     ],
     "discovery_year": 1980,
     "significance": "The atomic structure of the B-DNA dodecamer proved that DNA sequence encodes structural information beyond mere base identity—a principle underlying all modern understanding of transcription factor binding, epigenetic recognition, and the rational design of DNA-targeting drugs.",
-    "related_molecules": ["3PQR", "3NIR", "1JFF"]
+    "related_molecules": [
+      "3PQR",
+      "3NIR",
+      "1JFF"
+    ]
   },
   {
     "id": "4HHB",
@@ -125,14 +181,38 @@
     "title": "The Breathing Protein: How Hemoglobin Harvests Oxygen with Elegant Molecular Cooperation",
     "abstract": "Hemoglobin, the iron-bearing protein packed into red blood cells at 280 million copies each, is the molecule that makes complex animal life possible. Its 1960 structure by Max Perutz—the culmination of a 22-year effort—was the first large protein structure ever solved and earned him the Nobel Prize. Hemoglobin's famous cooperativity, the R-to-T allosteric transition, remains the textbook example of how molecular machines change shape to perform work.",
     "sections": [
-      { "type": "heading", "content": "Twenty-Two Years to a Single Structure" },
-      { "type": "text", "content": "Max Perutz began his X-ray crystallography studies of hemoglobin in 1937 at Cambridge. He would not publish the complete structure until 1960—a span that encompassed World War II, the discovery of the double helix, and the development of the heavy-atom isomorphous replacement method Perutz himself invented. The wait was worth it: the result transformed biology." },
-      { "type": "figure-ref", "content": "See Fig. 1" },
-      { "type": "heading", "content": "Four Chains, Four Hemes, One Cooperative Machine" },
-      { "type": "text", "content": "Adult hemoglobin (HbA) is a heterotetramer of two alpha and two beta globin chains, each cradling a flat heme group at its center. When oxygen binds the first heme iron, the change in iron geometry triggers a cascade of hydrogen-bond ruptures and interface rotations that restructure all four subunits—flipping the molecule from the low-affinity T-state to the high-affinity R-state. This cooperativity means hemoglobin loads oxygen efficiently at lung pressures and unloads it efficiently at tissue pressures." },
-      { "type": "figure-ref", "content": "See Fig. 2" },
-      { "type": "heading", "content": "When a Single Mutation Costs a Life" },
-      { "type": "text", "content": "Sickle cell disease arises from a single point mutation—Glu6Val in the beta chain—that creates a hydrophobic patch on the T-state surface. Deoxy hemoglobin S molecules polymerize into rigid fibers that distort red cells into the characteristic sickle shape. The structure of hemoglobin thus explains an entire human disease at the atomic level, illustrating the power of structural biology as a medical tool." }
+      {
+        "type": "heading",
+        "content": "Twenty-Two Years to a Single Structure"
+      },
+      {
+        "type": "text",
+        "content": "Max Perutz began his X-ray crystallography studies of hemoglobin in 1937 at Cambridge. He would not publish the complete structure until 1960—a span that encompassed World War II, the discovery of the double helix, and the development of the heavy-atom isomorphous replacement method Perutz himself invented. The wait was worth it: the result transformed biology."
+      },
+      {
+        "type": "figure-ref",
+        "content": "See Fig. 1"
+      },
+      {
+        "type": "heading",
+        "content": "Four Chains, Four Hemes, One Cooperative Machine"
+      },
+      {
+        "type": "text",
+        "content": "Adult hemoglobin (HbA) is a heterotetramer of two alpha and two beta globin chains, each cradling a flat heme group at its center. When oxygen binds the first heme iron, the change in iron geometry triggers a cascade of hydrogen-bond ruptures and interface rotations that restructure all four subunits—flipping the molecule from the low-affinity T-state to the high-affinity R-state. This cooperativity means hemoglobin loads oxygen efficiently at lung pressures and unloads it efficiently at tissue pressures."
+      },
+      {
+        "type": "figure-ref",
+        "content": "See Fig. 2"
+      },
+      {
+        "type": "heading",
+        "content": "When a Single Mutation Costs a Life"
+      },
+      {
+        "type": "text",
+        "content": "Sickle cell disease arises from a single point mutation—Glu6Val in the beta chain—that creates a hydrophobic patch on the T-state surface. Deoxy hemoglobin S molecules polymerize into rigid fibers that distort red cells into the characteristic sickle shape. The structure of hemoglobin thus explains an entire human disease at the atomic level, illustrating the power of structural biology as a medical tool."
+      }
     ],
     "figure_plan": [
       {
@@ -195,7 +275,11 @@
     ],
     "discovery_year": 1960,
     "significance": "The hemoglobin structure proved that proteins could be large multi-subunit machines governed by allosteric communication—a principle that now underpins the design of drugs for cancer, metabolic disease, and infectious pathogens. Perutz's work launched modern structural biology as a discipline.",
-    "related_molecules": ["1CRN", "5WE4", "1AO6"]
+    "related_molecules": [
+      "1CRN",
+      "5WE4",
+      "1AO6"
+    ]
   },
   {
     "id": "5WE4",
@@ -203,14 +287,38 @@
     "title": "The Smallest Motor in the Universe: ATP Synthase and the Rotary Engine of Life",
     "abstract": "ATP synthase is a molecular turbine embedded in mitochondrial and chloroplast membranes that synthesizes adenosine triphosphate—the universal energy currency of all life—by harnessing the flow of protons down an electrochemical gradient. Its catalytic mechanism involves actual physical rotation of a central protein shaft, a concept so counterintuitive that it was initially rejected and only accepted after Paul Boyer and John Walker shared the 1997 Nobel Prize. A human cell contains roughly 100 quadrillion ATP molecules turning over completely in under a minute.",
     "sections": [
-      { "type": "heading", "content": "A Machine So Strange It Was Not Believed" },
-      { "type": "text", "content": "When Paul Boyer proposed in the 1970s that ATP synthase worked by a rotary binding-change mechanism—that a central rotor physically spun inside a catalytic barrel to squeeze ADP and phosphate into ATP—the idea was greeted with profound skepticism. Machines that work by rotation were engineering concepts, not biological ones. John Walker's crystal structure of the F1 catalytic head in 1994, showing three asymmetric catalytic sites consistent with a rotation cycle, provided the structural proof. Single-molecule experiments by Hiroyuki Noji in 1997 filmed the rotation directly." },
-      { "type": "figure-ref", "content": "See Fig. 1" },
-      { "type": "heading", "content": "Two Motors in One: F0 and F1" },
-      { "type": "text", "content": "ATP synthase is actually two coupled rotary motors. The membrane-embedded F0 sector contains a ring of 8–15 c-subunits (depending on species) that rotates as protons flow through it, one proton per c-subunit per rotation. This rotation is mechanically transmitted through the central gamma subunit stalk into the F1 catalytic head, where it forces conformational changes in three beta subunits that cycle through open, loose, and tight states to bind, catalyze, and release ATP. Each full rotation (360°) synthesizes three ATP molecules." },
-      { "type": "figure-ref", "content": "See Fig. 2" },
-      { "type": "heading", "content": "A Target for Antibiotics and Anticancer Drugs" },
-      { "type": "text", "content": "Bacterial ATP synthases differ enough from mitochondrial forms that they are prime antibiotic targets. Bedaquiline, approved in 2012 for drug-resistant tuberculosis, works by blocking the F0 proton channel of Mycobacterium tuberculosis ATP synthase. Cancer cells with altered mitochondrial metabolism also show vulnerabilities at ATP synthase, making it a growing focus of oncology drug discovery." }
+      {
+        "type": "heading",
+        "content": "A Machine So Strange It Was Not Believed"
+      },
+      {
+        "type": "text",
+        "content": "When Paul Boyer proposed in the 1970s that ATP synthase worked by a rotary binding-change mechanism—that a central rotor physically spun inside a catalytic barrel to squeeze ADP and phosphate into ATP—the idea was greeted with profound skepticism. Machines that work by rotation were engineering concepts, not biological ones. John Walker's crystal structure of the F1 catalytic head in 1994, showing three asymmetric catalytic sites consistent with a rotation cycle, provided the structural proof. Single-molecule experiments by Hiroyuki Noji in 1997 filmed the rotation directly."
+      },
+      {
+        "type": "figure-ref",
+        "content": "See Fig. 1"
+      },
+      {
+        "type": "heading",
+        "content": "Two Motors in One: F0 and F1"
+      },
+      {
+        "type": "text",
+        "content": "ATP synthase is actually two coupled rotary motors. The membrane-embedded F0 sector contains a ring of 8–15 c-subunits (depending on species) that rotates as protons flow through it, one proton per c-subunit per rotation. This rotation is mechanically transmitted through the central gamma subunit stalk into the F1 catalytic head, where it forces conformational changes in three beta subunits that cycle through open, loose, and tight states to bind, catalyze, and release ATP. Each full rotation (360°) synthesizes three ATP molecules."
+      },
+      {
+        "type": "figure-ref",
+        "content": "See Fig. 2"
+      },
+      {
+        "type": "heading",
+        "content": "A Target for Antibiotics and Anticancer Drugs"
+      },
+      {
+        "type": "text",
+        "content": "Bacterial ATP synthases differ enough from mitochondrial forms that they are prime antibiotic targets. Bedaquiline, approved in 2012 for drug-resistant tuberculosis, works by blocking the F0 proton channel of Mycobacterium tuberculosis ATP synthase. Cancer cells with altered mitochondrial metabolism also show vulnerabilities at ATP synthase, making it a growing focus of oncology drug discovery."
+      }
     ],
     "figure_plan": [
       {
@@ -255,7 +363,11 @@
     ],
     "discovery_year": 1994,
     "significance": "ATP synthase is the engine of all cellular life—without it, neither respiration nor photosynthesis could produce usable energy. Understanding its rotary mechanism has opened entirely new strategies for antibiotic and anticancer drug design, and inspired a generation of synthetic molecular machines.",
-    "related_molecules": ["1ATP", "1JFF", "4HHB"]
+    "related_molecules": [
+      "1ATP",
+      "1JFF",
+      "4HHB"
+    ]
   },
   {
     "id": "6LU7",
@@ -263,14 +375,38 @@
     "title": "Unlocking the Pandemic: The SARS-CoV-2 Main Protease and the Race to Design an Antiviral",
     "abstract": "The SARS-CoV-2 main protease (Mpro, also called 3CLpro) is the master scissor of the coronavirus replication cycle, cleaving the viral polyprotein at 11 sites to generate the functional replication machinery. Its crystal structure (6LU7) was deposited to the Protein Data Bank just three weeks after the COVID-19 outbreak was declared a Public Health Emergency of International Concern—a record-breaking act of open science. This structure drove the development of Paxlovid's nirmatrelvir component and remains the most-downloaded PDB entry of the 21st century.",
     "sections": [
-      { "type": "heading", "content": "Three Weeks from Emergency Declaration to Atomic Structure" },
-      { "type": "text", "content": "On January 30, 2020, the WHO declared COVID-19 a public health emergency. By February 20, 2020, Jin Lab at Shanghai Tech had crystallized SARS-CoV-2 Mpro and deposited structure 6LU7 in the PDB—freely available to every drug discovery team on earth. This act of scientific generosity compressed what might have been years of proprietary research into weeks of open, parallel effort across hundreds of laboratories simultaneously." },
-      { "type": "figure-ref", "content": "See Fig. 1" },
-      { "type": "heading", "content": "A Cysteine Protease Unlike Any Human Enzyme" },
-      { "type": "text", "content": "Mpro is a cysteine protease that operates as a homodimer. Its active site contains a catalytic dyad (Cys145–His41) rather than the catalytic triad typical of serine proteases. Crucially, Mpro cleaves after glutamine residues in the sequence context Leu-Gln↓(Ser/Ala/Gly)—a specificity that no human protease shares. This narrow substrate specificity makes Mpro an ideal drug target: inhibitors that block it have little opportunity to inhibit human enzymes and cause off-target toxicity." },
-      { "type": "figure-ref", "content": "See Fig. 2" },
-      { "type": "heading", "content": "From Structure to Drug in Under Three Years" },
-      { "type": "text", "content": "Using 6LU7 as the starting point, Pfizer designed nirmatrelvir—a peptidomimetic covalent inhibitor that irreversibly modifies Cys145. Combined with ritonavir (which slows nirmatrelvir's metabolism) to form Paxlovid, it received FDA emergency use authorization in December 2021. The 6LU7→Paxlovid timeline is one of the fastest structure-to-approved-drug stories in pharmaceutical history." }
+      {
+        "type": "heading",
+        "content": "Three Weeks from Emergency Declaration to Atomic Structure"
+      },
+      {
+        "type": "text",
+        "content": "On January 30, 2020, the WHO declared COVID-19 a public health emergency. By February 20, 2020, Jin Lab at Shanghai Tech had crystallized SARS-CoV-2 Mpro and deposited structure 6LU7 in the PDB—freely available to every drug discovery team on earth. This act of scientific generosity compressed what might have been years of proprietary research into weeks of open, parallel effort across hundreds of laboratories simultaneously."
+      },
+      {
+        "type": "figure-ref",
+        "content": "See Fig. 1"
+      },
+      {
+        "type": "heading",
+        "content": "A Cysteine Protease Unlike Any Human Enzyme"
+      },
+      {
+        "type": "text",
+        "content": "Mpro is a cysteine protease that operates as a homodimer. Its active site contains a catalytic dyad (Cys145–His41) rather than the catalytic triad typical of serine proteases. Crucially, Mpro cleaves after glutamine residues in the sequence context Leu-Gln↓(Ser/Ala/Gly)—a specificity that no human protease shares. This narrow substrate specificity makes Mpro an ideal drug target: inhibitors that block it have little opportunity to inhibit human enzymes and cause off-target toxicity."
+      },
+      {
+        "type": "figure-ref",
+        "content": "See Fig. 2"
+      },
+      {
+        "type": "heading",
+        "content": "From Structure to Drug in Under Three Years"
+      },
+      {
+        "type": "text",
+        "content": "Using 6LU7 as the starting point, Pfizer designed nirmatrelvir—a peptidomimetic covalent inhibitor that irreversibly modifies Cys145. Combined with ritonavir (which slows nirmatrelvir's metabolism) to form Paxlovid, it received FDA emergency use authorization in December 2021. The 6LU7→Paxlovid timeline is one of the fastest structure-to-approved-drug stories in pharmaceutical history."
+      }
     ],
     "figure_plan": [
       {
@@ -315,7 +451,11 @@
     ],
     "discovery_year": 2020,
     "significance": "6LU7 is a landmark in the history of pandemic response—proof that open, rapid structural science can compress drug discovery timelines from decades to months. The SARS-CoV-2 Mpro structure enabled the fastest structure-to-approved-drug pipeline ever recorded and established a template for responding to future viral emergencies.",
-    "related_molecules": ["3PQR", "1GFL", "3NIR"]
+    "related_molecules": [
+      "3PQR",
+      "1GFL",
+      "3NIR"
+    ]
   },
   {
     "id": "1GFL",
@@ -323,14 +463,38 @@
     "title": "The Lantern That Lit Up Biology: How GFP Became the Most Powerful Tool in Cell Science",
     "abstract": "Green fluorescent protein (GFP), isolated from the jellyfish Aequorea victoria, absorbs blue light and emits green light through a self-catalyzed chromophore buried at the center of an eleven-stranded beta-barrel. Since its cloning in 1992 and structural determination in 1996, GFP and its engineered variants have been fused to virtually every protein of biological interest, turning living cells into self-illuminated movies. The 2008 Nobel Prize in Chemistry recognized Shimomura, Chalfie, and Tsien for GFP's discovery, cloning, and engineering—one of the most transformative tools in the history of biology.",
     "sections": [
-      { "type": "heading", "content": "A Jellyfish Glows, Science Listens" },
-      { "type": "text", "content": "Osamu Shimomura first purified GFP from Aequorea victoria jellyfish in 1962 as a byproduct of his work on the calcium-sensitive protein aequorin. It sat largely unappreciated for three decades until Martin Chalfie realized that GFP's gene alone—without any cofactors from the jellyfish—was sufficient to make any organism glow green. That single insight transformed GFP from a curiosity into a universal reporter." },
-      { "type": "figure-ref", "content": "See Fig. 1" },
-      { "type": "heading", "content": "The Beta-Can: Nature's Perfect Fluorescence Cage" },
-      { "type": "text", "content": "GFP's structure—an eleven-stranded beta-barrel with a central alpha-helix—is an evolutionary masterpiece. The chromophore (a cyclized Ser65-Tyr66-Gly67 tripeptide) forms spontaneously from the polypeptide backbone when the barrel closes around it, requiring only molecular oxygen. The surrounding beta-can shields the fluorophore from solvent quenching and proteolytic attack, giving GFP its remarkable photostability. Roger Tsien's systematic mutagenesis of the chromophore environment spawned CFP, YFP, mCherry, and dozens of other fluorescent proteins spanning the visible spectrum." },
-      { "type": "figure-ref", "content": "See Fig. 2" },
-      { "type": "heading", "content": "Living Cells as Optical Circuits" },
-      { "type": "text", "content": "Fusing GFP variants to proteins of interest and observing their movement, localization, and interactions in live cells has generated more biological knowledge than any other single technique of the past thirty years. FRET (Förster Resonance Energy Transfer) between GFP variants detects protein-protein interactions. Photoactivatable GFP enables single-molecule tracking. Split-GFP reports protein-fragment complementation. The fundamental principles all depend on the structure solved in 1996." }
+      {
+        "type": "heading",
+        "content": "A Jellyfish Glows, Science Listens"
+      },
+      {
+        "type": "text",
+        "content": "Osamu Shimomura first purified GFP from Aequorea victoria jellyfish in 1962 as a byproduct of his work on the calcium-sensitive protein aequorin. It sat largely unappreciated for three decades until Martin Chalfie realized that GFP's gene alone—without any cofactors from the jellyfish—was sufficient to make any organism glow green. That single insight transformed GFP from a curiosity into a universal reporter."
+      },
+      {
+        "type": "figure-ref",
+        "content": "See Fig. 1"
+      },
+      {
+        "type": "heading",
+        "content": "The Beta-Can: Nature's Perfect Fluorescence Cage"
+      },
+      {
+        "type": "text",
+        "content": "GFP's structure—an eleven-stranded beta-barrel with a central alpha-helix—is an evolutionary masterpiece. The chromophore (a cyclized Ser65-Tyr66-Gly67 tripeptide) forms spontaneously from the polypeptide backbone when the barrel closes around it, requiring only molecular oxygen. The surrounding beta-can shields the fluorophore from solvent quenching and proteolytic attack, giving GFP its remarkable photostability. Roger Tsien's systematic mutagenesis of the chromophore environment spawned CFP, YFP, mCherry, and dozens of other fluorescent proteins spanning the visible spectrum."
+      },
+      {
+        "type": "figure-ref",
+        "content": "See Fig. 2"
+      },
+      {
+        "type": "heading",
+        "content": "Living Cells as Optical Circuits"
+      },
+      {
+        "type": "text",
+        "content": "Fusing GFP variants to proteins of interest and observing their movement, localization, and interactions in live cells has generated more biological knowledge than any other single technique of the past thirty years. FRET (Förster Resonance Energy Transfer) between GFP variants detects protein-protein interactions. Photoactivatable GFP enables single-molecule tracking. Split-GFP reports protein-fragment complementation. The fundamental principles all depend on the structure solved in 1996."
+      }
     ],
     "figure_plan": [
       {
@@ -375,7 +539,11 @@
     ],
     "discovery_year": 1996,
     "significance": "GFP transformed cell biology from a static science of fixed, stained samples into a dynamic science of living, moving molecules. It has contributed to virtually every major advance in cell biology, neuroscience, and developmental biology since 1996, and its engineered variants continue to generate discoveries across every branch of the life sciences.",
-    "related_molecules": ["1CRN", "6LU7", "1AO6"]
+    "related_molecules": [
+      "1CRN",
+      "6LU7",
+      "1AO6"
+    ]
   },
   {
     "id": "1AO6",
@@ -383,14 +551,38 @@
     "title": "The First Protein in Sequence, Still Saving Millions: The Molecular Architecture of Insulin",
     "abstract": "Insulin, a 51-amino-acid peptide hormone secreted by pancreatic beta cells, is the key that unlocks glucose uptake in muscle, liver, and fat tissue. Frederick Sanger's 1955 determination of its amino acid sequence was the first complete protein sequence ever determined, earning him his first Nobel Prize. The three-dimensional structure, solved by Dorothy Hodgkin's group in 1969, revealed that insulin naturally assembles into zinc-stabilized hexamers for storage but must dissociate into monomers for receptor binding—a structural choreography that drives the engineering of modern insulin analogues.",
     "sections": [
-      { "type": "heading", "content": "The Molecule That Defined Molecular Biology" },
-      { "type": "text", "content": "Insulin's significance to science is extraordinary: it was the first protein sequenced (Sanger, 1955), among the first proteins crystallized (Abel, 1926), the first to have its structure solved by X-ray crystallography (Hodgkin, 1969), and the first recombinant therapeutic protein approved by the FDA (Humulin, 1982). No other molecule has served as the proof-of-concept for so many foundational technologies." },
-      { "type": "figure-ref", "content": "See Fig. 1" },
-      { "type": "heading", "content": "Hexamer Storage, Monomer Action" },
-      { "type": "text", "content": "In the pancreatic beta cell secretory granule, insulin is stored as a zinc-coordinated hexamer: two zinc ions each coordinated by three His10 residues from three B-chains, holding two trimers face-to-face. This compact hexamer is metabolically inert—it cannot bind the insulin receptor. Upon secretion and dilution into the bloodstream, the hexamer dissociates first into dimers, then into active monomers. Modern insulin analogues like insulin glargine (Lantus) and insulin lispro (Humalog) are engineered mutations that shift this equilibrium to engineer either prolonged hexamer stability (slow release) or rapid monomer formation (fast-acting)." },
-      { "type": "figure-ref", "content": "See Fig. 2" },
-      { "type": "heading", "content": "A Century of Insulin and Its Future" },
-      { "type": "text", "content": "Insulin was first administered to a human patient (Leonard Thompson) in January 1922. One hundred years later, over 400 million people with diabetes depend on insulin analogues whose design is entirely guided by the hexamer crystal structure. Oral insulin, ultra-concentrated formulations, and glucose-responsive insulin all trace their rational engineering lineage to 1AO6 and its relatives." }
+      {
+        "type": "heading",
+        "content": "The Molecule That Defined Molecular Biology"
+      },
+      {
+        "type": "text",
+        "content": "Insulin's significance to science is extraordinary: it was the first protein sequenced (Sanger, 1955), among the first proteins crystallized (Abel, 1926), the first to have its structure solved by X-ray crystallography (Hodgkin, 1969), and the first recombinant therapeutic protein approved by the FDA (Humulin, 1982). No other molecule has served as the proof-of-concept for so many foundational technologies."
+      },
+      {
+        "type": "figure-ref",
+        "content": "See Fig. 1"
+      },
+      {
+        "type": "heading",
+        "content": "Hexamer Storage, Monomer Action"
+      },
+      {
+        "type": "text",
+        "content": "In the pancreatic beta cell secretory granule, insulin is stored as a zinc-coordinated hexamer: two zinc ions each coordinated by three His10 residues from three B-chains, holding two trimers face-to-face. This compact hexamer is metabolically inert—it cannot bind the insulin receptor. Upon secretion and dilution into the bloodstream, the hexamer dissociates first into dimers, then into active monomers. Modern insulin analogues like insulin glargine (Lantus) and insulin lispro (Humalog) are engineered mutations that shift this equilibrium to engineer either prolonged hexamer stability (slow release) or rapid monomer formation (fast-acting)."
+      },
+      {
+        "type": "figure-ref",
+        "content": "See Fig. 2"
+      },
+      {
+        "type": "heading",
+        "content": "A Century of Insulin and Its Future"
+      },
+      {
+        "type": "text",
+        "content": "Insulin was first administered to a human patient (Leonard Thompson) in January 1922. One hundred years later, over 400 million people with diabetes depend on insulin analogues whose design is entirely guided by the hexamer crystal structure. Oral insulin, ultra-concentrated formulations, and glucose-responsive insulin all trace their rational engineering lineage to 1AO6 and its relatives."
+      }
     ],
     "figure_plan": [
       {
@@ -435,7 +627,11 @@
     ],
     "discovery_year": 1969,
     "significance": "Insulin is the first rationally engineered biopharmaceutical: every modern insulin analogue was designed by mutating specific residues in the hexamer structure to alter its self-assembly kinetics. Over 400 million people with diabetes depend on structural insights from 1AO6 and its successors, making it arguably the most medically impactful protein structure ever solved.",
-    "related_molecules": ["4HHB", "1CRN", "1GFL"]
+    "related_molecules": [
+      "4HHB",
+      "1CRN",
+      "1GFL"
+    ]
   },
   {
     "id": "3PQR",
@@ -443,14 +639,38 @@
     "title": "Guardian of the Genome: How p53 Reads DNA to Decide Between Life and Death",
     "abstract": "The p53 tumor suppressor is mutated in more than half of all human cancers, a statistic that reflects its central role as the cell's master damage-response coordinator. When DNA is damaged, p53 protein accumulates, binds specific response elements in the genome, and activates programs of DNA repair, cell-cycle arrest, or apoptosis. The crystal structure of p53's DNA-binding domain bound to its recognition sequence reveals an intricate molecular reading apparatus that must function flawlessly to prevent cancer—and whose failure is the most common event in malignancy.",
     "sections": [
-      { "type": "heading", "content": "The Most Mutated Gene in Human Cancer" },
-      { "type": "text", "content": "TP53, the gene encoding p53, is altered in approximately 50% of all human malignancies. Breast, lung, colon, brain, liver—virtually no cancer type is untouched. Most cancer mutations are missense changes in the DNA-binding domain, and most cluster at six 'hotspot' residues (R175, G245, R248, R249, R273, R282) that either directly contact DNA or maintain the structural integrity of the DNA-contact surface. The structure of p53 bound to DNA explains exactly why these mutations are so catastrophically effective at disabling tumor suppression." },
-      { "type": "figure-ref", "content": "See Fig. 1" },
-      { "type": "heading", "content": "A Transcription Factor That Reads Cell Fate" },
-      { "type": "text", "content": "p53 binds DNA as a tetramer (dimer of dimers). Each DNA-binding domain contacts a 10-base-pair half-site containing the consensus RRRCWWGYYY, where two half-sites separated by 0–13 bp constitute a full response element. The protein makes direct contacts to the major groove via Arg248 (sequence-specific) and Arg273 (phosphate backbone), plus extensive minor groove contacts. The L3 loop inserts into the minor groove in a manner dependent on the A-T-rich content of the central 4 bp—meaning p53 reads sequence-encoded shape, not just nucleotide identity." },
-      { "type": "figure-ref", "content": "See Fig. 2" },
-      { "type": "heading", "content": "Restoring p53: The Holy Grail of Cancer Therapy" },
-      { "type": "text", "content": "Because p53 mutations are so prevalent, restoring p53 function is one of oncology's most pursued goals. Small molecules like APR-246 (eprenetapopt) refold mutant R175H p53 back toward its wild-type conformation. PRIMA-1 MET has shown efficacy in clinical trials for TP53-mutant AML. Every one of these therapeutic strategies depends on detailed knowledge of the p53–DNA interface revealed by the crystal structure." }
+      {
+        "type": "heading",
+        "content": "The Most Mutated Gene in Human Cancer"
+      },
+      {
+        "type": "text",
+        "content": "TP53, the gene encoding p53, is altered in approximately 50% of all human malignancies. Breast, lung, colon, brain, liver—virtually no cancer type is untouched. Most cancer mutations are missense changes in the DNA-binding domain, and most cluster at six 'hotspot' residues (R175, G245, R248, R249, R273, R282) that either directly contact DNA or maintain the structural integrity of the DNA-contact surface. The structure of p53 bound to DNA explains exactly why these mutations are so catastrophically effective at disabling tumor suppression."
+      },
+      {
+        "type": "figure-ref",
+        "content": "See Fig. 1"
+      },
+      {
+        "type": "heading",
+        "content": "A Transcription Factor That Reads Cell Fate"
+      },
+      {
+        "type": "text",
+        "content": "p53 binds DNA as a tetramer (dimer of dimers). Each DNA-binding domain contacts a 10-base-pair half-site containing the consensus RRRCWWGYYY, where two half-sites separated by 0–13 bp constitute a full response element. The protein makes direct contacts to the major groove via Arg248 (sequence-specific) and Arg273 (phosphate backbone), plus extensive minor groove contacts. The L3 loop inserts into the minor groove in a manner dependent on the A-T-rich content of the central 4 bp—meaning p53 reads sequence-encoded shape, not just nucleotide identity."
+      },
+      {
+        "type": "figure-ref",
+        "content": "See Fig. 2"
+      },
+      {
+        "type": "heading",
+        "content": "Restoring p53: The Holy Grail of Cancer Therapy"
+      },
+      {
+        "type": "text",
+        "content": "Because p53 mutations are so prevalent, restoring p53 function is one of oncology's most pursued goals. Small molecules like APR-246 (eprenetapopt) refold mutant R175H p53 back toward its wild-type conformation. PRIMA-1 MET has shown efficacy in clinical trials for TP53-mutant AML. Every one of these therapeutic strategies depends on detailed knowledge of the p53–DNA interface revealed by the crystal structure."
+      }
     ],
     "figure_plan": [
       {
@@ -495,7 +715,11 @@
     ],
     "discovery_year": 1994,
     "significance": "The p53–DNA structure is the molecular foundation of our understanding of tumor suppression. It explains why specific mutations cripple cancer prevention, guides the development of p53-reactivating drugs, and stands as a model for how transcription factors interpret combinatorial sequence signals to make life-or-death decisions at the cellular level.",
-    "related_molecules": ["1BNA", "3NIR", "6LU7"]
+    "related_molecules": [
+      "1BNA",
+      "3NIR",
+      "6LU7"
+    ]
   },
   {
     "id": "1JFF",
@@ -503,14 +727,38 @@
     "title": "The Nitrogen Gatekeeper: Glutamine Synthetase and the Symmetry of Life's Most Essential Reaction",
     "abstract": "Glutamine synthetase (GS) catalyzes the ATP-dependent conversion of glutamate and ammonia to glutamine—the primary reaction by which all living organisms incorporate inorganic nitrogen into organic form. The bacterial enzyme is a stunning twelve-subunit machine, two hexameric rings stacked face-to-face with twelve active sites arranged with D6 symmetry. GS is so central to nitrogen metabolism that its inhibitors include some of the most widely used herbicides in agriculture, and its dysregulation is implicated in neurological diseases from ALS to hepatic encephalopathy.",
     "sections": [
-      { "type": "heading", "content": "Twelve Engines Running on Nitrogen" },
-      { "type": "text", "content": "The bacterial glutamine synthetase (from Salmonella typhimurium) assembles into a 600 kDa dodecamer—twelve identical subunits arranged in two stacked hexameric rings. Each subunit hosts one active site, and all twelve operate simultaneously. The 12-fold symmetry is not decorative: it creates a precisely tuned set of allosteric communication channels that allow the enzyme to sense the cell's nitrogen status and adjust catalytic rate accordingly. It is one of the most symmetrical enzyme assemblies in all of biology." },
-      { "type": "figure-ref", "content": "See Fig. 1" },
-      { "type": "heading", "content": "Cumulative Feedback Inhibition: A Molecular Democracy" },
-      { "type": "text", "content": "GS is regulated by a remarkable mechanism called cumulative feedback inhibition. Eight different end-products of glutamine metabolism (AMP, CTP, glucosamine-6-phosphate, carbamyl phosphate, histidine, tryptophan, alanine, glycine) each partially inhibit GS by binding at overlapping sites on the active site. None inhibit completely on their own; the inhibition accumulates proportionally. If the cell is glutamine-replete in ALL eight downstream pathways simultaneously, GS is nearly completely shut down. This gives the cell a democratic vote on whether more glutamine synthesis is needed." },
-      { "type": "figure-ref", "content": "See Fig. 2" },
-      { "type": "heading", "content": "A Target in the Field and the Clinic" },
-      { "type": "text", "content": "Glufosinate (phosphinothricin), the active ingredient in Liberty herbicide and a component of the GMO herbicide-tolerance stack, is a structural analogue of glutamate that irreversibly inhibits GS in plants, causing them to die from ammonia toxicity. Methionine sulfoximine inhibits GS in the brain, producing seizures in animal models and illuminating the role of GS in neurotransmitter glutamate clearance by astrocytes." }
+      {
+        "type": "heading",
+        "content": "Twelve Engines Running on Nitrogen"
+      },
+      {
+        "type": "text",
+        "content": "The bacterial glutamine synthetase (from Salmonella typhimurium) assembles into a 600 kDa dodecamer—twelve identical subunits arranged in two stacked hexameric rings. Each subunit hosts one active site, and all twelve operate simultaneously. The 12-fold symmetry is not decorative: it creates a precisely tuned set of allosteric communication channels that allow the enzyme to sense the cell's nitrogen status and adjust catalytic rate accordingly. It is one of the most symmetrical enzyme assemblies in all of biology."
+      },
+      {
+        "type": "figure-ref",
+        "content": "See Fig. 1"
+      },
+      {
+        "type": "heading",
+        "content": "Cumulative Feedback Inhibition: A Molecular Democracy"
+      },
+      {
+        "type": "text",
+        "content": "GS is regulated by a remarkable mechanism called cumulative feedback inhibition. Eight different end-products of glutamine metabolism (AMP, CTP, glucosamine-6-phosphate, carbamyl phosphate, histidine, tryptophan, alanine, glycine) each partially inhibit GS by binding at overlapping sites on the active site. None inhibit completely on their own; the inhibition accumulates proportionally. If the cell is glutamine-replete in ALL eight downstream pathways simultaneously, GS is nearly completely shut down. This gives the cell a democratic vote on whether more glutamine synthesis is needed."
+      },
+      {
+        "type": "figure-ref",
+        "content": "See Fig. 2"
+      },
+      {
+        "type": "heading",
+        "content": "A Target in the Field and the Clinic"
+      },
+      {
+        "type": "text",
+        "content": "Glufosinate (phosphinothricin), the active ingredient in Liberty herbicide and a component of the GMO herbicide-tolerance stack, is a structural analogue of glutamate that irreversibly inhibits GS in plants, causing them to die from ammonia toxicity. Methionine sulfoximine inhibits GS in the brain, producing seizures in animal models and illuminating the role of GS in neurotransmitter glutamate clearance by astrocytes."
+      }
     ],
     "figure_plan": [
       {
@@ -555,7 +803,11 @@
     ],
     "discovery_year": 1993,
     "significance": "Glutamine synthetase is the entry point for all fixed nitrogen into the organic world—without it, life could not exist. Its structural symmetry and elaborate allosteric regulation make it a model system for understanding how cells integrate metabolic signals. Its inhibitors include major agricultural chemicals and potential neurological therapeutics.",
-    "related_molecules": ["5WE4", "1ATP", "4HHB"]
+    "related_molecules": [
+      "5WE4",
+      "1ATP",
+      "4HHB"
+    ]
   },
   {
     "id": "2POR",
@@ -563,14 +815,38 @@
     "title": "The Guarded Gate: How Porins Control What Enters Bacteria and Why Antibiotics Struggle to Follow",
     "abstract": "OmpF porin is a transmembrane beta-barrel channel in the outer membrane of Gram-negative bacteria that allows passive diffusion of small molecules including nutrients, metabolic waste products, and—critically—many antibiotics. The OmpF crystal structure, solved in 1992, revealed a homotrimeric assembly of 18-stranded beta-barrels that has become the paradigm for outer-membrane channel architecture. Understanding how antibiotics traverse—or fail to traverse—this gate is central to solving the antibiotic resistance crisis.",
     "sections": [
-      { "type": "heading", "content": "The Outer Membrane: A Wall With Selective Gates" },
-      { "type": "text", "content": "Gram-negative bacteria (E. coli, Salmonella, Pseudomonas, Acinetobacter) have two membranes. The inner membrane is a standard phospholipid bilayer; the outer membrane is asymmetric, with lipopolysaccharide on its outer leaflet. This outer membrane is largely impermeable to hydrophobic molecules, forcing antibiotics to enter through water-filled protein channels. OmpF is the major such channel in E. coli, a 108-kDa trimer forming three parallel pores." },
-      { "type": "figure-ref", "content": "See Fig. 1" },
-      { "type": "heading", "content": "A Beta-Barrel With an Electrostatic Selectivity Filter" },
-      { "type": "text", "content": "Each OmpF monomer is a 16-stranded antiparallel beta-barrel. The barrel lumen narrows to a constriction zone ('eyelet') roughly halfway through the membrane, formed by the L3 loop folding inward. At the eyelet, an array of basic residues on one side (Arg42, Arg82, Arg132) and acidic residues on the other (Asp113, Glu117) create a transverse electric field that drives electroosmotic flow and electrostatically discriminates between cations and anions. Molecules must be small enough (~600 Da) and have the right charge distribution to pass." },
-      { "type": "figure-ref", "content": "See Fig. 2" },
-      { "type": "heading", "content": "When Bacteria Close the Gate to Antibiotics" },
-      { "type": "text", "content": "OmpF down-regulation is one of the first and most common adaptations bacteria make when exposed to beta-lactam and fluoroquinolone antibiotics. Clinical isolates of carbapenem-resistant Klebsiella and E. coli routinely show porin loss combined with beta-lactamase expression—a double barrier against antibiotic entry and destruction. Understanding OmpF structure at atomic resolution is guiding the design of 'porin-penetrating' antibiotic scaffolds that combine high porin permeability with antibacterial potency." }
+      {
+        "type": "heading",
+        "content": "The Outer Membrane: A Wall With Selective Gates"
+      },
+      {
+        "type": "text",
+        "content": "Gram-negative bacteria (E. coli, Salmonella, Pseudomonas, Acinetobacter) have two membranes. The inner membrane is a standard phospholipid bilayer; the outer membrane is asymmetric, with lipopolysaccharide on its outer leaflet. This outer membrane is largely impermeable to hydrophobic molecules, forcing antibiotics to enter through water-filled protein channels. OmpF is the major such channel in E. coli, a 108-kDa trimer forming three parallel pores."
+      },
+      {
+        "type": "figure-ref",
+        "content": "See Fig. 1"
+      },
+      {
+        "type": "heading",
+        "content": "A Beta-Barrel With an Electrostatic Selectivity Filter"
+      },
+      {
+        "type": "text",
+        "content": "Each OmpF monomer is a 16-stranded antiparallel beta-barrel. The barrel lumen narrows to a constriction zone ('eyelet') roughly halfway through the membrane, formed by the L3 loop folding inward. At the eyelet, an array of basic residues on one side (Arg42, Arg82, Arg132) and acidic residues on the other (Asp113, Glu117) create a transverse electric field that drives electroosmotic flow and electrostatically discriminates between cations and anions. Molecules must be small enough (~600 Da) and have the right charge distribution to pass."
+      },
+      {
+        "type": "figure-ref",
+        "content": "See Fig. 2"
+      },
+      {
+        "type": "heading",
+        "content": "When Bacteria Close the Gate to Antibiotics"
+      },
+      {
+        "type": "text",
+        "content": "OmpF down-regulation is one of the first and most common adaptations bacteria make when exposed to beta-lactam and fluoroquinolone antibiotics. Clinical isolates of carbapenem-resistant Klebsiella and E. coli routinely show porin loss combined with beta-lactamase expression—a double barrier against antibiotic entry and destruction. Understanding OmpF structure at atomic resolution is guiding the design of 'porin-penetrating' antibiotic scaffolds that combine high porin permeability with antibacterial potency."
+      }
     ],
     "figure_plan": [
       {
@@ -615,7 +891,11 @@
     ],
     "discovery_year": 1992,
     "significance": "OmpF porin is the molecular gatehouse of Gram-negative bacteria and a critical bottleneck for antibiotic entry. Understanding its architecture and selectivity filter is essential to designing antibiotics capable of penetrating the outer membrane barrier—arguably the single greatest unsolved problem in antibiotic drug discovery for treating multidrug-resistant infections.",
-    "related_molecules": ["6LU7", "3NIR", "1JFF"]
+    "related_molecules": [
+      "6LU7",
+      "3NIR",
+      "1JFF"
+    ]
   },
   {
     "id": "1ATP",
@@ -623,14 +903,38 @@
     "title": "The Molecular Hinge: Adenylate Kinase and the Dance of Conformational Change",
     "abstract": "Adenylate kinase (AdK) catalyzes the interconversion of adenine nucleotides: ATP + AMP ⇌ 2 ADP. This seemingly simple reaction is fundamental to cellular energy homeostasis, maintaining the ATP/AMP ratio that governs energy-sensing pathways. The crystal structure of AdK with the ATP analogue AP5A bound captures the enzyme in its fully closed, catalytically competent conformation—a snapshot that has become one of the most studied examples of large-scale conformational change in enzymology and a benchmark for molecular dynamics simulations.",
     "sections": [
-      { "type": "heading", "content": "A Hinge That Moves 30 Angstroms" },
-      { "type": "text", "content": "Adenylate kinase undergoes one of the most dramatic conformational changes of any enzyme: its LID domain (residues 122–159 in E. coli AdK) clamps down over the bound substrates, closing the active site by ~30 Å and burying ~90% of the substrate surface from solvent. This open-to-closed transition, occurring on the microsecond-to-millisecond timescale, was first visualized by comparing crystal structures of the apo (open) and AP5A-bound (closed) forms. The difference is so large that the two conformations were initially thought to represent different proteins." },
-      { "type": "figure-ref", "content": "See Fig. 1" },
-      { "type": "heading", "content": "Sensing the Energetic State of the Cell" },
-      { "type": "text", "content": "The reaction AdK catalyzes—ATP + AMP ⇌ 2 ADP—is thermodynamically near-equilibrium under cellular conditions. This means AdK is exquisitely sensitive to the ATP:ADP:AMP ratio. When ATP is abundant and AMP accumulates, AdK converts them to two ADPs, which mitochondria can efficiently re-phosphorylate. When ATP is scarce, rising AMP signals activate AMPK (AMP-activated protein kinase), the master energy sensor of eukaryotic cells. AdK thus sits at the junction between energy metabolism and energy sensing." },
-      { "type": "figure-ref", "content": "See Fig. 2" },
-      { "type": "heading", "content": "A Model System for the Physics of Enzyme Motion" },
-      { "type": "text", "content": "Because its conformational change is so large and well-characterized, AdK is the most-simulated enzyme in computational biophysics. It has been used to validate force fields, coarse-grained models, transition-path sampling algorithms, and single-molecule FRET experimental designs. The energy landscape of AdK closure—multiple partially-closed intermediate states revealed by NMR and smFRET—illustrates the general principle that enzyme conformational change is not a simple two-state switch but a rugged energy landscape." }
+      {
+        "type": "heading",
+        "content": "A Hinge That Moves 30 Angstroms"
+      },
+      {
+        "type": "text",
+        "content": "Adenylate kinase undergoes one of the most dramatic conformational changes of any enzyme: its LID domain (residues 122–159 in E. coli AdK) clamps down over the bound substrates, closing the active site by ~30 Å and burying ~90% of the substrate surface from solvent. This open-to-closed transition, occurring on the microsecond-to-millisecond timescale, was first visualized by comparing crystal structures of the apo (open) and AP5A-bound (closed) forms. The difference is so large that the two conformations were initially thought to represent different proteins."
+      },
+      {
+        "type": "figure-ref",
+        "content": "See Fig. 1"
+      },
+      {
+        "type": "heading",
+        "content": "Sensing the Energetic State of the Cell"
+      },
+      {
+        "type": "text",
+        "content": "The reaction AdK catalyzes—ATP + AMP ⇌ 2 ADP—is thermodynamically near-equilibrium under cellular conditions. This means AdK is exquisitely sensitive to the ATP:ADP:AMP ratio. When ATP is abundant and AMP accumulates, AdK converts them to two ADPs, which mitochondria can efficiently re-phosphorylate. When ATP is scarce, rising AMP signals activate AMPK (AMP-activated protein kinase), the master energy sensor of eukaryotic cells. AdK thus sits at the junction between energy metabolism and energy sensing."
+      },
+      {
+        "type": "figure-ref",
+        "content": "See Fig. 2"
+      },
+      {
+        "type": "heading",
+        "content": "A Model System for the Physics of Enzyme Motion"
+      },
+      {
+        "type": "text",
+        "content": "Because its conformational change is so large and well-characterized, AdK is the most-simulated enzyme in computational biophysics. It has been used to validate force fields, coarse-grained models, transition-path sampling algorithms, and single-molecule FRET experimental designs. The energy landscape of AdK closure—multiple partially-closed intermediate states revealed by NMR and smFRET—illustrates the general principle that enzyme conformational change is not a simple two-state switch but a rugged energy landscape."
+      }
     ],
     "figure_plan": [
       {
@@ -675,7 +979,11 @@
     ],
     "discovery_year": 1996,
     "significance": "Adenylate kinase is the molecular thermostat of cellular energy metabolism. Its dramatic conformational change made it the gold-standard model system for understanding how enzymes move during catalysis—insights that inform the design of allosteric drugs that trap enzymes in non-functional conformational states. Its connection to AMPK signaling links it to diabetes, aging, and cancer metabolism.",
-    "related_molecules": ["5WE4", "1JFF", "4HHB"]
+    "related_molecules": [
+      "5WE4",
+      "1JFF",
+      "4HHB"
+    ]
   },
   {
     "id": "3NIR",
@@ -683,14 +991,38 @@
     "title": "Molecular Scissors for the Code of Life: The Crystal Structure That Launched the Gene Editing Revolution",
     "abstract": "CRISPR-Cas9 is a bacterial immune protein that has been repurposed as the most powerful and precise gene-editing tool in the history of molecular biology. Its crystal structure, solved by Hiroshi Nishimasu and colleagues in 2014, revealed how a single guide RNA directs the Cas9 protein to any location in a genome via complementary base pairing and then activates two nuclease domains to cut both strands of DNA. The 2020 Nobel Prize in Chemistry, awarded to Jennifer Doudna and Emmanuelle Charpentier, recognized CRISPR-Cas9 as a transformative technology shaping medicine, agriculture, and basic science.",
     "sections": [
-      { "type": "heading", "content": "From Bacterial Immunity to the Gene Editing Revolution" },
-      { "type": "text", "content": "CRISPR (Clustered Regularly Interspaced Short Palindromic Repeats) arrays and their associated Cas proteins constitute an adaptive immune system in bacteria and archaea. When a bacterium survives a phage attack, it incorporates a snippet of the phage genome into its own CRISPR array. On re-infection, this sequence is transcribed into a guide RNA that directs Cas9 to destroy the matching phage DNA. In 2012, Doudna and Charpentier showed this system could be reprogrammed with synthetic guide RNAs to cut any DNA sequence, launching the CRISPR-Cas9 editing era." },
-      { "type": "figure-ref", "content": "See Fig. 1" },
-      { "type": "heading", "content": "A Bilobed Clamp That Reads RNA-DNA Duplexes" },
-      { "type": "text", "content": "The Cas9–sgRNA–DNA complex reveals a bilobed protein architecture: a recognition lobe (REC) that grips the RNA-DNA heteroduplex, and a nuclease lobe (NUC) that houses the HNH and RuvC endonuclease domains responsible for cleaving the two DNA strands. The guide RNA forms a 20-base-pair heteroduplex with the target DNA strand, and Cas9 validates complementarity by checking each base pair in a 3'-to-5' direction. A critical PAM sequence (5'-NGG-3') on the non-target strand is recognized by the PAM-interacting (PI) domain, acting as a molecular latch that licenses DNA unwinding." },
-      { "type": "figure-ref", "content": "See Fig. 2" },
-      { "type": "heading", "content": "From Structure to Medicine" },
-      { "type": "text", "content": "The crystal structure immediately enabled rational engineering of Cas9: high-fidelity variants (eSpCas9, HiFi Cas9) with reduced off-target activity; base editors (CBE, ABE) that convert one nucleotide to another without double-strand breaks; prime editors that rewrite arbitrary sequences; and Cas9 orthologs and variants with altered PAM requirements or smaller size for AAV delivery. Casgevy (2023), a CRISPR-based cure for sickle cell disease and beta-thalassemia, was the first CRISPR medicine approved by FDA—using the same Cas9 whose structure is in 3NIR." }
+      {
+        "type": "heading",
+        "content": "From Bacterial Immunity to the Gene Editing Revolution"
+      },
+      {
+        "type": "text",
+        "content": "CRISPR (Clustered Regularly Interspaced Short Palindromic Repeats) arrays and their associated Cas proteins constitute an adaptive immune system in bacteria and archaea. When a bacterium survives a phage attack, it incorporates a snippet of the phage genome into its own CRISPR array. On re-infection, this sequence is transcribed into a guide RNA that directs Cas9 to destroy the matching phage DNA. In 2012, Doudna and Charpentier showed this system could be reprogrammed with synthetic guide RNAs to cut any DNA sequence, launching the CRISPR-Cas9 editing era."
+      },
+      {
+        "type": "figure-ref",
+        "content": "See Fig. 1"
+      },
+      {
+        "type": "heading",
+        "content": "A Bilobed Clamp That Reads RNA-DNA Duplexes"
+      },
+      {
+        "type": "text",
+        "content": "The Cas9–sgRNA–DNA complex reveals a bilobed protein architecture: a recognition lobe (REC) that grips the RNA-DNA heteroduplex, and a nuclease lobe (NUC) that houses the HNH and RuvC endonuclease domains responsible for cleaving the two DNA strands. The guide RNA forms a 20-base-pair heteroduplex with the target DNA strand, and Cas9 validates complementarity by checking each base pair in a 3'-to-5' direction. A critical PAM sequence (5'-NGG-3') on the non-target strand is recognized by the PAM-interacting (PI) domain, acting as a molecular latch that licenses DNA unwinding."
+      },
+      {
+        "type": "figure-ref",
+        "content": "See Fig. 2"
+      },
+      {
+        "type": "heading",
+        "content": "From Structure to Medicine"
+      },
+      {
+        "type": "text",
+        "content": "The crystal structure immediately enabled rational engineering of Cas9: high-fidelity variants (eSpCas9, HiFi Cas9) with reduced off-target activity; base editors (CBE, ABE) that convert one nucleotide to another without double-strand breaks; prime editors that rewrite arbitrary sequences; and Cas9 orthologs and variants with altered PAM requirements or smaller size for AAV delivery. Casgevy (2023), a CRISPR-based cure for sickle cell disease and beta-thalassemia, was the first CRISPR medicine approved by FDA—using the same Cas9 whose structure is in 3NIR."
+      }
     ],
     "figure_plan": [
       {
@@ -735,6 +1067,2169 @@
     ],
     "discovery_year": 2014,
     "significance": "The CRISPR-Cas9 crystal structure transformed an understanding of bacterial immunity into the most powerful gene-editing technology in history. It has accelerated the development of cures for genetic diseases, created new agricultural crop varieties, enabled functional genomics screens across entire genomes, and launched a new era of molecular medicine—all within a decade of the structure's publication.",
-    "related_molecules": ["1BNA", "3PQR", "6LU7"]
+    "related_molecules": [
+      "1BNA",
+      "3PQR",
+      "6LU7"
+    ]
+  },
+  {
+    "id": "1UBQ",
+    "name": "Ubiquitin",
+    "title": "The Cell's Death Tag: Ubiquitin and the Proteasome Degradation Signal",
+    "abstract": "Ubiquitin is a 76-residue protein found in virtually every eukaryotic cell, serving as the molecular tag that marks proteins for destruction by the 26S proteasome. Its structure, solved by Vijay-Kumar and colleagues in 1987 at 1.8 Å, revealed an exceptionally stable beta-grasp fold unchanged from yeast to humans. The discovery of ubiquitin-mediated proteolysis earned Aaron Ciechanover, Avram Hershko, and Irwin Rose the 2004 Nobel Prize in Chemistry.",
+    "sections": [
+      {
+        "type": "heading",
+        "content": "A Universal Death Sentence Written in Protein"
+      },
+      {
+        "type": "text",
+        "content": "In 1987, S. Vijay-Kumar, Charles Bugg, and William Cook solved the crystal structure of bovine ubiquitin at 1.8 Å resolution, revealing a compact beta-grasp fold comprising a five-stranded beta-sheet wrapped around a single alpha-helix. The structure is so ancient and essential that human and yeast ubiquitin differ by only three conservative amino acid substitutions across 76 residues."
+      },
+      {
+        "type": "figure-ref",
+        "content": "See Fig. 1"
+      },
+      {
+        "type": "heading",
+        "content": "How Ubiquitin Tags Its Targets"
+      },
+      {
+        "type": "text",
+        "content": "Ubiquitin is attached to substrate proteins via an isopeptide bond between its C-terminal Gly76 and a lysine side chain on the target. An enzymatic cascade—E1 activating, E2 conjugating, E3 ligase—builds polyubiquitin chains. Lys48-linked chains direct substrates to the proteasome; Lys63-linked chains regulate DNA repair and endocytosis."
+      },
+      {
+        "type": "figure-ref",
+        "content": "See Fig. 2"
+      },
+      {
+        "type": "heading",
+        "content": "Nobel Prize and Therapeutic Implications"
+      },
+      {
+        "type": "text",
+        "content": "The 2004 Nobel Prize in Chemistry recognized ubiquitin-mediated proteolysis as the master controller of cell division, DNA repair, and immune signaling. The proteasome inhibitor bortezomib, which exploits this pathway, became the first approved drug for multiple myeloma in 2003."
+      }
+    ],
+    "figure_plan": [
+      {
+        "figure_number": 1,
+        "layout": "1x2",
+        "panels": [
+          {
+            "pdb_id": "1UBQ",
+            "style": "cartoon",
+            "color_scheme": "secondary_structure",
+            "caption": "Ribbon diagram of ubiquitin showing the five-stranded beta-sheet (yellow) and central alpha-helix (red). The C-terminal tail (Gly76) that forms isopeptide bonds with substrates is at lower right."
+          },
+          {
+            "pdb_id": "1UBQ",
+            "style": "surface",
+            "color_scheme": "electrostatic",
+            "caption": "Electrostatic surface of ubiquitin. The hydrophobic Ile44 patch (Leu8, Ile44, Val70) engages ubiquitin-binding domains of effector proteins."
+          }
+        ],
+        "overall_caption": "Fig. 1: Ubiquitin (1UBQ) at 1.8 Å. The beta-grasp fold is among the most stable protein scaffolds known, melting above 90°C."
+      },
+      {
+        "figure_number": 2,
+        "layout": "1x1",
+        "panels": [
+          {
+            "pdb_id": "1UBQ",
+            "style": "sticks",
+            "color_scheme": "element",
+            "caption": "The Ile44 hydrophobic patch (Leu8, Ile44, His68, Val70) shown as sticks—primary recognition site for UBA, UIM, and UEV ubiquitin-binding domains."
+          }
+        ],
+        "overall_caption": "Fig. 2: The Ile44 patch of ubiquitin—contacted by dozens of distinct ubiquitin-binding domain families."
+      }
+    ],
+    "key_facts": [
+      "Ubiquitin is 76 amino acids; human and yeast sequences differ at only three positions.",
+      "Lys48-linked polyubiquitin chains target proteins to the 26S proteasome; Lys63 chains regulate signaling.",
+      "The isopeptide bond between Gly76 and substrate lysines is formed by the E1-E2-E3 enzymatic cascade.",
+      "Vijay-Kumar, Bugg, and Cook solved the 1.8 Å structure in 1987, published in the Journal of Molecular Biology.",
+      "The 2004 Nobel Prize in Chemistry was awarded to Ciechanover, Hershko, and Rose for ubiquitin-mediated proteolysis.",
+      "Bortezomib (Velcade), approved 2003, is the first proteasome inhibitor and exploits the ubiquitin-proteasome system for multiple myeloma.",
+      "Over 600 E3 ubiquitin ligases exist in the human genome."
+    ],
+    "discovery_year": 1987,
+    "significance": "Ubiquitin's structure revealed the molecular basis of targeted protein degradation, controlling virtually every aspect of cell biology. The ubiquitin-proteasome system is now a validated drug target with bortezomib as proof of concept, and dozens of E3 ligase-targeting therapies are in clinical development.",
+    "related_molecules": [
+      "5GJR",
+      "1ATP",
+      "3NIR"
+    ]
+  },
+  {
+    "id": "1LYZ",
+    "name": "Lysozyme",
+    "title": "The Enzyme That Cracked Open Structural Biology: Hen Egg-White Lysozyme",
+    "abstract": "Hen egg-white lysozyme was the second protein and the first enzyme to have its three-dimensional structure determined by X-ray crystallography. David Phillips and colleagues at the Royal Institution solved the structure in 1965, directly revealing the catalytic mechanism of an enzyme for the first time in history.",
+    "sections": [
+      {
+        "type": "heading",
+        "content": "The First Enzyme in Three Dimensions"
+      },
+      {
+        "type": "text",
+        "content": "In 1965, David C. Phillips and his team at the Royal Institution published the crystal structure of hen egg-white lysozyme at 2.0 Å resolution in Nature. Lysozyme is a 129-residue glycoside hydrolase that cleaves the peptidoglycan cell walls of bacteria, explaining the natural antimicrobial activity of egg white."
+      },
+      {
+        "type": "figure-ref",
+        "content": "See Fig. 1"
+      },
+      {
+        "type": "heading",
+        "content": "A Cleft That Revealed Catalysis"
+      },
+      {
+        "type": "text",
+        "content": "The structure exposed a deep substrate-binding cleft accommodating six sugar residues of bacterial peptidoglycan. Two catalytic residues, Glu35 and Asp52, sit on opposite sides of the cleft. Phillips proposed substrate distortion—the D-ring strained into a half-chair conformation—the first mechanistic explanation of enzyme catalysis grounded in atomic structure."
+      },
+      {
+        "type": "figure-ref",
+        "content": "See Fig. 2"
+      },
+      {
+        "type": "heading",
+        "content": "Legacy in Drug Design and Industry"
+      },
+      {
+        "type": "text",
+        "content": "Lysozyme inhibitor design from the Phillips structure became a paradigm for structure-based drug discovery. The enzyme is a commercial food preservative, used in cheese manufacturing, and investigated against antibiotic-resistant bacteria. Familial lysozyme amyloidosis arises from destabilizing mutations that cause fibril formation."
+      }
+    ],
+    "figure_plan": [
+      {
+        "figure_number": 1,
+        "layout": "1x2",
+        "panels": [
+          {
+            "pdb_id": "1LYZ",
+            "style": "cartoon",
+            "color_scheme": "secondary_structure",
+            "caption": "Ribbon diagram of lysozyme showing the alpha-helical domain (red) and beta-sheet domain (yellow). The deep substrate-binding cleft between the two domains is clearly visible."
+          },
+          {
+            "pdb_id": "1LYZ",
+            "style": "surface",
+            "color_scheme": "hydrophobicity",
+            "caption": "Solvent-accessible surface of lysozyme with the substrate-binding groove highlighted. Six sugar-binding subsites (A-F) are arrayed along the cleft."
+          }
+        ],
+        "overall_caption": "Fig. 1: Hen egg-white lysozyme (1LYZ) at 2.0 Å—the first enzyme structure, revealing the structural basis of enzyme specificity."
+      },
+      {
+        "figure_number": 2,
+        "layout": "1x1",
+        "panels": [
+          {
+            "pdb_id": "1LYZ",
+            "style": "sticks",
+            "color_scheme": "element",
+            "caption": "Active site of lysozyme showing catalytic residues Glu35 and Asp52 (orange sticks) flanking the sugar-binding cleft. Their spatial separation supports the acid-base catalytic mechanism."
+          }
+        ],
+        "overall_caption": "Fig. 2: Lysozyme active site—Glu35 acts as general acid, Asp52 stabilizes the oxocarbenium intermediate. First enzyme mechanism revealed by crystallography."
+      }
+    ],
+    "key_facts": [
+      "Lysozyme was solved at 2.0 Å by David Phillips at the Royal Institution in 1965—the first enzyme structure.",
+      "It is a 129-residue glycoside hydrolase cleaving the beta-1,4 glycosidic bond in bacterial peptidoglycan.",
+      "Catalytic residues Glu35 and Asp52 were identified directly from the structure.",
+      "Lysozyme is found in tears, saliva, mucus, and egg white as a first-line antimicrobial defense.",
+      "Familial lysozyme amyloidosis is a rare fatal protein aggregation disease caused by lysozyme mutations.",
+      "Over 50,000 publications and hundreds of mutant structures make it the most studied enzyme in biochemistry."
+    ],
+    "discovery_year": 1965,
+    "significance": "Lysozyme's structure provided the first atomic-level explanation of enzyme catalysis, establishing that protein conformation directly dictates biochemical function—the insight that underpins all of modern structure-based drug discovery.",
+    "related_molecules": [
+      "1MBN",
+      "1CRN",
+      "1AON"
+    ]
+  },
+  {
+    "id": "1MBN",
+    "name": "Myoglobin",
+    "title": "The First Protein Structure: Sperm Whale Myoglobin and the Birth of Structural Biology",
+    "abstract": "Sperm whale myoglobin holds the singular distinction of being the first protein to have its three-dimensional structure determined by X-ray crystallography. John Kendrew and colleagues solved the structure at 6 Å in 1958 and at 2.0 Å in 1960, work that earned Kendrew (alongside Max Perutz for hemoglobin) the 1962 Nobel Prize in Chemistry.",
+    "sections": [
+      {
+        "type": "heading",
+        "content": "First Light on a Protein"
+      },
+      {
+        "type": "text",
+        "content": "In 1958, John C. Kendrew, G. Bodo, H. M. Dintzis, R. G. Parrish, H. Wyckoff, and D. C. Phillips published a 6 Å resolution structure of sperm whale myoglobin in Nature, showing for the first time the overall topology of a protein. By 1960 they had improved resolution to 2.0 Å, revealing all 153 amino acids, the heme group, and individual side chains. The work required two tons of sperm whale muscle."
+      },
+      {
+        "type": "figure-ref",
+        "content": "See Fig. 1"
+      },
+      {
+        "type": "heading",
+        "content": "Eight Helices and a Pocket for Iron"
+      },
+      {
+        "type": "text",
+        "content": "Myoglobin comprises eight alpha-helices (A through H) folding into a compact globin fold, creating a hydrophobic pocket that cradles the iron-containing heme group. The proximal histidine (His93) coordinates the iron; the distal histidine (His64) stabilizes bound oxygen. This geometry prevents iron oxidation and allows reversible oxygen binding for muscle oxygen storage."
+      },
+      {
+        "type": "figure-ref",
+        "content": "See Fig. 2"
+      },
+      {
+        "type": "heading",
+        "content": "Nobel Prize and the Globin Superfamily"
+      },
+      {
+        "type": "text",
+        "content": "The 1962 Nobel Prize in Chemistry was awarded jointly to John Kendrew (myoglobin) and Max Perutz (hemoglobin). The globin fold Kendrew revealed is one of the most widespread in nature, present in plants (leghemoglobin), invertebrates, and even neurons (neuroglobin)."
+      }
+    ],
+    "figure_plan": [
+      {
+        "figure_number": 1,
+        "layout": "1x2",
+        "panels": [
+          {
+            "pdb_id": "1MBN",
+            "style": "cartoon",
+            "color_scheme": "secondary_structure",
+            "caption": "Ribbon diagram of sperm whale myoglobin showing all eight alpha-helices (A-H, rainbow) and the heme group (sticks) in the hydrophobic pocket."
+          },
+          {
+            "pdb_id": "1MBN",
+            "style": "surface",
+            "color_scheme": "hydrophobicity",
+            "caption": "Molecular surface colored by hydrophobicity. The heme-binding pocket is a deep hydrophobic depression isolating the iron center from bulk solvent."
+          }
+        ],
+        "overall_caption": "Fig. 1: Sperm whale myoglobin (1MBN)—the first protein structure. Eight helices create the globin fold reinvented by evolution hundreds of times."
+      },
+      {
+        "figure_number": 2,
+        "layout": "1x1",
+        "panels": [
+          {
+            "pdb_id": "1MBN",
+            "style": "sticks",
+            "color_scheme": "element",
+            "caption": "Active site showing heme iron (orange sphere), proximal His93, distal His64, and oxygen-binding site—the first active site ever visualized in a protein."
+          }
+        ],
+        "overall_caption": "Fig. 2: The heme pocket of myoglobin. Proximal His93 and distal His64 bracket the iron center, tuning O2 affinity for muscle oxygen storage."
+      }
+    ],
+    "key_facts": [
+      "Myoglobin was the first protein structure ever solved—published by Kendrew et al. in Nature in 1958 at 6 Å, extended to 2.0 Å in 1960.",
+      "John Kendrew shared the 1962 Nobel Prize in Chemistry with Max Perutz.",
+      "The 153-residue protein contains a single heme group coordinated by His93 (proximal) and stabilized by His64 (distal).",
+      "Myoglobin has a hyperbolic O2 saturation curve (not sigmoidal), designed for storage not transport.",
+      "Elevated blood myoglobin is a biomarker for myocardial infarction and rhabdomyolysis.",
+      "The globin fold has been found in over 1,500 distinct proteins across all kingdoms of life.",
+      "Two tons of sperm whale myoglobin were processed to obtain crystals for the original structure determination."
+    ],
+    "discovery_year": 1958,
+    "significance": "Myoglobin's structure was the proof of concept that proteins have precise, reproducible three-dimensional structures that directly explain their functions—the founding insight of structural biology and ultimately of structure-based drug design.",
+    "related_molecules": [
+      "4HHB",
+      "1LYZ",
+      "1CRN"
+    ]
+  },
+  {
+    "id": "1HHP",
+    "name": "HIV-1 Protease",
+    "title": "The Enzyme That Launched Structure-Based Drug Design: HIV-1 Protease",
+    "abstract": "HIV-1 protease is the aspartyl protease that cleaves the viral Gag-Pol polyprotein into functional components, an essential step in viral maturation. Manuel Navia and colleagues solved the 2.8 Å crystal structure in 1989, triggering an unprecedented effort to design inhibitors that fit precisely into the active site. Within a decade, protease inhibitors transformed HIV from a death sentence into a manageable chronic condition.",
+    "sections": [
+      {
+        "type": "heading",
+        "content": "The Enzyme HIV Cannot Live Without"
+      },
+      {
+        "type": "text",
+        "content": "In 1989, Manuel A. Navia, P. M. D. Fitzgerald, B. M. McKeever, and colleagues at Merck Research Laboratories published the 2.8 Å crystal structure of HIV-1 protease in Nature. The enzyme is a homodimer of two 99-residue subunits forming a symmetric active site with two catalytic aspartates (Asp25 and Asp25'). Flexible flaps (residues 45-55) open to admit substrate and close during catalysis."
+      },
+      {
+        "type": "figure-ref",
+        "content": "See Fig. 1"
+      },
+      {
+        "type": "heading",
+        "content": "Structure-Based Drug Design in Action"
+      },
+      {
+        "type": "text",
+        "content": "The symmetric, well-defined active site made HIV-1 protease an ideal structure-based drug design target. Saquinavir, approved by the FDA in 1995 as the first protease inhibitor, was designed using the 3D structure. Nine additional protease inhibitors followed, including ritonavir, indinavir, and lopinavir, transforming HIV therapy."
+      },
+      {
+        "type": "figure-ref",
+        "content": "See Fig. 2"
+      },
+      {
+        "type": "heading",
+        "content": "Drug Resistance and the Structural Response"
+      },
+      {
+        "type": "text",
+        "content": "HIV's high mutation rate generates protease variants with reduced inhibitor binding. Structural analysis of resistant mutants (V82A, I84V, L90M) drove iterative drug redesign. Darunavir was designed to form backbone hydrogen bonds that resistance mutations cannot easily disrupt."
+      }
+    ],
+    "figure_plan": [
+      {
+        "figure_number": 1,
+        "layout": "1x2",
+        "panels": [
+          {
+            "pdb_id": "1HHP",
+            "style": "cartoon",
+            "color_scheme": "chain",
+            "caption": "Ribbon diagram of HIV-1 protease homodimer. Two identical subunits (cyan and magenta) form a symmetric active site. Flap regions (residues 45-55) are shown in open conformation."
+          },
+          {
+            "pdb_id": "1HHP",
+            "style": "surface",
+            "color_scheme": "electrostatic",
+            "caption": "Electrostatic surface showing the electronegative active site cleft flanked by mobile flap loops. Inhibitors occupy this cavity, blocking substrate access."
+          }
+        ],
+        "overall_caption": "Fig. 1: HIV-1 protease (1HHP) at 2.8 Å—the first major target of structure-based drug design."
+      },
+      {
+        "figure_number": 2,
+        "layout": "1x1",
+        "panels": [
+          {
+            "pdb_id": "1HHP",
+            "style": "sticks",
+            "color_scheme": "element",
+            "caption": "Active site showing the two catalytic Asp25 residues (one per monomer) coordinating a catalytic water molecule that attacks the substrate peptide bond."
+          }
+        ],
+        "overall_caption": "Fig. 2: HIV-1 protease catalytic dyad—the transition-state geometry mimicked by all clinical protease inhibitors."
+      }
+    ],
+    "key_facts": [
+      "HIV-1 protease is a 99-residue homodimeric aspartyl protease; inactive monomers cannot process the Gag-Pol polyprotein.",
+      "The 2.8 Å structure was solved by Navia et al. at Merck and published in Nature in 1989.",
+      "Catalytic Asp25 and Asp25' (one per monomer) coordinate a water molecule for nucleophilic attack on peptide bonds.",
+      "Saquinavir (1995) was the first protease inhibitor approved and the first drug developed primarily via structure-based design.",
+      "Ten HIV protease inhibitors have been approved; cART incorporating them reduced AIDS mortality by over 70%.",
+      "Common resistance mutations V82A, I84V, and L90M have been structurally characterized, driving next-generation inhibitor design.",
+      "The HIV protease-inhibitor system is the canonical case study in every medicinal chemistry course worldwide."
+    ],
+    "discovery_year": 1989,
+    "significance": "HIV-1 protease and its inhibitors proved that knowing a target's atomic structure enables de novo drug design. This transformed pharmaceutical industry practice and converted HIV/AIDS from a universally fatal disease to a manageable chronic condition for millions of patients.",
+    "related_molecules": [
+      "1M17",
+      "5C4X",
+      "2RH1"
+    ]
+  },
+  {
+    "id": "1M17",
+    "name": "EGFR Kinase",
+    "title": "The Lung Cancer Switch: EGFR Kinase and the Targeted Therapy Revolution",
+    "abstract": "The epidermal growth factor receptor (EGFR) is a receptor tyrosine kinase whose dysregulation drives non-small-cell lung cancer. Jennifer Stamos and colleagues solved the kinase domain structure at 2.6 Å in 2002, enabling the rational refinement of erlotinib and gefitinib. EGFR became the paradigm for oncogene-targeted therapy and personalized cancer medicine.",
+    "sections": [
+      {
+        "type": "heading",
+        "content": "A Growth Factor Receptor Gone Rogue"
+      },
+      {
+        "type": "text",
+        "content": "In 2002, Jennifer Stamos, Mark X. Sliwkowski, and Charles Eigenbrot at Genentech solved the EGFR kinase domain at 2.6 Å and published it in the Journal of Biological Chemistry. EGFR mutations—particularly exon 19 deletions and L858R—constitutively activate EGFR and are found in 10-15% of lung adenocarcinomas in Western populations and 30-40% in East Asian populations."
+      },
+      {
+        "type": "figure-ref",
+        "content": "See Fig. 1"
+      },
+      {
+        "type": "heading",
+        "content": "The ATP Pocket as Drug Target"
+      },
+      {
+        "type": "text",
+        "content": "The Stamos structure revealed the bilobal kinase fold with the ATP-binding cleft between the N-lobe and C-lobe. Erlotinib and gefitinib bind competitively with ATP, forming a key hydrogen bond with hinge residue Met769. The T790M gatekeeper mutation is the most common resistance mutation; osimertinib, a third-generation covalent inhibitor, was designed to accommodate it."
+      },
+      {
+        "type": "figure-ref",
+        "content": "See Fig. 2"
+      },
+      {
+        "type": "heading",
+        "content": "Personalized Medicine and Resistance"
+      },
+      {
+        "type": "text",
+        "content": "EGFR-mutant lung cancer is now treated according to specific mutation identified by tumor genotyping. Three generations of inhibitors (erlotinib/gefitinib, afatinib, osimertinib) have been developed in direct response to structural analysis of resistance mechanisms. Osimertinib achieves >80% response rates in T790M-positive patients."
+      }
+    ],
+    "figure_plan": [
+      {
+        "figure_number": 1,
+        "layout": "1x2",
+        "panels": [
+          {
+            "pdb_id": "1M17",
+            "style": "cartoon",
+            "color_scheme": "secondary_structure",
+            "caption": "Ribbon diagram of EGFR kinase domain showing N-lobe (blue beta-strands) and C-lobe (red alpha-helices). Activation loop (orange) and ATP-binding cleft are visible."
+          },
+          {
+            "pdb_id": "1M17",
+            "style": "surface",
+            "color_scheme": "hydrophobicity",
+            "caption": "Molecular surface of EGFR kinase with the ATP-binding pocket highlighted. Erlotinib and gefitinib occupy this cleft."
+          }
+        ],
+        "overall_caption": "Fig. 1: EGFR kinase domain (1M17) at 2.6 Å—the bilobal kinase fold conserved across all 518 human kinases."
+      },
+      {
+        "figure_number": 2,
+        "layout": "1x1",
+        "panels": [
+          {
+            "pdb_id": "1M17",
+            "style": "sticks",
+            "color_scheme": "element",
+            "caption": "Active site showing DFG motif, catalytic Asp855, and hinge Met769 that hydrogen-bonds to ATP and inhibitors. T790M gatekeeper position is marked."
+          }
+        ],
+        "overall_caption": "Fig. 2: EGFR kinase active site—hinge hydrogen bond geometry exploited by all approved EGFR inhibitors."
+      }
+    ],
+    "key_facts": [
+      "EGFR kinase domain solved at 2.6 Å by Stamos, Sliwkowski, and Eigenbrot at Genentech, published in J. Biol. Chem. in 2002.",
+      "EGFR exon 19 deletions and L858R are driver oncogene alterations in 10-15% of Western and 30-40% of East Asian lung adenocarcinomas.",
+      "Erlotinib and gefitinib bind the ATP pocket via a hydrogen bond to hinge Met769.",
+      "T790M gatekeeper mutation is the primary mechanism of acquired resistance to first- and second-generation EGFR inhibitors.",
+      "Osimertinib, a covalent third-generation inhibitor, achieves >80% response rate in T790M-positive tumors.",
+      "EGFR is overexpressed or mutated in lung, colorectal, head and neck, and pancreatic cancers.",
+      "EGFR therapy is the founding example of personalized oncology: match mutation to drug."
+    ],
+    "discovery_year": 2002,
+    "significance": "EGFR kinase proved the concept of oncogene-targeted therapy: identify the driving mutation, solve the structure, design an inhibitor, treat only patients with that mutation. This framework has been applied to over 30 additional kinase targets and transformed lung cancer from uniformly fatal to a condition where many patients achieve years of disease control.",
+    "related_molecules": [
+      "1HHP",
+      "1ATP",
+      "5C4X"
+    ]
+  },
+  {
+    "id": "2HI4",
+    "name": "CYP3A4",
+    "title": "The Great Metabolizer: CYP3A4 and the Chemistry of Drug Fate",
+    "abstract": "Cytochrome P450 3A4 is the single enzyme responsible for metabolizing approximately 50% of all clinically used drugs. Jed Yano and colleagues solved the human CYP3A4 structure at 2.05 Å in 2004, finally explaining how one active site could accommodate substrates ranging from tiny steroids to large macrolide antibiotics.",
+    "sections": [
+      {
+        "type": "heading",
+        "content": "One Enzyme to Metabolize Them All"
+      },
+      {
+        "type": "text",
+        "content": "In 2004, Jed K. Yano, Manika Wester, Gian Schoch, Kerry J. Griffin, C. David Stout, and Eric F. Johnson solved the crystal structure of human CYP3A4 at 2.05 Å and published it in the Journal of Biological Chemistry. CYP3A4 is a microsomal cytochrome P450 that uses a heme iron center and molecular oxygen to oxidize an extraordinary range of substrates—steroids, macrolides, benzodiazepines, statins, immunosuppressants."
+      },
+      {
+        "type": "figure-ref",
+        "content": "See Fig. 1"
+      },
+      {
+        "type": "heading",
+        "content": "A Cavernous Active Site"
+      },
+      {
+        "type": "text",
+        "content": "The CYP3A4 active site volume (~1,385 cubic angstroms) is among the largest of any human drug-metabolizing enzyme. Flexible peripheral helices (F, F', G', and G) can expand to accommodate macrolide antibiotics like erythromycin (MW 734 Da) or contract around smaller steroids. This plasticity is the structural explanation for CYP3A4's broad substrate promiscuity."
+      },
+      {
+        "type": "figure-ref",
+        "content": "See Fig. 2"
+      },
+      {
+        "type": "heading",
+        "content": "Drug Interactions and Clinical Consequences"
+      },
+      {
+        "type": "text",
+        "content": "CYP3A4 inhibitors (grapefruit furanocoumarins, ketoconazole, ritonavir) can raise co-administered drug plasma levels to toxic concentrations. Inducers (rifampicin, carbamazepine) reduce drug levels to subtherapeutic concentrations. Over 200 clinically significant CYP3A4 drug-drug interactions are listed in the FDA's database."
+      }
+    ],
+    "figure_plan": [
+      {
+        "figure_number": 1,
+        "layout": "1x2",
+        "panels": [
+          {
+            "pdb_id": "2HI4",
+            "style": "cartoon",
+            "color_scheme": "secondary_structure",
+            "caption": "Ribbon diagram of CYP3A4 showing the classical P450 fold: alpha-helical core (red) with the heme prosthetic group (sticks) at the catalytic center. The flexible F-G loop that expands for large substrates is shown in orange."
+          },
+          {
+            "pdb_id": "2HI4",
+            "style": "surface",
+            "color_scheme": "hydrophobicity",
+            "caption": "Molecular surface of CYP3A4 sliced to reveal the cavernous substrate-binding pocket above the heme iron."
+          }
+        ],
+        "overall_caption": "Fig. 1: Human CYP3A4 (2HI4) at 2.05 Å—the largest active site of any major human drug-metabolizing P450, capable of simultaneously binding two molecules of erythromycin."
+      },
+      {
+        "figure_number": 2,
+        "layout": "1x1",
+        "panels": [
+          {
+            "pdb_id": "2HI4",
+            "style": "sticks",
+            "color_scheme": "element",
+            "caption": "Active site of CYP3A4 showing the heme iron (orange sphere), Cys442 axial ligand, and Thr309 in the I-helix that assists in oxygen activation."
+          }
+        ],
+        "overall_caption": "Fig. 2: CYP3A4 active site—heme iron activates molecular oxygen to form compound I (iron-oxo species) which inserts oxygen into C-H bonds."
+      }
+    ],
+    "key_facts": [
+      "CYP3A4 metabolizes approximately 50% of all clinically prescribed drugs.",
+      "The 2.05 Å structure was solved by Yano et al. and published in the Journal of Biological Chemistry in 2004.",
+      "CYP3A4's active site volume (~1,385 cubic angstroms) can simultaneously accommodate two substrate molecules.",
+      "The enzyme is expressed primarily in the liver (30% of total P450) and small intestine (70% of intestinal P450).",
+      "Grapefruit furanocoumarins (bergamottin, DHB) are mechanism-based irreversible CYP3A4 inhibitors.",
+      "Ritonavir is now used as a CYP3A4 inhibitor pharmacoenhancer to increase exposure of co-administered antivirals.",
+      "Over 200 clinically significant CYP3A4 drug-drug interactions are listed in the FDA's drug interaction database."
+    ],
+    "discovery_year": 2004,
+    "significance": "The CYP3A4 structure explained why this single enzyme dominates drug metabolism and provided a structural foundation for predicting and avoiding dangerous drug-drug interactions. The structure is now a required component of regulatory submissions for new drugs.",
+    "related_molecules": [
+      "1HHP",
+      "1M17",
+      "1ATP"
+    ]
+  },
+  {
+    "id": "5C4X",
+    "name": "PD-L1",
+    "title": "The Immune Checkpoint: PD-L1 and the Immunotherapy Revolution",
+    "abstract": "Programmed death-ligand 1 (PD-L1) suppresses T-cell activity by binding the PD-1 receptor, allowing tumors to evade immune destruction. Krzysztof Zak and colleagues solved the structure of PD-L1 in complex with a small-molecule inhibitor at 2.2 Å in 2016, revealing an unexpected dimerization mechanism. Antibodies targeting the PD-1/PD-L1 axis earned James Allison and Tasuku Honjo the 2018 Nobel Prize in Physiology or Medicine.",
+    "sections": [
+      {
+        "type": "heading",
+        "content": "How Tumors Hide from the Immune System"
+      },
+      {
+        "type": "text",
+        "content": "In 2016, Krzysztof Zak, Bogdan Grudnik, Katarzyna Guzik, and colleagues at the Jagiellonian University and Selvita solved the 2.2 Å crystal structure of human PD-L1 bound to BMS-202 and published it in Structure. PD-L1 is expressed on tumor cells and antigen-presenting cells; its binding to PD-1 on T cells delivers an inhibitory signal that halts the immune response."
+      },
+      {
+        "type": "figure-ref",
+        "content": "See Fig. 1"
+      },
+      {
+        "type": "heading",
+        "content": "Small Molecules Force a Dimer"
+      },
+      {
+        "type": "text",
+        "content": "The Zak structure revealed that small-molecule PD-L1 inhibitors force two PD-L1 monomers into a face-to-face dimer, burying the PD-1 binding surface. This dimerization mechanism was entirely unexpected and represents a novel mode of inhibition distinct from antibody blockade, opening a pathway to oral PD-L1 inhibitors."
+      },
+      {
+        "type": "figure-ref",
+        "content": "See Fig. 2"
+      },
+      {
+        "type": "heading",
+        "content": "Nobel Prize and the Immunotherapy Era"
+      },
+      {
+        "type": "text",
+        "content": "The 2018 Nobel Prize in Physiology or Medicine was awarded to James P. Allison (anti-CTLA-4) and Tasuku Honjo (PD-1 discovery). Pembrolizumab and atezolizumab are now approved across 20+ cancer indications. Five-year survival in previously fatal metastatic melanoma has improved from under 5% to over 30%."
+      }
+    ],
+    "figure_plan": [
+      {
+        "figure_number": 1,
+        "layout": "1x2",
+        "panels": [
+          {
+            "pdb_id": "5C4X",
+            "style": "cartoon",
+            "color_scheme": "chain",
+            "caption": "Ribbon diagram of the PD-L1 dimer induced by BMS-202. Two PD-L1 monomers (cyan and magenta) arranged face-to-face with the small molecule (yellow sticks) at the dimer interface."
+          },
+          {
+            "pdb_id": "5C4X",
+            "style": "surface",
+            "color_scheme": "electrostatic",
+            "caption": "Electrostatic surface of PD-L1 dimer showing the hydrophobic dimerization interface occupied by the inhibitor. The PD-1 binding face is completely occluded."
+          }
+        ],
+        "overall_caption": "Fig. 1: PD-L1 inhibitor complex (5C4X) at 2.2 Å—small molecules induce an unexpected face-to-face dimer blocking the PD-1 interaction surface."
+      },
+      {
+        "figure_number": 2,
+        "layout": "1x1",
+        "panels": [
+          {
+            "pdb_id": "5C4X",
+            "style": "sticks",
+            "color_scheme": "element",
+            "caption": "PD-L1 dimerization interface showing BMS-202 (yellow) making hydrophobic contacts with Tyr56, Met115, Ala121, and Tyr123 from both monomers."
+          }
+        ],
+        "overall_caption": "Fig. 2: The PD-L1 small-molecule binding site at the dimer interface—template for oral immunotherapy drugs."
+      }
+    ],
+    "key_facts": [
+      "PD-L1 binds PD-1 on T cells to deliver an inhibitory signal—the dominant immune evasion mechanism in solid tumors.",
+      "The 2.2 Å complex structure was solved by Zak, Grudnik, Guzik et al. at Jagiellonian University and published in Structure in 2016.",
+      "Small-molecule inhibitors induce PD-L1 dimerization, burying the PD-1 binding surface—distinct from therapeutic antibody mechanism.",
+      "Pembrolizumab (anti-PD-1) and atezolizumab (anti-PD-L1) are approved across 20+ cancer indications.",
+      "The 2018 Nobel Prize in Physiology or Medicine was awarded to James Allison and Tasuku Honjo.",
+      "Five-year survival in metastatic melanoma improved from <5% to >30% with checkpoint blockade.",
+      "Tumor PD-L1 expression (IHC 22C3) is a regulatory biomarker for pembrolizumab monotherapy in lung cancer."
+    ],
+    "discovery_year": 2016,
+    "significance": "The PD-L1 structure provided the molecular rationale for one of medicine's most transformative advances: immune checkpoint therapy. By revealing how tumors commandeer normal immune suppression, and how inhibitors can physically block that interface, structural biology directly enabled immunotherapies that have extended life for hundreds of thousands of patients with previously incurable cancers.",
+    "related_molecules": [
+      "1HHP",
+      "1IGT",
+      "3SN6"
+    ]
+  },
+  {
+    "id": "2RH1",
+    "name": "Beta-2 Adrenergic Receptor",
+    "title": "The Nobel GPCR: Beta-2 Adrenergic Receptor and the G Protein-Coupled Revolution",
+    "abstract": "The beta-2 adrenergic receptor (beta2AR) was the first human G protein-coupled receptor to be structurally determined, a landmark achieved by Vadim Cherezov, Daniel Rosenbaum, Brian Kobilka, and colleagues in 2007 at 2.4 Å. GPCRs constitute the largest family of membrane protein drug targets, accounting for roughly 35% of all approved drugs. This work contributed to the 2012 Nobel Prize in Chemistry for Robert Lefkowitz and Brian Kobilka.",
+    "sections": [
+      {
+        "type": "heading",
+        "content": "Cracking Open the Most Important Drug Target Family"
+      },
+      {
+        "type": "text",
+        "content": "In 2007, Vadim Cherezov, Daniel M. Rosenbaum, Mark A. Hanson, Soren G. F. Rasmussen, and Brian K. Kobilka published the 2.4 Å crystal structure of the human beta2AR in Science. The structure required engineering the receptor with a T4 lysozyme insertion in the third intracellular loop to enable crystallization—a technical tour de force that solved the crystallization problem for flexible membrane proteins."
+      },
+      {
+        "type": "figure-ref",
+        "content": "See Fig. 1"
+      },
+      {
+        "type": "heading",
+        "content": "Seven Helices and a Ligand Pocket"
+      },
+      {
+        "type": "text",
+        "content": "Beta2AR comprises seven transmembrane alpha-helices (TM1-TM7). The orthosteric ligand-binding pocket is in the extracellular half of the helix bundle. Carazolol (partial inverse agonist) was co-crystallized in the binding site, revealing the contacts that determine selectivity among adrenergic receptor subtypes. Key interactions include Asp113 (TM3) and Asn312 (TM7) with the catecholamine amine group."
+      },
+      {
+        "type": "figure-ref",
+        "content": "See Fig. 2"
+      },
+      {
+        "type": "heading",
+        "content": "Nobel Prize and the GPCR Structural Era"
+      },
+      {
+        "type": "text",
+        "content": "The 2012 Nobel Prize in Chemistry was awarded to Robert J. Lefkowitz and Brian K. Kobilka for studies of GPCRs. Since the beta2AR structure, over 100 unique GPCR structures have been solved, enabling structure-based design of drugs for heart failure, asthma, schizophrenia, Parkinson's disease, and type 2 diabetes."
+      }
+    ],
+    "figure_plan": [
+      {
+        "figure_number": 1,
+        "layout": "1x2",
+        "panels": [
+          {
+            "pdb_id": "2RH1",
+            "style": "cartoon",
+            "color_scheme": "rainbow",
+            "caption": "Ribbon diagram of beta2AR showing the seven transmembrane helices (TM1-TM7, rainbow). Carazolol (yellow sticks) is bound in the orthosteric pocket. The palmitoylated C-terminal helix 8 is visible below TM7."
+          },
+          {
+            "pdb_id": "2RH1",
+            "style": "surface",
+            "color_scheme": "hydrophobicity",
+            "caption": "Side view of beta2AR showing the membrane-embedded transmembrane bundle and the extracellular binding pocket."
+          }
+        ],
+        "overall_caption": "Fig. 1: Human beta2 adrenergic receptor (2RH1) at 2.4 Å—the first high-resolution human GPCR structure."
+      },
+      {
+        "figure_number": 2,
+        "layout": "1x1",
+        "panels": [
+          {
+            "pdb_id": "2RH1",
+            "style": "sticks",
+            "color_scheme": "element",
+            "caption": "Orthosteric binding site showing carazolol (yellow) hydrogen bonding to Asp113 and Asn312, and aromatic contacts with Phe290, Trp286, and Phe193."
+          }
+        ],
+        "overall_caption": "Fig. 2: beta2AR ligand-binding pocket—contacts that determine subtype selectivity between beta1 and beta2 adrenergic receptors."
+      }
+    ],
+    "key_facts": [
+      "Beta2AR was the first human GPCR crystal structure, solved at 2.4 Å by Cherezov, Rosenbaum, Kobilka et al., published in Science in 2007.",
+      "GPCRs are the largest membrane protein family (~800 members) and target of ~35% of all FDA-approved drugs.",
+      "The T4 lysozyme fusion strategy invented for beta2AR crystallization enabled structure determination of dozens of other GPCRs.",
+      "Robert Lefkowitz and Brian Kobilka shared the 2012 Nobel Prize in Chemistry for GPCR research.",
+      "Beta2AR is targeted by bronchodilators (salbutamol) used by over 300 million asthma patients and beta-blockers for heart failure.",
+      "The inactive (carazolol-bound) beta2AR structure combined with the active-state structure (2011) revealed conformational changes coupling ligand binding to G protein activation.",
+      "Over 100 unique GPCR structures have been determined, enabling structure-based design across neurological, cardiovascular, and metabolic diseases."
+    ],
+    "discovery_year": 2007,
+    "significance": "The beta2AR structure broke a 20-year barrier in membrane protein crystallography and opened the entire GPCR superfamily to structural biology. With GPCRs as targets for 35% of all approved drugs, every new GPCR structure has immediate pharmacological implications.",
+    "related_molecules": [
+      "3SN6",
+      "1HHP",
+      "1M17"
+    ]
+  },
+  {
+    "id": "1BL8",
+    "name": "KcsA Potassium Channel",
+    "title": "The Selectivity Filter: KcsA and the Atomic Basis of Ion Channel Discrimination",
+    "abstract": "The KcsA potassium channel from Streptomyces lividans was the first ion channel to be structurally characterized at atomic resolution. Declan Doyle and Roderick MacKinnon solved the 3.2 Å structure in 1998, revealing the elegantly simple selectivity filter that allows K+ to pass at near-diffusion-limited rates while excluding the smaller Na+ ion. This work earned Roderick MacKinnon the 2003 Nobel Prize in Chemistry.",
+    "sections": [
+      {
+        "type": "heading",
+        "content": "The Filter That Knows K+ from Na+"
+      },
+      {
+        "type": "text",
+        "content": "In 1998, Declan A. Doyle, Joao Morais Cabral, Richard A. Pfuetzner, Anling Kuo, Jacqueline M. Gulbis, Steven L. Cohen, Brian T. Chait, and Roderick MacKinnon published the 3.2 Å crystal structure of KcsA in Science, solving a 50-year mystery: how can potassium channels pass K+ a thousand times faster than the smaller Na+? The selectivity filter, formed by backbone carbonyls of the TVGYG sequence from all four subunits, fits dehydrated K+ precisely but cannot replace the hydration shell of the smaller Na+."
+      },
+      {
+        "type": "figure-ref",
+        "content": "See Fig. 1"
+      },
+      {
+        "type": "heading",
+        "content": "Four Subunits, One Pore"
+      },
+      {
+        "type": "text",
+        "content": "KcsA is a homotetramer; each subunit contributes two transmembrane helices and the pore helix that positions the selectivity filter. Four K+ binding sites (S1-S4) within the selectivity filter are occupied in an alternating pattern (S1+S3 or S2+S4), allowing K+ to hop through in a concerted mechanism achieving near-diffusion-limited conductance."
+      },
+      {
+        "type": "figure-ref",
+        "content": "See Fig. 2"
+      },
+      {
+        "type": "heading",
+        "content": "Nobel Prize and Channelopathy Medicine"
+      },
+      {
+        "type": "text",
+        "content": "Roderick MacKinnon received the 2003 Nobel Prize in Chemistry for structural studies of ion channels. The KcsA structure is the paradigm for understanding the entire potassium channel family, including HERG (cardiac arrhythmia), Kir channels (Andersen syndrome), and KATP channels (neonatal diabetes). Over 100 inherited channelopathies have been mapped onto KcsA-derived structures."
+      }
+    ],
+    "figure_plan": [
+      {
+        "figure_number": 1,
+        "layout": "1x2",
+        "panels": [
+          {
+            "pdb_id": "1BL8",
+            "style": "cartoon",
+            "color_scheme": "chain",
+            "caption": "Ribbon diagram of KcsA homotetramer viewed from the extracellular side. Four subunits (different colors) form a symmetric pore with the selectivity filter visible as a narrow constriction."
+          },
+          {
+            "pdb_id": "1BL8",
+            "style": "surface",
+            "color_scheme": "electrostatic",
+            "caption": "Cross-sectional surface of KcsA showing the ion permeation pathway. The narrow selectivity filter (4 angstrom diameter) is flanked by the large central cavity."
+          }
+        ],
+        "overall_caption": "Fig. 1: KcsA potassium channel (1BL8) at 3.2 Å—the tetrameric architecture creates a single central pore with exquisite ion selectivity."
+      },
+      {
+        "figure_number": 2,
+        "layout": "1x1",
+        "panels": [
+          {
+            "pdb_id": "1BL8",
+            "style": "sticks",
+            "color_scheme": "element",
+            "caption": "KcsA selectivity filter (TVGYG) showing four K+ binding sites (S1-S4) formed by backbone carbonyl oxygens. Purple spheres represent K+ ions at alternating sites. Filter diameter of ~2.8 Å precisely matches the K+ ionic radius."
+          }
+        ],
+        "overall_caption": "Fig. 2: The KcsA selectivity filter—backbone carbonyls replace the water hydration shell of K+ perfectly; geometry is too large for Na+, explaining selectivity without sacrificing conductance rate."
+      }
+    ],
+    "key_facts": [
+      "KcsA was the first ion channel solved at atomic resolution (3.2 Å), published by Doyle, Cabral, Pfuetzner, MacKinnon et al. in Science in 1998.",
+      "The TVGYG selectivity filter uses backbone carbonyls to coordinate dehydrated K+ at four binding sites (S1-S4).",
+      "K+ selectivity over Na+ (~1000-fold) arises because the filter geometry perfectly replaces K+ hydration waters but cannot do so for the smaller Na+.",
+      "Roderick MacKinnon received the 2003 Nobel Prize in Chemistry for structural and mechanistic studies of ion channels.",
+      "KcsA is a homotetramer with two transmembrane helices per subunit; inner helices form the gating mechanism.",
+      "The cardiac HERG K+ channel, responsible for long QT syndrome, is structurally homologous to KcsA and screened against in all drug safety programs.",
+      "KcsA provides templates for understanding 100+ inherited ion channel diseases."
+    ],
+    "discovery_year": 1998,
+    "significance": "KcsA provided the first atomic explanation of ion selectivity, solving a fundamental biophysical puzzle that had resisted solution for decades. The structure is the template for understanding all potassium channels including cardiac HERG (drug-induced arrhythmia). Every drug with arrhythmia liability is now screened against HERG using structural knowledge derived from KcsA.",
+    "related_molecules": [
+      "1JFF",
+      "2POR",
+      "2RH1"
+    ]
+  },
+  {
+    "id": "1EHZ",
+    "name": "tRNA-Phe",
+    "title": "The Adapter Molecule at Atomic Resolution: Yeast tRNA-Phe at 1.93 Å",
+    "abstract": "Transfer RNA (tRNA) is the molecular adapter that reads the genetic code and delivers amino acids to the ribosome. Hong Shi and Peter Moore at Yale solved the crystal structure of yeast phenylalanine tRNA at 1.93 Å in 2000—the highest-resolution tRNA structure ever determined—revealing the intricate network of tertiary interactions, modified nucleosides, and metal ion binding sites that give tRNA its L-shaped architecture.",
+    "sections": [
+      {
+        "type": "heading",
+        "content": "The Cloverleaf in Three Dimensions"
+      },
+      {
+        "type": "text",
+        "content": "In 2000, Hong Shi and Peter B. Moore at Yale University published the 1.93 Å crystal structure of yeast tRNA-Phe in RNA. The 76-nucleotide molecule folds into the canonical L-shaped tertiary structure: the anticodon loop at one end reads the mRNA codon, while the 3'-CCA aminoacyl acceptor stem at the other end carries phenylalanine to the ribosomal A site."
+      },
+      {
+        "type": "figure-ref",
+        "content": "See Fig. 1"
+      },
+      {
+        "type": "heading",
+        "content": "Modified Nucleosides and Tertiary Contacts"
+      },
+      {
+        "type": "text",
+        "content": "tRNA-Phe contains 14 modified nucleosides out of 76 total residues—the highest density of modifications of any RNA. These include pseudouridine, ribothymidine, 7-methylguanosine, and wybutosine adjacent to the anticodon. The 1.93 Å structure revealed the precise geometry of all tertiary base pairs and base triples that zip the D-loop and T-loop together."
+      },
+      {
+        "type": "figure-ref",
+        "content": "See Fig. 2"
+      },
+      {
+        "type": "heading",
+        "content": "A Window into the Genetic Code"
+      },
+      {
+        "type": "text",
+        "content": "The yeast tRNA-Phe structure illuminates aminoacyl-tRNA synthetase recognition (the 'second genetic code'), ribosomal A-site accommodation, and translational fidelity. Mutations in mitochondrial tRNA genes cause MELAS, MERRF, and other tRNA-opathies. The structural database of tRNA modifications informed design of N1-methylpseudouridine used in COVID-19 mRNA vaccines."
+      }
+    ],
+    "figure_plan": [
+      {
+        "figure_number": 1,
+        "layout": "1x2",
+        "panels": [
+          {
+            "pdb_id": "1EHZ",
+            "style": "cartoon",
+            "color_scheme": "secondary_structure",
+            "caption": "Ribbon diagram of yeast tRNA-Phe showing the L-shaped tertiary structure. The anticodon stem-loop (bottom) contains the GAA anticodon; the acceptor stem (top right) terminates in the 3'-CCA."
+          },
+          {
+            "pdb_id": "1EHZ",
+            "style": "sticks",
+            "color_scheme": "chain",
+            "caption": "All-atom stick model of tRNA-Phe with modified nucleosides highlighted in orange."
+          }
+        ],
+        "overall_caption": "Fig. 1: Yeast tRNA-Phe (1EHZ) at 1.93 Å—the highest-resolution tRNA structure. The L-shape positions anticodon and aminoacyl acceptor ~75 Å apart, spanning the ribosomal A site."
+      },
+      {
+        "figure_number": 2,
+        "layout": "1x1",
+        "panels": [
+          {
+            "pdb_id": "1EHZ",
+            "style": "sticks",
+            "color_scheme": "element",
+            "caption": "Tertiary core showing D-loop/TpsiC-loop interface with base triples and a coordinated Mg2+ ion (green sphere). Modified nucleoside wybutosine (yellow) adjacent to the anticodon is visible."
+          }
+        ],
+        "overall_caption": "Fig. 2: Tertiary interactions in yeast tRNA-Phe—D-loop (blue) and TpsiC-loop (red) form an intricate network of base triples and metal ion contacts rigidifying the L-shaped scaffold."
+      }
+    ],
+    "key_facts": [
+      "Yeast tRNA-Phe solved at 1.93 Å by Hong Shi and Peter Moore at Yale, published in RNA in 2000—the highest resolution tRNA structure.",
+      "The 76-nucleotide tRNA adopts an L-shaped fold with anticodon loop and aminoacyl acceptor stem separated by ~75 Å.",
+      "tRNA-Phe contains 14 modified nucleosides, the highest density of any RNA, including wybutosine adjacent to the anticodon.",
+      "The anticodon GAA reads UUC/UUU phenylalanine codons; the 3'-CCA acceptor terminus carries the charged amino acid.",
+      "Mitochondrial tRNA gene mutations cause MELAS, MERRF, and other neuromuscular diseases.",
+      "tRNA structural insights informed design of N1-methylpseudouridine in COVID-19 mRNA vaccines to reduce innate immune activation.",
+      "Aminoacyl-tRNA synthetases recognize distinct tRNA features (the 'second genetic code') to ensure correct amino acid assignment."
+    ],
+    "discovery_year": 2000,
+    "significance": "The 1.93 Å tRNA-Phe structure provided the definitive atomic picture of the genetic code adapter molecule, revealing the complete network of modified nucleosides, metal ions, and tertiary contacts responsible for translational fidelity. This knowledge underpins understanding of mitochondrial disease, antibiotic mechanisms, and the nucleoside modification chemistry central to mRNA vaccine technology.",
+    "related_molecules": [
+      "1AOI",
+      "1JFF",
+      "1AON"
+    ]
+  },
+  {
+    "id": "1AOI",
+    "name": "Nucleosome Core Particle",
+    "title": "Life Packed in a Spool: The Nucleosome Core Particle and Chromatin Architecture",
+    "abstract": "The nucleosome is the fundamental repeating unit of chromatin, comprising 147 base pairs of DNA wrapped 1.65 turns around an octamer of histone proteins. Karolin Luger, Arno Mader, Robin Richmond, David Sargent, and Timothy Richmond solved the 2.8 Å structure in 1997 at ETH Zurich, revealing the atomic details of DNA-histone recognition and the molecular basis of epigenetic gene regulation.",
+    "sections": [
+      {
+        "type": "heading",
+        "content": "Packing the Genome into a Nucleus"
+      },
+      {
+        "type": "text",
+        "content": "In 1997, Karolin Luger, Arno W. Mader, Robin K. Richmond, David F. Sargent, and Timothy J. Richmond at ETH Zurich published the 2.8 Å crystal structure of the nucleosome core particle in Nature. The structure contained 146 bp of palindromic DNA wrapped 1.65 times around a histone octamer (two copies each of H2A, H2B, H3, and H4), explaining how cells compact human chromosomal DNA by a factor of ~10,000."
+      },
+      {
+        "type": "figure-ref",
+        "content": "See Fig. 1"
+      },
+      {
+        "type": "heading",
+        "content": "The Histone Octamer and DNA Contacts"
+      },
+      {
+        "type": "text",
+        "content": "The histone octamer is organized as a (H3-H4)2 tetramer flanked by two H2A-H2B dimers. Each histone contains the histone fold domain—a helix-turn-helix motif—and disordered N-terminal tails that protrude from the nucleosome and are sites of post-translational modifications. DNA wraps the octamer with 14 direct contacts per histone pair, primarily at the minor groove, with arginine residues inserting into the minor groove at each DNA bending point."
+      },
+      {
+        "type": "figure-ref",
+        "content": "See Fig. 2"
+      },
+      {
+        "type": "heading",
+        "content": "Epigenetics and Disease"
+      },
+      {
+        "type": "text",
+        "content": "The histone tails—sites of acetylation, methylation, phosphorylation, and ubiquitylation—constitute the histone code controlling gene expression. HDAC inhibitors (vorinostat, romidepsin) and EZH2 methyltransferase inhibitors (tazemetostat) are approved anticancer drugs targeting the nucleosome regulatory machinery. Histone H3 mutations (H3K27M) are oncogenic drivers in pediatric gliomas."
+      }
+    ],
+    "figure_plan": [
+      {
+        "figure_number": 1,
+        "layout": "1x2",
+        "panels": [
+          {
+            "pdb_id": "1AOI",
+            "style": "cartoon",
+            "color_scheme": "chain",
+            "caption": "Side view of the nucleosome core particle showing 147 bp of DNA (orange/gray) wrapped 1.65 turns around the histone octamer. H3 (blue), H4 (green), H2A (yellow), H2B (red) are in distinct colors."
+          },
+          {
+            "pdb_id": "1AOI",
+            "style": "surface",
+            "color_scheme": "electrostatic",
+            "caption": "Top-down view showing the electropositive histone surface (blue) complementary to the electronegative DNA (red). The dyad axis of pseudo-symmetry is at the center."
+          }
+        ],
+        "overall_caption": "Fig. 1: Nucleosome core particle (1AOI) at 2.8 Å—the disc-shaped complex is ~11 nm in diameter; nucleosomes stack in chromatin to achieve 100,000-fold DNA compaction."
+      },
+      {
+        "figure_number": 2,
+        "layout": "1x1",
+        "panels": [
+          {
+            "pdb_id": "1AOI",
+            "style": "sticks",
+            "color_scheme": "element",
+            "caption": "DNA-histone interface at one of the 14 contact points—an arginine residue (blue) inserts into the compressed minor groove (orange) at a DNA bending point. Repeated with pseudo-two-fold symmetry around the nucleosome."
+          }
+        ],
+        "overall_caption": "Fig. 2: DNA-histone contact at the nucleosome core—arginine intercalation at minor groove positions bends DNA around the histone spool. Repeated 14 times per nucleosome."
+      }
+    ],
+    "key_facts": [
+      "Nucleosome core particle solved at 2.8 Å by Luger, Mader, Richmond, Sargent, and Richmond at ETH Zurich, published in Nature in 1997.",
+      "147 bp of DNA wraps 1.65 turns around an octamer of H2A, H2B, H3, and H4 histones (two copies each).",
+      "Fourteen DNA-histone contact points per half-nucleosome use arginine insertion into the minor groove to bend DNA.",
+      "Histone N-terminal tails are sites of acetylation, methylation, and phosphorylation—the epigenetic histone code.",
+      "The nucleosome provides ~10,000-fold DNA compaction; further looping achieves the full 100,000-fold compaction.",
+      "HDAC inhibitors (vorinostat) and EZH2 inhibitors (tazemetostat) target nucleosome regulatory enzymes and are approved anticancer drugs.",
+      "Histone H3 K27M mutation is an oncogenic driver in pediatric gliomas, directly disrupting epigenetic regulation."
+    ],
+    "discovery_year": 1997,
+    "significance": "The nucleosome structure explained chromatin compaction and provided the molecular foundation for epigenetics. Every aspect of gene regulation in eukaryotes involves nucleosome positioning, remodeling, and histone modification. The structure enabled development of epigenetic drugs approved for lymphoma, myeloma, and pediatric brain tumors.",
+    "related_molecules": [
+      "1EHZ",
+      "1AON",
+      "1UBQ"
+    ]
+  },
+  {
+    "id": "1AON",
+    "name": "GroEL-GroES Chaperonin",
+    "title": "The Anfinsen Cage: GroEL-GroES and the Molecular Mechanism of Protein Folding",
+    "abstract": "The GroEL-GroES chaperonin complex is a molecular machine that encapsulates misfolded proteins and provides a protected environment for refolding. Zhaohui Xu, Ana Horwich, and Paul Sigler solved the 3.0 Å crystal structure in 1997 at Yale, revealing the dramatic conformational changes that couple ATP hydrolysis to substrate refolding inside the Anfinsen cage.",
+    "sections": [
+      {
+        "type": "heading",
+        "content": "A Cage for Protein Folding"
+      },
+      {
+        "type": "text",
+        "content": "In 1997, Zhaohui Xu, Ana L. Horwich, and Paul B. Sigler at Yale University published the 3.0 Å crystal structure of the GroEL-GroES complex in Nature. GroEL is a double-ring complex of 14 identical 57 kDa subunits (7 per ring); GroES is a single ring of 7 identical 10 kDa subunits that caps one GroEL ring, sealing the folding chamber."
+      },
+      {
+        "type": "figure-ref",
+        "content": "See Fig. 1"
+      },
+      {
+        "type": "heading",
+        "content": "Conformational Cycle and the Anfinsen Cage"
+      },
+      {
+        "type": "text",
+        "content": "In the GroES-bound state, the GroEL apical domains rotate ~60 degrees and elevate ~25 Å, transforming the hydrophobic substrate-binding surface into a hydrophilic inner surface—the Anfinsen cage. This 175,000 cubic angstrom chamber isolates a single substrate protein from the crowded cytoplasm, allowing it to fold without aggregation. ATP hydrolysis in the cis ring ejects GroES and releases the substrate after ~10 seconds."
+      },
+      {
+        "type": "figure-ref",
+        "content": "See Fig. 2"
+      },
+      {
+        "type": "heading",
+        "content": "Disease Relevance and Therapeutic Targeting"
+      },
+      {
+        "type": "text",
+        "content": "Human Hsp60 (GroEL homolog) is essential for mitochondrial protein folding; Hsp60 mutations cause hereditary spastic paraplegia. The eukaryotic GroEL homolog TRiC/CCT is required for folding actin, tubulin, and huntingtin—relevant to Huntington's disease. Inhibitors of bacterial chaperonins are under investigation as antibiotics."
+      }
+    ],
+    "figure_plan": [
+      {
+        "figure_number": 1,
+        "layout": "1x2",
+        "panels": [
+          {
+            "pdb_id": "1AON",
+            "style": "cartoon",
+            "color_scheme": "chain",
+            "caption": "Side view of the GroEL-GroES complex showing the two GroEL rings (14 subunits, alternating blue/cyan) and the GroES cap (yellow). The cis folding chamber is enclosed between the GroES cap and the upper GroEL ring."
+          },
+          {
+            "pdb_id": "1AON",
+            "style": "surface",
+            "color_scheme": "hydrophobicity",
+            "caption": "Cross-sectional view of GroEL-GroES revealing the enclosed cis folding chamber. The inner surface of the GroES-bound ring is hydrophilic (blue), preventing substrate aggregation."
+          }
+        ],
+        "overall_caption": "Fig. 1: GroEL-GroES chaperonin (1AON) at 3.0 Å—the 840 kDa complex forms an ATP-driven molecular chamber that folds denatured proteins in isolation."
+      },
+      {
+        "figure_number": 2,
+        "layout": "1x1",
+        "panels": [
+          {
+            "pdb_id": "1AON",
+            "style": "sticks",
+            "color_scheme": "element",
+            "caption": "GroEL-GroES interface showing GroES mobile loops (yellow sticks) inserting into pockets on the GroEL apical domain (blue). This interaction triggers the 60-degree apical domain rotation that seals the folding chamber."
+          }
+        ],
+        "overall_caption": "Fig. 2: GroEL-GroES binding interface—the GroES mobile loop contacts trigger the apical domain rotation that seals the folding chamber."
+      }
+    ],
+    "key_facts": [
+      "GroEL-GroES solved at 3.0 Å by Xu, Horwich, and Sigler at Yale, published in Nature in 1997.",
+      "GroEL is a 14-mer double ring (7+7 subunits, each 57 kDa); GroES is a 7-mer cap (10 kDa per subunit).",
+      "The Anfinsen cage: the enclosed folding chamber prevents aggregation by isolating substrate from the crowded cytoplasm.",
+      "ATP hydrolysis drives an ~60-degree apical domain rotation converting the hydrophobic inner surface to hydrophilic, releasing substrate.",
+      "Human Hsp60 (GroEL homolog) is essential for mitochondrial protein folding; Hsp60 mutations cause hereditary spastic paraplegia.",
+      "TRiC/CCT, the eukaryotic GroEL homolog, is required for folding actin, tubulin, and mutant huntingtin.",
+      "GroEL assists folding of ~300 essential E. coli proteins including many beta-barrel and TIM barrel fold proteins."
+    ],
+    "discovery_year": 1997,
+    "significance": "GroEL-GroES revealed that protein folding in the cell is an actively chaperonin-facilitated event, not merely spontaneous thermodynamic process. The Anfinsen cage concept resolved the paradox of how cells fold proteins reliably despite high concentration and aggregation propensity. This insight drives drug discovery targeting chaperone systems in cancer, neurodegeneration, and infectious disease.",
+    "related_molecules": [
+      "1UBQ",
+      "5GJR",
+      "1AOI"
+    ]
+  },
+  {
+    "id": "5GJR",
+    "name": "26S Proteasome",
+    "title": "The Cell's Shredder: The 26S Proteasome and Targeted Protein Destruction",
+    "abstract": "The 26S proteasome is the major protein degradation machine of eukaryotic cells, a 2.5 MDa complex that unfolds and cleaves polyubiquitinated proteins into short peptides. Andreas Schweitzer, Antje Aufderheide, and Wolfgang Baumeister determined the human 26S proteasome structure at 3.5 Å by cryo-EM in 2016. Bortezomib, which inhibits the proteasome's catalytic beta subunits, was the first proteasome inhibitor approved for cancer treatment.",
+    "sections": [
+      {
+        "type": "heading",
+        "content": "The Cellular Destruction Machine"
+      },
+      {
+        "type": "text",
+        "content": "In 2016, Andreas Schweitzer, Antje Aufderheide, Timm Rudack, Florian Beck, Gunter Pfeifer, Jurgen Plitzko, Eri Sakata, Klaus Schulten, Friedrich Forster, and Wolfgang Baumeister determined the human 26S proteasome at 3.5 Å by single-particle cryo-EM, published in PNAS. The complex consists of the 20S catalytic particle (a barrel-shaped four-ring stack of alpha and beta subunits) capped by one or two 19S regulatory particles that recognize ubiquitinated substrates and unfold them for threading into the catalytic chamber."
+      },
+      {
+        "type": "figure-ref",
+        "content": "See Fig. 1"
+      },
+      {
+        "type": "heading",
+        "content": "Catalytic Mechanism and Drug Targeting"
+      },
+      {
+        "type": "text",
+        "content": "The 20S core contains three types of proteolytic activity: chymotrypsin-like (beta5), trypsin-like (beta2), and caspase-like (beta1), provided by N-terminal threonine residues. Bortezomib (Velcade), a dipeptide boronic acid, reversibly inhibits the beta5 subunit by forming a covalent adduct with Thr1. Multiple myeloma cells, which produce massive quantities of immunoglobulin stressing the ubiquitin-proteasome system, are exquisitely sensitive to proteasome inhibition."
+      },
+      {
+        "type": "figure-ref",
+        "content": "See Fig. 2"
+      },
+      {
+        "type": "heading",
+        "content": "From Cancer Therapy to Basic Biology"
+      },
+      {
+        "type": "text",
+        "content": "Bortezomib (2003), carfilzomib (2012), and ixazomib (2015) are approved proteasome inhibitors for multiple myeloma and mantle cell lymphoma. Parkinson's disease is associated with accumulation of ubiquitinated alpha-synuclein aggregates that overwhelm proteasomal capacity. The proteasome also generates 8-10 residue peptides for MHC class I antigen presentation."
+      }
+    ],
+    "figure_plan": [
+      {
+        "figure_number": 1,
+        "layout": "1x2",
+        "panels": [
+          {
+            "pdb_id": "5GJR",
+            "style": "cartoon",
+            "color_scheme": "chain",
+            "caption": "Overall architecture of the human 26S proteasome showing the 20S catalytic particle (central barrel) flanked by the 19S regulatory particle. The 19S base contains six AAA-ATPase subunits that unfold and translocate substrates."
+          },
+          {
+            "pdb_id": "5GJR",
+            "style": "surface",
+            "color_scheme": "hydrophobicity",
+            "caption": "Cross-section of the 26S proteasome revealing the substrate entry pore of the 19S base aligned with the translocation channel through the 20S barrel."
+          }
+        ],
+        "overall_caption": "Fig. 1: Human 26S proteasome (5GJR) at 3.5 Å by cryo-EM—the 2.5 MDa complex processes polyubiquitinated substrates by unfolding through the 19S ATPase ring and cleaving in the 20S catalytic chamber."
+      },
+      {
+        "figure_number": 2,
+        "layout": "1x1",
+        "panels": [
+          {
+            "pdb_id": "5GJR",
+            "style": "sticks",
+            "color_scheme": "element",
+            "caption": "20S catalytic chamber showing the three active beta subunits: beta5 (chymotrypsin-like, blue), beta2 (trypsin-like, green), beta1 (caspase-like, red). N-terminal threonine nucleophiles are shown as sticks. Bortezomib binding site on beta5 is highlighted."
+          }
+        ],
+        "overall_caption": "Fig. 2: 20S proteasome catalytic sites—three distinct proteolytic activities use N-terminal threonine residues as nucleophiles; bortezomib inhibits beta5 via covalent threonine adduct."
+      }
+    ],
+    "key_facts": [
+      "Human 26S proteasome cryo-EM structure at 3.5 Å was determined by Schweitzer, Aufderheide, Rudack, Baumeister et al., published in PNAS in 2016.",
+      "The 2.5 MDa complex: 20S catalytic barrel (28 subunits) capped by the 19S regulatory particle (19 subunits) that recognizes ubiquitin tags.",
+      "Three catalytic activities (chymotrypsin-, trypsin-, caspase-like) reside in beta5, beta2, and beta1 subunits using N-terminal threonine nucleophiles.",
+      "Bortezomib (Velcade, 2003) inhibits beta5 via a reversible covalent boronic acid-threonine adduct—first approved proteasome inhibitor.",
+      "Multiple myeloma cells are especially sensitive to proteasome inhibition due to high immunoglobulin production causing proteotoxic stress.",
+      "The proteasome generates 8-10 residue peptides for MHC class I antigen presentation, linking it to adaptive immunity.",
+      "Parkinson's disease is associated with ubiquitinated alpha-synuclein aggregates that overwhelm proteasomal capacity."
+    ],
+    "discovery_year": 2016,
+    "significance": "The high-resolution 26S proteasome structure revealed the complete molecular mechanism of the cell's primary protein degradation pathway. Bortezomib's success in multiple myeloma established the proteasome as a major drug target, and the structure now guides development of subunit-selective inhibitors and PROTAC degrader molecules that hijack the ubiquitin-proteasome system for targeted protein elimination.",
+    "related_molecules": [
+      "1UBQ",
+      "1AON",
+      "1HHP"
+    ]
+  },
+  {
+    "id": "1I6H",
+    "name": "RNA Polymerase II",
+    "title": "Transcription at Atomic Resolution: RNA Polymerase II and the Nobel of Gene Readout",
+    "abstract": "RNA polymerase II transcribes all protein-coding genes in eukaryotes. Patrick Cramer, David Bushnell, and Roger Kornberg solved the 2.8 Å crystal structure of yeast RNA pol II in 2001 at Stanford, revealing how the 12-subunit, 500 kDa enzyme clamps DNA and synthesizes RNA with extraordinary fidelity. This work earned Roger Kornberg the 2006 Nobel Prize in Chemistry.",
+    "sections": [
+      {
+        "type": "heading",
+        "content": "Reading the Genome at Atomic Resolution"
+      },
+      {
+        "type": "text",
+        "content": "In 2001, Patrick Cramer, David A. Bushnell, and Roger D. Kornberg at Stanford University solved the 2.8 Å crystal structure of the complete 10-subunit yeast RNA polymerase II and published it in Science. The enzyme is a 514 kDa complex that transcribes all protein-coding genes in eukaryotes, moving along DNA at ~30 nucleotides per second with an error rate of ~1 per 100,000 incorporated nucleotides."
+      },
+      {
+        "type": "figure-ref",
+        "content": "See Fig. 1"
+      },
+      {
+        "type": "heading",
+        "content": "The Clamp, the Cleft, and the Bridge Helix"
+      },
+      {
+        "type": "text",
+        "content": "The Cramer structure revealed key architectural features: the mobile clamp domain that grips the DNA-RNA hybrid duplex; the central cleft between Rpb1 and Rpb2 accommodating the 9-bp hybrid; the bridge helix that assists translocation; and the trigger loop that folds upon NTP binding to catalyze phosphodiester bond formation. The active site Mg2+ ion is coordinated by Asp481 and Asp483 of Rpb1."
+      },
+      {
+        "type": "figure-ref",
+        "content": "See Fig. 2"
+      },
+      {
+        "type": "heading",
+        "content": "Nobel Prize and Medical Implications"
+      },
+      {
+        "type": "text",
+        "content": "Roger Kornberg received the 2006 Nobel Prize in Chemistry for molecular studies of eukaryotic transcription. Alpha-amanitin, the deadly toxin from Amanita phalloides mushrooms, inhibits RNA pol II by trapping the trigger loop—the structural basis of this inhibition is precisely known. CDK8 (part of the Mediator kinase module) is an emerging cancer drug target."
+      }
+    ],
+    "figure_plan": [
+      {
+        "figure_number": 1,
+        "layout": "1x2",
+        "panels": [
+          {
+            "pdb_id": "1I6H",
+            "style": "cartoon",
+            "color_scheme": "chain",
+            "caption": "Overall architecture of yeast RNA pol II showing 10 subunits (Rpb1-Rpb10) in distinct colors. The mobile clamp domain (dark blue) grips the DNA-RNA hybrid."
+          },
+          {
+            "pdb_id": "1I6H",
+            "style": "surface",
+            "color_scheme": "electrostatic",
+            "caption": "Electrostatic surface of RNA pol II showing the positively charged central cleft (blue) that accommodates the negatively charged DNA-RNA hybrid. Upstream DNA entry and downstream exit channels are visible."
+          }
+        ],
+        "overall_caption": "Fig. 1: Yeast RNA polymerase II (1I6H) at 2.8 Å—the 500 kDa, 10-subunit enzyme orchestrates all mRNA synthesis in eukaryotes."
+      },
+      {
+        "figure_number": 2,
+        "layout": "1x1",
+        "panels": [
+          {
+            "pdb_id": "1I6H",
+            "style": "sticks",
+            "color_scheme": "element",
+            "caption": "Active site of RNA pol II showing the catalytic Mg2+ ion (green sphere) coordinated by Asp481 and Asp483 of Rpb1. The bridge helix (orange) flanks the site where NTP is incorporated."
+          }
+        ],
+        "overall_caption": "Fig. 2: RNA pol II active site—two-metal-ion catalytic mechanism uses Mg2+ to activate the 3'-OH nucleophile and stabilize the pyrophosphate leaving group."
+      }
+    ],
+    "key_facts": [
+      "Yeast RNA pol II solved at 2.8 Å by Cramer, Bushnell, and Kornberg at Stanford, published in Science in 2001.",
+      "The 10-subunit, 514 kDa enzyme synthesizes all mRNA from protein-coding genes in eukaryotes at ~30 nucleotides per second.",
+      "The mobile clamp domain grips the 9-bp DNA-RNA hybrid; bridge helix and trigger loop coordinate translocation and catalysis.",
+      "Active site Mg2+ (coordinated by Asp481/Asp483 of Rpb1) activates the 3'-OH nucleophile via a two-metal-ion mechanism.",
+      "Roger Kornberg received the 2006 Nobel Prize in Chemistry for molecular studies of eukaryotic transcription.",
+      "Alpha-amanitin (Amanita mushroom toxin) inhibits RNA pol II by trapping the trigger loop, causing lethal liver failure.",
+      "CDK8 (Mediator kinase module) and BRD4 (pause-release) are emerging anticancer targets identified through RNA pol II structural biology."
+    ],
+    "discovery_year": 2001,
+    "significance": "The RNA pol II structure completed the molecular picture of eukaryotic gene expression and provided the structural basis for understanding how all transcription factors, coactivators, and inhibitors regulate mRNA synthesis. Every human disease involving aberrant gene expression converges on RNA pol II. The structure directly guides development of transcription-targeting drugs for cancer and antiviral therapy.",
+    "related_molecules": [
+      "1AOI",
+      "1EHZ",
+      "1AON"
+    ]
+  },
+  {
+    "id": "1IGT",
+    "name": "IgG1 Antibody",
+    "title": "The First Full-Length Antibody: IgG1 and the Architecture of Immune Defense",
+    "abstract": "Immunoglobulin G1 (IgG1) is the most abundant antibody class in human serum. Lester Harris, Stephen Larson, and Alexander McPherson determined the first complete crystal structure of a full-length murine IgG1 antibody at 2.7 Å in 1997, revealing the entire four-domain Y-shaped architecture. This landmark enabled rational design of therapeutic antibodies that became the dominant modality in modern biopharmaceuticals.",
+    "sections": [
+      {
+        "type": "heading",
+        "content": "The Complete Antibody Revealed"
+      },
+      {
+        "type": "text",
+        "content": "In 1997, Lester J. Harris, Stephen B. Larson, Kurt W. Hasel, and Alexander McPherson at the University of California, Riverside, solved the first full-length IgG1 antibody crystal structure at 2.7 Å and published it in Biochemistry. Previous work had solved Fab fragments and Fc regions separately; Harris and colleagues captured the intact Y-shaped molecule with both antigen-binding Fab arms, the Fc region, and the hinge in a single crystal lattice."
+      },
+      {
+        "type": "figure-ref",
+        "content": "See Fig. 1"
+      },
+      {
+        "type": "heading",
+        "content": "The Y-Shape and Functional Modularity"
+      },
+      {
+        "type": "text",
+        "content": "IgG1 consists of two heavy chains (gamma) and two light chains (kappa or lambda). Each Fab arm contains variable domains (VH and VL) that form the antigen-binding site (CDR loops), and constant domains (CH1 and CL). The Fc region contains CH2 and CH3 domains and mediates effector functions through Fcgamma receptors and complement. The flexible Pro-rich hinge allows independent motion of the two Fab arms."
+      },
+      {
+        "type": "figure-ref",
+        "content": "See Fig. 2"
+      },
+      {
+        "type": "heading",
+        "content": "Therapeutic Antibodies and Fc Engineering"
+      },
+      {
+        "type": "text",
+        "content": "The full-length antibody structure enabled rational engineering of therapeutic antibodies: CDR grafting (humanization), Fc engineering to extend half-life (YTE mutation), enhance ADCC (GASDALIE), or abolish effector function (LALA-PG). Over 100 therapeutic antibodies are now approved. Adalimumab (Humira) was the best-selling drug in the world for a decade with over $20 billion in annual sales."
+      }
+    ],
+    "figure_plan": [
+      {
+        "figure_number": 1,
+        "layout": "1x2",
+        "panels": [
+          {
+            "pdb_id": "1IGT",
+            "style": "cartoon",
+            "color_scheme": "chain",
+            "caption": "Ribbon diagram of full-length murine IgG1 showing the Y-shape. Two heavy chains (blue, red) and two light chains (green, yellow) form the complete antibody. The two Fab arms project upward; the Fc region is at the base."
+          },
+          {
+            "pdb_id": "1IGT",
+            "style": "surface",
+            "color_scheme": "electrostatic",
+            "caption": "Molecular surface of IgG1 showing the electropositive CDR region at the top of each Fab arm and the Fc region below the hinge."
+          }
+        ],
+        "overall_caption": "Fig. 1: Full-length murine IgG1 antibody (1IGT) at 2.7 Å—the first complete antibody structure showing functional modularity: antigen recognition (Fab) is separated from effector function (Fc) by the flexible hinge."
+      },
+      {
+        "figure_number": 2,
+        "layout": "1x1",
+        "panels": [
+          {
+            "pdb_id": "1IGT",
+            "style": "sticks",
+            "color_scheme": "element",
+            "caption": "CDR loops of the IgG1 Fab arm showing the six hypervariable loops (CDR-H1, H2, H3, CDR-L1, L2, L3) forming the antigen-binding paratope. CDR-H3 (orange, longest and most variable) contacts the center of the antigen epitope."
+          }
+        ],
+        "overall_caption": "Fig. 2: CDR loops of IgG1—the six CDR loops encoded by recombined V, D, and J gene segments create the immense antibody diversity of the adaptive immune system."
+      }
+    ],
+    "key_facts": [
+      "First full-length IgG1 crystal structure solved at 2.7 Å by Harris, Larson, Hasel, and McPherson at UC Riverside, published in Biochemistry in 1997.",
+      "IgG1 is a heterotetrameric Y-shaped molecule: two heavy chains (~50 kDa) + two light chains (~25 kDa), linked by disulfide bonds.",
+      "Six CDR loops (3 per Fab arm, from VH and VL) determine antigen specificity; CDR-H3 is the most variable and dominant contact loop.",
+      "Fc region CH2/CH3 domains mediate effector functions through FcgammaR receptors (ADCC, phagocytosis) and FcRn (half-life extension).",
+      "Over 100 therapeutic antibodies are approved, making IgG the dominant biopharmaceutical modality by revenue.",
+      "Adalimumab (anti-TNF IgG1) was the best-selling drug globally for a decade with >$20B annual peak revenue.",
+      "Fc engineering mutations (YTE: M252Y/S254T/T256E) extend antibody half-life 3-4 fold by enhancing FcRn binding at acidic endosomal pH."
+    ],
+    "discovery_year": 1997,
+    "significance": "The first full-length IgG structure provided the complete structural blueprint for the antibody scaffold underlying the modern biopharmaceutical industry. By revealing how Fab and Fc regions connect and move, the structure enabled rational engineering of half-life, effector function, and bispecificity. Therapeutic antibodies now account for over 40% of global pharmaceutical revenue.",
+    "related_molecules": [
+      "5C4X",
+      "1HHP",
+      "3SN6"
+    ]
+  },
+  {
+    "id": "6VYB",
+    "name": "SARS-CoV-2 Spike Protein",
+    "title": "The Pandemic Antigen: SARS-CoV-2 Spike Protein and mRNA Vaccine Design",
+    "abstract": "The SARS-CoV-2 spike glycoprotein mediates viral entry by binding the ACE2 receptor and fusing viral and host membranes. Alexandra Walls, Young-Jun Park, and David Veesler solved the cryo-EM structure of the prefusion spike trimer at 3.2 Å in 2020, weeks after the virus was sequenced. The structure directly guided design of mRNA vaccines achieving extraordinary efficacy in the COVID-19 pandemic.",
+    "sections": [
+      {
+        "type": "heading",
+        "content": "A Structure in Record Time"
+      },
+      {
+        "type": "text",
+        "content": "In February 2020, Alexandra Walls, Young-Jun Park, M. Alexandra Tortorici, Abigail Wall, Andrew T. McGuire, and David Veesler at the University of Washington published the 3.2 Å cryo-EM structure of the full-length SARS-CoV-2 spike in Cell. A parallel structure was published simultaneously by Jason McLellan's group at UT Austin. The speed of this work was enabled by prior investment in coronavirus structural biology and cryo-EM infrastructure."
+      },
+      {
+        "type": "figure-ref",
+        "content": "See Fig. 1"
+      },
+      {
+        "type": "heading",
+        "content": "Prefusion Trimer and ACE2 Recognition"
+      },
+      {
+        "type": "text",
+        "content": "The spike is a homotrimer (~4.5 MDa); each protomer contains NTD, receptor-binding domain (RBD), and two S2 subunit heptad repeats that drive membrane fusion. The RBD opens ('up' conformation) to engage ACE2 and closes ('down') to evade immune recognition. The furin cleavage site (RRAR) between S1 and S2 is critical for SARS-CoV-2 transmissibility. Six proline substitutions (2P or 6P) introduced into S2 lock the trimer in prefusion conformation, enhancing neutralizing antibody responses."
+      },
+      {
+        "type": "figure-ref",
+        "content": "See Fig. 2"
+      },
+      {
+        "type": "heading",
+        "content": "mRNA Vaccines and Variant Evolution"
+      },
+      {
+        "type": "text",
+        "content": "The BNT162b2 (Pfizer/BioNTech) and mRNA-1273 (Moderna) vaccines encode the 2P proline-stabilized spike directly implementing the structural design principle. These vaccines achieved ~95% efficacy—the highest of any respiratory virus vaccine. Structural surveillance of variants (Alpha through Omicron) revealed how RBD mutations alter ACE2 affinity and antibody evasion, informing bivalent vaccine formulations in real time."
+      }
+    ],
+    "figure_plan": [
+      {
+        "figure_number": 1,
+        "layout": "1x2",
+        "panels": [
+          {
+            "pdb_id": "6VYB",
+            "style": "cartoon",
+            "color_scheme": "chain",
+            "caption": "Cryo-EM structure of SARS-CoV-2 spike trimer in prefusion conformation. Three protomers (blue, red, green) are shown. One RBD is in the 'up' (open) conformation exposed for ACE2 binding."
+          },
+          {
+            "pdb_id": "6VYB",
+            "style": "surface",
+            "color_scheme": "electrostatic",
+            "caption": "Electrostatic surface of the spike trimer showing the electropositive ACE2 binding ridge on the RBD (one protomer in 'up' conformation) and the heavily glycosylated outer surface."
+          }
+        ],
+        "overall_caption": "Fig. 1: SARS-CoV-2 spike protein (6VYB) at 3.2 Å by cryo-EM—the trimeric prefusion conformation encoded by all mRNA COVID-19 vaccines."
+      },
+      {
+        "figure_number": 2,
+        "layout": "1x1",
+        "panels": [
+          {
+            "pdb_id": "6VYB",
+            "style": "sticks",
+            "color_scheme": "element",
+            "caption": "RBD in 'up' conformation showing the receptor-binding motif (RBM, orange) that contacts ACE2. Key residues mutated in variants of concern (K417, L452, E484, N501) are shown as sticks. The furin cleavage site (RRAR, yellow) connecting S1 and S2 is indicated."
+          }
+        ],
+        "overall_caption": "Fig. 2: SARS-CoV-2 RBD receptor-binding motif—Omicron mutations cluster in this region, simultaneously enhancing ACE2 affinity and evading neutralizing antibodies."
+      }
+    ],
+    "key_facts": [
+      "SARS-CoV-2 spike prefusion cryo-EM structure (3.2 Å) solved by Walls, Park, Tortorici, Veesler et al. at U. Washington, published in Cell in February 2020.",
+      "The homotrimeric spike (~4.5 MDa with glycans) uses the RBD to engage ACE2; one to three RBDs can be in 'up' conformation per trimer.",
+      "Six proline substitutions (2P or 6P) in S2 lock the spike in prefusion conformation, dramatically enhancing vaccine-induced neutralizing antibody responses.",
+      "BNT162b2 and mRNA-1273 mRNA vaccines encode the 2P-stabilized spike; both achieved ~95% efficacy against the original SARS-CoV-2 strain.",
+      "Omicron variant carries >30 mutations in the spike, including 15 in the RBD, driving both immune evasion and enhanced ACE2 binding.",
+      "The furin cleavage site (RRAR insert) between S1 and S2, absent in SARS-CoV-1, is a key determinant of SARS-CoV-2 high transmissibility.",
+      "The 2P prefusion-stabilization strategy is now standard for RSV, influenza, and HIV vaccine design."
+    ],
+    "discovery_year": 2020,
+    "significance": "The SARS-CoV-2 spike structure, solved within weeks of the pandemic's emergence, directly enabled vaccine design that ended the acute phase of the COVID-19 pandemic. The proline-stabilized prefusion antigen strategy produced vaccines with >95% efficacy in under a year—the fastest vaccine development in history. The structure provides a real-time example of how structural biology accelerates public health response to infectious disease.",
+    "related_molecules": [
+      "1IGT",
+      "6LU7",
+      "1HHP"
+    ]
+  },
+  {
+    "id": "3SN6",
+    "name": "Beta-2AR-Gs Complex",
+    "title": "Signal Transmission Captured: The First GPCR-G Protein Complex Structure",
+    "abstract": "The complex between the beta-2 adrenergic receptor and the heterotrimeric Gs protein was the first structure to capture a GPCR in its active, G protein-coupled state. Soren Rasmussen, Brian DeVree, and Brian Kobilka's group solved the 3.2 Å crystal structure in 2011, revealing the dramatic conformational changes in the receptor that open the cytoplasmic G protein-binding cavity.",
+    "sections": [
+      {
+        "type": "heading",
+        "content": "Catching the Signal Mid-Flight"
+      },
+      {
+        "type": "text",
+        "content": "In 2011, Soren G. F. Rasmussen, Brian T. DeVree, Yaozhong Zou, Andrew C. Kruse, Ka Young Chung, Tong Sun Kobilka, Brian K. Kobilka, and Roger K. Sunahara published the 3.2 Å structure of the beta2AR-Gs complex in Nature, completing the mechanistic picture of GPCR signal transduction started by the 2007 beta2AR structure."
+      },
+      {
+        "type": "figure-ref",
+        "content": "See Fig. 1"
+      },
+      {
+        "type": "heading",
+        "content": "The Open Cytoplasmic Cavity"
+      },
+      {
+        "type": "text",
+        "content": "Comparison of active beta2AR-Gs with the inactive beta2AR structure (2007) revealed that agonist binding drives a 14 Å outward movement of transmembrane helix 6 (TM6), opening a large cavity that accommodates the Galpha-s alpha5 helix. The alpha5 helix inserts 8 Å into the receptor core and directly connects to the nucleotide-binding pocket of Galpha-s, explaining how agonist binding >30 Å away stimulates GDP release and G protein activation."
+      },
+      {
+        "type": "figure-ref",
+        "content": "See Fig. 2"
+      },
+      {
+        "type": "heading",
+        "content": "Impact on Drug Discovery"
+      },
+      {
+        "type": "text",
+        "content": "The beta2AR-Gs structure revealed the basis for G protein selectivity and provided a framework for designing biased agonists that selectively activate G protein signaling without activating beta-arrestin recruitment. Biased agonists at mu-opioid receptors (Gi-biased) were developed as potential analgesics with reduced respiratory depression; biased agonists at GLP-1R are being pursued for type 2 diabetes and obesity."
+      }
+    ],
+    "figure_plan": [
+      {
+        "figure_number": 1,
+        "layout": "1x2",
+        "panels": [
+          {
+            "pdb_id": "3SN6",
+            "style": "cartoon",
+            "color_scheme": "chain",
+            "caption": "Complete beta2AR-Gs complex. The beta2AR (blue, seven transmembrane helices) is bound to agonist BI-167107 (yellow sticks) at the extracellular face and to the Galpha-s subunit (orange) at the intracellular face. Gbeta (green) and Ggamma (red) complete the heterotrimer."
+          },
+          {
+            "pdb_id": "3SN6",
+            "style": "surface",
+            "color_scheme": "hydrophobicity",
+            "caption": "Side view showing the membrane plane. TM6 is displaced outward by 14 Å relative to the inactive receptor, creating the cytoplasmic cavity that accommodates the Galpha-s alpha5 helix."
+          }
+        ],
+        "overall_caption": "Fig. 1: beta2AR-Gs complex (3SN6) at 3.2 Å—the first GPCR-G protein complex, capturing signal transduction in atomic detail from agonist-binding site to G protein nucleotide pocket."
+      },
+      {
+        "figure_number": 2,
+        "layout": "1x1",
+        "panels": [
+          {
+            "pdb_id": "3SN6",
+            "style": "sticks",
+            "color_scheme": "element",
+            "caption": "beta2AR-Galpha-s interface showing the Galpha-s alpha5 helix (orange) inserted 8 Å into the TM6 outward-displaced cavity. Key contacts between Galpha-s Leu393, Ile394 and receptor Arg131, Tyr326 are shown."
+          }
+        ],
+        "overall_caption": "Fig. 2: beta2AR-Galpha-s coupling interface—the alpha5 helix mechanically transmits the TM6 movement to open the GDP-binding site and trigger nucleotide exchange."
+      }
+    ],
+    "key_facts": [
+      "beta2AR-Gs complex solved at 3.2 Å by Rasmussen, DeVree, Kobilka, Sunahara et al., published in Nature in 2011.",
+      "TM6 moves outward by 14 Å upon receptor activation—the largest conformational change observed in a GPCR activation.",
+      "The Galpha-s alpha5 helix inserts 8 Å into the cytoplasmic cavity and directly connects to the GDP-binding site, triggering nucleotide exchange.",
+      "A T4 lysozyme and nanobody were required to stabilize the transient complex.",
+      "Biased agonism concept emerged from comparing active and inactive GPCR structures.",
+      "The structure provides the framework for designing selective modulators of Gs, Gi, and Gq coupling for heart failure, pain, and metabolic disease.",
+      "Kobilka's 2007 (inactive) and 2011 (active beta2AR-Gs) structures together provided the complete mechanistic picture honored by the 2012 Nobel Prize."
+    ],
+    "discovery_year": 2011,
+    "significance": "The beta2AR-Gs complex structure completed the mechanistic picture of G protein-coupled signaling, revealing how extracellular ligand binding is transmitted across the membrane to activate an intracellular G protein. This enabled structure-based design of biased agonists selectively engaging beneficial G protein signaling—a strategy now applied to opioids, glucagon receptors, and dozens of other GPCRs.",
+    "related_molecules": [
+      "2RH1",
+      "1HHP",
+      "1M17"
+    ]
+  },
+  {
+    "id": "1CGD",
+    "name": "Collagen Triple Helix",
+    "title": "The Body's Scaffold: Collagen and the Most Abundant Protein in the Human Body",
+    "abstract": "Collagen is the most abundant protein in the human body, comprising one-third of total protein mass and providing tensile strength to skin, bone, tendon, and blood vessels. Jordi Bella, Manu Eaton, Barbara Brodsky, and Helen Berman solved the 1.9 Å crystal structure of a synthetic collagen triple-helical peptide in 1994, explaining how hydroxyproline stabilizes the helix and how collagen mutations cause brittle bone disease.",
+    "sections": [
+      {
+        "type": "heading",
+        "content": "The Rope That Holds the Body Together"
+      },
+      {
+        "type": "text",
+        "content": "In 1994, Jordi Bella, Manu Eaton, Barbara Brodsky, and Helen M. Berman at Rutgers University solved the 1.9 Å crystal structure of the collagen model peptide (Pro-Hyp-Gly)10 and published it in Science. Collagen's triple helix—three chains wound around each other in a right-handed superhelix—had been known from fiber diffraction since the 1950s (Ramachandran and Kartha, 1954), but the Bella structure provided the first atomic-resolution picture of hydrogen bonding, water structure, and hydroxyproline contacts."
+      },
+      {
+        "type": "figure-ref",
+        "content": "See Fig. 1"
+      },
+      {
+        "type": "heading",
+        "content": "Hydroxyproline and Thermal Stability"
+      },
+      {
+        "type": "text",
+        "content": "The Bella structure revealed that hydroxyproline (Hyp) residues mediate water-bridged hydrogen bonds to backbone carbonyls of neighboring chains. The 4R-hydroxy group electronegatively destabilizes the ring pucker conformation unfavorable in the triple helix, biasing the residue toward the correct polyproline II conformation. This explains why vitamin C deficiency causes scurvy: unhydroxylated proline cannot stabilize the triple helix."
+      },
+      {
+        "type": "figure-ref",
+        "content": "See Fig. 2"
+      },
+      {
+        "type": "heading",
+        "content": "Disease: Osteogenesis Imperfecta and Beyond"
+      },
+      {
+        "type": "text",
+        "content": "Over 1,400 mutations in COL1A1 and COL1A2 cause osteogenesis imperfecta ('brittle bone disease'). Structurally, Gly substitutions introduce bulges that nucleate unfolding—the Gly-Xaa-Yaa triplet requires glycine at every third position. Ehlers-Danlos syndrome and Alport syndrome also arise from collagen mutations. Collagen is the scaffold for tissue engineering, wound healing matrices, and injectable soft-tissue fillers."
+      }
+    ],
+    "figure_plan": [
+      {
+        "figure_number": 1,
+        "layout": "1x2",
+        "panels": [
+          {
+            "pdb_id": "1CGD",
+            "style": "cartoon",
+            "color_scheme": "chain",
+            "caption": "Collagen triple helix (1CGD) showing three polyproline II-type chains (cyan, magenta, yellow) wound in a right-handed superhelix. The characteristic 1/3 stagger between chains is visible. Hydroxyproline residues are shown as sticks."
+          },
+          {
+            "pdb_id": "1CGD",
+            "style": "sticks",
+            "color_scheme": "element",
+            "caption": "Stick representation showing the backbone hydrogen bond network. Each NH of glycine (blue) hydrogen-bonds to the CO of the Xaa position on the preceding chain."
+          }
+        ],
+        "overall_caption": "Fig. 1: Collagen triple helix (1CGD) at 1.9 Å—three chains offset by one residue, wound into a right-handed superhelix with a pitch of 86 Å and 10 triplets per turn."
+      },
+      {
+        "figure_number": 2,
+        "layout": "1x1",
+        "panels": [
+          {
+            "pdb_id": "1CGD",
+            "style": "sticks",
+            "color_scheme": "element",
+            "caption": "Hydroxyproline residues in the collagen triple helix with water molecules (red spheres) bridging the Hyp hydroxyl groups to backbone carbonyls of neighboring chains—the primary source of helix stabilization."
+          }
+        ],
+        "overall_caption": "Fig. 2: Hydroxyproline-water network in collagen—the 4R-Hyp hydroxyl coordinates water molecules hydrogen-bonding across chains, explaining why vitamin C deficiency causes structural failure in scurvy."
+      }
+    ],
+    "key_facts": [
+      "Collagen triple helix solved at 1.9 Å by Bella, Eaton, Brodsky, and Berman at Rutgers, published in Science in 1994.",
+      "Collagen is the most abundant protein in humans (~30% of total protein), providing tensile strength to skin, bone, tendon, and blood vessels.",
+      "The (Gly-Xaa-Yaa)n sequence requires glycine (the smallest amino acid) at every third position to fit the tight triple helix core.",
+      "Hydroxyproline (requires vitamin C for biosynthesis) stabilizes the triple helix via water-mediated hydrogen bonds—structural basis of scurvy.",
+      "Over 1,400 mutations in COL1A1/COL1A2 cause osteogenesis imperfecta; Gly substitutions introduce steric clashes nucleating triple helix unfolding.",
+      "28 collagen types exist in humans (Types I-XXVIII), each with distinct tissue distribution and mechanical properties.",
+      "Collagen is the scaffold for tissue engineering, wound healing matrices, and soft-tissue fillers in cosmetic medicine."
+    ],
+    "discovery_year": 1994,
+    "significance": "The atomic-resolution collagen structure explained the molecular basis of the most abundant structural protein in the body, resolving questions about hydroxyproline's role in helix stability and the mechanism of osteogenesis imperfecta mutations. This knowledge underpins rational approaches to collagen-related diseases, guides engineering of collagen biomaterials for tissue repair, and explains why vitamin C is essential for structural integrity.",
+    "related_molecules": [
+      "1CRN",
+      "1MBN",
+      "4HHB"
+    ]
+  },
+  {
+    "id": "6OGE",
+    "name": "F-Actin",
+    "title": "The Cytoskeleton at Near-Atomic Resolution: F-Actin and Cell Movement",
+    "abstract": "Filamentous actin (F-actin) is the polymeric form of actin that forms the core of the cytoskeleton, driving cell movement, division, and shape. Hsiau-Wei Chou and Daved Bhatt solved the cryo-EM structure of rabbit skeletal F-actin at 3.1 Å in 2018 at the MRC-LMB, providing the highest-resolution F-actin structure to that point and revealing the conformational changes between monomeric G-actin and filamentous F-actin in atomic detail.",
+    "sections": [
+      {
+        "type": "heading",
+        "content": "The Filament That Moves Cells"
+      },
+      {
+        "type": "text",
+        "content": "In 2018, Hsiau-Wei Chou and Daved Bhatt at the MRC Laboratory of Molecular Biology published the 3.1 Å cryo-EM structure of rabbit skeletal F-actin in PNAS. Actin polymerizes from G-actin (globular) monomers into F-actin (filamentous) helical polymers. F-actin is a left-handed double helix with a 36 nm crossover repeat, providing the tracks for myosin motors and the scaffolding for branched networks driven by the Arp2/3 complex."
+      },
+      {
+        "type": "figure-ref",
+        "content": "See Fig. 1"
+      },
+      {
+        "type": "heading",
+        "content": "G-Actin to F-Actin: The Structural Transition"
+      },
+      {
+        "type": "text",
+        "content": "Comparison of G-actin and F-actin reveals a ~20-degree flattening of the actin monomer upon polymerization, driven by contacts between the D-loop of one monomer and the hydrophobic plug of the next. The D-loop becomes ordered in the filament—disordered in G-actin—forming the key longitudinal contact. ADP in F-actin adopts a more closed nucleotide-pocket conformation than ATP-bound G-actin, controlling filament dynamics."
+      },
+      {
+        "type": "figure-ref",
+        "content": "See Fig. 2"
+      },
+      {
+        "type": "heading",
+        "content": "Drug Targets and Pathogen Exploitation"
+      },
+      {
+        "type": "text",
+        "content": "Phalloidin (Amanita toxin) stabilizes F-actin by binding between subunits; latrunculin sequesters G-actin monomers. These compounds are used in cell biology research and as lead structures for anticancer drugs targeting cytoskeletal dynamics in cancer metastasis. Bacterial pathogens (Listeria, Shigella) hijack actin polymerization for intracellular motility—the F-actin structure explains how bacterial surface proteins nucleate actin assembly."
+      }
+    ],
+    "figure_plan": [
+      {
+        "figure_number": 1,
+        "layout": "1x2",
+        "panels": [
+          {
+            "pdb_id": "6OGE",
+            "style": "cartoon",
+            "color_scheme": "chain",
+            "caption": "Cryo-EM structure of F-actin filament segment showing seven actin subunits (alternating blue/cyan) in the left-handed helical arrangement. ADP (yellow sticks) is visible in each subunit's nucleotide cleft."
+          },
+          {
+            "pdb_id": "6OGE",
+            "style": "surface",
+            "color_scheme": "hydrophobicity",
+            "caption": "Surface of F-actin filament colored by hydrophobicity. The inter-subunit contacts include a prominent hydrophobic plug (orange) that inserts between the D-loop and subdomain 3 of the adjacent subunit."
+          }
+        ],
+        "overall_caption": "Fig. 1: F-actin (6OGE) at 3.1 Å by cryo-EM—left-handed double-stranded helix with 36 nm crossover repeat, 166-degree rotation and 27.5 Å axial rise per subunit."
+      },
+      {
+        "figure_number": 2,
+        "layout": "1x1",
+        "panels": [
+          {
+            "pdb_id": "6OGE",
+            "style": "sticks",
+            "color_scheme": "element",
+            "caption": "Inter-subunit interface of F-actin showing the D-loop (blue, ordered only in the filament) contacting the hydrophobic plug region (orange) of the adjacent subunit. Residues Ile287, Met269, Phe262, and Val43 form a hydrophobic cluster."
+          }
+        ],
+        "overall_caption": "Fig. 2: F-actin longitudinal interface—the D-loop becomes ordered upon polymerization and inserts into the hydrophobic cleft of the next subunit, stabilizing the filament and explaining cooperativity of actin polymerization."
+      }
+    ],
+    "key_facts": [
+      "F-actin cryo-EM structure at 3.1 Å determined by Chou and Bhatt at the MRC-LMB, published in PNAS in 2018.",
+      "F-actin is a left-handed double helix with 36 nm crossover repeat, 166-degree rotation, and 27.5 Å rise per subunit.",
+      "The G-actin to F-actin transition involves a ~20-degree monomer flattening and ordering of the D-loop that inserts into the adjacent subunit.",
+      "F-actin is the track for myosin II (muscle contraction), myosin V (vesicle transport), and scaffold for Arp2/3-branched lamellipodia.",
+      "Phalloidin (Amanita toxin) binds between actin subunits to stabilize filaments and is used ubiquitously as a fluorescent F-actin probe.",
+      "Actin cytoskeleton remodeling drives cancer invasion and metastasis; anti-actin compounds are in development as anti-metastatic drugs.",
+      "Bacterial pathogens (Listeria, Shigella) polymerize host actin via surface proteins (ActA, IcsA) for intracellular propulsion."
+    ],
+    "discovery_year": 2018,
+    "significance": "The near-atomic F-actin structure resolved the conformational differences between monomeric and filamentous actin governing cytoskeleton dynamics—the engine of cell movement, division, and shape change. This knowledge underpins understanding of cancer metastasis, muscle contraction diseases, and the molecular strategies used by intracellular pathogens. F-actin structural biology now guides development of anti-metastatic compounds.",
+    "related_molecules": [
+      "3KIN",
+      "1ATP",
+      "1AON"
+    ]
+  },
+  {
+    "id": "2BNH",
+    "name": "Streptavidin-Biotin",
+    "title": "The Strongest Non-Covalent Bond: Streptavidin-Biotin as a Universal Biotechnology Tool",
+    "abstract": "The streptavidin-biotin complex exhibits the strongest known non-covalent interaction in biology, with a dissociation constant of approximately 10^-14 M. Patrick Weber, David Ohlendorf, John Wendoloski, and Fred Salemme solved the 2.6 Å crystal structure of Streptomyces avidinii streptavidin in 1989, revealing the beta-barrel scaffold and deep hydrophobic biotin-binding pocket responsible for the extraordinary affinity.",
+    "sections": [
+      {
+        "type": "heading",
+        "content": "A Bond Near the Limit of Non-Covalency"
+      },
+      {
+        "type": "text",
+        "content": "In 1989, Patrick C. Weber, David H. Ohlendorf, John J. Wendoloski, and Fred R. Salemme at Bristol-Myers Squibb published the 2.6 Å crystal structure of Streptomyces avidinii streptavidin in Science. The dissociation constant for biotin (Kd ~10^-14 M) corresponds to a binding free energy of ~19 kcal/mol—approximately 6-fold stronger than a typical enzyme-substrate interaction and only 2-fold weaker than a covalent bond at physiological temperature."
+      },
+      {
+        "type": "figure-ref",
+        "content": "See Fig. 1"
+      },
+      {
+        "type": "heading",
+        "content": "The Barrel and the Buried Pocket"
+      },
+      {
+        "type": "text",
+        "content": "Streptavidin is a homotetramer; each subunit adopts an eight-stranded beta-barrel (jellyroll fold) with the biotin-binding pocket buried at one end. Biotin is buried to 84% of its surface area, forming hydrogen bonds with Asn23, Ser27, Tyr43, Asn49, and Ser45 and a stacking interaction with Trp92 that contributes ~3 kcal/mol. The extraordinary affinity arises from nearly complete desolvation of the ligand combined with a tight hydrogen bond network."
+      },
+      {
+        "type": "figure-ref",
+        "content": "See Fig. 2"
+      },
+      {
+        "type": "heading",
+        "content": "Biotechnology Platform"
+      },
+      {
+        "type": "text",
+        "content": "The streptavidin-biotin interaction survives denaturing agents, extremes of pH, temperature, and organic solvents, making it the universal coupling agent in biotechnology: ELISA, Western blotting, flow cytometry, single-molecule force spectroscopy, biosensors, and targeted drug delivery. Engineered monomeric streptavidin (mSA) has been developed to avoid multivalent crosslinking artefacts in cell biology."
+      }
+    ],
+    "figure_plan": [
+      {
+        "figure_number": 1,
+        "layout": "1x2",
+        "panels": [
+          {
+            "pdb_id": "2BNH",
+            "style": "cartoon",
+            "color_scheme": "chain",
+            "caption": "Ribbon diagram of streptavidin tetramer viewed from the biotin-binding face. Four subunits (distinct colors) each contribute an eight-stranded beta-barrel (jellyroll). Biotin molecules (yellow sticks) are visible buried at the end of each barrel."
+          },
+          {
+            "pdb_id": "2BNH",
+            "style": "surface",
+            "color_scheme": "hydrophobicity",
+            "caption": "Molecular surface of streptavidin showing four deep hydrophobic pockets (orange) that accommodate biotin. The non-polar nature of the binding site explains biotin's 84% burial and near-zero off-rate."
+          }
+        ],
+        "overall_caption": "Fig. 1: Streptavidin-biotin complex (2BNH) at 2.6 Å—the homotetramer binds four biotin molecules with Kd ~10^-14 M, the strongest non-covalent interaction in nature."
+      },
+      {
+        "figure_number": 2,
+        "layout": "1x1",
+        "panels": [
+          {
+            "pdb_id": "2BNH",
+            "style": "sticks",
+            "color_scheme": "element",
+            "caption": "Streptavidin biotin-binding site showing biotin (yellow) hydrogen bonded to Asn23, Ser27, Tyr43, Ser45, Asn49, and Asp128 (pink sticks) and stacked against Trp92 (orange). Five hydrogen bonds and the tryptophan stack account for >15 kcal/mol of binding energy."
+          }
+        ],
+        "overall_caption": "Fig. 2: Streptavidin biotin-binding pocket—five direct hydrogen bonds plus aromatic stacking with Trp92 and near-complete desolvation of biotin produce the strongest known non-covalent interaction in biology."
+      }
+    ],
+    "key_facts": [
+      "Streptavidin solved at 2.6 Å by Weber, Ohlendorf, Wendoloski, and Salemme at Bristol-Myers Squibb, published in Science in 1989.",
+      "The streptavidin-biotin Kd (~10^-14 M) is the strongest known non-covalent interaction in biology, with a half-life >24 hours at 37 degrees C.",
+      "Each subunit of the homotetramer forms an 8-stranded beta-barrel with a deep, hydrophobic biotin-binding pocket.",
+      "Biotin is 84% buried upon binding, forming 5 direct hydrogen bonds and a critical Trp92 aromatic stack; survives SDS, extremes of pH, and >100 degrees C.",
+      "The streptavidin-biotin interaction underpins ELISA, Western blotting, biosensors, SPR, cell sorting, and targeted drug delivery.",
+      "Engineered monomeric streptavidin (mSA, Kd ~10^-9 M) is used where monovalency is required to avoid crosslinking artefacts.",
+      "Egg white avidin (Kd ~10^-15 M) is the equivalent in higher organisms; convergently evolved the same binding geometry as streptavidin."
+    ],
+    "discovery_year": 1989,
+    "significance": "The streptavidin structure explained the extraordinary affinity for biotin at atomic resolution and validated the use of this interaction as the near-universal molecular coupling system in biotechnology. No other non-covalent interaction combines such extraordinary affinity with chemical robustness. The streptavidin-biotin system underpins thousands of diagnostic and research applications.",
+    "related_molecules": [
+      "1LYZ",
+      "1GFL",
+      "1CRN"
+    ]
+  },
+  {
+    "id": "4UN3",
+    "name": "Cas12a (Cpf1)",
+    "title": "The Staggered Cutter: Cas12a and the Expansion of the CRISPR Toolkit",
+    "abstract": "Cas12a (formerly Cpf1) is a Class 2, Type V CRISPR-Cas effector nuclease that generates staggered DNA cuts and uses only a crRNA without tracrRNA, distinguishing it from Cas9. Kazuki Yamano and colleagues in Feng Zhang's group solved the 2.8 Å crystal structure of Acidaminococcus sp. Cas12a in 2016, revealing the RuvC-only nuclease architecture and pre-ordered seed region that make Cas12a valuable for genome editing at T-rich PAM sites and for nucleic acid diagnostics.",
+    "sections": [
+      {
+        "type": "heading",
+        "content": "A Different CRISPR Cutter"
+      },
+      {
+        "type": "text",
+        "content": "In 2016, Kazuki Yamano, Bernd Zetsche, Rhiannon N. Smargon, Omar O. Abudayyeh, David Scott, and Feng Zhang solved the 2.8 Å crystal structure of Acidaminococcus sp. Cas12a (AsCas12a) in the binary complex with its crRNA, published in Cell. Unlike Cas9, which requires a tracrRNA and generates blunt cuts, Cas12a uses a single ~42-nucleotide crRNA and generates staggered 5-nt 5' overhangs. Its PAM sequence (5'-TTTN-3') is T-rich, complementing Cas9's NGG PAM."
+      },
+      {
+        "type": "figure-ref",
+        "content": "See Fig. 1"
+      },
+      {
+        "type": "heading",
+        "content": "RuvC Nuclease and the Pre-Ordered Seed"
+      },
+      {
+        "type": "text",
+        "content": "The Yamano structure revealed that Cas12a has only a single RuvC nuclease domain (vs. Cas9's RuvC plus HNH), which cleaves both DNA strands sequentially. The seed region of the crRNA (positions 1-5 adjacent to the PAM) is pre-ordered in a helix in the binary complex, facilitating rapid target search. The structure also revealed the collateral cleavage activity of Cas12a (activated single-stranded DNA degradation) that underlies the DETECTR diagnostic platform."
+      },
+      {
+        "type": "figure-ref",
+        "content": "See Fig. 2"
+      },
+      {
+        "type": "heading",
+        "content": "Diagnostics and Therapeutic Applications"
+      },
+      {
+        "type": "text",
+        "content": "Cas12a's collateral ssDNA cleavage activity was harnessed in the DETECTR diagnostics platform, which can detect attomolar concentrations of specific DNA sequences in under an hour and was authorized for emergency use for COVID-19 detection. Cas12a's smaller size (1,228 aa vs. SpCas9's 1,368 aa) enables better AAV delivery for in vivo gene therapy."
+      }
+    ],
+    "figure_plan": [
+      {
+        "figure_number": 1,
+        "layout": "1x2",
+        "panels": [
+          {
+            "pdb_id": "4UN3",
+            "style": "cartoon",
+            "color_scheme": "chain",
+            "caption": "Ribbon diagram of AsCas12a binary complex with crRNA. The bilobal architecture has a recognition lobe (REC1, REC2, blue) and nuclease lobe (RuvC, NUC, WED, PAM-interacting, orange/red). The crRNA (yellow) bridges the two lobes through the central channel."
+          },
+          {
+            "pdb_id": "4UN3",
+            "style": "surface",
+            "color_scheme": "electrostatic",
+            "caption": "Electrostatic surface of Cas12a showing the positively charged nucleic acid binding groove (blue) accommodating the crRNA:DNA heteroduplex. The PAM-interacting domain (bottom right) is electropositive to contact the T-rich PAM duplex."
+          }
+        ],
+        "overall_caption": "Fig. 1: AsCas12a-crRNA binary complex (4UN3) at 2.8 Å—bilobal architecture uses a single RuvC nuclease domain and a shorter crRNA without tracrRNA, simplifying delivery and multiplex editing."
+      },
+      {
+        "figure_number": 2,
+        "layout": "1x1",
+        "panels": [
+          {
+            "pdb_id": "4UN3",
+            "style": "sticks",
+            "color_scheme": "element",
+            "caption": "crRNA seed region (positions 1-5, orange sticks) in the pre-ordered helical conformation within the Cas12a central channel. Key contacts between Lys965, Arg1226 of the REC2 domain (blue sticks) and the crRNA backbone phosphates maintain seed region rigidity."
+          }
+        ],
+        "overall_caption": "Fig. 2: Pre-ordered crRNA seed region of Cas12a—the first 5 nucleotides of the spacer adopt a helical structure before target DNA binding, reducing the entropic cost of R-loop initiation."
+      }
+    ],
+    "key_facts": [
+      "AsCas12a-crRNA binary complex solved at 2.8 Å by Yamano, Zetsche, Smargon, Zhang et al., published in Cell in 2016.",
+      "Cas12a uses only a single ~42-nt crRNA (no tracrRNA), generates staggered 5-nt 5' overhangs, and requires a 5'-TTTN-3' PAM.",
+      "Single RuvC nuclease domain cleaves both DNA strands sequentially; no HNH domain (present in Cas9).",
+      "Pre-ordered seed region (positions 1-5 of spacer) facilitates rapid target search without conformational rearrangement.",
+      "Collateral ssDNA cleavage of Cas12a was harnessed in DETECTR diagnostics—attomolar DNA detection in under 1 hour, authorized for COVID-19 use.",
+      "Cas12a's smaller size (1,228 aa vs. SpCas9 1,368 aa) improves packaging into single AAV vectors for in vivo gene therapy.",
+      "Multiple Cas12a orthologs (LbCas12a, AsCas12a, FnCas12a) with distinct PAM preferences expand the addressable genome for editing."
+    ],
+    "discovery_year": 2016,
+    "significance": "The Cas12a structure expanded the CRISPR toolkit beyond Cas9 with distinct properties: staggered cuts for improved HDR, T-rich PAM for AT-rich genome editing, and collateral ssDNA cleavage for ultrasensitive diagnostics. DETECTR, built directly on the structural understanding of Cas12a's catalytic mechanism, is now an FDA-authorized diagnostic platform.",
+    "related_molecules": [
+      "5WE4",
+      "1AOI",
+      "1EHZ"
+    ]
+  },
+  {
+    "id": "3KIN",
+    "name": "Kinesin Motor Domain",
+    "title": "The Cellular Walker: Kinesin and the Molecular Mechanism of Intracellular Transport",
+    "abstract": "Kinesin-1 is a molecular motor that walks processively along microtubules, carrying cargo over micrometer distances at the cost of ATP hydrolysis. F. Jon Kull, Edward Sablin, Richard Lowe, Robert Fletterick, and Ronald Vale solved the 1.8 Å crystal structure of the rat kinesin motor domain in 1996 at UCSF, revealing unexpected structural homology to myosin and G proteins and establishing the framework for understanding chemomechanical coupling.",
+    "sections": [
+      {
+        "type": "heading",
+        "content": "The Motor That Walks on Protein Tracks"
+      },
+      {
+        "type": "text",
+        "content": "In 1996, F. Jon Kull, Edward P. Sablin, Richard Lowe, Robert J. Fletterick, and Ronald D. Vale at UCSF published the 1.8 Å crystal structure of the rat kinesin motor domain in Nature. Kinesin-1 moves processively toward microtubule plus ends, taking 8 nm steps (one tubulin dimer) per ATP hydrolysis cycle. Two motor domains operate in a hand-over-hand mechanism, powered by the conformational change in the neck linker upon ATP binding."
+      },
+      {
+        "type": "figure-ref",
+        "content": "See Fig. 1"
+      },
+      {
+        "type": "heading",
+        "content": "A Motor Fold Shared by Myosin and G Proteins"
+      },
+      {
+        "type": "text",
+        "content": "The Kull structure revealed that the kinesin motor domain is structurally homologous to both the myosin motor domain and the G protein alpha-subunit fold—all use a P-loop NTPase mechanism. The P-loop (Walker A, GQTSSGK), switch I, and switch II regions couple nucleotide state to the conformation of the neck linker, a ~12-residue peptide that docks onto the motor domain in the ATP state, generating the power stroke that propels cargo forward."
+      },
+      {
+        "type": "figure-ref",
+        "content": "See Fig. 2"
+      },
+      {
+        "type": "heading",
+        "content": "Disease and Drug Targeting"
+      },
+      {
+        "type": "text",
+        "content": "Mutations in KIF1B (kinesin-3) cause Charcot-Marie-Tooth disease type 2A; KIF5A mutations cause hereditary spastic paraplegia. In cancer, Eg5 (kinesin-5/KIF11) drives bipolar spindle formation and is an attractive mitotic target: ispinesib and SB-743921 entered clinical trials as Eg5 inhibitors. Cancer cells depend on kinesin-driven mitosis for their rapid proliferation."
+      }
+    ],
+    "figure_plan": [
+      {
+        "figure_number": 1,
+        "layout": "1x2",
+        "panels": [
+          {
+            "pdb_id": "3KIN",
+            "style": "cartoon",
+            "color_scheme": "secondary_structure",
+            "caption": "Ribbon diagram of rat kinesin motor domain showing the central beta-sheet core (yellow) flanked by alpha-helices (red). The P-loop (GQTSSGK, blue) that binds nucleotide phosphates and switch I/II loops are indicated. ADP (yellow sticks) is visible in the nucleotide pocket."
+          },
+          {
+            "pdb_id": "3KIN",
+            "style": "surface",
+            "color_scheme": "electrostatic",
+            "caption": "Electrostatic surface of kinesin motor domain showing the microtubule-binding interface (positively charged, blue, bottom) and the nucleotide-binding site (mixed charge, center)."
+          }
+        ],
+        "overall_caption": "Fig. 1: Rat kinesin motor domain (3KIN) at 1.8 Å—the P-loop NTPase fold is structurally conserved with myosin and G proteins, revealing that cellular motors and signaling GTPases share a common evolutionary ancestor."
+      },
+      {
+        "figure_number": 2,
+        "layout": "1x1",
+        "panels": [
+          {
+            "pdb_id": "3KIN",
+            "style": "sticks",
+            "color_scheme": "element",
+            "caption": "Nucleotide-binding site of kinesin showing ADP (yellow) coordinated by the P-loop (Walker A, blue sticks), switch I (Arg204, green), and switch II (Asp231-Leu234, red). The Mg2+ ion (green sphere) bridges the beta-phosphate of ADP and switch I."
+          }
+        ],
+        "overall_caption": "Fig. 2: Kinesin P-loop NTPase active site—ATP hydrolysis rearranges switch I and II conformations, propagating to the neck linker to generate directed mechanical movement."
+      }
+    ],
+    "key_facts": [
+      "Rat kinesin motor domain solved at 1.8 Å by Kull, Sablin, Lowe, Fletterick, and Vale at UCSF, published in Nature in 1996.",
+      "Kinesin takes 8 nm steps (one tubulin dimer length) per ATP hydrolysis cycle using a hand-over-hand mechanism.",
+      "The kinesin motor fold is homologous to myosin and G proteins—all use the P-loop NTPase (Walker A/B, switch I/II) mechanism.",
+      "ATP hydrolysis drives neck linker docking onto the motor domain, generating the ~60-degree rotation constituting the power stroke.",
+      "KIF1B mutations cause Charcot-Marie-Tooth disease type 2A; KIF5A mutations cause hereditary spastic paraplegia.",
+      "Eg5/KIF11 (kinesin-5) drives bipolar spindle assembly; Eg5 inhibitors (ispinesib, SB-743921) have entered Phase I/II cancer trials.",
+      "Neurons depend critically on kinesin for axonal transport of organelles, mRNAs, and neurofilaments over meter-long distances."
+    ],
+    "discovery_year": 1996,
+    "significance": "The kinesin motor domain structure revealed that cells use a single evolutionary P-loop NTPase fold to power both molecular motors and GTPase signaling switches—connecting two fundamental cellular processes. The structure established the framework for understanding all 45 human kinesin family members, several essential for mitosis and targeted by anticancer inhibitors. Understanding kinesin-driven axonal transport is central to neurodegenerative disease biology.",
+    "related_molecules": [
+      "6OGE",
+      "1ATP",
+      "1AON"
+    ]
+  },
+  {
+    "id": "1S5L",
+    "name": "Taq DNA Polymerase",
+    "title": "The PCR Engine: Taq Polymerase and the Structure Behind the Biotechnology Revolution",
+    "abstract": "Thermus aquaticus DNA polymerase I (Taq polymerase) is the thermostable enzyme that made PCR practical, earning Kary Mullis the 1993 Nobel Prize in Chemistry. Yunliang Li, Sergey Korolev, and Gudrun Waksman solved the 2.3 Å crystal structure of the large Klenow-like fragment of Taq polymerase in 1998, revealing the 'right-hand' fold and the O-helix that closes over the dNTP to ensure fidelity during PCR extension.",
+    "sections": [
+      {
+        "type": "heading",
+        "content": "The Enzyme That Made PCR Possible"
+      },
+      {
+        "type": "text",
+        "content": "In 1998, Yunliang Li, Sergey Korolev, and Gudrun Waksman at Washington University in St. Louis published the 2.3 Å crystal structure of the Taq polymerase Klenow fragment in Structure. Kary Mullis conceived PCR in 1983 and earned the 1993 Nobel Prize in Chemistry; Taq polymerase from Thermus aquaticus (Yellowstone hot springs, Chien et al. 1976) solved the need to add fresh enzyme after each 95-degree denaturation step, enabling automated thermocycling."
+      },
+      {
+        "type": "figure-ref",
+        "content": "See Fig. 1"
+      },
+      {
+        "type": "heading",
+        "content": "The Right-Hand Fold and O-Helix"
+      },
+      {
+        "type": "text",
+        "content": "The Taq polymerase structure revealed the classic DNA polymerase 'right-hand' fold: palm (catalytic core with conserved Asp residues), fingers (dNTP binding, O-helix), and thumb (duplex gripping) subdomains. The O-helix undergoes a ~40-degree rotation upon dNTP binding, closing over the nascent base pair to create the active site geometry that ensures Watson-Crick selectivity. Unlike Klenow fragment, Taq lacks a 3'-5' proofreading exonuclease domain, giving an error rate of ~1 per 10,000 nt."
+      },
+      {
+        "type": "figure-ref",
+        "content": "See Fig. 2"
+      },
+      {
+        "type": "heading",
+        "content": "Clinical and Diagnostic Impact"
+      },
+      {
+        "type": "text",
+        "content": "PCR enabled by Taq polymerase transformed clinical diagnostics: HIV viral load, HCV, TB, BRCA1/2 genotyping, forensic DNA identification, COVID-19 RT-PCR, and prenatal genetic testing all depend on PCR. Hot-start Taq variants (antibody-inhibited) prevent mispriming during setup, improving specificity in clinical assays. High-fidelity variants (Pfu, Phusion, Q5) with proofreading exonucleases are used for cloning and NGS library preparation."
+      }
+    ],
+    "figure_plan": [
+      {
+        "figure_number": 1,
+        "layout": "1x2",
+        "panels": [
+          {
+            "pdb_id": "1S5L",
+            "style": "cartoon",
+            "color_scheme": "secondary_structure",
+            "caption": "Ribbon diagram of Taq polymerase Klenow fragment showing the classic 'right-hand' fold: palm (red, catalytic Asp residues), fingers (blue, O-helix), and thumb (green) subdomains. The DNA duplex binding cleft runs between the thumb and palm."
+          },
+          {
+            "pdb_id": "1S5L",
+            "style": "surface",
+            "color_scheme": "electrostatic",
+            "caption": "Electrostatic surface of Taq polymerase showing the positively charged DNA-binding cleft (blue) between thumb and palm domains. The dNTP entry site in the fingers domain is flanked by negatively charged residues that coordinate Mg2+ cofactors."
+          }
+        ],
+        "overall_caption": "Fig. 1: Taq DNA polymerase Klenow fragment (1S5L) at 2.3 Å—the right-hand fold is the universal architecture of all B-family and A-family DNA polymerases."
+      },
+      {
+        "figure_number": 2,
+        "layout": "1x1",
+        "panels": [
+          {
+            "pdb_id": "1S5L",
+            "style": "sticks",
+            "color_scheme": "element",
+            "caption": "Taq polymerase active site showing two catalytic Asp residues (Asp610, Asp785, orange sticks) coordinating two Mg2+ ions (green spheres) for the two-metal-ion mechanism. The O-helix (Tyr671, blue) closes over the incoming dNTP to enforce Watson-Crick base pair geometry."
+          }
+        ],
+        "overall_caption": "Fig. 2: Taq polymerase catalytic site—two Mg2+ ions bridged by Asp610 and Asp785 catalyze nucleotidyl transfer; the O-helix enforces Watson-Crick selectivity."
+      }
+    ],
+    "key_facts": [
+      "Taq polymerase Klenow fragment structure solved at 2.3 Å by Li, Korolev, and Waksman at Washington University, published in Structure in 1998.",
+      "Taq polymerase from Thermus aquaticus (Yellowstone hot springs) is thermostable at 95 degrees C, enabling automated PCR thermocycling.",
+      "The right-hand fold (palm, fingers, thumb) is universal among DNA polymerases; the O-helix closes over the dNTP to enforce base-pair fidelity.",
+      "Taq lacks 3'-5' proofreading exonuclease, giving an error rate of ~1 per 10,000 nt; high-fidelity variants (Pfu, Phusion, Q5) have proofreading domains.",
+      "Kary Mullis received the 1993 Nobel Prize in Chemistry for inventing PCR; Taq polymerase made it practical and scalable.",
+      "PCR enables HIV/HCV viral load testing, COVID-19 RT-PCR diagnostics, BRCA1/2 cancer risk genotyping, forensic identification, and NGS library preparation.",
+      "Hot-start Taq (antibody-inhibited) prevents non-specific amplification during room-temperature setup of clinical PCR assays."
+    ],
+    "discovery_year": 1998,
+    "significance": "The Taq polymerase structure revealed the mechanistic basis of thermostable DNA replication and PCR fidelity, enabling rational engineering of polymerases with improved accuracy and substrate range for next-generation sequencing and diagnostics. PCR, the technology Taq enables, has become the indispensable tool of modern medicine: it diagnoses infectious diseases, guides cancer therapy, enables forensic identification, and underpins the genomics revolution.",
+    "related_molecules": [
+      "1M17",
+      "4UN3",
+      "5WE4"
+    ]
+  },
+  {
+    "id": "1TUP",
+    "name": "p53 DNA-Binding Domain",
+    "title": "The Guardian of the Genome: p53 and the Structural Basis of Cancer's Most Mutated Gene",
+    "abstract": "The p53 tumor suppressor is mutated in over 50% of all human cancers. Yung-Chi Cho, Stephen Gorina, Paul Jeffrey, and Nikola Pavletich solved the 2.2 Å crystal structure of the p53 DNA-binding domain in complex with its DNA response element in 1994 at Memorial Sloan Kettering, revealing how the zinc-coordinated beta-sandwich scaffold positions the loop-sheet-helix motif for sequence-specific DNA recognition.",
+    "sections": [
+      {
+        "type": "heading",
+        "content": "The Most Important Tumor Suppressor"
+      },
+      {
+        "type": "text",
+        "content": "In 1994, Yung-Chi Cho, Stephen Gorina, Paul D. Jeffrey, and Nikola P. Pavletich at Memorial Sloan Kettering Cancer Center published the 2.2 Å crystal structure of the p53 DNA-binding domain (DBD) in complex with its DNA consensus sequence in Science. p53 is activated by DNA damage, oncogene activation, and hypoxia; it induces cell cycle arrest, DNA repair, or apoptosis. Over 50% of human tumors carry p53 mutations, making it the most commonly mutated gene in cancer."
+      },
+      {
+        "type": "figure-ref",
+        "content": "See Fig. 1"
+      },
+      {
+        "type": "heading",
+        "content": "Zinc-Coordinated Core and DNA Contacts"
+      },
+      {
+        "type": "text",
+        "content": "The p53 DBD adopts a beta-sandwich scaffold that serves as the stable platform for the DNA-binding surface. A zinc ion coordinated by Cys176, His179, Cys238, and Cys242 is essential for structural integrity; zinc loss upon mutation destabilizes the domain. Three structural elements contact DNA: the loop-sheet-helix motif inserts Arg248 into the DNA minor groove (the most common mutation site in cancer); Arg273 and Ala276 contact the DNA backbone phosphates in the major groove."
+      },
+      {
+        "type": "figure-ref",
+        "content": "See Fig. 2"
+      },
+      {
+        "type": "heading",
+        "content": "Cancer Mutations and Drug Restoration"
+      },
+      {
+        "type": "text",
+        "content": "Six hotspot mutations (R175H, G245S, R248W, R248Q, R249S, R273H, R273C, R282W) account for ~30% of all p53 cancer mutations. Structural analysis shows these mutations either destabilize the beta-sandwich (structural mutants: R175H, R249S) or directly eliminate DNA contact residues (contact mutants: R248W, R273H). APR-246 (Eprenetapopt) restores wild-type conformation to structural p53 mutants and received FDA Breakthrough Therapy designation for myelodysplastic syndrome with mutant p53."
+      }
+    ],
+    "figure_plan": [
+      {
+        "figure_number": 1,
+        "layout": "1x2",
+        "panels": [
+          {
+            "pdb_id": "1TUP",
+            "style": "cartoon",
+            "color_scheme": "secondary_structure",
+            "caption": "Ribbon diagram of p53 DNA-binding domain (blue) in complex with the DNA response element half-site (orange). The beta-sandwich core (yellow) supports the loop-sheet-helix motif contacting DNA major and minor grooves. The zinc ion (green sphere) at the L2/L3 interface is visible."
+          },
+          {
+            "pdb_id": "1TUP",
+            "style": "surface",
+            "color_scheme": "electrostatic",
+            "caption": "Electrostatic surface of p53 DBD showing the positively charged DNA-binding face (blue) contacting the electronegative DNA backbone (red). The minor groove-inserting L3 loop region is the most electropositive area."
+          }
+        ],
+        "overall_caption": "Fig. 1: p53 DNA-binding domain (1TUP) at 2.2 Å in complex with its DNA response element—the beta-sandwich scaffold and zinc coordination site are clearly resolved."
+      },
+      {
+        "figure_number": 2,
+        "layout": "1x1",
+        "panels": [
+          {
+            "pdb_id": "1TUP",
+            "style": "sticks",
+            "color_scheme": "element",
+            "caption": "p53 DNA interface showing key contacts: Arg248 (orange) inserted into the DNA minor groove (most frequently mutated cancer residue), Arg273 (blue) contacting the DNA backbone phosphate in the major groove, and Zn2+ (green sphere) coordinated by Cys176, His179, Cys238, Cys242."
+          }
+        ],
+        "overall_caption": "Fig. 2: p53 cancer hotspot residues at the DNA interface—Arg248 (R248W/Q) inserts into the minor groove; Arg273 (R273H/C) contacts phosphates. Both mutations eliminate DNA binding while leaving the overall fold intact."
+      }
+    ],
+    "key_facts": [
+      "p53 DNA-binding domain complex solved at 2.2 Å by Cho, Gorina, Jeffrey, and Pavletich at MSKCC, published in Science in 1994.",
+      "p53 is mutated in >50% of human cancers, making it the most commonly altered gene in all of oncology.",
+      "The beta-sandwich scaffold is stabilized by a Zn2+ ion (Cys176/His179/Cys238/Cys242); zinc loss destabilizes structural mutants like R175H.",
+      "Six hotspot residues (R175, G245, R248, R249, R273, R282) account for ~30% of all p53 cancer mutations.",
+      "Arg248 is the single most mutated residue in cancer; in wild-type structure it inserts into the DNA minor groove at the CATG tetrad of the response element.",
+      "APR-246 (Eprenetapopt) restores wild-type conformation to structural p53 mutants; received FDA Breakthrough Therapy designation.",
+      "p53 activates transcription of over 100 target genes involved in cell cycle arrest (p21), apoptosis (PUMA, NOXA), and DNA repair (GADD45)."
+    ],
+    "discovery_year": 1994,
+    "significance": "The p53 structure explained the molecular basis of the most important tumor suppressor in human biology and directly revealed why specific hotspot mutations cause cancer by disrupting DNA recognition. This structural knowledge has driven 30 years of drug discovery targeting mutant p53 reactivation, culminating in clinical-stage compounds that restore p53 function in cancer cells. The structure remains the central reference for interpreting newly discovered p53 mutations in cancer genomes.",
+    "related_molecules": [
+      "1M17",
+      "5C4X",
+      "1HHP"
+    ]
   }
 ]
