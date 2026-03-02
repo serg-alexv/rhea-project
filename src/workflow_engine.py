@@ -156,6 +156,24 @@ def _ensure_tables(conn: sqlite3.Connection):
             error TEXT,
             FOREIGN KEY (workflow_id) REFERENCES workflows(id)
         );
+        CREATE TABLE IF NOT EXISTS scheduler_loops (
+            id TEXT PRIMARY KEY,
+            prompt TEXT NOT NULL,
+            status TEXT NOT NULL DEFAULT 'pending',
+            target_agreement REAL NOT NULL DEFAULT 0.9,
+            max_iterations INTEGER NOT NULL DEFAULT 20,
+            interval_seconds REAL NOT NULL DEFAULT 30,
+            k INTEGER NOT NULL DEFAULT 5,
+            tier TEXT NOT NULL DEFAULT 'cheap',
+            mode TEXT NOT NULL DEFAULT 'local',
+            current_iteration INTEGER DEFAULT 0,
+            best_agreement REAL DEFAULT 0.0,
+            best_consensus TEXT,
+            history TEXT,
+            started_at TEXT,
+            completed_at TEXT,
+            error TEXT
+        );
     """)
     conn.commit()
 
@@ -194,6 +212,17 @@ class WorkflowUpdate(BaseModel):
     name: Optional[str] = None
     nodes: Optional[list[WorkflowNode]] = None
     edges: Optional[list[WorkflowEdge]] = None
+
+
+class SchedulerLoopRequest(BaseModel):
+    prompt: str = Field(..., min_length=1, description="The claim or question to reach consensus on")
+    target_agreement: float = Field(0.9, ge=0.5, le=1.0, description="Stop when agreement >= this (0.9 = 90%)")
+    max_iterations: int = Field(20, ge=1, le=100, description="Max tribunal rounds before giving up")
+    interval_seconds: float = Field(30, ge=5, le=600, description="Seconds between iterations")
+    k: int = Field(5, ge=2, le=10, description="Number of models per tribunal call")
+    tier: str = Field("cheap", description="Model cost tier")
+    mode: str = Field("local", description="Execution mode (local/sceptic/ice)")
+    refine_prompt: bool = Field(True, description="Auto-refine prompt based on divergence points")
 
 
 # ---------------------------------------------------------------------------
@@ -738,3 +767,244 @@ _NODE_EXECUTORS = {
     "office_send": _exec_office_send,
     "condition": _exec_condition,
 }
+
+
+# ---------------------------------------------------------------------------
+# Scheduler-Looper: run tribunal until consensus >= target
+# ---------------------------------------------------------------------------
+
+# In-memory set of active loop IDs (for cancellation)
+_ACTIVE_LOOPS: set[str] = set()
+
+
+@workflow_router.post("/scheduler/loop")
+async def scheduler_loop_start(req: SchedulerLoopRequest):
+    """Start a consensus loop. Runs tribunal repeatedly until agreement >= target or max_iterations.
+
+    ComfyUI-style: submit a prompt, set your quality bar, walk away.
+    The scheduler keeps refining until the result is brilliant.
+    """
+    loop_id = str(uuid4())
+    now = datetime.now(timezone.utc).isoformat()
+
+    conn = _get_conn()
+    try:
+        conn.execute(
+            """INSERT INTO scheduler_loops
+               (id, prompt, status, target_agreement, max_iterations,
+                interval_seconds, k, tier, mode, current_iteration,
+                best_agreement, history, started_at)
+               VALUES (?,?,?,?,?,?,?,?,?,0,0.0,'[]',?)""",
+            (loop_id, req.prompt, "running", req.target_agreement,
+             req.max_iterations, req.interval_seconds, req.k,
+             req.tier, req.mode, now),
+        )
+        conn.commit()
+    finally:
+        conn.close()
+
+    _ACTIVE_LOOPS.add(loop_id)
+    asyncio.create_task(_run_loop(loop_id, req))
+
+    _get_broadcast()({
+        "id": f"loop-start-{loop_id[:8]}",
+        "type": "scheduler",
+        "sender": "scheduler",
+        "receiver": "all",
+        "text": f"Consensus loop started: target {req.target_agreement:.0%}, max {req.max_iterations} rounds",
+    })
+
+    return {"loop_id": loop_id, "status": "running"}
+
+
+@workflow_router.get("/scheduler/loops")
+async def scheduler_loop_list():
+    """List all scheduler loops."""
+    conn = _get_conn()
+    try:
+        rows = conn.execute(
+            "SELECT id, prompt, status, target_agreement, current_iteration, "
+            "max_iterations, best_agreement, started_at, completed_at "
+            "FROM scheduler_loops ORDER BY started_at DESC"
+        ).fetchall()
+    finally:
+        conn.close()
+    return [dict(r) for r in rows]
+
+
+@workflow_router.get("/scheduler/loops/{loop_id}")
+async def scheduler_loop_status(loop_id: str):
+    """Get full status of a scheduler loop including iteration history."""
+    conn = _get_conn()
+    try:
+        row = conn.execute("SELECT * FROM scheduler_loops WHERE id = ?", (loop_id,)).fetchone()
+    finally:
+        conn.close()
+    if not row:
+        raise HTTPException(status_code=404, detail="Loop not found")
+    result = dict(row)
+    result["history"] = json.loads(result["history"]) if result["history"] else []
+    return result
+
+
+@workflow_router.post("/scheduler/loops/{loop_id}/stop")
+async def scheduler_loop_stop(loop_id: str):
+    """Stop a running loop gracefully."""
+    _ACTIVE_LOOPS.discard(loop_id)
+    conn = _get_conn()
+    try:
+        conn.execute(
+            "UPDATE scheduler_loops SET status='stopped', completed_at=? WHERE id=? AND status='running'",
+            (datetime.now(timezone.utc).isoformat(), loop_id),
+        )
+        conn.commit()
+    finally:
+        conn.close()
+    return {"loop_id": loop_id, "status": "stopped"}
+
+
+async def _run_loop(loop_id: str, req: SchedulerLoopRequest):
+    """Background task: run tribunal in a loop until consensus reached."""
+    bridge = _get_bridge()
+    history: list[dict] = []
+    best_agreement = 0.0
+    best_consensus = ""
+    current_prompt = req.prompt
+
+    for iteration in range(1, req.max_iterations + 1):
+        if loop_id not in _ACTIVE_LOOPS:
+            break  # cancelled
+
+        try:
+            # Choose execution mode
+            if req.mode == "ice":
+                result = await asyncio.to_thread(
+                    bridge.tribunal,
+                    prompt=current_prompt,
+                    k=req.k,
+                    tier=req.tier,
+                    mode="ice",
+                )
+            elif req.mode == "sceptic":
+                result = await asyncio.to_thread(
+                    bridge.tribunal,
+                    prompt=current_prompt,
+                    k=req.k,
+                    tier=req.tier,
+                    mode="sceptic",
+                )
+            else:
+                result = await asyncio.to_thread(
+                    bridge.tribunal,
+                    prompt=current_prompt,
+                    k=req.k,
+                    tier=req.tier,
+                    mode="local",
+                )
+
+            report = result.consensus_report if hasattr(result, "consensus_report") else {}
+            agreement = report.get("agreement_score", 0.0) if isinstance(report, dict) else 0.0
+            consensus_text = report.get("consensus_text", getattr(result, "consensus", "")) if isinstance(report, dict) else ""
+            divergence = report.get("divergence_points", []) if isinstance(report, dict) else []
+
+            round_record = {
+                "iteration": iteration,
+                "agreement_score": agreement,
+                "consensus": consensus_text[:500],
+                "divergence_points": divergence[:5],
+                "prompt_used": current_prompt[:200],
+                "models_responded": report.get("models_responded", 0) if isinstance(report, dict) else 0,
+                "ts": datetime.now(timezone.utc).isoformat(),
+            }
+            history.append(round_record)
+
+            if agreement > best_agreement:
+                best_agreement = agreement
+                best_consensus = consensus_text
+
+            # Update DB with progress
+            _update_loop(loop_id, iteration, best_agreement, best_consensus, history)
+
+            # Broadcast progress
+            _get_broadcast()({
+                "id": f"loop-iter-{loop_id[:8]}-{iteration}",
+                "type": "scheduler",
+                "sender": "scheduler",
+                "receiver": "all",
+                "text": f"Loop {loop_id[:8]} iter {iteration}/{req.max_iterations}: agreement={agreement:.1%} (target={req.target_agreement:.0%})",
+            })
+
+            # Check exit condition
+            if agreement >= req.target_agreement:
+                _finalize_loop(loop_id, "converged", best_agreement, best_consensus, history)
+                _ACTIVE_LOOPS.discard(loop_id)
+                _get_broadcast()({
+                    "id": f"loop-done-{loop_id[:8]}",
+                    "type": "scheduler",
+                    "sender": "scheduler",
+                    "receiver": "all",
+                    "text": f"CONVERGED at {agreement:.1%} after {iteration} iterations",
+                })
+                return
+
+            # Auto-refine: if enabled, sharpen prompt using divergence points
+            if req.refine_prompt and divergence:
+                refinement = "; ".join(d[:80] for d in divergence[:3])
+                current_prompt = (
+                    f"{req.prompt}\n\n"
+                    f"[Previous models diverged on: {refinement}]\n"
+                    f"Please address these specific points of disagreement."
+                )
+
+        except Exception as e:
+            round_record = {
+                "iteration": iteration,
+                "error": str(e),
+                "ts": datetime.now(timezone.utc).isoformat(),
+            }
+            history.append(round_record)
+            _update_loop(loop_id, iteration, best_agreement, best_consensus, history)
+
+        # Wait before next iteration
+        if iteration < req.max_iterations and loop_id in _ACTIVE_LOOPS:
+            await asyncio.sleep(req.interval_seconds)
+
+    # Exhausted all iterations without convergence
+    status = "exhausted" if loop_id in _ACTIVE_LOOPS else "stopped"
+    _finalize_loop(loop_id, status, best_agreement, best_consensus, history)
+    _ACTIVE_LOOPS.discard(loop_id)
+
+
+def _update_loop(loop_id: str, iteration: int, best_agreement: float,
+                 best_consensus: str, history: list):
+    conn = _get_conn()
+    try:
+        conn.execute(
+            """UPDATE scheduler_loops
+               SET current_iteration=?, best_agreement=?,
+                   best_consensus=?, history=?
+               WHERE id=?""",
+            (iteration, best_agreement, best_consensus,
+             json.dumps(history), loop_id),
+        )
+        conn.commit()
+    finally:
+        conn.close()
+
+
+def _finalize_loop(loop_id: str, status: str, best_agreement: float,
+                   best_consensus: str, history: list):
+    conn = _get_conn()
+    try:
+        conn.execute(
+            """UPDATE scheduler_loops
+               SET status=?, best_agreement=?, best_consensus=?,
+                   history=?, completed_at=?
+               WHERE id=?""",
+            (status, best_agreement, best_consensus,
+             json.dumps(history),
+             datetime.now(timezone.utc).isoformat(), loop_id),
+        )
+        conn.commit()
+    finally:
+        conn.close()

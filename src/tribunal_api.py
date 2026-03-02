@@ -1057,6 +1057,7 @@ footer .f-copy{{color:#333;font-size:.68rem;letter-spacing:.04em}}
   <div class="nav-links">
     <a href="#features">Features</a>
     <a href="#clipboard">Clipboard</a>
+    <a href="#scheduler">Scheduler</a>
     <a href="#pricing">Pricing</a>
     <a href="#platforms">Apps</a>
     <!-- Compact auth widget -->
@@ -1152,6 +1153,17 @@ footer .f-copy{{color:#333;font-size:.68rem;letter-spacing:.04em}}
     <span class="bento-icon">&#x1F511;</span>
     <h3>BYOK: Bring Your Own Keys</h3>
     <p>Plug your API keys. Pay providers directly. $0 platform fee. You own the infrastructure.</p>
+  </div>
+  <div class="bento-card glass-card span-2 stagger-3">
+    <span class="bento-icon">&#x1F3AF;</span>
+    <h3>Scheduler Looper</h3>
+    <p>ComfyUI-style consensus loops. Set your quality bar (90%+), submit a claim, walk away. The scheduler
+       runs tribunal rounds with auto-refining prompts until models converge. Three modes: local, sceptic, ICE.</p>
+  </div>
+  <div class="bento-card glass-card stagger-4">
+    <span class="bento-icon">&#x1F4CB;</span>
+    <h3>Cross-Device Clipboard</h3>
+    <p>Copy anywhere, paste everywhere. Privacy auto-classification. Secrets auto-expire. SSE real-time sync.</p>
   </div>
 </div>
 <!-- Vendor logos strip — providers Rhea queries -->
@@ -1339,9 +1351,88 @@ footer .f-copy{{color:#333;font-size:.68rem;letter-spacing:.04em}}
       </div>
     </div>
   </div>
+  <!-- Clipboard KB shortcut button -->
+  <div style="text-align:center;margin-top:1.5rem">
+    <div style="display:inline-flex;align-items:center;gap:.8rem;padding:.6rem 1.4rem;border-radius:12px;background:linear-gradient(135deg,rgba(0,113,227,.15),rgba(88,86,214,.15));border:1px solid rgba(0,113,227,.3);cursor:default">
+      <span style="font-size:.7rem;font-weight:700;letter-spacing:.08em;color:var(--accent)">KEYBOARD</span>
+      <kbd style="display:inline-flex;align-items:center;gap:.2rem;padding:.25rem .6rem;border-radius:6px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);font-size:.75rem;font-family:var(--mono);color:var(--text)">&#x2318; Shift C</kbd>
+      <span style="font-size:.7rem;color:var(--muted)">Open Clipboard anywhere</span>
+    </div>
+  </div>
   <div style="text-align:center;margin-top:1rem">
     <a href="#auth" class="btn btn-primary" style="font-size:.82rem">Get Clipboard Sync Free</a>
     <span style="font-size:.65rem;color:var(--muted);margin-left:.8rem">Included in all plans &bull; 100 free clips/day</span>
+  </div>
+</div>
+</section>
+
+<!-- SCHEDULER LOOPER -->
+<section id="scheduler" class="reveal">
+<div class="section-title">
+  <h2>Set the bar.<br>Walk away.</h2>
+  <p>Consensus loops run until your quality threshold is met. Like ComfyUI, but for truth.</p>
+</div>
+<div style="max-width:960px;margin:0 auto">
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;margin-bottom:1.5rem">
+    <div class="glass-card stagger-1" style="padding:1.5rem">
+      <div style="font-size:1.5rem;margin-bottom:.8rem">&#x1F3AF;</div>
+      <h3 style="font-size:.95rem;font-weight:700;margin-bottom:.4rem">Target Consensus</h3>
+      <p style="font-size:.78rem;color:var(--muted);line-height:1.6">Set your quality bar &mdash; 85%, 90%, 95%.
+        The scheduler runs tribunal rounds automatically until models agree at your threshold.</p>
+    </div>
+    <div class="glass-card stagger-2" style="padding:1.5rem">
+      <div style="font-size:1.5rem;margin-bottom:.8rem">&#x1F504;</div>
+      <h3 style="font-size:.95rem;font-weight:700;margin-bottom:.4rem">Auto-Refine</h3>
+      <p style="font-size:.78rem;color:var(--muted);line-height:1.6">Each iteration learns from divergence.
+        The prompt sharpens itself, targeting exactly where models disagree. Convergence accelerates.</p>
+    </div>
+    <div class="glass-card stagger-3" style="padding:1.5rem">
+      <div style="font-size:1.5rem;margin-bottom:.8rem">&#x1F6E0;</div>
+      <h3 style="font-size:.95rem;font-weight:700;margin-bottom:.4rem">Three Modes</h3>
+      <p style="font-size:.78rem;color:var(--muted);line-height:1.6"><strong>Local</strong>: fast parallel consensus.
+        <strong>Sceptic</strong>: adversarial attack each round. <strong>ICE</strong>: iterative deep critique with chairman synthesis.</p>
+    </div>
+  </div>
+
+  <!-- Visual loop diagram -->
+  <div class="glass-card" style="padding:2rem;text-align:center">
+    <div style="display:flex;align-items:center;justify-content:center;gap:1.2rem;flex-wrap:wrap">
+      <div style="text-align:center">
+        <div style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#5856d6);display:flex;align-items:center;justify-content:center;font-size:1.5rem;margin:0 auto .4rem">&#x270D;</div>
+        <div style="font-size:.7rem;font-weight:600;color:var(--text)">Submit</div>
+        <div style="font-size:.55rem;color:var(--muted)">Your claim</div>
+      </div>
+      <div style="font-size:1.2rem;color:var(--accent)">&#x2192;</div>
+      <div style="text-align:center">
+        <div style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#FF9500,#FF6B00);display:flex;align-items:center;justify-content:center;font-size:1.5rem;margin:0 auto .4rem">&#x2696;</div>
+        <div style="font-size:.7rem;font-weight:600;color:var(--text)">Tribunal</div>
+        <div style="font-size:.55rem;color:var(--muted)">k models vote</div>
+      </div>
+      <div style="font-size:1.2rem;color:var(--accent)">&#x2192;</div>
+      <div style="text-align:center">
+        <div style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#34C759,#30D158);display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin:0 auto .4rem">&#x2265; 90%?</div>
+        <div style="font-size:.7rem;font-weight:600;color:var(--text)">Check</div>
+        <div style="font-size:.55rem;color:var(--muted)">Agreement score</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:.3rem;align-items:flex-start">
+        <div style="display:flex;align-items:center;gap:.4rem">
+          <span style="font-size:.9rem;color:var(--green)">&#x2713;</span>
+          <span style="font-size:.7rem;color:var(--green);font-weight:600">Done &mdash; consensus reached</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:.4rem">
+          <span style="font-size:.9rem;color:var(--amber)">&#x21BA;</span>
+          <span style="font-size:.7rem;color:var(--amber);font-weight:600">Refine &amp; loop again</span>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:1.2rem;font-size:.65rem;color:var(--muted)">
+      API: <code style="background:rgba(255,255,255,.06);padding:.15rem .4rem;border-radius:4px;font-size:.65rem">POST /workflows/scheduler/loop</code>
+      &mdash; set <code style="background:rgba(255,255,255,.06);padding:.15rem .4rem;border-radius:4px;font-size:.65rem">target_agreement: 0.9</code> and walk away
+    </div>
+  </div>
+  <div style="text-align:center;margin-top:1rem">
+    <a href="#auth" class="btn btn-primary" style="font-size:.82rem">Try Consensus Loops</a>
+    <span style="font-size:.65rem;color:var(--muted);margin-left:.8rem">Free tier includes 5 loop runs/day</span>
   </div>
 </div>
 </section>
