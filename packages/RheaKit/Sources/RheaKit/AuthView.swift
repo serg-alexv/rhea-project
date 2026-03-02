@@ -12,7 +12,7 @@ public class AuthManager: ObservableObject {
     @Published public var plan: String = "free"
     @Published public var queriesUsed: Int = 0
     @Published public var queryLimit: Int = 100
-    @Published public var didSkipAuth: Bool = false
+    @Published public var didSkipAuth: Bool = UserDefaults.standard.bool(forKey: "didSkipAuth")
 
     private let keychain = Keychain(service: "com.rhea.preview")
 
@@ -39,12 +39,14 @@ public class AuthManager: ObservableObject {
         queriesUsed = 0
         queryLimit = 100
         didSkipAuth = false
+        UserDefaults.standard.set(false, forKey: "didSkipAuth")
         keychain["jwt_token"] = nil
         keychain["user_email"] = nil
     }
 
     public func skipLogin() {
         didSkipAuth = true
+        UserDefaults.standard.set(true, forKey: "didSkipAuth")
     }
 
     /// Attach auth header to a URLRequest

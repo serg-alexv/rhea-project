@@ -33,6 +33,9 @@ public struct TasksView: View {
     @State private var tasks: [TaskItem] = []
     @State private var loading = true
     @State private var filter: String = "all"
+    @State private var agentFilter: String? = nil
+    @State private var priorityFilter: String? = nil
+    @State private var lensMode: Bool = false
     @State private var pollTimer: Timer? = nil
     @State private var showNewTask = false
     @State private var newTitle = ""
@@ -41,9 +44,33 @@ public struct TasksView: View {
     @State private var isCreating = false
     @AppStorage("apiBaseURL") private var apiBaseURL = AppConfig.defaultAPIBaseURL
 
+    /// Unique agents found in tasks
+    private var agents: [String] {
+        Array(Set(tasks.compactMap { $0.claimed_by.isEmpty ? nil : $0.claimed_by })).sorted()
+    }
+
+    /// Unique priorities
+    private var priorities: [String] {
+        Array(Set(tasks.map { $0.priority })).sorted()
+    }
+
+    /// Does a task pass all active filters?
+    func taskMatchesLens(_ task: TaskItem) -> Bool {
+        if filter != "all" && task.status != filter { return false }
+        if let agent = agentFilter, task.claimed_by != agent { return false }
+        if let prio = priorityFilter, task.priority != prio { return false }
+        return true
+    }
+
+    /// Any filter active beyond "all"?
+    var hasActiveLens: Bool {
+        filter != "all" || agentFilter != nil || priorityFilter != nil
+    }
+
+    /// In lens mode: show all, dim non-matching. Otherwise: filter out.
     public var filteredTasks: [TaskItem] {
-        guard filter != "all" else { return tasks }
-        return tasks.filter { $0.status == filter }
+        if lensMode { return tasks }
+        return tasks.filter { taskMatchesLens($0) }
     }
 
     public init() {}
@@ -51,22 +78,72 @@ public struct TasksView: View {
     public var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
-                // Filter chips
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 8) {
-                        FilterChip(label: "All", count: tasks.count, isActive: filter == "all") { filter = "all" }
-                        FilterChip(label: "Open", count: tasks.filter { $0.status == "open" }.count,
-                                   isActive: filter == "open", color: .secondary) { filter = "open" }
-                        FilterChip(label: "Claimed", count: tasks.filter { $0.status == "claimed" }.count,
-                                   isActive: filter == "claimed", color: RheaTheme.accent) { filter = "claimed" }
-                        FilterChip(label: "Done", count: tasks.filter { $0.status == "done" }.count,
-                                   isActive: filter == "done", color: RheaTheme.green) { filter = "done" }
-                        FilterChip(label: "Blocked", count: tasks.filter { $0.status == "blocked" }.count,
-                                   isActive: filter == "blocked", color: RheaTheme.red) { filter = "blocked" }
+                // MARK: - Cognitive Lens Filters
+                VStack(spacing: 6) {
+                    // Row 1: Status + lens toggle
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 8) {
+                            // Lens mode toggle
+                            Button {
+                                withAnimation(.spring(duration: 0.3)) { lensMode.toggle() }
+                            } label: {
+                                Image(systemName: lensMode ? "eye.circle.fill" : "eye.circle")
+                                    .font(.system(size: 16))
+                                    .foregroundStyle(lensMode ? RheaTheme.amber : .secondary)
+                            }
+                            .buttonStyle(.plain)
+                            .help("Lens mode: dim instead of hide")
+
+                            FilterChip(label: "All", count: tasks.count, isActive: filter == "all") {
+                                filter = "all"; agentFilter = nil; priorityFilter = nil
+                            }
+                            FilterChip(label: "Open", count: tasks.filter { $0.status == "open" }.count,
+                                       isActive: filter == "open", color: .secondary) { filter = "open" }
+                            FilterChip(label: "Claimed", count: tasks.filter { $0.status == "claimed" }.count,
+                                       isActive: filter == "claimed", color: RheaTheme.accent) { filter = "claimed" }
+                            FilterChip(label: "Done", count: tasks.filter { $0.status == "done" }.count,
+                                       isActive: filter == "done", color: RheaTheme.green) { filter = "done" }
+                            FilterChip(label: "Blocked", count: tasks.filter { $0.status == "blocked" }.count,
+                                       isActive: filter == "blocked", color: RheaTheme.red) { filter = "blocked" }
+                        }
+                        .padding(.horizontal)
                     }
-                    .padding(.horizontal)
-                    .padding(.vertical, 10)
+
+                    // Row 2: Agent + Priority chips (only show when tasks loaded)
+                    if !tasks.isEmpty {
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 6) {
+                                // Agent chips
+                                ForEach(agents, id: \.self) { agent in
+                                    FilterChip(
+                                        label: agent,
+                                        count: tasks.filter { $0.claimed_by == agent }.count,
+                                        isActive: agentFilter == agent,
+                                        color: RheaTheme.accent
+                                    ) {
+                                        agentFilter = agentFilter == agent ? nil : agent
+                                    }
+                                }
+                                if !agents.isEmpty && !priorities.isEmpty {
+                                    Divider().frame(height: 16)
+                                }
+                                // Priority chips
+                                ForEach(priorities, id: \.self) { prio in
+                                    FilterChip(
+                                        label: prio,
+                                        count: tasks.filter { $0.priority == prio }.count,
+                                        isActive: priorityFilter == prio,
+                                        color: RheaTheme.priorityColor(prio)
+                                    ) {
+                                        priorityFilter = priorityFilter == prio ? nil : prio
+                                    }
+                                }
+                            }
+                            .padding(.horizontal)
+                        }
+                    }
                 }
+                .padding(.vertical, 8)
                 .background(RheaTheme.bg)
 
                 if loading {
@@ -82,7 +159,12 @@ public struct TasksView: View {
                     ScrollView {
                         LazyVStack(spacing: 10) {
                             ForEach(filteredTasks) { task in
+                                let matches = taskMatchesLens(task)
                                 TaskCard(task: task)
+                                    .opacity(lensMode && !matches ? 0.2 : 1.0)
+                                    .scaleEffect(lensMode && !matches ? 0.97 : 1.0)
+                                    .blur(radius: lensMode && !matches ? 1.5 : 0)
+                                    .animation(.easeInOut(duration: 0.25), value: matches)
                             }
                         }
                         .padding(.horizontal)
