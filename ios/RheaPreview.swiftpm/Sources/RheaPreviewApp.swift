@@ -1,5 +1,4 @@
 import SwiftUI
-import AnimatedTabBar
 import RheaKit
 
 @main
@@ -7,7 +6,7 @@ struct RheaPreviewApp: App {
     @AppStorage("hasEnteredIntent") private var hasEnteredIntent = false
     @AppStorage("intentRevealLevel") private var intentRevealLevel = 1
     @StateObject private var auth = AuthManager.shared
-    @State private var selectedTab = 0
+    @State private var selectedPane: PlayPane = .ops
 
     init() {
         AppConfig.migrateStaleDefaults()
@@ -19,9 +18,9 @@ struct RheaPreviewApp: App {
                 if !auth.isLoggedIn && !auth.didSkipAuth {
                     AuthView()
                 } else if hasEnteredIntent {
-                    MainTabShell(selectedTab: $selectedTab, revealLevel: intentRevealLevel)
+                    PlayShell(selectedPane: $selectedPane, revealLevel: intentRevealLevel)
                 } else {
-                    IntentEntryView(selectedTab: $selectedTab)
+                    IntentEntryView(selectedPane: $selectedPane)
                 }
             }
             .preferredColorScheme(.dark)
@@ -30,74 +29,274 @@ struct RheaPreviewApp: App {
     }
 }
 
-// MARK: - Tab descriptor for dynamic tab configuration
-private struct TabDescriptor {
-    let icon: String
-    let label: String
-    let view: AnyView
-}
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// MARK: - Play Pane — mirrors macOS Play app
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-private struct MainTabShell: View {
-    @Binding var selectedTab: Int
-    let revealLevel: Int
+enum PlayPane: String, CaseIterable, Identifiable {
+    case ops, tribunal, bio, radio, tasks, governor, tools, settings
+    var id: String { rawValue }
 
-    private var tabs: [TabDescriptor] {
-        var list: [TabDescriptor] = [
-            // Level 1: unified ops dashboard + clipboard sync
-            TabDescriptor(icon: "square.grid.2x2", label: "Ops", view: AnyView(OpsView())),
-            TabDescriptor(icon: "doc.on.clipboard", label: "Clipboard", view: AnyView(ClipboardView())),
-        ]
-        if revealLevel >= 2 {
-            // Level 2: full feed + tasks + privacy
-            list.append(TabDescriptor(icon: "waveform", label: "Feed", view: AnyView(TeamChatView())))
-            list.append(TabDescriptor(icon: "checklist", label: "Tasks", view: AnyView(TasksView())))
-            list.append(TabDescriptor(icon: "shield.lefthalf.filled", label: "Privacy", view: AnyView(RelayPrivacyView())))
+    var label: String {
+        switch self {
+        case .ops: return "OPS"
+        case .tribunal: return "TRIBUNAL"
+        case .bio: return "BIO"
+        case .radio: return "RADIO"
+        case .tasks: return "TASKS"
+        case .governor: return "GOVERNOR"
+        case .tools: return "TOOLS"
+        case .settings: return "CONFIG"
         }
-        if revealLevel >= 3 {
-            // Level 3: live monitor web dashboard
-            list.append(TabDescriptor(icon: "tv.and.mediabox", label: "Monitor", view: AnyView(MonitorWebView())))
-        }
-        list.append(TabDescriptor(icon: "gearshape", label: "Settings", view: AnyView(SettingsView())))
-        return list
     }
 
-    /// Clamp selectedTab to valid range when revealLevel changes
-    private var safeIndex: Int {
-        min(max(selectedTab, 0), tabs.count - 1)
+    var icon: String {
+        switch self {
+        case .ops: return "square.grid.2x2"
+        case .tribunal: return "text.bubble"
+        case .bio: return "atom"
+        case .radio: return "waveform"
+        case .tasks: return "checklist"
+        case .governor: return "gauge.with.dots.needle.33percent"
+        case .tools: return "keyboard"
+        case .settings: return "slider.horizontal.3"
+        }
+    }
+
+    static func visiblePanes(for level: Int) -> [PlayPane] {
+        var list: [PlayPane] = [.ops, .tools]
+        if level >= 2 {
+            list.append(contentsOf: [.tribunal, .bio, .tasks, .governor])
+        }
+        if level >= 3 {
+            // Expert-only: raw radio feed (ops traffic)
+            list.append(.radio)
+        }
+        list.append(.settings)
+        return list
+    }
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// MARK: - Play Shell — command centre layout for iOS
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+private struct PlayShell: View {
+    @Binding var selectedPane: PlayPane
+    let revealLevel: Int
+    @StateObject private var store = RheaStore.shared
+    @State private var pulseFlash = false
+    @AppStorage("apiBaseURL") private var apiBaseURL = AppConfig.defaultAPIBaseURL
+
+    private var panes: [PlayPane] {
+        PlayPane.visiblePanes(for: revealLevel)
     }
 
     var body: some View {
         VStack(spacing: 0) {
-            // Page content
-            tabs[safeIndex].view
+            // ── Top bar: RHEA + agent pills + metrics (info only) ──
+            topBar
+
+            // ── Content ──
+            contentPane
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
 
-            // Animated tab bar
-            AnimatedTabBar(selectedIndex: $selectedTab, views: tabs.map { tab in
-                VStack(spacing: 2) {
-                    Image(systemName: tab.icon)
-                        .font(.system(size: 18))
-                    Text(tab.label)
-                        .font(.system(size: 9, weight: .medium, design: .monospaced))
-                }
-            })
-            .barColor(RheaTheme.card)
-            .selectedColor(RheaTheme.accent)
-            .unselectedColor(.gray)
-            .ballColor(RheaTheme.accent)
-            .verticalPadding(12)
-            .cornerRadius(0)
-            .ballTrajectory(.parabolic)
-            .ballAnimation(.spring(duration: 0.4, bounce: 0.2))
-            .indentAnimation(.spring(duration: 0.4, bounce: 0.1))
+            // ── Status bar ──
+            statusBar
+
+            // ── Pane selector: thumb zone at bottom ──
+            paneSelector
         }
         .background(RheaTheme.bg)
-        .onChange(of: tabs.count) {
-            // Clamp if tab count changes
-            if selectedTab >= tabs.count {
-                selectedTab = tabs.count - 1
+        .task { store.startPolling() }
+        .onDisappear { store.stopPolling() }
+        .onChange(of: store.connectionAlive) { _ in pulseFlash.toggle() }
+    }
+
+    // ━━ TOP BAR ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+    var topBar: some View {
+        HStack(spacing: 12) {
+            // Logo
+            HStack(spacing: 6) {
+                Image(systemName: "antenna.radiowaves.left.and.right")
+                    .font(.system(size: 12, weight: .bold))
+                    .foregroundStyle(RheaTheme.accent)
+
+                Text("RHEA")
+                    .font(.system(size: 14, weight: .black, design: .monospaced))
+                    .foregroundStyle(.white)
+            }
+
+            // Agent pills
+            HStack(spacing: 4) {
+                ForEach(store.agents) { agent in
+                    HStack(spacing: 3) {
+                        Circle()
+                            .fill(agent.alive ? RheaTheme.green : RheaTheme.red)
+                            .frame(width: 5, height: 5)
+                        Text(agent.name.prefix(3).lowercased())
+                            .font(.system(size: 9, weight: .bold, design: .monospaced))
+                            .foregroundStyle(.white.opacity(0.7))
+                    }
+                    .padding(.horizontal, 6)
+                    .padding(.vertical, 3)
+                    .background(
+                        Capsule()
+                            .fill(RheaTheme.card)
+                            .overlay(
+                                Capsule()
+                                    .stroke(agent.alive ? RheaTheme.green.opacity(0.2) : RheaTheme.red.opacity(0.2), lineWidth: 1)
+                            )
+                    )
+                }
+            }
+
+            Spacer()
+
+            // Metrics
+            HStack(spacing: 10) {
+                metricBadge("T", store.formatTokens(store.totalTokens), .white)
+                metricBadge("$", String(format: "%.2f", store.totalCost), RheaTheme.amber)
+                metricBadge("P", "\(store.aliveCount)/\(store.agents.count)", RheaTheme.green)
             }
         }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 8)
+        .background(RheaTheme.card.opacity(0.6))
+    }
+
+    func metricBadge(_ label: String, _ value: String, _ color: Color) -> some View {
+        HStack(spacing: 2) {
+            Text(label)
+                .font(.system(size: 8, weight: .bold, design: .monospaced))
+                .foregroundStyle(.secondary)
+            Text(value)
+                .font(.system(size: 10, weight: .bold, design: .monospaced))
+                .foregroundStyle(color)
+        }
+    }
+
+    // ━━ PANE SELECTOR ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+    var paneSelector: some View {
+        ScrollViewReader { proxy in
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 0) {
+                    ForEach(panes) { pane in
+                        Button {
+                            withAnimation(.spring(duration: 0.25)) {
+                                selectedPane = pane
+                            }
+                        } label: {
+                            VStack(spacing: 3) {
+                                // Active indicator bar
+                                Rectangle()
+                                    .fill(selectedPane == pane ? RheaTheme.accent : .clear)
+                                    .frame(height: 2)
+                                    .cornerRadius(1)
+
+                                Image(systemName: pane.icon)
+                                    .font(.system(size: 18, weight: .semibold))
+
+                                Text(pane.label)
+                                    .font(.system(size: 8, weight: .bold, design: .monospaced))
+                            }
+                            .foregroundStyle(selectedPane == pane ? RheaTheme.accent : .white.opacity(0.4))
+                            .frame(minWidth: 56)
+                            .padding(.vertical, 6)
+                            .padding(.horizontal, 4)
+                        }
+                        .buttonStyle(.plain)
+                        .id(pane)
+                    }
+                }
+                .padding(.horizontal, 4)
+            }
+            .onChange(of: selectedPane) { newPane in
+                withAnimation { proxy.scrollTo(newPane, anchor: .center) }
+            }
+        }
+        .padding(.bottom, 2)
+        .background(RheaTheme.card.opacity(0.8))
+    }
+
+    // ━━ CONTENT PANE ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+    var contentPane: some View {
+        Group {
+            switch selectedPane {
+            case .ops: OpsView()
+            case .tribunal: DialogView()
+            case .bio: BioRendererView()
+            case .radio: TeamChatView()
+            case .tasks: TasksView()
+            case .governor: GovernorView()
+            case .tools: ToolsHubView()
+            case .settings: SettingsView()
+            }
+        }
+        .background(RheaTheme.bg)
+    }
+
+    // ━━ STATUS BAR ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+    var statusBar: some View {
+        HStack(spacing: 10) {
+            // Connection indicator
+            HStack(spacing: 4) {
+                Circle()
+                    .fill(store.connectionAlive ? RheaTheme.green : RheaTheme.red)
+                    .frame(width: 5, height: 5)
+                Text(store.connectionAlive ? "LIVE" : "OFFLINE")
+                    .font(.system(size: 8, weight: .bold, design: .monospaced))
+                    .foregroundStyle(store.connectionAlive ? RheaTheme.green : RheaTheme.red)
+            }
+
+            Rectangle()
+                .fill(.white.opacity(0.1))
+                .frame(width: 1, height: 10)
+
+            // API url (truncated)
+            Text(apiBaseURL
+                .replacingOccurrences(of: "https://", with: "")
+                .replacingOccurrences(of: "http://", with: ""))
+                .font(.system(size: 8, design: .monospaced))
+                .foregroundStyle(.white.opacity(0.2))
+                .lineLimit(1)
+
+            Spacer()
+
+            // Current pane
+            Text(selectedPane.label)
+                .font(.system(size: 8, weight: .bold, design: .monospaced))
+                .foregroundStyle(RheaTheme.accent.opacity(0.5))
+
+            Rectangle()
+                .fill(.white.opacity(0.1))
+                .frame(width: 1, height: 10)
+
+            // Live clock
+            TimelineView(.periodic(from: .now, by: 1)) { context in
+                Text(context.date.formatted(.dateTime.hour().minute().second()))
+                    .font(.system(size: 8, design: .monospaced))
+                    .foregroundStyle(.white.opacity(0.3))
+            }
+
+            // Proof count
+            if store.proofCount > 0 {
+                HStack(spacing: 2) {
+                    Image(systemName: "checkmark.seal")
+                        .font(.system(size: 7))
+                    Text("\(store.proofCount)")
+                        .font(.system(size: 8, weight: .bold, design: .monospaced))
+                }
+                .foregroundStyle(RheaTheme.green.opacity(0.5))
+            }
+        }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 5)
+        .background(RheaTheme.card.opacity(0.4))
     }
 }
 
@@ -112,7 +311,7 @@ private struct IntentRoute: Identifiable {
 }
 
 private struct IntentEntryView: View {
-    @Binding var selectedTab: Int
+    @Binding var selectedPane: PlayPane
     @AppStorage("apiBaseURL") private var apiBaseURL = AppConfig.defaultAPIBaseURL
     @AppStorage("hasEnteredIntent") private var hasEnteredIntent = false
     @AppStorage("intentRevealLevel") private var intentRevealLevel = 1
@@ -226,7 +425,7 @@ private struct IntentEntryView: View {
                             intentRole = "operator"
                             intentRevealLevel = 3
                             hasEnteredIntent = true
-                            selectedTab = 2
+                            selectedPane = .tribunal
                         }
                         .font(.system(size: 13, weight: .semibold, design: .monospaced))
                         .buttonStyle(.bordered)
@@ -310,7 +509,7 @@ private struct IntentEntryView: View {
                 }
                 firstIntentText = text
                 hasEnteredIntent = true
-                selectedTab = 0
+                selectedPane = .ops
             }
         }.resume()
     }
