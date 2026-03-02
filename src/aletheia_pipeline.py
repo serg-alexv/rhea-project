@@ -211,6 +211,13 @@ def _get_conn_raw() -> sqlite3.Connection:
     conn.row_factory = sqlite3.Row
     conn.execute("PRAGMA journal_mode=WAL")
     conn.executescript(_SCHEMA_SQL)
+    # Migrate: add contributor columns to existing proofs table
+    for col, typedef in [("contributor_id", "TEXT DEFAULT NULL"),
+                         ("contributor_email", "TEXT DEFAULT NULL")]:
+        try:
+            conn.execute(f"ALTER TABLE proofs ADD COLUMN {col} {typedef}")
+        except Exception:
+            pass  # column already exists
     try:
         conn.execute("DROP VIEW IF EXISTS aletheia_stats")
         conn.executescript(_STATS_VIEW_SQL)
@@ -309,6 +316,36 @@ CREATE TABLE IF NOT EXISTS proof_chains (
     FOREIGN KEY (parent_id) REFERENCES proofs(id),
     FOREIGN KEY (child_id) REFERENCES proofs(id)
 );
+
+-- Proof economy tables below (ALTER handled in Python migration)
+
+-- Proof economy: usage tracking (citation/consumption counter)
+CREATE TABLE IF NOT EXISTS proof_usage (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    proof_id TEXT NOT NULL,
+    consumer_id TEXT,              -- user who consumed (NULL = anonymous)
+    usage_type TEXT NOT NULL,      -- 'query', 'cite', 'build_on', 'export'
+    credits_spent REAL DEFAULT 0,  -- credits consumed by this usage
+    created_at TEXT NOT NULL,
+    FOREIGN KEY (proof_id) REFERENCES proofs(id)
+);
+CREATE INDEX IF NOT EXISTS idx_usage_proof ON proof_usage(proof_id);
+CREATE INDEX IF NOT EXISTS idx_usage_consumer ON proof_usage(consumer_id);
+
+-- Proof economy: contributor rewards (blind contract ledger)
+CREATE TABLE IF NOT EXISTS contributor_rewards (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    contributor_id TEXT NOT NULL,
+    proof_id TEXT NOT NULL,
+    amount_credits REAL NOT NULL,
+    amount_usd REAL DEFAULT 0,
+    usage_id INTEGER,              -- which usage triggered the reward
+    paid_at TEXT,                   -- NULL = pending, set when paid out
+    created_at TEXT NOT NULL,
+    FOREIGN KEY (proof_id) REFERENCES proofs(id),
+    FOREIGN KEY (usage_id) REFERENCES proof_usage(id)
+);
+CREATE INDEX IF NOT EXISTS idx_rewards_contributor ON contributor_rewards(contributor_id);
 """
 
 _STATS_VIEW_SQL = """
