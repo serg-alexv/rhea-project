@@ -34,7 +34,7 @@ struct RheaPreviewApp: App {
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 enum PlayPane: String, CaseIterable, Identifiable {
-    case ops, tribunal, bio, radio, tasks, governor, tools, settings
+    case ops, tribunal, bio, radio, tasks, governor, tools, dpi, nodes, aletheia, history, processes, models, ruliad, settings
     var id: String { rawValue }
 
     var label: String {
@@ -46,6 +46,13 @@ enum PlayPane: String, CaseIterable, Identifiable {
         case .tasks: return "TASKS"
         case .governor: return "GOVERNOR"
         case .tools: return "TOOLS"
+        case .dpi: return "DPI"
+        case .nodes: return "NODES"
+        case .aletheia: return "ALETHEIA"
+        case .history: return "HISTORY"
+        case .processes: return "PROCS"
+        case .models: return "MODELS"
+        case .ruliad: return "RULIAD"
         case .settings: return "CONFIG"
         }
     }
@@ -59,21 +66,46 @@ enum PlayPane: String, CaseIterable, Identifiable {
         case .tasks: return "checklist"
         case .governor: return "gauge.with.dots.needle.33percent"
         case .tools: return "keyboard"
+        case .dpi: return "eye.trianglebadge.exclamationmark"
+        case .nodes: return "point.3.connected.trianglepath.dotted"
+        case .aletheia: return "checkmark.seal"
+        case .history: return "clock.arrow.circlepath"
+        case .processes: return "terminal"
+        case .models: return "cpu"
+        case .ruliad: return "function"
         case .settings: return "slider.horizontal.3"
         }
     }
 
+    /// Key for AppStorage-based visibility toggle
+    var storageKey: String { "pane_\(rawValue)" }
+
+    /// Whether this pane is always visible (cannot be hidden)
+    var alwaysVisible: Bool { self == .ops || self == .settings }
+
+    /// Default visibility when no user preference is set
+    var defaultVisible: Bool {
+        switch self {
+        case .ops, .tribunal, .bio, .tasks, .governor, .tools, .aletheia, .models, .settings: return true
+        case .radio, .dpi, .nodes, .history, .processes, .ruliad: return false
+        }
+    }
+
     static func visiblePanes(for level: Int) -> [PlayPane] {
-        var list: [PlayPane] = [.ops, .tools]
-        if level >= 2 {
-            list.append(contentsOf: [.tribunal, .bio, .tasks, .governor])
+        let store = UserDefaults.standard
+        return PlayPane.allCases.filter { pane in
+            if pane.alwaysVisible { return true }
+            // AppStorage-based toggle overrides level gating
+            if store.object(forKey: pane.storageKey) != nil {
+                return store.bool(forKey: pane.storageKey)
+            }
+            // Default level-based gating
+            switch pane {
+            case .radio, .history, .processes, .ruliad: return level >= 3
+            case .dpi, .nodes: return false
+            default: return level >= 2 || pane.defaultVisible
+            }
         }
-        if level >= 3 {
-            // Expert-only: raw radio feed (ops traffic)
-            list.append(.radio)
-        }
-        list.append(.settings)
-        return list
     }
 }
 
@@ -233,6 +265,13 @@ private struct PlayShell: View {
             case .tasks: TasksView()
             case .governor: GovernorView()
             case .tools: ToolsHubView()
+            case .dpi: DPIView()
+            case .nodes: NodeEditorView()
+            case .aletheia: AletheiaView()
+            case .history: HistoryView()
+            case .processes: ProcessesView()
+            case .models: ModelsView()
+            case .ruliad: RuliadView()
             case .settings: SettingsView()
             }
         }
