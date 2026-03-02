@@ -36,7 +36,7 @@ COPY src/task_queue.py src/
 COPY src/rhea_supervisor.py src/
 COPY src/workflow_engine.py src/
 COPY src/crdb_store.py src/
-COPY src/secrets.py src/
+COPY src/rhea_secrets.py src/
 
 # Copy pre-built Atlas static frontend
 COPY rhea-atlas-out/ static_frontend/

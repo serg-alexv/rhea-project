@@ -28,19 +28,14 @@ _pool = None
 
 def _get_url() -> str | None:
     """Resolve CockroachDB URL from secrets or env."""
-    # Try rhea secrets module (file-level import to avoid stdlib collision)
+    # Try rhea_secrets module
     try:
-        import importlib.util
-        _secrets_path = Path(__file__).parent / "secrets.py"
-        if _secrets_path.exists():
-            spec = importlib.util.spec_from_file_location("rhea_secrets", str(_secrets_path))
-            mod = importlib.util.module_from_spec(spec)
-            spec.loader.exec_module(mod)
-            url = mod.get_cockroachdb_url()
-            if url:
-                return url
+        from rhea_secrets import get_cockroachdb_url
+        url = get_cockroachdb_url()
+        if url:
+            return url
     except Exception as e:
-        log.debug("secrets.py import failed: %s", e)
+        log.debug("rhea_secrets import failed: %s", e)
     return os.environ.get("COCKROACHDB_URL")
 
 

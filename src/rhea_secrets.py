@@ -1,13 +1,12 @@
 """
-secrets.py — GCloud Secret Manager integration.
+rhea_secrets.py — GCloud Secret Manager integration.
 
 Retrieves secrets from GCloud Secret Manager with env-var fallback.
 Project: rhea-office-sync (auto-detected from gcloud config if not set).
 
 Usage:
-    from secrets import get_secret
-    db_url = get_secret("cockroachdb-url")          # GCloud SM first, then env
-    db_url = get_secret("cockroachdb-url", "local")  # version/alias
+    from rhea_secrets import get_secret
+    db_url = get_secret("cockroachdb-url")
 
 Env fallback: COCKROACHDB_URL (uppercased, hyphens → underscores)
 """
