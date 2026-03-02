@@ -1674,7 +1674,7 @@ You own your data, your models, your keys. Rhea serves you &mdash; not the other
     <a href="/terms">Terms</a>
     <a href="/privacy">Privacy</a>
     <a href="/health">System Status</a>
-    <a href="https://patreon.com/timelabs" target="_blank" rel="noopener" style="color:var(--orange)">
+    <a href="https://www.patreon.com/timelabsnpo" target="_blank" rel="noopener" style="color:var(--orange)">
       <svg width="12" height="12" viewBox="0 0 24 24" style="vertical-align:middle;margin-right:2px"><circle cx="15.5" cy="8.5" r="5.5" fill="#FF424D"/><rect x="2" y="2" width="3" height="20" fill="#052A49"/></svg>
       Patreon</a>
   </div>
