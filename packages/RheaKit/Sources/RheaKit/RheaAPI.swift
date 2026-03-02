@@ -148,6 +148,17 @@ public final class RheaAPI: @unchecked Sendable {
         return json["sessions"] as? [[String: Any]] ?? []
     }
 
+    // MARK: - Wallet
+
+    public func walletStatus() async throws -> [[String: Any]] {
+        let json = try await getJSON("/wallet/status")
+        return json["wallets"] as? [[String: Any]] ?? []
+    }
+
+    public func walletBalance(chain: String) async throws -> [String: Any] {
+        return try await getJSON("/wallet/balance/\(chain)")
+    }
+
     // MARK: - Supervisor (process management)
 
     public func supervisorSessions() async throws -> [SupervisorSession] {

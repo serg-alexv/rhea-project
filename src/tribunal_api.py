@@ -4805,6 +4805,45 @@ async def supervisor_cleanup():
 
 
 # ---------------------------------------------------------------------------
+# Wallet — crypto donation addresses + balance proxy
+# ---------------------------------------------------------------------------
+
+@app.get("/wallet/status")
+async def wallet_status():
+    """Public wallet addresses and donation info. No private keys exposed."""
+    btc = os.environ.get("BTC_DONATION_ADDRESS", "")
+    eth = os.environ.get("ETH_DONATION_ADDRESS", "")
+    wallets = []
+    if btc:
+        wallets.append({"chain": "btc", "address": btc, "label": "Bitcoin (BTC)", "network": "mainnet"})
+    if eth:
+        wallets.append({"chain": "eth", "address": eth, "label": "Ethereum (ETH)", "network": "mainnet"})
+        wallets.append({"chain": "usdt", "address": eth, "label": "USDT (ERC-20)", "network": "erc20"})
+    return {"wallets": wallets, "count": len(wallets)}
+
+
+@app.get("/wallet/balance/{chain}")
+async def wallet_balance(chain: str):
+    """Proxy balance lookup — avoids exposing wallet addresses in client-side API calls."""
+    chain = chain.lower()
+    if chain == "btc":
+        addr = os.environ.get("BTC_DONATION_ADDRESS", "")
+        if not addr:
+            raise HTTPException(404, "BTC wallet not configured")
+        try:
+            async with httpx.AsyncClient(timeout=10) as client:
+                r = await client.get(f"https://blockchain.info/q/addressbalance/{addr}")
+                satoshis = int(r.text.strip())
+                return {"chain": "btc", "balance": satoshis / 1e8, "unit": "BTC", "satoshis": satoshis}
+        except Exception as e:
+            return {"chain": "btc", "balance": None, "error": str(e)}
+    elif chain in ("eth", "usdt"):
+        return {"chain": chain, "balance": None, "note": "Use etherscan API with your own key for ETH balance"}
+    else:
+        raise HTTPException(400, f"Unknown chain: {chain}")
+
+
+# ---------------------------------------------------------------------------
 # Direct execution
 # ---------------------------------------------------------------------------
 
