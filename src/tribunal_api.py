@@ -2820,6 +2820,208 @@ async def cc_sessions(limit: int = 20):
     """List all tribunal sessions with step counts. Public read-only."""
     return {"sessions": rhea_db.query_sessions(limit=limit)}
 
+@app.get("/monitor")
+async def monitor_dashboard():
+    """Cross-platform web dashboard — tokens, agents, history, controls."""
+    from fastapi.responses import HTMLResponse
+    return HTMLResponse(f"""<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Rhea Monitor</title>
+<style>
+*{{margin:0;padding:0;box-sizing:border-box}}
+body{{font-family:'SF Mono','Cascadia Code','Fira Code',monospace;background:#0a0a0f;color:#c8c8d0;font-size:13px}}
+.grid{{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:#1a1a24;min-height:100vh}}
+.pane{{background:#0d0d14;padding:16px;overflow-y:auto;max-height:50vh}}
+.pane h2{{font-size:11px;text-transform:uppercase;letter-spacing:2px;color:#4a4a5a;margin-bottom:12px;display:flex;align-items:center;gap:8px}}
+.pane h2 .dot{{width:6px;height:6px;border-radius:50%;background:#22c55e;display:inline-block}}
+.pane h2 .dot.warn{{background:#f59e0b}}
+.pane h2 .dot.dead{{background:#ef4444}}
+.metric{{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #ffffff06}}
+.metric .label{{color:#6a6a7a}}.metric .value{{color:#e0e0e8;font-weight:600}}
+.metric .value.green{{color:#22c55e}}.metric .value.amber{{color:#f59e0b}}.metric .value.red{{color:#ef4444}}
+.agent-row{{display:flex;align-items:center;gap:10px;padding:8px;border-radius:6px;margin-bottom:4px;background:#ffffff04}}
+.agent-row:hover{{background:#ffffff08}}
+.agent-row .name{{flex:1;font-weight:600;color:#e0e0e8}}
+.agent-row .status{{font-size:11px}}
+.btn{{padding:3px 10px;border-radius:4px;border:1px solid #ffffff15;background:#ffffff08;color:#8a8a9a;font-size:10px;cursor:pointer;font-family:inherit}}
+.btn:hover{{background:#ffffff12;color:#c0c0c8}}.btn.danger:hover{{background:#ef444420;color:#ef4444;border-color:#ef4444}}
+.history-row{{padding:6px 0;border-bottom:1px solid #ffffff06}}
+.history-row .prompt{{color:#a0a0b0;font-size:12px;margin-bottom:2px}}.history-row .meta{{color:#4a4a5a;font-size:10px}}
+.radio-row{{padding:4px 0;font-size:11px;color:#6a6a7a}}.radio-row .sender{{color:#818cf8;font-weight:600}}
+.header{{grid-column:1/-1;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;background:#0d0d14;border-bottom:1px solid #1a1a24}}
+.header h1{{font-size:14px;font-weight:700;color:#e0e0e8;letter-spacing:1px}}
+.header .live{{font-size:10px;color:#22c55e;display:flex;align-items:center;gap:4px}}
+.header .live::before{{content:'';width:6px;height:6px;border-radius:50%;background:#22c55e;animation:pulse 2s infinite}}
+@keyframes pulse{{0%,100%{{opacity:1}}50%{{opacity:.3}}}}
+.full-width{{grid-column:1/-1}}
+@media(max-width:900px){{.grid{{grid-template-columns:1fr}}}}
+</style></head>
+<body>
+<div class="grid">
+<div class="header">
+  <h1>RHEA MONITOR</h1>
+  <div class="live">LIVE <span id="uptime" style="color:#4a4a5a;margin-left:8px"></span></div>
+</div>
+
+<!-- Governor / Tokens -->
+<div class="pane" id="governor-pane">
+  <h2><span class="dot"></span> Governor</h2>
+  <div id="governor">Loading...</div>
+</div>
+
+<!-- Agents -->
+<div class="pane" id="agents-pane">
+  <h2><span class="dot"></span> Agents</h2>
+  <div id="agents">Loading...</div>
+</div>
+
+<!-- Sessions -->
+<div class="pane" id="sessions-pane">
+  <h2><span class="dot"></span> Sessions</h2>
+  <div id="sessions">Loading...</div>
+</div>
+
+<!-- History -->
+<div class="pane" id="history-pane">
+  <h2><span class="dot"></span> History</h2>
+  <div id="history">Loading...</div>
+</div>
+
+<!-- Radio -->
+<div class="pane" id="radio-pane">
+  <h2><span class="dot"></span> Radio</h2>
+  <div id="radio">Loading...</div>
+</div>
+
+<!-- Controls -->
+<div class="pane" id="controls-pane">
+  <h2><span class="dot warn"></span> Controls</h2>
+  <div style="margin-bottom:12px">
+    <button class="btn" onclick="refresh()">Refresh All</button>
+    <button class="btn" onclick="location.href='/health'">Health Check</button>
+    <button class="btn" onclick="location.href='/aletheia/stats'">Proof Stats</button>
+  </div>
+  <div id="health-summary">Loading...</div>
+</div>
+</div>
+
+<script>
+const API = location.origin;
+let start = Date.now();
+
+async function fetchJSON(path) {{
+  try {{ const r = await fetch(API + path); return await r.json(); }}
+  catch {{ return null; }}
+}}
+
+async function loadGovernor() {{
+  const d = await fetchJSON('/governor');
+  if (!d) {{ document.getElementById('governor').innerHTML = '<div style="color:#ef4444">Offline</div>'; return; }}
+  const agents = d.agents || {{}};
+  let html = '';
+  let totalTok = 0, totalCost = 0;
+  for (const [name, a] of Object.entries(agents)) {{
+    totalTok += a.tokens_total || 0;
+    totalCost += a.cost_total || 0;
+    const status = (a.tokens_total || 0) > 0 ? 'green' : '';
+    html += `<div class="metric"><span class="label">${{name}}</span><span class="value ${{status}}">${{(a.tokens_total||0).toLocaleString()}} tok / $${{(a.cost_total||0).toFixed(2)}}</span></div>`;
+  }}
+  html = `<div class="metric"><span class="label">Total tokens</span><span class="value green">${{totalTok.toLocaleString()}}</span></div>
+           <div class="metric"><span class="label">Total cost</span><span class="value amber">$${{totalCost.toFixed(2)}}</span></div>
+           <div style="margin:8px 0;border-top:1px solid #ffffff08"></div>` + html;
+  document.getElementById('governor').innerHTML = html;
+}}
+
+async function loadAgents() {{
+  const d = await fetchJSON('/agents/status');
+  if (!d) {{ document.getElementById('agents').innerHTML = '<div style="color:#6a6a7a">No agent data</div>'; return; }}
+  const agents = d.agents || d;
+  let html = '';
+  const list = Array.isArray(agents) ? agents : Object.entries(agents).map(([k,v]) => ({{name:k,...v}}));
+  for (const a of list) {{
+    const name = a.name || a.agent || '?';
+    const alive = a.alive !== false && a.status !== 'dead';
+    const dot = alive ? '🟢' : '🔴';
+    html += `<div class="agent-row">
+      <span>${{dot}}</span>
+      <span class="name">${{name}}</span>
+      <span class="status" style="color:${{alive?'#22c55e':'#ef4444'}}">${{a.status || (alive?'active':'dead')}}</span>
+      <button class="btn danger" onclick="controlAgent('${{name}}','pause')" title="Pause">⏸</button>
+      <button class="btn danger" onclick="controlAgent('${{name}}','kill')" title="Kill">✕</button>
+    </div>`;
+  }}
+  document.getElementById('agents').innerHTML = html || '<div style="color:#6a6a7a">No agents registered</div>';
+}}
+
+async function loadSessions() {{
+  const d = await fetchJSON('/cc/sessions?limit=8');
+  if (!d?.sessions) return;
+  let html = '';
+  for (const s of d.sessions) {{
+    html += `<div class="metric"><span class="label">${{s.id?.slice(0,8)}} · ${{s.agent||'?'}}</span><span class="value">${{s.step_count||0}} steps</span></div>`;
+  }}
+  document.getElementById('sessions').innerHTML = html || '<div style="color:#6a6a7a">No sessions</div>';
+}}
+
+async function loadHistory() {{
+  const d = await fetchJSON('/cc/history?limit=10');
+  if (!d?.history) return;
+  let html = '';
+  for (const h of d.history) {{
+    const ago = h.created_at ? new Date(h.created_at).toLocaleTimeString() : '';
+    html += `<div class="history-row"><div class="prompt">${{(h.prompt||'').slice(0,80)}}${{(h.prompt||'').length>80?'...':''}}</div><div class="meta">${{h.type}} · ${{ago}} · agreement: ${{(h.agreement_score||0).toFixed(0)}}%</div></div>`;
+  }}
+  document.getElementById('history').innerHTML = html || '<div style="color:#6a6a7a">No history</div>';
+}}
+
+async function loadRadio() {{
+  const d = await fetchJSON('/cc/radio?limit=15');
+  if (!d?.radio) return;
+  let html = '';
+  for (const r of d.radio) {{
+    html += `<div class="radio-row"><span class="sender">${{r.sender}}</span> ${{(r.text||'').slice(0,60)}}</div>`;
+  }}
+  document.getElementById('radio').innerHTML = html || '<div style="color:#6a6a7a">No radio</div>';
+}}
+
+async function loadHealth() {{
+  const d = await fetchJSON('/health');
+  if (!d) return;
+  document.getElementById('health-summary').innerHTML = `
+    <div class="metric"><span class="label">Status</span><span class="value green">${{d.status}}</span></div>
+    <div class="metric"><span class="label">Providers</span><span class="value">${{d.providers_available}}/${{d.providers_total}}</span></div>
+    <div class="metric"><span class="label">Models</span><span class="value">${{d.total_models}}</span></div>
+    <div class="metric"><span class="label">Profile</span><span class="value">${{d.execution_profile}}</span></div>
+  `;
+}}
+
+async function controlAgent(name, action) {{
+  if (!confirm(`${{action}} agent "${{name}}"?`)) return;
+  // POST to agent control endpoint
+  try {{
+    await fetch(`${{API}}/agents/${{action}}`, {{
+      method:'POST', headers:{{'Content-Type':'application/json'}},
+      body: JSON.stringify({{agent: name}})
+    }});
+    setTimeout(loadAgents, 500);
+  }} catch(e) {{ console.error(e); }}
+}}
+
+function refresh() {{
+  loadGovernor(); loadAgents(); loadSessions(); loadHistory(); loadRadio(); loadHealth();
+}}
+
+setInterval(() => {{
+  const s = Math.floor((Date.now()-start)/1000);
+  const m = Math.floor(s/60); const h = Math.floor(m/60);
+  document.getElementById('uptime').textContent = `${{h}}h${{m%60}}m${{s%60}}s`;
+}}, 1000);
+
+refresh();
+setInterval(refresh, 5000);
+</script>
+</body></html>""")
+
 @app.get("/cc/ndi", dependencies=[Depends(verify_api_key)])
 async def cc_ndi_status():
     """NDI runtime status + source discovery."""
