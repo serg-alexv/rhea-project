@@ -824,14 +824,29 @@ async def landing():
         crypto_section = f"""
 <section class="reveal" id="support">
 <div class="section-title">
-  <h2>Support the project</h2>
-  <p>Rhea is built by independent researchers. Every sat helps.</p>
+  <h2>Support open science</h2>
+  <p>Every transaction funds real impact. You get credits. The world gets better.</p>
 </div>
 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;max-width:800px;margin:0 auto">
   {cards}
 </div>
-<div style="text-align:center;margin-top:1rem;font-size:.65rem;color:var(--muted)">
-  5% funds development. 95% credits your account directly. No middlemen.
+<div style="max-width:680px;margin:1.5rem auto 0;text-align:center">
+  <div style="display:flex;gap:.8rem;justify-content:center;flex-wrap:wrap;margin-bottom:1rem">
+    <span class="glass-card" style="padding:.5rem 1rem;font-size:.65rem;display:flex;align-items:center;gap:.4rem">
+      <span style="color:var(--green)">&#x1F33F;</span> 2% carbon-neutral computing
+    </span>
+    <span class="glass-card" style="padding:.5rem 1rem;font-size:.65rem;display:flex;align-items:center;gap:.4rem">
+      <span style="color:var(--blue)">&#x1F52C;</span> 2% open-science grants
+    </span>
+    <span class="glass-card" style="padding:.5rem 1rem;font-size:.65rem;display:flex;align-items:center;gap:.4rem">
+      <span style="color:var(--orange)">&#x1F43E;</span> 1% animal shelter fund
+    </span>
+  </div>
+  <div style="font-size:.65rem;color:var(--muted)">
+    95% credits your account instantly. 5% funds impact above. No middlemen.<br>
+    <span style="color:var(--accent)">First payment auto-creates your account</span> &mdash;
+    patron key derived from tx hash, redeemable anytime.
+  </div>
 </div>
 </section>"""
     html = f"""<!DOCTYPE html>

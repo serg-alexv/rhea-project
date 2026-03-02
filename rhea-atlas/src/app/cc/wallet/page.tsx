@@ -203,21 +203,36 @@ export default function WalletPage() {
 
         {/* How it works */}
         <div className="mt-8 bg-white/[0.02] border border-white/[0.06] rounded-xl p-5">
-          <h3 className="text-sm font-semibold mb-3">How crypto payments work</h3>
+          <h3 className="text-sm font-semibold mb-3">How it works</h3>
           <div className="space-y-2 text-xs text-white/40 leading-relaxed">
             <p>
-              1. Send any amount to the address above for the currency you prefer.
+              1. Send any amount to the address above. First payment auto-creates your account.
             </p>
             <p>
-              2. BTCPay webhook detects the payment and credits your Rhea account automatically.
+              2. BTCPay webhook detects the transaction. A <strong className="text-white/60">patron key</strong> is
+              derived from your tx hash &mdash; redeemable anytime at <code className="text-white/50">/auth/redeem</code>.
             </p>
             <p>
-              3. <strong className="text-white/60">95%</strong> of the payment value converts to
-              Rhea credits. <strong className="text-white/60">5%</strong> funds open-source
-              development.
+              3. <strong className="text-white/60">95%</strong> converts to Rhea credits instantly.
             </p>
             <p>
-              4. Credits are used for tribunal queries, ICE verification, and Aletheia proof storage.
+              4. <strong className="text-white/60">5%</strong> funds real-world impact:
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-2 mt-3 mb-3">
+            <span className="bg-green-500/10 border border-green-500/20 text-green-400 text-[10px] px-2.5 py-1 rounded-full">
+              2% carbon-neutral GPU compute
+            </span>
+            <span className="bg-blue-500/10 border border-blue-500/20 text-blue-400 text-[10px] px-2.5 py-1 rounded-full">
+              2% open-science grants
+            </span>
+            <span className="bg-orange-500/10 border border-orange-500/20 text-orange-400 text-[10px] px-2.5 py-1 rounded-full">
+              1% animal shelter fund
+            </span>
+          </div>
+          <div className="text-xs text-white/40 leading-relaxed">
+            <p>
+              5. Credits unlock tribunal queries, ICE verification, Aletheia proof storage, and sceptic mode.
             </p>
           </div>
         </div>

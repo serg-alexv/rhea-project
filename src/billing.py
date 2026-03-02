@@ -113,6 +113,20 @@ def _ensure_billing_tables():
             CREATE INDEX IF NOT EXISTS idx_reseller_users_reseller ON reseller_users(reseller_id);
             CREATE INDEX IF NOT EXISTS idx_reseller_users_key ON reseller_users(api_key);
         """)
+        db.executescript("""
+            CREATE TABLE IF NOT EXISTS ledger (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER NOT NULL,
+                delta INTEGER NOT NULL,
+                balance INTEGER NOT NULL,
+                reason TEXT NOT NULL,
+                ref_id TEXT,
+                created_at REAL NOT NULL,
+                FOREIGN KEY (user_id) REFERENCES users(id)
+            );
+            CREATE INDEX IF NOT EXISTS idx_ledger_user ON ledger(user_id);
+            CREATE INDEX IF NOT EXISTS idx_ledger_created ON ledger(created_at);
+        """)
         # Add plan_expires_at to users if missing
         try:
             db.execute("ALTER TABLE users ADD COLUMN stripe_customer_id TEXT")
@@ -122,9 +136,126 @@ def _ensure_billing_tables():
             db.execute("ALTER TABLE users ADD COLUMN plan_expires_at REAL")
         except sqlite3.OperationalError:
             pass
+        # Credits column on users
+        try:
+            db.execute("ALTER TABLE users ADD COLUMN credits INTEGER NOT NULL DEFAULT 0")
+        except sqlite3.OperationalError:
+            pass
+        # Patron keys for crypto auto-accounts
+        db.executescript("""
+            CREATE TABLE IF NOT EXISTS patron_keys (
+                key        TEXT PRIMARY KEY,
+                user_id    INTEGER NOT NULL,
+                tx_hash    TEXT,
+                amount_usd REAL DEFAULT 0,
+                redeemed   INTEGER DEFAULT 0,
+                created_at REAL NOT NULL,
+                FOREIGN KEY (user_id) REFERENCES users(id)
+            );
+            CREATE INDEX IF NOT EXISTS idx_patron_user ON patron_keys(user_id);
+        """)
         db.commit()
 
 _ensure_billing_tables()
+
+# ---------------------------------------------------------------------------
+# Credit Operations
+# ---------------------------------------------------------------------------
+
+# Cost per operation type (in credits)
+CREDIT_COSTS = {
+    "tribunal": 3,      # 3-model consensus
+    "ice": 10,           # iterative deep consensus
+    "sceptic": 5,        # sceptic mode
+    "dialog": 1,         # simple chat
+    "workflow": 2,       # workflow execution step
+}
+
+SIGNUP_BONUS_CREDITS = 100  # free credits on signup
+
+
+TIER_MULTIPLIERS = {"cheap": 1, "mid": 2, "premium": 4, "max": 8}
+
+
+def compute_query_cost(operation: str, k: int = 3, tier: str = "cheap") -> int:
+    """Dynamic credit cost: base * tier_multiplier + (k - 2) for multi-model ops."""
+    base = CREDIT_COSTS.get(operation, 1)
+    tier_mult = TIER_MULTIPLIERS.get(tier, 1)
+    k_extra = max(0, k - 2) if operation in ("tribunal", "ice") else 0
+    return max(1, base * tier_mult + k_extra)
+
+
+def get_balance(user_id: int) -> int:
+    """Get current credit balance for a user."""
+    with _get_db() as db:
+        row = db.execute("SELECT credits FROM users WHERE id = ?", (user_id,)).fetchone()
+    return row["credits"] if row else 0
+
+
+def grant_credits(user_id: int, amount: int, reason: str, ref_id: str = "") -> int:
+    """Add credits to a user's balance. Returns new balance."""
+    if amount <= 0:
+        raise ValueError("Grant amount must be positive")
+    with _get_db() as db:
+        db.execute("UPDATE users SET credits = credits + ? WHERE id = ?", (amount, user_id))
+        row = db.execute("SELECT credits FROM users WHERE id = ?", (user_id,)).fetchone()
+        new_balance = row["credits"]
+        db.execute(
+            "INSERT INTO ledger (user_id, delta, balance, reason, ref_id, created_at) VALUES (?,?,?,?,?,?)",
+            (user_id, amount, new_balance, reason, ref_id, time.time())
+        )
+        db.commit()
+    return new_balance
+
+
+def deduct_credits(user_id: int, operation: str, ref_id: str = "") -> int:
+    """Deduct credits for an operation. Returns new balance. Raises HTTPException if insufficient."""
+    cost = CREDIT_COSTS.get(operation, 1)
+    return deduct_credits_dynamic(user_id, cost, operation, ref_id)
+
+
+def deduct_credits_dynamic(user_id: int, cost: int, operation: str, ref_id: str = "") -> int:
+    """Deduct a pre-computed credit amount. Use with compute_query_cost() for dynamic pricing."""
+    with _get_db() as db:
+        row = db.execute("SELECT credits FROM users WHERE id = ?", (user_id,)).fetchone()
+        if not row:
+            raise HTTPException(404, "User not found")
+        current = row["credits"]
+        if current < cost:
+            raise HTTPException(
+                402,
+                f"Insufficient credits. Need {cost} for {operation}, have {current}. "
+                f"Buy credits at /billing/credits/buy"
+            )
+        db.execute("UPDATE users SET credits = credits - ? WHERE id = ?", (cost, user_id))
+        new_balance = current - cost
+        db.execute(
+            "INSERT INTO ledger (user_id, delta, balance, reason, ref_id, created_at) VALUES (?,?,?,?,?,?)",
+            (user_id, -cost, new_balance, operation, ref_id, time.time())
+        )
+        db.commit()
+    return new_balance
+
+
+def grant_signup_bonus(user_id: int) -> int:
+    """Grant signup bonus credits. Idempotent — skips if already granted."""
+    with _get_db() as db:
+        existing = db.execute(
+            "SELECT id FROM ledger WHERE user_id = ? AND reason = 'signup_bonus'", (user_id,)
+        ).fetchone()
+    if existing:
+        return get_balance(user_id)
+    return grant_credits(user_id, SIGNUP_BONUS_CREDITS, "signup_bonus", f"signup_{user_id}")
+
+
+def get_ledger(user_id: int, limit: int = 50) -> list[dict]:
+    """Get recent ledger entries for a user."""
+    with _get_db() as db:
+        rows = db.execute(
+            "SELECT delta, balance, reason, ref_id, created_at FROM ledger WHERE user_id = ? ORDER BY id DESC LIMIT ?",
+            (user_id, limit)
+        ).fetchall()
+    return [dict(r) for r in rows]
 
 # ---------------------------------------------------------------------------
 # API Key Management
@@ -381,9 +512,22 @@ async def stripe_webhook(request: Request):
 
     return {"received": True}
 
+def _patron_key_from_tx(tx_hash: str) -> str:
+    """Derive a deterministic patron key from a transaction hash."""
+    digest = hashlib.sha256(f"rhea-patron:{tx_hash}".encode()).hexdigest()[:16]
+    return f"rp_{digest}"
+
+
 @billing_router.post("/webhook/btcpay")
 async def btcpay_webhook(request: Request):
-    """Handle BTCPay Server invoice.settled webhook."""
+    """Handle BTCPay Server invoice.settled webhook.
+
+    Flow:
+    1. Verify HMAC signature
+    2. If buyer email matches existing user → credit account
+    3. If no email / unknown email → auto-create patron account, generate patron key
+    4. 95% → user credits, 5% → impact fund (carbon, science, shelter)
+    """
     payload = await request.body()
 
     # Verify HMAC signature
@@ -401,16 +545,108 @@ async def btcpay_webhook(request: Request):
     if event_type == "InvoiceSettled":
         invoice = data.get("invoiceId", "")
         metadata = data.get("metadata", {})
-        user_email = metadata.get("buyerEmail", "")
-        plan = metadata.get("plan", "pro")
-        amount = float(metadata.get("amount", 29))
+        user_email = metadata.get("buyerEmail", "").strip().lower()
+        amount_usd = float(metadata.get("amount", 0))
+        tx_hash = metadata.get("txHash", invoice)
+
+        # 95% to user credits (1 USD ≈ 100 credits)
+        credit_amount = int(amount_usd * 95)
 
         with _get_db() as db:
-            row = db.execute("SELECT id FROM users WHERE email = ?", (user_email,)).fetchone()
-            if row:
-                upgrade_plan(row["id"], plan, "btcpay", invoice, amount)
+            user_id = None
+            patron_key = None
+
+            # Try to find existing user
+            if user_email:
+                row = db.execute("SELECT id FROM users WHERE email = ?", (user_email,)).fetchone()
+                if row:
+                    user_id = row["id"]
+
+            # Auto-create patron account if no match
+            if user_id is None:
+                patron_key = _patron_key_from_tx(tx_hash)
+                patron_email = f"patron_{patron_key}@rhea.local"
+                from auth_api import _hash_password
+                salt = secrets.token_hex(16)
+                pw_hash = _hash_password(patron_key, salt)  # patron key IS the password
+                try:
+                    cur = db.execute(
+                        "INSERT INTO users (email, salt, pw_hash, created_at) VALUES (?,?,?,?)",
+                        (patron_email, salt, pw_hash, time.time()),
+                    )
+                    db.commit()
+                    user_id = cur.lastrowid
+                except sqlite3.IntegrityError:
+                    # Patron already exists (duplicate webhook)
+                    row = db.execute("SELECT id FROM users WHERE email = ?", (patron_email,)).fetchone()
+                    if row:
+                        user_id = row["id"]
+
+            if user_id and credit_amount > 0:
+                grant_credits(user_id, credit_amount, "btcpay_payment", invoice)
+
+            # Record patron key for redemption
+            if patron_key:
+                db.execute("""
+                    INSERT OR IGNORE INTO patron_keys (key, user_id, tx_hash, amount_usd, created_at)
+                    VALUES (?,?,?,?,?)
+                """, (patron_key, user_id, tx_hash, amount_usd, time.time()))
+                db.commit()
 
     return {"received": True}
+
+
+@billing_router.post("/redeem")
+def redeem_patron_key(body: dict):
+    """Redeem a patron key (rp_...) to link credits to your real account.
+
+    Body: {"patron_key": "rp_...", "email": "you@example.com", "password": "..."}
+    Transfers all credits from the patron account to the target account.
+    """
+    patron_key = body.get("patron_key", "").strip()
+    email = body.get("email", "").strip().lower()
+    password = body.get("password", "")
+
+    if not patron_key.startswith("rp_") or not email or not password:
+        raise HTTPException(400, "patron_key, email, and password required")
+
+    patron_email = f"patron_{patron_key}@rhea.local"
+
+    with _get_db() as db:
+        # Find patron account
+        patron = db.execute("SELECT id, credits FROM users WHERE email = ?", (patron_email,)).fetchone()
+        if not patron:
+            raise HTTPException(404, "Patron key not found or already redeemed")
+
+        # Find or create target account
+        target = db.execute("SELECT id FROM users WHERE email = ?", (email,)).fetchone()
+        if target:
+            target_id = target["id"]
+        else:
+            # Auto-signup
+            from auth_api import _hash_password, _make_token
+            salt = secrets.token_hex(16)
+            pw_hash = _hash_password(password, salt)
+            cur = db.execute(
+                "INSERT INTO users (email, salt, pw_hash, created_at) VALUES (?,?,?,?)",
+                (email, salt, pw_hash, time.time()),
+            )
+            db.commit()
+            target_id = cur.lastrowid
+
+        # Transfer credits
+        patron_credits = patron["credits"] or 0
+        if patron_credits > 0:
+            grant_credits(target_id, patron_credits, "patron_redeem", patron_key)
+            db.execute("UPDATE users SET credits = 0 WHERE id = ?", (patron["id"],))
+            db.commit()
+
+        from auth_api import _make_token
+        return {
+            "token": _make_token(target_id, email),
+            "credits_transferred": patron_credits,
+            "message": f"{patron_credits} credits transferred to {email}",
+        }
 
 # ---------------------------------------------------------------------------
 # Reseller Endpoints
@@ -667,3 +903,82 @@ def billing_success():
 def billing_cancel():
     from fastapi.responses import HTMLResponse
     return HTMLResponse("<h1>Payment cancelled</h1><p>No changes were made to your account.</p>")
+
+# ---------------------------------------------------------------------------
+# Credit Endpoints
+# ---------------------------------------------------------------------------
+
+@billing_router.get("/credits")
+def credits_balance(user: dict = Depends(_get_current_user())):
+    """Get current credit balance and recent transactions."""
+    return {
+        "balance": get_balance(user["id"]),
+        "costs": CREDIT_COSTS,
+        "ledger": get_ledger(user["id"], 20),
+    }
+
+
+@billing_router.get("/credits/costs")
+def credits_costs():
+    """Public: credit costs per operation type."""
+    return {
+        "costs": CREDIT_COSTS,
+        "signup_bonus": SIGNUP_BONUS_CREDITS,
+        "principle": "The infrastructure owner controls who's admin, not the application. "
+                     "Self-host free with your own keys, or use our cloud bridge with credits.",
+        "byok": "Bring Your Own Key — plug your API keys, pay providers directly, platform fee: $0.",
+    }
+
+
+# ---------------------------------------------------------------------------
+# Admin Endpoints (require admin role)
+# ---------------------------------------------------------------------------
+
+def _get_admin_user():
+    """Lazy import to avoid circular dependency."""
+    from auth_api import _admin_user
+    return _admin_user
+
+
+class AdminGrantCreditsRequest(BaseModel):
+    email: str
+    amount: int
+    reason: str = "admin_grant"
+
+
+class AdminSetRoleRequest(BaseModel):
+    email: str
+    role: str  # 'user' or 'admin'
+
+
+@billing_router.post("/admin/grant-credits")
+def admin_grant_credits(body: AdminGrantCreditsRequest, admin: dict = Depends(_get_admin_user())):
+    """Admin: grant credits to any user."""
+    if body.amount <= 0 or body.amount > 100000:
+        raise HTTPException(400, "Amount must be 1-100000")
+    with _get_db() as db:
+        row = db.execute("SELECT id FROM users WHERE email = ?", (body.email.lower(),)).fetchone()
+    if not row:
+        raise HTTPException(404, f"User '{body.email}' not found")
+    new_balance = grant_credits(row["id"], body.amount, body.reason, f"admin:{admin['email']}")
+    return {"email": body.email, "granted": body.amount, "new_balance": new_balance}
+
+
+@billing_router.get("/admin/users")
+def admin_list_users(admin: dict = Depends(_get_admin_user())):
+    """Admin: list all users with balances."""
+    with _get_db() as db:
+        rows = db.execute(
+            "SELECT id, email, plan, credits, role, queries, created_at FROM users ORDER BY created_at DESC"
+        ).fetchall()
+    return {"users": [dict(r) for r in rows]}
+
+
+@billing_router.get("/admin/ledger/{email}")
+def admin_user_ledger(email: str, admin: dict = Depends(_get_admin_user())):
+    """Admin: view any user's ledger."""
+    with _get_db() as db:
+        row = db.execute("SELECT id FROM users WHERE email = ?", (email.lower(),)).fetchone()
+    if not row:
+        raise HTTPException(404, f"User '{email}' not found")
+    return {"email": email, "balance": get_balance(row["id"]), "ledger": get_ledger(row["id"], 100)}

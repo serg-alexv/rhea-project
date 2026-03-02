@@ -31,7 +31,10 @@ RUN mkdir -p /app/logs /app/data
 # Stage proof.db seed outside the volume mount path
 COPY data/proof.db /tmp/seed_proof.db
 
+# Entrypoint: seeds proof.db if volume is sparse, then starts server
+COPY scripts/docker-entrypoint.sh /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
+
 EXPOSE 8400
 
-# On boot: seed proof.db if volume is empty/tiny, then start
-CMD ["bash", "-c", "SEED_COUNT=$(python3 -c \"import sqlite3;c=sqlite3.connect('/app/data/proof.db');print(c.execute('SELECT COUNT(*) FROM proofs').fetchone()[0])\" 2>/dev/null || echo 0); if [ \"$SEED_COUNT\" -lt 5 ]; then cp /tmp/seed_proof.db /app/data/proof.db; echo \"[seed] proof.db seeded ($SEED_COUNT -> 11 artifacts)\"; fi && python3 src/tribunal_api.py"]
+CMD ["/app/entrypoint.sh"]
