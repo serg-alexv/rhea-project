@@ -1,22 +1,20 @@
 import SwiftUI
 
-/// Rhea keyboard — system-wide AI text tool.
+/// Rhea keyboard — system-wide AI text tool with full QWERTY input.
 ///
-/// Three modes:
-///   1. Quick Actions — single-model fast (translate, rewrite, grammar, summarize)
-///   2. Tribunal — multi-model consensus for complex claims
-///   3. Builder — LEGO-like block chain constructor (ComfyUI-style pipelines)
-///
-/// Quick actions grab text from the host app's text field via `getContext()`,
-/// process it through a single LLM, and let the user insert the result.
+/// Four modes via visible tab bar:
+///   1. ABC — full QWERTY letter keyboard (default)
+///   2. Quick — single-model fast actions (translate, rewrite, grammar)
+///   3. Tribunal — multi-model consensus for claims
+///   4. Builder — LEGO-like block chain constructor (ComfyUI-style)
 struct KeyboardView: View {
 
-    // Callbacks from UIInputViewController
     let insertText: (String) -> Void
     let deleteBackward: () -> Void
     let switchKeyboard: () -> Void
     let getContext: () -> String
 
+    // Shared state
     @State private var query = ""
     @State private var isLoading = false
     @State private var resultText: String?
@@ -25,13 +23,13 @@ struct KeyboardView: View {
     @State private var copied = false
     @State private var showLangPicker = false
     @State private var selectedLang = "en"
-    @State private var mode: KeyboardMode = .actions
+    @State private var mode: KeyboardMode = .typing
 
-    enum KeyboardMode {
-        case actions    // quick action strip + result
-        case tribunal   // full tribunal query
-        case builder    // LEGO-like block chain constructor
-    }
+    // Typing state
+    @State private var shifted = false
+    @State private var capsLock = false
+    @State private var numbersMode = false
+    @State private var symbolsMode = false
 
     // Builder state
     @State private var chain: [ChainBlock] = [
@@ -44,126 +42,353 @@ struct KeyboardView: View {
     @State private var chainRunning = false
     @State private var chainProgress: String? = nil
 
-    /// Current mode label (shows which mode is ACTIVE)
-    private var modeLabel: String {
-        switch mode {
-        case .actions:  return "⚡ Quick"
-        case .tribunal: return "⚖ Tribunal"
-        case .builder:  return "🧱 Builder"
+    enum KeyboardMode: String, CaseIterable {
+        case typing   = "ABC"
+        case actions  = "Quick"
+        case tribunal = "Tribunal"
+        case builder  = "Builder"
+
+        var icon: String {
+            switch self {
+            case .typing:   return "keyboard"
+            case .actions:  return "bolt.fill"
+            case .tribunal: return "scalemass.fill"
+            case .builder:  return "puzzlepiece.fill"
+            }
         }
     }
 
-    /// Current mode accent color
-    private var modeColor: Color {
-        switch mode {
-        case .actions:  return accent
-        case .tribunal: return accent
-        case .builder:  return amber
-        }
-    }
-
-    // Colors matching RheaTheme (local — no RheaKit import in extensions)
+    // Colors (local — no RheaKit import in extensions)
     private let bg = Color(red: 0.06, green: 0.06, blue: 0.10)
     private let card = Color(red: 0.10, green: 0.10, blue: 0.16)
+    private let keyBg = Color(red: 0.18, green: 0.18, blue: 0.24)
     private let accent = Color(red: 0.40, green: 0.85, blue: 1.0)
     private let green = Color(red: 0.30, green: 0.90, blue: 0.50)
     private let amber = Color(red: 1.0, green: 0.78, blue: 0.20)
     private let red = Color(red: 1.0, green: 0.35, blue: 0.35)
 
+    // QWERTY layout
+    private let row1 = ["q","w","e","r","t","y","u","i","o","p"]
+    private let row2 = ["a","s","d","f","g","h","j","k","l"]
+    private let row3 = ["z","x","c","v","b","n","m"]
+    private let numRow1 = ["1","2","3","4","5","6","7","8","9","0"]
+    private let numRow2 = ["-","/",":",";","(",")","$","&","@","\""]
+    private let numRow3 = [".",",","?","!","'"]
+    private let symRow1 = ["[","]","{","}","#","%","^","*","+","="]
+    private let symRow2 = ["_","\\","|","~","<",">","€","£","¥","·"]
+    private let symRow3 = [".",",","?","!","'"]
+
     var body: some View {
         VStack(spacing: 0) {
-            header
+            tabBar
+            Divider().background(Color.white.opacity(0.06))
+
             if showLangPicker {
                 languagePicker
+            } else if isLoading || resultText != nil || errorText != nil {
+                responseArea
             } else {
                 switch mode {
+                case .typing:   qwertyView
                 case .actions:  quickActions
                 case .tribunal: tribunalInput
                 case .builder:  builderView
                 }
             }
-            if isLoading || resultText != nil || errorText != nil {
-                responseArea
-            }
         }
         .frame(maxWidth: .infinity)
-        .frame(height: bodyHeight)
         .background(bg)
     }
 
-    /// Dynamic height based on mode and state
-    private var bodyHeight: CGFloat {
-        if resultText != nil { return 280 }
-        if showLangPicker { return 240 }
-        switch mode {
-        case .actions:  return 170
-        case .tribunal: return 170
-        case .builder:
-            // Builder needs more room: chain + optional palette/editor + run bar
-            var h: CGFloat = 130
-            if showBlockPalette { h += 60 }
-            if editingBlockIndex != nil { h += 36 }
-            return h
-        }
-    }
+    // MARK: - Tab Bar
 
-    // MARK: - Header
-
-    private var header: some View {
-        HStack(spacing: 8) {
-            Image(systemName: "scalemass.fill")
-                .font(.system(size: 11))
-                .foregroundStyle(accent)
-            Text("RHEA")
-                .font(.system(size: 11, weight: .bold, design: .monospaced))
-                .foregroundStyle(.white)
-
-            Spacer()
-
-            // Mode toggle — 3-way cycle: Quick → Tribunal → Builder → Quick
-            Button {
-                withAnimation(.easeInOut(duration: 0.2)) {
-                    switch mode {
-                    case .actions:  mode = .tribunal
-                    case .tribunal: mode = .builder
-                    case .builder:  mode = .actions
+    private var tabBar: some View {
+        HStack(spacing: 0) {
+            ForEach(KeyboardMode.allCases, id: \.self) { m in
+                Button {
+                    withAnimation(.easeInOut(duration: 0.15)) {
+                        mode = m
+                        showLangPicker = false
+                        showBlockPalette = false
+                        editingBlockIndex = nil
+                        if m == .typing {
+                            resultText = nil
+                            errorText = nil
+                        }
                     }
-                    showLangPicker = false
-                    showBlockPalette = false
-                    editingBlockIndex = nil
-                    resultText = nil
-                    errorText = nil
-                }
-            } label: {
-                Text(modeLabel)
-                    .font(.system(size: 10, weight: .semibold, design: .monospaced))
+                } label: {
+                    HStack(spacing: 3) {
+                        Image(systemName: m.icon)
+                            .font(.system(size: 9))
+                        Text(m.rawValue)
+                            .font(.system(size: 10, weight: .semibold, design: .monospaced))
+                    }
                     .padding(.horizontal, 8)
-                    .padding(.vertical, 3)
-                    .background(Capsule().fill(card))
-                    .foregroundStyle(modeColor)
+                    .padding(.vertical, 5)
+                    .frame(maxWidth: .infinity)
+                    .background(
+                        mode == m
+                        ? accent.opacity(0.15)
+                        : Color.clear
+                    )
+                    .foregroundStyle(mode == m ? accent : .secondary)
+                }
             }
 
             // Auth dot
             Circle()
                 .fill(TribunalClient.authToken != nil ? green : amber)
-                .frame(width: 6, height: 6)
+                .frame(width: 5, height: 5)
+                .padding(.trailing, 6)
+        }
+        .frame(height: 28)
+    }
 
-            // Globe (switch keyboard — required by Apple)
-            Button(action: switchKeyboard) {
-                Image(systemName: "globe")
-                    .font(.system(size: 15))
-                    .foregroundStyle(.secondary)
+    // MARK: - QWERTY Keyboard
+
+    private var isUppercase: Bool { shifted || capsLock }
+
+    private var qwertyView: some View {
+        VStack(spacing: 6) {
+            if numbersMode || symbolsMode {
+                numbersSymbolsView
+            } else {
+                lettersView
             }
         }
-        .padding(.horizontal, 12)
-        .padding(.vertical, 5)
+        .padding(.horizontal, 3)
+        .padding(.vertical, 4)
+    }
+
+    private var lettersView: some View {
+        VStack(spacing: 6) {
+            // Row 1: Q W E R T Y U I O P
+            HStack(spacing: 4) {
+                ForEach(row1, id: \.self) { key in
+                    letterKey(key)
+                }
+            }
+
+            // Row 2: A S D F G H J K L
+            HStack(spacing: 4) {
+                ForEach(row2, id: \.self) { key in
+                    letterKey(key)
+                }
+            }
+
+            // Row 3: Shift Z X C V B N M Delete
+            HStack(spacing: 4) {
+                // Shift
+                Button {
+                    if shifted {
+                        // Double-tap for caps lock
+                        capsLock = !capsLock
+                        shifted = false
+                    } else {
+                        shifted = true
+                        capsLock = false
+                    }
+                } label: {
+                    Image(systemName: capsLock ? "capslock.fill" : (shifted ? "shift.fill" : "shift"))
+                        .font(.system(size: 14))
+                        .frame(width: 38, height: 38)
+                        .background(RoundedRectangle(cornerRadius: 6).fill(
+                            (shifted || capsLock) ? accent.opacity(0.25) : keyBg
+                        ))
+                        .foregroundStyle((shifted || capsLock) ? accent : .white)
+                }
+
+                ForEach(row3, id: \.self) { key in
+                    letterKey(key)
+                }
+
+                // Delete
+                Button {
+                    deleteBackward()
+                } label: {
+                    Image(systemName: "delete.left")
+                        .font(.system(size: 14))
+                        .frame(width: 38, height: 38)
+                        .background(RoundedRectangle(cornerRadius: 6).fill(keyBg))
+                        .foregroundStyle(.white)
+                }
+                .simultaneousGesture(
+                    LongPressGesture(minimumDuration: 0.5).onEnded { _ in
+                        // Delete word on long press
+                        for _ in 0..<20 { deleteBackward() }
+                    }
+                )
+            }
+
+            // Row 4: 123 Globe Space Return
+            HStack(spacing: 4) {
+                Button {
+                    withAnimation(.easeInOut(duration: 0.1)) { numbersMode = true }
+                } label: {
+                    Text("123")
+                        .font(.system(size: 13, weight: .medium, design: .monospaced))
+                        .frame(width: 44, height: 38)
+                        .background(RoundedRectangle(cornerRadius: 6).fill(keyBg))
+                        .foregroundStyle(.white)
+                }
+
+                Button(action: switchKeyboard) {
+                    Image(systemName: "globe")
+                        .font(.system(size: 15))
+                        .frame(width: 38, height: 38)
+                        .background(RoundedRectangle(cornerRadius: 6).fill(keyBg))
+                        .foregroundStyle(.secondary)
+                }
+
+                // Space bar
+                Button {
+                    insertText(" ")
+                } label: {
+                    Text("space")
+                        .font(.system(size: 13, design: .monospaced))
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 38)
+                        .background(RoundedRectangle(cornerRadius: 6).fill(keyBg.opacity(1.2)))
+                        .foregroundStyle(.white.opacity(0.6))
+                }
+
+                Button {
+                    insertText("\n")
+                } label: {
+                    Text("return")
+                        .font(.system(size: 13, weight: .medium, design: .monospaced))
+                        .frame(width: 72, height: 38)
+                        .background(RoundedRectangle(cornerRadius: 6).fill(accent.opacity(0.2)))
+                        .foregroundStyle(accent)
+                }
+            }
+        }
+    }
+
+    private var numbersSymbolsView: some View {
+        let r1 = symbolsMode ? symRow1 : numRow1
+        let r2 = symbolsMode ? symRow2 : numRow2
+        let r3 = symbolsMode ? symRow3 : numRow3
+
+        return VStack(spacing: 6) {
+            // Row 1
+            HStack(spacing: 4) {
+                ForEach(r1, id: \.self) { key in
+                    charKey(key)
+                }
+            }
+
+            // Row 2
+            HStack(spacing: 4) {
+                ForEach(r2, id: \.self) { key in
+                    charKey(key)
+                }
+            }
+
+            // Row 3: #+= / ABC toggle + chars + delete
+            HStack(spacing: 4) {
+                Button {
+                    withAnimation(.easeInOut(duration: 0.1)) {
+                        symbolsMode.toggle()
+                    }
+                } label: {
+                    Text(symbolsMode ? "123" : "#+=")
+                        .font(.system(size: 12, weight: .medium, design: .monospaced))
+                        .frame(width: 38, height: 38)
+                        .background(RoundedRectangle(cornerRadius: 6).fill(keyBg))
+                        .foregroundStyle(.white)
+                }
+
+                ForEach(r3, id: \.self) { key in
+                    charKey(key)
+                }
+
+                Spacer()
+
+                Button { deleteBackward() } label: {
+                    Image(systemName: "delete.left")
+                        .font(.system(size: 14))
+                        .frame(width: 38, height: 38)
+                        .background(RoundedRectangle(cornerRadius: 6).fill(keyBg))
+                        .foregroundStyle(.white)
+                }
+            }
+
+            // Row 4: ABC Globe Space Return
+            HStack(spacing: 4) {
+                Button {
+                    withAnimation(.easeInOut(duration: 0.1)) {
+                        numbersMode = false
+                        symbolsMode = false
+                    }
+                } label: {
+                    Text("ABC")
+                        .font(.system(size: 13, weight: .medium, design: .monospaced))
+                        .frame(width: 44, height: 38)
+                        .background(RoundedRectangle(cornerRadius: 6).fill(keyBg))
+                        .foregroundStyle(.white)
+                }
+
+                Button(action: switchKeyboard) {
+                    Image(systemName: "globe")
+                        .font(.system(size: 15))
+                        .frame(width: 38, height: 38)
+                        .background(RoundedRectangle(cornerRadius: 6).fill(keyBg))
+                        .foregroundStyle(.secondary)
+                }
+
+                Button { insertText(" ") } label: {
+                    Text("space")
+                        .font(.system(size: 13, design: .monospaced))
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 38)
+                        .background(RoundedRectangle(cornerRadius: 6).fill(keyBg.opacity(1.2)))
+                        .foregroundStyle(.white.opacity(0.6))
+                }
+
+                Button { insertText("\n") } label: {
+                    Text("return")
+                        .font(.system(size: 13, weight: .medium, design: .monospaced))
+                        .frame(width: 72, height: 38)
+                        .background(RoundedRectangle(cornerRadius: 6).fill(accent.opacity(0.2)))
+                        .foregroundStyle(accent)
+                }
+            }
+        }
+    }
+
+    private func letterKey(_ key: String) -> some View {
+        let display = isUppercase ? key.uppercased() : key
+        return Button {
+            insertText(display)
+            if shifted && !capsLock { shifted = false }
+        } label: {
+            Text(display)
+                .font(.system(size: 18, weight: .regular))
+                .frame(maxWidth: .infinity)
+                .frame(height: 38)
+                .background(RoundedRectangle(cornerRadius: 6).fill(keyBg))
+                .foregroundStyle(.white)
+        }
+    }
+
+    private func charKey(_ key: String) -> some View {
+        Button {
+            insertText(key)
+        } label: {
+            Text(key)
+                .font(.system(size: 16, weight: .regular))
+                .frame(maxWidth: .infinity)
+                .frame(height: 38)
+                .background(RoundedRectangle(cornerRadius: 6).fill(keyBg))
+                .foregroundStyle(.white)
+        }
     }
 
     // MARK: - Quick Actions
 
     private var quickActions: some View {
         VStack(spacing: 6) {
-            // Row 1: Primary actions
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 6) {
                     actionPill("Translate", icon: "globe", color: accent) {
@@ -185,7 +410,6 @@ struct KeyboardView: View {
                 .padding(.horizontal, 12)
             }
 
-            // Row 2: Rewrite styles
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 6) {
                     stylePill("Formal") { runQuickAction("rewrite", style: "formal") }
@@ -198,17 +422,13 @@ struct KeyboardView: View {
                 .padding(.horizontal, 12)
             }
 
-            // Freeform input
             HStack(spacing: 6) {
                 TextField("Ask anything...", text: $query)
                     .font(.system(size: 13, design: .monospaced))
                     .foregroundStyle(.white)
                     .padding(.horizontal, 8)
                     .padding(.vertical, 6)
-                    .background(
-                        RoundedRectangle(cornerRadius: 8)
-                            .fill(card)
-                    )
+                    .background(RoundedRectangle(cornerRadius: 8).fill(card))
                     .submitLabel(.send)
                     .onSubmit { runQuickAction("freeform") }
 
@@ -227,10 +447,8 @@ struct KeyboardView: View {
     private func actionPill(_ label: String, icon: String, color: Color, action: @escaping () -> Void) -> some View {
         Button(action: action) {
             HStack(spacing: 4) {
-                Image(systemName: icon)
-                    .font(.system(size: 10))
-                Text(label)
-                    .font(.system(size: 11, weight: .semibold, design: .monospaced))
+                Image(systemName: icon).font(.system(size: 10))
+                Text(label).font(.system(size: 11, weight: .semibold, design: .monospaced))
             }
             .padding(.horizontal, 10)
             .padding(.vertical, 6)
@@ -261,26 +479,13 @@ struct KeyboardView: View {
     // MARK: - Language Picker
 
     private let languages: [(code: String, flag: String, name: String)] = [
-        ("en", "🇬🇧", "English"),
-        ("ja", "🇯🇵", "Japanese"),
-        ("es", "🇪🇸", "Spanish"),
-        ("fr", "🇫🇷", "French"),
-        ("de", "🇩🇪", "German"),
-        ("ru", "🇷🇺", "Russian"),
-        ("zh", "🇨🇳", "Chinese"),
-        ("ko", "🇰🇷", "Korean"),
-        ("ar", "🇸🇦", "Arabic"),
-        ("pt", "🇧🇷", "Portuguese"),
-        ("it", "🇮🇹", "Italian"),
-        ("uk", "🇺🇦", "Ukrainian"),
-        ("hi", "🇮🇳", "Hindi"),
-        ("tr", "🇹🇷", "Turkish"),
-        ("nl", "🇳🇱", "Dutch"),
-        ("th", "🇹🇭", "Thai"),
-        ("vi", "🇻🇳", "Vietnamese"),
-        ("pl", "🇵🇱", "Polish"),
-        ("sv", "🇸🇪", "Swedish"),
-        ("he", "🇮🇱", "Hebrew"),
+        ("en", "🇬🇧", "English"), ("ja", "🇯🇵", "Japanese"), ("es", "🇪🇸", "Spanish"),
+        ("fr", "🇫🇷", "French"), ("de", "🇩🇪", "German"), ("ru", "🇷🇺", "Russian"),
+        ("zh", "🇨🇳", "Chinese"), ("ko", "🇰🇷", "Korean"), ("ar", "🇸🇦", "Arabic"),
+        ("pt", "🇧🇷", "Portuguese"), ("it", "🇮🇹", "Italian"), ("uk", "🇺🇦", "Ukrainian"),
+        ("hi", "🇮🇳", "Hindi"), ("tr", "🇹🇷", "Turkish"), ("nl", "🇳🇱", "Dutch"),
+        ("th", "🇹🇭", "Thai"), ("vi", "🇻🇳", "Vietnamese"), ("pl", "🇵🇱", "Polish"),
+        ("sv", "🇸🇪", "Swedish"), ("he", "🇮🇱", "Hebrew"),
     ]
 
     private var languagePicker: some View {
@@ -290,15 +495,12 @@ struct KeyboardView: View {
                     .font(.system(size: 10, weight: .bold, design: .monospaced))
                     .foregroundStyle(accent)
                 Spacer()
-                Button("Cancel") {
-                    withAnimation { showLangPicker = false }
-                }
-                .font(.system(size: 11, design: .monospaced))
-                .foregroundStyle(.secondary)
+                Button("Cancel") { withAnimation { showLangPicker = false } }
+                    .font(.system(size: 11, design: .monospaced))
+                    .foregroundStyle(.secondary)
             }
             .padding(.horizontal, 14)
 
-            // Language grid (5 columns)
             LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 4), count: 5), spacing: 4) {
                 ForEach(languages, id: \.code) { lang in
                     Button {
@@ -307,8 +509,7 @@ struct KeyboardView: View {
                         runQuickAction("translate", targetLang: lang.code)
                     } label: {
                         VStack(spacing: 2) {
-                            Text(lang.flag)
-                                .font(.system(size: 20))
+                            Text(lang.flag).font(.system(size: 20))
                             Text(lang.code.uppercased())
                                 .font(.system(size: 8, weight: .bold, design: .monospaced))
                                 .foregroundStyle(.white.opacity(0.7))
@@ -327,7 +528,7 @@ struct KeyboardView: View {
         .padding(.vertical, 6)
     }
 
-    // MARK: - Tribunal Mode
+    // MARK: - Tribunal
 
     private var tribunalInput: some View {
         VStack(spacing: 6) {
@@ -341,10 +542,7 @@ struct KeyboardView: View {
                     .foregroundStyle(.white)
                     .padding(.horizontal, 8)
                     .padding(.vertical, 6)
-                    .background(
-                        RoundedRectangle(cornerRadius: 8)
-                            .fill(card)
-                    )
+                    .background(RoundedRectangle(cornerRadius: 8).fill(card))
                     .submitLabel(.send)
                     .onSubmit { runTribunal() }
 
@@ -366,9 +564,7 @@ struct KeyboardView: View {
         VStack(alignment: .leading, spacing: 4) {
             if isLoading {
                 HStack(spacing: 6) {
-                    ProgressView()
-                        .scaleEffect(0.7)
-                        .tint(accent)
+                    ProgressView().scaleEffect(0.7).tint(accent)
                     Text("Processing...")
                         .font(.system(size: 11, design: .monospaced))
                         .foregroundStyle(.secondary)
@@ -376,11 +572,17 @@ struct KeyboardView: View {
                 .frame(maxWidth: .infinity, alignment: .center)
                 .padding(.vertical, 8)
             } else if let error = errorText {
-                Text(error)
-                    .font(.system(size: 11, design: .monospaced))
-                    .foregroundStyle(red)
-                    .padding(.horizontal, 14)
-                    .padding(.vertical, 4)
+                HStack {
+                    Text(error)
+                        .font(.system(size: 11, design: .monospaced))
+                        .foregroundStyle(red)
+                    Spacer()
+                    Button { errorText = nil } label: {
+                        Image(systemName: "xmark.circle").foregroundStyle(.secondary)
+                    }
+                }
+                .padding(.horizontal, 14)
+                .padding(.vertical, 4)
             } else if let text = resultText {
                 ScrollView {
                     Text(text)
@@ -389,26 +591,32 @@ struct KeyboardView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.horizontal, 14)
                 }
-                .frame(maxHeight: 90)
+                .frame(maxHeight: 120)
 
-                // Meta + actions
                 HStack(spacing: 8) {
                     if let meta = resultMeta {
                         Text(meta)
                             .font(.system(size: 9, design: .monospaced))
                             .foregroundStyle(.secondary)
                     }
-
                     Spacer()
 
                     Button {
+                        resultText = nil
+                        resultMeta = nil
+                    } label: {
+                        Image(systemName: "xmark")
+                            .font(.system(size: 10))
+                            .foregroundStyle(.secondary)
+                    }
+
+                    Button {
                         insertText(text)
+                        resultText = nil
                     } label: {
                         HStack(spacing: 3) {
-                            Image(systemName: "arrow.up.doc")
-                                .font(.system(size: 9))
-                            Text("Insert")
-                                .font(.system(size: 10, weight: .semibold, design: .monospaced))
+                            Image(systemName: "arrow.up.doc").font(.system(size: 9))
+                            Text("Insert").font(.system(size: 10, weight: .semibold, design: .monospaced))
                         }
                         .padding(.horizontal, 10)
                         .padding(.vertical, 5)
@@ -432,16 +640,14 @@ struct KeyboardView: View {
         }
     }
 
-    // MARK: - Actions
+    // MARK: - Network Actions
 
     private func runQuickAction(_ action: String, targetLang: String = "", style: String = "") {
-        // For freeform, use the typed query; for others, grab from host app's text field
         let text: String
         if action == "freeform" {
             text = query.trimmingCharacters(in: .whitespacesAndNewlines)
         } else {
-            let context = getContext()
-            text = context.trimmingCharacters(in: .whitespacesAndNewlines)
+            text = getContext().trimmingCharacters(in: .whitespacesAndNewlines)
         }
 
         guard !text.isEmpty else {
@@ -457,10 +663,8 @@ struct KeyboardView: View {
         Task {
             do {
                 let resp = try await TribunalClient.quick(
-                    text: text,
-                    action: action,
-                    targetLang: targetLang,
-                    style: style
+                    text: text, action: action,
+                    targetLang: targetLang, style: style
                 )
                 await MainActor.run {
                     resultText = resp.text
@@ -484,9 +688,7 @@ struct KeyboardView: View {
         guard !claim.isEmpty else { return }
 
         isLoading = true
-        resultText = nil
-        resultMeta = nil
-        errorText = nil
+        resultText = nil; resultMeta = nil; errorText = nil
 
         Task {
             do {
@@ -494,15 +696,9 @@ struct KeyboardView: View {
                 await MainActor.run {
                     resultText = resp.reply
                     var meta = ""
-                    if let score = resp.agreement_score {
-                        meta += "\(Int(score * 100))% agreement"
-                    }
-                    if let models = resp.models_responded {
-                        meta += " · \(models) models"
-                    }
-                    if let elapsed = resp.elapsed_s {
-                        meta += " · \(String(format: "%.1fs", elapsed))"
-                    }
+                    if let score = resp.agreement_score { meta += "\(Int(score * 100))% agreement" }
+                    if let models = resp.models_responded { meta += " · \(models) models" }
+                    if let elapsed = resp.elapsed_s { meta += " · \(String(format: "%.1fs", elapsed))" }
                     resultMeta = meta
                     isLoading = false
                     query = ""
@@ -516,15 +712,13 @@ struct KeyboardView: View {
         }
     }
 
-    // MARK: - Builder Mode (LEGO block chain)
+    // MARK: - Builder Mode
 
     private var builderView: some View {
         VStack(spacing: 4) {
-            // Chain — scrollable horizontal block pipeline
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 0) {
                     ForEach(Array(chain.enumerated()), id: \.element.id) { idx, block in
-                        // Arrow connector (except before first)
                         if idx > 0 {
                             Image(systemName: "chevron.right")
                                 .font(.system(size: 8, weight: .bold))
@@ -532,15 +726,13 @@ struct KeyboardView: View {
                                 .padding(.horizontal, 2)
                         }
 
-                        // Block pill
                         Button {
                             withAnimation(.easeInOut(duration: 0.15)) {
                                 editingBlockIndex = editingBlockIndex == idx ? nil : idx
                             }
                         } label: {
                             HStack(spacing: 4) {
-                                Image(systemName: block.type.icon)
-                                    .font(.system(size: 10))
+                                Image(systemName: block.type.icon).font(.system(size: 10))
                                 Text(block.label)
                                     .font(.system(size: 10, weight: .bold, design: .monospaced))
                             }
@@ -559,13 +751,10 @@ struct KeyboardView: View {
                         .contextMenu {
                             Button(role: .destructive) {
                                 if chain.count > 2 { chain.remove(at: idx) }
-                            } label: {
-                                Label("Remove", systemImage: "trash")
-                            }
+                            } label: { Label("Remove", systemImage: "trash") }
                         }
                     }
 
-                    // Add block button
                     Button {
                         withAnimation { showBlockPalette.toggle() }
                     } label: {
@@ -578,17 +767,9 @@ struct KeyboardView: View {
                 .padding(.horizontal, 12)
             }
 
-            // Block palette (shown when + tapped)
-            if showBlockPalette {
-                blockPalette
-            }
+            if showBlockPalette { blockPalette }
+            if let idx = editingBlockIndex, idx < chain.count { blockEditor(for: idx) }
 
-            // Block editor (shown when a block is selected)
-            if let idx = editingBlockIndex, idx < chain.count {
-                blockEditor(for: idx)
-            }
-
-            // Run bar
             HStack(spacing: 8) {
                 if let progress = chainProgress {
                     Text(progress)
@@ -604,8 +785,7 @@ struct KeyboardView: View {
                         if chainRunning {
                             ProgressView().scaleEffect(0.6).tint(green)
                         } else {
-                            Image(systemName: "play.fill")
-                                .font(.system(size: 10))
+                            Image(systemName: "play.fill").font(.system(size: 10))
                         }
                         Text(chainRunning ? "Running..." : "Run Chain")
                             .font(.system(size: 11, weight: .bold, design: .monospaced))
@@ -625,15 +805,12 @@ struct KeyboardView: View {
         .padding(.vertical, 4)
     }
 
-    // MARK: - Block Palette
-
     private var blockPalette: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 6) {
                 ForEach(BlockType.allCases, id: \.self) { type in
                     Button {
                         let newBlock = ChainBlock(type: type, label: type.defaultLabel, config: type.defaultConfig)
-                        // Insert before the last block (output)
                         let insertAt = max(chain.count - 1, 1)
                         withAnimation {
                             chain.insert(newBlock, at: insertAt)
@@ -642,16 +819,12 @@ struct KeyboardView: View {
                         }
                     } label: {
                         VStack(spacing: 2) {
-                            Image(systemName: type.icon)
-                                .font(.system(size: 14))
+                            Image(systemName: type.icon).font(.system(size: 14))
                             Text(type.rawValue)
                                 .font(.system(size: 8, weight: .bold, design: .monospaced))
                         }
                         .frame(width: 52, height: 40)
-                        .background(
-                            RoundedRectangle(cornerRadius: 8)
-                                .fill(type.color.opacity(0.12))
-                        )
+                        .background(RoundedRectangle(cornerRadius: 8).fill(type.color.opacity(0.12)))
                         .foregroundStyle(type.color)
                     }
                 }
@@ -662,12 +835,9 @@ struct KeyboardView: View {
         .background(card.opacity(0.5))
     }
 
-    // MARK: - Block Editor
-
     private func blockEditor(for idx: Int) -> some View {
         let block = chain[idx]
         return HStack(spacing: 6) {
-            // Quick-config options based on block type
             switch block.type {
             case .model:
                 ForEach(["cheap", "mid", "frontier"], id: \.self) { tier in
@@ -677,8 +847,7 @@ struct KeyboardView: View {
                     } label: {
                         Text(tier.uppercased())
                             .font(.system(size: 9, weight: .bold, design: .monospaced))
-                            .padding(.horizontal, 8)
-                            .padding(.vertical, 4)
+                            .padding(.horizontal, 8).padding(.vertical, 4)
                             .background(Capsule().fill(
                                 chain[idx].config["model"] == tier ? accent.opacity(0.2) : card
                             ))
@@ -693,8 +862,7 @@ struct KeyboardView: View {
                     } label: {
                         Text(act.prefix(5).uppercased())
                             .font(.system(size: 9, weight: .bold, design: .monospaced))
-                            .padding(.horizontal, 6)
-                            .padding(.vertical, 4)
+                            .padding(.horizontal, 6).padding(.vertical, 4)
                             .background(Capsule().fill(
                                 chain[idx].config["action"] == act ? amber.opacity(0.2) : card
                             ))
@@ -709,8 +877,7 @@ struct KeyboardView: View {
                     } label: {
                         Text("≥\(Int(Double(threshold)! * 100))%")
                             .font(.system(size: 9, weight: .bold, design: .monospaced))
-                            .padding(.horizontal, 8)
-                            .padding(.vertical, 4)
+                            .padding(.horizontal, 8).padding(.vertical, 4)
                             .background(Capsule().fill(
                                 chain[idx].config["threshold"] == threshold ? green.opacity(0.2) : card
                             ))
@@ -725,8 +892,7 @@ struct KeyboardView: View {
                     } label: {
                         Text("×\(max)")
                             .font(.system(size: 9, weight: .bold, design: .monospaced))
-                            .padding(.horizontal, 8)
-                            .padding(.vertical, 4)
+                            .padding(.horizontal, 8).padding(.vertical, 4)
                             .background(Capsule().fill(
                                 chain[idx].config["max"] == max ? Color.purple.opacity(0.2) : card
                             ))
@@ -755,9 +921,7 @@ struct KeyboardView: View {
     private func runChain() async {
         chainRunning = true
         chainProgress = "Starting..."
-        defer {
-            chainRunning = false
-        }
+        defer { chainRunning = false }
 
         var currentText = ""
 
@@ -768,7 +932,6 @@ struct KeyboardView: View {
 
             switch block.type {
             case .input:
-                // Grab text from host app or use query
                 let context = getContext()
                 currentText = context.isEmpty ? query : context
                 if currentText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
@@ -780,14 +943,10 @@ struct KeyboardView: View {
                 }
 
             case .model:
-                // Send through AI model
-                let tier = block.config["model"] ?? "cheap"
                 do {
                     let resp = try await TribunalClient.quick(
-                        text: currentText,
-                        action: "freeform",
-                        targetLang: "",
-                        style: ""
+                        text: currentText, action: "freeform",
+                        targetLang: "", style: ""
                     )
                     currentText = resp.text ?? currentText
                 } catch {
@@ -799,12 +958,10 @@ struct KeyboardView: View {
                 }
 
             case .action:
-                // Run specific action
                 let action = block.config["action"] ?? "rewrite"
                 do {
                     let resp = try await TribunalClient.quick(
-                        text: currentText,
-                        action: action,
+                        text: currentText, action: action,
                         targetLang: block.config["lang"] ?? "en",
                         style: block.config["style"] ?? ""
                     )
@@ -818,19 +975,17 @@ struct KeyboardView: View {
                 }
 
             case .verify:
-                // Run tribunal verification
                 let threshold = Double(block.config["threshold"] ?? "0.8") ?? 0.8
                 do {
                     let resp = try await TribunalClient.tribunal(currentText)
                     if let score = resp.agreement_score, score >= threshold {
-                        // Passed — keep the text, add verification stamp
                         await MainActor.run {
                             chainProgress = "Verified: \(Int(score * 100))% agreement"
                         }
                     } else {
                         let scoreStr = resp.agreement_score.map { "\(Int($0 * 100))%" } ?? "?"
                         await MainActor.run {
-                            chainProgress = "Failed verification: \(scoreStr)"
+                            chainProgress = "Failed: \(scoreStr)"
                             errorText = "Below \(Int(threshold * 100))% threshold (\(scoreStr))"
                         }
                         return
@@ -844,28 +999,19 @@ struct KeyboardView: View {
                 }
 
             case .loop:
-                // Repeat previous model/action block N times
-                // (simplified: re-run the text through model)
                 let maxIter = Int(block.config["max"] ?? "3") ?? 3
                 for i in 1...maxIter {
-                    await MainActor.run {
-                        chainProgress = "Loop \(i)/\(maxIter)"
-                    }
+                    await MainActor.run { chainProgress = "Loop \(i)/\(maxIter)" }
                     do {
                         let resp = try await TribunalClient.quick(
                             text: "Improve this text, iteration \(i): \(currentText)",
-                            action: "rewrite",
-                            targetLang: "",
-                            style: "better"
+                            action: "rewrite", targetLang: "", style: "better"
                         )
                         currentText = resp.text ?? currentText
-                    } catch {
-                        break
-                    }
+                    } catch { break }
                 }
 
             case .output:
-                // Final step — insert into host app
                 await MainActor.run {
                     resultText = currentText
                     insertText(currentText)
