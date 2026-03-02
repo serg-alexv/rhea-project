@@ -1508,9 +1508,6 @@ You own your data, your models, your keys. Rhea serves you &mdash; not the other
     <a href="#" onclick="return false" style="cursor:default">Manage cookies</a>
     <a href="#" onclick="return false" style="cursor:default">My personal information</a>
   </div>
-  <div class="f-links" style="margin-top:.6rem;font-size:.72rem">
-    <span style="color:#444">General &amp; Support: <a href="mailto:timelabs.ad@gmail.com" style="color:#555">timelabs.ad@gmail.com</a></span>
-  </div>
   <div class="f-copy" style="margin-top:1rem">
     <span id="nabla-explain" style="transition:opacity .6s ease;display:inline-block">
       &#x2207; &gt; 0 &#x2228; &#x22A5; &mdash; gradient positive or bottom</span><br>
@@ -1640,7 +1637,7 @@ async def terms():
 <p class="subtitle">timelabs npo &bull; Effective date: 1 January 2026 &bull; Last updated: 1 March 2026</p>
 
 <h2>1. Acceptance of Terms</h2>
-<p>By accessing or using the Rhea platform, its APIs, mobile applications, or any associated services (collectively, the "Service"), you agree to be bound by these Terms of Service ("Terms"). If you do not agree to these Terms, do not use the Service. These Terms constitute a legally binding agreement between you and timelabs npo ("TimeLabs", "we", "us").</p>
+<p>By accessing or using the Rhea platform, its APIs, mobile applications, or any associated services (collectively, the "Service"), you agree to be bound by these Terms of Service ("Terms"). If you do not agree to these Terms, do not use the Service. These Terms constitute a legally binding agreement between you and timelabs npo ("timelabs", "we", "us").</p>
 
 <h2>2. Accounts</h2>
 <p>To access most features of the Service, you must create an account. You agree to:</p>
@@ -1669,7 +1666,7 @@ async def terms():
 <p>We reserve the right to suspend or terminate access for violations without prior notice.</p>
 
 <h2>5. Intellectual Property</h2>
-<p>The Rhea platform source code is made available under open-source licences as indicated in the GitHub repository. TimeLabs retains ownership of all trademarks, service marks, and trade names associated with the Rhea brand. Your input data and any proofs you generate and store remain yours. You grant TimeLabs a limited, non-exclusive licence to process your data solely to deliver the Service.</p>
+<p>The Rhea platform source code is made available under open-source licences as indicated in the GitHub repository. timelabs retains ownership of all trademarks, service marks, and trade names associated with the Rhea brand. Your input data and any proofs you generate and store remain yours. You grant timelabs a limited, non-exclusive licence to process your data solely to deliver the Service.</p>
 
 <h2>6. Disclaimers</h2>
 <p>THE SERVICE IS PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, OR NON-INFRINGEMENT. TIMELABS DOES NOT WARRANT THAT THE SERVICE WILL BE UNINTERRUPTED, ERROR-FREE, OR THAT RESULTS OBTAINED WILL BE ACCURATE OR RELIABLE. MULTI-MODEL CONSENSUS IS A STATISTICAL SIGNAL, NOT A GUARANTEE OF FACTUAL ACCURACY.</p>
@@ -1702,7 +1699,7 @@ async def privacy():
 <p class="subtitle">timelabs npo &bull; Effective date: 1 January 2026 &bull; GDPR-compliant</p>
 
 <h2>1. Who We Are</h2>
-<p>timelabs npo ("TimeLabs", "we", "us") operates the Rhea multi-model consensus platform. We are committed to protecting your personal data and processing it lawfully, fairly, and transparently in accordance with the General Data Protection Regulation (GDPR) and applicable national data protection laws.</p>
+<p>timelabs npo ("timelabs", "we", "us") operates the Rhea multi-model consensus platform. We are committed to protecting your personal data and processing it lawfully, fairly, and transparently in accordance with the General Data Protection Regulation (GDPR) and applicable national data protection laws.</p>
 
 <h2>2. Data We Collect</h2>
 <p>We collect the minimum data necessary to operate the Service:</p>
@@ -1710,7 +1707,7 @@ async def privacy():
   <li><strong>Account data:</strong> Email address, OAuth provider identity (Google/Microsoft/Apple), account creation timestamp.</li>
   <li><strong>Usage data:</strong> Number of API calls, credit consumption, plan tier, anonymised prompt hashes (SHA-256, non-reversible), response latencies.</li>
   <li><strong>Technical data:</strong> IP address (retained for 30 days for abuse prevention), User-Agent string, request timestamps.</li>
-  <li><strong>Billing data:</strong> Stripe customer ID, subscription status. Full payment card data is never stored by TimeLabs — it is handled exclusively by Stripe.</li>
+  <li><strong>Billing data:</strong> Stripe customer ID, subscription status. Full payment card data is never stored by timelabs — it is handled exclusively by Stripe.</li>
   <li><strong>Content you store:</strong> Proofs and ontology entries you deliberately save to Aletheia. These are stored under your account and accessible only by you unless you explicitly share them.</li>
 </ul>
 <p>We do not collect: your raw prompt text (only its hash), biometric data, or any special categories of personal data as defined by GDPR Article 9.</p>
@@ -1788,7 +1785,7 @@ async def security():
 <p>Incoming webhooks (e.g. Stripe payment events, BTCPay notifications) are verified using HMAC-SHA256 signatures. The shared secret is stored exclusively as an environment variable on the server — never in source code or logs. Requests with invalid or missing signatures are rejected with HTTP 403 before any processing occurs.</p>
 
 <h2>Admin Promotion — No REST Endpoint</h2>
-<p>There is no API endpoint to promote a user to administrator. Admin status is granted exclusively by listing an email address in the <code>ADMIN_EMAILS</code> environment variable on the server. This means: compromising an account, a token, or the database is insufficient to gain admin access. Only the infrastructure owner (you, on self-hosted deployments, or TimeLabs on the managed platform) can grant admin rights.</p>
+<p>There is no API endpoint to promote a user to administrator. Admin status is granted exclusively by listing an email address in the <code>ADMIN_EMAILS</code> environment variable on the server. This means: compromising an account, a token, or the database is insufficient to gain admin access. Only the infrastructure owner (you, on self-hosted deployments, or timelabs on the managed platform) can grant admin rights.</p>
 
 <h2>Data at Rest</h2>
 <p>User data is stored in SQLite databases operating in WAL (Write-Ahead Logging) mode, hosted on Fly.io's AMS region. WAL mode ensures consistency during concurrent access and provides a recoverable journal. Fly.io encrypts volumes at rest using AES-256. Database files are never exposed via any API endpoint.</p>
@@ -2077,10 +2074,10 @@ tree-shakeable core that produces the same reactive UI with a fraction of the bu
 <h2>Installation</h2>
 <p>CDN (no build step):</p>
 <p><code>&lt;script src="https://unpkg.com/@webqit/playui-js/dist/main.js"&gt;&lt;/script&gt;</code></p>
-<p style="font-size:.7rem;color:var(--muted)">TimeLabs CDN (coming soon): <code>unpkg.com/@timelabs/playui-js/dist/main.js</code></p>
+<p style="font-size:.7rem;color:var(--muted)">timelabs CDN (coming soon): <code>unpkg.com/@timelabs/playui-js/dist/main.js</code></p>
 <p>NPM:</p>
 <p><code>npm i @webqit/playui-js @webqit/playui-element @webqit/playui-form</code></p>
-<p style="font-size:.7rem;color:var(--muted)">TimeLabs packages (coming soon): <code>npm i @timelabs/playui-js @timelabs/playui-element @timelabs/playui-form</code></p>
+<p style="font-size:.7rem;color:var(--muted)">timelabs packages (coming soon): <code>npm i @timelabs/playui-js @timelabs/playui-element @timelabs/playui-form</code></p>
 
 <h2>Roadmap</h2>
 <ul>
