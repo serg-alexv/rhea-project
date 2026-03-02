@@ -965,7 +965,7 @@ section{{padding:5rem 2rem;max-width:1200px;margin:0 auto}}
 .section-title p{{color:var(--muted);font-size:1rem;max-width:480px;margin:0 auto;line-height:1.5}}
 
 /* PRICING */
-.pricing-grid{{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;max-width:1100px;margin:0 auto}}
+.pricing-grid{{display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem;max-width:680px;margin:0 auto}}
 .plan{{border-radius:var(--radius);padding:2rem;display:flex;flex-direction:column;position:relative}}
 .plan.featured{{border-color:var(--accent)!important;background:linear-gradient(180deg,rgba(0,113,227,.1),rgba(0,0,0,0))!important}}
 .plan.featured::before{{content:'Most Popular';position:absolute;top:-10px;left:50%;transform:translateX(-50%);
@@ -1041,7 +1041,7 @@ footer .f-links a{{color:#555}}.f-links a:hover{{color:var(--text)}}
 footer .f-copy{{color:#333;font-size:.68rem;letter-spacing:.04em}}
 
 /* RESPONSIVE */
-@media(max-width:900px){{.pricing-grid{{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:900px){{.pricing-grid{{grid-template-columns:1fr}}
   .bento{{grid-template-columns:1fr}}.bento-card.span-2{{grid-column:span 1}}}}
 @media(max-width:600px){{.hero h1{{font-size:2.5rem}}.pricing-grid{{grid-template-columns:1fr}}
   .stats-inner{{flex-direction:column;gap:1.5rem}}.nav-links{{gap:.6rem;font-size:.75rem}}
@@ -1394,45 +1394,51 @@ footer .f-copy{{color:#333;font-size:.68rem;letter-spacing:.04em}}
     </div>
   </div>
 
-  <!-- Visual loop diagram -->
-  <div class="glass-card" style="padding:2rem;text-align:center">
-    <div style="display:flex;align-items:center;justify-content:center;gap:1.2rem;flex-wrap:wrap">
-      <div style="text-align:center">
-        <div style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#5856d6);display:flex;align-items:center;justify-content:center;font-size:1.5rem;margin:0 auto .4rem">&#x270D;</div>
-        <div style="font-size:.7rem;font-weight:600;color:var(--text)">Submit</div>
-        <div style="font-size:.55rem;color:var(--muted)">Your claim</div>
-      </div>
-      <div style="font-size:1.2rem;color:var(--accent)">&#x2192;</div>
-      <div style="text-align:center">
-        <div style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#FF9500,#FF6B00);display:flex;align-items:center;justify-content:center;font-size:1.5rem;margin:0 auto .4rem">&#x2696;</div>
-        <div style="font-size:.7rem;font-weight:600;color:var(--text)">Tribunal</div>
-        <div style="font-size:.55rem;color:var(--muted)">k models vote</div>
-      </div>
-      <div style="font-size:1.2rem;color:var(--accent)">&#x2192;</div>
-      <div style="text-align:center">
-        <div style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#34C759,#30D158);display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin:0 auto .4rem">&#x2265; 90%?</div>
-        <div style="font-size:.7rem;font-weight:600;color:var(--text)">Check</div>
-        <div style="font-size:.55rem;color:var(--muted)">Agreement score</div>
-      </div>
-      <div style="display:flex;flex-direction:column;gap:.3rem;align-items:flex-start">
-        <div style="display:flex;align-items:center;gap:.4rem">
-          <span style="font-size:.9rem;color:var(--green)">&#x2713;</span>
-          <span style="font-size:.7rem;color:var(--green);font-weight:600">Done &mdash; consensus reached</span>
+  <!-- Visual loop — minimal timeline -->
+  <div style="max-width:640px;margin:2rem auto 0;position:relative">
+    <!-- Connecting line -->
+    <div style="position:absolute;top:28px;left:48px;right:48px;height:1px;background:linear-gradient(90deg,var(--accent),var(--purple),var(--green));opacity:.25"></div>
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;position:relative">
+      <!-- Step 1 -->
+      <div style="text-align:center;width:120px">
+        <div style="width:56px;height:56px;border-radius:14px;border:1px solid rgba(0,113,227,.3);background:rgba(0,113,227,.06);display:flex;align-items:center;justify-content:center;margin:0 auto .8rem">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.5"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
         </div>
-        <div style="display:flex;align-items:center;gap:.4rem">
-          <span style="font-size:.9rem;color:var(--amber)">&#x21BA;</span>
-          <span style="font-size:.7rem;color:var(--amber);font-weight:600">Refine &amp; loop again</span>
+        <div style="font-size:.78rem;font-weight:600;color:var(--text);margin-bottom:.15rem">Submit</div>
+        <div style="font-size:.6rem;color:var(--muted);line-height:1.4">Your claim enters<br>the pipeline</div>
+      </div>
+      <!-- Step 2 -->
+      <div style="text-align:center;width:120px">
+        <div style="width:56px;height:56px;border-radius:14px;border:1px solid rgba(175,130,255,.3);background:rgba(175,130,255,.06);display:flex;align-items:center;justify-content:center;margin:0 auto .8rem">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
         </div>
+        <div style="font-size:.78rem;font-weight:600;color:var(--text);margin-bottom:.15rem">Tribunal</div>
+        <div style="font-size:.6rem;color:var(--muted);line-height:1.4"><em>k</em> models deliberate<br>independently</div>
+      </div>
+      <!-- Step 3 -->
+      <div style="text-align:center;width:120px">
+        <div style="width:56px;height:56px;border-radius:14px;border:1px solid rgba(48,209,88,.3);background:rgba(48,209,88,.06);display:flex;align-items:center;justify-content:center;margin:0 auto .8rem">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="1.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        </div>
+        <div style="font-size:.78rem;font-weight:600;color:var(--text);margin-bottom:.15rem">Converge</div>
+        <div style="font-size:.6rem;color:var(--muted);line-height:1.4">Meet threshold or<br>refine &amp; iterate</div>
+      </div>
+      <!-- Step 4 -->
+      <div style="text-align:center;width:120px">
+        <div style="width:56px;height:56px;border-radius:14px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);display:flex;align-items:center;justify-content:center;margin:0 auto .8rem">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--text)" stroke-width="1.5" opacity=".7"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        </div>
+        <div style="font-size:.78rem;font-weight:600;color:var(--text);margin-bottom:.15rem">Proof</div>
+        <div style="font-size:.6rem;color:var(--muted);line-height:1.4">Stored in Aletheia<br>with provenance</div>
       </div>
     </div>
-    <div style="margin-top:1.2rem;font-size:.65rem;color:var(--muted)">
-      API: <code style="background:rgba(255,255,255,.06);padding:.15rem .4rem;border-radius:4px;font-size:.65rem">POST /workflows/scheduler/loop</code>
-      &mdash; set <code style="background:rgba(255,255,255,.06);padding:.15rem .4rem;border-radius:4px;font-size:.65rem">target_agreement: 0.9</code> and walk away
+    <!-- API callout -->
+    <div style="margin-top:2rem;padding:1rem 1.5rem;border-radius:12px;border:1px solid var(--border);background:rgba(255,255,255,.02);font-family:'JetBrains Mono',monospace">
+      <code style="font-size:.7rem;color:var(--muted)">POST</code>
+      <code style="font-size:.7rem;color:var(--text);margin-left:.3rem">/workflows/scheduler/loop</code>
+      <code style="font-size:.7rem;color:var(--muted);margin-left:.6rem">target_agreement:</code>
+      <code style="font-size:.7rem;color:var(--green)">0.9</code>
     </div>
-  </div>
-  <div style="text-align:center;margin-top:1rem">
-    <a href="#auth" class="btn btn-primary" style="font-size:.82rem">Try Consensus Loops</a>
-    <span style="font-size:.65rem;color:var(--muted);margin-left:.8rem">Free tier includes 5 loop runs/day</span>
   </div>
 </div>
 </section>
@@ -1440,67 +1446,54 @@ footer .f-copy{{color:#333;font-size:.68rem;letter-spacing:.04em}}
 <!-- PRICING -->
 <section id="pricing" class="reveal">
 <div class="section-title">
-  <h2>Simple, transparent pricing</h2>
-  <p>Start free. Scale with credits. Bring your own keys for zero platform cost.</p>
+  <h2>Start free. Scale when ready.</h2>
+  <p>100 credits on signup. Bring your own keys for zero platform cost.</p>
 </div>
-<div class="pricing-grid">
-  <div class="plan glass-card stagger-1">
+<!-- Two-tier focus -->
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;max-width:680px;margin:0 auto">
+  <div class="plan glass-card stagger-1" style="padding:2.5rem">
     <div class="plan-name" style="color:var(--green)">Free</div>
-    <div class="plan-price">$0 <small>forever</small></div>
-    <div class="plan-desc">100 credits on signup. Perfect for trying the consensus engine.</div>
+    <div class="plan-price">$0</div>
+    <div class="plan-desc" style="margin-bottom:1.8rem">Everything you need to verify claims with multi-model consensus.</div>
     <ul class="plan-features">
-      <li>100 free credits</li>
+      <li>100 credits on signup</li>
       <li>3-model tribunal</li>
       <li>Aletheia proof storage</li>
-      <li>All apps (web, iOS, macOS)</li>
-      <li>Google &amp; Microsoft auth</li>
+      <li>All platforms</li>
+      <li>OAuth sign-in</li>
     </ul>
-    <a href="#auth" class="plan-cta primary">Get Started Free</a>
+    <a href="#auth" class="plan-cta primary">Get Started</a>
   </div>
-  <div class="plan glass-card featured stagger-2">
+  <div class="plan glass-card featured stagger-2" style="padding:2.5rem">
     <div class="plan-name" style="color:var(--accent)">Pro</div>
     <div class="plan-price">$19 <small>/mo</small></div>
-    <div class="plan-desc">5-model ICE, sceptic mode, API key. Everything free-tier does, plus:</div>
+    <div class="plan-desc" style="margin-bottom:1.8rem">Deep verification, adversarial testing, and API access for serious work.</div>
     <ul class="plan-features">
       <li>2,000 credits/month</li>
-      <li>5-model ICE deep verification</li>
-      <li>Sceptic adversarial stress-testing</li>
-      <li>Priority routing to faster models</li>
-      <li>API key + CLI access</li>
-      <li>Email support</li>
+      <li>5-model ICE verification</li>
+      <li>Sceptic mode</li>
+      <li>Priority routing</li>
+      <li>API key + CLI</li>
     </ul>
-    <a href="#auth" class="plan-cta primary">Start Pro Trial</a>
-    <div class="byok">Or BYOK &mdash; $0 with your keys</div>
+    <a href="#auth" class="plan-cta primary">Start Pro</a>
+    <div class="byok">BYOK: $0 with your own keys</div>
   </div>
-  <div class="plan glass-card stagger-3">
-    <div class="plan-name" style="color:var(--orange)">Team</div>
-    <div class="plan-price">$49 <small>/mo</small></div>
-    <div class="plan-desc">Shared workspace for labs and research groups.</div>
-    <ul class="plan-features">
-      <li>10,000 credits/month</li>
-      <li>Up to 10 seats</li>
-      <li>Shared proof library</li>
-      <li>Workflow automation</li>
-      <li>Admin controls</li>
-      <li>Priority support</li>
-    </ul>
-    <a href="#auth" class="plan-cta outline">Contact Us</a>
-    <div class="byok">BYOK: $0 platform fee</div>
+</div>
+<!-- Team/Sovereign row — quiet -->
+<div style="max-width:680px;margin:1.5rem auto 0;display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+  <div class="glass-card stagger-3" style="padding:1.2rem 1.5rem;display:flex;align-items:center;justify-content:space-between">
+    <div>
+      <div style="font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--orange)">Team</div>
+      <div style="font-size:.65rem;color:var(--muted);margin-top:.15rem">10 seats, shared proofs, admin controls</div>
+    </div>
+    <div style="font-size:.85rem;font-weight:700;color:var(--text)">$49<small style="font-weight:400;color:var(--muted)">/mo</small></div>
   </div>
-  <div class="plan glass-card stagger-4">
-    <div class="plan-name" style="color:var(--purple)">Sovereign</div>
-    <div class="plan-price">$199 <small>/mo</small></div>
-    <div class="plan-desc">Full infrastructure ownership. Your data, models, rules.</div>
-    <ul class="plan-features">
-      <li>Unlimited (self-hosted)</li>
-      <li>All providers unlocked</li>
-      <li>ADMIN_EMAILS genline</li>
-      <li>Custom routing</li>
-      <li>White-label &amp; SSO</li>
-      <li>Dedicated support + SLA</li>
-    </ul>
-    <a href="#auth" class="plan-cta outline">Request Access</a>
-    <div class="byok">You own the infrastructure</div>
+  <div class="glass-card stagger-4" style="padding:1.2rem 1.5rem;display:flex;align-items:center;justify-content:space-between">
+    <div>
+      <div style="font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--purple)">Sovereign</div>
+      <div style="font-size:.65rem;color:var(--muted);margin-top:.15rem">Self-hosted, SSO, your infrastructure</div>
+    </div>
+    <div style="font-size:.85rem;font-weight:700;color:var(--text)">$199<small style="font-weight:400;color:var(--muted)">/mo</small></div>
   </div>
 </div>
 </section>
