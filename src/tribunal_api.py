@@ -1047,6 +1047,13 @@ footer .f-copy{{color:#333;font-size:.68rem;letter-spacing:.04em}}
   .stats-inner{{flex-direction:column;gap:1.5rem}}.nav-links{{gap:.6rem;font-size:.75rem}}
   nav{{padding:0 1rem}}.plat-grid{{grid-template-columns:repeat(2,1fr)}}
   .legacy-bar{{flex-direction:column;text-align:center}}}}
+
+/* LANG TABS */
+.ltab{{background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:8px;
+  padding:.3rem .65rem;font-size:.65rem;font-weight:600;color:var(--muted);cursor:pointer;
+  font-family:'JetBrains Mono',monospace;transition:.2s}}
+.ltab:hover{{color:var(--text);border-color:var(--accent)}}
+.ltab.active{{background:var(--accent);color:#fff;border-color:var(--accent)}}
 </style></head>
 <body>
 
@@ -1105,6 +1112,150 @@ footer .f-copy{{color:#333;font-size:.68rem;letter-spacing:.04em}}
     </div>
   </div>
 </div>
+
+<!-- WTF EXPLAINER — multilingual, 6yo biochem ninja style -->
+<section class="reveal" id="wtf" style="max-width:760px;margin:0 auto;padding:2.5rem 1.2rem 1rem">
+  <div class="glass-card" style="padding:2rem;border-radius:var(--radius);position:relative;overflow:hidden">
+    <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--green),var(--accent),var(--purple),var(--orange))"></div>
+    <!-- Language tabs -->
+    <div id="lang-tabs" style="display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:1.4rem;justify-content:center">
+      <button class="ltab active" onclick="switchLang('en')">EN</button>
+      <button class="ltab" onclick="switchLang('fr')">FR</button>
+      <button class="ltab" onclick="switchLang('pt')">PT</button>
+      <button class="ltab" onclick="switchLang('de')">DE</button>
+      <button class="ltab" onclick="switchLang('el')">EL</button>
+      <button class="ltab" onclick="switchLang('ka')">KA</button>
+      <button class="ltab" onclick="switchLang('ja')">JA</button>
+      <button class="ltab" onclick="switchLang('zh')">ZH</button>
+      <button class="ltab" onclick="switchLang('cs')">CS</button>
+    </div>
+    <!-- EN -->
+    <div class="lang-block" id="lang-en">
+      <div style="font-size:.65rem;color:var(--green);font-weight:600;text-transform:uppercase;letter-spacing:.1em;margin-bottom:.6rem">ok so what is this</div>
+      <p style="font-size:.92rem;line-height:1.7;color:var(--text)">
+        You know how when you ask one friend if your drawing is good, they always say yes?
+        <strong style="color:var(--accent)">Rhea asks 5 friends who can&rsquo;t hear each other.</strong>
+        If they all say the same thing &mdash; it&rsquo;s probably true.
+        If they disagree &mdash; <em>that&rsquo;s where the interesting part is.</em>
+      </p>
+      <p style="font-size:.78rem;color:var(--muted);margin-top:.8rem;line-height:1.6">
+        Technically: you give Rhea a claim like &ldquo;aspirin blocks COX-2 selectively.&rdquo;
+        Rhea sends it to multiple AI models (Claude, GPT, Gemini, DeepSeek...) <em>independently</em> &mdash;
+        they don&rsquo;t see each other&rsquo;s answers. Then it measures agreement.
+        High agreement = signal. Low agreement = the claim has cracks. A sceptic model attacks what&rsquo;s left.
+        Survivors become <strong>proofs</strong> stored forever.
+      </p>
+    </div>
+    <!-- FR -->
+    <div class="lang-block" id="lang-fr" style="display:none">
+      <div style="font-size:.65rem;color:var(--green);font-weight:600;text-transform:uppercase;letter-spacing:.1em;margin-bottom:.6rem">c&rsquo;est quoi ce truc</div>
+      <p style="font-size:.92rem;line-height:1.7;color:var(--text)">
+        Tu sais quand tu demandes &agrave; un seul copain si ton dessin est beau, il dit toujours oui&nbsp;?
+        <strong style="color:var(--accent)">Rh&eacute;a demande &agrave; 5 copains qui ne s&rsquo;entendent pas entre eux.</strong>
+        S&rsquo;ils disent tous pareil &mdash; c&rsquo;est probablement vrai.
+        S&rsquo;ils ne sont pas d&rsquo;accord &mdash; <em>c&rsquo;est l&agrave; que &ccedil;a devient int&eacute;ressant.</em>
+      </p>
+      <p style="font-size:.78rem;color:var(--muted);margin-top:.8rem;line-height:1.6">
+        Concr&egrave;tement&nbsp;: tu donnes une affirmation comme &laquo;&nbsp;l&rsquo;aspirine bloque COX-2 s&eacute;lectivement&nbsp;&raquo;.
+        Rh&eacute;a l&rsquo;envoie &agrave; plusieurs mod&egrave;les d&rsquo;IA ind&eacute;pendamment &mdash;
+        ils ne voient pas les r&eacute;ponses des autres. Puis on mesure l&rsquo;accord.
+        Fort accord = signal. Faible accord = la th&egrave;se a des fissures.
+        Un mod&egrave;le sceptique attaque ce qui reste. Les survivants deviennent des <strong>preuves</strong>.
+      </p>
+    </div>
+    <!-- PT -->
+    <div class="lang-block" id="lang-pt" style="display:none">
+      <div style="font-size:.65rem;color:var(--green);font-weight:600;text-transform:uppercase;letter-spacing:.1em;margin-bottom:.6rem">o que &eacute; isso afinal</div>
+      <p style="font-size:.92rem;line-height:1.7;color:var(--text)">
+        Sabe quando voc&ecirc; pergunta pra um amigo se seu desenho ficou bonito e ele sempre diz que sim?
+        <strong style="color:var(--accent)">Rhea pergunta pra 5 amigos que n&atilde;o se ouvem.</strong>
+        Se todos dizem a mesma coisa &mdash; provavelmente &eacute; verdade.
+        Se discordam &mdash; <em>&eacute; a&iacute; que fica interessante.</em>
+      </p>
+      <p style="font-size:.78rem;color:var(--muted);margin-top:.8rem;line-height:1.6">
+        Na pr&aacute;tica: voc&ecirc; manda uma afirma&ccedil;&atilde;o tipo &ldquo;aspirina bloqueia COX-2 seletivamente.&rdquo;
+        Rhea envia pra v&aacute;rios modelos de IA independentemente &mdash;
+        eles n&atilde;o veem as respostas dos outros. Depois mede a concord&acirc;ncia.
+        Alta = sinal. Baixa = a tese tem rachaduras. Um modelo c&eacute;tico ataca o que sobra.
+        Sobreviventes viram <strong>provas</strong> armazenadas pra sempre.
+      </p>
+    </div>
+    <!-- DE -->
+    <div class="lang-block" id="lang-de" style="display:none">
+      <div style="font-size:.65rem;color:var(--green);font-weight:600;text-transform:uppercase;letter-spacing:.1em;margin-bottom:.6rem">was passiert hier eigentlich</div>
+      <p style="font-size:.92rem;line-height:1.7;color:var(--text)">
+        Kennst du das, wenn du einen Freund fragst ob dein Bild sch&ouml;n ist und er immer ja sagt?
+        <strong style="color:var(--accent)">Rhea fragt 5 Freunde, die sich gegenseitig nicht h&ouml;ren k&ouml;nnen.</strong>
+        Wenn alle dasselbe sagen &mdash; ist es wahrscheinlich wahr.
+        Wenn sie sich widersprechen &mdash; <em>genau da wird es spannend.</em>
+      </p>
+      <p style="font-size:.78rem;color:var(--muted);margin-top:.8rem;line-height:1.6">
+        Technisch: du gibst eine Behauptung wie &bdquo;Aspirin hemmt COX-2 selektiv&ldquo;.
+        Rhea schickt sie an mehrere KI-Modelle unabh&auml;ngig voneinander &mdash;
+        sie sehen die Antworten der anderen nicht. Dann wird die &Uuml;bereinstimmung gemessen.
+        Hohe &Uuml;bereinstimmung = Signal. Niedrige = die These hat Risse.
+        Ein skeptisches Modell greift an was &uuml;brig bleibt. &Uuml;berlebende werden <strong>Beweise</strong>.
+      </p>
+    </div>
+    <!-- EL (Greek) -->
+    <div class="lang-block" id="lang-el" style="display:none">
+      <div style="font-size:.65rem;color:var(--green);font-weight:600;text-transform:uppercase;letter-spacing:.1em;margin-bottom:.6rem">&tau;&iota; &gamma;&iota;&apos;&nu;&epsilon;&tau;&alpha;&iota; &epsilon;&delta;&omega;</div>
+      <p style="font-size:.92rem;line-height:1.7;color:var(--text)">
+        &Xi;&epsilon;&rho;&epsilon;&iota;&sigmaf; &pi;&omega;&sigmaf; &omicron;&tau;&alpha;&nu; &rho;&omega;&tau;&alpha;&sigmaf; &epsilon;&nu;&alpha;&nu; &phi;&iota;&lambda;&omicron; &alpha;&nu; &eta; &zeta;&omega;&gamma;&rho;&alpha;&phi;&iota;&alpha; &sigma;&omicron;&upsilon; &epsilon;&iota;&nu;&alpha;&iota; &omega;&rho;&alpha;&iota;&alpha;, &lambda;&epsilon;&epsilon;&iota; &pi;&alpha;&nu;&tau;&alpha; &nu;&alpha;&iota;;
+        <strong style="color:var(--accent)">&Eta; Rhea &rho;&omega;&tau;&alpha;&epsilon;&iota; 5 &phi;&iota;&lambda;&omicron;&upsilon;&sigmaf; &pi;&omicron;&upsilon; &delta;&epsilon;&nu; &alpha;&kappa;&omicron;&upsilon;&nu;&epsilon; &omicron; &epsilon;&nu;&alpha;&sigmaf; &tau;&omicron;&nu; &alpha;&lambda;&lambda;&omicron;&nu;.</strong>
+        &Alpha;&nu; &lambda;&epsilon;&nu;&epsilon; &omicron;&lambda;&omicron;&iota; &tau;&omicron; &iota;&delta;&iota;&omicron; &mdash; &mu;&alpha;&lambda;&lambda;&omicron;&nu; &epsilon;&iota;&nu;&alpha;&iota; &alpha;&lambda;&eta;&theta;&epsilon;&iota;&alpha;.
+        &Alpha;&nu; &delta;&iota;&alpha;&phi;&omega;&nu;&omicron;&upsilon;&nu; &mdash; <em>&epsilon;&kappa;&epsilon;&iota; &epsilon;&iota;&nu;&alpha;&iota; &tau;&omicron; &epsilon;&nu;&delta;&iota;&alpha;&phi;&epsilon;&rho;&omicron;&nu;.</em>
+      </p>
+    </div>
+    <!-- KA (Georgian) -->
+    <div class="lang-block" id="lang-ka" style="display:none">
+      <div style="font-size:.65rem;color:var(--green);font-weight:600;text-transform:uppercase;letter-spacing:.1em;margin-bottom:.6rem">&#4320;&#4304; &#4334;&#4307;&#4308;&#4305;&#4304; &#4304;&#4325;</div>
+      <p style="font-size:.92rem;line-height:1.7;color:var(--text)">
+        &#4312;&#4330;&#4312; &#4320;&#4317;&#4306;&#4317;&#4320; &#4308;&#4320;&#4311; &#4315;&#4308;&#4306;&#4317;&#4305;&#4304;&#4320;&#4321; &#4308;&#4313;&#4312;&#4311;&#4334;&#4308;&#4305;&#4312; &#4314;&#4304;&#4315;&#4304;&#4310;&#4312;&#4304; &#4328;&#4308;&#4316;&#4312; &#4316;&#4304;&#4334;&#4304;&#4322;&#4312; &#4307;&#4304; &#4327;&#4317;&#4309;&#4308;&#4314;&#4311;&#4309;&#4312;&#4321; &#4304;&#4315;&#4305;&#4317;&#4305;&#4321; &#4313;&#4312;?
+        <strong style="color:var(--accent)">Rhea &#4308;&#4313;&#4312;&#4311;&#4334;&#4308;&#4305;&#4304; 5 &#4315;&#4308;&#4306;&#4317;&#4305;&#4304;&#4320;&#4321; &#4320;&#4317;&#4315;&#4314;&#4308;&#4305;&#4312;&#4330; &#4308;&#4320;&#4311;&#4315;&#4304;&#4316;&#4308;&#4311;&#4321; &#4309;&#4308;&#4320; &#4312;&#4321;&#4315;&#4308;&#4316;&#4308;&#4316;.</strong>
+        &#4311;&#4323; &#4327;&#4309;&#4308;&#4314;&#4304; &#4308;&#4320;&#4311;&#4312; &#4307;&#4304; &#4312;&#4306;&#4312;&#4309;&#4308;&#4321; &#4304;&#4315;&#4305;&#4317;&#4305;&#4321; &mdash; &#4321;&#4304;&#4309;&#4304;&#4320;&#4304;&#4323;&#4307;&#4317;&#4307; &#4315;&#4304;&#4320;&#4311;&#4304;&#4314;&#4312;&#4304;.
+        &#4311;&#4323; &#4304;&#4320; &#4308;&#4311;&#4304;&#4316;&#4334;&#4315;&#4308;&#4305;&#4312;&#4304;&#4316; &mdash; <em>&#4321;&#4332;&#4317;&#4320;&#4308;&#4307; &#4312;&#4325; &#4312;&#4332;&#4327;&#4308;&#4305;&#4304; &#4321;&#4304;&#4312;&#4316;&#4322;&#4308;&#4320;&#4308;&#4321;&#4317;.</em>
+      </p>
+    </div>
+    <!-- JA (Japanese) -->
+    <div class="lang-block" id="lang-ja" style="display:none">
+      <div style="font-size:.65rem;color:var(--green);font-weight:600;text-transform:uppercase;letter-spacing:.1em;margin-bottom:.6rem">&#12371;&#12428;&#12399;&#19968;&#20307;&#20309;&#65311;</div>
+      <p style="font-size:.92rem;line-height:1.7;color:var(--text)">
+        &#21451;&#36948;&#12395;&#12300;&#31169;&#12398;&#32117;&#12289;&#19978;&#25163;&#65311;&#12301;&#12387;&#12390;&#32862;&#12367;&#12392;&#12289;&#12356;&#12388;&#12418;&#12300;&#12358;&#12435;&#12289;&#19978;&#25163;&#12384;&#12424;&#12301;&#12387;&#12390;&#35328;&#12358;&#12391;&#12375;&#12423;&#65311;
+        <strong style="color:var(--accent)">Rhea&#12399;&#12289;&#12362;&#20114;&#12356;&#12398;&#31572;&#12360;&#12364;&#32862;&#12371;&#12360;&#12394;&#12356;5&#20154;&#12398;&#21451;&#36948;&#12395;&#32862;&#12365;&#12414;&#12377;&#12290;</strong>
+        &#20840;&#21729;&#12364;&#21516;&#12376;&#12371;&#12392;&#12434;&#35328;&#12360;&#12400;&mdash;&#12362;&#12381;&#12425;&#12367;&#26412;&#24403;&#12290;
+        &#24847;&#35211;&#12364;&#21106;&#12428;&#12383;&#12425;&mdash;<em>&#12381;&#12371;&#12364;&#38754;&#30333;&#12356;&#12392;&#12371;&#12429;&#12290;</em>
+      </p>
+    </div>
+    <!-- ZH (Chinese) -->
+    <div class="lang-block" id="lang-zh" style="display:none">
+      <div style="font-size:.65rem;color:var(--green);font-weight:600;text-transform:uppercase;letter-spacing:.1em;margin-bottom:.6rem">&#36825;&#21040;&#24213;&#26159;&#20160;&#20040;</div>
+      <p style="font-size:.92rem;line-height:1.7;color:var(--text)">
+        &#20320;&#30693;&#36947;&#24403;&#20320;&#38382;&#19968;&#20010;&#26379;&#21451;&#20320;&#30340;&#30011;&#22909;&#19981;&#22909;&#30475;&#65292;&#20182;&#24635;&#35828;&#22909;&#30475;&#21527;&#65311;
+        <strong style="color:var(--accent)">Rhea&#20250;&#38382;5&#20010;&#20114;&#30456;&#21548;&#19981;&#21040;&#23545;&#26041;&#22238;&#31572;&#30340;&#26379;&#21451;&#12290;</strong>
+        &#22914;&#26524;&#20182;&#20204;&#37117;&#35828;&#19968;&#26679;&mdash;&#37027;&#21487;&#33021;&#26159;&#30495;&#30340;&#12290;
+        &#22914;&#26524;&#24847;&#35265;&#19981;&#19968;&mdash;<em>&#26377;&#36259;&#30340;&#37096;&#20998;&#23601;&#22312;&#36825;&#37324;&#12290;</em>
+      </p>
+    </div>
+    <!-- CS (Czech) -->
+    <div class="lang-block" id="lang-cs" style="display:none">
+      <div style="font-size:.65rem;color:var(--green);font-weight:600;text-transform:uppercase;letter-spacing:.1em;margin-bottom:.6rem">co se tu vlastn&#283; d&#283;je</div>
+      <p style="font-size:.92rem;line-height:1.7;color:var(--text)">
+        V&iacute;&#353; jak kdy&#382; se zept&aacute;&#353; jednoho kamar&aacute;da jestli je tv&#367;j obr&aacute;zek hezk&yacute; a on v&#382;dycky &#345;ekne jo?
+        <strong style="color:var(--accent)">Rhea se zept&aacute; 5 kamar&aacute;d&#367;, kte&#345;&iacute; se navz&aacute;jem nesly&#353;&iacute;.</strong>
+        Kdy&#382; &#345;eknou v&#353;ichni totéž &mdash; asi je to pravda.
+        Kdy&#382; se neshodnou &mdash; <em>pr&aacute;v&#283; tam je to zaj&iacute;mav&eacute;.</em>
+      </p>
+      <p style="font-size:.78rem;color:var(--muted);margin-top:.8rem;line-height:1.6">
+        Technicky: zad&aacute;&#353; tvrzen&iacute; jako &bdquo;aspirin blokuje COX-2 selektivn&#283;&ldquo;.
+        Rhea ho po&#353;le v&iacute;ce AI model&#367;m nez&aacute;visle &mdash;
+        nevid&iacute; odpov&#283;di ostatn&iacute;ch. Pak m&#283;&#345;&iacute; shodu.
+        Vysok&aacute; shoda = sign&aacute;l. N&iacute;zk&aacute; = teze m&aacute; trhliny.
+        Skeptick&yacute; model zaúto&#269;&iacute; na zbytek. P&#345;e&#382;iv&#353;&iacute; se stanou <strong>d&#367;kazy</strong>.
+      </p>
+    </div>
+  </div>
+</section>
 
 <!-- LIVE PULSE -->
 <div class="stats-bar">
@@ -1581,6 +1732,15 @@ You own your data, your models, your keys. Rhea serves you &mdash; not the other
     entries.forEach(e=>{{if(e.isIntersecting){{e.target.classList.add('visible');obs.unobserve(e.target)}}}})
   }},{{threshold:.15,rootMargin:'0px 0px -40px 0px'}});
   document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+  // Language switcher
+  window.switchLang=function(code){{
+    document.querySelectorAll('.lang-block').forEach(b=>b.style.display='none');
+    const el=document.getElementById('lang-'+code);
+    if(el)el.style.display='block';
+    document.querySelectorAll('.ltab').forEach(t=>t.classList.remove('active'));
+    event.target.classList.add('active');
+  }};
 
   // Animate stat numbers
   document.querySelectorAll('.stat .val').forEach(el=>{{
