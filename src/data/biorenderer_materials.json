@@ -413,5 +413,1157 @@
       "transparency": 0.25
     },
     "artistic_notes": "CRISPR-Cas9 wraps around DNA like a clam; assign the Cas9 protein a warm amber surface and render the sgRNA and target DNA in contrasting cool blues so the nucleic acid cargo is immediately distinguishable from the protein chassis. The HNH and RuvC nuclease active sites should be lit with stick-atom detail inside the semi-transparent surface to communicate the dual-scissor cleavage mechanism."
+  },
+  {
+    "pdb_id": "1UBQ",
+    "name": "Ubiquitin",
+    "primary_style": {
+      "render_style": "cartoon",
+      "color_scheme": "ss",
+      "surface_type": null,
+      "opacity": 1.0
+    },
+    "overlays": [
+      {
+        "render_style": "surface",
+        "color_scheme": "electrostatic",
+        "surface_type": "SES",
+        "opacity": 0.18
+      }
+    ],
+    "highlight_residues": [
+      {
+        "selection": "LYS 48, LYS 63",
+        "style": "sphere",
+        "color_scheme": "atom",
+        "note": "K48 chains target proteins to proteasome; K63 chains signal DNA repair and NF-kB"
+      },
+      {
+        "selection": "ILE 44, VAL 70, LEU 8, HIS 68",
+        "style": "stick",
+        "color_scheme": "residue",
+        "note": "Hydrophobic patch — canonical ubiquitin receptor binding surface"
+      }
+    ],
+    "palette": [
+      "#E8A020",
+      "#C85A00",
+      "#F5DEB3",
+      "#5A3E28",
+      "#2E4A6E"
+    ],
+    "pbr": {
+      "metallic": 0.0,
+      "roughness": 0.44,
+      "emission": 0.04
+    },
+    "notes": "Compact 76-residue beta-grasp fold. Warm amber-wheat palette evokes the ubiquitous 'molecular tag' role. K48 and K63 as contrasting spheres immediately conveys the chain-type specificity story. Electrostatic SES overlay at low opacity reveals the charged surface that discriminates UBDs."
+  },
+  {
+    "pdb_id": "1LYZ",
+    "name": "Lysozyme",
+    "primary_style": {
+      "render_style": "cartoon",
+      "color_scheme": "ss",
+      "surface_type": null,
+      "opacity": 1.0
+    },
+    "overlays": [
+      {
+        "render_style": "surface",
+        "color_scheme": "hydrophobicity",
+        "surface_type": "SES",
+        "opacity": 0.20
+      }
+    ],
+    "highlight_residues": [
+      {
+        "selection": "GLU 35, ASP 52",
+        "style": "stick",
+        "color_scheme": "atom",
+        "note": "Catalytic dyad: Glu35 proton donor, Asp52 stabilizes oxocarbenium transition state"
+      },
+      {
+        "selection": "CYS 6, CYS 127, CYS 30, CYS 115, CYS 64, CYS 80, CYS 76, CYS 94",
+        "style": "sphere",
+        "color_scheme": "atom",
+        "note": "Four disulfide bonds that rigidify the fold and confer thermal stability"
+      }
+    ],
+    "palette": [
+      "#F5F0DC",
+      "#D4AC6E",
+      "#8B6914",
+      "#3D6B8C",
+      "#C0392B"
+    ],
+    "pbr": {
+      "metallic": 0.0,
+      "roughness": 0.38,
+      "emission": 0.03
+    },
+    "notes": "Hen egg-white lysozyme — the first enzyme structure solved (1965). Parchment-ivory palette honors its historic role. Active site cleft runs between alpha and beta domains; render from the cleft side to show the catalytic residue geometry. Golden spheres on all eight disulfide cysteines emphasize the stabilization network."
+  },
+  {
+    "pdb_id": "1MBN",
+    "name": "Myoglobin",
+    "primary_style": {
+      "render_style": "cartoon",
+      "color_scheme": "chain",
+      "surface_type": null,
+      "opacity": 1.0
+    },
+    "overlays": [
+      {
+        "render_style": "surface",
+        "color_scheme": "chain",
+        "surface_type": "SES",
+        "opacity": 0.16
+      }
+    ],
+    "highlight_residues": [
+      {
+        "selection": "HEM 154",
+        "style": "stick",
+        "color_scheme": "atom",
+        "note": "Protoporphyrin IX heme with central iron — primary O2 binding site"
+      },
+      {
+        "selection": "HIS 93, HIS 64",
+        "style": "sphere",
+        "color_scheme": "atom",
+        "note": "Proximal His93 coordinates Fe directly; distal His64 stabilizes bound O2"
+      }
+    ],
+    "palette": [
+      "#8B0000",
+      "#C0392B",
+      "#D4AC0D",
+      "#5D4037",
+      "#BF8B6E"
+    ],
+    "pbr": {
+      "metallic": 0.10,
+      "roughness": 0.46,
+      "emission": 0.12
+    },
+    "notes": "First protein structure ever solved (Kendrew 1958). Deep crimson palette mirrors oxymyoglobin's vivid color. High emission on heme iron captures its redox-active character. Eight alpha-helices (A-H) wrap around the heme pocket — cartoon coloring them by helix letter helps teaching the globin fold."
+  },
+  {
+    "pdb_id": "1HHP",
+    "name": "HIV-1 Protease",
+    "primary_style": {
+      "render_style": "cartoon",
+      "color_scheme": "chain",
+      "surface_type": null,
+      "opacity": 1.0
+    },
+    "overlays": [
+      {
+        "render_style": "surface",
+        "color_scheme": "bfactor",
+        "surface_type": "SES",
+        "opacity": 0.22
+      }
+    ],
+    "highlight_residues": [
+      {
+        "selection": "ASP 25, ASP 25'",
+        "style": "stick",
+        "color_scheme": "atom",
+        "note": "Catalytic dyad from each monomer; both Asp25 residues required for acid-base catalysis"
+      },
+      {
+        "selection": "ILE 47, MET 46, GLY 48, ILE 50, PHE 53, ILE 54",
+        "style": "stick",
+        "color_scheme": "residue",
+        "note": "Flap residues 46-54 that gate substrate access; B-factor coloring reveals their high mobility"
+      }
+    ],
+    "palette": [
+      "#1A1A2E",
+      "#16213E",
+      "#0F3460",
+      "#E94560",
+      "#F5A623"
+    ],
+    "pbr": {
+      "metallic": 0.05,
+      "roughness": 0.50,
+      "emission": 0.05
+    },
+    "notes": "Homodimeric aspartyl protease; dark navy palette communicates the pathogen context while the hot-pink flaps make resistance mutation sites immediately visible. B-factor surface overlay is critical here — the flaps are among the highest-B segments in the PDB and their motion governs drug resistance. Render from above the active site cleft to show flap symmetry."
+  },
+  {
+    "pdb_id": "1M17",
+    "name": "EGFR Kinase",
+    "primary_style": {
+      "render_style": "cartoon",
+      "color_scheme": "spectrum",
+      "surface_type": null,
+      "opacity": 1.0
+    },
+    "overlays": [
+      {
+        "render_style": "surface",
+        "color_scheme": "hydrophobicity",
+        "surface_type": "SES",
+        "opacity": 0.18
+      }
+    ],
+    "highlight_residues": [
+      {
+        "selection": "ERB",
+        "style": "stick",
+        "color_scheme": "atom",
+        "note": "Erlotinib occupying the ATP binding pocket — canonical EGFR inhibitor"
+      },
+      {
+        "selection": "LYS 745, GLU 762, MET 769",
+        "style": "sphere",
+        "color_scheme": "atom",
+        "note": "Salt bridge Lys745-Glu762 marks active conformation; Met769 gatekeeper residue"
+      },
+      {
+        "selection": "ASP 855, PHE 856, GLY 857",
+        "style": "stick",
+        "color_scheme": "residue",
+        "note": "DFG motif activation loop — DFG-in conformation shown in erlotinib-bound state"
+      }
+    ],
+    "palette": [
+      "#0B3D91",
+      "#1565C0",
+      "#42A5F5",
+      "#FF7043",
+      "#FFCA28"
+    ],
+    "pbr": {
+      "metallic": 0.0,
+      "roughness": 0.40,
+      "emission": 0.06
+    },
+    "notes": "Drug-target classic. Spectrum ribbon from N-lobe (blue) to C-lobe (red) makes the bilobal kinase architecture self-evident. Erlotinib rendered as prominent colored sticks in the ATP pocket anchors the therapeutic context. Activation loop DFG motif as stick highlight allows comparison to inactive DFG-out structures."
+  },
+  {
+    "pdb_id": "2HI4",
+    "name": "CYP3A4",
+    "primary_style": {
+      "render_style": "cartoon",
+      "color_scheme": "ss",
+      "surface_type": null,
+      "opacity": 1.0
+    },
+    "overlays": [
+      {
+        "render_style": "surface",
+        "color_scheme": "hydrophobicity",
+        "surface_type": "SES",
+        "opacity": 0.25
+      }
+    ],
+    "highlight_residues": [
+      {
+        "selection": "HEM 900",
+        "style": "stick",
+        "color_scheme": "atom",
+        "note": "Iron protoporphyrin IX — the catalytic center for oxidative metabolism"
+      },
+      {
+        "selection": "PHE 304, PHE 215, PHE 108, PHE 213",
+        "style": "stick",
+        "color_scheme": "residue",
+        "note": "Phe-cluster gateway residues that shape the promiscuous substrate cavity"
+      },
+      {
+        "selection": "ILE 369, ALA 370, LEU 373, THR 224",
+        "style": "sphere",
+        "color_scheme": "residue",
+        "note": "Substrate cavity walls — largest P450 active site in humans"
+      }
+    ],
+    "palette": [
+      "#4A235A",
+      "#7B241C",
+      "#D4AC0D",
+      "#1B4F72",
+      "#CACFD2"
+    ],
+    "pbr": {
+      "metallic": 0.12,
+      "roughness": 0.48,
+      "emission": 0.10
+    },
+    "notes": "Responsible for metabolizing ~50% of clinical drugs. Deep purple-maroon palette evokes the porphyrin Soret band. The cavernous active site (up to 2000 Å3) accommodates two erythromycin molecules simultaneously — a cross-section rendering showing the cavity volume is more informative than an exterior view. Heme emission highlights the iron-oxo reactive species."
+  },
+  {
+    "pdb_id": "5C4X",
+    "name": "PD-L1",
+    "primary_style": {
+      "render_style": "cartoon",
+      "color_scheme": "chain",
+      "surface_type": null,
+      "opacity": 1.0
+    },
+    "overlays": [
+      {
+        "render_style": "surface",
+        "color_scheme": "electrostatic",
+        "surface_type": "SES",
+        "opacity": 0.22
+      }
+    ],
+    "highlight_residues": [
+      {
+        "selection": "TYR 56, GLU 58, ARG 113, MET 115, ASN 63, VAL 68",
+        "style": "stick",
+        "color_scheme": "atom",
+        "note": "IgV domain interface residues that contact PD-1; checkpoint blockade epitope"
+      },
+      {
+        "selection": "TYR 123, LYS 124, SER 80",
+        "style": "sphere",
+        "color_scheme": "residue",
+        "note": "Atezolizumab and durvalumab contact positions — antibody drug target epitope"
+      }
+    ],
+    "palette": [
+      "#E8F8F5",
+      "#A2D9CE",
+      "#148F77",
+      "#1A5276",
+      "#884EA0"
+    ],
+    "pbr": {
+      "metallic": 0.0,
+      "roughness": 0.36,
+      "emission": 0.04
+    },
+    "notes": "Immune checkpoint ligand — the brake on T-cell activation. Cool teal-lavender palette conveys the immunological context. IgV beta-sandwich fold benefits from an angled view that exposes the flat face engaged by PD-1 and anti-PD-L1 antibodies. Electrostatic overlay reveals the negatively charged surface that docks against PD-1's positive patch."
+  },
+  {
+    "pdb_id": "2RH1",
+    "name": "Beta2 Adrenergic GPCR",
+    "primary_style": {
+      "render_style": "cartoon",
+      "color_scheme": "ss",
+      "surface_type": null,
+      "opacity": 1.0
+    },
+    "overlays": [
+      {
+        "render_style": "surface",
+        "color_scheme": "chain",
+        "surface_type": "SES",
+        "opacity": 0.28
+      }
+    ],
+    "highlight_residues": [
+      {
+        "selection": "CAU",
+        "style": "stick",
+        "color_scheme": "atom",
+        "note": "Carazolol occupying the orthosteric binding pocket between TM3/TM5/TM6/TM7"
+      },
+      {
+        "selection": "ASP 130, ARG 131, TYR 132",
+        "style": "sphere",
+        "color_scheme": "atom",
+        "note": "DRY motif at TM3/ICL2 junction — ionic lock governing receptor activation state"
+      },
+      {
+        "selection": "SER 203, SER 204, SER 207",
+        "style": "stick",
+        "color_scheme": "residue",
+        "note": "Ser triad in TM5 that makes hydrogen bonds to catecholamine hydroxyl groups"
+      }
+    ],
+    "palette": [
+      "#2C3E50",
+      "#566573",
+      "#5DADE2",
+      "#A569BD",
+      "#D4AC0D"
+    ],
+    "pbr": {
+      "metallic": 0.06,
+      "roughness": 0.55,
+      "emission": 0.05
+    },
+    "notes": "First GPCR crystal structure with a diffusible ligand (2007, Kobilka Nobel). Dark slate palette with lipid-bilayer-evoking horizontal banding. Seven-helix bundle rendered with ss coloring so TM1-TM7 are individually legible. Cross-sectional slice view exposes the carazolol-binding cavity. DRY motif as bright spheres at cytoplasmic face marks the G-protein coupling site."
+  },
+  {
+    "pdb_id": "1BL8",
+    "name": "KcsA Potassium Channel",
+    "primary_style": {
+      "render_style": "cartoon",
+      "color_scheme": "chain",
+      "surface_type": null,
+      "opacity": 1.0
+    },
+    "overlays": [
+      {
+        "render_style": "surface",
+        "color_scheme": "electrostatic",
+        "surface_type": "SES",
+        "opacity": 0.24
+      }
+    ],
+    "highlight_residues": [
+      {
+        "selection": "THR 74, VAL 75, GLY 76, TYR 77, GLY 78",
+        "style": "stick",
+        "color_scheme": "atom",
+        "note": "TVGYG selectivity filter — backbone carbonyls mimic water hydration shell of K+"
+      },
+      {
+        "selection": "K+ ions S1, S2, S3, S4",
+        "style": "sphere",
+        "color_scheme": "atom",
+        "note": "Four ion binding sites in the selectivity filter; alternating occupancy drives conduction"
+      }
+    ],
+    "palette": [
+      "#1A237E",
+      "#283593",
+      "#42A5F5",
+      "#B3E5FC",
+      "#FFD54F"
+    ],
+    "pbr": {
+      "metallic": 0.08,
+      "roughness": 0.42,
+      "emission": 0.08
+    },
+    "notes": "MacKinnon Nobel (2003). Tetrameric channel viewed down the pore axis reveals 4-fold symmetry and the narrow selectivity filter. Deep blue palette mirrors the ionic/aqueous environment. K+ ions as gold metallic spheres against the blue filter create an immediate visual metaphor for selective ion conduction. Electrostatic SES shows the negative funnel that recruits cations."
+  },
+  {
+    "pdb_id": "1EHZ",
+    "name": "tRNA-Phe",
+    "primary_style": {
+      "render_style": "stick",
+      "color_scheme": "residue",
+      "surface_type": null,
+      "opacity": 1.0
+    },
+    "overlays": [
+      {
+        "render_style": "surface",
+        "color_scheme": "chain",
+        "surface_type": "SES",
+        "opacity": 0.15
+      }
+    ],
+    "highlight_residues": [
+      {
+        "selection": "A 34, A 35, A 36",
+        "style": "sphere",
+        "color_scheme": "atom",
+        "note": "Anticodon loop positions 34-36 (GAA anticodon reads Phe UUC/UUU codons)"
+      },
+      {
+        "selection": "C 74, C 75, A 76",
+        "style": "stick",
+        "color_scheme": "atom",
+        "note": "CCA 3'-acceptor stem — site of aminoacylation by PheRS"
+      },
+      {
+        "selection": "PSU 55, M2G 10, CM5U 34",
+        "style": "sphere",
+        "color_scheme": "residue",
+        "note": "Post-transcriptional modified bases that stabilize the L-shaped tertiary structure"
+      }
+    ],
+    "palette": [
+      "#880E4F",
+      "#C2185B",
+      "#F06292",
+      "#F8BBD9",
+      "#37474F"
+    ],
+    "pbr": {
+      "metallic": 0.0,
+      "roughness": 0.32,
+      "emission": 0.06
+    },
+    "notes": "L-shaped cloverleaf adapter molecule, 76 nucleotides. Warm rose palette distinguishes it from DNA's canonical blue. Stick rendering with residue coloring makes the base-stacking architecture legible. Modified bases rendered as distinct spheres tell the post-transcriptional processing story. View from the side to reveal the L-shape and the spatial separation of anticodon and acceptor ends."
+  },
+  {
+    "pdb_id": "1AOI",
+    "name": "Nucleosome Core Particle",
+    "primary_style": {
+      "render_style": "surface",
+      "color_scheme": "chain",
+      "surface_type": "SES",
+      "opacity": 0.80
+    },
+    "overlays": [
+      {
+        "render_style": "cartoon",
+        "color_scheme": "ss",
+        "surface_type": null,
+        "opacity": 0.55
+      }
+    ],
+    "highlight_residues": [
+      {
+        "selection": "H3 1-40, H4 1-26, H2A 1-16, H2B 1-32",
+        "style": "stick",
+        "color_scheme": "chain",
+        "note": "Histone N-terminal tails — sites of acetylation, methylation, and ubiquitination marks"
+      },
+      {
+        "selection": "H3 LYS 4, H3 LYS 9, H3 LYS 27, H4 LYS 20",
+        "style": "sphere",
+        "color_scheme": "residue",
+        "note": "Key lysine positions for epigenetic histone code writing/reading"
+      }
+    ],
+    "palette": [
+      "#F3E5AB",
+      "#C8A951",
+      "#7B4F12",
+      "#1565C0",
+      "#0D47A1"
+    ],
+    "pbr": {
+      "metallic": 0.04,
+      "roughness": 0.60,
+      "emission": 0.02
+    },
+    "notes": "The fundamental unit of chromatin packaging. 146 bp DNA (shown in blue) wraps 1.65 left-handed superhelical turns around the histone octamer (warm gold). Per-chain surface coloring distinguishes H2A, H2B, H3, H4 pairs. View from above the superhelical axis to show DNA wrapping geometry. Histone tails as stick overlays communicate the epigenetic regulatory surface."
+  },
+  {
+    "pdb_id": "1AON",
+    "name": "GroEL-GroES Chaperonin",
+    "primary_style": {
+      "render_style": "surface",
+      "color_scheme": "chain",
+      "surface_type": "SES",
+      "opacity": 0.78
+    },
+    "overlays": [
+      {
+        "render_style": "cartoon",
+        "color_scheme": "ss",
+        "surface_type": null,
+        "opacity": 0.50
+      }
+    ],
+    "highlight_residues": [
+      {
+        "selection": "GroEL apical domain residues 191-376 (all 14 subunits)",
+        "style": "stick",
+        "color_scheme": "residue",
+        "note": "Apical domains form the hydrophobic substrate-binding ring and GroES contact surface"
+      },
+      {
+        "selection": "ATP binding sites equatorial domains",
+        "style": "sphere",
+        "color_scheme": "atom",
+        "note": "Equatorial ATP sites drive allosteric cycle between cis and trans rings"
+      }
+    ],
+    "palette": [
+      "#004D40",
+      "#00695C",
+      "#26A69A",
+      "#80CBC4",
+      "#B2DFDB"
+    ],
+    "pbr": {
+      "metallic": 0.06,
+      "roughness": 0.62,
+      "emission": 0.03
+    },
+    "notes": "The protein folding machine — 14 GroEL subunits in two stacked 7-mer rings plus 7-mer GroES cap. Graduated teal palette maps the three structural domains: dark equatorial, mid intermediate, pale apical. Cross-sectional cut view is essential to reveal the enclosed central folding cavity where substrate proteins refold in isolation from the crowded cytoplasm."
+  },
+  {
+    "pdb_id": "5GJR",
+    "name": "26S Proteasome",
+    "primary_style": {
+      "render_style": "surface",
+      "color_scheme": "chain",
+      "surface_type": "SES",
+      "opacity": 0.75
+    },
+    "overlays": [
+      {
+        "render_style": "cartoon",
+        "color_scheme": "ss",
+        "surface_type": null,
+        "opacity": 0.45
+      }
+    ],
+    "highlight_residues": [
+      {
+        "selection": "PSMB5 THR 1, PSMB6 THR 1, PSMB7 THR 1",
+        "style": "sphere",
+        "color_scheme": "atom",
+        "note": "Catalytic beta subunits beta1/beta2/beta5 N-terminal Thr nucleophiles; caspase/trypsin/chymotrypsin-like activities"
+      },
+      {
+        "selection": "19S lid Rpn11, Rpn8 JAMM motif",
+        "style": "stick",
+        "color_scheme": "atom",
+        "note": "Deubiquitylase active site in 19S lid that removes ubiquitin chains before translocation"
+      }
+    ],
+    "palette": [
+      "#212121",
+      "#424242",
+      "#757575",
+      "#B0BEC5",
+      "#E53935"
+    ],
+    "pbr": {
+      "metallic": 0.10,
+      "roughness": 0.65,
+      "emission": 0.03
+    },
+    "notes": "The cellular protein recycling machinery. 2.5 MDa, 33 subunits. Monochrome steel palette — the 20S barrel as dark grey cylinder, 19S cap as lighter grey — lets the molecular scale convey power without color distraction. Red accent spheres on catalytic Thr residues inside the 20S channel are visible only in cross-section, rewarding viewers who look inside. Per-chain surface coloring distinguishes alpha/beta rings."
+  },
+  {
+    "pdb_id": "1I6H",
+    "name": "RNA Polymerase II",
+    "primary_style": {
+      "render_style": "surface",
+      "color_scheme": "chain",
+      "surface_type": "SES",
+      "opacity": 0.78
+    },
+    "overlays": [
+      {
+        "render_style": "cartoon",
+        "color_scheme": "ss",
+        "surface_type": null,
+        "opacity": 0.50
+      }
+    ],
+    "highlight_residues": [
+      {
+        "selection": "RPB1 ASP 481, ASP 483, Mg2+",
+        "style": "sphere",
+        "color_scheme": "atom",
+        "note": "Active site Mg2+ coordinated by Rpb1 Asp481/Asp483 — catalytic metal for phosphodiester bond formation"
+      },
+      {
+        "selection": "RPB1 trigger loop 1078-1089",
+        "style": "stick",
+        "color_scheme": "residue",
+        "note": "Trigger loop that folds into active site upon NTP binding to promote fidelity and catalysis"
+      },
+      {
+        "selection": "RNA-DNA hybrid 8-9 bp",
+        "style": "stick",
+        "color_scheme": "atom",
+        "note": "Nascent RNA-template DNA hybrid in the cleft — the product of transcription"
+      }
+    ],
+    "palette": [
+      "#1B2631",
+      "#1A5276",
+      "#2E86C1",
+      "#F39C12",
+      "#E8DAEF"
+    ],
+    "pbr": {
+      "metallic": 0.08,
+      "roughness": 0.58,
+      "emission": 0.06
+    },
+    "notes": "10-subunit 500 kDa transcription engine (Kornberg Nobel 2006). Navy-ocean palette suits the nucleic-acid-handling complex. Surface view from the front reveals the clamp and cleft through which DNA template threads. The Mg2+ ion as a bright metallic sphere inside the active site cleft is the visual anchor. RNA exit channel visible as a groove along the side — render in cross-section to expose the hybrid."
+  },
+  {
+    "pdb_id": "1IGT",
+    "name": "IgG1 Antibody",
+    "primary_style": {
+      "render_style": "cartoon",
+      "color_scheme": "chain",
+      "surface_type": null,
+      "opacity": 1.0
+    },
+    "overlays": [
+      {
+        "render_style": "surface",
+        "color_scheme": "chain",
+        "surface_type": "SES",
+        "opacity": 0.20
+      }
+    ],
+    "highlight_residues": [
+      {
+        "selection": "L CDR1, L CDR2, L CDR3, H CDR1, H CDR2, H CDR3",
+        "style": "stick",
+        "color_scheme": "residue",
+        "note": "Six CDR loops at Fab tips form the paratope — antigen binding determinant"
+      },
+      {
+        "selection": "CYS 220, CYS 229",
+        "style": "sphere",
+        "color_scheme": "atom",
+        "note": "Inter-chain disulfide bonds in the flexible hinge region connecting Fab to Fc"
+      },
+      {
+        "selection": "ASN 297",
+        "style": "sphere",
+        "color_scheme": "residue",
+        "note": "N-linked glycosylation site in CH2 domain — critical for Fc receptor binding and effector function"
+      }
+    ],
+    "palette": [
+      "#F5F5F5",
+      "#B0BEC5",
+      "#546E7A",
+      "#C62828",
+      "#1565C0"
+    ],
+    "pbr": {
+      "metallic": 0.02,
+      "roughness": 0.45,
+      "emission": 0.03
+    },
+    "notes": "The canonical Y-shaped antibody. White-steel palette with red CDR loops and blue Fc immediately communicates the functional tripartition: two Fab arms for antigen recognition, one Fc stem for effector recruitment. The flexible hinge disulfides as golden spheres mark the pivot point. Render in slight perspective tilt to reveal all four domains (VH, VL, CH1-CH3) simultaneously."
+  },
+  {
+    "pdb_id": "6VYB",
+    "name": "SARS-CoV-2 Spike Trimer",
+    "primary_style": {
+      "render_style": "surface",
+      "color_scheme": "chain",
+      "surface_type": "SES",
+      "opacity": 0.82
+    },
+    "overlays": [
+      {
+        "render_style": "cartoon",
+        "color_scheme": "ss",
+        "surface_type": null,
+        "opacity": 0.50
+      }
+    ],
+    "highlight_residues": [
+      {
+        "selection": "RBD 319-541 (all three chains)",
+        "style": "stick",
+        "color_scheme": "chain",
+        "note": "Receptor binding domain — engages ACE2 on host cells; primary neutralizing antibody target"
+      },
+      {
+        "selection": "FUR cleavage site 681-685, S2 816",
+        "style": "sphere",
+        "color_scheme": "atom",
+        "note": "S1/S2 furin cleavage site and S2' site activate fusion peptide for membrane fusion"
+      },
+      {
+        "selection": "FP 816-833",
+        "style": "stick",
+        "color_scheme": "residue",
+        "note": "Fusion peptide that inserts into host membrane to drive membrane merger"
+      }
+    ],
+    "palette": [
+      "#B71C1C",
+      "#E53935",
+      "#EF9A9A",
+      "#D4AC0D",
+      "#1A237E"
+    ],
+    "pbr": {
+      "metallic": 0.04,
+      "roughness": 0.60,
+      "emission": 0.04
+    },
+    "notes": "3.5 MDa trimeric fusion machine. Three-chain prefusion trimer rendered with distinct chain colors shows the 3-fold symmetry. Red palette evokes pathogen urgency. RBDs highlighted in contrasting gold capture the most clinically relevant domains. A tilted view that shows two RBDs in 'up' and one in 'down' conformation captures the conformational heterogeneity critical for understanding immune evasion."
+  },
+  {
+    "pdb_id": "3SN6",
+    "name": "GPCR-Gs Complex",
+    "primary_style": {
+      "render_style": "cartoon",
+      "color_scheme": "chain",
+      "surface_type": null,
+      "opacity": 1.0
+    },
+    "overlays": [
+      {
+        "render_style": "surface",
+        "color_scheme": "chain",
+        "surface_type": "SES",
+        "opacity": 0.18
+      }
+    ],
+    "highlight_residues": [
+      {
+        "selection": "ADRB2 TM5, TM6 intracellular ends",
+        "style": "stick",
+        "color_scheme": "residue",
+        "note": "Receptor-G protein interface: outward displacement of TM6 opens cavity for Gs alpha5 helix"
+      },
+      {
+        "selection": "GNAS alpha5 helix C-terminus",
+        "style": "sphere",
+        "color_scheme": "atom",
+        "note": "Alpha5 helix insertion into receptor core — the key engagement event for receptor-G coupling"
+      },
+      {
+        "selection": "GNAS nucleotide binding pocket",
+        "style": "stick",
+        "color_scheme": "atom",
+        "note": "Empty nucleotide pocket in the receptor-stabilized nucleotide-free state (Gs activation intermediate)"
+      }
+    ],
+    "palette": [
+      "#2C3E50",
+      "#8E44AD",
+      "#3498DB",
+      "#27AE60",
+      "#E67E22"
+    ],
+    "pbr": {
+      "metallic": 0.04,
+      "roughness": 0.50,
+      "emission": 0.04
+    },
+    "notes": "Landmark signaling complex (Kobilka second Nobel contribution, 2012). Five distinct chains (receptor, Gs-alpha, Gs-beta, Gs-gamma, nanobody) rendered in five distinct palette colors to expose every player in the ternary complex. The outward-tilted TM6 shown with cartoon inside the SES surface captures the activated receptor conformation. The empty nucleotide pocket as stick overlay communicates the transient nature of the complex."
+  },
+  {
+    "pdb_id": "1CGD",
+    "name": "Collagen Triple Helix",
+    "primary_style": {
+      "render_style": "cartoon",
+      "color_scheme": "chain",
+      "surface_type": null,
+      "opacity": 1.0
+    },
+    "overlays": [
+      {
+        "render_style": "surface",
+        "color_scheme": "chain",
+        "surface_type": "SES",
+        "opacity": 0.16
+      }
+    ],
+    "highlight_residues": [
+      {
+        "selection": "all GLY positions",
+        "style": "sphere",
+        "color_scheme": "residue",
+        "note": "Every third Gly of Gly-X-Y repeat packs into triple helix interior; Gly mutations cause osteogenesis imperfecta"
+      },
+      {
+        "selection": "all HYP positions",
+        "style": "stick",
+        "color_scheme": "atom",
+        "note": "Hydroxyproline (post-translational, vitamin C-dependent) stabilizes helix via water bridges"
+      }
+    ],
+    "palette": [
+      "#FFF8E1",
+      "#FFE082",
+      "#FFB300",
+      "#E65100",
+      "#BF360C"
+    ],
+    "pbr": {
+      "metallic": 0.0,
+      "roughness": 0.50,
+      "emission": 0.02
+    },
+    "notes": "The most abundant protein in the human body — an elegant supercoiled rope. Warm amber-ivory palette evokes structural connective tissue. Three chains wound in right-handed superhelix are rendered per-chain in stepped warm hues. Gly spheres as white markers on the central axis and Hyp sticks on the exterior together tell the Gly-X-Y repeat story in a single view. Elongated aspect ratio rewards a wide-format composition."
+  },
+  {
+    "pdb_id": "6OGE",
+    "name": "F-Actin Filament",
+    "primary_style": {
+      "render_style": "surface",
+      "color_scheme": "chain",
+      "surface_type": "SES",
+      "opacity": 0.80
+    },
+    "overlays": [
+      {
+        "render_style": "cartoon",
+        "color_scheme": "ss",
+        "surface_type": null,
+        "opacity": 0.48
+      }
+    ],
+    "highlight_residues": [
+      {
+        "selection": "ADP, Pi at each subunit nucleotide site",
+        "style": "stick",
+        "color_scheme": "atom",
+        "note": "ADP+Pi (pointed end) vs ADP (barbed end) — nucleotide state controls filament dynamics"
+      },
+      {
+        "selection": "D-loop residues 38-52",
+        "style": "stick",
+        "color_scheme": "residue",
+        "note": "DNase I binding loop at pointed end; mediates actin-actin longitudinal contacts in filament"
+      }
+    ],
+    "palette": [
+      "#FF6F00",
+      "#E65100",
+      "#BF360C",
+      "#4A148C",
+      "#F3E5F5"
+    ],
+    "pbr": {
+      "metallic": 0.05,
+      "roughness": 0.55,
+      "emission": 0.04
+    },
+    "notes": "Cryo-EM structure of the cytoskeletal polymer. Tangerine-ember palette evokes dynamic muscular motion. The two-start helical filament viewed along its axis shows the right-handed twist. Per-subunit chain coloring in alternating shades of orange makes the helical repeat immediately visible. Nucleotide states at both ends together tell the treadmilling mechanism story in a single image."
+  },
+  {
+    "pdb_id": "2BNH",
+    "name": "Streptavidin-Biotin",
+    "primary_style": {
+      "render_style": "cartoon",
+      "color_scheme": "chain",
+      "surface_type": null,
+      "opacity": 1.0
+    },
+    "overlays": [
+      {
+        "render_style": "surface",
+        "color_scheme": "hydrophobicity",
+        "surface_type": "SES",
+        "opacity": 0.20
+      }
+    ],
+    "highlight_residues": [
+      {
+        "selection": "TRP 79, TRP 92, TRP 108, TRP 120",
+        "style": "stick",
+        "color_scheme": "atom",
+        "note": "Trp cage around biotin — four tryptophans sandwich the ureido ring via van der Waals and hydrogen bonds"
+      },
+      {
+        "selection": "ASN 23, SER 27, TYR 43, ASN 49",
+        "style": "stick",
+        "color_scheme": "atom",
+        "note": "Hydrogen bond donors to biotin; Asn23 and Ser27 contact the ureido carbonyl oxygens"
+      },
+      {
+        "selection": "BTN",
+        "style": "sphere",
+        "color_scheme": "atom",
+        "note": "Biotin ligand — Kd ~10^-15 M, strongest known non-covalent interaction"
+      }
+    ],
+    "palette": [
+      "#FAFAFA",
+      "#E0E0E0",
+      "#9E9E9E",
+      "#F9A825",
+      "#1565C0"
+    ],
+    "pbr": {
+      "metallic": 0.0,
+      "roughness": 0.35,
+      "emission": 0.05
+    },
+    "notes": "The tightest non-covalent interaction in biology. White-grey protein tetramer makes the yellow biotin ligand unmissable. The Trp cage as aromatic sticks around the biotin sphere is the key narrative element — four tryptophan residues from two subunits clamp the bicyclic ring. A monochrome grey exterior surface with a cut-away reveals the buried biotin in its aromatic embrace."
+  },
+  {
+    "pdb_id": "4UN3",
+    "name": "Cas12a (Cpf1) Endonuclease",
+    "primary_style": {
+      "render_style": "surface",
+      "color_scheme": "chain",
+      "surface_type": "SES",
+      "opacity": 0.76
+    },
+    "overlays": [
+      {
+        "render_style": "cartoon",
+        "color_scheme": "ss",
+        "surface_type": null,
+        "opacity": 0.52
+      }
+    ],
+    "highlight_residues": [
+      {
+        "selection": "ASP 917, GLU 1006, ASP 1255",
+        "style": "sphere",
+        "color_scheme": "atom",
+        "note": "RuvC nuclease triad — single active site that cleaves both strands sequentially (unlike Cas9's dual nuclease)"
+      },
+      {
+        "selection": "WED domain residues 540-660, PI domain 800-870",
+        "style": "stick",
+        "color_scheme": "residue",
+        "note": "WED and PI domains recognize the T-rich PAM on the non-template strand"
+      }
+    ],
+    "palette": [
+      "#1A237E",
+      "#283593",
+      "#7986CB",
+      "#F57F17",
+      "#FFD54F"
+    ],
+    "pbr": {
+      "metallic": 0.06,
+      "roughness": 0.55,
+      "emission": 0.04
+    },
+    "notes": "CRISPR-Cas12a cleaves staggered cuts and processes its own crRNA — distinct from Cas9. Deep indigo protein surface with amber crRNA distinguishes the nucleic acid from protein. The RuvC-only active site (no HNH domain) is highlighted with red spheres inside the transparent surface to emphasize the mechanistic difference from Cas9. PAM recognition domains in contrasting yellow."
+  },
+  {
+    "pdb_id": "3KIN",
+    "name": "Kinesin Motor Domain",
+    "primary_style": {
+      "render_style": "cartoon",
+      "color_scheme": "spectrum",
+      "surface_type": null,
+      "opacity": 1.0
+    },
+    "overlays": [
+      {
+        "render_style": "surface",
+        "color_scheme": "bfactor",
+        "surface_type": "SES",
+        "opacity": 0.18
+      }
+    ],
+    "highlight_residues": [
+      {
+        "selection": "AMP-PNP, Mg2+",
+        "style": "stick",
+        "color_scheme": "atom",
+        "note": "ATP analog AMP-PNP in the nucleotide pocket — mimics the pre-hydrolysis state"
+      },
+      {
+        "selection": "neck linker residues 325-340",
+        "style": "stick",
+        "color_scheme": "residue",
+        "note": "Neck linker docks onto motor domain in ATP state to generate the 8 nm power stroke"
+      },
+      {
+        "selection": "loop8, loop12 switch regions",
+        "style": "sphere",
+        "color_scheme": "atom",
+        "note": "Switch I and II loops sense nucleotide state and communicate with microtubule binding surface"
+      }
+    ],
+    "palette": [
+      "#004D40",
+      "#00897B",
+      "#4DB6AC",
+      "#E0F2F1",
+      "#FF6F00"
+    ],
+    "pbr": {
+      "metallic": 0.0,
+      "roughness": 0.42,
+      "emission": 0.05
+    },
+    "notes": "The 8-nm molecular walker. Spectrum ribbon from N-terminus (blue) to C-terminus (red) maps the P-loop, Switch I/II, and coiled-coil stalk within a single color narrative. Orange neck linker sticks against the teal motor domain make the power-stroke element unmissable. B-factor surface overlay highlights the mobile switch loops that gate nucleotide hydrolysis and microtubule release."
+  },
+  {
+    "pdb_id": "1S5L",
+    "name": "Taq DNA Polymerase",
+    "primary_style": {
+      "render_style": "cartoon",
+      "color_scheme": "chain",
+      "surface_type": null,
+      "opacity": 1.0
+    },
+    "overlays": [
+      {
+        "render_style": "surface",
+        "color_scheme": "ss",
+        "surface_type": "SES",
+        "opacity": 0.18
+      }
+    ],
+    "highlight_residues": [
+      {
+        "selection": "ASP 610, ASP 785",
+        "style": "sphere",
+        "color_scheme": "atom",
+        "note": "Catalytic Mg2+-coordinating aspartates in the palm domain — polymerase active site"
+      },
+      {
+        "selection": "Mg2+ A, Mg2+ B",
+        "style": "sphere",
+        "color_scheme": "atom",
+        "note": "Two-metal-ion catalytic mechanism — Metal A activates 3'-OH nucleophile, Metal B stabilizes triphosphate"
+      },
+      {
+        "selection": "thumb domain 534-608, fingers domain 660-780",
+        "style": "stick",
+        "color_scheme": "residue",
+        "note": "Fingers close around incoming dNTP; thumb grips duplex DNA during synthesis"
+      }
+    ],
+    "palette": [
+      "#B71C1C",
+      "#C62828",
+      "#EF9A9A",
+      "#1A237E",
+      "#E8F5E9"
+    ],
+    "pbr": {
+      "metallic": 0.08,
+      "roughness": 0.46,
+      "emission": 0.06
+    },
+    "notes": "The enzyme that made PCR possible (thermostable to 95°C). Right-hand metaphor: render thumb (red), palm (dark red), and fingers (pink) domains in graduated crimson tones so the molecular hand shape is immediately legible. DNA template and primer as blue sticks in the cleft create a red-on-blue composition that reads as mechanistically active. Two Mg2+ ions as metallic spheres anchor the two-metal-ion catalytic mechanism."
+  },
+  {
+    "pdb_id": "1TUP",
+    "name": "p53 DNA-Binding Domain",
+    "primary_style": {
+      "render_style": "cartoon",
+      "color_scheme": "spectrum",
+      "surface_type": null,
+      "opacity": 1.0
+    },
+    "overlays": [
+      {
+        "render_style": "surface",
+        "color_scheme": "electrostatic",
+        "surface_type": "SES",
+        "opacity": 0.20
+      }
+    ],
+    "highlight_residues": [
+      {
+        "selection": "CYS 176, HIS 179, CYS 238, CYS 242",
+        "style": "stick",
+        "color_scheme": "atom",
+        "note": "Zinc coordination tetrahedral: Cys176, His179, Cys238, Cys242 — Zn2+ structural ion in L2/L3 loop region"
+      },
+      {
+        "selection": "ZN 302",
+        "style": "sphere",
+        "color_scheme": "atom",
+        "note": "Structural Zn2+ ion that organizes L2 and L3 loops forming the DNA-binding surface"
+      },
+      {
+        "selection": "ARG 248, ARG 273, LYS 120",
+        "style": "stick",
+        "color_scheme": "atom",
+        "note": "Direct DNA base contacts; Arg248 most frequently mutated residue in human cancer"
+      }
+    ],
+    "palette": [
+      "#E53935",
+      "#FF8A65",
+      "#FFCC02",
+      "#1976D2",
+      "#263238"
+    ],
+    "pbr": {
+      "metallic": 0.10,
+      "roughness": 0.44,
+      "emission": 0.07
+    },
+    "notes": "Guardian of the genome. Warm spectrum ribbon from red (N-term) to blue (C-term) maps across the immunoglobulin-like beta-sandwich scaffold and highlights the L2/L3 loop protrusion. Zn2+ as a bright metallic sphere at the core of the loops communicates structural dependency on zinc. Hotspot mutation residues Arg248 and Arg273 as prominent sticks tell the cancer relevance story. Electrostatic SES overlay shows the positively charged DNA-reading head."
   }
 ]

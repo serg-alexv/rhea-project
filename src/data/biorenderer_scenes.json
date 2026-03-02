@@ -406,5 +406,821 @@
       }
     ],
     "composition_notes": "A 20-degree Y-rotation combined with slight X-tilt reveals the bilobed architecture (recognition lobe + nuclease lobe) and the guide RNA threading through the central channel. Chain coloring distinguishes Cas9 protein from guide RNA and target DNA."
+  },
+  {
+    "id": "1UBQ",
+    "name": "Ubiquitin",
+    "category": "protein",
+    "scene": {
+      "camera_distance": 0.8,
+      "rotation_x": 10,
+      "rotation_y": -20,
+      "rotation_z": 0,
+      "zoom_level": 1.2
+    },
+    "recommended_style": "cartoon",
+    "recommended_color": "secondary structure",
+    "recommended_bg": "Dark",
+    "optimal_layout": "2x2",
+    "focal_points": [
+      {
+        "name": "Beta-grasp fold",
+        "description": "Canonical beta-grasp topology with a central alpha-helix braced by a mixed beta-sheet on one face",
+        "approximate_position": "center"
+      },
+      {
+        "name": "Ile44 hydrophobic patch",
+        "description": "Surface patch around Ile44, Leu8, Val70 that is the primary docking site for ubiquitin-binding domains (UBDs)",
+        "approximate_position": "right"
+      },
+      {
+        "name": "C-terminal tail",
+        "description": "Gly-Gly dipeptide at the C-terminus (residues 75-76) that forms the isopeptide bond to substrate lysines",
+        "approximate_position": "bottom"
+      }
+    ],
+    "composition_notes": "At only 76 residues, ubiquitin is compact enough to fill a 2x2 panel without dead space. A slight Y-rotation puts both the Ile44 patch and the C-terminal tail in the same field of view, making the functional surfaces immediately legible."
+  },
+  {
+    "id": "1LYZ",
+    "name": "Hen Egg-White Lysozyme",
+    "category": "enzyme",
+    "scene": {
+      "camera_distance": 0.9,
+      "rotation_x": 5,
+      "rotation_y": -35,
+      "rotation_z": 0,
+      "zoom_level": 1.1
+    },
+    "recommended_style": "cartoon",
+    "recommended_color": "secondary structure",
+    "recommended_bg": "Dark",
+    "optimal_layout": "2x2",
+    "focal_points": [
+      {
+        "name": "Active site cleft",
+        "description": "Deep substrate-binding groove between the alpha and beta domains housing the catalytic dyad Glu35-Asp52",
+        "approximate_position": "center"
+      },
+      {
+        "name": "Alpha domain",
+        "description": "Four alpha-helices forming the larger lobe with the main hydrophobic core",
+        "approximate_position": "left"
+      },
+      {
+        "name": "Beta domain",
+        "description": "Three-stranded antiparallel beta-sheet forming the smaller lobe; beta-barrel loop closes over substrate",
+        "approximate_position": "right"
+      }
+    ],
+    "composition_notes": "A -35 Y-rotation opens the active site cleft toward the viewer, making the bilobed alpha/beta architecture and substrate groove simultaneously visible. As the first protein to have its mechanism elucidated (Phillips 1965), it remains a canonical teaching structure."
+  },
+  {
+    "id": "1MBN",
+    "name": "Myoglobin",
+    "category": "protein",
+    "scene": {
+      "camera_distance": 1.0,
+      "rotation_x": 15,
+      "rotation_y": -10,
+      "rotation_z": 0,
+      "zoom_level": 1.05
+    },
+    "recommended_style": "cartoon",
+    "recommended_color": "secondary structure",
+    "recommended_bg": "Dark",
+    "optimal_layout": "2x2",
+    "focal_points": [
+      {
+        "name": "Heme group",
+        "description": "Non-covalently bound iron-porphyrin prosthetic group seated in the hydrophobic heme pocket between helices E and F",
+        "approximate_position": "center"
+      },
+      {
+        "name": "Eight helices (A-H)",
+        "description": "All-alpha globin fold: eight helices forming the canonical globin scaffold first described by Kendrew in 1958",
+        "approximate_position": "center"
+      },
+      {
+        "name": "Proximal His93",
+        "description": "His93 (F8) ligating the heme iron from below; distal His64 (E7) regulates O2 on-rate from above",
+        "approximate_position": "center"
+      }
+    ],
+    "composition_notes": "Myoglobin was the first protein structure solved by X-ray crystallography (Kendrew, Nobel 1962). Secondary-structure coloring clearly delineates the eight helices. A slight X-tilt reveals the heme pocket depth. Black or Dark background lets the heme stand out as a distinct red-orange feature when ligand atom coloring is overlaid."
+  },
+  {
+    "id": "1HHP",
+    "name": "HIV-1 Protease",
+    "category": "enzyme",
+    "scene": {
+      "camera_distance": 1.1,
+      "rotation_x": 0,
+      "rotation_y": 40,
+      "rotation_z": 0,
+      "zoom_level": 1.0
+    },
+    "recommended_style": "cartoon",
+    "recommended_color": "atom",
+    "recommended_bg": "Dark",
+    "optimal_layout": "2x2",
+    "focal_points": [
+      {
+        "name": "C2-symmetric active site",
+        "description": "Catalytic Asp25-Thr26-Gly27 from each monomer form the symmetric aspartyl dyad; substrate binds across the C2 axis",
+        "approximate_position": "center"
+      },
+      {
+        "name": "Flap region",
+        "description": "Two beta-hairpin flaps (residues 46-55 per monomer) that close over the active site upon substrate or inhibitor binding",
+        "approximate_position": "top"
+      },
+      {
+        "name": "Homodimer interface",
+        "description": "N- and C-terminal beta-sheet strands from both monomers interdigitate to form the only tight inter-subunit contact",
+        "approximate_position": "bottom"
+      }
+    ],
+    "composition_notes": "A 40-degree Y-rotation presents the C2 symmetry axis nearly perpendicular to the viewer, showing both flaps and the active site cleft in one frame. Atom coloring highlights the catalytic aspartates and any bound inhibitor against the cartoon backbone."
+  },
+  {
+    "id": "1M17",
+    "name": "EGFR Kinase Domain",
+    "category": "enzyme",
+    "scene": {
+      "camera_distance": 1.2,
+      "rotation_x": 10,
+      "rotation_y": -30,
+      "rotation_z": 0,
+      "zoom_level": 1.0
+    },
+    "recommended_style": "cartoon",
+    "recommended_color": "atom",
+    "recommended_bg": "Dark",
+    "optimal_layout": "2x2",
+    "focal_points": [
+      {
+        "name": "ATP-binding pocket / erlotinib site",
+        "description": "Hinge region between N- and C-lobes where erlotinib binds, mimicking the adenine moiety of ATP",
+        "approximate_position": "center"
+      },
+      {
+        "name": "Activation loop",
+        "description": "DFG motif and activation loop in DFG-in conformation; phospho-Tyr1068 stabilizes the active configuration",
+        "approximate_position": "center"
+      },
+      {
+        "name": "N-lobe / C-lobe interface",
+        "description": "The cleft between beta-sheet N-lobe and helical C-lobe forms the catalytic site; hinge connects the two lobes",
+        "approximate_position": "center"
+      }
+    ],
+    "composition_notes": "EGFR kinase is a premier cancer drug target (erlotinib, gefitinib). Atom coloring on the bound erlotinib ligand against a cartoon protein backbone immediately communicates the inhibitor geometry. A -30 Y-rotation opens the ATP cleft toward the viewer."
+  },
+  {
+    "id": "2HI4",
+    "name": "Cytochrome P450 3A4",
+    "category": "enzyme",
+    "scene": {
+      "camera_distance": 1.3,
+      "rotation_x": 5,
+      "rotation_y": -20,
+      "rotation_z": 0,
+      "zoom_level": 0.95
+    },
+    "recommended_style": "cartoon",
+    "recommended_color": "atom",
+    "recommended_bg": "Dark",
+    "optimal_layout": "2x2",
+    "focal_points": [
+      {
+        "name": "Heme iron / active site",
+        "description": "Iron-porphyrin heme coordinated by Cys442 as the proximal ligand; the large active site cavity above the heme can accommodate multiple substrate molecules",
+        "approximate_position": "center"
+      },
+      {
+        "name": "F-G loop and access channel",
+        "description": "Flexible F-G loop region that gates substrate access to the buried active site; its conformation determines substrate selectivity",
+        "approximate_position": "top"
+      },
+      {
+        "name": "I-helix",
+        "description": "Long central I-helix running above the heme plane; conserved Gly-Thr motif in the middle enables proton delivery for oxygen activation",
+        "approximate_position": "center"
+      }
+    ],
+    "composition_notes": "CYP3A4 metabolizes ~50% of marketed drugs. Atom coloring on the heme and any bound ligand against the cartoon scaffold reveals the unusually large and malleable active site cavity. A slight Y-rotation exposes both the heme pocket and the F-G gate in a single frame."
+  },
+  {
+    "id": "5C4X",
+    "name": "PD-L1",
+    "category": "protein",
+    "scene": {
+      "camera_distance": 0.95,
+      "rotation_x": 0,
+      "rotation_y": -15,
+      "rotation_z": 0,
+      "zoom_level": 1.1
+    },
+    "recommended_style": "cartoon",
+    "recommended_color": "secondary structure",
+    "recommended_bg": "Dark",
+    "optimal_layout": "2x2",
+    "focal_points": [
+      {
+        "name": "IgV-fold beta-sandwich",
+        "description": "Canonical immunoglobulin variable-domain beta-sandwich; the IgV fold is the structural basis for PD-1 recognition",
+        "approximate_position": "center"
+      },
+      {
+        "name": "PD-1 binding face",
+        "description": "CC' and FG loops on the front beta-sheet that dock onto the PD-1 receptor, inhibiting T-cell activation",
+        "approximate_position": "center"
+      },
+      {
+        "name": "Hydrophobic core",
+        "description": "Tightly packed hydrophobic residues between the two beta-sheets forming the thermodynamic core of the Ig fold",
+        "approximate_position": "center"
+      }
+    ],
+    "composition_notes": "PD-L1 is a major immunotherapy checkpoint target (pembrolizumab, atezolizumab). The compact IgV fold renders well in a 2x2 panel. Secondary-structure coloring clearly delineates the two beta-sheets of the sandwich. A slight Y-rotation displays the flat binding face toward the viewer."
+  },
+  {
+    "id": "2RH1",
+    "name": "Beta2-Adrenergic GPCR",
+    "category": "membrane",
+    "scene": {
+      "camera_distance": 1.4,
+      "rotation_x": 0,
+      "rotation_y": 20,
+      "rotation_z": 0,
+      "zoom_level": 0.9
+    },
+    "recommended_style": "surface",
+    "recommended_color": "secondary structure",
+    "recommended_bg": "Navy",
+    "optimal_layout": "1x1",
+    "focal_points": [
+      {
+        "name": "Seven transmembrane helices",
+        "description": "Seven membrane-spanning alpha-helices (TM1-TM7) forming the canonical GPCR 7TM bundle; carazolol binds in the orthosteric pocket",
+        "approximate_position": "center"
+      },
+      {
+        "name": "Orthosteric binding pocket",
+        "description": "Ligand-binding pocket between TM3, TM5, TM6 and TM7 where carazolol (inverse agonist) is coordinated",
+        "approximate_position": "center"
+      },
+      {
+        "name": "Intracellular G-protein coupling face",
+        "description": "Intracellular face with ICL2 and ICL3 loops and TM5/TM6 cytoplasmic ends that engage the Gs heterotrimer",
+        "approximate_position": "bottom"
+      }
+    ],
+    "composition_notes": "Beta2AR was the first GPCR crystallized (Kobilka and Lefkowitz, Nobel 2012). Surface rendering communicates the membrane-spanning architecture. Navy background evokes the lipid bilayer. A 20-degree Y-rotation reveals both the extracellular binding pocket and the intracellular G-protein interface."
+  },
+  {
+    "id": "1BL8",
+    "name": "KcsA K+ Channel",
+    "category": "membrane",
+    "scene": {
+      "camera_distance": 1.3,
+      "rotation_x": 0,
+      "rotation_y": 0,
+      "rotation_z": 0,
+      "zoom_level": 0.95
+    },
+    "recommended_style": "surface",
+    "recommended_color": "chain",
+    "recommended_bg": "Navy",
+    "optimal_layout": "1x1",
+    "focal_points": [
+      {
+        "name": "Selectivity filter",
+        "description": "TVGYG sequence forming the 12-angstrom-long selectivity filter that selects K+ over Na+ with high fidelity",
+        "approximate_position": "top"
+      },
+      {
+        "name": "Inner helix bundle gate",
+        "description": "Four inner helices crossing below the selectivity filter to form the hydrophobic gate; helix bending opens the channel",
+        "approximate_position": "center"
+      },
+      {
+        "name": "Outer (pore) helices",
+        "description": "Four outer helices flanking the selectivity filter that provide the structural scaffold for the narrow ion pathway",
+        "approximate_position": "top"
+      }
+    ],
+    "composition_notes": "KcsA (MacKinnon, Nobel 2003) defined the structural basis of ion selectivity. View along the channel axis (top-down) to display the C4 symmetry and the selectivity filter entrance. Navy background places the channel in membrane context. Chain coloring distinguishes the four identical subunits of the homotetramer."
+  },
+  {
+    "id": "1EHZ",
+    "name": "tRNA-Phe",
+    "category": "nucleic",
+    "scene": {
+      "camera_distance": 1.2,
+      "rotation_x": 10,
+      "rotation_y": -30,
+      "rotation_z": 0,
+      "zoom_level": 0.95
+    },
+    "recommended_style": "stick",
+    "recommended_color": "chain",
+    "recommended_bg": "gradient-dark",
+    "optimal_layout": "1x2",
+    "focal_points": [
+      {
+        "name": "L-shaped tertiary fold",
+        "description": "The classic L-shape formed by stacking of the acceptor stem on the T-arm and the anticodon stem on the D-arm",
+        "approximate_position": "center"
+      },
+      {
+        "name": "Anticodon loop",
+        "description": "7-nucleotide anticodon loop at one end of the L presenting the GAA anticodon for mRNA codon recognition",
+        "approximate_position": "bottom"
+      },
+      {
+        "name": "3'-CCA acceptor end",
+        "description": "Single-stranded 3'-CCA terminus at the other end of the L where Phe is aminoacylated by PheRS",
+        "approximate_position": "top"
+      }
+    ],
+    "composition_notes": "tRNA-Phe is the reference RNA tertiary fold. Stick representation shows the ribose-phosphate backbone and base stacking clearly. A -30 Y-rotation with slight X-tilt displays the full L-shape in one frame. Chain coloring on the single chain uses positional coloring to show the 5'-to-3' fold-back geometry."
+  },
+  {
+    "id": "1AOI",
+    "name": "Nucleosome Core Particle",
+    "category": "complex",
+    "scene": {
+      "camera_distance": 1.7,
+      "rotation_x": 10,
+      "rotation_y": -15,
+      "rotation_z": 0,
+      "zoom_level": 0.8
+    },
+    "recommended_style": "cartoon",
+    "recommended_color": "chain",
+    "recommended_bg": "gradient-dark",
+    "optimal_layout": "1x1",
+    "focal_points": [
+      {
+        "name": "Histone octamer core",
+        "description": "(H3-H4)2 tetramer flanked by two H2A-H2B dimers; the octamer presents a positively charged surface for DNA wrapping",
+        "approximate_position": "center"
+      },
+      {
+        "name": "147 bp DNA superhelix",
+        "description": "146-147 bp of DNA wrapping 1.65 turns around the octamer in a left-handed superhelix at 28 angstrom diameter",
+        "approximate_position": "center"
+      },
+      {
+        "name": "Histone tails",
+        "description": "Unstructured N-terminal tails of H3 and H4 passing between the DNA gyres; post-translational modification sites",
+        "approximate_position": "top"
+      }
+    ],
+    "composition_notes": "The nucleosome core particle (Luger et al. 1997) is the fundamental unit of eukaryotic chromatin compaction. Chain coloring is essential to distinguish the eight histone subunits from each other and from the two DNA strands. Stick rendering for the DNA combined with cartoon for the histones shows both components at appropriate detail."
+  },
+  {
+    "id": "1AON",
+    "name": "GroEL-GroES Chaperonin",
+    "category": "complex",
+    "scene": {
+      "camera_distance": 2.2,
+      "rotation_x": 10,
+      "rotation_y": 0,
+      "rotation_z": 0,
+      "zoom_level": 0.65
+    },
+    "recommended_style": "surface",
+    "recommended_color": "chain",
+    "recommended_bg": "gradient-dark",
+    "optimal_layout": "1x1",
+    "focal_points": [
+      {
+        "name": "GroEL double-ring barrel",
+        "description": "Two heptameric GroEL rings stacked back-to-back forming the large barrel; each ring has a central cavity for substrate folding",
+        "approximate_position": "center"
+      },
+      {
+        "name": "GroES dome cap",
+        "description": "Heptameric GroES co-chaperonin capping one GroEL ring, enclosing the folding chamber and releasing substrate upon ATP hydrolysis",
+        "approximate_position": "top"
+      },
+      {
+        "name": "Apical substrate-binding domains",
+        "description": "Apical domains of the uncapped GroEL ring exposing hydrophobic surfaces that bind unfolded substrate proteins",
+        "approximate_position": "bottom"
+      }
+    ],
+    "composition_notes": "GroEL-GroES is the quintessential molecular chaperone machine (~900 kDa). Surface rendering at a large camera distance conveys the iconic football shape. A slight X-tilt off the 7-fold axis shows both the capped and uncapped GroEL rings simultaneously. Chain coloring distinguishes the 14 GroEL and 7 GroES subunits."
+  },
+  {
+    "id": "5GJR",
+    "name": "26S Proteasome",
+    "category": "complex",
+    "scene": {
+      "camera_distance": 2.8,
+      "rotation_x": 5,
+      "rotation_y": 15,
+      "rotation_z": 0,
+      "zoom_level": 0.55
+    },
+    "recommended_style": "surface",
+    "recommended_color": "chain",
+    "recommended_bg": "gradient-dark",
+    "optimal_layout": "1x1",
+    "focal_points": [
+      {
+        "name": "20S core particle barrel",
+        "description": "Four stacked heptameric rings (alpha7-beta7-beta7-alpha7) forming the proteolytic barrel; threonine active sites face the inner chamber",
+        "approximate_position": "center"
+      },
+      {
+        "name": "19S regulatory cap (lid + base)",
+        "description": "One or two 19S caps docking on alpha-ring faces; base contains AAA-ATPase ring that unfolds and translocates ubiquitinated substrates",
+        "approximate_position": "top"
+      },
+      {
+        "name": "Ubiquitin receptor subunits",
+        "description": "Rpn10 and Rpn13 in the 19S lid function as ubiquitin receptors that recognize polyubiquitin chains on substrates",
+        "approximate_position": "top"
+      }
+    ],
+    "composition_notes": "The 26S proteasome (~2.5 MDa) is among the largest asymmetric complexes in the PDB. Surface rendering at maximum camera distance is required to fit the full assembly. A slight Y-rotation reveals the asymmetric cap(s) alongside the symmetric 20S barrel core. Chain coloring distinguishes the many subunits and communicates the modular architecture."
+  },
+  {
+    "id": "1I6H",
+    "name": "RNA Polymerase II",
+    "category": "enzyme",
+    "scene": {
+      "camera_distance": 2.0,
+      "rotation_x": 10,
+      "rotation_y": -20,
+      "rotation_z": 0,
+      "zoom_level": 0.7
+    },
+    "recommended_style": "surface",
+    "recommended_color": "chain",
+    "recommended_bg": "gradient-dark",
+    "optimal_layout": "1x1",
+    "focal_points": [
+      {
+        "name": "Clamp and cleft",
+        "description": "Mobile clamp domain closing over the DNA-RNA hybrid in the active site cleft; clamp opening/closing is key to translocation",
+        "approximate_position": "center"
+      },
+      {
+        "name": "Active site with Mg2+ bridge",
+        "description": "Two magnesium ions coordinated by the universally conserved DFDGD motif in Rpb1; site of phosphodiester bond formation",
+        "approximate_position": "center"
+      },
+      {
+        "name": "Rpb4/Rpb7 stalk",
+        "description": "Dissociable Rpb4-Rpb7 heterodimer protruding from the main body; important for initiation and stress response",
+        "approximate_position": "right"
+      }
+    ],
+    "composition_notes": "RNA Pol II (Kornberg, Nobel 2006) is the engine of eukaryotic gene expression. Surface rendering of the 12-subunit, 500 kDa complex communicates scale and modular organization. A -20 Y-rotation opens the DNA entry cleft toward the viewer. Chain coloring distinguishes the 12 subunits (Rpb1-Rpb12)."
+  },
+  {
+    "id": "1IGT",
+    "name": "IgG1 Antibody",
+    "category": "protein",
+    "scene": {
+      "camera_distance": 1.9,
+      "rotation_x": 5,
+      "rotation_y": 10,
+      "rotation_z": 0,
+      "zoom_level": 0.72
+    },
+    "recommended_style": "cartoon",
+    "recommended_color": "chain",
+    "recommended_bg": "gradient-dark",
+    "optimal_layout": "1x1",
+    "focal_points": [
+      {
+        "name": "CDR loops (antigen-binding site)",
+        "description": "Six complementarity-determining region loops (H1-H3, L1-L3) at the Fab tips forming the hypervariable antigen-binding surface",
+        "approximate_position": "top"
+      },
+      {
+        "name": "Fab arms",
+        "description": "Two identical Fab fragments (VH-CH1 / VL-CL domain pairs) articulated by the flexible hinge region",
+        "approximate_position": "top"
+      },
+      {
+        "name": "Fc region",
+        "description": "CH2-CH3 domain pair at the base; binds Fc receptors and complement to mediate effector functions",
+        "approximate_position": "bottom"
+      }
+    ],
+    "composition_notes": "Chain coloring is essential for IgG to distinguish the two heavy chains from the two light chains, making the Y-shaped architecture legible. The flexible hinge means the two Fabs may be asymmetrically positioned; a slight Y-rotation shows both Fab tips and the Fc stem in a single view. Camera at 1.9 fits the full Y-shape without cropping."
+  },
+  {
+    "id": "6VYB",
+    "name": "SARS-CoV-2 Spike Trimer",
+    "category": "viral",
+    "scene": {
+      "camera_distance": 2.1,
+      "rotation_x": 5,
+      "rotation_y": 20,
+      "rotation_z": 0,
+      "zoom_level": 0.68
+    },
+    "recommended_style": "surface",
+    "recommended_color": "chain",
+    "recommended_bg": "gradient-dark",
+    "optimal_layout": "1x1",
+    "focal_points": [
+      {
+        "name": "Receptor-binding domain (RBD)",
+        "description": "One RBD in 'up' conformation (ACE2-accessible) and two in 'down' in the asymmetric prefusion trimer; primary neutralizing antibody target",
+        "approximate_position": "top"
+      },
+      {
+        "name": "N-terminal domain (NTD)",
+        "description": "Beta-barrel NTDs flanking each RBD; target of class IV neutralizing antibodies and site of many immune-evasion mutations",
+        "approximate_position": "center"
+      },
+      {
+        "name": "Fusion peptide / S2 stalk",
+        "description": "Central helical coiled-coil S2 stalk in prefusion conformation; dramatic refolding drives membrane fusion upon receptor binding",
+        "approximate_position": "bottom"
+      }
+    ],
+    "composition_notes": "The SARS-CoV-2 spike trimer is the defining structure of the pandemic era. Surface rendering and a gradient-dark background emphasize its menacing scale and globular form. Chain coloring distinguishes the three protomers (A/B/C), making the trimer symmetry and the asymmetric RBD up/down state immediately visible."
+  },
+  {
+    "id": "3SN6",
+    "name": "Beta2AR-Gs Complex",
+    "category": "complex",
+    "scene": {
+      "camera_distance": 1.9,
+      "rotation_x": 5,
+      "rotation_y": 15,
+      "rotation_z": 0,
+      "zoom_level": 0.72
+    },
+    "recommended_style": "surface",
+    "recommended_color": "chain",
+    "recommended_bg": "Navy",
+    "optimal_layout": "1x1",
+    "focal_points": [
+      {
+        "name": "GPCR 7TM bundle",
+        "description": "Beta2-adrenergic receptor transmembrane helices in active conformation with TM6 outward displacement exposing the G-protein binding cavity",
+        "approximate_position": "center"
+      },
+      {
+        "name": "Gs alpha5 helix insertion",
+        "description": "C-terminal alpha5 helix of Gsalpha inserting into the intracellular cavity of the receptor; primary coupling interface",
+        "approximate_position": "center"
+      },
+      {
+        "name": "Gs heterotrimer",
+        "description": "Gsalpha (Ras-like + helical domain), Gsbeta, and Gsgamma forming the full heterotrimer engaged with the receptor",
+        "approximate_position": "bottom"
+      }
+    ],
+    "composition_notes": "Beta2AR-Gs (Kobilka, Nobel 2012) was the first GPCR-G protein complex structure. Surface rendering at a slightly elevated camera distance fits both the 7TM receptor and the G-protein heterotrimer. Navy background evokes the membrane environment. Chain coloring distinguishes receptor, Gsalpha, Gsbeta, and Gsgamma."
+  },
+  {
+    "id": "1CGD",
+    "name": "Collagen Triple Helix",
+    "category": "protein",
+    "scene": {
+      "camera_distance": 1.4,
+      "rotation_x": 0,
+      "rotation_y": -10,
+      "rotation_z": 0,
+      "zoom_level": 0.88
+    },
+    "recommended_style": "cartoon",
+    "recommended_color": "chain",
+    "recommended_bg": "Dark",
+    "optimal_layout": "1x2",
+    "focal_points": [
+      {
+        "name": "Triple-helical supercoil",
+        "description": "Three polyproline II-like left-handed helices coiled into a right-handed superhelix; the canonical collagen fold",
+        "approximate_position": "center"
+      },
+      {
+        "name": "Gly at every third position",
+        "description": "Glycine at every third residue (Gly-X-Y repeat) packs at the central axis; any substitution causes disease (osteogenesis imperfecta)",
+        "approximate_position": "center"
+      },
+      {
+        "name": "Hydroxyproline stabilization",
+        "description": "4-hydroxyproline in the Y position forms water-mediated hydrogen bonds that thermally stabilize the triple helix",
+        "approximate_position": "right"
+      }
+    ],
+    "composition_notes": "Collagen is the most abundant protein in the human body. The rod-like triple helix is best displayed with the helical axis oriented vertically in a 1x2 panel, showing the three chains coiling together along the full length. Chain coloring with three distinct colors makes the individual chains and their interdigitation immediately legible."
+  },
+  {
+    "id": "6OGE",
+    "name": "F-Actin Filament",
+    "category": "protein",
+    "scene": {
+      "camera_distance": 1.8,
+      "rotation_x": 0,
+      "rotation_y": 0,
+      "rotation_z": 0,
+      "zoom_level": 0.75
+    },
+    "recommended_style": "surface",
+    "recommended_color": "chain",
+    "recommended_bg": "gradient-dark",
+    "optimal_layout": "1x2",
+    "focal_points": [
+      {
+        "name": "Double-stranded helical polymer",
+        "description": "Two actin strands forming a right-handed double helix with a 37 nm crossover repeat; the basic cytoskeletal fiber",
+        "approximate_position": "center"
+      },
+      {
+        "name": "Barbed (+) end",
+        "description": "Fast-growing barbed end where actin-ATP monomers preferentially add; target of profilin and barbed-end cappers",
+        "approximate_position": "top"
+      },
+      {
+        "name": "Pointed (-) end",
+        "description": "Slow-growing pointed end where ADP-actin preferentially dissociates, driving treadmilling dynamics",
+        "approximate_position": "bottom"
+      }
+    ],
+    "composition_notes": "F-actin filament cryo-EM structure shows the polymer that drives cell motility and muscle contraction. Display the filament axis vertically in a 1x2 panel to show multiple protomers of the helical repeat. Surface rendering at a moderate camera distance communicates the polymer scale. Chain coloring with alternating colors helps trace each strand of the double helix."
+  },
+  {
+    "id": "2BNH",
+    "name": "Streptavidin-Biotin",
+    "category": "complex",
+    "scene": {
+      "camera_distance": 1.2,
+      "rotation_x": 15,
+      "rotation_y": 0,
+      "rotation_z": 0,
+      "zoom_level": 1.0
+    },
+    "recommended_style": "cartoon",
+    "recommended_color": "chain",
+    "recommended_bg": "Dark",
+    "optimal_layout": "2x2",
+    "focal_points": [
+      {
+        "name": "Biotin binding pocket",
+        "description": "Deep hydrophobic barrel pocket in each monomer where biotin binds with Kd ~10^-15 M; loop 3-4 closes over biotin upon binding",
+        "approximate_position": "center"
+      },
+      {
+        "name": "Beta-barrel tetramer",
+        "description": "Four eight-stranded beta-barrels packed into a D2-symmetric tetramer with two pseudo-dyad axes",
+        "approximate_position": "center"
+      },
+      {
+        "name": "Binding loop (loop 3-4)",
+        "description": "Flexible loop that folds over the bound biotin, accounting for much of the extreme binding affinity through extensive van der Waals and hydrogen bond contacts",
+        "approximate_position": "top"
+      }
+    ],
+    "composition_notes": "Streptavidin-biotin is the strongest known non-covalent biological interaction and a cornerstone of biotechnology. Chain coloring distinguishes the four subunits of the homotetramer. A slight X-tilt reveals all four binding pockets. Atom coloring on the biotin ligands against the cartoon protein provides an immediate visual indication of each occupied pocket."
+  },
+  {
+    "id": "4UN3",
+    "name": "Cas12a / Cpf1",
+    "category": "nucleic",
+    "scene": {
+      "camera_distance": 1.5,
+      "rotation_x": 5,
+      "rotation_y": -25,
+      "rotation_z": 0,
+      "zoom_level": 0.88
+    },
+    "recommended_style": "cartoon",
+    "recommended_color": "chain",
+    "recommended_bg": "gradient-dark",
+    "optimal_layout": "1x1",
+    "focal_points": [
+      {
+        "name": "Crescent-shaped architecture",
+        "description": "Distinctive crescent or comma shape formed by the recognition (REC) lobe and nuclease (NUC) lobe; different from the bilobed Cas9",
+        "approximate_position": "center"
+      },
+      {
+        "name": "RuvC nuclease domain",
+        "description": "Single RuvC domain that cleaves both strands sequentially, generating 5-nt 5'-overhangs rather than blunt cuts",
+        "approximate_position": "right"
+      },
+      {
+        "name": "PAM-interacting / WED domain",
+        "description": "WED and PI domains recognizing the T-rich PAM on the non-target strand at the 5' end of the protospacer",
+        "approximate_position": "left"
+      }
+    ],
+    "composition_notes": "Cas12a (Cpf1) generates 5-overhang cuts and requires only a crRNA (no tracrRNA), making it attractive for multiplex editing. Chain coloring distinguishes the protein from the crRNA guide. A -25 Y-rotation displays the distinctive crescent profile that differentiates Cas12a from Cas9."
+  },
+  {
+    "id": "3KIN",
+    "name": "Kinesin Motor Domain",
+    "category": "enzyme",
+    "scene": {
+      "camera_distance": 0.95,
+      "rotation_x": 10,
+      "rotation_y": -20,
+      "rotation_z": 0,
+      "zoom_level": 1.1
+    },
+    "recommended_style": "cartoon",
+    "recommended_color": "secondary structure",
+    "recommended_bg": "Dark",
+    "optimal_layout": "2x2",
+    "focal_points": [
+      {
+        "name": "Switch I/Switch II nucleotide-binding site",
+        "description": "P-loop, switch I, and switch II elements around the bound ADP/ATP that couple nucleotide state to neck linker docking",
+        "approximate_position": "center"
+      },
+      {
+        "name": "Neck linker",
+        "description": "C-terminal neck linker that docks onto the motor domain in the ATP state, generating the ~8 nm hand-over-hand step",
+        "approximate_position": "right"
+      },
+      {
+        "name": "Microtubule-binding interface",
+        "description": "Loop L8, helix alpha4, and loop L12 forming the tubulin contact surface; microtubule binding accelerates ATPase 1000-fold",
+        "approximate_position": "bottom"
+      }
+    ],
+    "composition_notes": "Kinesin is the canonical processive cytoskeletal motor. Secondary-structure coloring clearly delineates the central beta-sheet core and surrounding helices. A -20 Y-rotation places the neck linker and the MT-binding face visible simultaneously, conveying the mechanochemical cycle."
+  },
+  {
+    "id": "1S5L",
+    "name": "Taq DNA Polymerase",
+    "category": "enzyme",
+    "scene": {
+      "camera_distance": 1.5,
+      "rotation_x": 5,
+      "rotation_y": -30,
+      "rotation_z": 0,
+      "zoom_level": 0.85
+    },
+    "recommended_style": "cartoon",
+    "recommended_color": "secondary structure",
+    "recommended_bg": "Dark",
+    "optimal_layout": "1x1",
+    "focal_points": [
+      {
+        "name": "Thumb, palm, and fingers subdomains",
+        "description": "Right-hand topology with thumb gripping DNA duplex, palm containing the catalytic DDD triad, and fingers closing over incoming dNTP",
+        "approximate_position": "center"
+      },
+      {
+        "name": "5'-to-3' exonuclease domain",
+        "description": "N-terminal 5'-to-3' exonuclease domain unique among thermostable polymerases; used in TaqMan probe hydrolysis assays",
+        "approximate_position": "left"
+      },
+      {
+        "name": "O-helix (finger closing)",
+        "description": "Conserved O-helix in the fingers subdomain that swings inward upon correct dNTP binding, triggering the induced-fit conformational change",
+        "approximate_position": "right"
+      }
+    ],
+    "composition_notes": "Taq polymerase is the PCR workhorse. The right-hand fold metaphor (thumb, palm, fingers) is one of the most pedagogically useful in structural biology. A -30 Y-rotation opens the DNA-binding cleft toward the viewer, making the three subdomains clearly distinguishable. Secondary-structure coloring delineates the domain architecture."
+  },
+  {
+    "id": "1TUP",
+    "name": "p53 DNA-Binding Domain",
+    "category": "protein",
+    "scene": {
+      "camera_distance": 0.9,
+      "rotation_x": 5,
+      "rotation_y": -20,
+      "rotation_z": 0,
+      "zoom_level": 1.1
+    },
+    "recommended_style": "cartoon",
+    "recommended_color": "atom",
+    "recommended_bg": "Dark",
+    "optimal_layout": "2x2",
+    "focal_points": [
+      {
+        "name": "Zinc-coordinated L2/L3 loops",
+        "description": "Zinc ion tetrahedrally coordinated by Cys176, His179, Cys238, Cys242 stabilizing the L2 and L3 loops that contact DNA",
+        "approximate_position": "center"
+      },
+      {
+        "name": "Loop-sheet-helix motif",
+        "description": "Key DNA-contact element: L1 loop, S2-S2' hairpin, and helix H2 insert into the DNA major groove at the response element",
+        "approximate_position": "right"
+      },
+      {
+        "name": "Hotspot mutation residues",
+        "description": "Arg175, Gly245, Arg248, Arg249, Arg273, Arg282 — six hotspot positions mutated in >30% of all human cancers",
+        "approximate_position": "center"
+      }
+    ],
+    "composition_notes": "p53 DBD is mutated in more than half of all human tumors. Atom coloring highlights the zinc ion and coordinating residues in context of the cartoon scaffold. A -20 Y-rotation reveals the DNA-contacting loops and the helix H2 insertion element together. This is the monomer reference; see 3PQR for the full tetramer-DNA complex."
   }
 ]
