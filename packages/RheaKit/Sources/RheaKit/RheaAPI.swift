@@ -102,14 +102,20 @@ public final class RheaAPI: @unchecked Sendable {
 
     /// SQL-backed: survives cloud restarts
     public func history(limit: Int = 50) async throws -> [[String: Any]] {
-        let json = try await getJSON("/cc/history?limit=\(limit)", auth: true)
+        let json = try await getJSON("/cc/history?limit=\(limit)")
         return json["history"] as? [[String: Any]] ?? []
     }
 
     /// SQL-backed: survives cloud restarts
     public func radio(limit: Int = 100) async throws -> [[String: Any]] {
-        let json = try await getJSON("/cc/radio?limit=\(limit)", auth: true)
+        let json = try await getJSON("/cc/radio?limit=\(limit)")
         return json["radio"] as? [[String: Any]] ?? []
+    }
+
+    /// SQL-backed: office messages between agents
+    public func office(limit: Int = 50) async throws -> [[String: Any]] {
+        let json = try await getJSON("/cc/office?limit=\(limit)")
+        return json["office"] as? [[String: Any]] ?? []
     }
 
     /// SQL-backed: proof.db, immutable once written
@@ -138,7 +144,7 @@ public final class RheaAPI: @unchecked Sendable {
     }
 
     public func sessions(limit: Int = 20) async throws -> [[String: Any]] {
-        let json = try await getJSON("/cc/sessions?limit=\(limit)", auth: true)
+        let json = try await getJSON("/cc/sessions?limit=\(limit)")
         return json["sessions"] as? [[String: Any]] ?? []
     }
 

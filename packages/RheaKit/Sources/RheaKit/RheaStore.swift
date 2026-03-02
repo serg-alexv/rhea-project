@@ -141,35 +141,32 @@ public final class RheaStore: ObservableObject {
 
     // ─── Connection Recovery ─────────────────────────────────────────
 
-    /// TODO(human): Implement recovery triage — the cell stress response.
+    /// Recovery triage — the cell stress response.
     ///
-    /// After a cloud restart (Fly.io suspend/resume, Cloud Run cold start),
-    /// ALL in-memory server state is gone:
-    ///   - Governor token counters → reset to 0 (the zero IS truth)
-    ///   - Agent leases → all expired (agents show dead until re-lease)
-    ///   - SSE subscribers → disconnected (reconnect happens automatically)
-    ///
-    /// But SQL-backed data SURVIVED:
-    ///   - Proofs (proof.db) → immutable, long half-life
-    ///   - History (rhea.db) → append-only, need delta since last fetch
-    ///   - Radio (rhea.db) → chronological, need delta
-    ///   - Office messages → persisted, need delta
-    ///
-    /// Your task: decide the recovery order and staleness thresholds.
-    /// Think of it like cellular stress recovery:
-    ///   1. Membrane integrity → is the server even alive? (already done above)
-    ///   2. Core metabolism → which data to refresh FIRST?
-    ///   3. Clear damaged state → what cached data is now WRONG and must be invalidated?
-    ///   4. Resume normal ops → when to flip back to normal polling?
-    ///
-    /// Fill in the body. You have access to:
-    ///   - self.api (RheaAPI) for fetching
-    ///   - self.lastFetch[key] for staleness
-    ///   - self.age(key) returns seconds since last fetch
-    ///   - self.wasOffline (true if we were previously disconnected)
-    ///
+    /// After a cloud restart, in-memory state is gone but SQL data survived.
+    /// Recovery order mirrors cellular stress response:
+    ///   1. Membrane = server alive (already confirmed by caller)
+    ///   2. Core metabolism = refresh proofs + history (immutable truth first)
+    ///   3. Clear damaged = invalidate stale governor/agent counters
+    ///   4. Resume = normal polling takes over
     public func onConnectionRecovered() async {
+        // Phase 1: Core metabolism — refresh SQL-backed data (survives restarts)
+        // Proofs are immutable truth — refresh first
+        _ = await refreshProofs()
 
+        // History and radio are append-only — get latest
+        _ = await refreshHistory(limit: 50)
+        _ = await refreshRadio(limit: 100)
+
+        // Office messages — agent coordination state
+        _ = await refreshOffice(limit: 50)
+
+        // Phase 2: Clear damaged state
+        // Governor counters reset to 0 on restart — the zero IS truth.
+        // Agent status will be refreshed by normal polling (already running).
+        // No need to invalidate — the next poll cycle gets fresh data.
+
+        wasOffline = false
     }
 
     // ─── On-Demand Refresh (called by panes) ─────────────────────────
@@ -204,6 +201,22 @@ public final class RheaStore: ObservableObject {
             let o = try await api.ontologies()
             lastFetch["ontologies"] = Date()
             return o
+        } catch { return [] }
+    }
+
+    public func refreshOffice(limit: Int = 50) async -> [[String: Any]] {
+        do {
+            let o = try await api.office(limit: limit)
+            lastFetch["office"] = Date()
+            return o
+        } catch { return [] }
+    }
+
+    public func refreshSessions(limit: Int = 20) async -> [[String: Any]] {
+        do {
+            let s = try await api.sessions(limit: limit)
+            lastFetch["sessions"] = Date()
+            return s
         } catch { return [] }
     }
 

@@ -43,20 +43,24 @@ private struct MainTabShell: View {
 
     private var tabs: [TabDescriptor] {
         var list: [TabDescriptor] = [
-            TabDescriptor(icon: "scalemass", label: "Tribunal", view: AnyView(DialogView())),
-            TabDescriptor(icon: "antenna.radiowaves.left.and.right", label: "Radio", view: AnyView(TeamChatView())),
+            // Level 1: core actions — human words, not agent jargon
+            TabDescriptor(icon: "checkmark.shield", label: "Verify", view: AnyView(DialogView())),
+            TabDescriptor(icon: "waveform", label: "Feed", view: AnyView(TeamChatView())),
         ]
         if revealLevel >= 2 {
-            list.append(TabDescriptor(icon: "gauge.with.dots.needle.33percent", label: "Governor", view: AnyView(GovernorView())))
+            // Level 2: operations
+            list.append(TabDescriptor(icon: "dollarsign.circle", label: "Budget", view: AnyView(GovernorView())))
             list.append(TabDescriptor(icon: "checklist", label: "Tasks", view: AnyView(TasksView())))
+            list.append(TabDescriptor(icon: "bubble.left.and.bubble.right", label: "Office", view: AnyView(OfficeView())))
         }
         if revealLevel >= 3 {
+            // Level 3: specialist tools
+            list.append(TabDescriptor(icon: "tv.and.mediabox", label: "Monitor", view: AnyView(MonitorWebView())))
+            list.append(TabDescriptor(icon: "atom", label: "Molecules", view: AnyView(BioRendererView())))
             list.append(TabDescriptor(icon: "globe", label: "Atlas", view: AnyView(AtlasView())))
-            list.append(TabDescriptor(icon: "dot.radiowaves.left.and.right", label: "Pulse", view: AnyView(PulseMonitorView())))
-            list.append(TabDescriptor(icon: "atom", label: "Bio", view: AnyView(BioRendererView())))
-            list.append(TabDescriptor(icon: "shield.lefthalf.filled", label: "Relay", view: AnyView(RelayPrivacyView())))
+            list.append(TabDescriptor(icon: "heart.text.square", label: "Health", view: AnyView(PulseMonitorView())))
         }
-        list.append(TabDescriptor(icon: "slider.horizontal.3", label: "Settings", view: AnyView(SettingsView())))
+        list.append(TabDescriptor(icon: "gearshape", label: "Settings", view: AnyView(SettingsView())))
         return list
     }
 
