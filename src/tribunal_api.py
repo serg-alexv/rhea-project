@@ -5331,6 +5331,58 @@ async def clipboard_unpin(
 
 
 # ---------------------------------------------------------------------------
+# SHARES — Shareable links for proofs, formulas, graphics
+# ---------------------------------------------------------------------------
+
+@app.post("/share")
+async def share_create(request: Request):
+    """Create a shareable link. Body: {content, content_type?, title?, metadata?}"""
+    body = await request.json()
+    content = body.get("content", "")
+    if not content:
+        raise HTTPException(400, "content required")
+    user_id = ""
+    try:
+        user_id = _get_user_id(request)
+    except Exception:
+        pass
+    rec = rhea_db.create_share(
+        content=content,
+        content_type=body.get("content_type", "text"),
+        title=body.get("title", ""),
+        user_id=user_id,
+        metadata=body.get("metadata"),
+    )
+    return rec
+
+
+@app.get("/share/{token}")
+async def share_get(token: str):
+    """Retrieve shared content by token. Public — no auth required."""
+    rec = rhea_db.get_share(token)
+    if not rec:
+        raise HTTPException(404, "Share not found or expired")
+    return rec
+
+
+@app.get("/shares", dependencies=[Depends(verify_api_key)])
+async def share_list(request: Request, limit: int = 50):
+    """List your shares."""
+    user_id = _get_user_id(request)
+    return {"shares": rhea_db.list_shares(user_id, limit=limit)}
+
+
+@app.delete("/share/{token}", dependencies=[Depends(verify_api_key)])
+async def share_delete(token: str, request: Request):
+    """Delete a share you own."""
+    user_id = _get_user_id(request)
+    ok = rhea_db.delete_share(token, user_id)
+    if not ok:
+        raise HTTPException(404, "Share not found")
+    return {"deleted": token}
+
+
+# ---------------------------------------------------------------------------
 # Direct execution
 # ---------------------------------------------------------------------------
 

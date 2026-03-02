@@ -583,6 +583,33 @@ export default function GraphicsPage() {
     img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(xml)))
   }, [canvasSize])
 
+  // ─── Share ────────────────────────────────────────────────────
+  const [shareUrl, setShareUrl] = useState<string | null>(null)
+  const shareGraphic = useCallback(async () => {
+    const svg = svgRef.current
+    if (!svg) return
+    const clone = svg.cloneNode(true) as SVGSVGElement
+    clone.setAttribute('width', String(canvasSize.w))
+    clone.setAttribute('height', String(canvasSize.h))
+    clone.querySelector('#editor-grid')?.remove()
+    clone.querySelectorAll('[data-sel-handle]').forEach(el => el.remove())
+    const xml = new XMLSerializer().serializeToString(clone)
+    try {
+      const resp = await fetch(`${API}/share`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content: xml, content_type: 'graphic', title: 'Rhea Graphic' }),
+      })
+      if (resp.ok) {
+        const data = await resp.json()
+        const url = `${location.origin}/share/${data.token}`
+        setShareUrl(url)
+        navigator.clipboard.writeText(url)
+        setTimeout(() => setShareUrl(null), 3000)
+      }
+    } catch { /* silent */ }
+  }, [canvasSize])
+
   // ─── Image drop / paste ────────────────────────────────────────
   const handleImageFile = useCallback((file: File) => {
     const reader = new FileReader()
@@ -640,6 +667,10 @@ export default function GraphicsPage() {
         </div>
         <button onClick={exportSVG} className="px-3 py-1 bg-white/10 hover:bg-white/15 text-xs rounded">SVG</button>
         <button onClick={exportPNG} className="px-3 py-1 bg-cyan-600 hover:bg-cyan-500 text-xs rounded font-medium">PNG</button>
+        <button onClick={shareGraphic}
+          className={`px-3 py-1 text-xs rounded font-medium ${shareUrl ? 'bg-green-600 text-white' : 'bg-indigo-600 hover:bg-indigo-500 text-white'}`}>
+          {shareUrl ? 'Link copied' : 'Share'}
+        </button>
       </div>
 
       <div className="flex flex-1 overflow-hidden">

@@ -3,6 +3,8 @@
 import { useState, useRef, useCallback, useEffect } from 'react'
 import Link from 'next/link'
 
+const API = process.env.NEXT_PUBLIC_CC_API ?? 'http://localhost:8400'
+
 // ─── Symbol Palettes ─────────────────────────────────────────────────
 
 const PALETTES: Record<string, { label: string; symbols: string[] }> = {
@@ -214,6 +216,28 @@ export default function LogicPage() {
   }
 
   const [evalResult, setEvalResult] = useState<{ valid: boolean; normalized?: string; error?: string } | null>(null)
+  const [shareUrl, setShareUrl] = useState<string | null>(null)
+  const [sharing, setSharing] = useState(false)
+
+  const shareFormula = useCallback(async () => {
+    if (!formula.trim()) return
+    setSharing(true)
+    setShareUrl(null)
+    try {
+      const resp = await fetch(`${API}/share`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content: formula, content_type: 'formula', title: formula.slice(0, 60) }),
+      })
+      if (resp.ok) {
+        const data = await resp.json()
+        const url = `${location.origin}/share/${data.token}`
+        setShareUrl(url)
+        navigator.clipboard.writeText(url)
+      }
+    } catch { /* silent */ }
+    setSharing(false)
+  }, [formula])
 
   const runEvaluate = useCallback(() => {
     if (!formula.trim()) return
@@ -263,6 +287,19 @@ export default function LogicPage() {
                 Formula
               </span>
               <div style={{ display: 'flex', gap: 6 }}>
+                <button
+                  onClick={shareFormula}
+                  disabled={!formula || sharing}
+                  style={{
+                    background: shareUrl ? `${green}22` : `${accent}11`,
+                    border: `1px solid ${shareUrl ? green : accent}55`,
+                    color: shareUrl ? green : accent,
+                    borderRadius: 6, padding: '4px 10px', cursor: formula ? 'pointer' : 'default',
+                    fontSize: 11, fontFamily: 'monospace', opacity: formula ? 1 : 0.4,
+                  }}
+                >
+                  {shareUrl ? 'Link copied' : sharing ? '...' : 'Share'}
+                </button>
                 <button
                   onClick={runEvaluate}
                   disabled={!formula}

@@ -109,6 +109,19 @@ def init_db() -> None:
         CREATE INDEX IF NOT EXISTS idx_clip_user ON clipboard(user_id, created_at DESC);
         CREATE INDEX IF NOT EXISTS idx_clip_hash ON clipboard(content_hash);
         CREATE INDEX IF NOT EXISTS idx_clip_expires ON clipboard(expires_at);
+
+        CREATE TABLE IF NOT EXISTS shares (
+            token TEXT PRIMARY KEY,
+            user_id TEXT NOT NULL DEFAULT '',
+            content_type TEXT NOT NULL DEFAULT 'text',
+            title TEXT DEFAULT '',
+            content TEXT NOT NULL,
+            metadata TEXT,
+            views INTEGER DEFAULT 0,
+            created_at TEXT NOT NULL,
+            expires_at TEXT
+        );
+        CREATE INDEX IF NOT EXISTS idx_shares_user ON shares(user_id, created_at DESC);
     """)
     conn.commit()
 
@@ -424,3 +437,88 @@ def migrate_office_jsonl(jsonl_path: Optional[Path] = None) -> int:
             except Exception:
                 continue
     return count
+
+
+# ─── Shares ──────────────────────────────────────────────────────────
+
+import secrets as _secrets
+
+
+def create_share(
+    content: str,
+    content_type: str = "text",
+    title: str = "",
+    user_id: str = "",
+    metadata: Optional[dict] = None,
+    ttl_hours: int = 720,  # 30 days default
+) -> dict:
+    """Create a shareable link. Returns the share record with token."""
+    token = _secrets.token_urlsafe(12)  # 16-char URL-safe token
+    now = datetime.now(timezone.utc)
+    from datetime import timedelta
+    expires_at = (now + timedelta(hours=ttl_hours)).isoformat() if ttl_hours else None
+
+    conn = _get_conn()
+    conn.execute(
+        "INSERT INTO shares (token, user_id, content_type, title, content, metadata, created_at, expires_at) "
+        "VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+        (token, user_id, content_type, title, content,
+         json.dumps(metadata) if metadata else None,
+         now.isoformat(), expires_at),
+    )
+    conn.commit()
+    return {
+        "token": token,
+        "content_type": content_type,
+        "title": title,
+        "created_at": now.isoformat(),
+        "expires_at": expires_at,
+    }
+
+
+def get_share(token: str) -> Optional[dict]:
+    """Retrieve a shared item by token. Increments view count. Returns None if expired/missing."""
+    conn = _get_conn()
+    row = conn.execute("SELECT * FROM shares WHERE token = ?", (token,)).fetchone()
+    if not row:
+        return None
+    rec = dict(row)
+    # Check expiration
+    if rec.get("expires_at"):
+        exp = datetime.fromisoformat(rec["expires_at"])
+        if datetime.now(timezone.utc) > exp:
+            conn.execute("DELETE FROM shares WHERE token = ?", (token,))
+            conn.commit()
+            return None
+    # Increment views
+    conn.execute("UPDATE shares SET views = views + 1 WHERE token = ?", (token,))
+    conn.commit()
+    # Parse metadata
+    if rec.get("metadata"):
+        try:
+            rec["metadata"] = json.loads(rec["metadata"])
+        except (json.JSONDecodeError, TypeError):
+            pass
+    return rec
+
+
+def list_shares(user_id: str, limit: int = 50) -> list:
+    """List shares created by a user."""
+    conn = _get_conn()
+    rows = conn.execute(
+        "SELECT token, content_type, title, views, created_at, expires_at "
+        "FROM shares WHERE user_id = ? ORDER BY created_at DESC LIMIT ?",
+        (user_id, limit),
+    ).fetchall()
+    return [dict(r) for r in rows]
+
+
+def delete_share(token: str, user_id: str = "") -> bool:
+    """Delete a share. If user_id given, requires ownership."""
+    conn = _get_conn()
+    if user_id:
+        cur = conn.execute("DELETE FROM shares WHERE token = ? AND user_id = ?", (token, user_id))
+    else:
+        cur = conn.execute("DELETE FROM shares WHERE token = ?", (token,))
+    conn.commit()
+    return cur.rowcount > 0
