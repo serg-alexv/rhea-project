@@ -952,11 +952,19 @@ nav .glass{{border:none;border-radius:0}}
 .stats-bar{{padding:2.5rem 2rem;animation:fadeUp .8s .9s both}}
 .stats-inner{{max-width:800px;margin:0 auto;display:flex;justify-content:space-around;
   padding:1.5rem 2rem;border-radius:var(--radius)}}
-.stat{{text-align:center}}
+.stat{{text-align:center;position:relative}}
+.stat-link{{text-decoration:none;display:block;padding:.8rem 1rem;border-radius:12px;
+  transition:all .25s ease;cursor:pointer}}
+.stat-link:hover{{background:rgba(102,217,255,.08);transform:translateY(-2px)}}
+.stat-link:hover .val{{-webkit-text-fill-color:transparent;
+  background:linear-gradient(180deg,var(--accent),#fff);-webkit-background-clip:text;background-clip:text}}
+.stat-link:hover .stat-hint{{opacity:1;transform:translateY(0)}}
 .stat .val{{font-size:2.2rem;font-weight:700;
   background:linear-gradient(180deg,#fff,#888);-webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;background-clip:text}}
+  -webkit-text-fill-color:transparent;background-clip:text;transition:all .3s}}
 .stat .lbl{{font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;margin-top:.3rem}}
+.stat-hint{{font-size:.6rem;color:var(--accent);opacity:0;transform:translateY(4px);
+  transition:all .25s;margin-top:.4rem;letter-spacing:.08em}}
 
 /* SECTION */
 section{{padding:5rem 2rem;max-width:1200px;margin:0 auto}}
@@ -1106,13 +1114,25 @@ footer .f-copy{{color:#333;font-size:.68rem;letter-spacing:.04em}}
   </div>
 </div>
 
-<!-- ANIMATED STATS -->
+<!-- ANIMATED STATS — each stat is a portal -->
 <div class="stats-bar">
 <div class="stats-inner glass-card">
-  <div class="stat"><div class="val">{artifact_count}</div><div class="lbl">Verified artifacts</div></div>
-  <div class="stat"><div class="val">{ontology_count}</div><div class="lbl">Ontologies</div></div>
-  <div class="stat"><div class="val">{avg_conf_str}</div><div class="lbl">Avg confidence</div></div>
-  <div class="stat"><div class="val">{providers_line}</div><div class="lbl">Right now</div></div>
+  <a href="{url}/aletheia/proofs" target="_blank" class="stat stat-link" title="Browse verified proofs">
+    <div class="val">{artifact_count}</div><div class="lbl">Verified artifacts</div>
+    <div class="stat-hint">Browse proofs →</div>
+  </a>
+  <a href="{url}/aletheia/ontology" target="_blank" class="stat stat-link" title="Explore ontology graph">
+    <div class="val">{ontology_count}</div><div class="lbl">Ontologies</div>
+    <div class="stat-hint">Explore graph →</div>
+  </a>
+  <a href="{url}/aletheia/stats" target="_blank" class="stat stat-link" title="Live confidence metrics">
+    <div class="val">{avg_conf_str}</div><div class="lbl">Avg confidence</div>
+    <div class="stat-hint">Live metrics →</div>
+  </a>
+  <a href="{url}/health" target="_blank" class="stat stat-link" title="System health + active models">
+    <div class="val">{providers_line}</div><div class="lbl">Right now</div>
+    <div class="stat-hint">Health check →</div>
+  </a>
 </div>
 </div>
 
