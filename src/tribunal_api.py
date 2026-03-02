@@ -1378,7 +1378,7 @@ footer .f-copy{{color:#333;font-size:.68rem;letter-spacing:.04em}}
         onmouseover="this.style.background='rgba(255,255,255,.07)'" onmouseout="this.style.background='rgba(255,255,255,.03)'">
         <svg viewBox="0 0 24 24" width="16" height="16"><rect fill="#f25022" x="1" y="1" width="10" height="10"/><rect fill="#00a4ef" x="1" y="13" width="10" height="10"/><rect fill="#7fba00" x="13" y="1" width="10" height="10"/><rect fill="#ffb900" x="13" y="13" width="10" height="10"/></svg>
         Continue with Microsoft</a>
-      <a href="/auth/login-page" style="display:flex;align-items:center;gap:.7rem;padding:.65rem 1rem;
+      <a href="/auth/apple?callback=web" style="display:flex;align-items:center;gap:.7rem;padding:.65rem 1rem;
         border-radius:12px;border:1px solid var(--border);background:rgba(255,255,255,.03);
         color:var(--text);font-size:.82rem;font-weight:500;text-decoration:none;transition:.2s"
         onmouseover="this.style.background='rgba(255,255,255,.07)'" onmouseout="this.style.background='rgba(255,255,255,.03)'">
@@ -1394,7 +1394,6 @@ footer .f-copy{{color:#333;font-size:.68rem;letter-spacing:.04em}}
         color:var(--text);font-size:.82rem;font-family:inherit">
       <button class="btn btn-primary" style="padding:.55rem 1.2rem;font-size:.82rem;border-radius:10px">Sign Up</button>
     </div>
-    <p style="color:#444;font-size:.65rem;margin-top:.8rem">Apple Sign In available natively on iOS</p>
   </div>
 </div>
 </section>

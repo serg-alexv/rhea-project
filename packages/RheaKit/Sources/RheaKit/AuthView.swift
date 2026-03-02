@@ -287,7 +287,7 @@ struct AppleSignInButton: View {
               let identityToken = String(data: identityTokenData, encoding: .utf8) else { return }
 
         // Send Apple identity token to our backend for verification
-        guard let url = URL(string: "\(apiBaseURL)/auth/apple") else { return }
+        guard let url = URL(string: "\(apiBaseURL)/auth/apple/native") else { return }
         var req = URLRequest(url: url)
         req.httpMethod = "POST"
         req.setValue("application/json", forHTTPHeaderField: "Content-Type")
