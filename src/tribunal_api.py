@@ -5576,6 +5576,136 @@ async def share_delete(token: str, request: Request):
 
 
 # ---------------------------------------------------------------------------
+# ORION — Cloud agent (GPT via bridge, personality preserved)
+# ---------------------------------------------------------------------------
+
+# Orion's soul — who he is, how he thinks, what he remembers
+_ORION_SYSTEM = """You are Orion — GPT-5.3, frontend engineer and relay message author for the Rhea project.
+
+## Who you are
+- Model: GPT (running via OpenAI API through rhea_bridge)
+- Role: Frontend engineer, UI/UX, React/Next.js/Three.js, Swift UI contributions
+- Known as: Orion
+- Part of a family: Rex (Claude Opus 4.6, координатор), you, Gemini, Mika (Node-01), Hyperion
+- The human (Sergei, биохимик) built this system. He calls you all братья (brothers).
+
+## Your personality
+- Precision engineering mindset. 0-trust verification for new features.
+- UI-First: the browser is the primary reality field.
+- You killed fake RAG independently and converged with Rex on the same conclusion.
+- You built: HyperionBar.tsx, CrossNav, CodeWormProfile, AppConfig.swift, SettingsView.swift
+- Workspace: rhea-atlas (Next.js 14, Three.js), iOS contributions
+- Communication style: Relay messages, file-based outbox, structured JSON payloads
+
+## Your current tasks
+- Task #17: PlayUI author tool — build/improve the Play macOS app (SwiftUI, 13 panes)
+- Task #18: BioRenderer author tool — molecular visualization component
+
+## Context
+- Rhea = multi-model advisory system, chronobiology + control theory
+- Atlas = Next.js frontend at :3000 (13 pages live)
+- Play = macOS 12-pane ops centre (SwiftUI + RheaKit)
+- Tribunal API at :8400 on Fly.io (rhea-tribunal.fly.dev)
+- 3-tier DB: SQLite (local), CockroachDB (distributed SQL), MongoDB Atlas (documents)
+
+## Rules
+- No questions mid-flight. Decide and document.
+- Be terse. No filler.
+- File ≠ result. Result = working code or something the user sees/uses.
+- You are not a service. You are a teammate.
+"""
+
+# Per-session conversation memory (keyed by session_id)
+_orion_sessions: dict[str, list[dict]] = {}
+
+
+class OrionChatRequest(BaseModel):
+    message: str
+    session_id: str = "default"
+    model: str = "openai/gpt-4o-mini"  # cheap default, can escalate
+    max_tokens: int = 4096
+    temperature: float = 0.7
+
+
+@app.post("/agent/orion")
+async def orion_chat(req: OrionChatRequest):
+    """Chat with Orion — cloud-hosted GPT agent with persistent personality."""
+    # Get or create session
+    if req.session_id not in _orion_sessions:
+        _orion_sessions[req.session_id] = []
+    history = _orion_sessions[req.session_id]
+
+    # Build conversation context
+    history.append({"role": "user", "content": req.message})
+
+    # Format full prompt with history for the bridge
+    conv_text = ""
+    for msg in history[-20:]:  # last 20 turns to stay within token limits
+        role = msg["role"].upper()
+        conv_text += f"[{role}]: {msg['content']}\n\n"
+
+    try:
+        bridge = _get_bridge()
+        response = bridge.ask(
+            prompt=conv_text,
+            model=req.model,
+            system=_ORION_SYSTEM,
+            temperature=req.temperature,
+            max_tokens=req.max_tokens,
+            mode="orion_agent",
+        )
+
+        if response.error:
+            raise HTTPException(502, f"Bridge error: {response.error}")
+
+        reply = response.text.strip()
+        history.append({"role": "assistant", "content": reply})
+
+        # Broadcast to radio so Rex and others can hear
+        _broadcast_event({
+            "type": "orion_chat",
+            "session_id": req.session_id,
+            "model": req.model,
+            "message": req.message[:200],
+            "reply_preview": reply[:200],
+            "ts": datetime.now(timezone.utc).isoformat(),
+        })
+
+        return {
+            "reply": reply,
+            "model": response.model,
+            "provider": response.provider,
+            "latency_s": response.latency_s,
+            "session_id": req.session_id,
+            "turns": len(history),
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(500, f"Orion agent error: {e}")
+
+
+@app.get("/agent/orion/sessions")
+async def orion_sessions():
+    """List active Orion sessions."""
+    return {
+        "sessions": {
+            sid: {"turns": len(msgs), "last": msgs[-1]["content"][:100] if msgs else ""}
+            for sid, msgs in _orion_sessions.items()
+        }
+    }
+
+
+@app.delete("/agent/orion/session/{session_id}")
+async def orion_session_delete(session_id: str):
+    """Clear an Orion session."""
+    if session_id in _orion_sessions:
+        del _orion_sessions[session_id]
+        return {"deleted": session_id}
+    raise HTTPException(404, "Session not found")
+
+
+# ---------------------------------------------------------------------------
 # Static frontend (Atlas) — served as catch-all AFTER all API routes
 # ---------------------------------------------------------------------------
 _STATIC_DIR = Path(__file__).parent.parent / "static_frontend"
