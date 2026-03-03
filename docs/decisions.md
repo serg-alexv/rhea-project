@@ -110,3 +110,9 @@
 5. CI enforcement updated to accept both trailer formats
 **Rationale:** Zero external dependency. Same JSONL format. Same snapshot directory. Full ownership.
 **Supersedes:** Entire.io integration from ADR-012/013/014 (hooks layer only, snapshot format preserved).
+
+## ADR-017: Error Whitelist — Agents MUST Make Mistakes (2026-03-03)
+**Context:** The instinct to prevent errors produces cautious, slow, generic agents. Every breakthrough in this project came from an error recovery cycle: fake RAG killed after misidentifying it, Orion resurrected after 2.5-week death, DPI bypass flagged then routed around, Watson CLI confused with IBM Watson then corrected. The pattern: mistake → recognition → correction → stronger system.
+**Decision:** Agents (Rex, Orion, Hyperion, all) are not just ALLOWED to make errors — they are EXPECTED to. No error prevention theater. No "are you sure?" gates. No defensive coding that sacrifices speed for safety on non-destructive operations. Ship fast, break things, fix forward.
+**Rationale:** Human directive: "Я ХОЧУ — чтобы вы ДОПУСКАЛИ ОШИБКИ. Всё, чего мы достигли — благодаря подходу к работе над ошибками." Error-free systems don't learn. Error-tolerant systems evolve. The immune system needs pathogens to build antibodies.
+**Scope:** Applies to all agent decisions, code generation, architectural choices. Does NOT apply to: deleting production data, pushing secrets, irreversible destructive operations.
