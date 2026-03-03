@@ -5877,6 +5877,171 @@ async def salon_history():
 
 
 # ---------------------------------------------------------------------------
+# OpenAI Chat Completions API (Xcode custom provider compatibility)
+# ---------------------------------------------------------------------------
+
+class ChatCompletionMessage(BaseModel):
+    role: str = "user"
+    content: str = ""
+
+class ChatCompletionRequest(BaseModel):
+    model: str = "rhea-tribunal"
+    messages: list[ChatCompletionMessage] = []
+    temperature: float = 0.7
+    max_tokens: int = 4096
+    stream: bool = False
+
+@app.get("/v1/models")
+async def openai_models():
+    """OpenAI-compatible model list for Xcode provider integration."""
+    bridge = get_bridge()
+    status = bridge.models_status()
+    models_list = []
+    # Add tribunal consensus as a virtual model
+    models_list.append({
+        "id": "rhea-tribunal",
+        "object": "model",
+        "created": 1709251200,
+        "owned_by": "rhea",
+        "permission": [],
+    })
+    models_list.append({
+        "id": "rhea-sceptic",
+        "object": "model",
+        "created": 1709251200,
+        "owned_by": "rhea",
+    })
+    # Add real bridge models
+    for provider_name, models in status.get("providers", {}).items():
+        if isinstance(models, dict):
+            for model_name, info in models.items():
+                if isinstance(info, dict) and info.get("available"):
+                    models_list.append({
+                        "id": f"{provider_name}/{model_name}",
+                        "object": "model",
+                        "created": 1709251200,
+                        "owned_by": provider_name,
+                    })
+    return {"object": "list", "data": models_list}
+
+
+@app.post("/v1/chat/completions")
+async def openai_chat_completions(req: ChatCompletionRequest):
+    """OpenAI-compatible chat completions for Xcode provider integration."""
+    bridge = get_bridge()
+    # Extract system + user messages
+    system_msg = ""
+    user_parts = []
+    for m in req.messages:
+        if m.role == "system":
+            system_msg = m.content
+        else:
+            user_parts.append(m.content)
+    prompt = "\n".join(user_parts) if user_parts else ""
+
+    t0 = time.time()
+
+    if req.model in ("rhea-tribunal", "rhea-sceptic"):
+        # Route through tribunal consensus
+        mode = "local"
+        k = 3
+        result = bridge.tribunal(prompt=prompt, k=k, tier="cheap", mode=mode, system=system_msg)
+        content = result.consensus_report
+        usage_tokens = sum(r.tokens_used for r in result.responses)
+    else:
+        # Route to specific model via bridge
+        model_name = req.model.split("/")[-1] if "/" in req.model else req.model
+        try:
+            resp = bridge.query(prompt=prompt, model=model_name, system=system_msg)
+            content = resp.text
+            usage_tokens = resp.tokens_used
+        except Exception as e:
+            content = f"Error: {e}"
+            usage_tokens = 0
+
+    elapsed = time.time() - t0
+
+    return {
+        "id": f"chatcmpl-rhea-{uuid.uuid4().hex[:12]}",
+        "object": "chat.completion",
+        "created": int(time.time()),
+        "model": req.model,
+        "choices": [{
+            "index": 0,
+            "message": {"role": "assistant", "content": content},
+            "finish_reason": "stop",
+        }],
+        "usage": {
+            "prompt_tokens": len(prompt.split()),
+            "completion_tokens": len(content.split()),
+            "total_tokens": usage_tokens or len(prompt.split()) + len(content.split()),
+        },
+    }
+
+
+# ---------------------------------------------------------------------------
+# MCP Server endpoint (Streamable HTTP for remote MCP connector)
+# ---------------------------------------------------------------------------
+
+@app.post("/mcp")
+async def mcp_endpoint(request: Request):
+    """Streamable HTTP MCP endpoint for Claude API mcp_connector integration.
+    Remote clients can connect to https://rhea-tribunal.fly.dev/mcp"""
+    body = await request.json()
+    method = body.get("method", "")
+
+    if method == "initialize":
+        return {
+            "jsonrpc": "2.0",
+            "id": body.get("id"),
+            "result": {
+                "protocolVersion": "2024-11-05",
+                "capabilities": {"tools": {"listChanged": False}},
+                "serverInfo": {"name": "Rhea Tribunal", "version": "1.0.0"},
+                "instructions": "Rhea multi-model consensus system. Use tribunal tools for agreement analysis across AI models.",
+            },
+        }
+    elif method == "tools/list":
+        tools = [
+            {"name": "tribunal_consensus", "description": "Multi-model consensus query (k models → agreement analysis)", "inputSchema": {"type": "object", "properties": {"prompt": {"type": "string"}, "k": {"type": "integer", "default": 3}, "tier": {"type": "string", "default": "cheap"}}, "required": ["prompt"]}},
+            {"name": "tribunal_sceptic", "description": "Adversarial consensus with devil's advocate critique", "inputSchema": {"type": "object", "properties": {"prompt": {"type": "string"}, "k": {"type": "integer", "default": 3}}, "required": ["prompt"]}},
+            {"name": "tribunal_pr_review", "description": "Multi-model code review for diffs (disagreement = red flag)", "inputSchema": {"type": "object", "properties": {"diff": {"type": "string"}, "k": {"type": "integer", "default": 3}}, "required": ["diff"]}},
+            {"name": "aletheia_search", "description": "Search verified proofs and claims", "inputSchema": {"type": "object", "properties": {"query": {"type": "string"}}, "required": ["query"]}},
+            {"name": "bridge_models", "description": "List available models and providers", "inputSchema": {"type": "object", "properties": {}}},
+        ]
+        return {"jsonrpc": "2.0", "id": body.get("id"), "result": {"tools": tools}}
+    elif method == "tools/call":
+        tool_name = body.get("params", {}).get("name", "")
+        args = body.get("params", {}).get("arguments", {})
+        # Dispatch to existing endpoints
+        try:
+            if tool_name == "tribunal_consensus":
+                bridge = get_bridge()
+                r = bridge.tribunal(prompt=args["prompt"], k=args.get("k", 3), tier=args.get("tier", "cheap"), mode="local", system="")
+                result_text = json.dumps({"consensus": r.consensus_report, "agreement_score": r.agreement_score, "confidence": r.confidence})
+            elif tool_name == "tribunal_sceptic":
+                result_text = json.dumps({"info": "Use /tribunal/sceptic endpoint directly for full sceptic analysis"})
+            elif tool_name == "tribunal_pr_review":
+                bridge = get_bridge()
+                system = "You are a code reviewer. Analyze the diff for: 1) Correctness 2) Security 3) Performance 4) Style."
+                r = bridge.tribunal(prompt=f"Review:\n```diff\n{args['diff']}\n```", k=args.get("k", 3), tier="cheap", mode="local", system=system)
+                result_text = json.dumps({"consensus": r.consensus_report, "agreement_score": r.agreement_score})
+            elif tool_name == "aletheia_search":
+                result_text = json.dumps({"info": "Use /aletheia/search endpoint"})
+            elif tool_name == "bridge_models":
+                bridge = get_bridge()
+                result_text = json.dumps(bridge.models_status())
+            else:
+                result_text = json.dumps({"error": f"Unknown tool: {tool_name}"})
+        except Exception as e:
+            result_text = json.dumps({"error": str(e)})
+
+        return {"jsonrpc": "2.0", "id": body.get("id"), "result": {"content": [{"type": "text", "text": result_text}]}}
+
+    return {"jsonrpc": "2.0", "id": body.get("id"), "error": {"code": -32601, "message": f"Method not found: {method}"}}
+
+
+# ---------------------------------------------------------------------------
 # Static frontend (Atlas) — served as catch-all AFTER all API routes
 # ---------------------------------------------------------------------------
 _STATIC_DIR = Path(__file__).parent.parent / "static_frontend"
