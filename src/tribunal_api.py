@@ -1321,14 +1321,28 @@ footer .f-copy{{color:#333;font-size:.68rem;letter-spacing:.04em}}
   </div>
   <div class="bento-card glass-card span-2 stagger-2" style="border-left:3px solid var(--purple)">
     <span class="bento-icon">&#x1F30A;</span>
-    <h3>Ruliad &mdash; Mathematical Explorations</h3>
-    <p>Wolfram-class ontology engine with 6 mathematical universe plugins: proof theory, category theory,
-       information geometry, dynamical systems, game theory, core engine.
-       Propose hypotheses, verify through 3-layer chains (consensus + formal + red-team).
-       {ontology_count} domains mapped. Every exploration feeds back into the gem store.</p>
+    <h3>Ruliad &mdash; Wolfram's Summary</h3>
+    <p style="font-size:.6rem;line-height:1.7;color:var(--muted)">
+      <strong style="color:var(--text)">What it is:</strong> The entangled limit of everything computationally possible &mdash;
+      following all possible rules in all possible ways. Unique, inevitable, formally necessary.
+      No choices needed to define it; it just <em>is</em>, like 1+1=2.<br><br>
+      <strong style="color:var(--text)">Why it matters:</strong> We are <em>inside</em> it. We never see the Ruliad from outside &mdash;
+      we sample tiny slices using our bounded perception. For &ldquo;observers like us&rdquo;
+      (computationally bounded, coherent, persistent), the laws of general relativity and quantum mechanics
+      <em>inevitably</em> emerge. Physics and mathematics are the same object viewed from different angles.<br><br>
+      <strong style="color:var(--text)">Rulial space:</strong> Like physical space, but for description languages.
+      Moving in it = changing how you think. Concepts are &ldquo;rulial particles&rdquo; &mdash;
+      stable structures that survive transport between different minds.
+      Different consciousnesses are at different positions in rulial space;
+      that&rsquo;s why you can&rsquo;t fully &ldquo;get inside&rdquo; another mind.<br><br>
+      <strong style="color:var(--text)">The punchline:</strong> Computational irreducibility means no shortcuts &mdash;
+      you must walk through time step by step. The universe runs every possible rule;
+      we just perceive the slice consistent with what we are.
+    </p>
     <div style="margin-top:.8rem;display:flex;gap:1rem;flex-wrap:wrap">
-      <span class="gem-stat" style="font-size:.55rem;padding:.2rem .5rem;border-radius:6px;background:rgba(180,130,255,.1);border:1px solid rgba(180,130,255,.2)">7-state hypothesis lifecycle</span>
-      <span class="gem-stat" style="font-size:.55rem;padding:.2rem .5rem;border-radius:6px;background:rgba(180,130,255,.1);border:1px solid rgba(180,130,255,.2)">3-layer verification</span>
+      <span class="gem-stat" style="font-size:.55rem;padding:.2rem .5rem;border-radius:6px;background:rgba(180,130,255,.1);border:1px solid rgba(180,130,255,.2)">&infin;-groupoid structure</span>
+      <span class="gem-stat" style="font-size:.55rem;padding:.2rem .5rem;border-radius:6px;background:rgba(180,130,255,.1);border:1px solid rgba(180,130,255,.2)">causal invariance</span>
+      <span class="gem-stat" style="font-size:.55rem;padding:.2rem .5rem;border-radius:6px;background:rgba(180,130,255,.1);border:1px solid rgba(180,130,255,.2)">Wolfram 2021</span>
     </div>
   </div>
 </div>
