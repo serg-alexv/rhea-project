@@ -3,9 +3,10 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-# Install system deps needed by some Python packages (e.g. libzmq for pyzmq)
+# Install system deps + Tailscale for mesh networking
 RUN apt-get update && apt-get install -y --no-install-recommends \
-        libzmq3-dev \
+        libzmq3-dev curl iptables \
+    && curl -fsSL https://tailscale.com/install.sh | sh \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Python dependencies first (layer cache friendly)

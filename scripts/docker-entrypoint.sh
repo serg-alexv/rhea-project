@@ -1,5 +1,13 @@
 #!/bin/bash
-# Rhea Docker entrypoint — seed proof.db if volume is empty, then start server
+# Rhea Docker entrypoint — Tailscale mesh + seed proof.db + start server
+
+# Start Tailscale daemon in background (if auth key is set)
+if [ -n "$TAILSCALE_AUTHKEY" ]; then
+    tailscaled --state=/var/lib/tailscale/tailscaled.state --socket=/var/run/tailscale/tailscaled.sock &
+    sleep 2
+    tailscale up --authkey="$TAILSCALE_AUTHKEY" --hostname=rhea-tribunal
+    echo "[tailscale] joined tailnet as rhea-tribunal"
+fi
 
 SEED_COUNT=$(python3 -c "
 import sqlite3, sys
