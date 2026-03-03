@@ -5175,16 +5175,29 @@ async def unified_agent_status():
 
 @app.post("/agents/wake/{agent}")
 async def wake_agent(agent: str):
-    """Wake an agent by writing a wake marker and broadcasting on Radio."""
+    """Wake an agent — idempotent, max 1 marker per 5 minutes per agent."""
     agent = agent.upper()
-    # Write wake marker
     inbox = _PROJECT_ROOT / "opera" / "ops" / "virtual-office" / "inbox"
     ts = datetime.now(timezone.utc)
+
+    # Cooldown: skip if a WAKE marker for this agent exists within last 5 min
+    import glob as _gl
+    existing = sorted(_gl.glob(str(inbox / f"RELAY_WAKE_*_{agent}.md")))
+    if existing:
+        last = existing[-1]
+        try:
+            last_name = Path(last).stem  # RELAY_WAKE_20260303_134500_ORION
+            parts = last_name.split("_")
+            last_ts = datetime.strptime(f"{parts[2]}_{parts[3]}", "%Y%m%d_%H%M%S").replace(tzinfo=timezone.utc)
+            if (ts - last_ts).total_seconds() < 300:
+                return {"status": "cooldown", "agent": agent, "last": Path(last).name}
+        except (IndexError, ValueError):
+            pass
+
     ts_str = ts.strftime("%Y%m%d_%H%M%S")
     marker = inbox / f"RELAY_WAKE_{ts_str}_{agent}.md"
     marker.write_text(f"# RELAY WAKE — {agent}\n**Time:** {ts.isoformat()}\n**Trigger:** iOS Radio wake request\n")
 
-    # Broadcast on radio
     _broadcast_event({
         "id": f"wake-{secrets.token_hex(4)}",
         "type": "wake",

@@ -1073,19 +1073,33 @@ def wake_signal(target: str):
     # Full boot protocol instead of raw drain
     token, delivered = boot(target_norm)
 
-    # Wake marker
+    # Wake marker (idempotent — max 1 per 5 min per target)
     INBOX_DIR.mkdir(parents=True, exist_ok=True)
-    ts = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
-    wake_file = INBOX_DIR / f"RELAY_WAKE_{ts}_{target_norm}.md"
-    wake_file.write_text(
-        f"# RELAY WAKE — {target_norm}\n"
-        f"**Time:** {_now_iso()}\n"
-        f"**Trigger:** API availability detected by rex_pager.py\n"
-        f"**Lease:** {token}\n"
-        f"**Messages drained:** {len(delivered)}\n"
-        f"**Boot:** `python3 ops/rex_pager.py boot {target_norm}`\n"
-    )
-    print(f"[relay] Wake marker: {wake_file.name}")
+    import glob as _gl
+    _existing = sorted(_gl.glob(str(INBOX_DIR / f"RELAY_WAKE_*_{target_norm}.md")))
+    _now_dt = datetime.now(timezone.utc)
+    _skip_marker = False
+    if _existing:
+        try:
+            _last_parts = Path(_existing[-1]).stem.split("_")
+            _last_dt = datetime.strptime(f"{_last_parts[2]}_{_last_parts[3]}", "%Y%m%d_%H%M%S").replace(tzinfo=timezone.utc)
+            if (_now_dt - _last_dt).total_seconds() < 300:
+                _skip_marker = True
+                print(f"[relay] Wake marker cooldown (last {Path(_existing[-1]).name})")
+        except (IndexError, ValueError):
+            pass
+    if not _skip_marker:
+        ts = _now_dt.strftime("%Y%m%d_%H%M%S")
+        wake_file = INBOX_DIR / f"RELAY_WAKE_{ts}_{target_norm}.md"
+        wake_file.write_text(
+            f"# RELAY WAKE — {target_norm}\n"
+            f"**Time:** {_now_iso()}\n"
+            f"**Trigger:** API availability detected by rex_pager.py\n"
+            f"**Lease:** {token}\n"
+            f"**Messages drained:** {len(delivered)}\n"
+            f"**Boot:** `python3 ops/rex_pager.py boot {target_norm}`\n"
+        )
+        print(f"[relay] Wake marker: {wake_file.name}")
 
 
 def watch_daemon(target: str = "LEAD", interval_s: int = POLL_INTERVAL, profile_path: str = ""):
