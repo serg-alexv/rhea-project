@@ -47,7 +47,36 @@ public class TunnelManager: ObservableObject {
 
     public var isConnected: Bool { status == .connected }
 
-    /// Configure and install the VPN profile.
+    /// Install DPI bypass mode — no server needed.
+    /// Captures traffic via TUN, applies ZAPRET-style transformations, sends to real destination.
+    public func installDPIBypass(
+        preset: String = "gentle",
+        dns: [String] = ["1.1.1.1", "1.0.0.1"]
+    ) async throws {
+        let manager = self.manager ?? NETunnelProviderManager()
+
+        let proto = NETunnelProviderProtocol()
+        proto.providerBundleIdentifier = "com.rhea.preview.tunnel"
+        proto.serverAddress = "127.0.0.1"  // local — no remote server
+        proto.providerConfiguration = [
+            "mode": "dpi_bypass",
+            "dpiPreset": preset,
+            "dns": dns,
+        ]
+
+        manager.protocolConfiguration = proto
+        manager.localizedDescription = "Rhea DPI Bypass"
+        manager.isEnabled = true
+
+        try await manager.saveToPreferences()
+        try await manager.loadFromPreferences()
+
+        self.manager = manager
+        observeStatus()
+        log.info("DPI bypass profile installed (preset: \(preset))")
+    }
+
+    /// Configure and install the full VPN profile (WireGuard mode).
     /// Call this before first connect — installs the profile in Settings → VPN.
     public func install(
         serverAddress: String,
@@ -63,6 +92,7 @@ public class TunnelManager: ObservableObject {
         proto.providerBundleIdentifier = "com.rhea.preview.tunnel"
         proto.serverAddress = serverAddress
         proto.providerConfiguration = [
+            "mode": "full_vpn",
             "serverAddress": serverAddress,
             "serverPort": serverPort,
             "serverPublicKey": serverPublicKey,

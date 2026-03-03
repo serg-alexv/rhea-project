@@ -248,6 +248,37 @@ public struct RelayPrivacyView: View {
                     techniqueRow("Segment disorder", active: dpiPreset == "aggressive")
                     techniqueRow("Fake packet (low TTL)", active: dpiPreset == "aggressive")
                 }
+
+                // TODO(human): DPI bypass activation button
+                Button {
+                    Task {
+                        do {
+                            if tunnel.isConnected {
+                                tunnel.disconnect()
+                            } else {
+                                try await tunnel.installDPIBypass(preset: dpiPreset)
+                                try tunnel.connect()
+                            }
+                            vpnError = nil
+                        } catch {
+                            vpnError = error.localizedDescription
+                        }
+                    }
+                } label: {
+                    HStack {
+                        Image(systemName: tunnel.isConnected ? "stop.fill" : "play.fill")
+                            .font(.system(size: 10))
+                        Text(tunnel.isConnected ? "DEACTIVATE DPI BYPASS" : "ACTIVATE DPI BYPASS")
+                            .font(.system(size: 11, weight: .bold, design: .monospaced))
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 10)
+                    .background(
+                        RoundedRectangle(cornerRadius: 10)
+                            .fill(tunnel.isConnected ? RheaTheme.red.opacity(0.2) : RheaTheme.green.opacity(0.2))
+                    )
+                    .foregroundStyle(tunnel.isConnected ? RheaTheme.red : RheaTheme.green)
+                }
             }
         }
         .glassCard()
