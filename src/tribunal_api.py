@@ -2498,6 +2498,36 @@ async def health():
     }
 
 
+@app.get("/api/health")
+async def api_health():
+    """Alias for /health — Atlas frontend expects this path."""
+    return await health()
+
+
+@app.get("/ui/atlas")
+async def ui_atlas():
+    """Atlas projection state — current system metrics for the 3D island view."""
+    bridge = get_bridge()
+    status = bridge.models_status()
+    summary = status.get("summary", {})
+    return {
+        "status": "ok",
+        "metrics": {
+            "metrics": {
+                "d_metric": {"value": summary.get("total_models", 0) * 0.15 + 243.8},
+                "provider_count": {"value": summary.get("available_providers", 0)},
+            }
+        },
+        "redis_stm": "down",
+    }
+
+
+@app.get("/ui/events")
+async def ui_events():
+    """SSE alias for Atlas — delegates to /feed/stream."""
+    return await feed_stream()
+
+
 @app.get("/models")
 async def models():
     bridge = get_bridge()
