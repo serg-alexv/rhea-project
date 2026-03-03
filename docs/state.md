@@ -1,11 +1,13 @@
-# RHEA ACTIVE STATE (v4.2)
+# RHEA ACTIVE STATE (v4.3)
 > Date: 2026-03-03 | Agent: REX (Opus 4.6) | Mode: SOVEREIGN | Stage: 4-RELEASE
 
 ## System
 - **CHECK:** `bash scripts/rhea/check.sh` → OK
 - **GIT:** `stage4-release` | **Release:** v1.0.0 shipped
 - **Fly.io:** rhea-tribunal.fly.dev LIVE (JWT auth, dev-bypass blocked)
-- **Secrets:** GCloud SM (rhea-office-sync) — cockroachdb-url, mongodb-url
+- **Secrets:** GCloud SM (rhea-office-sync) — 10 secrets incl RHSM token
+- **AAP:** 4.7.8 licensed (Developer Sub), Controller+EDA+Galaxy+Gateway
+- **OpenShift AI:** model serving LIVE (OpenVINO on GCS, CPU-only)
 
 ## Products
 - **iOS:** build 28 (v1.0.28), TestFlight, auth + 8 visible tabs, VPN entitlement
@@ -19,12 +21,9 @@
 - **MongoDB:** Atlas rhea v8.0.19 — documents + change streams
 
 ## Atlas (:3000) — 13 pages live
-- `/cc/design` (SwiftUI tool), `/cc/paper` (biotech figures), `/cc/logic`, `/cc/graphics`
-- `/cc/automation`, `/cc/decisions`, `/cc/papers`, `/cc/wallet`
 
 ## Pending
-- Fly.io deploy with new Atlas landing (Orion's WOW page)
-- CockroachDB schema: tasks, workflows, billing
+- Wire OpenShift AI into rhea_bridge (Task #19)
+- EDA webhook → Aletheia proof pipeline
 - MongoDB change streams → real-time push
 - VPN auto-install (NEVPNManager wiring)
-- App Store submission + PyPI publish
