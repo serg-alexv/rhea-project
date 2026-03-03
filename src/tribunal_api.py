@@ -85,8 +85,26 @@ import rhea_db
 
 app = FastAPI(
     title="Rhea Tribunal API",
-    description="Multi-model consensus as a service. Send a prompt, get structured agreement analysis across 3-7 AI models.",
-    version="0.1.0",
+    description=(
+        "Multi-model consensus as a service. "
+        "Send a prompt, get structured agreement analysis across 3-7 AI models.\n\n"
+        "## Core Modules\n"
+        "- **Tribunal** — consensus verification (local, ICE, sceptic)\n"
+        "- **Aletheia** — proof storage & semantic search\n"
+        "- **Office** — inter-agent messaging & radio\n"
+        "- **Supervisor** — session management & agent spawning\n"
+        "- **Governor** — token budgets & cost tracking\n"
+        "- **Tasks** — distributed task queue\n"
+        "- **Feed** — SSE live stream\n"
+        "- **Clipboard** — cross-device clipboard sync\n"
+        "- **Salon** — character-driven conversations\n"
+        "- **Pilot** — screen automation\n"
+        "- **Wallet** — crypto balance tracking\n"
+        "- **Share** — public link generation\n"
+    ),
+    version="1.0.0",
+    docs_url="/swagger",
+    redoc_url="/redoc",
 )
 
 # Expose Aletheia read-only endpoints under /api/aletheia (mirrors rhead /aletheia)
