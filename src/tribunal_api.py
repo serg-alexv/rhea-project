@@ -5615,7 +5615,7 @@ _orion_sessions: dict[str, list[dict]] = {}
 class OrionChatRequest(BaseModel):
     message: str
     session_id: str = "default"
-    model: str = "openai/gpt-4.1"  # Orion needs muscle for PlayUI + BioRenderer
+    model: str = "openai/gpt-5"  # Orion was on 5.1/5.3 Codex — needs top tier
     max_tokens: int = 4096
     temperature: float = 0.7
 
