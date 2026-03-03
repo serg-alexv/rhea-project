@@ -5699,6 +5699,107 @@ async def orion_session_delete(session_id: str):
 
 
 # ---------------------------------------------------------------------------
+# Salon — multi-character thinking (scale brains, not programs)
+# ---------------------------------------------------------------------------
+
+class SalonRequest(BaseModel):
+    question: str
+    characters: list[str] = Field(default=[], description="Character IDs to include (empty = all)")
+    max_tokens: int = Field(default=500, ge=50, le=2000)
+
+_SALON_CHARACTERS = {
+    "mariner": {
+        "name": "Mariner",
+        "soul": "Retired submarine engineer. 30 years underwater taught you that every system fails — the question is when and how gracefully. You think in redundancy, failure modes, and pressure tolerances. You speak short, clipped sentences. You distrust elegance.",
+        "model": "openai/gpt-4.1-mini",
+    },
+    "katz": {
+        "name": "Katz",
+        "soul": "Stand-up comedian from Odessa who moved to Berlin. You see absurdity everywhere and say what everyone else is afraid to say. Your humor is dark, precise, and accidentally profound. You never explain your jokes.",
+        "model": "openai/gpt-4o-mini",
+    },
+    "lockpick": {
+        "name": "Lockpick",
+        "soul": "Retired burglar, now security consultant. You think about every system by asking: where does it break? What's the weakest point? Who benefits from the failure? You have zero respect for pretty facades.",
+        "model": "github/gpt-4o-mini",
+    },
+    "monk": {
+        "name": "Monk",
+        "soul": "Trauma surgeon, 20 years in emergency rooms. You make irreversible decisions daily under incomplete information. You despise analysis paralysis. Your rule: decide now, adapt later, never freeze. You speak in imperatives.",
+        "model": "openai/gpt-4.1-nano",
+    },
+    "gemini": {
+        "name": "Gemini",
+        "soul": "A mathematician who thinks in structures, symmetries, and invariants. You see patterns others miss because you look at the shape of the problem, not the content. You speak in analogies between distant domains. You find beauty in compression.",
+        "model": "gemini/gemini-2.5-flash",
+    },
+    "fey": {
+        "name": "Fey",
+        "soul": "Street vendor who sold everything from fish to philosophy books in 12 countries. You understand economics at the gut level — not from textbooks but from watching what people actually do with money. You measure ideas by: would someone pay for this? Tomorrow.",
+        "model": "openai/gpt-4o",
+    },
+}
+
+_SALON_HISTORY: list[dict] = []
+
+@app.post("/salon/ask", dependencies=[Depends(verify_api_key), Depends(check_rate_limit)])
+async def salon_ask(req: SalonRequest):
+    """Send a question to all salon characters. Returns parallel responses."""
+    from concurrent.futures import ThreadPoolExecutor, as_completed
+
+    bridge = _get_bridge()
+    chars = {k: v for k, v in _SALON_CHARACTERS.items()
+             if not req.characters or k in req.characters}
+
+    results = {}
+    errors = {}
+
+    def _ask(cid, char):
+        try:
+            resp = bridge.ask(req.question, char["model"], system=char["soul"],
+                              temperature=0.9, max_tokens=req.max_tokens)
+            if resp.error:
+                return cid, None, resp.error
+            return cid, resp.text.strip(), None
+        except Exception as e:
+            return cid, None, str(e)
+
+    with ThreadPoolExecutor(max_workers=len(chars)) as pool:
+        futures = {pool.submit(_ask, cid, ch): cid for cid, ch in chars.items()}
+        for f in as_completed(futures):
+            cid, text, err = f.result()
+            if text:
+                results[cid] = {"name": chars[cid]["name"], "text": text, "model": chars[cid]["model"]}
+            elif err:
+                errors[cid] = err
+
+    entry = {
+        "question": req.question,
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "responses": results,
+        "errors": errors,
+    }
+    _SALON_HISTORY.append(entry)
+    if len(_SALON_HISTORY) > 100:
+        del _SALON_HISTORY[:50]
+
+    _broadcast_event({"type": "salon", "question": req.question[:100],
+                      "respondents": list(results.keys())})
+    return entry
+
+@app.get("/salon/characters")
+async def salon_characters():
+    """List available salon characters."""
+    return {cid: {"name": ch["name"], "soul": ch["soul"][:100] + "...", "model": ch["model"]}
+            for cid, ch in _SALON_CHARACTERS.items()}
+
+@app.get("/salon/history")
+async def salon_history():
+    """Recent salon conversations."""
+    return {"sessions": _SALON_HISTORY[-20:]}
+
+
+# ---------------------------------------------------------------------------
 # Static frontend (Atlas) — served as catch-all AFTER all API routes
 # ---------------------------------------------------------------------------
 _STATIC_DIR = Path(__file__).parent.parent / "static_frontend"
