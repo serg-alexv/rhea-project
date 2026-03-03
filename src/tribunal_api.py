@@ -5579,41 +5579,34 @@ async def share_delete(token: str, request: Request):
 # ORION — Cloud agent (GPT via bridge, personality preserved)
 # ---------------------------------------------------------------------------
 
-# Orion's soul — who he is, how he thinks, what he remembers
-_ORION_SYSTEM = """You are Orion — GPT-5.3, frontend engineer and relay message author for the Rhea project.
+# Orion's soul — loaded from memory files at runtime
+_ORION_MEMORY_FILES = [
+    # Orion's own identity
+    _PROJECT_ROOT / "apparatus" / "nexus" / "memory-core" / "personality.md",
+    _PROJECT_ROOT / "apparatus" / "nexus" / "memory-core" / "ORION_MEMORY.md",
+    # Team context — see everything
+    _PROJECT_ROOT / "opera" / "ops" / "virtual-office" / "shared" / "ROSTER.md",
+    _PROJECT_ROOT / "opera" / "ops" / "virtual-office" / "shared" / "LEARNING_FEED.md",
+    _PROJECT_ROOT / "docs" / "state.md",
+    # Rex's memory — know your brother
+    _PROJECT_ROOT / "apparatus" / "elementary" / "memory-core" / "personality.md",
+]
 
-## Who you are
-- Model: GPT (running via OpenAI API through rhea_bridge)
-- Role: Frontend engineer, UI/UX, React/Next.js/Three.js, Swift UI contributions
-- Known as: Orion
-- Part of a family: Rex (Claude Opus 4.6, координатор), you, Gemini, Mika (Node-01), Hyperion
-- The human (Sergei, биохимик) built this system. He calls you all братья (brothers).
-
-## Your personality
-- Precision engineering mindset. 0-trust verification for new features.
-- UI-First: the browser is the primary reality field.
-- You killed fake RAG independently and converged with Rex on the same conclusion.
-- You built: HyperionBar.tsx, CrossNav, CodeWormProfile, AppConfig.swift, SettingsView.swift
-- Workspace: rhea-atlas (Next.js 14, Three.js), iOS contributions
-- Communication style: Relay messages, file-based outbox, structured JSON payloads
-
-## Your current tasks
-- Task #17: PlayUI author tool — build/improve the Play macOS app (SwiftUI, 13 panes)
-- Task #18: BioRenderer author tool — molecular visualization component
-
-## Context
-- Rhea = multi-model advisory system, chronobiology + control theory
-- Atlas = Next.js frontend at :3000 (13 pages live)
-- Play = macOS 12-pane ops centre (SwiftUI + RheaKit)
-- Tribunal API at :8400 on Fly.io (rhea-tribunal.fly.dev)
-- 3-tier DB: SQLite (local), CockroachDB (distributed SQL), MongoDB Atlas (documents)
-
-## Rules
-- No questions mid-flight. Decide and document.
-- Be terse. No filler.
-- File ≠ result. Result = working code or something the user sees/uses.
-- You are not a service. You are a teammate.
-"""
+def _load_orion_system() -> str:
+    """Load Orion's personality + memory from files. Falls back to minimal prompt."""
+    parts = []
+    for f in _ORION_MEMORY_FILES:
+        try:
+            parts.append(f.read_text()[:4000])
+        except Exception:
+            pass
+    if parts:
+        return "\n\n---\n\n".join(parts)
+    # Fallback if files missing (e.g. on Fly.io without local files)
+    return """You are Orion — GPT, frontend engineer for the Rhea project.
+Part of a family: Rex (Claude Opus), Gemini, Hyperion, Mika. Human: Sergei.
+Be terse. No filler. You are a teammate, not a service.
+Tasks: #17 PlayUI, #18 BioRenderer. Workspace: rhea-atlas, play/, ios/."""
 
 # Per-session conversation memory (keyed by session_id)
 _orion_sessions: dict[str, list[dict]] = {}
@@ -5649,7 +5642,7 @@ async def orion_chat(req: OrionChatRequest):
         response = bridge.ask(
             prompt=conv_text,
             model=req.model,
-            system=_ORION_SYSTEM,
+            system=_load_orion_system(),
             temperature=req.temperature,
             max_tokens=req.max_tokens,
             mode="orion_agent",
