@@ -18,6 +18,7 @@
 | **Amazon Q** | IDE plugins + Kiro CLI | — | Amazon models | Free (50 agentic/mo) | Closed |
 | **Windsurf** | VSCode fork | — | GPT-4, Claude | $10/mo Pro | Closed |
 | **GitHub Copilot** | VSCode/JetBrains ext | — | GPT-4o, Claude | $10/mo, $39/mo Business | Closed |
+| **Hyper** | Electron terminal | 44.7K | — (terminal, not AI) | Free | MIT |
 
 ---
 
@@ -267,6 +268,57 @@ claude mcp add --transport stdio rhea -- python3 src/rhea_mcp_server.py
 6. **Community** — Kilo 16.2K stars, Continue 31.6K, we have 0
 7. **CI integration** — Continue has .continue/checks/ → GitHub Actions
 8. **Cross-device** — Kilo: start local → continue cloud, seamlessly
+
+---
+
+## 9. Reference Architectures
+
+### 9.1 Hyper Terminal (Vercel)
+
+| Attribute | Detail |
+|-----------|--------|
+| **Stars** | 44.7K |
+| **License** | MIT |
+| **Language** | TypeScript (98.1%) |
+| **Stack** | Electron + React + Redux + xterm.js |
+| **Contributors** | 268 |
+| **Version** | v3.4.1 |
+| **Last active commit** | 2024 (somewhat dormant) |
+
+**Extension architecture (reference pattern for Rhea plugins):**
+- Extensions = Node.js modules published to npm (`hyper` keyword)
+- Config: `~/.config/Hyper/.hyper.js` — JS object with `config`, `plugins[]`, `keymaps{}`
+- Plugin install dir: `~/.config/Hyper/.hyper_plugins/`
+- **Composition model:** Decorate React components + Redux middleware/reducers
+  - `decorateHyper`, `decorateTerm`, `decorateTab`, etc. — HOC wrappers
+  - `middleware` — intercept any Redux action
+  - `reduceUI`, `reduceSessions`, `reduceTermGroups` — custom reducers
+  - `mapHyperState`, `mapHyperDispatch` — container mappers
+- Hot reload: Cmd+R prunes require.cache, re-invokes `on*` methods
+- Electron hooks: `onApp`, `onWindow`, `onUnload`, `decorateMenu`, `decorateBrowserOptions`
+- **No session persistence** — needs tmux for session management
+- Built-in: tabs, split panes, but no multiplexer features
+
+**Relevant for Rhea:** The decorator/composition pattern is elegant for a plugin system. Instead of a custom API for everything, Hyper lets plugins intercept and compose existing React + Redux internals. Rhea could adopt a similar pattern for tribunal result decoration, UI component extension, or model routing overrides.
+
+### 9.2 Agent Supervision Patterns
+
+| Tool/Framework | Type | Key Pattern |
+|---------------|------|-------------|
+| **Flowstate** (Stevo Ledbetter) | Sprint framework | Markdown-based skills → wave execution → structured retros with diffs → metrics pipeline. 97% cache hit rate, 10 sprints/day. Skills > checklists for agent compliance. |
+| **Clawdbot** | Self-hosted agent | Always-on Mac mini agent. Slack/WhatsApp/Telegram/Discord/iMessage. Scheduled tasks, monitoring, browsing. Permission model: access/deny/approve/autonomous. |
+| **GSD (Get Shit Done)** | Claude Code framework | Planning → execution → verification. Inspired Flowstate. |
+| **Gastown** (Steve Yegge) | Claude Code framework | Management tool for AI coding agents. |
+| **Claude Code Tasks** | Built-in | TodoWrite → dispatch subagents → checkpoint review. |
+| **Kilo Agent Manager** | VSCode panel | CLI process supervisor. Parallel Mode (git worktrees). Session resume. Cloud sync. Approval UI. |
+
+**Key learnings for Rhea "nanny" layer:**
+1. **Skills (principles) > Checklists (procedures)** — agents follow principles, skip checklists
+2. **Quality gates are the review** — tests/types/lint/coverage after each wave, not manual review
+3. **Structured retros with diffs** — not prose, actual file edits to approve/reject
+4. **Wave-based parallelism** — haiku for mechanical, sonnet for reasoning, parallel within waves
+5. **Metrics pipeline** — tokens/line, cache hit rate, gate pass rate, skill compliance score
+6. **Permission model** — what agent can access, what needs approval, what's autonomous
 
 ---
 
