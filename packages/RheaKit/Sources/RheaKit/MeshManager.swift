@@ -2,6 +2,10 @@ import Foundation
 import Combine
 import os.log
 
+#if canImport(TailscaleKit)
+import TailscaleKit
+#endif
+
 /// Rhea Mesh Manager — agent-to-agent networking via Tailscale/Headscale.
 ///
 /// Uses TailscaleKit (BSD-3-Clause) to create a userspace mesh node.
@@ -25,7 +29,10 @@ public class MeshManager: ObservableObject {
     @Published public var statusText = "Disconnected"
 
     private let log = Logger(subsystem: "com.rhea.preview", category: "mesh")
-    private var node: AnyObject?  // TailscaleNode (typed as AnyObject to avoid compile-time dependency)
+    #if canImport(TailscaleKit)
+    private var tsNode: TailscaleNode?
+    #endif
+    private var node: AnyObject?  // Stub fallback when TailscaleKit is not linked
     private let queue = DispatchQueue(label: "com.rhea.mesh", qos: .userInitiated)
 
     // Mesh configuration — points to self-hosted Headscale
@@ -114,10 +121,15 @@ public class MeshManager: ObservableObject {
 
     /// Disconnect from the mesh.
     public func disconnect() async {
-        guard let node else { return }
+        #if canImport(TailscaleKit)
+        let hasNode = tsNode != nil || node != nil
+        #else
+        let hasNode = node != nil
+        #endif
+        guard hasNode else { return }
         log.info("Disconnecting from mesh...")
 
-        await closeNode(node)
+        await closeNode(node ?? NSObject())
         self.node = nil
 
         await MainActor.run {
@@ -143,12 +155,16 @@ public class MeshManager: ObservableObject {
 
     // MARK: - TailscaleKit Bridge
 
-    // These methods use runtime checks to call TailscaleKit APIs.
-    // This allows compilation without hard-linking the framework,
-    // with graceful degradation when TailscaleKit is absent.
+    // Uses #if canImport(TailscaleKit) for compile-time integration.
+    // When TailscaleKit.xcframework is linked (via project.yml), real mesh networking is active.
+    // When not linked, falls back to MeshNodeStub for UI testing.
 
     private func isTailscaleKitAvailable() -> Bool? {
+        #if canImport(TailscaleKit)
+        return true
+        #else
         return NSClassFromString("TailscaleKit.TailscaleNode") != nil ? true : nil
+        #endif
     }
 
     private func createTailscaleNode(
@@ -158,62 +174,94 @@ public class MeshManager: ObservableObject {
         controlURL: String,
         ephemeral: Bool
     ) async throws -> AnyObject {
-        // Direct TailscaleKit integration (linked at build time)
-        // When TailscaleKit.xcframework is linked, uncomment:
-        //
-        // import TailscaleKit
-        // let config = Configuration(
-        //     hostName: hostname,
-        //     path: path,
-        //     authKey: authKey,
-        //     controlURL: controlURL,
-        //     ephemeral: ephemeral
-        // )
-        // return try TailscaleNode(config: config, logger: nil)
-
-        // For now: stub that simulates mesh connectivity
-        // This gets replaced when TailscaleKit.xcframework is linked
-        log.info("Creating mesh node: \(hostname) → \(controlURL)")
+        #if canImport(TailscaleKit)
+        let config = Configuration(
+            hostName: hostname,
+            path: path,
+            authKey: authKey,
+            controlURL: controlURL,
+            ephemeral: ephemeral
+        )
+        let tsNode = try TailscaleNode(config: config, logger: nil)
+        self.tsNode = tsNode
+        log.info("Created TailscaleKit node: \(hostname) → \(controlURL)")
+        return tsNode as AnyObject
+        #else
+        // Stub fallback when TailscaleKit.xcframework is not linked
+        log.info("Creating stub mesh node: \(hostname) → \(controlURL)")
         return MeshNodeStub(hostname: hostname, controlURL: controlURL, authKey: authKey) as AnyObject
+        #endif
     }
 
     private func bringNodeUp(_ node: AnyObject) async throws {
+        #if canImport(TailscaleKit)
+        if let tsNode {
+            try await tsNode.up()
+            return
+        }
+        #endif
         if let stub = node as? MeshNodeStub {
             try await stub.up()
             return
         }
-        // TailscaleKit: try await (node as! TailscaleNode).up()
     }
 
     private func getNodeIPs(_ node: AnyObject) async throws -> (ipv4: String?, ipv6: String?) {
+        #if canImport(TailscaleKit)
+        if let tsNode {
+            let addrs = try await tsNode.addrs()
+            return (ipv4: addrs.ip4, ipv6: addrs.ip6)
+        }
+        #endif
         if let stub = node as? MeshNodeStub {
             return stub.ips
         }
-        // TailscaleKit: return try await (node as! TailscaleNode).addrs()
         return (nil, nil)
     }
 
     private func closeNode(_ node: AnyObject) async {
+        #if canImport(TailscaleKit)
+        if let tsNode {
+            try? await tsNode.close()
+            self.tsNode = nil
+            return
+        }
+        #endif
         if let stub = node as? MeshNodeStub {
             await stub.close()
             return
         }
-        // TailscaleKit: try? await (node as! TailscaleNode).close()
     }
 
     private func dialAndSend(node: AnyObject, address: String, data: Data) async throws {
         log.info("Mesh send to \(address): \(data.count) bytes")
-        // TailscaleKit:
-        // let conn = try await OutgoingConnection(tailscale: node.tailscale!, to: address, proto: .tcp, logger: ...)
-        // try await conn.connect()
-        // try conn.send(data)
-        // conn.close()
+        #if canImport(TailscaleKit)
+        if let tsNode, let handle = await tsNode.tailscale {
+            let conn = try await OutgoingConnection(
+                tailscale: handle,
+                to: address,
+                proto: .tcp,
+                logger: BlackholeLogger()
+            )
+            try await conn.connect()
+            try await conn.send(data)
+            await conn.close()
+            return
+        }
+        #endif
+        // Stub: log only
     }
 
     private func tailscaleHTTPRequest(node: AnyObject, url: URL) async throws -> (Data, URLResponse) {
-        // TailscaleKit provides URLSession.tailscaleSession(node) for HTTP over tailnet
-        // For now, fall back to regular URLSession
         log.info("Mesh HTTP: \(url)")
+        #if canImport(TailscaleKit)
+        if let tsNode {
+            let (sessionConfig, _) = try await URLSessionConfiguration.tailscaleSession(tsNode)
+            let session = URLSession(configuration: sessionConfig)
+            return try await session.data(from: url)
+        }
+        #endif
+        // Fallback: regular URLSession (no tailnet routing)
         return try await URLSession.shared.data(from: url)
     }
 

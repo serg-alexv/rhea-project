@@ -500,11 +500,12 @@ public struct DPIView: View {
 
     private func refreshStats() {
         // Read from shared UserDefaults (app group) written by the tunnel extension.
-        // Key convention: "dpi.stats.<field>"
-        let defaults = UserDefaults.standard
-        stats.totalPackets = UInt64(defaults.integer(forKey: "dpi.stats.totalPackets"))
-        stats.modifiedPackets = UInt64(defaults.integer(forKey: "dpi.stats.modifiedPackets"))
-        stats.tlsClientHellos = UInt64(defaults.integer(forKey: "dpi.stats.tlsClientHellos"))
-        stats.httpRequests = UInt64(defaults.integer(forKey: "dpi.stats.httpRequests"))
+        // The extension writes to "group.com.rhea.preview" suite with keys:
+        //   dpi_total_packets, dpi_modified_packets, dpi_tls_hellos, dpi_http_requests, dpi_active, dpi_last_update
+        let defaults = UserDefaults(suiteName: "group.com.rhea.preview") ?? .standard
+        stats.totalPackets = UInt64(defaults.integer(forKey: "dpi_total_packets"))
+        stats.modifiedPackets = UInt64(defaults.integer(forKey: "dpi_modified_packets"))
+        stats.tlsClientHellos = UInt64(defaults.integer(forKey: "dpi_tls_hellos"))
+        stats.httpRequests = UInt64(defaults.integer(forKey: "dpi_http_requests"))
     }
 }

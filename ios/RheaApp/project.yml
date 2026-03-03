@@ -42,6 +42,8 @@ targets:
       - target: RheaTunnel
       - target: RheaKeyboard
       - target: RheaShare
+      - framework: ../../vendor/libtailscale/swift/build/Build/Products/Release-iphonefat/TailscaleKit.xcframework
+        embed: true
     info:
       path: Info.plist
       properties:

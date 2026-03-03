@@ -10,8 +10,10 @@
 		06E656822071248B625AE0D7 /* TribunalClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2831EB795B13A29C6A189D1E /* TribunalClient.swift */; };
 		145A3BB626553141E8FA200A /* CommandCentreLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = B938A34423FB72064979B8A6 /* CommandCentreLayout.swift */; };
 		153CD582B1C7E60EB6A962CC /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED4E164F5622691030F95F5B /* ShareViewController.swift */; };
+		1A999DCD1C87BD433D5FB631 /* DPIBypassEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48FA8CAE5B313909B01511DD /* DPIBypassEngine.swift */; };
 		2020B120A5A6D7B940111F12 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A61BE59C6096A226D41463FC /* Assets.xcassets */; };
 		4888EF75F029CEA9FA61270B /* RheaKit in Frameworks */ = {isa = PBXBuildFile; productRef = FC51B905A12BD3ACD3E9B223 /* RheaKit */; };
+		649F6323BB9A072552701F3A /* TailscaleKit.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 057A840068F8E883DC1C520C /* TailscaleKit.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		705E204FBECE5C9D71948BB3 /* KeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D837731C33367F5AF137C0 /* KeyboardView.swift */; };
 		7078EC9E0A472B633A8369D2 /* RheaTunnel.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 9574E18377E1F632476B4C07 /* RheaTunnel.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		71BB49DFF7DF420578BE30B4 /* RheaShare.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 52409BDB4148A36F8697069E /* RheaShare.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -20,6 +22,7 @@
 		8E73ED5F5FC02885676DC830 /* RheaKit in Frameworks */ = {isa = PBXBuildFile; productRef = E8DAE4868EC16BBBD478263A /* RheaKit */; };
 		AB9582A76076614E803D469A /* PacketTunnelProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02CF84DA502BA4D1F2705083 /* PacketTunnelProvider.swift */; };
 		B1CBB9EDD48631F873E83CD3 /* MenuBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C709DD65D53B2C1556F7B5F /* MenuBarView.swift */; };
+		B927FA075C06D30582FDC93D /* TailscaleKit.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 057A840068F8E883DC1C520C /* TailscaleKit.xcframework */; };
 		C0B17B6AA28A19A8FB0104CD /* KeyboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA402D4D7E8A8D3FC63332E7 /* KeyboardViewController.swift */; };
 		C46E4FDF7F0BF1DFD488CF9E /* ScreenPilotView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9ED40BFBC76E50BEA4CA59F /* ScreenPilotView.swift */; };
 		CD6AD05EF3419775A612BB37 /* CommandCentreApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B6E1E09FE6D90D1F384770 /* CommandCentreApp.swift */; };
@@ -52,6 +55,17 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		B8C3E5F80E56733E88E2EA37 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				649F6323BB9A072552701F3A /* TailscaleKit.xcframework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		EB55BE82A830276C02C0F124 /* Embed Foundation Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -69,11 +83,13 @@
 
 /* Begin PBXFileReference section */
 		02CF84DA502BA4D1F2705083 /* PacketTunnelProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PacketTunnelProvider.swift; sourceTree = "<group>"; };
+		057A840068F8E883DC1C520C /* TailscaleKit.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = TailscaleKit.xcframework; path = "../../vendor/libtailscale/swift/build/Build/Products/Release-iphonefat/TailscaleKit.xcframework"; sourceTree = "<group>"; };
 		18D837731C33367F5AF137C0 /* KeyboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardView.swift; sourceTree = "<group>"; };
 		1C709DD65D53B2C1556F7B5F /* MenuBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarView.swift; sourceTree = "<group>"; };
 		2831EB795B13A29C6A189D1E /* TribunalClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TribunalClient.swift; sourceTree = "<group>"; };
 		2B2B4E882931341E39C435E2 /* RheaKeyboard.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = RheaKeyboard.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		40F5D3F7CE5129EE551FD58A /* RheaKit */ = {isa = PBXFileReference; lastKnownFileType = folder; name = RheaKit; path = ../../packages/RheaKit; sourceTree = SOURCE_ROOT; };
+		48FA8CAE5B313909B01511DD /* DPIBypassEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DPIBypassEngine.swift; sourceTree = "<group>"; };
 		52409BDB4148A36F8697069E /* RheaShare.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = RheaShare.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		60B6E1E09FE6D90D1F384770 /* CommandCentreApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommandCentreApp.swift; sourceTree = "<group>"; };
 		9477E3C820DABB86E045F9C1 /* RheaPreviewApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RheaPreviewApp.swift; sourceTree = "<group>"; };
@@ -94,6 +110,7 @@
 			files = (
 				4888EF75F029CEA9FA61270B /* RheaKit in Frameworks */,
 				81D0994B8A74B0BA6A033CA5 /* AnimatedTabBar in Frameworks */,
+				B927FA075C06D30582FDC93D /* TailscaleKit.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -133,6 +150,7 @@
 				B304770D2747396A96EFED90 /* Sources */,
 				0407F85E4226D8F3F8F872BD /* Sources */,
 				B31944FF7CEF242EA1BD8B7C /* Sources */,
+				D016D786EB3EC62993B905F0 /* Frameworks */,
 				9531D99E19050B15226ADC13 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -166,10 +184,19 @@
 		B31944FF7CEF242EA1BD8B7C /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				48FA8CAE5B313909B01511DD /* DPIBypassEngine.swift */,
 				02CF84DA502BA4D1F2705083 /* PacketTunnelProvider.swift */,
 			);
 			name = Sources;
 			path = ../RheaTunnel/Sources;
+			sourceTree = "<group>";
+		};
+		D016D786EB3EC62993B905F0 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				057A840068F8E883DC1C520C /* TailscaleKit.xcframework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		EEA2260F0C4414BB91DAADCF /* Sources */ = {
@@ -248,6 +275,7 @@
 				1EC37FB7920C186A82C659F7 /* Resources */,
 				7BD4504B1BE6F0C72534143A /* Frameworks */,
 				EB55BE82A830276C02C0F124 /* Embed Foundation Extensions */,
+				B8C3E5F80E56733E88E2EA37 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -382,6 +410,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1A999DCD1C87BD433D5FB631 /* DPIBypassEngine.swift in Sources */,
 				AB9582A76076614E803D469A /* PacketTunnelProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -432,7 +461,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 25;
+				CURRENT_PROJECT_VERSION = 28;
 				DEVELOPMENT_TEAM = 398XACWZ7G;
 				INFOPLIST_FILE = "CommandCentre-Info.plist";
 				INFOPLIST_GENERATION_MODE = GeneratedByXcode;
@@ -441,7 +470,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 1.0.23;
+				MARKETING_VERSION = 1.0.28;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rhea.commandcentre;
 				SDKROOT = macosx;
 				SWIFT_VERSION = 5.9;
@@ -510,15 +539,19 @@
 				CODE_SIGN_ENTITLEMENTS = RheaApp.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 25;
+				CURRENT_PROJECT_VERSION = 28;
 				DEVELOPMENT_TEAM = 398XACWZ7G;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"../../vendor/libtailscale/swift/build/Build/Products/Release-iphonefat\"",
+				);
 				INFOPLIST_FILE = Info.plist;
 				INFOPLIST_GENERATION_MODE = GeneratedByXcode;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.23;
+				MARKETING_VERSION = 1.0.28;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rhea.preview;
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 5.9;
@@ -531,7 +564,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = RheaTunnel.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 25;
+				CURRENT_PROJECT_VERSION = 28;
 				DEVELOPMENT_TEAM = 398XACWZ7G;
 				INFOPLIST_FILE = "RheaTunnel-Info.plist";
 				INFOPLIST_GENERATION_MODE = GeneratedByXcode;
@@ -540,7 +573,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0.23;
+				MARKETING_VERSION = 1.0.28;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rhea.preview.tunnel;
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 5.9;
@@ -555,15 +588,19 @@
 				CODE_SIGN_ENTITLEMENTS = RheaApp.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 25;
+				CURRENT_PROJECT_VERSION = 28;
 				DEVELOPMENT_TEAM = 398XACWZ7G;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"../../vendor/libtailscale/swift/build/Build/Products/Release-iphonefat\"",
+				);
 				INFOPLIST_FILE = Info.plist;
 				INFOPLIST_GENERATION_MODE = GeneratedByXcode;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.23;
+				MARKETING_VERSION = 1.0.28;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rhea.preview;
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 5.9;
@@ -576,7 +613,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = RheaShare.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 25;
+				CURRENT_PROJECT_VERSION = 28;
 				DEVELOPMENT_TEAM = 398XACWZ7G;
 				INFOPLIST_FILE = "RheaShare-Info.plist";
 				INFOPLIST_GENERATION_MODE = GeneratedByXcode;
@@ -585,7 +622,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0.23;
+				MARKETING_VERSION = 1.0.28;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rhea.preview.share;
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 5.9;
@@ -598,7 +635,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = RheaShare.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 25;
+				CURRENT_PROJECT_VERSION = 28;
 				DEVELOPMENT_TEAM = 398XACWZ7G;
 				INFOPLIST_FILE = "RheaShare-Info.plist";
 				INFOPLIST_GENERATION_MODE = GeneratedByXcode;
@@ -607,7 +644,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0.23;
+				MARKETING_VERSION = 1.0.28;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rhea.preview.share;
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 5.9;
@@ -620,7 +657,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = RheaKeyboard.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 25;
+				CURRENT_PROJECT_VERSION = 28;
 				DEVELOPMENT_TEAM = 398XACWZ7G;
 				INFOPLIST_FILE = "RheaKeyboard-Info.plist";
 				INFOPLIST_GENERATION_MODE = GeneratedByXcode;
@@ -629,7 +666,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0.23;
+				MARKETING_VERSION = 1.0.28;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rhea.preview.keyboard;
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 5.9;
@@ -704,7 +741,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = RheaKeyboard.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 25;
+				CURRENT_PROJECT_VERSION = 28;
 				DEVELOPMENT_TEAM = 398XACWZ7G;
 				INFOPLIST_FILE = "RheaKeyboard-Info.plist";
 				INFOPLIST_GENERATION_MODE = GeneratedByXcode;
@@ -713,7 +750,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0.23;
+				MARKETING_VERSION = 1.0.28;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rhea.preview.keyboard;
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 5.9;
@@ -727,7 +764,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 25;
+				CURRENT_PROJECT_VERSION = 28;
 				DEVELOPMENT_TEAM = 398XACWZ7G;
 				INFOPLIST_FILE = "CommandCentre-Info.plist";
 				INFOPLIST_GENERATION_MODE = GeneratedByXcode;
@@ -736,7 +773,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 1.0.23;
+				MARKETING_VERSION = 1.0.28;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rhea.commandcentre;
 				SDKROOT = macosx;
 				SWIFT_VERSION = 5.9;
@@ -748,7 +785,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = RheaTunnel.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 25;
+				CURRENT_PROJECT_VERSION = 28;
 				DEVELOPMENT_TEAM = 398XACWZ7G;
 				INFOPLIST_FILE = "RheaTunnel-Info.plist";
 				INFOPLIST_GENERATION_MODE = GeneratedByXcode;
@@ -757,7 +794,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0.23;
+				MARKETING_VERSION = 1.0.28;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rhea.preview.tunnel;
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 5.9;
