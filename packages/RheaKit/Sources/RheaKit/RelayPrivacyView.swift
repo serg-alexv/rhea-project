@@ -249,7 +249,6 @@ public struct RelayPrivacyView: View {
                     techniqueRow("Fake packet (low TTL)", active: dpiPreset == "aggressive")
                 }
 
-                // TODO(human): DPI bypass activation button
                 Button {
                     Task {
                         do {
