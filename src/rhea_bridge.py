@@ -14,7 +14,9 @@ Usage:
     python3 src/rhea_bridge.py tiers                             # show tier config
     python3 src/rhea_bridge.py profile                           # show active execution profile
     python3 src/rhea_bridge.py profile set safe_cheap|balanced|deep
-    python3 src/rhea_bridge.py daily-summary [YYYY-MM-DD]        # call log summary
+    python3 src/rhea_bridge.py predict [model-name]               # KServe v2 inference
+    python3 src/rhea_bridge.py predict-status                     # OpenShift AI health
+    python3 src/rhea_bridge.py daily-summary [YYYY-MM-DD]         # call log summary
 """
 
 import json
@@ -762,6 +764,17 @@ PROVIDERS = {
         ],
         call_method="openai_compatible",
     ),
+    "openshift_ai": ProviderConfig(
+        name="openshift_ai",
+        display_name="OpenShift AI (OpenVINO)",
+        base_url=os.environ.get(
+            "OPENSHIFT_AI_ENDPOINT",
+            "https://rhea-openshift-one-mrfeynman-dev.apps.rm3.7wse.p1.openshiftapps.com",
+        ),
+        api_key_env="OPENSHIFT_AI_TOKEN",  # oc whoami -t
+        models=["rhea-openshift-one"],
+        call_method="kserve_v2",
+    ),
 }
 
 # Map env vars for LiteLLM Azure OpenAI provider
@@ -787,6 +800,19 @@ if not os.environ.get("GITHUB_TOKEN"):
             print("[bridge] GITHUB_TOKEN auto-detected from gh CLI")
     except Exception:
         pass  # gh not available — skip
+
+# Auto-detect OpenShift AI token from oc CLI
+if not os.environ.get("OPENSHIFT_AI_TOKEN"):
+    try:
+        import subprocess
+        _oc_token = subprocess.run(
+            ["oc", "whoami", "-t"],
+            capture_output=True, text=True, timeout=5,
+        )
+        if _oc_token.returncode == 0 and _oc_token.stdout.strip():
+            os.environ["OPENSHIFT_AI_TOKEN"] = _oc_token.stdout.strip()
+    except Exception:
+        pass  # oc not available — skip
 
 
 # ---------------------------------------------------------------------------
@@ -1188,6 +1214,125 @@ class RheaBridge:
             k=k,
             elapsed_s=round(elapsed, 2),
         )
+
+    # ------------------------------------------------------------------
+    # OpenShift AI / KServe v2 inference
+    # ------------------------------------------------------------------
+
+    def predict(
+        self,
+        model_name: str = "rhea-openshift-one",
+        input_data: Optional[list] = None,
+        input_name: str = "out_0",
+        input_shape: Optional[list] = None,
+        input_dtype: str = "FP32",
+    ) -> dict:
+        """Send a KServe v2 inference request to OpenShift AI model serving.
+
+        Returns dict with keys: outputs, latency_s, error, model_name, endpoint.
+        """
+        import urllib.request, ssl
+
+        cfg = self.providers.get("openshift_ai")
+        if not cfg:
+            return {"error": "openshift_ai provider not configured"}
+
+        token = os.environ.get(cfg.api_key_env, "")
+        endpoint = cfg.base_url.rstrip("/")
+        url = f"{endpoint}/v2/models/{model_name}/infer"
+
+        shape = input_shape or [1, 3, 224, 224]
+        data = input_data or [0.0] * (shape[0] * shape[1] * shape[2] * shape[3])
+
+        payload = {
+            "inputs": [{
+                "name": input_name,
+                "shape": shape,
+                "datatype": input_dtype,
+                "data": data,
+            }]
+        }
+
+        headers = {"Content-Type": "application/json"}
+        if token:
+            headers["Authorization"] = f"Bearer {token}"
+
+        ctx = ssl.create_default_context()
+        ctx.check_hostname = False
+        ctx.verify_mode = ssl.CERT_NONE
+
+        t0 = time.time()
+        try:
+            req = urllib.request.Request(
+                url, data=json.dumps(payload).encode(), headers=headers, method="POST"
+            )
+            with urllib.request.urlopen(req, context=ctx, timeout=30) as resp:
+                result = json.loads(resp.read().decode())
+            latency = round(time.time() - t0, 3)
+
+            _log_call(
+                "openshift_ai", model_name, 0, 0, 0, latency, None,
+                metadata={"input_shape": shape, "endpoint": endpoint},
+            )
+
+            return {
+                "model_name": result.get("model_name", model_name),
+                "outputs": result.get("outputs", []),
+                "latency_s": latency,
+                "endpoint": endpoint,
+                "error": None,
+            }
+        except Exception as e:
+            latency = round(time.time() - t0, 3)
+            _log_call(
+                "openshift_ai", model_name, 0, 0, 0, latency, str(e),
+                metadata={"input_shape": shape, "endpoint": endpoint},
+            )
+            return {
+                "model_name": model_name,
+                "outputs": [],
+                "latency_s": latency,
+                "endpoint": endpoint,
+                "error": str(e),
+            }
+
+    def predict_status(self) -> dict:
+        """Check OpenShift AI model serving health."""
+        import urllib.request, ssl
+
+        cfg = self.providers.get("openshift_ai")
+        if not cfg:
+            return {"status": "not_configured"}
+
+        token = os.environ.get(cfg.api_key_env, "")
+        endpoint = cfg.base_url.rstrip("/")
+
+        results = {}
+        for model_name in cfg.models:
+            url = f"{endpoint}/v2/models/{model_name}"
+            headers = {}
+            if token:
+                headers["Authorization"] = f"Bearer {token}"
+
+            ctx = ssl.create_default_context()
+            ctx.check_hostname = False
+            ctx.verify_mode = ssl.CERT_NONE
+
+            try:
+                req = urllib.request.Request(url, headers=headers)
+                with urllib.request.urlopen(req, context=ctx, timeout=10) as resp:
+                    info = json.loads(resp.read().decode())
+                results[model_name] = {
+                    "status": "ready",
+                    "platform": info.get("platform", "unknown"),
+                    "versions": info.get("versions", []),
+                    "inputs": info.get("inputs", []),
+                    "outputs": info.get("outputs", []),
+                }
+            except Exception as e:
+                results[model_name] = {"status": "error", "error": str(e)}
+
+        return {"endpoint": endpoint, "models": results}
 
     def send_chronos(self, message: ChronosMessage) -> bool:
         """Log and relay a CHRONOS inter-agent message using QWRR relay."""
@@ -1709,6 +1854,15 @@ def main():
         )
         success = bridge.send_chronos(msg)
         print(json.dumps({"success": success, "message": "CHRONOS message logged and relayed"}, indent=2))
+
+    elif cmd == "predict":
+        model_name = sys.argv[2] if len(sys.argv) > 2 else "rhea-openshift-one"
+        result = bridge.predict(model_name=model_name)
+        print(json.dumps(result, indent=2))
+
+    elif cmd == "predict-status":
+        result = bridge.predict_status()
+        print(json.dumps(result, indent=2))
 
     elif cmd == "daily-summary":
         date_arg = None
