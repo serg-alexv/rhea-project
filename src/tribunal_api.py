@@ -1232,6 +1232,8 @@ footer .f-copy{{color:#333;font-size:.68rem;letter-spacing:.04em}}
         <a href="?lang=ja" style="display:block;padding:.4rem 1rem;font-size:.75rem;color:var(--text);text-decoration:none" onmouseover="this.style.background='rgba(255,255,255,.06)'" onmouseout="this.style.background=''">&#x1F1EF;&#x1F1F5; &#26085;&#26412;&#35486;</a>
         <a href="?lang=zh" style="display:block;padding:.4rem 1rem;font-size:.75rem;color:var(--text);text-decoration:none" onmouseover="this.style.background='rgba(255,255,255,.06)'" onmouseout="this.style.background=''">&#x1F1E8;&#x1F1F3; &#20013;&#25991;</a>
         <a href="?lang=cs" style="display:block;padding:.4rem 1rem;font-size:.75rem;color:var(--text);text-decoration:none" onmouseover="this.style.background='rgba(255,255,255,.06)'" onmouseout="this.style.background=''">&#x1F1E8;&#x1F1FF; &#268;e&#353;tina</a>
+        <a href="?lang=sw" style="display:block;padding:.4rem 1rem;font-size:.75rem;color:var(--text);text-decoration:none" onmouseover="this.style.background='rgba(255,255,255,.06)'" onmouseout="this.style.background=''">&#x1F1F0;&#x1F1EA; Kiswahili</a>
+        <a href="?lang=he" style="display:block;padding:.4rem 1rem;font-size:.75rem;color:var(--text);text-decoration:none" onmouseover="this.style.background='rgba(255,255,255,.06)'" onmouseout="this.style.background=''">&#x1F1EE;&#x1F1F1; &#1506;&#1489;&#1512;&#1497;&#1514;</a>
       </div>
     </div>
     <!-- Compact auth widget -->
@@ -1927,7 +1929,7 @@ You own your data, your models, your keys. Rhea serves you &mdash; not the other
   window.declineGdpr=function(){{localStorage.setItem('rhea_gdpr','decline');gdprBanner.classList.remove('visible')}};
 
   // Language picker — navbar globe icon
-  const langData={{en:'English',fr:'Fran\u00e7ais',pt:'Portugu\u00eas',de:'Deutsch',el:'\u0395\u03bb\u03bb\u03b7\u03bd\u03b9\u03ba\u03ac',ka:'\u10e5\u10d0\u10e0\u10d7\u10e3\u10da\u10d8',ja:'\u65e5\u672c\u8a9e',zh:'\u4e2d\u6587',cs:'\u010ce\u0161tina'}};
+  const langData={{en:'English',fr:'Fran\u00e7ais',pt:'Portugu\u00eas',de:'Deutsch',el:'\u0395\u03bb\u03bb\u03b7\u03bd\u03b9\u03ba\u03ac',ka:'\u10e5\u10d0\u10e0\u10d7\u10e3\u10da\u10d8',ja:'\u65e5\u672c\u8a9e',zh:'\u4e2d\u6587',cs:'\u010ce\u0161tina',sw:'Kiswahili',he:'\u05e2\u05d1\u05e8\u05d9\u05ea'}};
   const langMenu=document.getElementById('lang-menu');
   const langBtn=document.getElementById('lang-btn');
   if(langBtn&&langMenu){{
