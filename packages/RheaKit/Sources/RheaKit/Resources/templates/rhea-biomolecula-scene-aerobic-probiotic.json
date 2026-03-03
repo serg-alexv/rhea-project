@@ -1,0 +1,24 @@
+{
+  "name": "aerobic_probiotic",
+  "description": "BioRenderer scene illustrating aerobic metabolism and probiotic protection systems.",
+  "camera": {
+    "position": [1.2, 0.6, 2.8],
+    "target": [0, 0, 0],
+    "fov": 50,
+    "controls": { "enableZoom": true }
+  },
+  "lighting": [
+    { "type": "ambient", "intensity": 0.4 },
+    { "type": "directional", "direction": [0.6, 1, -0.7], "intensity": 0.9 }
+  ],
+  "nodes": [
+    { "id": "mitochondria", "type": "sphere", "position": [0.2, 0.1, 0], "color": "#4fd1c5", "scale": 0.6 },
+    { "id": "probiotic_cell", "type": "plane", "position": [-0.4, 0, -0.2], "color": "#f6cd61", "scale": 0.5 },
+    { "id": "oxygen_flow", "type": "tube", "points": [[-0.6, 0, -0.4], [0.6, 0.1, 0.3]], "color": "#6cb2eb", "lineWidth": 0.04 }
+  ],
+  "annotations": [
+    { "text": "Aerobic path active", "position": [0.5, 0.8, 0.1], "color": "#ffffff" },
+    { "text": "Probiotic guard layer", "position": [-0.7, -0.2, -0.3], "color": "#f6cd61" }
+  ],
+  "export": { "resolution": [2048, 1152], "format": "png", "prefix": "bio-aerobic" }
+}

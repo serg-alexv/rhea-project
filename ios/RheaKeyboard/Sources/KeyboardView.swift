@@ -78,6 +78,7 @@ struct KeyboardView: View {
     private let green = Color(red: 0.30, green: 0.90, blue: 0.50)
     private let amber = Color(red: 1.0, green: 0.78, blue: 0.20)
     private let red = Color(red: 1.0, green: 0.35, blue: 0.35)
+    private let keySpacing: CGFloat = 5
 
     // QWERTY layout
     private let row1 = ["q","w","e","r","t","y","u","i","o","p"]
