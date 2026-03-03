@@ -5645,7 +5645,7 @@ async def orion_chat(req: OrionChatRequest):
         conv_text += f"[{role}]: {msg['content']}\n\n"
 
     try:
-        bridge = _get_bridge()
+        bridge = get_bridge()
         response = bridge.ask(
             prompt=conv_text,
             model=req.model,
