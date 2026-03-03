@@ -449,6 +449,12 @@ export default function CommandCentre() {
         >
           Wallet
         </Link>
+        <Link
+          href="/cc/bio"
+          className="px-4 py-2 text-xs font-medium text-white/40 hover:text-white/60 transition-colors border-b-2 border-transparent"
+        >
+          Bio
+        </Link>
       </div>
 
       {/* 3-column layout */}
