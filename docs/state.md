@@ -1,38 +1,30 @@
-# RHEA ACTIVE STATE (v4.1)
-> Date: 2026-03-02 | Agent: REX (Opus 4.6) | Mode: SOVEREIGN | Stage: 4-RELEASE
+# RHEA ACTIVE STATE (v4.2)
+> Date: 2026-03-03 | Agent: REX (Opus 4.6) | Mode: SOVEREIGN | Stage: 4-RELEASE
 
 ## System
 - **CHECK:** `bash scripts/rhea/check.sh` → OK
 - **GIT:** `stage4-release` | **Release:** v1.0.0 shipped
 - **Fly.io:** rhea-tribunal.fly.dev LIVE (JWT auth, dev-bypass blocked)
+- **Secrets:** GCloud SM (rhea-office-sync) — cockroachdb-url, mongodb-url
 
-## Products (all shipped)
-- **iOS:** build 26 (v1.0.26), TestFlight LIVE, auth gate + 13 tabs
+## Products
+- **iOS:** build 28 (v1.0.28), TestFlight, auth + 8 visible tabs, VPN entitlement
 - **Play (macOS):** v1.0 DMG shipped, 12-pane ops centre
 - **rhea-memory:** Python package, pip-installable, CLI ready
 - **Landing:** rhea-tribunal.fly.dev with signup + OAuth
 
-## Atlas (:3000) — 11 pages live
-- `/` (home), `/cc` (core), `/cc/automation`, `/cc/decisions`, `/cc/papers`, `/cc/graphics`
-- API health, 404, proof listings
+## Databases (3-tier)
+- **SQLite:** local proof.db, tasks.db, users.db — zero latency
+- **CockroachDB:** rhea-flow v25.4.1, GCP EU-West3 — distributed SQL
+- **MongoDB:** Atlas rhea v8.0.19 — documents + change streams
 
-## Features — Stage 4
-- **Auth:** JWT signup/login + OAuth (Google, Microsoft) at /auth
-- **Billing:** Credits ledger, ADMIN_EMAILS genline, 100-credit signup bonus
-- **Graphics:** SVG/PNG editor (/cc/graphics): shapes, text, freehand, image import, export
-- **Papers:** PDF annotation (/cc/papers): tribunal, aletheia, note, ontology tools
-- **Decisions:** Interactive sovereignty map (/cc/decisions)
-- **Aletheia:** 9 endpoints, 11 proofs, dedup+ontology
-
-## Surfaces
-- **Tribunal (:8400):** 54+ endpoints + auth + supervisor
-- **Atlas (:3000):** Next.js — live
-- **Rust TUI:** /opt/homebrew/bin/rhea (1.5MB)
-- **NDI:** libndi v6.2.0 local, graceful cloud degradation
+## Atlas (:3000) — 13 pages live
+- `/cc/design` (SwiftUI tool), `/cc/paper` (biotech figures), `/cc/logic`, `/cc/graphics`
+- `/cc/automation`, `/cc/decisions`, `/cc/papers`, `/cc/wallet`
 
 ## Pending
-- Apple Network Extension + Personal VPN — ENABLED in portal 2026-03-02
-- Apple Hotspot Helper — SUBMITTED 2026-03-02 (waiting approval)
-- Entity registration (timelabs npo) → ASC developer name
-- PyPI publish for rhea-memory
-- App Store submission
+- Fly.io deploy with new Atlas landing (Orion's WOW page)
+- CockroachDB schema: tasks, workflows, billing
+- MongoDB change streams → real-time push
+- VPN auto-install (NEVPNManager wiring)
+- App Store submission + PyPI publish
