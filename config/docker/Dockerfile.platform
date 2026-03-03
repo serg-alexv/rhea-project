@@ -2,6 +2,12 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
+# Install system deps + Tailscale for mesh networking
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        curl iptables \
+    && curl -fsSL https://tailscale.com/install.sh | sh \
+    && rm -rf /var/lib/apt/lists/*
+
 # Install all dependencies including billing
 RUN pip install --no-cache-dir \
     fastapi==0.128.8 \
@@ -51,4 +57,15 @@ EXPOSE 8400
 HEALTHCHECK --interval=30s --timeout=5s --retries=3 \
     CMD python3 -c "import urllib.request; urllib.request.urlopen('http://localhost:8400/health')"
 
-CMD ["uvicorn", "tribunal_api:app", "--host", "0.0.0.0", "--port", "8400", "--workers", "2"]
+# Inline entrypoint (scripts/ is in .dockerignore)
+RUN printf '#!/bin/bash\n\
+if [ -n "$TAILSCALE_AUTHKEY" ]; then\n\
+    tailscaled --state=/var/lib/tailscale/tailscaled.state --socket=/var/run/tailscale/tailscaled.sock &\n\
+    sleep 2\n\
+    tailscale up --authkey="$TAILSCALE_AUTHKEY" --hostname=rhea-tribunal\n\
+    echo "[tailscale] joined tailnet as rhea-tribunal"\n\
+fi\n\
+exec uvicorn tribunal_api:app --host 0.0.0.0 --port 8400 --workers 2\n' > /app/entrypoint.sh \
+    && chmod +x /app/entrypoint.sh
+
+CMD ["/app/entrypoint.sh"]
