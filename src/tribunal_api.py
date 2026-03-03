@@ -117,6 +117,95 @@ try:
 except Exception:
     crdb = None
 
+# ---------------------------------------------------------------------------
+# MongoDB change stream → SSE push (real-time sync)
+# ---------------------------------------------------------------------------
+import threading
+
+_mongo_client = None
+_mongo_watcher_thread = None
+
+def _get_mongo_uri() -> str:
+    """Get MongoDB URI from env or GCloud Secret Manager."""
+    uri = os.environ.get("MONGODB_URL", "")
+    if not uri:
+        try:
+            import subprocess
+            r = subprocess.run(
+                ["gcloud", "secrets", "versions", "access", "latest",
+                 "--secret=mongodb-url", "--project=rhea-office-sync"],
+                capture_output=True, text=True, timeout=10,
+            )
+            if r.returncode == 0:
+                uri = r.stdout.strip()
+        except Exception:
+            pass
+    return uri
+
+def _mongo_serialize(obj):
+    """Make MongoDB documents JSON-safe (ObjectId, datetime, etc.)."""
+    from bson import ObjectId as _OID
+    if isinstance(obj, _OID):
+        return str(obj)
+    if isinstance(obj, datetime):
+        return obj.isoformat()
+    if isinstance(obj, dict):
+        return {k: _mongo_serialize(v) for k, v in obj.items()}
+    if isinstance(obj, list):
+        return [_mongo_serialize(v) for v in obj]
+    return obj
+
+def _mongo_change_stream_worker(uri: str, db_name: str = "rhea"):
+    """Background thread: watch MongoDB and push changes to SSE bus with reconnect."""
+    import time as _time
+    from pymongo import MongoClient
+    backoff = 1
+    while True:
+        try:
+            client = MongoClient(uri, serverSelectionTimeoutMS=10000)
+            db = client[db_name]
+            print(f"[mongo-stream] Connected to {db_name}, watching for changes...")
+            backoff = 1  # reset on successful connect
+
+            pipeline = [{"$match": {"operationType": {"$in": ["insert", "update", "replace", "delete"]}}}]
+            with db.watch(pipeline, full_document="updateLookup") as stream:
+                for change in stream:
+                    op = change.get("operationType", "unknown")
+                    ns = change.get("ns", {})
+                    coll = ns.get("coll", "?")
+                    doc = _mongo_serialize(change.get("fullDocument") or {})
+
+                    event = {
+                        "type": "mongo_change",
+                        "collection": coll,
+                        "operation": op,
+                        "document": doc,
+                        "ts": datetime.now(timezone.utc).isoformat(),
+                    }
+                    # Thread-safe push into asyncio event loop
+                    try:
+                        loop = asyncio.get_event_loop()
+                        loop.call_soon_threadsafe(_broadcast_event, event)
+                    except RuntimeError:
+                        _broadcast_event(event)  # fallback if no loop yet
+        except Exception as e:
+            print(f"[mongo-stream] Error (reconnect in {backoff}s): {e}")
+            _time.sleep(backoff)
+            backoff = min(backoff * 2, 60)
+
+def start_mongo_watcher():
+    """Start the MongoDB change stream watcher in a background thread."""
+    global _mongo_client, _mongo_watcher_thread
+    uri = _get_mongo_uri()
+    if not uri:
+        print("[mongo-stream] No MONGODB_URL — change stream disabled")
+        return
+    _mongo_watcher_thread = threading.Thread(
+        target=_mongo_change_stream_worker, args=(uri,), daemon=True
+    )
+    _mongo_watcher_thread.start()
+
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -3642,6 +3731,8 @@ async def startup():
     migrated = rhea_db.migrate_office_jsonl()
     if migrated:
         print(f"[rhea_db] migrated {migrated} office messages from JSONL to SQL")
+    # Start MongoDB change stream watcher
+    start_mongo_watcher()
     # Print dev key if auto-generated
     if _keys_env == "":
         print(f"\n  Dev API key: {_dev_key}")
@@ -4646,6 +4737,14 @@ async def tasks_reopen(task_id: str):
 # ---------------------------------------------------------------------------
 # CockroachDB cloud store — persistent tasks, workflows, billing
 # ---------------------------------------------------------------------------
+
+@app.get("/mongo/health")
+async def mongo_health():
+    """MongoDB change stream watcher health."""
+    alive = _mongo_watcher_thread is not None and _mongo_watcher_thread.is_alive()
+    uri = bool(_get_mongo_uri())
+    return {"status": "streaming" if alive else "stopped", "uri_configured": uri, "thread_alive": alive}
+
 
 @app.get("/crdb/status")
 async def crdb_status():
