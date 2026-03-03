@@ -190,9 +190,12 @@ MODEL_TIERS = {
     "cheap": {
         "description": "Default tier. Fast, cost-effective. Use for all routine work.",
         "candidates": [
+            "ollama/qwen3.5:32b",
+            "ollama/gemma3:27b",
             "github/gpt-4o-mini",
             "groq/llama-3.1-8b-instant",
             "cerebras/llama-3.3-70b",
+            "volcengine/doubao-1.5-pro-32k",
             "deepseek/deepseek-chat",
             "anthropic/claude-haiku-3-5-20241022",
             "gemini/gemini-2.5-flash",
@@ -205,6 +208,8 @@ MODEL_TIERS = {
     "balanced": {
         "description": "Mid-tier. For complex reasoning that cheap tier struggles with.",
         "candidates": [
+            "ollama/qwen3.5:32b",
+            "volcengine/doubao-seed-2-0-pro",
             "github/gpt-4o",
             "cerebras/llama-3.3-70b",
             "groq/llama-3.3-70b-versatile",
@@ -231,6 +236,7 @@ MODEL_TIERS = {
     "reasoning": {
         "description": "Specialized reasoning models. For chain-of-thought / math / logic.",
         "candidates": [
+            "ollama/deepseek-r1:32b",
             "gemini/gemini-3.1-pro-preview",
             "gemini/gemini-3-pro-preview",
             "openai/o4-mini",
@@ -354,6 +360,15 @@ PRICE_TABLE = {
     "meta-llama/Llama-3.2-3B-Instruct":      (0.00, 0.00),
     "microsoft/Phi-3-mini-4k-instruct": (0.00, 0.00),
     "Qwen/Qwen2.5-1.5B-Instruct":     (0.00, 0.00),
+    # Volcano Engine / Doubao (ByteDance)
+    "doubao-seed-2-0-pro":  (0.47, 1.40),
+    "doubao-1.5-pro-32k":   (0.30, 0.90),
+    # Ollama (self-hosted — zero cost)
+    "qwen3.5:32b":       (0.00, 0.00),
+    "qwen3-coder:32b":   (0.00, 0.00),
+    "jais:70b":          (0.00, 0.00),
+    "gemma3:27b":        (0.00, 0.00),
+    "deepseek-r1:32b":   (0.00, 0.00),
 }
 
 PRICE_DEFAULT = (1.00, 3.00)  # fallback for unknown models
@@ -775,6 +790,32 @@ PROVIDERS = {
         models=["rhea-openshift-one"],
         call_method="kserve_v2",
     ),
+    "volcengine": ProviderConfig(
+        name="volcengine",
+        display_name="Volcano Engine (Doubao)",
+        base_url=os.environ.get(
+            "VOLCENGINE_API_BASE",
+            "https://ark.cn-beijing.volces.com/api/v3",
+        ),
+        api_key_env="VOLCENGINE_API_KEY",
+        models=[
+            "doubao-seed-2-0-pro",
+            "doubao-1.5-pro-32k",
+        ],
+        call_method="openai_compatible",
+    ),
+    "ollama": ProviderConfig(
+        name="ollama",
+        display_name="Ollama (self-hosted)",
+        base_url=os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434/v1"),
+        api_key_env="OLLAMA_API_KEY",  # dummy — ollama needs no key
+        models=[
+            "qwen3.5:32b", "qwen3-coder:32b",
+            "jais:70b", "gemma3:27b",
+            "deepseek-r1:32b",
+        ],
+        call_method="openai_compatible",
+    ),
 }
 
 # Map env vars for LiteLLM Azure OpenAI provider
@@ -800,6 +841,22 @@ if not os.environ.get("GITHUB_TOKEN"):
             print("[bridge] GITHUB_TOKEN auto-detected from gh CLI")
     except Exception:
         pass  # gh not available — skip
+
+# Ollama needs no key — set dummy so provider isn't marked dead
+if not os.environ.get("OLLAMA_API_KEY"):
+    # Check if Ollama is actually running locally
+    try:
+        import subprocess as _sp
+        _ollama_check = _sp.run(
+            ["curl", "-s", "-o", "/dev/null", "-w", "%{http_code}",
+             os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434") + "/api/tags"],
+            capture_output=True, text=True, timeout=3,
+        )
+        if _ollama_check.stdout.strip() == "200":
+            os.environ["OLLAMA_API_KEY"] = "ollama"  # dummy key
+            print("[bridge] Ollama detected locally")
+    except Exception:
+        pass  # Ollama not running — provider stays dead
 
 # Auto-detect OpenShift AI token from oc CLI
 if not os.environ.get("OPENSHIFT_AI_TOKEN"):
