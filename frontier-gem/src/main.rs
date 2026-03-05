@@ -11,6 +11,9 @@ use tokio::io::{AsyncReadExt, AsyncWriteExt};
 use tokio::net::{TcpListener, TcpStream};
 use std::path::Path;
 
+mod windows_injector;
+use windows_injector::TextInjector;
+
 #[derive(Serialize, Deserialize, Debug, Clone)]
 struct Frame {
     prev_hash: String,
@@ -147,32 +150,124 @@ async fn run_http_server(addr: &str, tx: broadcast::Sender<String>) -> io::Resul
                                     )
                                 },
                                 "POST" | "GET" => {
-                                    // Process the request and append event
-                                    if let Ok(json) = serde_json::from_str::<serde_json::Value>(&body) {
-                                        let frame = append_event("http", json);
-                                        let _ = tx.send(serde_json::to_string(&frame).unwrap());
+                                    // Handle different endpoints
+                                    if path == "/api/inject" && method == "POST" {
+                                        // Text injection endpoint (Windows only)
+                                        if let Ok(json) = serde_json::from_str::<serde_json::Value>(&body) {
+                                            let text = json.get("text")
+                                                .and_then(|v| v.as_str())
+                                                .unwrap_or("")
+                                                .to_string();
+                                            
+                                            let delay_ms = json.get("delay_ms")
+                                                .and_then(|v| v.as_u64())
+                                                .unwrap_or(50) as u32;
+
+                                            // Attempt injection
+                                            match TextInjector::inject_text(&text, delay_ms) {
+                                                Ok(_) => {
+                                                    let response_body = serde_json::json!({
+                                                        "status": "ok",
+                                                        "message": "Text injected successfully",
+                                                        "characters": text.len(),
+                                                        "timestamp": Utc::now().timestamp()
+                                                    }).to_string();
+
+                                                    let frame = append_event("inject", serde_json::json!({
+                                                        "status": "ok",
+                                                        "chars": text.len()
+                                                    }));
+                                                    let _ = tx.send(serde_json::to_string(&frame).unwrap());
+
+                                                    format!(
+                                                        "HTTP/1.1 200 OK\r\n\
+                                                         Access-Control-Allow-Origin: {}\r\n\
+                                                         Access-Control-Allow-Methods: GET, POST, OPTIONS\r\n\
+                                                         Access-Control-Allow-Headers: Content-Type\r\n\
+                                                         Content-Type: application/json\r\n\
+                                                         Content-Length: {}\r\n\
+                                                         Connection: close\r\n\
+                                                         \r\n\
+                                                         {}",
+                                                        cors_origin,
+                                                        response_body.len(),
+                                                        response_body
+                                                    )
+                                                },
+                                                Err(e) => {
+                                                    let error_msg = format!("{}", e);
+                                                    let response_body = serde_json::json!({
+                                                        "status": "error",
+                                                        "message": error_msg,
+                                                        "timestamp": Utc::now().timestamp()
+                                                    }).to_string();
+
+                                                    format!(
+                                                        "HTTP/1.1 400 Bad Request\r\n\
+                                                         Access-Control-Allow-Origin: {}\r\n\
+                                                         Access-Control-Allow-Methods: GET, POST, OPTIONS\r\n\
+                                                         Access-Control-Allow-Headers: Content-Type\r\n\
+                                                         Content-Type: application/json\r\n\
+                                                         Content-Length: {}\r\n\
+                                                         Connection: close\r\n\
+                                                         \r\n\
+                                                         {}",
+                                                        cors_origin,
+                                                        response_body.len(),
+                                                        response_body
+                                                    )
+                                                }
+                                            }
+                                        } else {
+                                            let response_body = serde_json::json!({
+                                                "status": "error",
+                                                "message": "Invalid JSON in request body",
+                                                "timestamp": Utc::now().timestamp()
+                                            }).to_string();
+
+                                            format!(
+                                                "HTTP/1.1 400 Bad Request\r\n\
+                                                 Access-Control-Allow-Origin: {}\r\n\
+                                                 Access-Control-Allow-Methods: GET, POST, OPTIONS\r\n\
+                                                 Access-Control-Allow-Headers: Content-Type\r\n\
+                                                 Content-Type: application/json\r\n\
+                                                 Content-Length: {}\r\n\
+                                                 Connection: close\r\n\
+                                                 \r\n\
+                                                 {}",
+                                                cors_origin,
+                                                response_body.len(),
+                                                response_body
+                                            )
+                                        }
+                                    } else {
+                                        // Generic event endpoint
+                                        if let Ok(json) = serde_json::from_str::<serde_json::Value>(&body) {
+                                            let frame = append_event("http", json);
+                                            let _ = tx.send(serde_json::to_string(&frame).unwrap());
+                                        }
+                                        
+                                        let response_body = serde_json::json!({
+                                            "status": "ok",
+                                            "path": path,
+                                            "timestamp": Utc::now().timestamp()
+                                        }).to_string();
+                                        
+                                        format!(
+                                            "HTTP/1.1 200 OK\r\n\
+                                             Access-Control-Allow-Origin: {}\r\n\
+                                             Access-Control-Allow-Methods: GET, POST, OPTIONS\r\n\
+                                             Access-Control-Allow-Headers: Content-Type\r\n\
+                                             Content-Type: application/json\r\n\
+                                             Content-Length: {}\r\n\
+                                             Connection: close\r\n\
+                                             \r\n\
+                                             {}",
+                                            cors_origin,
+                                            response_body.len(),
+                                            response_body
+                                        )
                                     }
-                                    
-                                    let response_body = serde_json::json!({
-                                        "status": "ok",
-                                        "path": path,
-                                        "timestamp": Utc::now().timestamp()
-                                    }).to_string();
-                                    
-                                    format!(
-                                        "HTTP/1.1 200 OK\r\n\
-                                         Access-Control-Allow-Origin: {}\r\n\
-                                         Access-Control-Allow-Methods: GET, POST, OPTIONS\r\n\
-                                         Access-Control-Allow-Headers: Content-Type\r\n\
-                                         Content-Type: application/json\r\n\
-                                         Content-Length: {}\r\n\
-                                         Connection: close\r\n\
-                                         \r\n\
-                                         {}",
-                                        cors_origin,
-                                        response_body.len(),
-                                        response_body
-                                    )
                                 },
                                 _ => {
                                     format!(

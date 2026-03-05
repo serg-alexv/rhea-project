@@ -112,5 +112,89 @@ chrome.webRequest?.onBeforeRequest?.addListener?.(
     { urls: ["<all_urls>"] }
 );
 
-// Initial connection
-connect();
+/**
+ * Inject text into the focused window (Windows only)
+ * @param {string} text - The text to inject
+ * @param {number} delayMs - Delay between keystrokes in milliseconds
+ * @returns {Promise<{success: boolean, message: string}>}
+ */
+async function injectText(text, delayMs = 50) {
+    try {
+        const response = await fetch('http://localhost:3456/api/inject', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                text: text,
+                delay_ms: delayMs
+            })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            console.log("✅ Injection successful:", data.message);
+            showNotification('✅ Text Injected', `${data.characters} characters typed`);
+            return { success: true, message: data.message };
+        } else {
+            console.error("❌ Injection failed:", data.message);
+            showNotification('❌ Injection Failed', data.message);
+            return { success: false, message: data.message };
+        }
+    } catch (error) {
+        console.error("❌ Injection error:", error);
+        showNotification('❌ Connection Error', 'Cannot reach daemon. Is it running?');
+        return { success: false, message: error.message };
+    }
+}
+
+/**
+ * Show desktop notification (using Chrome extensions API)
+ */
+function showNotification(title, message) {
+    chrome.notifications.create({
+        type: 'basic',
+        iconUrl: '/images/icon-128.png',
+        title: title,
+        message: message,
+        priority: 1
+    }, (notificationId) => {
+        // Auto-close notification after 5 seconds
+        setTimeout(() => {
+            chrome.notifications.clear(notificationId);
+        }, 5000);
+    });
+}
+
+/**
+ * Context menu handler for injection
+ */
+chrome.contextMenus?.create?.({
+    id: 'inject-ai-response',
+    title: 'Inject AI Response (Windows Only)',
+    contexts: ['editable']
+}, () => {
+    if (chrome.runtime.lastError) {
+        console.warn("Context menu creation skipped (macOS/Linux):", chrome.runtime.lastError.message);
+    }
+});
+
+chrome.contextMenus?.onClicked?.addListener?.((info, tab) => {
+    if (info.menuItemId === 'inject-ai-response') {
+        // This would be triggered with AI-generated text
+        // For now, placeholder example
+        const exampleText = "This text was injected by Frontier Gem";
+        injectText(exampleText, 50);
+    }
+});
+
+// Listen for messages from other parts of the extension
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    if (request.action === 'inject') {
+        injectText(request.text, request.delayMs || 50)
+            .then(sendResponse)
+            .catch(error => sendResponse({ success: false, message: error.message }));
+        return true; // Indicate async response
+    }
+});

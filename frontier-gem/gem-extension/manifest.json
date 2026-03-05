@@ -8,7 +8,9 @@
     "activeTab",
     "tabs",
     "nativeMessaging",
-    "webRequest"
+    "webRequest",
+    "contextMenus",
+    "notifications"
   ],
   
   "host_permissions": [
