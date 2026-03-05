@@ -14,6 +14,12 @@ use std::path::Path;
 mod windows_injector;
 use windows_injector::TextInjector;
 
+mod discovery;
+use discovery::DiscoveryState;
+
+mod focus;
+use focus::get_focused_window;
+
 #[derive(Serialize, Deserialize, Debug, Clone)]
 struct Frame {
     prev_hash: String,
@@ -151,7 +157,42 @@ async fn run_http_server(addr: &str, tx: broadcast::Sender<String>) -> io::Resul
                                 },
                                 "POST" | "GET" => {
                                     // Handle different endpoints
-                                    if path == "/api/inject" && method == "POST" {
+                                    if path == "/api/discovery" && method == "GET" {
+                                        // AI Discovery endpoint
+                                        let mut discovery_state = DiscoveryState::with_example_nodes();
+                                        
+                                        // Update system focus
+                                        if let Ok(focused) = get_focused_window() {
+                                            discovery_state.system_info.system_focus = focused.process_name.clone();
+                                            discovery_state.system_info.focus_window_class = focused.window_class.clone();
+                                            discovery_state.system_info.focus_title = focused.window_title.clone();
+                                            discovery_state.system_info.timestamp_focus = Utc::now();
+                                        }
+                                        
+                                        let response_body = discovery_state.to_json()
+                                            .unwrap_or_else(|_| "{}".to_string());
+
+                                        let frame = append_event("discovery", serde_json::json!({
+                                            "nodes_count": discovery_state.active_nodes.len(),
+                                            "focus": discovery_state.system_info.system_focus
+                                        }));
+                                        let _ = tx.send(serde_json::to_string(&frame).unwrap());
+
+                                        format!(
+                                            "HTTP/1.1 200 OK\r\n\
+                                             Access-Control-Allow-Origin: {}\r\n\
+                                             Access-Control-Allow-Methods: GET, POST, OPTIONS\r\n\
+                                             Access-Control-Allow-Headers: Content-Type\r\n\
+                                             Content-Type: application/json\r\n\
+                                             Content-Length: {}\r\n\
+                                             Connection: close\r\n\
+                                             \r\n\
+                                             {}",
+                                            cors_origin,
+                                            response_body.len(),
+                                            response_body
+                                        )
+                                    } else if path == "/api/inject" && method == "POST" {
                                         // Text injection endpoint (Windows only)
                                         if let Ok(json) = serde_json::from_str::<serde_json::Value>(&body) {
                                             let text = json.get("text")
