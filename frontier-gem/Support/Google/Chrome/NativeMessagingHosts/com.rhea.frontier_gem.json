@@ -1,0 +1,9 @@
+{
+  "name": "com.rhea.frontier_gem",
+  "description": "Rhea Frontier Gem - native messaging host for system monitoring and event collection",
+  "path": "/usr/local/bin/frontier-gem",
+  "type": "stdio",
+  "allowed_extensions": [
+    "chrome-extension://[EXTENSION_ID_HERE]"
+  ]
+}
