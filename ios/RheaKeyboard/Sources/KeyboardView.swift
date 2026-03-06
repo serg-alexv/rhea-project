@@ -45,30 +45,19 @@ struct KeyboardView: View {
     enum KeyboardMode: String, CaseIterable {
         case typing   = "ABC"
         case actions  = "Quick"
-        case tribunal = "Tribunal"
         case builder  = "Builder"
-        case logic    = "Logic"
 
         var icon: String {
             switch self {
             case .typing:   return "keyboard"
             case .actions:  return "bolt.fill"
-            case .tribunal: return "scalemass.fill"
             case .builder:  return "puzzlepiece.fill"
-            case .logic:    return "function"
             }
         }
     }
 
-    // Logic mode state
-    @State private var logicPalette: LogicPalette = .operators
-    enum LogicPalette: String, CaseIterable {
-        case operators = "∧∨¬"
-        case greek     = "αβγ"
-        case sets      = "∈∪∩"
-        case math      = "∑∫∂"
-        case sub       = "x₁₂"
-    }
+    // Logic symbols (accessible via long-press on 123 or #+=)
+    @State private var showLogicSymbols = false
 
     // Colors (local — no RheaKit import in extensions)
     private let bg = Color(red: 0.06, green: 0.06, blue: 0.10)
@@ -104,9 +93,7 @@ struct KeyboardView: View {
                 switch mode {
                 case .typing:   qwertyView
                 case .actions:  quickActions
-                case .tribunal: tribunalInput
                 case .builder:  builderView
-                case .logic:    logicView
                 }
             }
         }
@@ -163,8 +150,13 @@ struct KeyboardView: View {
     private var isUppercase: Bool { shifted || capsLock }
 
     private var qwertyView: some View {
-        VStack(spacing: 6) {
-            if numbersMode || symbolsMode {
+        VStack(spacing: 4) {
+            // AI action bar — always visible above letters, contextual actions
+            aiBar
+
+            if showLogicSymbols {
+                logicView
+            } else if numbersMode || symbolsMode {
                 numbersSymbolsView
             } else {
                 lettersView
@@ -172,6 +164,60 @@ struct KeyboardView: View {
         }
         .padding(.horizontal, 3)
         .padding(.vertical, 4)
+    }
+
+    // MARK: - AI Bar (inline, above QWERTY)
+
+    private var aiBar: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 5) {
+                aiPill("Fix", icon: "checkmark.circle", color: green) {
+                    runQuickAction("grammar")
+                }
+                aiPill("Rewrite", icon: "arrow.triangle.2.circlepath", color: amber) {
+                    runQuickAction("rewrite", style: "clearer")
+                }
+                aiPill("Shorter", icon: "text.justify.leading", color: .purple) {
+                    runQuickAction("rewrite", style: "shorter")
+                }
+                aiPill("Translate", icon: "globe", color: accent) {
+                    withAnimation { showLangPicker = true }
+                }
+                aiPill("Formal", icon: "briefcase", color: Color.white.opacity(0.7)) {
+                    runQuickAction("rewrite", style: "formal")
+                }
+                aiPill("Casual", icon: "face.smiling", color: Color.white.opacity(0.7)) {
+                    runQuickAction("rewrite", style: "casual")
+                }
+                aiPill("⚖ Tribunal", icon: "scalemass", color: accent) {
+                    runTribunalFromContext()
+                }
+
+                Spacer().frame(width: 4)
+
+                // Auth indicator
+                Circle()
+                    .fill(TribunalClient.authToken != nil ? green : amber)
+                    .frame(width: 4, height: 4)
+            }
+            .padding(.horizontal, 6)
+        }
+        .frame(height: 26)
+    }
+
+    private func aiPill(_ label: String, icon: String, color: Color, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            HStack(spacing: 3) {
+                Image(systemName: icon).font(.system(size: 8))
+                Text(label).font(.system(size: 9, weight: .semibold, design: .monospaced))
+            }
+            .padding(.horizontal, 7)
+            .padding(.vertical, 4)
+            .background(Capsule().fill(color.opacity(0.12))
+                .overlay(Capsule().stroke(color.opacity(0.3), lineWidth: 0.5)))
+            .foregroundStyle(color)
+        }
+        .disabled(isLoading)
     }
 
     private var lettersView: some View {
@@ -237,7 +283,7 @@ struct KeyboardView: View {
             // Row 4: 123 Globe Space Return
             HStack(spacing: 4) {
                 Button {
-                    withAnimation(.easeInOut(duration: 0.1)) { numbersMode = true }
+                    withAnimation(.easeInOut(duration: 0.1)) { numbersMode = true; showLogicSymbols = false }
                 } label: {
                     Text("123")
                         .font(.system(size: 13, weight: .medium, design: .monospaced))
@@ -245,6 +291,15 @@ struct KeyboardView: View {
                         .background(RoundedRectangle(cornerRadius: 6).fill(keyBg))
                         .foregroundStyle(.white)
                 }
+                .simultaneousGesture(
+                    LongPressGesture(minimumDuration: 0.4).onEnded { _ in
+                        withAnimation(.easeInOut(duration: 0.15)) {
+                            showLogicSymbols = true
+                            numbersMode = false
+                            symbolsMode = false
+                        }
+                    }
+                )
 
                 Button(action: switchKeyboard) {
                     Image(systemName: "globe")
@@ -262,7 +317,7 @@ struct KeyboardView: View {
                         .font(.system(size: 13, design: .monospaced))
                         .frame(maxWidth: .infinity)
                         .frame(height: 38)
-                        .background(RoundedRectangle(cornerRadius: 6).fill(keyBg.opacity(1.2)))
+                        .background(RoundedRectangle(cornerRadius: 6).fill(keyBg))
                         .foregroundStyle(.white.opacity(0.6))
                 }
 
@@ -299,7 +354,7 @@ struct KeyboardView: View {
                 }
             }
 
-            // Row 3: #+= / ABC toggle + chars + delete
+            // Row 3: #+= / ABC toggle + chars + f(x) logic + delete
             HStack(spacing: 4) {
                 Button {
                     withAnimation(.easeInOut(duration: 0.1)) {
@@ -315,6 +370,19 @@ struct KeyboardView: View {
 
                 ForEach(r3, id: \.self) { key in
                     charKey(key)
+                }
+
+                // Logic symbols access
+                Button {
+                    withAnimation(.easeInOut(duration: 0.15)) {
+                        showLogicSymbols = true
+                    }
+                } label: {
+                    Text("f(x)")
+                        .font(.system(size: 11, weight: .semibold, design: .monospaced))
+                        .frame(width: 38, height: 38)
+                        .background(RoundedRectangle(cornerRadius: 6).fill(accent.opacity(0.15)))
+                        .foregroundStyle(accent)
                 }
 
                 Spacer()
@@ -356,7 +424,7 @@ struct KeyboardView: View {
                         .font(.system(size: 13, design: .monospaced))
                         .frame(maxWidth: .infinity)
                         .frame(height: 38)
-                        .background(RoundedRectangle(cornerRadius: 6).fill(keyBg.opacity(1.2)))
+                        .background(RoundedRectangle(cornerRadius: 6).fill(keyBg))
                         .foregroundStyle(.white.opacity(0.6))
                 }
 
@@ -541,37 +609,6 @@ struct KeyboardView: View {
         }
         .padding(.vertical, 6)
     }
-
-    // MARK: - Tribunal
-
-    private var tribunalInput: some View {
-        VStack(spacing: 6) {
-            Text("MULTI-MODEL CONSENSUS")
-                .font(.system(size: 9, weight: .bold, design: .monospaced))
-                .foregroundStyle(accent.opacity(0.6))
-
-            HStack(spacing: 6) {
-                TextField("Enter claim for tribunal...", text: $query)
-                    .font(.system(size: 13, design: .monospaced))
-                    .foregroundStyle(.white)
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 6)
-                    .background(RoundedRectangle(cornerRadius: 8).fill(card))
-                    .submitLabel(.send)
-                    .onSubmit { runTribunal() }
-
-                Button(action: runTribunal) {
-                    Image(systemName: "arrow.up.circle.fill")
-                        .font(.system(size: 22))
-                        .foregroundStyle(query.isEmpty ? .secondary : accent)
-                }
-                .disabled(query.isEmpty || isLoading)
-            }
-            .padding(.horizontal, 12)
-        }
-        .padding(.vertical, 8)
-    }
-
     // MARK: - Response
 
     private var responseArea: some View {
@@ -720,6 +757,38 @@ struct KeyboardView: View {
             } catch {
                 await MainActor.run {
                     errorText = "Failed: \(error.localizedDescription)"
+                    isLoading = false
+                }
+            }
+        }
+    }
+
+    /// Tribunal from AI bar — uses text before cursor, no separate input field
+    private func runTribunalFromContext() {
+        let claim = getContext().trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !claim.isEmpty else {
+            errorText = "No text before cursor for tribunal"
+            return
+        }
+
+        isLoading = true
+        resultText = nil; resultMeta = nil; errorText = nil
+
+        Task {
+            do {
+                let resp = try await TribunalClient.tribunal(claim)
+                await MainActor.run {
+                    resultText = resp.reply
+                    var meta = "⚖ "
+                    if let score = resp.agreement_score { meta += "\(Int(score * 100))% agreement" }
+                    if let models = resp.models_responded { meta += " · \(models) models" }
+                    if let elapsed = resp.elapsed_s { meta += " · \(String(format: "%.1fs", elapsed))" }
+                    resultMeta = meta
+                    isLoading = false
+                }
+            } catch {
+                await MainActor.run {
+                    errorText = "Tribunal failed: \(error.localizedDescription)"
                     isLoading = false
                 }
             }
@@ -921,7 +990,17 @@ struct KeyboardView: View {
         .padding(.horizontal, 12)
     }
 
-    // MARK: - Logic Mode — Greek letters, operators, sets, math symbols
+    // MARK: - Logic Symbols (accessed via long-press 123 or f(x) in numbers view)
+
+    private enum LogicPalette: String, CaseIterable {
+        case operators = "∧∨¬"
+        case greek     = "αβγ"
+        case sets      = "∈∪∩"
+        case math      = "∑∫∂"
+        case sub       = "x₁₂"
+    }
+
+    @State private var logicPalette: LogicPalette = .operators
 
     private let logicSymbols: [LogicPalette: [String]] = [
         .operators: ["∧","∨","¬","→","←","↔","⊕","∀","∃","⊤","⊥","⊢","⊨","⇒","⇐","⇔"],
@@ -933,53 +1012,56 @@ struct KeyboardView: View {
 
     private var logicView: some View {
         VStack(spacing: 2) {
-            // Palette selector
+            // Header: palette selector + ABC back button
             HStack(spacing: 0) {
+                Button {
+                    withAnimation(.easeInOut(duration: 0.12)) {
+                        showLogicSymbols = false
+                        numbersMode = false
+                    }
+                } label: {
+                    Text("ABC")
+                        .font(.system(size: 11, weight: .bold, design: .monospaced))
+                        .padding(.horizontal, 8).padding(.vertical, 5)
+                        .background(Capsule().fill(keyBg))
+                        .foregroundStyle(.white)
+                }
+                .padding(.leading, 8)
+
                 ForEach(LogicPalette.allCases, id: \.self) { pal in
                     Button {
                         withAnimation(.easeInOut(duration: 0.12)) { logicPalette = pal }
                     } label: {
                         Text(pal.rawValue)
                             .font(.system(size: 13, weight: logicPalette == pal ? .bold : .regular))
-                            .padding(.horizontal, 10)
-                            .padding(.vertical, 6)
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 5)
                             .foregroundStyle(logicPalette == pal ? accent : .secondary)
                             .background(logicPalette == pal ? accent.opacity(0.12) : .clear)
                             .clipShape(Capsule())
                     }
                 }
                 Spacer()
-                Button { switchKeyboard() } label: {
-                    Image(systemName: "globe").font(.system(size: 14))
-                        .foregroundStyle(.secondary)
-                }
-                .padding(.trailing, 8)
             }
-            .padding(.horizontal, 8)
-            .padding(.top, 4)
+            .padding(.top, 2)
 
             // Symbol grid
             let syms = logicSymbols[logicPalette] ?? []
             let columns = min(syms.count, 9)
             LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 3), count: columns), spacing: 3) {
                 ForEach(Array(syms.enumerated()), id: \.offset) { _, sym in
-                    Button {
-                        insertText(sym)
-                    } label: {
+                    Button { insertText(sym) } label: {
                         Text(sym)
                             .font(.system(size: 20))
                             .frame(maxWidth: .infinity, minHeight: 36)
-                            .background(
-                                RoundedRectangle(cornerRadius: 6)
-                                    .fill(keyBg)
-                            )
+                            .background(RoundedRectangle(cornerRadius: 6).fill(keyBg))
                             .foregroundStyle(.white)
                     }
                 }
             }
             .padding(.horizontal, 6)
 
-            // Bottom row: space, backspace, return
+            // Bottom row
             HStack(spacing: 6) {
                 Button { insertText("(") } label: {
                     Text("(").font(.system(size: 16, weight: .bold))
