@@ -1,0 +1,27 @@
+{
+  "id": "design-system",
+  "title": "Design System",
+  "description": "RheaKit's visual language is defined in RheaTheme — a single enum with static color constants, semantic color functions, and the GlassCard view modifier.",
+  "source": "@site/docs/design-system.md",
+  "sourceDirName": ".",
+  "slug": "/design-system",
+  "permalink": "/docs/design-system",
+  "draft": false,
+  "unlisted": false,
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 3,
+  "frontMatter": {
+    "sidebar_position": 3,
+    "title": "Design System"
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "Getting Started",
+    "permalink": "/docs/getting-started"
+  },
+  "next": {
+    "title": "Components",
+    "permalink": "/docs/category/components"
+  }
+}

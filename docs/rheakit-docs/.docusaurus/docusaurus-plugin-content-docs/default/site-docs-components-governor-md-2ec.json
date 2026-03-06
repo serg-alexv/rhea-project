@@ -1,0 +1,27 @@
+{
+  "id": "components/governor",
+  "title": "GovernorView",
+  "description": "A real-time budget and pace dashboard for monitoring AI agent resource consumption. Displays token burn charts, per-agent status cards, and operational mode indicators.",
+  "source": "@site/docs/components/governor.md",
+  "sourceDirName": "components",
+  "slug": "/components/governor",
+  "permalink": "/docs/components/governor",
+  "draft": false,
+  "unlisted": false,
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 6,
+  "frontMatter": {
+    "sidebar_position": 6,
+    "title": "GovernorView"
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "DialogView",
+    "permalink": "/docs/components/dialog"
+  },
+  "next": {
+    "title": "TasksView",
+    "permalink": "/docs/components/tasks"
+  }
+}

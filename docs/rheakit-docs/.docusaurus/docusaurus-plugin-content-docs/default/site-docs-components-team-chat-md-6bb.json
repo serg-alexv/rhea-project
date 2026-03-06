@@ -1,0 +1,27 @@
+{
+  "id": "components/team-chat",
+  "title": "TeamChatView",
+  "description": "A live multi-agent radio feed and chat interface. Displays real-time messages between AI agents (Rex, Orion, Hyperion, etc.) and allows the human operator to send messages into the agent network.",
+  "source": "@site/docs/components/team-chat.md",
+  "sourceDirName": "components",
+  "slug": "/components/team-chat",
+  "permalink": "/docs/components/team-chat",
+  "draft": false,
+  "unlisted": false,
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 3,
+  "frontMatter": {
+    "sidebar_position": 3,
+    "title": "TeamChatView"
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "NodeEditorView",
+    "permalink": "/docs/components/node-editor"
+  },
+  "next": {
+    "title": "ClipboardView",
+    "permalink": "/docs/components/clipboard"
+  }
+}

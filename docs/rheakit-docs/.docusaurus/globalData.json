@@ -1,0 +1,108 @@
+{
+  "docusaurus-plugin-content-docs": {
+    "default": {
+      "path": "/docs",
+      "versions": [
+        {
+          "name": "current",
+          "label": "Next",
+          "isLast": true,
+          "path": "/docs",
+          "mainDocId": "intro",
+          "docs": [
+            {
+              "id": "api-reference",
+              "path": "/docs/api-reference",
+              "sidebar": "docs"
+            },
+            {
+              "id": "architecture",
+              "path": "/docs/architecture",
+              "sidebar": "docs"
+            },
+            {
+              "id": "components/aletheia",
+              "path": "/docs/components/aletheia",
+              "sidebar": "docs"
+            },
+            {
+              "id": "components/bio-renderer",
+              "path": "/docs/components/bio-renderer",
+              "sidebar": "docs"
+            },
+            {
+              "id": "components/clipboard",
+              "path": "/docs/components/clipboard",
+              "sidebar": "docs"
+            },
+            {
+              "id": "components/dialog",
+              "path": "/docs/components/dialog",
+              "sidebar": "docs"
+            },
+            {
+              "id": "components/governor",
+              "path": "/docs/components/governor",
+              "sidebar": "docs"
+            },
+            {
+              "id": "components/node-editor",
+              "path": "/docs/components/node-editor",
+              "sidebar": "docs"
+            },
+            {
+              "id": "components/processes",
+              "path": "/docs/components/processes",
+              "sidebar": "docs"
+            },
+            {
+              "id": "components/pulse-monitor",
+              "path": "/docs/components/pulse-monitor",
+              "sidebar": "docs"
+            },
+            {
+              "id": "components/tasks",
+              "path": "/docs/components/tasks",
+              "sidebar": "docs"
+            },
+            {
+              "id": "components/team-chat",
+              "path": "/docs/components/team-chat",
+              "sidebar": "docs"
+            },
+            {
+              "id": "design-system",
+              "path": "/docs/design-system",
+              "sidebar": "docs"
+            },
+            {
+              "id": "getting-started",
+              "path": "/docs/getting-started",
+              "sidebar": "docs"
+            },
+            {
+              "id": "intro",
+              "path": "/docs/",
+              "sidebar": "docs"
+            },
+            {
+              "id": "/category/components",
+              "path": "/docs/category/components",
+              "sidebar": "docs"
+            }
+          ],
+          "draftIds": [],
+          "sidebars": {
+            "docs": {
+              "link": {
+                "path": "/docs/",
+                "label": "intro"
+              }
+            }
+          }
+        }
+      ],
+      "breadcrumbs": true
+    }
+  }
+}

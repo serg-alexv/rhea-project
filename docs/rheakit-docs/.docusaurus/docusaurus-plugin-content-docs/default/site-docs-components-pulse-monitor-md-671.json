@@ -1,0 +1,27 @@
+{
+  "id": "components/pulse-monitor",
+  "title": "PulseMonitorView",
+  "description": "A system-level monitoring dashboard showing agent pulse status, task queue health, and lease states. Designed for ops-console oversight of the multi-agent system.",
+  "source": "@site/docs/components/pulse-monitor.md",
+  "sourceDirName": "components",
+  "slug": "/components/pulse-monitor",
+  "permalink": "/docs/components/pulse-monitor",
+  "draft": false,
+  "unlisted": false,
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 10,
+  "frontMatter": {
+    "sidebar_position": 10,
+    "title": "PulseMonitorView"
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "ProcessesView",
+    "permalink": "/docs/components/processes"
+  },
+  "next": {
+    "title": "Architecture",
+    "permalink": "/docs/architecture"
+  }
+}

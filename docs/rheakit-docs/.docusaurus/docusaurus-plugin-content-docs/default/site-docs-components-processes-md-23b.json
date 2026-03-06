@@ -1,0 +1,27 @@
+{
+  "id": "components/processes",
+  "title": "ProcessesView",
+  "description": "A supervisor session manager for spawning, monitoring, and controlling agent processes. Provides real-time output viewing and interactive input for running sessions.",
+  "source": "@site/docs/components/processes.md",
+  "sourceDirName": "components",
+  "slug": "/components/processes",
+  "permalink": "/docs/components/processes",
+  "draft": false,
+  "unlisted": false,
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 9,
+  "frontMatter": {
+    "sidebar_position": 9,
+    "title": "ProcessesView"
+  },
+  "sidebar": "docs",
+  "previous": {
+    "title": "AletheiaView",
+    "permalink": "/docs/components/aletheia"
+  },
+  "next": {
+    "title": "PulseMonitorView",
+    "permalink": "/docs/components/pulse-monitor"
+  }
+}
