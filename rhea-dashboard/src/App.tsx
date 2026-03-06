@@ -2,6 +2,12 @@ import { useState, useEffect } from 'react'
 import { useStore } from './store'
 import ChainsTab from './components/ChainsTab'
 import ProcsTab from './components/ProcsTab'
+import AITab from './components/AITab'
+import PeopleTab from './components/PeopleTab'
+import SecurityTab from './components/SecurityTab'
+import ServicesTab from './components/ServicesTab'
+import DocsTab from './components/DocsTab'
+import LiveTab from './components/LiveTab'
 import BottomNav from './components/BottomNav'
 
 export default function App() {
@@ -57,6 +63,12 @@ export default function App() {
       <main className="flex-1 overflow-auto p-4 pb-24">
         {activeTab === 'chains' && <ChainsTab />}
         {activeTab === 'procs' && <ProcsTab />}
+        {activeNav === 'ai' && <AITab />}
+        {activeNav === 'people' && <PeopleTab />}
+        {activeNav === 'shield' && <SecurityTab />}
+        {activeNav === 'cart' && <ServicesTab />}
+        {activeNav === 'docs' && <DocsTab />}
+        {activeNav === 'live' && <LiveTab />}
       </main>
 
       {/* Bottom Navigation */}
