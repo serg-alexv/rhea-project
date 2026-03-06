@@ -163,7 +163,7 @@ async fn run_app<B: ratatui::backend::Backend>(
             }
         })?;
 
-        if crossterm::event::poll(std::time::Duration::from_millis(100))? {
+        if crossterm::event::poll(std::time::Duration::from_millis(50))? {
             if let Event::Key(key) = event::read()? {
                 match (key.code, key.modifiers) {
                     (KeyCode::Char('c'), KeyModifiers::CONTROL) => return Ok(()),
