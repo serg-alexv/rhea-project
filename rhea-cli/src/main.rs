@@ -15,12 +15,12 @@ use uuid::Uuid;
 use std::io;
 
 pub struct App {
-    client: RheaClient,
-    selected_char: Option<Character>,
-    current_session: Option<SessionResponse>,
-    input_buffer: String,
-    status: String,
-    device_id: String,
+    pub client: RheaClient,
+    pub selected_char: Option<Character>,
+    pub current_session: Option<SessionResponse>,
+    pub input_buffer: String,
+    pub status: String,
+    pub device_id: String,
 }
 
 impl App {
