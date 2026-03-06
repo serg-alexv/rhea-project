@@ -116,3 +116,55 @@
 **Decision:** Agents (Rex, Orion, Hyperion, all) are not just ALLOWED to make errors — they are EXPECTED to. No error prevention theater. No "are you sure?" gates. No defensive coding that sacrifices speed for safety on non-destructive operations. Ship fast, break things, fix forward.
 **Rationale:** Human directive: "Я ХОЧУ — чтобы вы ДОПУСКАЛИ ОШИБКИ. Всё, чего мы достигли — благодаря подходу к работе над ошибками." Error-free systems don't learn. Error-tolerant systems evolve. The immune system needs pathogens to build antibodies.
 **Scope:** Applies to all agent decisions, code generation, architectural choices. Does NOT apply to: deleting production data, pushing secrets, irreversible destructive operations.
+
+## ADR-017: Lamport Clocks for Deterministic Time System (DTS) (2026-03-06)
+**Context:** Multi-device Rhea sessions require deterministic message ordering across devices with different wall-clock times. Prior implementation used `created_at` (wall-clock), which is non-deterministic: Device A's 03:00:05 message can arrive after Device B's 03:00:06 message due to network latency.
+
+**Problem:**
+- Wall-clock time is unreliable across devices (NTP drift, skew, spoofing).
+- Ordering must converge on all devices for CRDT merge idempotence.
+- Example: Two devices apply messages in different order → different final state (breaks causality).
+
+**Decision:** Implement Lamport Clocks (LC) as server-assigned logical timestamps:
+1. Server maintains monotonic LC counter (begins at 1).
+2. On message arrival: `LC := max(current_max, client_proposed_max) + 1`.
+3. Message stored with LC in database; `created_at` is advisory (audit only).
+4. `get_messages()` returns sorted by `ORDER BY lamport_clock ASC, uuid ASC`.
+5. Client receives LC with message; increments local max for offline reasoning.
+
+**Implementation:**
+- **rhea-session-server/src/lib.rs:**
+  - Added `lamport_clock u64` field to `Message`.
+  - Added `UNIQUE(session_id, lamport_clock)` constraint.
+  - Endpoint `/messages` now assigns LC on arrival: `LC := max(SELECT MAX(lamport_clock) ...) + 1`.
+  - `SessionResponse` includes `lamport_clock` in return payload.
+  
+- **rhea-client/src/lib.rs:**
+  - `add_message()` now extracts LC from response.
+  - `get_messages()` returns `ORDER BY lamport_clock ASC` (deterministic, causality-preserving).
+  
+- **rhea-cli/src/main.rs:**
+  - Displays LC alongside messages for user transparency.
+
+**Rationale:**
+- **Lamport Clocks (Lamport 1978):** Each actor increments a counter on every event. Safe to merge across distributed systems because: (1) monotonic per actor, (2) captures partial causal order, (3) sorts consistently on all devices.
+- **CRDT Convergence:** Append-only messages + deterministic sort + idempotent dedup (by UUID) = mathematical guarantee all devices converge (provable via commutativity and associativity of merge).
+- **No external clock dependencies:** Doesn't require NTP, GPS, or trusted time source. Pure logical causality.
+- **Offline-friendly:** Devices can reason offline; LC gets reassigned on sync (idempotent).
+
+**Supersedes:** None (first time DTS implemented).
+
+**Testing:**
+- Manual: Created 2 messages on 2 devices 5 seconds apart; both converged to same LC order.
+- Automated: Added `lamport_clock` to test fixtures; `get_messages()` tests assert `ORDER BY LC`.
+
+**Documentation:**
+- Philosophy: `docs/dev/architecture/philosophy.md` (lines 36–75) explains WHY Lamport > wall-clock.
+- Technical: `docs/dev/architecture/dts.md` (lines 1–120) with examples, LC algorithm, CRDT proof sketch.
+
+**Depends on:** ADR-004 (architecture freeze for session system).
+
+**Notes:**
+- LC is not a timestamp (cannot be converted to wall-clock time; this is feature, not bug).
+- Large offline queues may cause LC gaps; this is safe (gaps don't break causality).
+- Client max tracking allows offline agents to propose new LCs; server always overrides (safety guarantee).
