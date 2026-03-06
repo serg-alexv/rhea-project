@@ -8,10 +8,13 @@ export default function App() {
   const [activeTab, setActiveTab] = useState<'chains' | 'procs'>('chains')
   const [activeNav, setActiveNav] = useState<string>('live')
   const sessions = useStore(s => s.sessions)
+  const startPolling = useStore(s => s.startPolling)
+  const stopPolling = useStore(s => s.stopPolling)
   
   useEffect(() => {
-    useStore.getState().fetchSessions()
-  }, [])
+    startPolling()
+    return () => stopPolling()
+  }, [startPolling, stopPolling])
 
   return (
     <div className="min-h-screen bg-slate-900 text-white flex flex-col">
