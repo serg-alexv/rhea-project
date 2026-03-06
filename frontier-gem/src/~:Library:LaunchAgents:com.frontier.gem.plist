@@ -1,0 +1,7 @@
+<dict>
+    <key>Label</key><string>com.frontier.gem</string>
+    <key>ProgramArguments</key>
+    <array><string>/usr/local/bin/frontier-gem</string><string>daemon</string></array>
+    <key>RunAtLoad</key><true/>
+    <key>KeepAlive</key><true/>
+</dict>

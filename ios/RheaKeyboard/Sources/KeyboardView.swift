@@ -992,9 +992,9 @@ struct KeyboardView: View {
                 ForEach(["0.7", "0.8", "0.9"], id: \.self) { threshold in
                     Button {
                         chain[idx].config["threshold"] = threshold
-                        chain[idx].label = "≥\(Int(Double(threshold)! * 100))%"
+                        chain[idx].label = "≥\(Int((Double(threshold) ?? 0.8) * 100))%"
                     } label: {
-                        Text("≥\(Int(Double(threshold)! * 100))%")
+                        Text("≥\(Int((Double(threshold) ?? 0.8) * 100))%")
                             .font(.system(size: 9, weight: .bold, design: .monospaced))
                             .padding(.horizontal, 8).padding(.vertical, 4)
                             .background(Capsule().fill(

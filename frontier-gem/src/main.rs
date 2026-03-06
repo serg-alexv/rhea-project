@@ -20,6 +20,8 @@ use discovery::DiscoveryState;
 mod focus;
 use focus::get_focused_window;
 
+mod clipboard;
+
 #[derive(Serialize, Deserialize, Debug, Clone)]
 struct Frame {
     prev_hash: String,
@@ -281,6 +283,82 @@ async fn run_http_server(addr: &str, tx: broadcast::Sender<String>) -> io::Resul
                                                 response_body
                                             )
                                         }
+                                    } else if path.starts_with("/api/clipboard") {
+                                        // Clipboard proxy routes → relay to fly.dev
+                                        let server_url = std::env::var("RHEA_SERVER")
+                                            .unwrap_or_else(|_| "https://rhea-tribunal.fly.dev".to_string());
+                                        let auth_hdr: Option<String> = std::env::var("RHEA_AUTH_TOKEN").ok();
+
+                                        let client = reqwest::Client::builder()
+                                            .timeout(std::time::Duration::from_secs(5))
+                                            .build()
+                                            .unwrap_or_default();
+                                        let upstream = format!(
+                                            "{}{}",
+                                            server_url.trim_end_matches('/'),
+                                            path.strip_prefix("/api").unwrap_or(path)
+                                        );
+
+                                        // TODO: chunked SSE streaming
+                                        // SSE streams are unbounded; proxying via resp.text().await
+                                        // would hang forever. Return 501 until chunked relay is implemented.
+                                        if path == "/api/clipboard/stream" {
+                                            let err_body = serde_json::json!({
+                                                "status": "error",
+                                                "message": "SSE proxy not yet supported — subscribe via upstream directly"
+                                            }).to_string();
+                                            format!(
+                                                "HTTP/1.1 501 Not Implemented\r\n\
+                                                 Access-Control-Allow-Origin: {}\r\n\
+                                                 Content-Type: application/json\r\n\
+                                                 Content-Length: {}\r\n\
+                                                 Connection: close\r\n\
+                                                 \r\n\
+                                                 {}",
+                                                cors_origin,
+                                                err_body.len(),
+                                                err_body
+                                            )
+                                        } else {
+                                            let mut req_builder = match method {
+                                                "POST" => client.post(&upstream).body(body.clone()),
+                                                _ => client.get(&upstream),
+                                            };
+                                            if let Some(ref tok) = auth_hdr {
+                                                req_builder = req_builder.header("Authorization", format!("Bearer {}", tok));
+                                            }
+
+                                            let (status_line, response_body) = match req_builder.send().await {
+                                                Ok(resp) => {
+                                                    let code = resp.status().as_u16();
+                                                    let reason = resp.status().canonical_reason().unwrap_or("OK");
+                                                    let body_text = resp.text().await.unwrap_or_default();
+                                                    (format!("HTTP/1.1 {} {}", code, reason), body_text)
+                                                }
+                                                Err(e) => {
+                                                    let err = serde_json::json!({
+                                                        "status": "error",
+                                                        "message": format!("upstream unreachable: {}", e)
+                                                    }).to_string();
+                                                    ("HTTP/1.1 502 Bad Gateway".to_string(), err)
+                                                }
+                                            };
+                                            format!(
+                                                "{}\r\n\
+                                                 Access-Control-Allow-Origin: {}\r\n\
+                                                 Access-Control-Allow-Methods: GET, POST, OPTIONS\r\n\
+                                                 Access-Control-Allow-Headers: Content-Type, Authorization\r\n\
+                                                 Content-Type: application/json\r\n\
+                                                 Content-Length: {}\r\n\
+                                                 Connection: close\r\n\
+                                                 \r\n\
+                                                 {}",
+                                                status_line,
+                                                cors_origin,
+                                                response_body.len(),
+                                                response_body
+                                            )
+                                        }
                                     } else {
                                         // Generic event endpoint
                                         if let Ok(json) = serde_json::from_str::<serde_json::Value>(&body) {
@@ -428,6 +506,16 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                             }
                         }
                     }
+                });
+
+                // Start clipboard monitor
+                let server_url = std::env::var("RHEA_SERVER")
+                    .unwrap_or_else(|_| "https://rhea-tribunal.fly.dev".to_string());
+                let auth_token = std::env::var("RHEA_AUTH_TOKEN").ok();
+                let (clip_tx, _clip_rx) = tokio::sync::broadcast::channel::<clipboard::ClipboardEvent>(64);
+                let clip_tx2 = clip_tx.clone();
+                tokio::spawn(async move {
+                    clipboard::clipboard_monitor(server_url, auth_token, clip_tx2).await;
                 });
 
                 if let Err(e) = run_daemon_bus(tx).await {
