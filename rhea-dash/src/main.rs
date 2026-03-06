@@ -39,6 +39,7 @@ struct ApiAgent {
 }
 
 #[derive(Clone, serde::Deserialize)]
+#[allow(dead_code)]
 struct ApiStatusResponse {
     online: u32,
     busy: u32,
@@ -48,6 +49,7 @@ struct ApiStatusResponse {
 }
 
 #[derive(Clone, serde::Deserialize)]
+#[allow(dead_code)]
 struct DelegateResponse {
     task_id: String,
     status: String,
@@ -55,6 +57,7 @@ struct DelegateResponse {
 }
 
 #[derive(Clone, serde::Deserialize)]
+#[allow(dead_code)]
 struct FlowTaskRef {
     agent: String,
     task_id: String,
@@ -816,7 +819,7 @@ impl eframe::App for RheaDash {
         egui::CentralPanel::default()
             .frame(egui::Frame::none().fill(BG).inner_margin(egui::Margin::symmetric(16.0, 12.0)))
             .show(ctx, |ui| {
-                match self.selected {
+                match &self.selected.clone() {
                     None => {
                         ui.centered_and_justified(|ui| {
                             ui.colored_label(
@@ -827,7 +830,8 @@ impl eframe::App for RheaDash {
                             );
                         });
                     }
-                    Some(idx) => {
+                    Some(Selection::Local(idx)) => {
+                        let idx = *idx;
                         let agent = &self.agents[idx];
                         ui.horizontal(|ui| {
                             ui.colored_label(
@@ -886,8 +890,218 @@ impl eframe::App for RheaDash {
                                 );
                             });
                     }
+                    Some(Selection::Orch(idx)) => {
+                        let idx = *idx;
+                        if let Some(oa) = self.orch_agents.get(idx) {
+                            let agent_id = oa.id.clone();
+                            let status = AgentStatus::from_api(&oa.status);
+                            let activity = oa
+                                .last_activity
+                                .as_ref()
+                                .map(|v| match v {
+                                    serde_json::Value::String(s) => s.clone(),
+                                    other => other.to_string(),
+                                })
+                                .unwrap_or_else(|| "—".to_string());
+
+                            ui.horizontal(|ui| {
+                                ui.colored_label(
+                                    ACCENT,
+                                    egui::RichText::new(format!("▸ {} {}", oa.id, oa.name))
+                                        .strong()
+                                        .size(14.0),
+                                );
+                                let dot = status.color();
+                                let (r, _) = ui.allocate_exact_size(
+                                    egui::vec2(8.0, 8.0),
+                                    egui::Sense::hover(),
+                                );
+                                ui.painter().circle_filled(r.center(), 4.0, dot);
+                                ui.colored_label(
+                                    status.color(),
+                                    egui::RichText::new(status.label()).size(11.0),
+                                );
+                            });
+                            ui.separator();
+                            ui.add_space(4.0);
+
+                            ui.horizontal(|ui| {
+                                ui.colored_label(TEXT_DIM, egui::RichText::new("Role:").size(11.0));
+                                ui.colored_label(TEXT, egui::RichText::new(&oa.role).size(11.0));
+                                ui.add_space(12.0);
+                                ui.colored_label(TEXT_DIM, egui::RichText::new("Tier:").size(11.0));
+                                ui.colored_label(TEXT, egui::RichText::new(&oa.tier).size(11.0));
+                            });
+                            ui.add_space(2.0);
+                            ui.horizontal_wrapped(|ui| {
+                                ui.colored_label(TEXT_DIM, egui::RichText::new("Domain:").size(11.0));
+                                ui.colored_label(TEXT, egui::RichText::new(&oa.domain).size(11.0));
+                            });
+                            ui.add_space(2.0);
+                            ui.horizontal(|ui| {
+                                ui.colored_label(TEXT_DIM, egui::RichText::new("Last activity:").size(11.0));
+                                ui.colored_label(TEXT, egui::RichText::new(&activity).size(11.0));
+                            });
+
+                            ui.add_space(12.0);
+                            if ui
+                                .add(
+                                    egui::Button::new(
+                                        egui::RichText::new("📋 Delegate Task")
+                                            .size(12.0)
+                                            .color(TEXT),
+                                    )
+                                    .fill(egui::Color32::from_rgb(36, 36, 56))
+                                    .rounding(3.0),
+                                )
+                                .clicked()
+                            {
+                                self.delegate_target = Some(idx);
+                                self.delegate_input.clear();
+                                self.show_delegate = true;
+                            }
+
+                            // Inline delegate result area
+                            drop(agent_id);
+                        } else {
+                            ui.colored_label(
+                                TEXT_DIM,
+                                egui::RichText::new("Agent data unavailable").size(14.0).italics(),
+                            );
+                        }
+                    }
                 }
             });
+
+        // ── Delegate Task Dialog ────────────────────────────────────
+        if self.show_delegate {
+            let target_name = self
+                .delegate_target
+                .and_then(|i| self.orch_agents.get(i))
+                .map(|a| format!("{} {}", a.id, a.name))
+                .unwrap_or_default();
+            let target_id = self
+                .delegate_target
+                .and_then(|i| self.orch_agents.get(i))
+                .map(|a| a.id.clone())
+                .unwrap_or_default();
+
+            let mut open = true;
+            egui::Window::new(format!("Delegate to {target_name}"))
+                .open(&mut open)
+                .collapsible(false)
+                .resizable(true)
+                .default_size([400.0, 150.0])
+                .anchor(egui::Align2::CENTER_CENTER, [0.0, 0.0])
+                .show(ctx, |ui| {
+                    ui.label(egui::RichText::new("Task description:").size(12.0).color(TEXT));
+                    ui.add(
+                        egui::TextEdit::multiline(&mut self.delegate_input)
+                            .desired_width(f32::INFINITY)
+                            .desired_rows(3)
+                            .font(egui::TextStyle::Monospace),
+                    );
+                    ui.add_space(6.0);
+                    ui.horizontal(|ui| {
+                        let can_send = !self.delegate_input.trim().is_empty();
+                        if ui
+                            .add_enabled(
+                                can_send,
+                                egui::Button::new(
+                                    egui::RichText::new("Send").size(12.0).color(TEXT),
+                                )
+                                .fill(egui::Color32::from_rgb(40, 80, 60))
+                                .rounding(3.0),
+                            )
+                            .clicked()
+                        {
+                            self.send_delegate(&target_id, &self.delegate_input.clone());
+                            self.show_delegate = false;
+                        }
+                        if ui
+                            .add(
+                                egui::Button::new(
+                                    egui::RichText::new("Cancel").size(12.0).color(TEXT_DIM),
+                                )
+                                .fill(PANEL_BG)
+                                .rounding(3.0),
+                            )
+                            .clicked()
+                        {
+                            self.show_delegate = false;
+                        }
+                    });
+                });
+            if !open {
+                self.show_delegate = false;
+            }
+        }
+
+        // ── Run Flow Dialog ─────────────────────────────────────────
+        if self.show_flow {
+            let mut open = true;
+            egui::Window::new("Run Orchestration Flow")
+                .open(&mut open)
+                .collapsible(false)
+                .resizable(true)
+                .default_size([420.0, 180.0])
+                .anchor(egui::Align2::CENTER_CENTER, [0.0, 0.0])
+                .show(ctx, |ui| {
+                    ui.label(egui::RichText::new("Query:").size(12.0).color(TEXT));
+                    ui.add(
+                        egui::TextEdit::multiline(&mut self.flow_query)
+                            .desired_width(f32::INFINITY)
+                            .desired_rows(3)
+                            .font(egui::TextStyle::Monospace),
+                    );
+                    ui.add_space(6.0);
+                    ui.horizontal(|ui| {
+                        ui.label(egui::RichText::new("Mode:").size(12.0).color(TEXT));
+                        for (i, label) in FLOW_MODES.iter().enumerate() {
+                            if ui
+                                .selectable_label(self.flow_mode == i, *label)
+                                .clicked()
+                            {
+                                self.flow_mode = i;
+                            }
+                        }
+                    });
+                    ui.add_space(6.0);
+                    ui.horizontal(|ui| {
+                        let can_send = !self.flow_query.trim().is_empty();
+                        if ui
+                            .add_enabled(
+                                can_send,
+                                egui::Button::new(
+                                    egui::RichText::new("▶ Execute").size(12.0).color(TEXT),
+                                )
+                                .fill(egui::Color32::from_rgb(40, 80, 60))
+                                .rounding(3.0),
+                            )
+                            .clicked()
+                        {
+                            let mode = FLOW_MODES[self.flow_mode];
+                            self.send_flow(&self.flow_query.clone(), mode);
+                            self.show_flow = false;
+                        }
+                        if ui
+                            .add(
+                                egui::Button::new(
+                                    egui::RichText::new("Cancel").size(12.0).color(TEXT_DIM),
+                                )
+                                .fill(PANEL_BG)
+                                .rounding(3.0),
+                            )
+                            .clicked()
+                        {
+                            self.show_flow = false;
+                        }
+                    });
+                });
+            if !open {
+                self.show_flow = false;
+            }
+        }
     }
 }
 
