@@ -1,7 +1,7 @@
 use axum::{
     extract::{Path, Json, State},
     http::StatusCode,
-    routing::{get, post},
+    routing::{get, post, delete},
     Router,
 };
 use serde::{Deserialize, Serialize};
@@ -10,6 +10,13 @@ use tokio::sync::RwLock;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Component {
+    pub id: String,
+    pub name: String,
+    pub priority: u8,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CreateComponentRequest {
     pub id: String,
     pub name: String,
     pub priority: u8,
@@ -35,11 +42,13 @@ async fn main() {
     let app = Router::new()
         .route("/health", get(health))
         .route("/components", get(list_components))
+        .route("/components", post(create_component))
+        .route("/components/:id", delete(delete_component))
         .route("/allocate", post(allocate))
         .with_state(store);
 
     let listener = tokio::net::TcpListener::bind("127.0.0.1:3006").await.unwrap();
-    println!("🎬 Play Token Mapper on http://127.0.0.1:3006");
+    println!("🎬 Play Token Mapper (dynamic components) on http://127.0.0.1:3006");
     axum::serve(listener, app).await.unwrap();
 }
 
@@ -51,6 +60,29 @@ async fn list_components(
     State(store): State<Store>,
 ) -> Json<Vec<Component>> {
     Json(store.read().await.clone())
+}
+
+async fn create_component(
+    State(store): State<Store>,
+    Json(req): Json<CreateComponentRequest>,
+) -> (StatusCode, Json<Component>) {
+    let comp = Component {
+        id: req.id,
+        name: req.name,
+        priority: req.priority,
+    };
+    
+    store.write().await.push(comp.clone());
+    
+    (StatusCode::CREATED, Json(comp))
+}
+
+async fn delete_component(
+    Path(id): Path<String>,
+    State(store): State<Store>,
+) -> StatusCode {
+    store.write().await.retain(|c| c.id != id);
+    StatusCode::OK
 }
 
 async fn allocate(
@@ -72,5 +104,8 @@ async fn allocate(
         remain = remain.saturating_sub(amt);
     }
 
-    Json(serde_json::json!({ "allocations": alloc }))
+    Json(serde_json::json!({ 
+        "allocations": alloc,
+        "total_allocated": req.budget - remain
+    }))
 }
