@@ -91,7 +91,11 @@ impl RheaClient {
         content: String,
     ) -> Result<Uuid, String> {
         let url = format!("{}/sessions/{}/messages", self.server_url, session_id);
-        let req = AddMessageRequest { role, content };
+        let req = AddMessageRequest { 
+            role, 
+            content,
+            device_id: self.device_id.clone(),
+        };
 
         let resp = self.http_client
             .post(&url)
