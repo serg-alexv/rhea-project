@@ -20,6 +20,7 @@ struct KeyboardView: View {
     @State private var resultText: String?
     @State private var resultMeta: String?
     @State private var errorText: String?
+    @State private var agreementScore: Double?
     @State private var copied = false
     @State private var showLangPicker = false
     @State private var selectedLang = "en"
@@ -635,58 +636,92 @@ struct KeyboardView: View {
                 .padding(.horizontal, 14)
                 .padding(.vertical, 4)
             } else if let text = resultText {
-                ScrollView {
-                    Text(text)
-                        .font(.system(size: 13, design: .monospaced))
-                        .foregroundStyle(.white.opacity(0.9))
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.horizontal, 14)
-                }
-                .frame(maxHeight: 120)
+                VStack(alignment: .leading, spacing: 8) {
+                    // Header: sender label + agreement badge
+                    HStack {
+                        Text("RHEA")
+                            .font(.system(size: 10, weight: .bold, design: .monospaced))
+                            .foregroundStyle(accent)
 
-                HStack(spacing: 8) {
-                    if let meta = resultMeta {
-                        Text(meta)
-                            .font(.system(size: 9, design: .monospaced))
-                            .foregroundStyle(.secondary)
-                    }
-                    Spacer()
+                        Spacer()
 
-                    Button {
-                        resultText = nil
-                        resultMeta = nil
-                    } label: {
-                        Image(systemName: "xmark")
-                            .font(.system(size: 10))
-                            .foregroundStyle(.secondary)
-                    }
-
-                    Button {
-                        insertText(text)
-                        resultText = nil
-                    } label: {
-                        HStack(spacing: 3) {
-                            Image(systemName: "arrow.up.doc").font(.system(size: 9))
-                            Text("Insert").font(.system(size: 10, weight: .semibold, design: .monospaced))
+                        if let score = agreementScore {
+                            HStack(spacing: 3) {
+                                Image(systemName: "checkmark.shield")
+                                    .font(.system(size: 10))
+                                Text("\(Int(score * 100))%")
+                                    .font(.system(size: 11, weight: .bold, design: .monospaced))
+                            }
+                            .foregroundStyle(score >= 0.7 ? green : score >= 0.4 ? amber : red)
                         }
-                        .padding(.horizontal, 10)
-                        .padding(.vertical, 5)
-                        .background(Capsule().fill(accent.opacity(0.2)))
-                        .foregroundStyle(accent)
                     }
 
-                    Button {
-                        UIPasteboard.general.string = text
-                        copied = true
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { copied = false }
-                    } label: {
-                        Image(systemName: copied ? "checkmark" : "doc.on.doc")
-                            .font(.system(size: 11))
-                            .foregroundStyle(copied ? green : .secondary)
+                    // Body text
+                    ScrollView {
+                        Text(text)
+                            .font(.system(size: 13))
+                            .foregroundStyle(.white.opacity(0.9))
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                    .frame(maxHeight: 100)
+
+                    // Footer: meta + action pills
+                    HStack(spacing: 6) {
+                        if let meta = resultMeta {
+                            Text(meta)
+                                .font(.system(size: 9, design: .monospaced))
+                                .foregroundStyle(.secondary)
+                        }
+                        Spacer()
+
+                        Button {
+                            UIPasteboard.general.string = text
+                            copied = true
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { copied = false }
+                        } label: {
+                            Image(systemName: copied ? "checkmark" : "doc.on.doc")
+                                .font(.system(size: 10))
+                                .foregroundStyle(copied ? green : .secondary)
+                        }
+
+                        Button {
+                            resultText = nil
+                            resultMeta = nil
+                            agreementScore = nil
+                        } label: {
+                            Text("Dismiss")
+                                .font(.system(size: 10, weight: .medium))
+                                .padding(.horizontal, 10)
+                                .padding(.vertical, 4)
+                                .background(Capsule().fill(Color.white.opacity(0.08)))
+                                .foregroundStyle(.secondary)
+                        }
+
+                        Button {
+                            insertText(text)
+                            resultText = nil
+                            agreementScore = nil
+                        } label: {
+                            Text("Insert")
+                                .font(.system(size: 10, weight: .semibold))
+                                .padding(.horizontal, 10)
+                                .padding(.vertical, 4)
+                                .background(Capsule().fill(accent.opacity(0.2)))
+                                .foregroundStyle(accent)
+                        }
                     }
                 }
-                .padding(.horizontal, 14)
-                .padding(.bottom, 6)
+                .padding(12)
+                .background(
+                    RoundedRectangle(cornerRadius: 14)
+                        .fill(card)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 14)
+                                .stroke(Color.white.opacity(0.06), lineWidth: 1)
+                        )
+                )
+                .padding(.horizontal, 8)
+                .padding(.vertical, 4)
             }
         }
     }
@@ -719,6 +754,7 @@ struct KeyboardView: View {
                 )
                 await MainActor.run {
                     resultText = resp.text
+                    agreementScore = nil
                     if let elapsed = resp.elapsed_s, let model = resp.model {
                         resultMeta = "\(model) · \(String(format: "%.1fs", elapsed))"
                     }
@@ -739,16 +775,16 @@ struct KeyboardView: View {
         guard !claim.isEmpty else { return }
 
         isLoading = true
-        resultText = nil; resultMeta = nil; errorText = nil
+        resultText = nil; resultMeta = nil; errorText = nil; agreementScore = nil
 
         Task {
             do {
                 let resp = try await TribunalClient.tribunal(claim)
                 await MainActor.run {
                     resultText = resp.reply
+                    agreementScore = resp.agreement_score
                     var meta = ""
-                    if let score = resp.agreement_score { meta += "\(Int(score * 100))% agreement" }
-                    if let models = resp.models_responded { meta += " · \(models) models" }
+                    if let models = resp.models_responded { meta += "\(models) models" }
                     if let elapsed = resp.elapsed_s { meta += " · \(String(format: "%.1fs", elapsed))" }
                     resultMeta = meta
                     isLoading = false
@@ -772,16 +808,16 @@ struct KeyboardView: View {
         }
 
         isLoading = true
-        resultText = nil; resultMeta = nil; errorText = nil
+        resultText = nil; resultMeta = nil; errorText = nil; agreementScore = nil
 
         Task {
             do {
                 let resp = try await TribunalClient.tribunal(claim)
                 await MainActor.run {
                     resultText = resp.reply
-                    var meta = "⚖ "
-                    if let score = resp.agreement_score { meta += "\(Int(score * 100))% agreement" }
-                    if let models = resp.models_responded { meta += " · \(models) models" }
+                    agreementScore = resp.agreement_score
+                    var meta = ""
+                    if let models = resp.models_responded { meta += "\(models) models" }
                     if let elapsed = resp.elapsed_s { meta += " · \(String(format: "%.1fs", elapsed))" }
                     resultMeta = meta
                     isLoading = false
