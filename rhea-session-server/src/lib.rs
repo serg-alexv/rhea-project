@@ -152,3 +152,60 @@ pub struct SessionWithKeystrokes {
     pub messages: Vec<Message>,
     pub keystrokes: Vec<KeystrokeEvent>,
 }
+
+// ── Tribunal types ──────────────────────────────────────────────
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct TribunalRequest {
+    pub text: String,
+    pub sender: String,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct TribunalResponse {
+    pub reply: String,
+    pub agreement_score: f64,
+    pub models_responded: usize,
+    pub elapsed_s: f64,
+    /// Devil's-advocate counter-argument added by the adversarial layer.
+    pub adversarial_note: String,
+    /// Original confidence discounted by the skepticism factor (×0.85).
+    pub confidence_adjusted: f64,
+}
+
+/// Structured adversarial analysis applied after consensus.
+pub fn adversarial_check(claim: &str, agreement_score: f64) -> (String, f64) {
+    let note = if agreement_score > 0.8 {
+        format!(
+            "High agreement ({:.0}%) may indicate groupthink. \
+             Consider: what evidence would *disprove* \"{}\"?",
+            agreement_score * 100.0,
+            truncate_claim(claim, 80),
+        )
+    } else if agreement_score < 0.5 {
+        format!(
+            "Low agreement ({:.0}%) suggests genuine ambiguity. \
+             Multiple valid perspectives exist on \"{}\".",
+            agreement_score * 100.0,
+            truncate_claim(claim, 80),
+        )
+    } else {
+        format!(
+            "Moderate agreement ({:.0}%). \
+             The claim \"{}\" warrants further evidence before full endorsement.",
+            agreement_score * 100.0,
+            truncate_claim(claim, 80),
+        )
+    };
+
+    let confidence_adjusted = agreement_score * 0.85; // 15 % skepticism discount
+    (note, confidence_adjusted)
+}
+
+fn truncate_claim(s: &str, max: usize) -> String {
+    if s.len() <= max {
+        s.to_string()
+    } else {
+        format!("{}…", &s[..s.floor_char_boundary(max)])
+    }
+}

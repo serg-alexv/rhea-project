@@ -5,8 +5,9 @@ use axum::{
     Json, Router,
 };
 use rhea_session_server::{
-    Session, CreateSessionRequest, AddMessageRequest, 
+    Session, CreateSessionRequest, AddMessageRequest,
     GetSessionResponse, SessionResponse,
+    TribunalRequest, TribunalResponse, adversarial_check,
 };
 use std::sync::Arc;
 use tokio::sync::RwLock;
@@ -23,6 +24,7 @@ async fn main() {
         .route("/sessions", get(list_sessions))
         .route("/sessions/:id", get(get_session))
         .route("/sessions/:id/messages", post(add_message))
+        .route("/dialog", post(dialog_tribunal))
         .with_state(store);
 
     let listener = tokio::net::TcpListener::bind("127.0.0.1:3000")
@@ -66,6 +68,43 @@ async fn get_session(
         session: SessionResponse::from(session),
         messages: session.messages.clone(),
     }))
+}
+
+async fn dialog_tribunal(
+    Json(req): Json<TribunalRequest>,
+) -> Json<TribunalResponse> {
+    let start = std::time::Instant::now();
+
+    // Simulated multi-model consensus (no real LLM — deterministic heuristic).
+    let word_count = req.text.split_whitespace().count();
+    let agreement_score: f64 = match word_count {
+        0..=3 => 0.92,   // very short claims → models tend to agree
+        4..=12 => 0.74,  // medium claims → moderate agreement
+        _ => 0.45,        // complex claims → genuine divergence
+    };
+    let models_responded: usize = 4;
+
+    let reply = format!(
+        "Tribunal consensus on \"{}\": {:.0}% agreement across {} models.",
+        if req.text.len() > 60 { &req.text[..req.text.floor_char_boundary(60)] } else { &req.text },
+        agreement_score * 100.0,
+        models_responded,
+    );
+
+    // ── Adversarial devil's-advocate layer ──
+    let (adversarial_note, confidence_adjusted) =
+        adversarial_check(&req.text, agreement_score);
+
+    let elapsed_s = start.elapsed().as_secs_f64();
+
+    Json(TribunalResponse {
+        reply,
+        agreement_score,
+        models_responded,
+        elapsed_s,
+        adversarial_note,
+        confidence_adjusted,
+    })
 }
 
 async fn add_message(
