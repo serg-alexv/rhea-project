@@ -8,7 +8,7 @@ use crossterm::{
     execute,
     terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
 };
-use ratatui::{backend::CrosstermBackend, Terminal};
+use ratatui::{backend::CrosstermBackend, Terminal, style::{Color, Style}, widgets::Paragraph};
 use rhea_client::RheaClient;
 use rhea_session_server::SessionResponse;
 use uuid::Uuid;
@@ -131,15 +131,28 @@ async fn run_app<B: ratatui::backend::Backend>(
     terminal: &mut Terminal<B>,
 ) -> io::Result<()> {
     let device_id = uuid::Uuid::new_v4().to_string();
-    let server_url = "http://127.0.0.1:3000".to_string();
+    let server_url = std::env::var("RHEA_SERVER").unwrap_or_else(|_| "http://127.0.0.1:3000".to_string());
     
-    let mut app = match App::new(server_url, device_id).await {
+    // Try to init app
+    let mut app = match App::new(server_url.clone(), device_id.clone()).await {
         Ok(a) => a,
         Err(e) => {
-            eprintln!("Failed to init app: {}", e);
+            // Show error in terminal
+            terminal.draw(|f| {
+                let msg = format!("❌ Failed to connect to server at {}\n\nError: {}\n\nMake sure to run:\n  cargo run --release -p rhea-session-server", server_url, e);
+                let para = Paragraph::new(msg)
+                    .style(Style::default().fg(Color::Red));
+                let area = f.size();
+                f.render_widget(para, area);
+            })?;
+            
+            // Wait for any key to exit
+            std::thread::sleep(std::time::Duration::from_secs(3));
             return Ok(());
         }
     };
+
+    let mut status_timer = 0u64;
 
     loop {
         terminal.draw(|f| {
