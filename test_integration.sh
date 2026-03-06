@@ -1,5 +1,5 @@
 #!/bin/bash
-# test_integration.sh - Full integration test for Stage 4
+# test_integration.sh - Full integration test for Stage 4 + Stage 5
 
 set -euo pipefail
 
@@ -12,7 +12,7 @@ pass() { echo -e "${GREEN}✓${NC} $1"; }
 fail() { echo -e "${RED}✗${NC} $1"; exit 1; }
 warn() { echo -e "${YELLOW}⚠${NC} $1"; }
 
-echo "=== Stage 4 Integration Tests ==="
+echo "=== Stage 4 + Stage 5 Integration Tests ==="
 echo ""
 
 # Test 1: Services Running
@@ -100,6 +100,27 @@ echo "Test 8: Deployment script..."
 bash scripts/stage4_deploy.sh status > /dev/null || fail "Status check failed"
 pass "Deployment script working"
 
+# Test 9: Dashboard API Polling (Stage 5)
+echo ""
+echo "Test 9: Dashboard can poll sessions..."
+SESSIONS=$(curl -s http://127.0.0.1:3000/sessions)
+echo "$SESSIONS" | jq . > /dev/null || fail "Sessions response not valid JSON"
+SESSION_COUNT=$(echo "$SESSIONS" | jq 'length')
+pass "Dashboard polling works: $SESSION_COUNT sessions found"
+
+# Test 10: Session Server has all sessions accessible
+echo ""
+echo "Test 10: Real-time session data..."
+if [ "$SESSION_COUNT" -gt 0 ]; then
+  FIRST_ID=$(echo "$SESSIONS" | jq -r '.[0].id')
+  SESSION_DATA=$(curl -s http://127.0.0.1:3000/sessions/$FIRST_ID)
+  MSG_COUNT=$(echo "$SESSION_DATA" | jq -r '.session.message_count')
+  LC=$(echo "$SESSION_DATA" | jq -r '.session.lamport_clock')
+  pass "Session detail: id=$FIRST_ID, messages=$MSG_COUNT, lamport_clock=$LC"
+else
+  warn "No sessions to check (create one with: curl -X POST http://127.0.0.1:3000/sessions ...)"
+fi
+
 echo ""
 echo "=== All Tests Passed ✓ ==="
 echo ""
@@ -107,4 +128,9 @@ echo "Services Summary:"
 echo "  Session Server: http://127.0.0.1:3000"
 echo "  AI Auth:        http://127.0.0.1:3001"
 echo "  Angel Game:     http://127.0.0.1:3002"
-echo "  CLI:            cd rhea-cli && cargo run --release"
+echo "  BioRenderer:    http://127.0.0.1:3003"
+echo "  RAG Storage:    http://127.0.0.1:3004"
+echo "  Logical Keyboard: http://127.0.0.1:3005"
+echo "  Play Token Mapper: http://127.0.0.1:3006"
+echo ""
+echo "Dashboard: Open rhea-dashboard/dist/index.html in browser"
