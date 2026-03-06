@@ -11,16 +11,32 @@ use crossterm::{
 use ratatui::{backend::CrosstermBackend, Terminal, style::{Color, Style}, widgets::Paragraph};
 use rhea_client::RheaClient;
 use rhea_session_server::SessionResponse;
-use uuid::Uuid;
 use std::io;
+use tokio::sync::mpsc;
+use std::sync::Arc;
+
+#[derive(Clone, Debug)]
+enum BackgroundTask {
+    CreateSession(String),
+    SendMessage(String),
+}
+
+#[derive(Clone, Debug)]
+enum TaskResult {
+    SessionCreated(SessionResponse),
+    SessionFailed(String),
+    MessageSent,
+    MessageFailed(String),
+}
 
 pub struct App {
-    pub client: RheaClient,
+    pub client: Arc<RheaClient>,
     pub selected_char: Option<Character>,
     pub current_session: Option<SessionResponse>,
     pub input_buffer: String,
     pub status: String,
     pub device_id: String,
+    pub is_loading: bool,
 }
 
 impl App {
@@ -30,60 +46,14 @@ impl App {
             .map_err(|e| e.to_string())?;
         
         Ok(App {
-            client,
+            client: Arc::new(client),
             selected_char: None,
             current_session: None,
             input_buffer: String::new(),
-            status: format!("Device: {} | Type /help for commands", &device_id[0..8.min(device_id.len())]),
+            status: format!("Device: {} | Press 1-4", &device_id[0..8.min(device_id.len())]),
             device_id,
+            is_loading: false,
         })
-    }
-
-    async fn create_session(&mut self, char_name: &str) -> Result<(), String> {
-        let character = rhea_session_server::Character::Protos; // Will be set by char_name
-        let character = match char_name {
-            "PROTOS" => rhea_session_server::Character::Protos,
-            "ZERG" => rhea_session_server::Character::Zerg,
-            "TERRAN" => rhea_session_server::Character::Terran,
-            "AEON" => rhea_session_server::Character::Aeon,
-            _ => rhea_session_server::Character::Protos,
-        };
-        
-        let session = self.client.create_session(character).await?;
-        let session_id = session.id;
-        self.current_session = Some(session);
-        self.selected_char = Some(Character::from_str(char_name));
-        self.status = format!("Session: {} | Device: {}", 
-            &session_id.to_string()[0..8.min(36)],
-            &self.device_id[0..8.min(self.device_id.len())]
-        );
-        Ok(())
-    }
-
-    async fn send_message(&mut self, content: String) -> Result<(), String> {
-        if content.starts_with('/') {
-            self.handle_command(&content).await
-        } else if let Some(session) = &self.current_session {
-            self.client.add_message(session.id, "user".to_string(), content).await?;
-            self.input_buffer.clear();
-            Ok(())
-        } else {
-            Err("No session active".to_string())
-        }
-    }
-
-    async fn handle_command(&mut self, cmd: &str) -> Result<(), String> {
-        match cmd {
-            "/help" => {
-                help::show_help();
-                Ok(())
-            }
-            "/device" => {
-                println!("Device ID: {}", self.device_id);
-                Ok(())
-            }
-            _ => Err(format!("Unknown command: {}", cmd))
-        }
     }
 }
 
@@ -91,7 +61,6 @@ impl App {
 async fn main() -> io::Result<()> {
     let args: Vec<String> = std::env::args().collect();
     
-    // Check for command-line help
     if args.len() > 1 {
         match args[1].as_str() {
             "--help" => {
@@ -102,7 +71,6 @@ async fn main() -> io::Result<()> {
         }
     }
 
-    // Setup terminal
     enable_raw_mode()?;
     let mut stdout = io::stdout();
     execute!(stdout, EnterAlternateScreen, EnableMouseCapture)?;
@@ -111,7 +79,6 @@ async fn main() -> io::Result<()> {
 
     let res = run_app(&mut terminal).await;
 
-    // Restore terminal
     disable_raw_mode()?;
     execute!(
         terminal.backend_mut(),
@@ -133,11 +100,9 @@ async fn run_app<B: ratatui::backend::Backend>(
     let device_id = uuid::Uuid::new_v4().to_string();
     let server_url = std::env::var("RHEA_SERVER").unwrap_or_else(|_| "http://127.0.0.1:3000".to_string());
     
-    // Try to init app
     let mut app = match App::new(server_url.clone(), device_id.clone()).await {
         Ok(a) => a,
         Err(e) => {
-            // Show error in terminal
             terminal.draw(|f| {
                 let msg = format!("❌ Failed to connect to server at {}\n\nError: {}\n\nMake sure to run:\n  cargo run --release -p rhea-session-server", server_url, e);
                 let para = Paragraph::new(msg)
@@ -146,15 +111,44 @@ async fn run_app<B: ratatui::backend::Backend>(
                 f.render_widget(para, area);
             })?;
             
-            // Wait for any key to exit
             std::thread::sleep(std::time::Duration::from_secs(3));
             return Ok(());
         }
     };
 
-    let mut status_timer = 0u64;
+    // Channel for background task results
+    let (tx, mut rx) = mpsc::channel(10);
 
     loop {
+        // Check for background task results (non-blocking)
+        tokio::select! {
+            Some(result) = rx.recv() => {
+                match result {
+                    TaskResult::SessionCreated(session) => {
+                        app.current_session = Some(session.clone());
+                        app.selected_char = Some(Character::from_str(session.character.name()));
+                        app.status = format!("Session created! Type message...");
+                        app.is_loading = false;
+                    }
+                    TaskResult::SessionFailed(err) => {
+                        app.status = format!("Error: {}", err);
+                        app.is_loading = false;
+                    }
+                    TaskResult::MessageSent => {
+                        app.status = "Message sent ✓".to_string();
+                        app.is_loading = false;
+                    }
+                    TaskResult::MessageFailed(err) => {
+                        app.status = format!("Error: {}", err);
+                        app.is_loading = false;
+                    }
+                }
+            }
+            _ = tokio::time::sleep(tokio::time::Duration::from_millis(30)) => {
+                // Timeout every 30ms to check for keyboard input
+            }
+        }
+
         terminal.draw(|f| {
             if app.selected_char.is_none() {
                 ui::UIRenderer::render_character_select(f);
@@ -163,7 +157,8 @@ async fn run_app<B: ratatui::backend::Backend>(
             }
         })?;
 
-        if crossterm::event::poll(std::time::Duration::from_millis(50))? {
+        // Non-blocking event poll
+        if crossterm::event::poll(std::time::Duration::from_millis(10))? {
             if let Event::Key(key) = event::read()? {
                 match (key.code, key.modifiers) {
                     (KeyCode::Char('c'), KeyModifiers::CONTROL) => return Ok(()),
@@ -172,49 +167,78 @@ async fn run_app<B: ratatui::backend::Backend>(
                             app.selected_char = None;
                             app.current_session = None;
                             app.input_buffer.clear();
+                            app.status = "Back to character select".to_string();
                         } else {
                             return Ok(());
                         }
                     }
-                    (KeyCode::Char(c), _) if app.selected_char.is_none() => {
-                        match c {
-                            '1' => {
-                                if let Err(e) = app.create_session("PROTOS").await {
-                                    app.status = format!("Error: {}", e);
+                    // Character selection - spawn background task
+                    (KeyCode::Char(c), _) if app.selected_char.is_none() && !app.is_loading => {
+                        let char_name = match c {
+                            '1' => Some("PROTOS"),
+                            '2' => Some("ZERG"),
+                            '3' => Some("TERRAN"),
+                            '4' => Some("AEON"),
+                            _ => None,
+                        };
+                        
+                        if let Some(char_name) = char_name {
+                            app.is_loading = true;
+                            app.status = format!("⟳ Creating {} session...", char_name);
+                            
+                            let client = app.client.clone();
+                            let tx = tx.clone();
+                            let char_name = char_name.to_string();
+                            
+                            tokio::spawn(async move {
+                                let character = match char_name.as_str() {
+                                    "PROTOS" => rhea_session_server::Character::Protos,
+                                    "ZERG" => rhea_session_server::Character::Zerg,
+                                    "TERRAN" => rhea_session_server::Character::Terran,
+                                    "AEON" => rhea_session_server::Character::Aeon,
+                                    _ => rhea_session_server::Character::Protos,
+                                };
+                                
+                                match client.create_session(character).await {
+                                    Ok(session) => {
+                                        let _ = tx.send(TaskResult::SessionCreated(session)).await;
+                                    }
+                                    Err(e) => {
+                                        let _ = tx.send(TaskResult::SessionFailed(e)).await;
+                                    }
                                 }
-                            }
-                            '2' => {
-                                if let Err(e) = app.create_session("ZERG").await {
-                                    app.status = format!("Error: {}", e);
-                                }
-                            }
-                            '3' => {
-                                if let Err(e) = app.create_session("TERRAN").await {
-                                    app.status = format!("Error: {}", e);
-                                }
-                            }
-                            '4' => {
-                                if let Err(e) = app.create_session("AEON").await {
-                                    app.status = format!("Error: {}", e);
-                                }
-                            }
-                            _ => {}
+                            });
                         }
                     }
-                    (KeyCode::Char(c), _) if app.selected_char.is_some() => {
+                    // Message input - instant echo (no blocking)
+                    (KeyCode::Char(c), _) if app.selected_char.is_some() && !app.is_loading => {
                         app.input_buffer.push(c);
                     }
-                    (KeyCode::Enter, _) if app.selected_char.is_some() => {
-                        if !app.input_buffer.is_empty() {
-                            let msg = app.input_buffer.clone();
-                            if let Err(e) = app.send_message(msg).await {
-                                app.status = format!("Error: {}", e);
-                            } else {
-                                app.status.clear();
-                            }
+                    // Send message
+                    (KeyCode::Enter, _) if app.selected_char.is_some() && !app.input_buffer.is_empty() && !app.is_loading => {
+                        let msg = app.input_buffer.clone();
+                        app.input_buffer.clear();
+                        app.is_loading = true;
+                        app.status = "⟳ Sending...".to_string();
+                        
+                        if let Some(session) = app.current_session.clone() {
+                            let client = app.client.clone();
+                            let tx = tx.clone();
+                            
+                            tokio::spawn(async move {
+                                match client.add_message(session.id, "user".to_string(), msg).await {
+                                    Ok(_) => {
+                                        let _ = tx.send(TaskResult::MessageSent).await;
+                                    }
+                                    Err(e) => {
+                                        let _ = tx.send(TaskResult::MessageFailed(e)).await;
+                                    }
+                                }
+                            });
                         }
                     }
-                    (KeyCode::Backspace, _) => {
+                    // Backspace
+                    (KeyCode::Backspace, _) if !app.input_buffer.is_empty() => {
                         app.input_buffer.pop();
                     }
                     _ => {}

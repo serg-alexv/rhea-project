@@ -30,7 +30,7 @@ impl RheaClient {
         })
     }
 
-    pub async fn create_session(&mut self, character: Character) -> Result<SessionResponse, String> {
+    pub async fn create_session(&self, character: Character) -> Result<SessionResponse, String> {
         let url = format!("{}/sessions", self.server_url);
         let req = CreateSessionRequest { character: character.clone() };
 
@@ -52,7 +52,6 @@ impl RheaClient {
             .await
             .map_err(|e| e.to_string())?;
 
-        self.current_session_id = Some(session.id);
         Ok(session)
     }
 

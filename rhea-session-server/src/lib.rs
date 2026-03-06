@@ -155,7 +155,7 @@ pub struct AddMessageRequest {
     pub device_id: String,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct SessionResponse {
     pub id: Uuid,
     pub character: Character,
