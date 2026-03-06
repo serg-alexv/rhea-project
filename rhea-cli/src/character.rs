@@ -1,11 +1,19 @@
-use serde::{Deserialize, Serialize};
+use serde::{Deserialize, Deserializer, Serialize};
 
-#[derive(Clone, Copy, Debug, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Copy, Debug, PartialEq, Serialize)]
 pub enum Character {
     Protos,
     Zerg,
     Terran,
     Aeon,
+}
+
+impl<'de> Deserialize<'de> for Character {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where D: Deserializer<'de> {
+        let s = String::deserialize(deserializer)?;
+        Ok(Character::from_str(&s))
+    }
 }
 
 impl Character {

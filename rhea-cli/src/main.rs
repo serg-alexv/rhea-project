@@ -126,7 +126,7 @@ async fn run_app<B: ratatui::backend::Backend>(
                 match result {
                     TaskResult::SessionCreated(session) => {
                         app.current_session = Some(session.clone());
-                        app.selected_char = Some(Character::from_str(session.character.name()));
+                        app.selected_char = Some(Character::from_str(&session.character));
                         app.status = format!("Session created! Type message...");
                         app.is_loading = false;
                     }

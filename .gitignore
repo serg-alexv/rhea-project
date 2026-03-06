@@ -108,3 +108,7 @@ rhea-project/docs/*.audit
 rhea-nexus/memories/
 *.pdf
 *.bak
+
+# Rust build artifacts
+target/
+*/target/

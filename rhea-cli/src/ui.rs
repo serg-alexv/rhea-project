@@ -91,10 +91,10 @@ impl UIRenderer {
 
         // Session header with live character info
         let header = if let Some(session) = &app.current_session {
-            let char_local = Character::from_str(session.character.name());
+            let char_local = Character::from_str(&session.character);
             vec![
                 Line::from(Span::styled(
-                    format!("{} {} — Cross-Device Session", session.character.symbol(), session.character.name()),
+                    format!("{} {} — Cross-Device Session", char_local.symbol(), char_local.name()),
                     Style::default()
                         .fg(char_local.color())
                         .add_modifier(Modifier::BOLD),
