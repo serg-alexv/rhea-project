@@ -6042,6 +6042,187 @@ async def mcp_endpoint(request: Request):
 
 
 # ---------------------------------------------------------------------------
+# Agent Orchestration — A1-A8 multi-agent delegation & flow
+# ---------------------------------------------------------------------------
+
+_ORCHESTRATION_REGISTRY = {
+    "A1": {"name": "Quantitative Scientist", "role": "root_manager", "tier": "cheap",
+           "domain": "Fourier analysis, Bayesian inference, MPC, mathematical models"},
+    "A2": {"name": "Life Sciences Integrator", "role": "researcher", "tier": "cheap",
+           "domain": "Polyvagal theory, HRV, chronobiology, sleep science"},
+    "A3": {"name": "Psychologist / Profile Whisperer", "role": "profiler", "tier": "cheap",
+           "domain": "Passive profiling, ADHD-optimized UX, behavioral signals"},
+    "A4": {"name": "Linguist-Culturologist", "role": "researcher", "tier": "cheap",
+           "domain": "42 calendar systems, 16+ civilizations, symbolic power"},
+    "A5": {"name": "Product Architect", "role": "builder", "tier": "cheap",
+           "domain": "SwiftUI, HealthKit, Apple Watch, iOS MVP"},
+    "A6": {"name": "Tech Lead", "role": "builder", "tier": "cheap",
+           "domain": "Multi-model bridge, API orchestration, infra"},
+    "A7": {"name": "Growth Strategist", "role": "strategist", "tier": "cheap",
+           "domain": "TestFlight, monetization, user acquisition"},
+    "A8": {"name": "Critical Reviewer & Conductor", "role": "reviewer", "tier": "balanced",
+           "domain": "Tribunal consensus, gap analysis, quality gate"},
+}
+
+_agent_runtime: dict[str, dict] = {}
+
+
+class DelegateRequest(BaseModel):
+    task: str
+    context: Optional[str] = None
+
+
+class FlowRequest(BaseModel):
+    query: str
+    mode: str = "single"
+
+
+class SnapshotRequest(BaseModel):
+    label: str = "api-snapshot"
+
+
+async def _optional_auth(
+    authorization: str = Header(None, alias="Authorization"),
+):
+    """Accept optional Bearer token; no-op when missing."""
+    if authorization and authorization.startswith("Bearer "):
+        try:
+            from auth_api import _decode_token
+            _decode_token(authorization[7:])
+        except Exception:
+            raise HTTPException(status_code=401, detail="Invalid Bearer token")
+
+
+def _agent_summary(agent_id: str) -> dict:
+    """Build summary dict for one orchestration agent."""
+    agent = _ORCHESTRATION_REGISTRY[agent_id]
+    runtime = _agent_runtime.get(agent_id, {})
+    recent = rhea_db.query_agent_tasks(agent_id=agent_id, limit=1)
+    running = rhea_db.query_agent_tasks(agent_id=agent_id, status="running", limit=1)
+    if running:
+        status = "busy"
+    elif runtime.get("status"):
+        status = runtime["status"]
+    else:
+        status = "online"
+    last_activity = recent[0]["created_at"] if recent else runtime.get("last_activity")
+    return {
+        "id": agent_id,
+        "name": agent["name"],
+        "role": agent["role"],
+        "domain": agent["domain"],
+        "tier": agent["tier"],
+        "status": status,
+        "last_activity": last_activity,
+    }
+
+
+@app.get("/orchestration/agents")
+async def list_orchestration_agents():
+    """List all A1-A8 orchestration agents with current status."""
+    return {"agents": [_agent_summary(aid) for aid in _ORCHESTRATION_REGISTRY]}
+
+
+@app.get("/orchestration/agents/status")
+async def orchestration_status():
+    """Quick dashboard summary for the orchestration layer."""
+    agents = [_agent_summary(aid) for aid in _ORCHESTRATION_REGISTRY]
+    counts: dict[str, int] = {"online": 0, "busy": 0, "offline": 0}
+    for a in agents:
+        s = a["status"]
+        counts[s] = counts.get(s, 0) + 1
+    return {**counts, "total": len(agents), "agents": agents}
+
+
+@app.get("/orchestration/agents/{agent_id}")
+async def get_orchestration_agent(agent_id: str):
+    """Detailed info for one orchestration agent including recent tasks."""
+    agent_id = agent_id.upper()
+    if agent_id not in _ORCHESTRATION_REGISTRY:
+        raise HTTPException(status_code=404, detail=f"Unknown agent: {agent_id}")
+    summary = _agent_summary(agent_id)
+    summary["recent_tasks"] = rhea_db.query_agent_tasks(agent_id=agent_id, limit=10)
+    return summary
+
+
+@app.post("/orchestration/agents/{agent_id}/delegate", dependencies=[Depends(_optional_auth)])
+async def delegate_to_agent(agent_id: str, body: DelegateRequest):
+    """Assign a task to an orchestration agent. Returns task ID immediately."""
+    agent_id = agent_id.upper()
+    if agent_id not in _ORCHESTRATION_REGISTRY:
+        raise HTTPException(status_code=404, detail=f"Unknown agent: {agent_id}")
+    task_id = uuid.uuid4().hex[:12]
+    rhea_db.persist_agent_task({
+        "id": task_id,
+        "agent_id": agent_id,
+        "task": body.task,
+        "context": body.context,
+    })
+    _broadcast_event({
+        "id": f"delegate-{task_id}",
+        "type": "delegation",
+        "sender": "api",
+        "receiver": agent_id,
+        "text": f"Task delegated to {agent_id}: {body.task[:120]}",
+        "ts": datetime.now(timezone.utc).isoformat(),
+    })
+    return {"task_id": task_id, "status": "delegated", "agent": agent_id}
+
+
+@app.post("/orchestration/flow", dependencies=[Depends(_optional_auth)])
+async def run_orchestration_flow(body: FlowRequest):
+    """Run a standard orchestration flow (single, dual, or consensus)."""
+    flow_id = uuid.uuid4().hex[:12]
+    mode = body.mode if body.mode in ("single", "dual", "consensus") else "single"
+    if mode == "single":
+        target_agents = ["A1"]
+    elif mode == "dual":
+        target_agents = ["A1", "A8"]
+    else:
+        target_agents = list(_ORCHESTRATION_REGISTRY.keys())
+    task_ids = []
+    for aid in target_agents:
+        tid = uuid.uuid4().hex[:12]
+        rhea_db.persist_agent_task({
+            "id": tid,
+            "agent_id": aid,
+            "task": body.query,
+            "context": f"flow={flow_id} mode={mode}",
+        })
+        task_ids.append({"agent": aid, "task_id": tid})
+    _broadcast_event({
+        "id": f"flow-{flow_id}",
+        "type": "flow",
+        "sender": "api",
+        "receiver": "all",
+        "text": f"Orchestration flow started: mode={mode}, agents={len(target_agents)}",
+        "ts": datetime.now(timezone.utc).isoformat(),
+    })
+    return {"flow_id": flow_id, "mode": mode, "tasks": task_ids}
+
+
+@app.post("/orchestration/snapshot", dependencies=[Depends(_optional_auth)])
+async def create_orchestration_snapshot(body: SnapshotRequest):
+    """Create a point-in-time snapshot of orchestration state."""
+    agents = [_agent_summary(aid) for aid in _ORCHESTRATION_REGISTRY]
+    pending = rhea_db.query_agent_tasks(status="pending", limit=100)
+    running = rhea_db.query_agent_tasks(status="running", limit=100)
+    snapshot_data = {
+        "label": body.label,
+        "ts": datetime.now(timezone.utc).isoformat(),
+        "agents": agents,
+        "pending_tasks": len(pending),
+        "running_tasks": len(running),
+    }
+    ts_str = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H-%M-%SZ")
+    snap_dir = _PROJECT_ROOT / ".entire" / "snapshots"
+    snap_dir.mkdir(parents=True, exist_ok=True)
+    snap_file = snap_dir / f"{body.label}-{ts_str}.json"
+    snap_file.write_text(json.dumps(snapshot_data, indent=2), encoding="utf-8")
+    return {"status": "saved", "file": snap_file.name, "snapshot": snapshot_data}
+
+
+# ---------------------------------------------------------------------------
 # Static frontend (Atlas) — served as catch-all AFTER all API routes
 # ---------------------------------------------------------------------------
 _STATIC_DIR = Path(__file__).parent.parent / "static_frontend"

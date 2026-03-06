@@ -122,6 +122,19 @@ def init_db() -> None:
             expires_at TEXT
         );
         CREATE INDEX IF NOT EXISTS idx_shares_user ON shares(user_id, created_at DESC);
+
+        CREATE TABLE IF NOT EXISTS agent_tasks (
+            id TEXT PRIMARY KEY,
+            agent_id TEXT NOT NULL,
+            task TEXT NOT NULL,
+            context TEXT,
+            status TEXT DEFAULT 'pending',
+            result TEXT,
+            created_at TEXT NOT NULL,
+            completed_at TEXT
+        );
+        CREATE INDEX IF NOT EXISTS idx_agent_tasks_agent ON agent_tasks(agent_id);
+        CREATE INDEX IF NOT EXISTS idx_agent_tasks_status ON agent_tasks(status);
     """)
     conn.commit()
 
@@ -510,6 +523,51 @@ def list_shares(user_id: str, limit: int = 50) -> list:
         "FROM shares WHERE user_id = ? ORDER BY created_at DESC LIMIT ?",
         (user_id, limit),
     ).fetchall()
+    return [dict(r) for r in rows]
+
+
+# ─── Agent Tasks Write-Through ────────────────────────────────────────
+
+def persist_agent_task(task: dict) -> None:
+    """Insert a new agent task record."""
+    conn = _get_conn()
+    conn.execute(
+        "INSERT INTO agent_tasks (id, agent_id, task, context, status, created_at) VALUES (?, ?, ?, ?, ?, ?)",
+        (task["id"], task["agent_id"], task["task"], task.get("context"),
+         task.get("status", "pending"), datetime.now(timezone.utc).isoformat()),
+    )
+    conn.commit()
+
+
+def update_agent_task(task_id: str, status: str, result: Optional[str] = None) -> bool:
+    """Update an agent task status and optionally set result."""
+    conn = _get_conn()
+    if status in ("done", "failed"):
+        cur = conn.execute(
+            "UPDATE agent_tasks SET status=?, result=?, completed_at=? WHERE id=?",
+            (status, result, datetime.now(timezone.utc).isoformat(), task_id),
+        )
+    else:
+        cur = conn.execute("UPDATE agent_tasks SET status=? WHERE id=?", (status, task_id))
+    conn.commit()
+    return cur.rowcount > 0
+
+
+def query_agent_tasks(agent_id: Optional[str] = None, limit: int = 50,
+                      status: Optional[str] = None) -> list[dict]:
+    """Query agent tasks with optional filters."""
+    conn = _get_conn()
+    sql = "SELECT * FROM agent_tasks WHERE 1=1"
+    params: list = []
+    if agent_id:
+        sql += " AND agent_id = ?"
+        params.append(agent_id)
+    if status:
+        sql += " AND status = ?"
+        params.append(status)
+    sql += " ORDER BY created_at DESC LIMIT ?"
+    params.append(limit)
+    rows = conn.execute(sql, params).fetchall()
     return [dict(r) for r in rows]
 
 
