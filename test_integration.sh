@@ -19,7 +19,8 @@ echo ""
 echo "Test 1: Services running..."
 curl -s http://127.0.0.1:3000/sessions > /dev/null || fail "Session server down"
 curl -s http://127.0.0.1:3001/health > /dev/null || fail "AI Auth down"
-pass "Both services responding"
+curl -s http://127.0.0.1:3002/health > /dev/null || fail "Angel Game down"
+pass "All 4 services responding"
 
 # Test 2: Create Session
 echo ""
@@ -58,7 +59,6 @@ SESSION_DATA=$(curl -s http://127.0.0.1:3000/sessions/$SESSION_ID)
 MSG_COUNT=$(echo "$SESSION_DATA" | jq '.messages | length')
 [ "$MSG_COUNT" = "2" ] || fail "Expected 2 messages, got $MSG_COUNT"
 
-# Extract LCs from response
 LCS=$(echo "$SESSION_DATA" | jq -r '.messages[].lamport_clock')
 FIRST_LC=$(echo "$LCS" | head -1)
 SECOND_LC=$(echo "$LCS" | tail -1)
@@ -76,9 +76,26 @@ TARGET_HASH=$(echo "$CHALLENGE" | jq -r '.target_hash // empty')
 [ -n "$CHAL_ID" ] && [ -n "$TARGET_HASH" ] || fail "Invalid challenge response"
 pass "Challenge created: $CHAL_ID"
 
-# Test 7: Deployment Script
+# Test 7: Angel Game Decision Evaluation
 echo ""
-echo "Test 7: Deployment script..."
+echo "Test 7: Angel Game evaluates decisions..."
+EVAL=$(curl -s -X POST http://127.0.0.1:3002/eval/decision \
+  -H "Content-Type: application/json" \
+  -d '{
+    "decision_id": "test-decision",
+    "context": "Chose Lamport Clocks for DTS",
+    "options": ["wall-clock", "ntp", "lamport", "hybrid"],
+    "chosen": "lamport",
+    "rationale": "Logical timestamps eliminate clock dependencies. Provably correct CRDT convergence."
+  }')
+EVAL_ID=$(echo "$EVAL" | jq -r '.eval_id // empty')
+SCORE=$(echo "$EVAL" | jq -r '.total_score // empty')
+[ -n "$EVAL_ID" ] && [ -n "$SCORE" ] || fail "Invalid evaluation response"
+pass "Decision evaluated: score=$SCORE"
+
+# Test 8: Deployment Script
+echo ""
+echo "Test 8: Deployment script..."
 [ -x scripts/stage4_deploy.sh ] || fail "stage4_deploy.sh not executable"
 bash scripts/stage4_deploy.sh status > /dev/null || fail "Status check failed"
 pass "Deployment script working"
@@ -89,4 +106,5 @@ echo ""
 echo "Services Summary:"
 echo "  Session Server: http://127.0.0.1:3000"
 echo "  AI Auth:        http://127.0.0.1:3001"
+echo "  Angel Game:     http://127.0.0.1:3002"
 echo "  CLI:            cd rhea-cli && cargo run --release"
