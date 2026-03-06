@@ -1,13 +1,10 @@
-# Quick Start (5 minutes)
+# ⚡ Quick Start (5 minutes)
 
-Get your first Rhea session running in 5 minutes.
+Get a working Rhea system running in 5 minutes. No theory, just code.
 
-## Prerequisites
+---
 
-- Rust 1.70+ (for server and Rust client)
-- Docker (optional, for running server in container)
-
-## 1. Start the Rhea Server (2 min)
+## Step 1️⃣: Start the Server (1 min)
 
 ```bash
 cd rhea-session-server
@@ -19,86 +16,148 @@ You should see:
 🌟 Rhea Session Server running on http://127.0.0.1:3000
 ```
 
-## 2. Create a Client (2 min)
+✓ **Server is alive.** It's now assigning Lamport clocks.
 
-**Rust client**:
+---
+
+## Step 2️⃣: Build a Client (2 min)
+
+Create `src/main.rs`:
+
 ```rust
 use rhea_client::Client;
 
 #[tokio::main]
-async fn main() -> Result<()> {
-    let client = Client::new("http://127.0.0.1:3000", "my-device-id").await?;
-    
+async fn main() -> anyhow::Result<()> {
+    // Connect to Rhea server
+    let client = Client::new(
+        "http://127.0.0.1:3000",
+        "my-device-id"
+    ).await?;
+
     // Create a session
     let session = client.create_session("PROTOS").await?;
-    println!("Session: {}", session);
-    
-    // Add a message
-    client.add_message(&session, "user", "Hello, Rhea!").await?;
-    
-    // Retrieve messages (ordered by Lamport clock)
+    println!("✓ Created session: {}", session);
+
+    // Add a message (server assigns Lamport clock)
+    let msg_id = client.add_message(
+        &session,
+        "user",
+        "Hello, Rhea!"
+    ).await?;
+    println!("✓ Added message: {}", msg_id);
+
+    // Retrieve messages (ordered by Lamport clock, not wall-time)
     let messages = client.get_local_messages(&session).await?;
-    for (id, role, content, lamport_clock) in messages {
-        println!("[LC:{}] {}: {}", lamport_clock, role, content);
-    }
     
+    println!("\nMessages (ordered by Lamport clock):");
+    for (id, role, content, lamport_clock) in messages {
+        println!("  [LC:{}] {}: {}", lamport_clock, role, content);
+    }
+
     Ok(())
 }
 ```
 
-Run it:
+✓ **Client is ready.** It trusts the server's Lamport clocks.
+
+---
+
+## Step 3️⃣: Run It (2 min)
+
 ```bash
 cd rhea-client
 cargo run --example quickstart
 ```
 
-## 3. Test Cross-Device Sync (1 min)
+**Output**:
+```
+✓ Created session: 550e8400-e29b-41d4-a716-446655440000
+✓ Added message: 650e8400-e29b-41d4-a716-446655440001
 
-Open two terminals:
-
-**Terminal 1**:
-```bash
-export DEVICE_ID="device-1"
-cargo run --example quickstart
+Messages (ordered by Lamport clock):
+  [LC:1] user: Hello, Rhea!
 ```
 
-**Terminal 2**:
-```bash
-export DEVICE_ID="device-2"
-cargo run --example cross-device
-```
-
-Both devices will converge on the same message order, deterministically, regardless of clock skew.
-
-## What Just Happened?
-
-✅ **Server assigned Lamport clocks** — Monotonically increasing (1, 2, 3...)  
-✅ **Client stored messages locally** — With LC in SQLite  
-✅ **Messages ordered by LC, not wall-clock** — No clock skew!  
-✅ **Devices converged** — Same order across all devices  
-
-## Next Steps
-
-- **Add more messages**: Keep adding to the same session to see LC increment
-- **Simulate offline**: Kill the server, add messages locally, restart to see sync
-- **Integrate an LLM**: See [Integrating LLMs](../guides/llm-integration.md)
-- **Deploy to production**: See [Deployment](../guides/deployment.md)
-
-## API Cheat Sheet
-
-| Operation | Code |
-|-----------|------|
-| Create session | `client.create_session("PROTOS")` |
-| Add message | `client.add_message(session_id, role, content)` |
-| Get messages | `client.get_local_messages(session_id)` |
-| List sessions | `client.get_local_sessions()` |
-
-## Troubleshooting
-
-**"Connection refused"**: Make sure server is running on `127.0.0.1:3000`  
-**"No such table: messages"**: Server will auto-create schema on first run  
-**Messages out of order**: Check Lamport clock values (should be 1,2,3...)  
+✓ **You built a convergent system in 5 minutes.**
 
 ---
 
-Ready for more? Jump into [API Reference](../api/sessions.md) or [Architecture Deep Dive](../architecture/dts.md).
+## What Just Happened? 🤯
+
+1. **Client sent message** → "Hello, Rhea!"
+2. **Server received it** → Assigned LC=1 (logical order)
+3. **Server returned LC=1** → Client stored it locally
+4. **Client queried messages** → Got them ordered by LC (not wall-clock time)
+
+**Magic**: Add the same message on a second device:
+- Server assigns LC=2
+- Both devices see: [LC=1, LC=2]
+- **Same order, forever**
+
+No clock skew. No conflicts. No manual syncing.
+
+---
+
+## Test Cross-Device Sync 🔄
+
+Open **two terminals**:
+
+**Terminal 1** (Device A):
+```bash
+export DEVICE_ID="phone"
+cargo run --example minimal-client
+# Device A creates session, adds "Hi from phone"
+```
+
+**Terminal 2** (Device B):
+```bash
+export DEVICE_ID="laptop"
+cargo run --example multi-device
+# Device B adds "Hi from laptop" to SAME session
+```
+
+**Result**: Both devices print the same message order:
+```
+Device A sees: [LC:1 "Hi from phone", LC:2 "Hi from laptop"]
+Device B sees: [LC:1 "Hi from phone", LC:2 "Hi from laptop"]
+```
+
+✓ **Devices converged automatically.**
+
+---
+
+## 🎓 What You Just Learned
+
+| Concept | Example |
+|---------|---------|
+| **Session** | Immutable message stream (messages never change) |
+| **Lamport Clock** | Order number (1, 2, 3...) assigned by server |
+| **Convergence** | All devices see same order (by LC) |
+| **Idempotent** | Sending same message twice = stored once |
+
+---
+
+## 🚀 Next Steps
+
+- **Understand the WHY**: [Design Philosophy](./architecture/philosophy.md)
+- **Learn the mechanics**: [DTS: Deterministic Time System](./architecture/dts.md)
+- **Read the proof**: [CRDT Convergence](./architecture/crdt.md)
+- **Build more**: [Multi-Device Example](./examples/multi-device.rs)
+- **Full API**: [Sessions Reference](./api/sessions.md) & [Messages Reference](./api/messages.md)
+
+---
+
+## Troubleshooting
+
+| Problem | Solution |
+|---------|----------|
+| `Connection refused` | Is server running? `cargo run --release --bin server` |
+| `Port 3000 in use` | Change port: `--bind 127.0.0.1:8080` |
+| `No messages returned` | Check Lamport clock is being returned from server |
+
+---
+
+**Congratulations! You've built a convergent system.** 🎉
+
+Next: [Understand the Architecture](./architecture.md)
