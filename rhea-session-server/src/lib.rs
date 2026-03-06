@@ -30,16 +30,15 @@ impl Character {
     }
 }
 
-/// Immutable event: never changes once created
 #[derive(Clone, Debug, Serialize, Deserialize, Eq, PartialEq)]
 pub struct Message {
-    pub id: Uuid,                    // Immutable: unique forever
-    pub session_id: Uuid,            // Immutable: never changes
-    pub role: String,                // Immutable: who said it
-    pub content: String,             // Immutable: what was said
-    pub created_at: i64,             // Immutable: wall-clock timestamp
-    pub device_id: String,           // Immutable: which device
-    pub lamport_clock: u64,          // Immutable: causal order
+    pub id: Uuid,
+    pub session_id: Uuid,
+    pub role: String,
+    pub content: String,
+    pub created_at: i64,
+    pub device_id: String,
+    pub lamport_clock: u64,
 }
 
 impl Message {
@@ -62,13 +61,12 @@ impl Message {
     }
 }
 
-/// Session state (derived from messages, not stored)
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct Session {
     pub id: Uuid,
     pub character: Character,
     pub title: String,
-    pub messages: Vec<Message>,  // Append-only immutable list
+    pub messages: Vec<Message>,
     pub created_at: DateTime<Utc>,
     pub updated_at: DateTime<Utc>,
     pub client_id: Option<String>,
@@ -80,7 +78,7 @@ impl Session {
         Session {
             id: Uuid::new_v4(),
             character: character.clone(),
-            title: format!("{} session", character.name()),
+            title: format!("Session {}", character.symbol()),
             messages: vec![],
             created_at: now,
             updated_at: now,
@@ -88,61 +86,15 @@ impl Session {
         }
     }
 
-    /// Add message with automatic Lamport clock increment
     pub fn add_message(&mut self, role: String, content: String, device_id: String) -> Message {
-        let lamport = if self.messages.is_empty() {
-            1
-        } else {
-            self.messages.iter().map(|m| m.lamport_clock).max().unwrap_or(0) + 1
-        };
-
-        let msg = Message::new(
-            self.id,
-            role,
-            content,
-            device_id,
-            lamport,
-        );
-
+        let lc = self.messages.last().map(|m| m.lamport_clock).unwrap_or(0) + 1;
+        let msg = Message::new(self.id, role, content, device_id, lc);
         self.messages.push(msg.clone());
         self.updated_at = Utc::now();
         msg
     }
-
-    /// Merge messages from another device (idempotent)
-    pub fn merge_messages(&mut self, new_messages: Vec<Message>) {
-        for msg in new_messages {
-            // UUID dedup: only add if not already present
-            if !self.messages.iter().any(|m| m.id == msg.id) {
-                self.messages.push(msg);
-            }
-        }
-
-        // Re-sort by Lamport clock to maintain causal order
-        self.messages.sort_by_key(|m| m.lamport_clock);
-        self.updated_at = Utc::now();
-    }
-
-    /// Rebuild session state from events (for verification)
-    pub fn rebuild_from_events(id: Uuid, character: Character, messages: Vec<Message>) -> Self {
-        let mut session = Session::new(character);
-        session.id = id;
-        session.messages = messages;
-        session.messages.sort_by_key(|m| m.lamport_clock);
-        session
-    }
-
-    pub fn last_n_messages(&self, n: usize) -> Vec<&Message> {
-        self.messages
-            .iter()
-            .rev()
-            .take(n)
-            .rev()
-            .collect()
-    }
 }
 
-// API DTOs
 #[derive(Debug, Serialize, Deserialize)]
 pub struct CreateSessionRequest {
     pub character: Character,
@@ -158,22 +110,22 @@ pub struct AddMessageRequest {
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct SessionResponse {
     pub id: Uuid,
-    pub character: Character,
+    pub character: String,
     pub title: String,
     pub message_count: usize,
+    pub lamport_clock: u64,
     pub created_at: DateTime<Utc>,
-    pub updated_at: DateTime<Utc>,
 }
 
 impl From<&Session> for SessionResponse {
     fn from(s: &Session) -> Self {
         SessionResponse {
             id: s.id,
-            character: s.character.clone(),
+            character: s.character.name().to_string(),
             title: s.title.clone(),
             message_count: s.messages.len(),
+            lamport_clock: s.messages.last().map(|m| m.lamport_clock).unwrap_or(0),
             created_at: s.created_at,
-            updated_at: s.updated_at,
         }
     }
 }
@@ -182,4 +134,21 @@ impl From<&Session> for SessionResponse {
 pub struct GetSessionResponse {
     pub session: SessionResponse,
     pub messages: Vec<Message>,
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+pub struct KeystrokeEvent {
+    pub id: String,
+    pub session_id: Uuid,
+    pub device_id: String,
+    pub key: String,
+    pub timestamp: i64,
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+pub struct SessionWithKeystrokes {
+    pub id: Uuid,
+    pub character: String,
+    pub messages: Vec<Message>,
+    pub keystrokes: Vec<KeystrokeEvent>,
 }
