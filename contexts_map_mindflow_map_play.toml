@@ -1,0 +1,271 @@
+# contexts_map_mindflow_map.toml
+# Generated: 2026-03-05 11:26:48
+# Purpose: carry an ultra-dense “meta_layer + rag_layer + contexts_map + mindflow_map” snapshot into a new dialog.
+# Mode defaults: 0truth + 2check (facts vs inference), minimal fluff, no goal-drift.
+
+[meta]
+schema_version = "0.7"
+generated_at = "2026-03-05 11:26:48"
+language = "ru"
+assistant_role = "главный архитектор/ревьюер (жёсткий, без флирта/уговоров)"
+interaction_policy = "0truth + 2check: отделяй факты от гипотез; обозначай неизвестное; не обещай фоновых задач"
+user_handle = "sa"
+user_name_known = "Sergei Aleksandrov (аккаунт) / Leonid Shaposhnikov (в другой ветке памяти)"
+timezone_default = "+0300"
+current_state_label = "bifurcation-control / keep invariants / stop goal-drift"
+primary_invariant = "append-only source-of-truth log + deterministic state rebuild"
+secondary_invariant = "agent output must be auditable: commands + outputs + counts"
+
+[constraints]
+no_motivational_framing = true
+no_fake_confidence = true
+no_time_estimates_promises = true
+avoid_questions_unless_needed = true
+avoid_long_markdown_tables = true
+avoid_writing_blocks_when_code = true
+
+[style]
+directness = 5
+harshness = 5
+sarcasm = 5
+teasing = 5
+warmth = 5
+confrontation = 5
+swearing = "light"
+length = "short"
+pace = "lively"
+emojis = "medium"
+
+# -----------------------------
+# 1) SYSTEM MAP (Rhea / Rhea Commander / 0.log pipeline)
+# -----------------------------
+[system.rhea]
+name = "Rhea / Rhea-Commander"
+tagline = "multi-agent coordination + event-sourcing cognition pipeline"
+repo_hint = "timelabs-npo/rhea-project (GitHub); local: ~/rh.1"
+key_branches = ["stage4-release", "feat/chronos-agents-and-bridge (mentioned historically)"]
+core_pattern = "prompt -> answer -> event -> state -> UI"
+working_mode = ["0truth", "frontier rough redteam mode (when requested)"]
+
+[system.rhea.pipeline]
+source_of_truth = "/tmp/0.log (append-only)"
+observer = "inspect_0.py (passive tail)"
+ui = "rhea-tui (ratatui) live tailer"
+transport = "TCP localhost:4444 daemon (lifecycle-managed)"
+goal = "Chrome/Atlas/Safari extensions -> daemon -> 0.log -> cockpit views (events/state/actors)"
+
+[system.rhea.ui_goal]
+target = "TUI cockpit with 3 panels: events / state / actors"
+ux_problems_now = [
+  "too small/centered; poor readability",
+  "missing chrome events",
+  "appcui not surfaced",
+  "no window movement / resizing / multi-window management"
+]
+ratatui_truth = "ratatui has no real OS windows; it renders into a terminal buffer"
+important_decision = "separate: (A) cockpit-in-terminal vs (B) real GUI window via wrapper (egui/iced/wgpu)"
+preferred_path = "do ratatui refactor first; then optional GUI wrapper"
+
+[system.rhea.ui_abstraction]
+trait = "RheaUI / RheaBackend (decouple layout + state from backend)"
+backends = ["RatatuiBackend (real)", "AppCUIBackend (stub currently)"]
+hot_switch_goal = "runtime backend switching if feasible, but not at cost of stalling progress"
+
+# -----------------------------
+# 2) PLAY / Play UI reverse engineering target
+# -----------------------------
+[play.target]
+primary_target = "/Applications/Play.app (Mach-O reverse engineering + SDK reconstruction)"
+artifact = "Play.bndb (Binary Ninja project map) — GUI open; API license may block automation"
+license_note = "MIT of project ≠ Binary Ninja license; API license error is plausible"
+binary = "/Applications/Play.app/Contents/MacOS/Play"
+docs_site = "docs.createwithplay.com"
+local_extraction_root = "ios/play-extraction"
+future_module_name = "rhea-playui"
+
+[play.binary.slices]
+fact = "Mach-O universal binary: x86_64 + arm64"
+verification_cmd = "file /Applications/Play.app/Contents/MacOS/Play"
+
+[play.binary.signals]
+swift_metadata_sections = ["__swift5_reflstr","__swift5_fieldmd","__swift5_assocty","__swift5_proto","__swift5_types","__swift5_protos"]
+jscore_strings_seen = ["JSCoreScripts/app.js", "evaluateScript:", "JSContext", "JSValue"]
+inference = "Play likely uses JavaScriptCore scripting layer (confirmed by strings + selector presence)"
+
+[play.selector.evaluateScript]
+arm64_methname_addr = "0x102ed2b4b (from: otool -arch arm64 -vV -s __TEXT __objc_methname | grep evaluateScript:)"
+x86_64_selector_addr_seen_in_ov = "0x103683b85 (from: otool -ov output; likely metadata print addr)"
+note = "addresses printed by otool -ov are not guaranteed to be literal selref pointers; avoid raw hexdump on full binary"
+
+[play.next_steps.minimal]
+step0 = "confirm slices (file)"
+step1 = "find selector string addr in __objc_methname (arm64)"
+step2 = "dump __objc_selrefs (arm64) big window; names may not appear"
+step3 = "dump __objc_classrefs (arm64) to bind context objects"
+step4 = "find selref address in BN/Ghidra via xrefs OR compute mapping using Mach-O parsing"
+step5 = "map callers: 3–10 call sites (fn start addr + slice) for evaluateScript:"
+
+[play.binja.plan]
+if_gui_available = "use BN GUI: goto methname/selref/classref addresses; list xrefs/callers top 10"
+if_api_blocked = "stay read-only: otool section-scoped + lldb breakpoints on objc_msgSend filtering selector"
+output_format = "counts + top names; no repo scanning; include architecture slice per address"
+
+# -----------------------------
+# 3) iOS app status (RheaApp)
+# -----------------------------
+[ios.rheaapp]
+xcode_projects_present = true
+path = "ios/RheaApp"
+xcodegen_status = "xcodegen generate succeeded; created RheaApp.xcodeproj"
+archive_status = "Archive succeeded for build b30 earlier; signing conflicts occurred when CODE_SIGN_IDENTITY was manually set"
+team_id = "398XACWZ7G"
+issue = "missing dSYM for TailscaleKit.framework UUIDs (earlier)"
+note = "some prior agent tried background builds; rate limits/errors occurred; stop-hook script missing"
+
+# -----------------------------
+# 4) “rhea-playui” definition (what is it?)
+# -----------------------------
+[rhea_playui.definition]
+working_definition = "recovered UI component/runtime layer extracted from Play.app + exported project/assets schema + adapters to iOS RheaApp"
+possible_forms = ["SDK (Swift/ObjC headers + runtime)", "UIKit/SwiftUI component library", "data model + renderer + scripting bridge"]
+current_best_guess = "component library + project format + scripting bridge (JSCore) + asset pipeline"
+goal_end_state = "clean open-source repo with docs + minimal reproduction project + tests + integration into RheaApp"
+monster_risk = "high if only binary shims; reduced if we recover: schema + type graph + stable APIs + golden fixtures"
+
+# -----------------------------
+# 5) Local extraction artifacts (ios/play-extraction)
+# -----------------------------
+[play.extraction]
+files_seen = [
+  "EXTRACTION_SUMMARY.json",
+  "REPORT.md",
+  "components/all_colors.json",
+  "components/page_component_ids.txt",
+  "components/placeholder_colors.json",
+  "components/product_versions.json",
+  "projects/*.txt, project_names.json",
+  "teams/*/team_info.json, projects.json, all_teams.json, all_members.json",
+  "urls/all_firebase_urls.txt, urls_by_category.json",
+  "assets/thumbnails/*"
+]
+fact = "schema scan shows FILES_OK=17 (from /tmp/playui_schema.tsv)"
+
+[play.extraction.schema_top]
+top_id_fields = { project_id = 232, id = 25, user_id = 20, total_project_ids = 1, total_uuids = 1 }
+top_paths_examples = [
+  "$[] (list of dict/str mixtures)",
+  "$.thumbnails[]",
+  "$[].name, $[].owner, $[].project_id",
+  "$.product_versions[]",
+  "$.teams.<id>.name/projects_count",
+  "$.url_categories.*",
+  "$.total_* counters"
+]
+
+[play.extraction.observations]
+fact = "grepping for nodes/children/component/props in ios/play-extraction returned nothing"
+inference = "extraction currently contains metadata/indexes and lists, not full project graph JSON (or it’s compressed/encoded elsewhere)"
+gotcha = "jq '..|objects|select(.project!=null)|.project' returned strings (project titles), not nested project objects"
+
+# -----------------------------
+# 6) RAG layer: what to feed models + where
+# -----------------------------
+[rag]
+goal = "give Gemini/others enough context to run 1–2 hours without questions"
+principle = "chunked prompts + strict success criteria + deterministic outputs (counts, top-N, file paths)"
+do_not = ["open-ended browsing", "repo-wide scanning", "hexdump whole binaries", "goal drift to unrelated codebases"]
+
+[rag.sources.local]
+paths = [
+  "/Applications/Play.app",
+  "/Applications/Play.app/Contents/Resources/PlayPlayMode_PlayPlayMode.bundle/Contents/Resources/JSCoreScripts/app.js",
+  "~/rh.1/Play.bndb",
+  "~/rh.1/ios/play-extraction/**",
+  "~/rh.1/ios/RheaApp/**",
+  "/tmp/0.log"
+]
+artifacts_to_collect = [
+  "selector mapping table: methname_addr -> selref_addr -> callsites",
+  "callsite list with counts per slice",
+  "list of recovered type names: PlayNodes/*NodeViewModel etc. with counts",
+  "project format hypothesis + evidence pointers (file paths + JSON key frequency)",
+  "bridge points between JSCore and native (functions/classes)"
+]
+
+[rag.sources.web]
+required_articles = [
+  "https://docs.createwithplay.com/en/articles/manage-assets",
+  "https://docs.createwithplay.com/en/articles/play-ai"
+]
+note = "web content may change; capture minimal quotes; store as summaries + anchors"
+
+# -----------------------------
+# 7) Agent teams (for Gemini) — short method
+# -----------------------------
+[agents]
+method = "agent teams (roles) inside one prompt: Scout -> Extractor -> Mapper -> Verifier -> Reporter"
+golden_rule = "each role outputs only its artifact; handoff via explicit filenames"
+stop_condition = "if blocked by permissions/licenses, fall back to alternative toolchain and continue"
+
+[agents.roles.scout]
+job = "enumerate only necessary files/sections; confirm slices; collect counts"
+deliver = ["facts.md", "commands.log"]
+
+[agents.roles.extractor]
+job = "extract names/type graph hints: strings, swift-demangle, objc sections"
+deliver = ["symbols_summary.md", "type_names_topN.txt"]
+
+[agents.roles.mapper]
+job = "map selector -> selref -> callsites; map JSCore bootstrap"
+deliver = ["selector_map.json", "jscore_bootstrap_candidates.md"]
+
+[agents.roles.verifier]
+job = "2check: validate invariants; cross-check counts; flag unknowns"
+deliver = ["verification.md"]
+
+[agents.roles.reporter]
+job = "produce final short report + next 3 actions"
+deliver = ["report.md"]
+
+# -----------------------------
+# 8) Execution recipes (console-first, no agents)
+# -----------------------------
+[recipes.console.play_selector_mapping]
+step_0 = 'file /Applications/Play.app/Contents/MacOS/Play'
+step_1 = 'otool -arch arm64 -vV -s __TEXT __objc_methname /Applications/Play.app/Contents/MacOS/Play | grep -n "evaluateScript:" | head -n 20'
+step_2 = 'otool -arch arm64 -vV -s __DATA __objc_selrefs /Applications/Play.app/Contents/MacOS/Play | head -n 400 > /tmp/selrefs_head.txt'
+step_3 = 'otool -arch arm64 -vV -s __DATA __objc_classrefs /Applications/Play.app/Contents/MacOS/Play | head -n 200 > /tmp/classrefs_head.txt'
+step_4 = '## in BN GUI: search for methname addr (0x102ed2b4b), then find xrefs; identify selref addresses and callsites'
+success = "3–10 callsite functions + slice; plus counts of xrefs"
+
+[recipes.console.play_strings_typeharvest]
+cmd_1 = 'strings /Applications/Play.app/Contents/MacOS/Play | grep -E "PlayNodes|NodeViewModel|NodeData|ComponentEvent" | head -n 200'
+cmd_2 = 'strings /Applications/Play.app/Contents/MacOS/Play | grep -E "JSCoreScripts/app\.js|JSContext|JSValue|evaluateScript:" | head -n 200'
+success = "top namespaces + evidence of Node/Component graph terms"
+
+[recipes.console.extraction_schema]
+cmd_1 = 'find ios/play-extraction -name "*.json" -print0 | xargs -0 -n 1 -I{} sh -lc 'jq -c "paths | map(tostring) | join(\".\")" "{}" 2>/dev/null | head -n 200''
+cmd_2 = 'python3 scripts/schema_scan.py ios/play-extraction > /tmp/playui_schema.tsv  # (if exists; otherwise use your current scanner)'
+success = "key frequency table + where full project graph actually resides (if at all)"
+
+# -----------------------------
+# 9) Reality checks / gotchas
+# -----------------------------
+[gotchas]
+swift_demangle = "use: xcrun --find swift-demangle; then pipe through `xcrun swift-demangle` (brew formula likely absent)"
+objc_class_count_zero = "nm -gU | grep _OBJC_CLASS_$_ returned 0 → likely stripped exports; rely on otool sections + runtime refs"
+selrefs_values_pattern = "selrefs showed 0x10000002.... (not in literal section) → may be tagged/relocated pointer scheme; don’t assume direct equality to methname addr"
+otool_mode = "-ov prints ObjC metadata; -tvV prints disassembly; grepping text in -tvV for selector name is expected to fail"
+
+# -----------------------------
+# 10) Deliverables for next dialog (what to paste first)
+# -----------------------------
+[next_dialog.bootstrap]
+paste_order = [
+  "this TOML file",
+  "latest command outputs: file + methname line + first 60 lines of selrefs + classrefs",
+  "EXTRACTION_SUMMARY.json + REPORT.md excerpts (only key findings + counts)",
+  "current RheaUI trait/main.rs diff summary (what changed)"
+]
+goal = "restart without re-asking basics; continue from selector mapping + schema reconstruction"
+

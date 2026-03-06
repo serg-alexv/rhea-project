@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>com.rhea.tunnel</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>/Applications/RheaApp.app/Contents/PlugIns/RheaTunnel.appex/Contents/MacOS/RheaTunnel</string>
+	</array>
+	<key>RunAtLoad</key>
+	<true/>
+	<key>KeepAlive</key>
+	<dict>
+		<key>SuccessfulExit</key>
+		<false/>
+	</dict>
+	<key>WorkingDirectory</key>
+	<string>/Applications/RheaApp.app</string>
+	<key>StandardOutPath</key>
+	<string>/var/log/rhea_tunnel.log</string>
+	<key>StandardErrorPath</key>
+	<string>/var/log/rhea_tunnel_error.log</string>
+	<key>EnvironmentVariables</key>
+	<dict>
+		<key>PATH</key>
+		<string>/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+	</dict>
+	<key>UserName</key>
+	<string>_networkd</string>
+	<key>GroupName</key>
+	<string>_networkd</string>
+	<key>ThrottleInterval</key>
+	<integer>10</integer>
+	<key>ExitTimeOut</key>
+	<integer>30</integer>
+	<key>ProcessType</key>
+	<string>Background</string>
+	<key>MachServiceName</key>
+	<string>com.rhea.tunnel.service</string>
+</dict>
+</plist>

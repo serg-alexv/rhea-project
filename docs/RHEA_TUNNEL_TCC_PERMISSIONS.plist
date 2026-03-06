@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>RheaTunnelTCCPermissions</key>
+	<dict>
+		<key>NetworkExtension</key>
+		<dict>
+			<key>Description</key>
+			<string>Allow RheaTunnel to manage network interfaces and routing</string>
+			<key>Service</key>
+			<string>kTCCServiceNetworkExtension</string>
+			<key>BundleID</key>
+			<string>com.rhea.preview.RheaTunnel</string>
+			<key>RequiredEntitlements</key>
+			<array>
+				<string>com.apple.developer.networking.networkextension</string>
+				<string>com.apple.developer.networking.vpn</string>
+			</array>
+		</dict>
+		<key>LocalNetworking</key>
+		<dict>
+			<key>Description</key>
+			<string>Allow RheaTunnel local network access</string>
+			<key>Service</key>
+			<string>kTCCServiceLocalNetworking</string>
+			<key>BundleID</key>
+			<string>com.rhea.preview.RheaTunnel</string>
+			<key>RequiredEntitlements</key>
+			<array>
+				<string>com.apple.security.temporary-exception.local-networking</string>
+			</array>
+		</dict>
+		<key>SystemExtensions</key>
+		<dict>
+			<key>Description</key>
+			<string>Allow RheaTunnel to install and manage system extensions</string>
+			<key>Service</key>
+			<string>kTCCServiceSystemExtensions</string>
+			<key>BundleID</key>
+			<string>com.rhea.preview</string>
+			<key>RequiredEntitlements</key>
+			<array>
+				<string>com.apple.developer.system-extension.install</string>
+			</array>
+		</dict>
+	</dict>
+	<key>BinarySandboxingRequirements</key>
+	<dict>
+		<key>ProcessName</key>
+		<string>RheaTunnel</string>
+		<key>SandboxProfile</key>
+		<string>(version 1)(allow default)(deny network-inbound)(allow network-outbound)
+(allow system-socket (socket-family unix inet inet6))</string>
+		<key>DataContainers</key>
+		<array>
+			<string>/Library/Application Support/RheaTunnel</string>
+			<string>/var/log/rhea_tunnel*.log</string>
+		</array>
+	</dict>
+	<key>CodeSigningRequirements</key>
+	<dict>
+		<key>TeamID</key>
+		<string>K4THLVMXM6</string>
+		<key>SigningIdentity</key>
+		<string>Apple Development: Apple ID associated with certificate</string>
+		<key>ProvisioningProfile</key>
+		<string>com.rhea.preview Network Extension Development</string>
+		<key>EntitlementsFile</key>
+		<string>ios/RheaApp/RheaTunnel.entitlements</string>
+	</dict>
+</dict>
+</plist>

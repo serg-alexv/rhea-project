@@ -1,0 +1,8 @@
+count,test
+36,pages without description
+86,pages with long or short description
+93,pages with thin content
+8,pages with duplicate titles
+12,pages with duplicate descriptions
+1,pages with robots noindex
+1,Pages with multiple h1

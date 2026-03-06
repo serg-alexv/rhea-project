@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+	xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+>
+<!-- created with Scrutiny from https://peacockmedia.software -->
+
+	<url>
+		<loc>https://docs.createwithplay.com/en/articles/getting-started</loc>
+		<changefreq>weekly</changefreq>
+		<priority>1.0</priority>
+		<image:image>
+		<image:loc>https://docs.createwithplay.com/mintlify-assets/_mintlify/favicons/play-9683f630/AT8O5WYNbwvjrEUJ/_generated/favicon/apple-touch-icon.png</image:loc>
+		</image:image>
+		<image:image>
+		<image:loc>https://docs.createwithplay.com/mintlify-assets/_mintlify/favicons/play-9683f630/AT8O5WYNbwvjrEUJ/_generated/favicon/favicon-16x16.png</image:loc>
+		</image:image>
+		<image:image>
+		<image:loc>https://docs.createwithplay.com/mintlify-assets/_mintlify/favicons/play-9683f630/AT8O5WYNbwvjrEUJ/_generated/favicon/favicon-32x32.png</image:loc>
+		</image:image>
+		<image:image>
+		<image:loc>https://docs.createwithplay.com/mintlify-assets/_mintlify/favicons/play-9683f630/AT8O5WYNbwvjrEUJ/_generated/favicon/favicon.ico</image:loc>
+		</image:image>
+		<image:image>
+		<image:loc>https://docs.createwithplay.com/mintlify-assets/_mintlify/favicons/play-9683f630/AT8O5WYNbwvjrEUJ/_generated/favicon-dark/favicon-16x16.png</image:loc>
+		</image:image>
+		<image:image>
+		<image:loc>https://docs.createwithplay.com/mintlify-assets/_mintlify/favicons/play-9683f630/AT8O5WYNbwvjrEUJ/_generated/favicon-dark/favicon-32x32.png</image:loc>
+		</image:image>
+		<image:image>
+		<image:loc>https://docs.createwithplay.com/mintlify-assets/_mintlify/favicons/play-9683f630/AT8O5WYNbwvjrEUJ/_generated/favicon-dark/favicon.ico</image:loc>
+		</image:image>
+	</url>
+
+</urlset>
