@@ -75,9 +75,13 @@ from rhea_bridge import RheaBridge
 from consensus_analyzer import ConsensusAnalyzer, math_augment, detect_math_domains
 from rhea_profile_manager import profile_manager
 from rhea_visual_context import update_state, get_health_history
+<<<<<<< HEAD
 import aletheia_pipeline as aletheia
 from aletheia_api import aletheia_router
 import rhea_db
+=======
+from rhea_bus import RheaBus
+>>>>>>> hyperion/memory
 
 # ---------------------------------------------------------------------------
 # App setup
@@ -236,6 +240,19 @@ _bridge = None
 _analyzer = None
 _command_queue: list[dict] = []
 _receipts: dict[str, dict] = {}
+_bus: Optional[RheaBus] = None
+
+
+def get_bus() -> Optional[RheaBus]:
+    global _bus
+    if _bus is None:
+        try:
+            _bus = RheaBus("tribunal-api")
+            if not _bus.ping():
+                _bus = None
+        except Exception:
+            _bus = None
+    return _bus
 
 # ---------------------------------------------------------------------------
 # Session history (in-memory, reset on process restart)
@@ -391,7 +408,7 @@ def _resolve_user_id(
 
 
 # ---------------------------------------------------------------------------
-# Rate limiting (in-memory token bucket, per API key)
+# Rate limiting (Redis-backed, falls back to in-memory)
 # ---------------------------------------------------------------------------
 
 RATE_LIMIT_PER_MINUTE = int(os.environ.get("TRIBUNAL_RATE_LIMIT", "30"))
@@ -400,6 +417,7 @@ RATE_LIMIT_DAILY = int(os.environ.get("TRIBUNAL_DAILY_LIMIT", "1000"))
 _rate_buckets: dict[str, list[float]] = {}
 
 
+<<<<<<< HEAD
 async def check_rate_limit(
     x_api_key: str = Header(None, alias="X-API-Key"),
     authorization: str = Header(None, alias="Authorization"),
@@ -416,22 +434,34 @@ async def check_rate_limit(
     if key == "anonymous" and x_api_key:
         key = f"key:{x_api_key}"
 
+=======
+async def check_rate_limit(x_api_key: str = Header(None, alias="X-API-Key")):
+    key = x_api_key or "anonymous"
+    bus = get_bus()
+
+    # Try Redis first
+    if bus is not None:
+        try:
+            ok, reason = bus.check_rate(key, RATE_LIMIT_PER_MINUTE, RATE_LIMIT_DAILY)
+            if not ok:
+                raise HTTPException(status_code=429, detail=reason)
+            return
+        except HTTPException:
+            raise
+        except Exception:
+            pass  # Redis down — fall through to in-memory
+
+    # In-memory fallback
+>>>>>>> hyperion/memory
     now = time.time()
     if key not in _rate_buckets:
         _rate_buckets[key] = []
-
-    # Prune entries older than 24h
     _rate_buckets[key] = [t for t in _rate_buckets[key] if now - t < 86400]
-
-    # Daily check
     if len(_rate_buckets[key]) >= RATE_LIMIT_DAILY:
-        raise HTTPException(status_code=429, detail=f"Daily limit ({RATE_LIMIT_DAILY} calls) exceeded")
-
-    # Per-minute check
+        raise HTTPException(status_code=429, detail=f"Daily limit ({RATE_LIMIT_DAILY}) exceeded")
     recent = sum(1 for t in _rate_buckets[key] if now - t < 60)
     if recent >= RATE_LIMIT_PER_MINUTE:
         raise HTTPException(status_code=429, detail=f"Rate limit ({RATE_LIMIT_PER_MINUTE}/min) exceeded")
-
     _rate_buckets[key].append(now)
 
 
@@ -2520,7 +2550,12 @@ tree-shakeable core that produces the same reactive UI with a fraction of the bu
 async def health():
     bridge = get_bridge()
     status = bridge.models_status()
+<<<<<<< HEAD
     summary = status.get("summary", {})
+=======
+    bus = get_bus()
+    redis_ok = bus.ping() if bus else False
+>>>>>>> hyperion/memory
     return {
         "status": "ok",
         "providers_available": summary.get("available_providers", 0),
@@ -2529,6 +2564,7 @@ async def health():
         "execution_profile": summary.get("execution_profile", "safe_cheap"),
         "analyzer_version": "v2-ice-council",
         "profile_mode": profile_manager.get_active_mode(),
+        "redis": "connected" if redis_ok else "unavailable",
     }
 
 
@@ -2817,6 +2853,21 @@ async def tribunal(
     authorization: Optional[str] = Header(None, alias="Authorization"),
 ):
     t0 = time.time()
+
+    # Check Redis cache
+    bus = get_bus()
+    if bus is not None:
+        try:
+            cached = bus.get_cached_tribunal(req.prompt, req.k, req.tier, req.mode)
+            if cached:
+                cached["meta"] = cached.get("meta", {})
+                cached["meta"]["cache_hit"] = True
+                cached["elapsed_s"] = round(time.time() - t0, 2)
+                _log_api_call("/tribunal", req.dict(), cached["elapsed_s"], "cache_hit")
+                return TribunalResponse(**cached)
+        except Exception:
+            pass  # Cache miss or Redis error — proceed normally
+
     bridge = get_bridge()
 
     # Dynamic credit deduction based on operation type, tier, and k
@@ -2875,17 +2926,38 @@ async def tribunal(
 
     _log_api_call("/tribunal", req.dict(), elapsed, "ok")
 
+<<<<<<< HEAD
     tribunal_response = TribunalResponse(
+=======
+    # Math augmentation — run Ruliad plugins if prompt has math content
+    math_ver = {}
+    confidence = report.get("confidence", 0.0)
+    agreement = report.get("agreement_score", 0.0)
+    method = report.get("analysis_method", "unknown")
+    if detect_math_domains(req.prompt):
+        try:
+            from consensus_analyzer import run_math_verification, adjust_confidence_with_math
+            math_results = run_math_verification(req.prompt)
+            confidence, agreement, math_method = adjust_confidence_with_math(
+                confidence, agreement, math_results
+            )
+            method = f"{method}+{math_method}"
+            math_ver = math_results
+        except Exception as e:
+            math_ver = {"error": str(e)}
+
+    resp = TribunalResponse(
+>>>>>>> hyperion/memory
         prompt=req.prompt,
         k=req.k,
         mode=req.mode,
         elapsed_s=round(elapsed, 2),
         consensus=report.get("consensus_text", result.consensus),
-        agreement_score=report.get("agreement_score", 0.0),
-        confidence=report.get("confidence", 0.0),
+        agreement_score=agreement,
+        confidence=confidence,
         models_responded=report.get("successful_count", len([r for r in result.responses if not r.error])),
         models_queried=report.get("model_count", len(result.responses)),
-        analysis_method=report.get("analysis_method", "unknown"),
+        analysis_method=method,
         agreement_points=report.get("agreement_points", []),
         divergence_points=report.get("divergence_points", []),
         stance_summary=report.get("stance_summary", {}),
@@ -2894,6 +2966,7 @@ async def tribunal(
         meta=report.get("meta", {}),
     )
 
+<<<<<<< HEAD
     # Broadcast tribunal result to Radio
     _broadcast_event({
         "id": f"tribunal-{int(time.time())}",
@@ -2935,6 +3008,17 @@ async def tribunal(
         print(f"[aletheia] capture error: {e}")
 
     return tribunal_response
+=======
+    # Cache result in Redis (5 min TTL)
+    if bus is not None:
+        try:
+            bus.cache_tribunal(req.prompt, req.k, req.tier, req.mode,
+                               resp.dict(), ttl=300)
+        except Exception:
+            pass
+
+    return resp
+>>>>>>> hyperion/memory
 
 
 @app.post("/tribunal/ice", response_model=TribunalICEResponse, dependencies=[Depends(verify_api_key), Depends(check_rate_limit)])

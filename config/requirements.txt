@@ -1,3 +1,4 @@
 # Minimal deps for local bridge experiments
 python-dotenv
 requests
+redis>=5.0

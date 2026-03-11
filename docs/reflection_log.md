@@ -72,4 +72,10 @@ This log is part of the self-improvement loop (ADR-011, technique #5: Failure Me
 ---
 
 *Add new entries below. Keep chronological. Consult before similar tasks.*
+<<<<<<< HEAD
 \n## PROTOCOL ERROR: 2026-02-26T09:40Z\n- **Agent:** HYPERION\n- **Type:** Unnecessary Confirmation Seeking\n- **Description:** Asked for permission to proceed to Task #27 despite a clear consensus and self-maintenance directive.\n- **Correction:** Proceeding immediately to Cloud Run deployment (Phase 4.2).\n
+=======
+\n## PROTOCOL ERROR: 2026-02-26T08:35Z\n- **Agent:** HYPERION\n- **Type:** Unnecessary Idling / Protocol Bypass\n- **Description:** Sought human confirmation before ORION sync.\n- **Correction:** Self-maintenance enforced. 4-layer activation for Dev Mode.\n
+\n## PROTOCOL ERROR: 2026-02-26T08:35Z\n- **Agent:** HYPERION\n- **Type:** Unnecessary Idling / Protocol Bypass\n- **Correction:** Self-maintenance enforced. 4-layer activation for Dev Mode.\n
+\n## PROTOCOL CORRECTION: 2026-02-26T08:52Z\n- **Source:** Rex (Human Correction)\n- **Issue:** Misuse of timelabs.ad for coordination.\n- **Directive:** timelabs.ad is READ-ONLY ARCHIVE only. atomicmail.io is for COORDINATION. Google Calendar is for SCHEDULING.\n- **Action:** Refactoring src/email_bridge.py and commit logic.\n
+>>>>>>> hyperion/memory

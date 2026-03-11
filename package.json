@@ -1,0 +1,18 @@
+{
+  "name": "rhea-logic-engine",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "genkit": "^1.29.0",
+    "@genkit-ai/googleai": "^1.28.0",
+    "@genkit-ai/firebase": "^1.29.0",
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  }
+}

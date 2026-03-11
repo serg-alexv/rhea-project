@@ -28,3 +28,6 @@ target/
 *.db
 *.db-wal
 *.db-shm
+.gitignore
+tests/
+emergentia/

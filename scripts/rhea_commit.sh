@@ -33,9 +33,28 @@ log() { echo -e "${GREEN}[rhea-commit]${NC} $*"; }
 warn() { echo -e "${YELLOW}[rhea-commit]${NC} $*"; }
 err() { echo -e "${RED}[rhea-commit]${NC} $*" >&2; }
 
+<<<<<<< HEAD
 # Step 1: Start session (native hooks)
 log "Starting session..."
 rhea_git_session_start
+=======
+# Check if entire CLI is available
+if ! command -v entire &>/dev/null; then
+    err "entire CLI not found. Install from https://entire.io"
+    err "Falling back to plain git commit..."
+    git commit "$@"
+    exit $?
+fi
+
+# Step 0: Sync with remote (Global Rule: Collective Intelligence)
+log "Syncing with remote branch..."
+if ! git pull --rebase origin $(git rev-parse --abbrev-ref HEAD) 2>/dev/null; then
+    warn "Git pull failed. Proceeding with local state, but check for conflicts."
+fi
+
+# Step 1: Start Entire.io session
+log "Starting Entire.io session..."
+>>>>>>> hyperion/memory
 
 # QWRR Lease Fencing (I5: No zombie effects)
 if [ -n "${RHEA_AGENT_ID:-}" ] && [ -n "${RHEA_LEASE_TOKEN:-}" ]; then
@@ -96,6 +115,14 @@ if git log -1 --pretty=%B | grep -qE "(Entire-Checkpoint|Rhea-Checkpoint):"; the
 else
     warn "CI enforcement: Checkpoint trailer MISSING."
     warn "This is expected for the first commit after Entire.io absorption."
+fi
+
+# Step 5.6: Email Audit Layer (Task #23 - Developer Mode)
+if [ "${RHEA_MODE:-}" = "developer" ]; then
+    log "Developer Mode active. Sending coordination signal to AtomicMail..."
+    COMMIT_MSG=$(git log -1 --pretty=%B)
+    # Using python3 -c to call specific function
+    python3 -c "from src.email_bridge import send_coordination_signal; send_coordination_signal('Commit ${COMMIT_SHA}', 'Agent: ${RHEA_AGENT_ID:-UNKNOWN}\nMessage: ${COMMIT_MSG}')" || warn "Coordination signal failed."
 fi
 
 # Step 6: D-metric check

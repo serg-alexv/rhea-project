@@ -25,7 +25,10 @@ import random
 import re
 import time
 import uuid
+<<<<<<< HEAD
 import hashlib
+=======
+>>>>>>> hyperion/memory
 import litellm
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass, field, asdict
@@ -34,6 +37,7 @@ from pathlib import Path
 from statistics import median
 from typing import Optional
 
+<<<<<<< HEAD
 
 # ---------------------------------------------------------------------------
 # Backoff with jitter (absorbed from CockroachDB Cortex)
@@ -83,6 +87,11 @@ def _is_retryable(e: Exception) -> bool:
 litellm.set_verbose = False
 litellm.telemetry = False
 litellm.drop_params = True
+=======
+# Disable litellm logging to keep dashboard clean
+litellm.set_verbose = False
+litellm.telemetry = False
+>>>>>>> hyperion/memory
 
 # Enable Redis Caching if available (Task #22)
 if os.environ.get("REDIS_URL"):
@@ -190,17 +199,24 @@ MODEL_TIERS = {
     "cheap": {
         "description": "Default tier. Fast, cost-effective. Use for all routine work.",
         "candidates": [
+<<<<<<< HEAD
             "ollama/qwen3.5:32b",
             "ollama/gemma3:27b",
             "github/gpt-4o-mini",
             "groq/llama-3.1-8b-instant",
             "cerebras/llama-3.3-70b",
             "volcengine/doubao-1.5-pro-32k",
+=======
+>>>>>>> hyperion/memory
             "deepseek/deepseek-chat",
             "anthropic/claude-haiku-3-5-20241022",
             "gemini/gemini-2.5-flash",
             "openai/gpt-4o-mini",
             "azure/gpt-4o-mini",
+<<<<<<< HEAD
+=======
+            "gemini/gemini-2.5-flash-8b",
+>>>>>>> hyperion/memory
             "openai/gpt-4.1-nano",
             "openrouter/anthropic/claude-sonnet-4",
         ],
@@ -208,6 +224,7 @@ MODEL_TIERS = {
     "balanced": {
         "description": "Mid-tier. For complex reasoning that cheap tier struggles with.",
         "candidates": [
+<<<<<<< HEAD
             "ollama/qwen3.5:32b",
             "volcengine/doubao-seed-2-0-pro",
             "github/gpt-4o",
@@ -216,6 +233,12 @@ MODEL_TIERS = {
             "gemini/gemini-2.5-flash",
             "deepseek/deepseek-chat",
             "openai/gpt-4o",
+=======
+            "gemini/gemini-2.5-flash",
+            "deepseek/deepseek-chat",
+            "openai/gpt-4o",
+            "gemini/gemini-2.5-flash",
+>>>>>>> hyperion/memory
         ],
     },
     "expensive": {
@@ -249,8 +272,11 @@ MODEL_TIERS = {
         "description": "Science-grade models. For biology, chemistry, STEM tribunal queries.",
         "candidates": [
             "anthropic/claude-sonnet-4-20250514",
+<<<<<<< HEAD
             "cerebras/llama-3.3-70b",
             "groq/llama-3.3-70b-versatile",
+=======
+>>>>>>> hyperion/memory
             "gemini/gemini-3.1-pro-preview",
             "gemini/gemini-3-pro-preview",
             "gemini/gemini-2.5-pro",
@@ -360,6 +386,7 @@ PRICE_TABLE = {
     "meta-llama/Llama-3.2-3B-Instruct":      (0.00, 0.00),
     "microsoft/Phi-3-mini-4k-instruct": (0.00, 0.00),
     "Qwen/Qwen2.5-1.5B-Instruct":     (0.00, 0.00),
+<<<<<<< HEAD
     # Volcano Engine / Doubao (ByteDance)
     "doubao-seed-2-0-pro":  (0.47, 1.40),
     "doubao-1.5-pro-32k":   (0.30, 0.90),
@@ -369,6 +396,8 @@ PRICE_TABLE = {
     "jais:70b":          (0.00, 0.00),
     "gemma3:27b":        (0.00, 0.00),
     "deepseek-r1:32b":   (0.00, 0.00),
+=======
+>>>>>>> hyperion/memory
 }
 
 PRICE_DEFAULT = (1.00, 3.00)  # fallback for unknown models
@@ -744,6 +773,7 @@ PROVIDERS = {
         base_url=os.environ.get("AZURE_ENDPOINT", ""),
         api_key_env="AZURE_API_KEY",
         models=[
+<<<<<<< HEAD
             "gpt-4o", "gpt-4o-mini", "gpt-5",
         ],
         call_method="azure_openai",
@@ -813,8 +843,11 @@ PROVIDERS = {
             "qwen3.5:32b", "qwen3-coder:32b",
             "jais:70b", "gemma3:27b",
             "deepseek-r1:32b",
+=======
+            "gpt-4o", "gpt-4o-mini",
+>>>>>>> hyperion/memory
         ],
-        call_method="openai_compatible",
+        call_method="azure_openai",
     ),
 }
 
@@ -825,6 +858,7 @@ if _azure_base and "AZURE_API_BASE" not in os.environ:
 if "AZURE_API_VERSION" not in os.environ:
     os.environ["AZURE_API_VERSION"] = "2024-12-01-preview"
 
+<<<<<<< HEAD
 
 # ---------------------------------------------------------------------------
 # Auto-detect GitHub token from gh CLI if GITHUB_TOKEN not set
@@ -919,14 +953,21 @@ try:
 except ImportError:
     get_context_block = None
     _HAS_VISUAL = False
+=======
+>>>>>>> hyperion/memory
 
 # ---------------------------------------------------------------------------
 # Bridge
 # ---------------------------------------------------------------------------
 
-class RheaBridge:
-    """Multi-provider LLM bridge with tiered cost-aware routing and tribunal support."""
+try:
+    from rhea_profile_manager import profile_manager
+    _HAS_PROFILE = True
+except ImportError:
+    profile_manager = None
+    _HAS_PROFILE = False
 
+<<<<<<< HEAD
     def __init__(self):
         self.providers = PROVIDERS
         self.tiers = MODEL_TIERS
@@ -941,6 +982,14 @@ class RheaBridge:
             "available": list(EXECUTION_PROFILES.keys()),
             "config": EXECUTION_PROFILES[profile_name],
         }
+=======
+try:
+    from rhea_visual_context import get_context_block
+    _HAS_VISUAL = True
+except ImportError:
+    get_context_block = None
+    _HAS_VISUAL = False
+>>>>>>> hyperion/memory
 
     def set_execution_profile(self, profile: str, source: str = "api") -> dict:
         """Set global execution profile and persist to disk."""
@@ -1066,6 +1115,7 @@ class RheaBridge:
         # ----------------------------------------------------
 
         provider_name, model_id = self._resolve_model(model)
+<<<<<<< HEAD
 
         # --- Fail-fast: skip providers with no API key ---
         if provider_name in _DEAD_PROVIDERS:
@@ -1095,6 +1145,10 @@ class RheaBridge:
         temperature_eff, max_tokens_eff = self._clamp_request_params(temperature, max_tokens)
         t0 = time.time()
 
+=======
+        t0 = time.time()
+        
+>>>>>>> hyperion/memory
         try:
             # Prepare messages for LiteLLM
             messages = []
@@ -1102,6 +1156,7 @@ class RheaBridge:
                 messages.append({"role": "system", "content": system})
             messages.append({"role": "user", "content": prompt})
 
+<<<<<<< HEAD
             # Call LiteLLM — inject api_base/api_key for custom providers
             extra_kwargs = {}
             cfg = self.providers.get(provider_name)
@@ -1138,6 +1193,15 @@ class RheaBridge:
                         time.sleep(delay)
                     else:
                         raise  # non-retryable or exhausted retries
+=======
+            # Call LiteLLM
+            response = litellm.completion(
+                model=model,
+                messages=messages,
+                temperature=temperature,
+                max_tokens=max_tokens,
+            )
+>>>>>>> hyperion/memory
 
             text = response.choices[0].message.content
             usage = getattr(response, 'usage', {})
@@ -1166,6 +1230,7 @@ class RheaBridge:
                 },
             )
 
+<<<<<<< HEAD
             # Auto-launch plan-proposal task on "industrial-level" thoughts.
             plan_event = _maybe_create_plan_task(
                 prompt=prompt,
@@ -1179,6 +1244,8 @@ class RheaBridge:
             elif plan_event and plan_event.get("reason") == "duplicate":
                 print(f"[bridge] AUTO-PLAN duplicate ignored: {plan_event.get('task_id', '')}")
 
+=======
+>>>>>>> hyperion/memory
             return ModelResponse(
                 provider=provider_name, model=model_id,
                 text=text, latency_s=round(elapsed, 2),
@@ -1188,6 +1255,7 @@ class RheaBridge:
         except Exception as e:
             elapsed = time.time() - t0
             latency_ms = elapsed * 1000
+<<<<<<< HEAD
             _log_call(
                 provider_name, model_id, 0, 0, 0, latency_ms, str(e),
                 metadata={
@@ -1199,6 +1267,9 @@ class RheaBridge:
                     **(call_meta or {}),
                 },
             )
+=======
+            _log_call(provider_name, model_id, 0, 0, 0, latency_ms, str(e))
+>>>>>>> hyperion/memory
             return ModelResponse(
                 provider=provider_name, model=model_id,
                 text="", latency_s=round(elapsed, 2), error=str(e),
@@ -1272,6 +1343,7 @@ class RheaBridge:
             elapsed_s=round(elapsed, 2),
         )
 
+<<<<<<< HEAD
     # ------------------------------------------------------------------
     # OpenShift AI / KServe v2 inference
     # ------------------------------------------------------------------
@@ -1394,6 +1466,11 @@ class RheaBridge:
     def send_chronos(self, message: ChronosMessage) -> bool:
         """Log and relay a CHRONOS inter-agent message using QWRR relay."""
         try:
+=======
+    def send_chronos(self, message: ChronosMessage) -> bool:
+        """Log and relay a CHRONOS inter-agent message using QWRR relay."""
+        try:
+>>>>>>> hyperion/memory
             # Ensure project root is in path for opera.ops import
             import sys
             root = str(Path(__file__).resolve().parent.parent)
@@ -1486,7 +1563,14 @@ class RheaBridge:
         results = {}
         test_models = {}
         for name, cfg in self.providers.items():
+<<<<<<< HEAD
             if not _provider_has_key(cfg):
+=======
+            key = os.environ.get(cfg.api_key_env, "")
+            if not key and name == "gemini":
+                key = os.environ.get("GEMINI_T1_API_KEY", "")
+            if not key:
+>>>>>>> hyperion/memory
                 results[name] = {"live": False, "error": "no_key", "latency_s": 0}
                 continue
             test_models[name] = f"{name}/{cfg.models[0]}"
@@ -1748,8 +1832,12 @@ def main():
             err = info.get("error", "")
             lat = info.get("latency_s", 0)
             txt = info.get("text", "")
+<<<<<<< HEAD
             detail = (txt or "")[:25] if txt else (err or "unknown")[:60]
             print(f"  {name:15s} {status:4s}  {lat:.1f}s  {detail}")
+=======
+            print(f"  {name:15s} {status:4s}  {lat:.1f}s  {txt[:25] if txt else err[:60]}")
+>>>>>>> hyperion/memory
         print(f"\nAlive: {result['alive']}/{result['total']}")
 
     elif cmd == "tiers":
