@@ -295,6 +295,35 @@ def cmd_run(args: argparse.Namespace) -> int:
     ensure_dirs()
     state = load_state()
     interval = max(1, int(args.interval))
+    
+    # Optional Redis bridge
+    try:
+        sys.path.insert(0, str(ROOT / "src"))
+        from rhea_bus import RheaBus
+        bus = RheaBus(node_id="radio_daemon")
+        
+        def redis_callback(data):
+            event = {
+                "source": "redis_bus",
+                "level": "info",
+                "text": f"[bus] {data.get('sender', '?')}: {data.get('text', '')}",
+                "event_id": f"bus:{int(time.time()*1000)}"
+            }
+            # Add context if available
+            if "data" in data and isinstance(data["data"], dict):
+                event["text"] = f"[bus] {data['data'].get('sender', '?')}: {data['data'].get('text', '')}"
+            
+            append_feed(event)
+            if args.echo:
+                print(event["text"])
+            if args.notify:
+                notify_event(event, sound=args.sound)
+
+        bus.subscribe("rhea:radio", redis_callback)
+        print(f"[radio] Subscribed to rhea:radio via Redis.")
+    except Exception as e:
+        print(f"[radio] Redis bridge unavailable: {e}")
+
     while True:
         emitted = process_once(
             state=state,

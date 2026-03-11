@@ -204,8 +204,9 @@ def persist_history(
 # ─── Radio Write-Through ──────────────────────────────────────────────
 
 def persist_radio(event: dict) -> None:
-    """Write-through: persist a radio/broadcast event to SQL."""
+    """Write-through: persist a radio/broadcast event to SQL and notify via Redis."""
     conn = _get_conn()
+    ts = event.get("ts", datetime.now(timezone.utc).isoformat())
     try:
         conn.execute(
             "INSERT INTO radio (type, sender, receiver, text, ts, metadata) VALUES (?, ?, ?, ?, ?, ?)",
@@ -214,11 +215,21 @@ def persist_radio(event: dict) -> None:
                 event.get("sender", "system"),
                 event.get("receiver", ""),
                 event.get("text", ""),
-                event.get("ts", datetime.now(timezone.utc).isoformat()),
+                ts,
                 json.dumps({k: v for k, v in event.items() if k not in ("type", "sender", "receiver", "text", "ts")}),
             ),
         )
         conn.commit()
+        
+        # Real-time notification via Redis Bus
+        try:
+            from rhea_bus import RheaBus
+            bus = RheaBus(node_id="rhea_db")
+            bus.publish("rhea:radio", {**event, "ts": ts})
+        except Exception as e:
+            # Don't fail the main persistence if Redis is down
+            pass
+            
     except Exception as e:
         print(f"[rhea_db] radio persist error: {e}")
 
@@ -226,7 +237,7 @@ def persist_radio(event: dict) -> None:
 # ─── Office Write-Through ─────────────────────────────────────────────
 
 def persist_office_message(msg_dict: dict) -> None:
-    """Write-through: persist an office message to SQL."""
+    """Write-through: persist an office message to SQL and notify via Redis."""
     conn = _get_conn()
     try:
         conn.execute(
@@ -249,6 +260,15 @@ def persist_office_message(msg_dict: dict) -> None:
             ),
         )
         conn.commit()
+        
+        # Real-time notification via Redis Bus
+        try:
+            from rhea_bus import RheaBus
+            bus = RheaBus(node_id="rhea_db")
+            bus.publish(f"rhea:office:{msg_dict.get('receiver', 'all')}", msg_dict)
+        except Exception as e:
+            pass
+            
     except Exception as e:
         print(f"[rhea_db] office persist error: {e}")
 
