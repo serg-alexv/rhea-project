@@ -1,0 +1,4 @@
+# Cloud asset directories and logs
+docs/restore/
+websites/
+*.log

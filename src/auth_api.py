@@ -18,6 +18,7 @@ OAuth   : Authorization Code flow (Google, Microsoft) via httpx
 
 import hashlib
 import hmac
+import logging
 import os
 import secrets
 import sqlite3
@@ -31,13 +32,28 @@ from fastapi import APIRouter, Depends, HTTPException, Query, status
 from fastapi.responses import RedirectResponse
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from pydantic import BaseModel, EmailStr
+from validation import (
+    ValidatedAuthRequest, validate_email, validate_password,
+    validate_oauth_params, handle_validation_error
+)
+
+log = logging.getLogger("rhea.auth")
 
 # ---------------------------------------------------------------------------
 # Config
 # ---------------------------------------------------------------------------
 PROJECT_ROOT = Path(__file__).parent.parent
 DB_PATH = PROJECT_ROOT / "data" / "users.db"
-JWT_SECRET = os.environ.get("JWT_SECRET", "rhea-dev-secret-change-in-prod")
+
+# Critical security: JWT_SECRET must be set in production
+JWT_SECRET = os.environ.get("JWT_SECRET")
+if not JWT_SECRET:
+    raise RuntimeError("JWT_SECRET environment variable must be set. This is required for security.")
+
+# Additional security: validate JWT secret complexity
+if len(JWT_SECRET) < 32:
+    raise RuntimeError("JWT_SECRET must be at least 32 characters long for security.")
+
 JWT_ALGORITHM = "HS256"
 JWT_TTL_SECONDS = 60 * 60 * 24 * 7  # 7 days
 
@@ -167,14 +183,19 @@ class AuthRequest(BaseModel):
 auth_router = APIRouter(tags=["auth"])
 
 @auth_router.post("/signup", status_code=201)
+@handle_validation_error
 def signup(body: AuthRequest):
+    # Validate inputs
+    email = validate_email(body.email)
+    password = validate_password(body.password)
+    
     salt = secrets.token_hex(16)
-    pw_hash = _hash_password(body.password, salt)
+    pw_hash = _hash_password(password, salt)
     try:
         with _get_db() as db:
             cur = db.execute(
                 "INSERT INTO users (email, salt, pw_hash, created_at) VALUES (?,?,?,?)",
-                (body.email.lower(), salt, pw_hash, time.time()),
+                (email, salt, pw_hash, time.time()),
             )
             db.commit()
             user_id = cur.lastrowid
@@ -187,7 +208,7 @@ def signup(body: AuthRequest):
     except Exception:
         pass  # billing bonus must never block signup
     return {
-        "token": _make_token(user_id, body.email.lower()),
+        "token": _make_token(user_id, email),
         "credits": 100,
         "message": "Welcome to Rhea. You own your infrastructure — "
                    "the infrastructure owner controls who's admin, not the application. "
@@ -195,15 +216,20 @@ def signup(body: AuthRequest):
     }
 
 @auth_router.post("/login")
+@handle_validation_error
 def login(body: AuthRequest):
+    # Validate inputs
+    email = validate_email(body.email)
+    password = validate_password(body.password)
+    
     with _get_db() as db:
         row = db.execute(
             "SELECT id, email, salt, pw_hash FROM users WHERE email = ?",
-            (body.email.lower(),)
+            (email,)
         ).fetchone()
     if not row:
         raise HTTPException(status_code=401, detail="Invalid credentials")
-    expected = _hash_password(body.password, row["salt"])
+    expected = _hash_password(password, row["salt"])
     if not hmac.compare_digest(expected, row["pw_hash"]):
         raise HTTPException(status_code=401, detail="Invalid credentials")
     return {"token": _make_token(row["id"], row["email"])}
@@ -459,6 +485,7 @@ def apple_start(callback: str = Query("rhea://oauth")):
 
 
 @auth_router.post("/apple/callback")
+@handle_validation_error
 async def apple_callback(
     code: str = "",
     id_token: str = "",
@@ -471,17 +498,60 @@ async def apple_callback(
     Apple POSTs code + id_token. The id_token contains the email.
     'user' JSON is only sent on the FIRST authorization — we must capture it.
     """
-    if error or (not code and not id_token):
-        return _oauth_redirect_with_token("", "", error=error or "no_code", callback=state)
+    # Validate OAuth parameters
+    oauth_params = validate_oauth_params(code, state, error)
+    
+    if "error" in oauth_params:
+        return _oauth_redirect_with_token("", "", error=oauth_params["error"], callback=state)
 
     email = ""
 
-    # Extract email from id_token (always present)
+    # Extract email from id_token with proper signature verification
     if id_token:
         try:
-            payload = jwt.decode(id_token, options={"verify_signature": False})
-            email = payload.get("email", "")
-        except Exception:
+            # Get Apple's public keys for verification
+            import httpx
+            async with httpx.AsyncClient() as client:
+                keys_response = await client.get("https://appleid.apple.com/auth/keys")
+                if keys_response.status_code != 200:
+                    raise Exception("Failed to fetch Apple public keys")
+                apple_keys = keys_response.json()
+            
+            # Verify the token signature
+            try:
+                from jose import jwk
+                from jose.utils import base64url_decode
+                import json
+                
+                # Decode token header to get key ID
+                header = json.loads(base64url_decode(id_token.split('.')[0]))
+                kid = header.get('kid')
+                
+                # Find matching key
+                key = next((k for k in apple_keys['keys'] if k['kid'] == kid), None)
+                if not key:
+                    raise Exception("Key not found")
+                
+                # Convert to JWK and verify
+                public_key = jwk.construct(key)
+                payload = jwt.decode(
+                    id_token, 
+                    key=public_key, 
+                    algorithms=["RS256"],
+                    audience=APPLE_SERVICES_ID,
+                    issuer="https://appleid.apple.com"
+                )
+                email = payload.get("email", "")
+            except Exception as e:
+                log.warning(f"Apple token verification failed: {e}")
+                # Fallback to unsigned verification only for development
+                if os.environ.get("ENVIRONMENT") == "development":
+                    payload = jwt.decode(id_token, options={"verify_signature": False})
+                    email = payload.get("email", "")
+                else:
+                    raise Exception("Invalid Apple token signature")
+        except Exception as e:
+            log.warning(f"Apple id_token processing failed: {e}")
             pass
 
     # First-time auth: Apple sends user JSON with name/email
@@ -535,11 +605,54 @@ class AppleAuthRequest(BaseModel):
 async def apple_signin_native(body: AppleAuthRequest):
     """Verify Apple identity token from iOS native AuthenticationServices."""
     try:
-        payload = jwt.decode(body.identity_token, options={"verify_signature": False})
-        email = payload.get("email") or body.email
-        if not email:
-            raise HTTPException(400, "No email in Apple token or request")
-    except Exception:
+        # For native tokens, we need to verify with Apple's public keys
+        import httpx
+        async with httpx.AsyncClient() as client:
+            keys_response = await client.get("https://appleid.apple.com/auth/keys")
+            if keys_response.status_code != 200:
+                raise HTTPException(503, "Failed to fetch Apple public keys")
+            apple_keys = keys_response.json()
+        
+        # Verify the token signature
+        try:
+            from jose import jwk
+            from jose.utils import base64url_decode
+            import json
+            
+            # Decode token header to get key ID
+            header = json.loads(base64url_decode(body.identity_token.split('.')[0]))
+            kid = header.get('kid')
+            
+            # Find matching key
+            key = next((k for k in apple_keys['keys'] if k['kid'] == kid), None)
+            if not key:
+                raise HTTPException(400, "Invalid Apple token - key not found")
+            
+            # Convert to JWK and verify
+            public_key = jwk.construct(key)
+            payload = jwt.decode(
+                body.identity_token, 
+                key=public_key, 
+                algorithms=["RS256"],
+                audience=APPLE_SERVICES_ID,
+                issuer="https://appleid.apple.com"
+            )
+            email = payload.get("email") or body.email
+            if not email:
+                raise HTTPException(400, "No email in Apple token or request")
+        except Exception as e:
+            log.warning(f"Apple native token verification failed: {e}")
+            # Fallback to unsigned verification only for development
+            if os.environ.get("ENVIRONMENT") == "development":
+                payload = jwt.decode(body.identity_token, options={"verify_signature": False})
+                email = payload.get("email") or body.email
+                if not email:
+                    raise HTTPException(400, "No email in Apple token or request")
+            else:
+                raise HTTPException(400, f"Invalid Apple token signature: {e}")
+    except HTTPException:
+        raise
+    except Exception as e:
         if not body.email:
             raise HTTPException(400, "Could not decode Apple token and no email provided")
         email = body.email
@@ -593,8 +706,60 @@ async def google_callback(code: str = "", error: str = "", state: str = "rhea://
 
         tokens = token_resp.json()
         access_token = tokens.get("access_token", "")
+        id_token = tokens.get("id_token", "")
 
-        # Fetch user info
+        # Verify the ID token signature and claims
+        if id_token:
+            try:
+                # Get Google's certificates for verification
+                certs_response = await client.get("https://www.googleapis.com/oauth2/v3/certs")
+                if certs_response.status_code != 200:
+                    raise Exception("Failed to fetch Google certificates")
+                
+                certs = certs_response.json()
+                
+                # Verify the token
+                try:
+                    from jose import jwk
+                    from jose.utils import base64url_decode
+                    import json
+                    
+                    # Decode token header to get key ID
+                    header = json.loads(base64url_decode(id_token.split('.')[0]))
+                    kid = header.get('kid')
+                    
+                    # Find matching certificate
+                    cert = next((c for c in certs['keys'] if c['kid'] == kid), None)
+                    if not cert:
+                        raise Exception("Certificate not found")
+                    
+                    # Convert to JWK and verify
+                    public_key = jwk.construct(cert)
+                    payload = jwt.decode(
+                        id_token,
+                        key=public_key,
+                        algorithms=["RS256"],
+                        audience=GOOGLE_CLIENT_ID,
+                        issuer="accounts.google.com"
+                    )
+                    
+                    # Use verified email from ID token
+                    verified_email = payload.get("email")
+                    if verified_email:
+                        _, jwt_token = _oauth_find_or_create(verified_email, "google")
+                        return _oauth_redirect_with_token(jwt_token, verified_email, callback=state)
+                    
+                except Exception as e:
+                    log.warning(f"Google ID token verification failed: {e}")
+                    # Fallback to userinfo API if verification fails
+                    pass
+                    
+            except ImportError:
+                # If python-jose is not available, fall back to userinfo
+                log.warning("python-jose not available, using userinfo API fallback")
+                pass
+
+        # Fetch user info as fallback
         userinfo_resp = await client.get(
             "https://www.googleapis.com/oauth2/v2/userinfo",
             headers={"Authorization": f"Bearer {access_token}"},

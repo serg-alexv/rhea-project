@@ -8,28 +8,80 @@ Database: data/rhea.db (SQLite WAL mode for concurrent reads).
 from __future__ import annotations
 
 import json
+import logging
 import sqlite3
 import threading
+import atexit
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional
+
+log = logging.getLogger("rhea.db")
 
 _PROJECT_ROOT = Path(__file__).resolve().parent.parent
 DB_PATH = _PROJECT_ROOT / "data" / "rhea.db"
 
 _local = threading.local()
+_connections = set()  # Track all connections for cleanup
+
+
+def _cleanup_connections():
+    """Clean up all thread-local connections on exit."""
+    for conn in list(_connections):
+        try:
+            conn.close()
+            log.debug("Closed database connection on cleanup")
+        except Exception as e:
+            log.warning(f"Error closing connection during cleanup: {e}")
+    _connections.clear()
+
+# Register cleanup function
+atexit.register(_cleanup_connections)
 
 
 def _get_conn() -> sqlite3.Connection:
-    """Thread-local SQLite connection with WAL mode."""
+    """Thread-local SQLite connection with WAL mode and proper cleanup."""
     if not hasattr(_local, "conn") or _local.conn is None:
         DB_PATH.parent.mkdir(parents=True, exist_ok=True)
         conn = sqlite3.connect(str(DB_PATH), check_same_thread=False)
         conn.execute("PRAGMA journal_mode=WAL")
         conn.execute("PRAGMA synchronous=NORMAL")
+        conn.execute("PRAGMA busy_timeout=30000")  # 30 second timeout
         conn.row_factory = sqlite3.Row
+        
+        # Track connection for cleanup
+        _connections.add(conn)
         _local.conn = conn
+        
+        # Set up thread cleanup
+        def cleanup_thread():
+            if hasattr(_local, 'conn') and _local.conn:
+                try:
+                    _local.conn.close()
+                    _connections.discard(_local.conn)
+                    log.debug("Closed thread-local database connection")
+                except Exception as e:
+                    log.warning(f"Error closing thread connection: {e}")
+                finally:
+                    _local.conn = None
+        
+        # Register thread cleanup (Python doesn't have built-in thread exit callbacks)
+        # We'll rely on the atexit handler for now
+        
     return _local.conn
+
+
+def close_connection():
+    """Explicitly close the current thread's database connection."""
+    if hasattr(_local, 'conn') and _local.conn:
+        try:
+            _local.conn.close()
+            _connections.discard(_local.conn)
+            log.debug("Explicitly closed thread-local database connection")
+        except Exception as e:
+            log.warning(f"Error closing connection: {e}")
+        finally:
+            _local.conn = None
 
 
 def init_db() -> None:
@@ -197,8 +249,12 @@ def persist_history(
             ),
         )
         conn.commit()
+    except sqlite3.Error as e:
+        log.error(f"[rhea_db] Database error persisting history: {e}")
+        raise
     except Exception as e:
-        print(f"[rhea_db] history persist error: {e}")
+        log.error(f"[rhea_db] Unexpected error persisting history: {e}")
+        raise
 
 
 # ─── Radio Write-Through ──────────────────────────────────────────────
@@ -227,11 +283,15 @@ def persist_radio(event: dict) -> None:
             bus = RheaBus(node_id="rhea_db")
             bus.publish("rhea:radio", {**event, "ts": ts})
         except Exception as e:
+            log.warning(f"Failed to publish radio event to Redis: {e}")
             # Don't fail the main persistence if Redis is down
-            pass
             
+    except sqlite3.Error as e:
+        log.error(f"[rhea_db] Database error persisting radio: {e}")
+        raise
     except Exception as e:
-        print(f"[rhea_db] radio persist error: {e}")
+        log.error(f"[rhea_db] Unexpected error persisting radio: {e}")
+        raise
 
 
 # ─── Office Write-Through ─────────────────────────────────────────────
@@ -267,10 +327,15 @@ def persist_office_message(msg_dict: dict) -> None:
             bus = RheaBus(node_id="rhea_db")
             bus.publish(f"rhea:office:{msg_dict.get('receiver', 'all')}", msg_dict)
         except Exception as e:
-            pass
+            log.warning(f"Failed to publish office message to Redis: {e}")
+            # Don't fail the main persistence if Redis is down
             
+    except sqlite3.Error as e:
+        log.error(f"[rhea_db] Database error persisting office message: {e}")
+        raise
     except Exception as e:
-        print(f"[rhea_db] office persist error: {e}")
+        log.error(f"[rhea_db] Unexpected error persisting office message: {e}")
+        raise
 
 
 # ─── Query Helpers (for Command Centre API) ───────────────────────────

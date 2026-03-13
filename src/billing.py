@@ -35,6 +35,45 @@ def _get_current_user():
 PROJECT_ROOT = Path(__file__).parent.parent
 DB_PATH = PROJECT_ROOT / "data" / "users.db"
 
+# Critical security: validate required secrets are set
+def _validate_secrets():
+    """Validate that required secrets are properly configured."""
+    missing_secrets = []
+    
+    # Check Stripe configuration if enabled
+    if os.environ.get("STRIPE_ENABLED", "true").lower() == "true":
+        if not os.environ.get("STRIPE_SECRET_KEY"):
+            missing_secrets.append("STRIPE_SECRET_KEY")
+        if not os.environ.get("STRIPE_WEBHOOK_SECRET"):
+            missing_secrets.append("STRIPE_WEBHOOK_SECRET")
+    
+    # Check BTCPay configuration if enabled
+    if os.environ.get("BTCPAY_ENABLED", "false").lower() == "true":
+        if not os.environ.get("BTCPAY_WEBHOOK_SECRET"):
+            missing_secrets.append("BTCPAY_WEBHOOK_SECRET")
+    
+    # Check OAuth providers if enabled
+    if os.environ.get("GOOGLE_OAUTH_ENABLED", "false").lower() == "true":
+        if not os.environ.get("GOOGLE_CLIENT_ID"):
+            missing_secrets.append("GOOGLE_CLIENT_ID")
+        if not os.environ.get("GOOGLE_CLIENT_SECRET"):
+            missing_secrets.append("GOOGLE_CLIENT_SECRET")
+    
+    if os.environ.get("MICROSOFT_OAUTH_ENABLED", "false").lower() == "true":
+        if not os.environ.get("MICROSOFT_CLIENT_ID"):
+            missing_secrets.append("MICROSOFT_CLIENT_ID")
+        if not os.environ.get("MICROSOFT_CLIENT_SECRET"):
+            missing_secrets.append("MICROSOFT_CLIENT_SECRET")
+    
+    if missing_secrets:
+        raise RuntimeError(
+            f"Missing required environment variables: {', '.join(missing_secrets)}. "
+            "These must be set for secure operation."
+        )
+
+# Validate configuration on import
+_validate_secrets()
+
 STRIPE_SECRET_KEY = os.environ.get("STRIPE_SECRET_KEY", "")
 STRIPE_WEBHOOK_SECRET = os.environ.get("STRIPE_WEBHOOK_SECRET", "")
 BTCPAY_WEBHOOK_SECRET = os.environ.get("BTCPAY_WEBHOOK_SECRET", "")
@@ -215,25 +254,43 @@ def deduct_credits(user_id: int, operation: str, ref_id: str = "") -> int:
 
 
 def deduct_credits_dynamic(user_id: int, cost: int, operation: str, ref_id: str = "") -> int:
-    """Deduct a pre-computed credit amount. Use with compute_query_cost() for dynamic pricing."""
+    """Deduct a pre-computed credit amount. Use with compute_query_cost() for dynamic pricing.
+    
+    Uses atomic UPDATE to prevent race conditions and ensure consistency.
+    """
+    if cost <= 0:
+        raise ValueError("Cost must be positive")
+    
     with _get_db() as db:
-        row = db.execute("SELECT credits FROM users WHERE id = ?", (user_id,)).fetchone()
-        if not row:
-            raise HTTPException(404, "User not found")
-        current = row["credits"]
-        if current < cost:
+        # Atomic operation: check and deduct in single statement
+        cursor = db.execute(
+            "UPDATE users SET credits = credits - ? WHERE id = ? AND credits >= ?",
+            (cost, user_id, cost)
+        )
+        
+        if cursor.rowcount == 0:
+            # Either user doesn't exist or insufficient credits
+            row = db.execute("SELECT credits FROM users WHERE id = ?", (user_id,)).fetchone()
+            if not row:
+                raise HTTPException(404, "User not found")
+            current = row["credits"]
             raise HTTPException(
                 402,
                 f"Insufficient credits. Need {cost} for {operation}, have {current}. "
                 f"Buy credits at /billing/credits/buy"
             )
-        db.execute("UPDATE users SET credits = credits - ? WHERE id = ?", (cost, user_id))
-        new_balance = current - cost
+        
+        # Get the new balance
+        row = db.execute("SELECT credits FROM users WHERE id = ?", (user_id,)).fetchone()
+        new_balance = row["credits"]
+        
+        # Record the transaction
         db.execute(
             "INSERT INTO ledger (user_id, delta, balance, reason, ref_id, created_at) VALUES (?,?,?,?,?,?)",
             (user_id, -cost, new_balance, operation, ref_id, time.time())
         )
         db.commit()
+        
     # Mirror to CockroachDB for persistent cloud billing
     try:
         import crdb_store
@@ -246,6 +303,7 @@ def deduct_credits_dynamic(user_id: int, cost: int, operation: str, ref_id: str 
         )
     except Exception:
         pass  # CRDB logging must never block billing
+    
     return new_balance
 
 

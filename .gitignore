@@ -113,3 +113,11 @@ rhea-nexus/memories/
 target/
 */target/
 Play.bndb
+
+# Cloud asset directories and logs
+docs/restore/
+websites/
+*.log
+
+.gemini/
+gha-creds-*.json
