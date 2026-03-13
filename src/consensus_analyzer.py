@@ -841,42 +841,13 @@ class ConsensusAnalyzer:
 
 
 # ---------------------------------------------------------------------------
-<<<<<<< HEAD
-# Math verification augmentation (Ruliad → Tribunal bridge)
-# ---------------------------------------------------------------------------
-
-# Keywords that suggest a claim might be verifiable by math plugins
-_MATH_DOMAIN_HINTS = {
-    "game_theory": [
-        "nash", "equilibrium", "payoff", "dominant strategy", "prisoner",
-        "zero-sum", "pareto", "game theory", "cooperative", "auction",
-    ],
-    "dynamical_systems": [
-        "lorenz", "chaos", "attractor", "lyapunov", "bifurcation",
-        "stability", "oscillat", "differential equation", "dynamical",
-        "eigenvalue", "equilibrium point", "phase space",
-    ],
-    "information_geometry": [
-        "fisher", "metric", "manifold", "cramer-rao", "kl divergence",
-        "kullback", "statistical", "gaussian", "distribution family",
-        "information geometry", "riemannian",
-    ],
-    "proof_theory": [
-        "tautology", "consistent", "implies", "logical", "horn clause",
-        "satisfiab", "propositional", "proof", "theorem", "axiom",
-        "deduction", "inference",
-    ],
-    "category_theory": [
-        "functor", "morphism", "associativ", "identity element",
-        "category", "group", "monoid", "composit", "S3", "symmetric group",
-    ],
-=======
 # Math verification bridge (Ruliad plugins → consensus augmentation)
 # ---------------------------------------------------------------------------
 
 import sys
 from pathlib import Path as _Path
 
+# Keywords that suggest a claim might be verifiable by math plugins
 _MATH_DOMAIN_HINTS = {
     "game_theory": ["nash", "equilibrium", "payoff", "dominant strategy",
                      "pareto", "auction", "mechanism design", "evolutionary",
@@ -887,64 +858,29 @@ _MATH_DOMAIN_HINTS = {
     "information_geometry": ["fisher", "metric", "manifold", "cramer-rao",
                              "divergence", "geodesic", "curvature",
                              "statistical manifold", "exponential family"],
-    "proof_theory": ["tautology", "consistent", "implies", "logical",
-                     "axiom", "theorem", "proof", "contradiction",
-                     "deduction", "horn clause", "satisfiable"],
-    "category_theory": ["functor", "morphism", "associativ", "identity element",
-                        "commutative diagram", "adjoint", "monad", "topos",
-                        "natural transformation", "isomorphism"],
->>>>>>> hyperion/memory
+    "abstract_algebra": ["group", "ring", "field", "homomorphism", "isomorphism",
+                         "subgroup", "coset", "normal", "quotient", "kernel",
+                         "functor", "morphism", "associativ", "identity element",
+                         "category", "monoid", "composit", "S3", "symmetric Group"],
 }
 
 
 def detect_math_domains(prompt: str) -> list[str]:
-<<<<<<< HEAD
-    """Detect which Ruliad math domains a prompt might be verifiable by.
-
-    Returns list of domain names sorted by relevance (hit count).
-    """
+    """Auto-detect which math domains might be relevant to a prompt."""
     prompt_lower = prompt.lower()
-    hits: dict[str, int] = {}
+    detected = []
     for domain, keywords in _MATH_DOMAIN_HINTS.items():
-        count = sum(1 for kw in keywords if kw in prompt_lower)
-=======
-    """Detect which Ruliad math domains are relevant to a prompt."""
-    lower = prompt.lower()
-    hits = {}
-    for domain, keywords in _MATH_DOMAIN_HINTS.items():
-        count = sum(1 for kw in keywords if kw in lower)
->>>>>>> hyperion/memory
-        if count > 0:
-            hits[domain] = count
-    return sorted(hits, key=hits.get, reverse=True)
+        if any(kw in prompt_lower for kw in keywords):
+            detected.append(domain)
+    return detected
 
 
-<<<<<<< HEAD
-def run_math_verification(prompt: str, engine, domains: list[str] = None) -> dict:
+def run_math_verification(prompt: str, domains: list[str] = None) -> dict:
     """Run Ruliad math plugins on a hypothesis. Returns {domain: result_dict}.
 
     If domains is None, auto-detects from prompt. If no domains detected,
-    runs all plugins (belt-and-suspenders).
+    returns empty dict (avoids loading heavy engine).
     """
-    if domains is None:
-        domains = detect_math_domains(prompt)
-    if not domains:
-        domains = list(engine.registry.list_plugins())
-
-    from core.engine import Hypothesis
-    h = Hypothesis(title=prompt[:80], statement=prompt, domain="general")
-    results = {}
-    for domain in domains:
-        plugin = engine.registry.get(domain)
-        if plugin and plugin.verify:
-            try:
-                results[domain] = plugin.verify(h)
-            except Exception as e:
-                results[domain] = {"overall": "error", "error": str(e)}
-    return results
-=======
-def run_math_verification(prompt: str, domains: list[str] = None) -> dict:
-    """Run Ruliad plugin verify() hooks for detected domains."""
     if domains is None:
         domains = detect_math_domains(prompt)
     if not domains:
@@ -968,15 +904,10 @@ def run_math_verification(prompt: str, domains: list[str] = None) -> dict:
                 spec = importlib.util.spec_from_file_location(domain, plugin_path)
                 mod = importlib.util.module_from_spec(spec)
                 spec.loader.exec_module(mod)
-                if hasattr(mod, "register_plugin"):
-                    mod.register_plugin(engine)
+                if hasattr(mod, "Plugin"):
+                    engine.registry.register(mod.Plugin())
 
-        # Create a hypothesis from the prompt and run verification
-        h = Hypothesis(
-            title=prompt[:60],
-            statement=prompt,
-            domain=domains[0],
-        )
+        h = Hypothesis(title=prompt[:80], statement=prompt, domain="general")
 
         results = {}
         for domain in domains:
@@ -996,7 +927,6 @@ def run_math_verification(prompt: str, domains: list[str] = None) -> dict:
     finally:
         if str(ruliad_root) in sys.path:
             sys.path.remove(str(ruliad_root))
->>>>>>> hyperion/memory
 
 
 def adjust_confidence_with_math(
@@ -1004,64 +934,6 @@ def adjust_confidence_with_math(
     base_agreement: float,
     math_results: dict,
 ) -> tuple[float, float, str]:
-<<<<<<< HEAD
-    """TODO(human): Adjust tribunal confidence based on math verification verdicts.
-
-    Args:
-        base_confidence: Original confidence from TF-IDF + stance analysis (0.0-1.0)
-        base_agreement: Original agreement score from text similarity (0.0-1.0)
-        math_results: Dict of {domain: result_dict} from Ruliad plugins.
-            Each result has an "overall" key with values like:
-            "verified", "requires_proof", "consistent_requires_deeper_proof",
-            "refuted", "error", "unknown"
-
-    Returns:
-        (adjusted_confidence, adjusted_agreement, reason_string)
-
-    Design considerations:
-    - A math "verified" verdict should boost confidence — but by how much?
-    - A "refuted" verdict should tank confidence regardless of LLM consensus
-    - "requires_proof" is ambiguous — should it be neutral or slightly negative?
-    - If ALL math domains agree, that's stronger signal than just one
-    - What if math says "verified" but LLMs disagree? (math wins? weighted blend?)
-    """
-    # TODO(human): Implement the confidence adjustment logic
-    return base_confidence, base_agreement, "math_augmentation_not_implemented"
-
-
-def math_augment(report: ConsensusReport, prompt: str, engine) -> ConsensusReport:
-    """Enrich a ConsensusReport with Ruliad math verification.
-
-    Detects math-relevant domains in the prompt, runs plugins,
-    adjusts confidence, and stores results in report.math_verification.
-    """
-    domains = detect_math_domains(prompt)
-    if not domains and not report.meta.get("force_math"):
-        return report
-
-    math_results = run_math_verification(prompt, engine, domains)
-    if not math_results:
-        return report
-
-    verdicts = {k: v.get("overall", "unknown") for k, v in math_results.items()
-                if isinstance(v, dict)}
-
-    new_conf, new_agree, reason = adjust_confidence_with_math(
-        report.confidence, report.agreement_score, math_results,
-    )
-
-    report.math_verification = {
-        "domains_tested": list(math_results.keys()),
-        "verdicts": verdicts,
-        "confidence_adjustment": reason,
-        "pre_math_confidence": report.confidence,
-        "pre_math_agreement": report.agreement_score,
-    }
-    report.confidence = new_conf
-    report.agreement_score = new_agree
-    report.analysis_method += " + ruliad_math"
-
-=======
     """
     Adjust tribunal confidence based on math verification verdicts.
 
@@ -1136,7 +1008,6 @@ def math_augment(report: ConsensusReport, prompt: str) -> ConsensusReport:
     report.analysis_method = f"{report.analysis_method}+{method}"
     report.meta["math_verification"] = math_results
     report.meta["math_domains_detected"] = domains
->>>>>>> hyperion/memory
     return report
 
 
