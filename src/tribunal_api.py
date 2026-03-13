@@ -75,13 +75,13 @@ from rhea_bridge import RheaBridge
 from consensus_analyzer import ConsensusAnalyzer, math_augment, detect_math_domains
 from rhea_profile_manager import profile_manager
 from rhea_visual_context import update_state, get_health_history
-<<<<<<< HEAD
 import aletheia_pipeline as aletheia
 from aletheia_api import aletheia_router
 import rhea_db
-=======
-from rhea_bus import RheaBus
->>>>>>> hyperion/memory
+try:
+    from rhea_bus import RheaBus
+except ImportError:
+    RheaBus = None
 
 # ---------------------------------------------------------------------------
 # App setup
@@ -417,7 +417,6 @@ RATE_LIMIT_DAILY = int(os.environ.get("TRIBUNAL_DAILY_LIMIT", "1000"))
 _rate_buckets: dict[str, list[float]] = {}
 
 
-<<<<<<< HEAD
 async def check_rate_limit(
     x_api_key: str = Header(None, alias="X-API-Key"),
     authorization: str = Header(None, alias="Authorization"),
@@ -434,12 +433,8 @@ async def check_rate_limit(
     if key == "anonymous" and x_api_key:
         key = f"key:{x_api_key}"
 
-=======
-async def check_rate_limit(x_api_key: str = Header(None, alias="X-API-Key")):
-    key = x_api_key or "anonymous"
-    bus = get_bus()
-
     # Try Redis first
+    bus = get_bus()
     if bus is not None:
         try:
             ok, reason = bus.check_rate(key, RATE_LIMIT_PER_MINUTE, RATE_LIMIT_DAILY)
@@ -452,7 +447,6 @@ async def check_rate_limit(x_api_key: str = Header(None, alias="X-API-Key")):
             pass  # Redis down — fall through to in-memory
 
     # In-memory fallback
->>>>>>> hyperion/memory
     now = time.time()
     if key not in _rate_buckets:
         _rate_buckets[key] = []
@@ -2550,12 +2544,9 @@ tree-shakeable core that produces the same reactive UI with a fraction of the bu
 async def health():
     bridge = get_bridge()
     status = bridge.models_status()
-<<<<<<< HEAD
     summary = status.get("summary", {})
-=======
     bus = get_bus()
     redis_ok = bus.ping() if bus else False
->>>>>>> hyperion/memory
     return {
         "status": "ok",
         "providers_available": summary.get("available_providers", 0),
@@ -2909,15 +2900,14 @@ async def tribunal(
     math_ver = {}
     if detect_math_domains(req.prompt):
         try:
-            from consensus_analyzer import ConsensusReport as _CR, run_math_verification
-            engine = _get_engine()
+            from consensus_analyzer import ConsensusReport as _CR
             _tmp = _CR(
                 confidence=report.get("confidence", 0.0),
                 agreement_score=report.get("agreement_score", 0.0),
                 analysis_method=report.get("analysis_method", "unknown"),
             )
-            _tmp = math_augment(_tmp, req.prompt, engine)
-            math_ver = _tmp.math_verification
+            _tmp = math_augment(_tmp, req.prompt)
+            math_ver = _tmp.meta.get("math_verification", {})
             report["confidence"] = _tmp.confidence
             report["agreement_score"] = _tmp.agreement_score
             report["analysis_method"] = _tmp.analysis_method
@@ -2926,28 +2916,12 @@ async def tribunal(
 
     _log_api_call("/tribunal", req.dict(), elapsed, "ok")
 
-<<<<<<< HEAD
-    tribunal_response = TribunalResponse(
-=======
-    # Math augmentation — run Ruliad plugins if prompt has math content
-    math_ver = {}
+    # Use values from math augmentation above (or defaults if no math domains)
     confidence = report.get("confidence", 0.0)
     agreement = report.get("agreement_score", 0.0)
     method = report.get("analysis_method", "unknown")
-    if detect_math_domains(req.prompt):
-        try:
-            from consensus_analyzer import run_math_verification, adjust_confidence_with_math
-            math_results = run_math_verification(req.prompt)
-            confidence, agreement, math_method = adjust_confidence_with_math(
-                confidence, agreement, math_results
-            )
-            method = f"{method}+{math_method}"
-            math_ver = math_results
-        except Exception as e:
-            math_ver = {"error": str(e)}
 
     resp = TribunalResponse(
->>>>>>> hyperion/memory
         prompt=req.prompt,
         k=req.k,
         mode=req.mode,
@@ -2966,14 +2940,13 @@ async def tribunal(
         meta=report.get("meta", {}),
     )
 
-<<<<<<< HEAD
     # Broadcast tribunal result to Radio
     _broadcast_event({
         "id": f"tribunal-{int(time.time())}",
         "type": "tribunal",
         "sender": "tribunal",
         "receiver": "all",
-        "text": f"[{req.mode}] {req.prompt[:100]} → confidence={tribunal_response.confidence:.0%} agreement={tribunal_response.agreement_score:.0%} ({tribunal_response.models_responded}/{tribunal_response.models_queried} models, {elapsed:.1f}s)",
+        "text": f"[{req.mode}] {req.prompt[:100]} → confidence={resp.confidence:.0%} agreement={resp.agreement_score:.0%} ({resp.models_responded}/{resp.models_queried} models, {elapsed:.1f}s)",
         "ts": datetime.now(timezone.utc).isoformat(),
     })
 
@@ -2984,19 +2957,19 @@ async def tribunal(
         "timestamp": datetime.now(timezone.utc).isoformat(),
         "request": req.dict(),
         "ontology": _active_ontology,
-        "response": tribunal_response.dict(),
+        "response": resp.dict(),
     })
     # SQL write-through
     rhea_db.persist_history(
         step=len(_session_history) - 1, endpoint="/tribunal",
-        prompt=req.prompt, response_dict=tribunal_response.dict(),
+        prompt=req.prompt, response_dict=resp.dict(),
         ontology=_active_ontology,
     )
 
     # ── Aletheia capture: persist as proof/hypothesis ──
     try:
         aletheia.capture(
-            tribunal_response=tribunal_response.dict(),
+            tribunal_response=resp.dict(),
             consensus_report=report,
             raw_responses=[r.dict() for r in response_models],
             request_meta={
@@ -3007,9 +2980,8 @@ async def tribunal(
     except Exception as e:
         print(f"[aletheia] capture error: {e}")
 
-    return tribunal_response
-=======
     # Cache result in Redis (5 min TTL)
+    bus = get_bus()
     if bus is not None:
         try:
             bus.cache_tribunal(req.prompt, req.k, req.tier, req.mode,
@@ -3018,7 +2990,6 @@ async def tribunal(
             pass
 
     return resp
->>>>>>> hyperion/memory
 
 
 @app.post("/tribunal/ice", response_model=TribunalICEResponse, dependencies=[Depends(verify_api_key), Depends(check_rate_limit)])
