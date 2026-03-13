@@ -1,4 +1,28 @@
-# Cloud asset directories and logs
-docs/restore/
-websites/
-*.log
+
+# RHEA PROJECT: ROO TOKENOMETER SHIELD
+# This prevents Roo from reading massive files and burning OpenRouter credits.
+
+# 1. Ignore all heavy symlinked cloud assets
+packages/build/
+packages/dist/
+**/node_modules/**
+**/.next/**
+**/.nuxt/
+
+# 2. Ignore the HTML dumps (Strict Anti-Pattern Rule)
+docs/restore/**/*.html
+
+# 3. Ignore large inventory tracking files (unless explicitly asked)
+artifacts/components_inventory.jsonl
+**/.sqlite
+**/.db
+**/.log
+**/.csv
+**/.pdf
+**/.zip
+*.tar.gz
+
+# 4. Ignore local Python/environment scanners
+**/.venv/**
+**/venv/**
+**/.env

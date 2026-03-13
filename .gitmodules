@@ -1,0 +1,3 @@
+[submodule "scripts/rexus"]
+	path = scripts/rexus
+	url = https://github.com/serg-alexv/rexus

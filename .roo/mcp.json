@@ -1,29 +1,150 @@
 {
-  "mcpServers": {
-    "context7": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@upstash/context7-mcp"
-      ],
-      "env": {
-        "DEFAULT_MINIMUM_TOKENS": ""
-      }
-    },
-    "filesystem": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-filesystem",
-        "/Users/sa"
-      ]
-    },
-    "sequentialthinking": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-sequential-thinking"
-      ]
-    }
-  }
+	"mcpServers": {
+		"context7": {
+			"command": "/opt/homebrew/bin/npx",
+			"args": [
+				"-y",
+				"@upstash/context7-mcp"
+			],
+			"env": {
+				"DEFAULT_MINIMUM_TOKENS": "",
+				"PATH": "/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+			},
+			"alwaysAllow": [
+				"resolve-library-id",
+				"query-docs"
+			]
+		},
+		"filesystem": {
+			"command": "/opt/homebrew/bin/npx",
+			"args": [
+				"-y",
+				"@modelcontextprotocol/server-filesystem",
+				"/Users/sa"
+			],
+			"env": {
+				"PATH": "/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+			}
+		},
+		"sequentialthinking": {
+			"command": "/opt/homebrew/bin/npx",
+			"args": [
+				"-y",
+				"@modelcontextprotocol/server-sequential-thinking"
+			],
+			"disabled": false,
+			"alwaysAllow": [
+				"sequentialthinking"
+			],
+			"disabledTools": [],
+			"env": {
+				"PATH": "/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+			}
+		},
+		"fetch": {
+			"command": "/opt/homebrew/bin/uvx",
+			"args": [
+				"mcp-server-fetch"
+			],
+			"disabled": false,
+			"alwaysAllow": [],
+			"env": {
+				"PATH": "/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+			}
+		},
+		"sqlite": {
+			"command": "/opt/homebrew/bin/uvx",
+			"args": [
+				"mcp-server-sqlite",
+				"--db-path",
+				"artifacts/0truth.db"
+			]
+		},
+		"redis-cloud": {
+			"command": "/opt/homebrew/bin/uvx",
+			"args": [
+				"--from",
+				"redis-mcp-server@latest",
+				"redis-mcp-server",
+				"--url",
+				"rediss://roo:%23XPBR6g3zA0N20nI4I4B77A0SgJ8zdF7a@redis-17165.c335.europe-west2-1.gce.cloud.redislabs.com:17165/0?ssl_cert_reqs=none"
+			],
+			"disabled": false,
+			"alwaysAllow": [],
+			"env": {
+				"PATH": "/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+			}
+		},
+		"qdrant": {
+			"command": "/opt/homebrew/bin/uvx",
+			"args": [
+				"mcp-server-qdrant"
+			],
+			"env": {
+				"QDRANT_URL": "https://801482c8-831d-4c2d-9995-d01522f8c024.eu-central-1-0.aws.cloud.qdrant.io",
+				"QDRANT_API_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiJtIn0.nEpsTcOBiZh59JY35761jyzLLcNYv7xe398Z02KcalI",
+				"COLLECTION_NAME": "ws-d943667ed188cd94",
+				"EMBEDDING_MODEL": "BAAI/bge-small-en-v1.5",
+				"PATH": "/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+			},
+			"disabled": true,
+			"alwaysAllow": [
+				"qdrant-find",
+				"qdrant-store"
+			]
+		},
+		"firebase": {
+			"command": "/opt/homebrew/bin/npx",
+			"args": [
+				"-y",
+				"firebase-tools@14.15.2",
+				"experimental:mcp"
+			],
+			"disabled": false,
+			"alwaysAllow": [
+				"firebase_list_apps",
+				"firebase_get_project",
+				"firebase_list_projects",
+				"firebase_get_admin_sdk_config",
+				"firebase_create_project",
+				"firebase_get_sdk_config",
+				"firebase_create_android_sha",
+				"firebase_create_app",
+				"firebase_get_environment",
+				"firebase_consult_assistant",
+				"firebase_update_environment",
+				"firebase_init",
+				"firestore_list_collections",
+				"firestore_get_documents",
+				"firestore_delete_document",
+				"firestore_query_collection",
+				"firestore_get_rules",
+				"firestore_validate_rules",
+				"storage_get_rules",
+				"storage_validate_rules",
+				"storage_get_object_download_url",
+				"dataconnect_build",
+				"dataconnect_generate_schema",
+				"dataconnect_generate_operation",
+				"auth_disable_user",
+				"auth_list_users",
+				"auth_get_user",
+				"dataconnect_execute",
+				"dataconnect_info",
+				"auth_set_claim",
+				"auth_set_sms_region_policy",
+				"messaging_send_message",
+				"remoteconfig_get_template",
+				"remoteconfig_publish_template",
+				"remoteconfig_rollback_template",
+				"database_get_data",
+				"database_set_data",
+				"database_get_rules",
+				"database_validate_rules"
+			],
+			"env": {
+				"PATH": "/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+			}
+		}
+	}
 }
