@@ -1,0 +1,13 @@
+name = "Ananke"
+license = "MIT"
+licenselink = "https://github.com/theNewDynamic/gohugo-theme-ananke/blob/master/LICENSE.md"
+description = "Ananke is a purposeful Hugo theme for content-focused sites such as blogs, news sites, and portfolios."
+homepage = "https://github.com/theNewDynamic/gohugo-theme-ananke"
+demosite = "https://ananke.netlify.app"
+tags = ["blog", "company", "portfolio", "projects", "minimal", "responsive"]
+features = ["responsive", "minimal", "company", "portfolio", "projects", "blog"]
+min_version = "0.84.0"
+
+[author]
+  name = "theNewDynamic"
+  homepage = "https://www.thenewdynamic.com"

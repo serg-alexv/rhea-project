@@ -3,6 +3,9 @@ import Network
 import CryptoKit
 import Combine
 import os.log
+#if canImport(UIKit)
+import UIKit
+#endif
 
 /// PairingDelegate — Orchestrates device pairing via QR code scanning and Ed25519 public key exchange.
 ///
@@ -55,7 +58,7 @@ public final class PairingDelegate: NSObject, ObservableObject {
     public struct SessionReceipt: Codable {
         public let deviceID: String
         public let sessionToken: String
-        public let expiresAt: ISO8601DateFormatter.Options
+        public let expiresAt: Date
         public let trustLevel: TrustLevel
 
         public enum CodingKeys: String, CodingKey {
@@ -145,7 +148,7 @@ public final class PairingDelegate: NSObject, ObservableObject {
 
         let descriptor = NWBrowser.Descriptor.bonjour(type: "_rhea._tcp", domain: "local.")
         let parameters = NWParameters.tcp
-        parameters.multipathServiceType = .none
+        parameters.multipathServiceType = .disabled
 
         let browser = NWBrowser(for: descriptor, using: parameters)
         self.mdnsBrowser = browser
@@ -163,6 +166,8 @@ public final class PairingDelegate: NSObject, ObservableObject {
 
     private func handleBrowserStateChange(_ state: NWBrowser.State, serviceName: String) {
         switch state {
+        case .setup:
+            break
         case .ready:
             log.info("mDNS browser ready")
         case .failed(let error):
@@ -180,13 +185,16 @@ public final class PairingDelegate: NSObject, ObservableObject {
 
     private func handleBrowseResults(_ results: Set<NWBrowser.Result>, serviceName: String) {
         for result in results {
-            guard case let .service(name, type, domain) = result.endpoint else { continue }
-
-            if name == serviceName {
-                log.info("Found mDNS service: \(name)")
-                connectToService(result.endpoint)
-                stopBrowsing()
-                return
+            switch result.endpoint {
+            case .service(let name, _, _, _):
+                if name == serviceName {
+                    log.info("Found mDNS service: \(name)")
+                    connectToService(result.endpoint)
+                    stopBrowsing()
+                    return
+                }
+            default:
+                continue
             }
         }
     }
@@ -212,6 +220,8 @@ public final class PairingDelegate: NSObject, ObservableObject {
 
     private func handleConnectionStateChange(_ state: NWConnection.State) {
         switch state {
+        case .setup:
+            break
         case .ready:
             log.info("TLS connection established")
             updateStatus("Connected, generating keys...", level: .pending)
@@ -253,12 +263,19 @@ public final class PairingDelegate: NSObject, ObservableObject {
         let publicKeyData = privateKey.publicKey.rawRepresentation
         let publicKeyHex = publicKeyData.map { String(format: "%02x", $0) }.joined()
 
-        let pairingPayload: [String: Any] = [
-            "public_key": publicKeyHex,
-            "device_name": UIDevice.current.name,
-            "device_model": UIDevice.current.model,
-            "os_version": UIDevice.current.systemVersion
+        var pairingPayload: [String: Any] = [
+            "public_key": publicKeyHex
         ]
+
+        #if canImport(UIKit)
+        pairingPayload["device_name"] = UIDevice.current.name
+        pairingPayload["device_model"] = UIDevice.current.model
+        pairingPayload["os_version"] = UIDevice.current.systemVersion
+        #else
+        pairingPayload["device_name"] = Host.current().localizedName ?? "macOS"
+        pairingPayload["device_model"] = "Mac"
+        pairingPayload["os_version"] = ProcessInfo.processInfo.operatingSystemVersionString
+        #endif
 
         guard let jsonData = try? JSONSerialization.data(withJSONObject: pairingPayload) else {
             log.error("Failed to encode pairing payload")
@@ -276,12 +293,19 @@ public final class PairingDelegate: NSObject, ObservableObject {
     private func sendPairingToServer(publicKeyHex: String) {
         Task {
             do {
-                let pairingRequest: [String: Any] = [
-                    "public_key": publicKeyHex,
-                    "device_name": UIDevice.current.name,
-                    "device_model": UIDevice.current.model,
-                    "os_version": UIDevice.current.systemVersion
+                var pairingRequest: [String: Any] = [
+                    "public_key": publicKeyHex
                 ]
+
+                #if canImport(UIKit)
+                pairingRequest["device_name"] = UIDevice.current.name
+                pairingRequest["device_model"] = UIDevice.current.model
+                pairingRequest["os_version"] = UIDevice.current.systemVersion
+                #else
+                pairingRequest["device_name"] = Host.current().localizedName ?? "macOS"
+                pairingRequest["device_model"] = "Mac"
+                pairingRequest["os_version"] = ProcessInfo.processInfo.operatingSystemVersionString
+                #endif
 
                 let jsonData = try JSONSerialization.data(withJSONObject: pairingRequest)
 
@@ -323,7 +347,9 @@ public final class PairingDelegate: NSObject, ObservableObject {
     }
 
     private func handlePairingSuccess(data: Data) throws {
-        let receipt = try JSONDecoder().decode(SessionReceipt.self, from: data)
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        let receipt = try decoder.decode(SessionReceipt.self, from: data)
 
         log.info("Pairing successful: device=\(receipt.deviceID)")
 

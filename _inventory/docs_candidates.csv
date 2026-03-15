@@ -1,0 +1,139 @@
+path,type,reason,likely_use,confidence
+/Users/sa/rh.1/docs,docs_directory,Main documentation directory,Project documentation,0.9
+/Users/sa/rh.1/docs/restore,restore_docs,Restored documentation,Recoverable documentation,0.8
+/Users/sa/rh.1/docs/restore/1,restore_batch1,Restored docs batch 1,Documentation recovery,0.8
+/Users/sa/rh.1/play,play_docs,Play documentation,Play framework docs,0.8
+/Users/sa/rh.1/play-token-mapper,play_token_mapper,Play token mapper,Token mapping documentation,0.7
+/Users/sa/rh.1/README.md,readme,Project README,Project overview,0.9
+/Users/sa/rh.1/CLAUDE.md,claude_docs,Claude documentation,Claude integration docs,0.9
+/Users/sa/rh.1/readme0.md,readme0,Alternative README,Project overview,0.8
+/Users/sa/rh.1/readme0.pdf,readme0_pdf,README PDF,Project overview document,0.8
+/Users/sa/rh.1/fulltree.md,fulltree,Full tree documentation,Project structure docs,0.8
+/Users/sa/rh.1/11march-full-audit-p0leftovers.md,audit_docs,Audit leftovers documentation,Audit documentation,0.7
+/Users/sa/rh.1/CHECK.md,check_docs,Check documentation,Validation docs,0.7
+/Users/sa/rh.1/FINAL_DELIVERY.md,final_delivery,Final delivery documentation,Project delivery docs,0.9
+/Users/sa/rh.1/INTERAGENT_COMM_GUIDE.md,interagent_guide,Inter-agent communication guide,Communication docs,0.8
+/Users/sa/rh.1/MULTITEAMLOOP_PLAN.md,multiteam_plan,Multi-team loop plan,Team coordination docs,0.8
+/Users/sa/rh.1/PLAY_MAINTENANCE_GUIDE.md,play_maintenance,Play maintenance guide,Maintenance docs,0.8
+/Users/sa/rh.1/PRODUCTION_STATUS.md,production_status,Production status documentation,Production docs,0.9
+/Users/sa/rh.1/SESSION_STATE.md,session_state,Session state documentation,Session management docs,0.8
+/Users/sa/rh.1/SESSION_SUMMARY_STAGE5.md,session_summary,Session summary stage 5,Session documentation,0.8
+/Users/sa/rh.1/STAGE5_RELEASE.md,stage5_release,Stage 5 release documentation,Release docs,0.8
+/Users/sa/rh.1/TEAM_STATUS.md,team_status,Team status documentation,Team docs,0.8
+/Users/sa/rh.1/TODO.md,todo_docs,TODO documentation,Task tracking docs,0.9
+/Users/sa/rh.1/REDIS_SCHEMA.md,redis_schema,Redis schema documentation,Database docs,0.8
+/Users/sa/rh.1/RHEKNELGPT54cp.md,rheaknel_copy,RHEKNEL GPT copy,Research documentation,0.7
+/Users/sa/rh.1/RHEKNELGPT54sems.md,rheaknel_sems,RHEKNEL GPT semantics,Research documentation,0.7
+/Users/sa/rh.1/f(prompt) Token Mapping.pdf,token_mapping_pdf,Prompt token mapping PDF,Token mapping docs,0.7
+/Users/sa/rh.1/RHEKNELGPT54full.pdf,rheaknel_full,RHEKNEL GPT full PDF,Research documentation,0.7
+/Users/sa/rh.1/rheaknelgemini.pdf,rheaknel_gemini,Rheknel Gemini PDF,Research documentation,0.7
+/Users/sa/rh.1/rheknelgemini2.pdf,rheaknel_gemini2,Rheknel Gemini 2 PDF,Research documentation,0.7
+/Users/sa/rh.1/QUICKSTART.md,quickstart,Quickstart documentation,Getting started docs,0.8
+/Users/sa/rh.1/TASKS.log,tasks_log,Tasks log,Task tracking logs,0.7
+/Users/sa/rh.1/build_stage5.log,build_log,Stage 5 build log,Build documentation,0.7
+/Users/sa/rh.1/observer.log,observer_log,Observer log,Observation logs,0.7
+/Users/sa/rh.1/firebase-debug.log,firebase_log,Firebase debug log,Troubleshooting docs,0.7
+/Users/sa/rh.1/.rhea/radio/radio.stdout.log,radio_log,Radio session log,Session logs,0.7
+/Users/sa/rh.1/arhive_history_Rhea.html,archive_history,Rhea archive history HTML,Archive documentation,0.6
+/Users/sa/rh.1/rheknel.htm,rheknel_html,Rheknel demo HTML,Demo documentation,0.6
+/Users/sa/rh.1/2 помоги мне доказать, что sqlite устарела и _это самая устойчивая идея_ это манипуляция, а не аргумент - Google Search.mhtml,web_archive,Web archive documentation,0.5
+/Users/sa/rh.1/RheklGemini.webarchive,web_archive,Web archive documentation,Archive docs,0.5
+/Users/sa/rh.1/rheknel.mhtml,web_archive,Web archive documentation,Archive docs,0.5
+/Users/sa/rh.1/demo_atlas.html,demo_html,Atlas demo HTML file,Demo documentation,0.6
+/Users/sa/rh.1/demo_math.html,demo_html,Math demo HTML file,Demo documentation,0.6
+/Users/sa/rh.1/glowing-sphere.html,demo_html,Glowing sphere demo HTML file,Demo documentation,0.6
+/Users/sa/rh.1/semantic-drift.html,demo_html,Semantic drift demo HTML file,Demo documentation,0.6
+/Users/sa/rh.1/.windsurf,windsurf_docs,Windsurf configuration docs,Development docs,0.6
+/Users/sa/rh.1/.vscode,vscode_docs,VS Code configuration docs,Development docs,0.6
+/Users/sa/rh.1/.obsidian,obsidian_docs,Obsidian configuration docs,Development docs,0.6
+/Users/sa/rh.1/.claude,claude_docs,Claude configuration docs,Development docs,0.6
+/Users/sa/rh.1/.codex,codex_docs,Codex configuration docs,Development docs,0.6
+/Users/sa/rh.1/.rhea,rhea_docs,Rhea configuration docs,Development docs,0.6
+/Users/sa/rh.1/.roo,roo_docs,Roo configuration docs,Development docs,0.6
+/Users/sa/rh.1/.roomodes,roomodes_docs,Roo modes configuration docs,Development docs,0.6
+/Users/sa/rh.1/.gemini,gemini_docs,Gemini configuration docs,Development docs,0.6
+/Users/sa/rh.1/.firecrawl,firecrawl_docs,Firecrawl configuration docs,Development docs,0.6
+/Users/sa/rh.1/.entire,entire_docs,Entire configuration docs,Development docs,0.6
+/Users/sa/rh.1/.github,github_docs,GitHub configuration docs,Development docs,0.6
+/Users/sa/rh.1/.pids,pids_docs,Process ID configuration docs,Development docs,0.5
+/Users/sa/rh.1/.secrets,secrets_docs,Secrets configuration docs,Development docs,0.6
+/Users/sa/rh.1/.tmp_music,temp_music_docs,Temporary music docs,Media docs,0.4
+/Users/sa/rh.1/.watcher,watcher_docs,Watcher configuration docs,Development docs,0.5
+/Users/sa/rh.1/contracts,contracts_docs,Contracts documentation,Legal docs,0.5
+/Users/sa/rh.1/deploy,deploy_docs,Deployment documentation,Deployment docs,0.6
+/Users/sa/rh.1/diagnostics,diagnostics_docs,Diagnostics documentation,Troubleshooting docs,0.6
+/Users/sa/rh.1/eval,eval_docs,Evaluation documentation,Testing docs,0.6
+/Users/sa/rh.1/extensions,extensions_docs,Extensions documentation,Plugin docs,0.6
+/Users/sa/rh.1/metrics,metrics_docs,Metrics documentation,Performance docs,0.6
+/Users/sa/rh.1/opera,opera_docs,Opera documentation,Opera docs,0.5
+/Users/sa/rh.1/plugins,plugins_docs,Plugins documentation,Plugin docs,0.6
+/Users/sa/rh.1/prompts,prompts_docs,Prompts documentation,AI docs,0.6
+/Users/sa/rh.1/protocols,protocols_docs,Protocols documentation,Protocol docs,0.6
+/Users/sa/rh.1/src,src_docs,Source documentation,Code docs,0.6
+/Users/sa/rh.1/tools,tools_docs,Tools documentation,Development tools docs,0.6
+/Users/sa/rh.1/tests,tests_docs,Tests documentation,Testing docs,0.6
+/Users/sa/rh.1/scripts,scripts_docs,Scripts documentation,Automation docs,0.6
+/Users/sa/rh.1/config,config_docs,Configuration documentation,Config docs,0.6
+/Users/sa/rh.1/logs,logs_docs,Logs documentation,Troubleshooting docs,0.6
+/Users/sa/rh.1/data,data_docs,Data documentation,Data docs,0.6
+/Users/sa/rh.1/archive,archive_docs,Archive documentation,Archive docs,0.6
+/Users/sa/rh.1/artifacts,artifacts_docs,Artifacts documentation,Build docs,0.6
+/Users/sa/rh.1/emergentia,emergentia_docs,Emergent data documentation,Research docs,0.5
+/Users/sa/rh.1/friends,friends_docs,External projects documentation,External docs,0.5
+/Users/sa/rh.1/mirror,mirror_docs,Mirror data documentation,Mirror docs,0.5
+/Users/sa/rh.1/ops,ops_docs,Operations documentation,Operations docs,0.5
+/Users/sa/rh.1/vendor,vendor_docs,Vendor documentation,Third-party docs,0.6
+/Users/sa/rh.1/build,build_docs,Build documentation,Build docs,0.6
+/Users/sa/rh.1/dist,dist_docs,Distribution documentation,Distribution docs,0.6
+/Users/sa/rh.1/target,target_docs,Target documentation,Build target docs,0.6
+/Users/sa/rh.1/.next,next_docs,Next.js documentation,Framework docs,0.6
+/Users/sa/rh.1/node_modules,node_modules_docs,Node modules documentation,Dependency docs,0.5
+/Users/sa/rh.1/.git,git_docs,Git documentation,Version control docs,0.6
+/Users/sa/rh.1/.venv,venv_docs,Virtual environment documentation,Environment docs,0.6
+/Users/sa/rh.1/contexts_map_mindflow_map_play.toml,context_map,Context mapping configuration,Mapping docs,0.7
+/Users/sa/rh.1/LATEST.json,latest_json,Latest data JSON,Data documentation,0.7
+/Users/sa/rh.1/metrics/memory_metrics.json,memory_json,Memory metrics JSON,Performance docs,0.7
+/Users/sa/rh.1/package.json,package_json,Package configuration,Dependency docs,0.7
+/Users/sa/rh.1/tsconfig.json,tsconfig_json,TypeScript configuration,Config docs,0.7
+/Users/sa/rh.1/firebase.json,firebase_json,Firebase configuration,Config docs,0.7
+/Users/sa/rh.1/firestore.rules,firestore_rules,Firestore rules,Security docs,0.7
+/Users/sa/rh.1/fly.toml,fly_toml,Fly.io configuration,Deployment docs,0.7
+/Users/sa/rh.1/Dockerfile,dockerfile,Docker configuration,Container docs,0.7
+/Users/sa/rh.1/docker-compose.yml,docker_compose,Docker Compose configuration,Container docs,0.7
+/Users/sa/rh.1/.gitignore,gitignore,Git ignore configuration,Version control docs,0.7
+/Users/sa/rh.1/.windsurfignore,windsurfignore,Windsurf ignore configuration,Development docs,0.7
+/Users/sa/rh.1/.dockerignore,dockerignore,Docker ignore configuration,Container docs,0.7
+/Users/sa/rh.1/.gcloudignore,gcloudignore,Google Cloud ignore configuration,Cloud docs,0.7
+/Users/sa/rh.1/.gitmodules,gitmodules,Git submodules configuration,Version control docs,0.7
+/Users/sa/rh.1/.roomodes,roomodes,Roo modes configuration,Development docs,0.7
+/Users/sa/rh.1/.gemini,gemini,Gemini configuration,Development docs,0.7
+/Users/sa/rh.1/.env,env_file,Environment variables,Configuration docs,0.7
+/Users/sa/rh.1/.env.example,env_example,Environment variables template,Configuration docs,0.7
+/Users/sa/rh.1/.DS_Store,dstore,macOS metadata,System docs,0.4
+/Users/sa/rh.1/LICENSE,license,Project license,Legal docs,0.7
+/Users/sa/rh.1/NOTICE,notice,Project notice,Legal docs,0.7
+/Users/sa/rh.1/session_store.db,session_db,Session storage database,Database docs,0.7
+/Users/sa/rh.1/Play.bndb,playwright_db,Playwright database,Testing docs,0.7
+/Users/sa/rh.1/rhea,rhea_binary,Rhea main binary,Executable docs,0.7
+/Users/sa/rh.1/find_jscore_bootstrap.py,bootstrap_script,Bootstrap finder script,Script docs,0.7
+/Users/sa/rh.1/find_selrefs.py,selrefs_script,Selector references finder script,Script docs,0.7
+/Users/sa/rh.1/mirror_assets.py,mirror_script,Asset mirroring script,Script docs,0.7
+/Users/sa/rh.1/inspect_0.py,inspect_script,Inspection script,Script docs,0.7
+/Users/sa/rh.1/test_cli.sh,cli_test_script,CLI test script,Script docs,0.7
+/Users/sa/rh.1/test_integration.sh,integration_test_script,Integration test script,Script docs,0.7
+/Users/sa/rh.1/verify-stage5.sh,stage5_verify_script,Stage 5 verification script,Script docs,0.7
+/Users/sa/rh.1/brain-capsule-20260228T211513Z-smoke-20260228t211513z.tar.gz,brain_capsule,Brain capsule archive,Archive docs,0.7
+/Users/sa/rh.1/brain-capsule-20260228T211513Z-smoke-20260228t211513z.tar.gz.sha256,brain_capsule_checksum,Brain capsule checksum,Archive docs,0.7
+/Users/sa/rh.1/frontier.sock,socket_file,Frontier socket file,Network docs,0.5
+/Users/sa/rh.1/play_frame_00.png,play_frame,Play frame screenshot,Visual docs,0.6
+/Users/sa/rh.1/themis-demo-seeded.png,themis_demo,Themis demo seeded screenshot,Visual docs,0.6
+/Users/sa/rh.1/themis-demo-tooltip.png,themis_tooltip,Themis demo tooltip screenshot,Visual docs,0.6
+/Users/sa/rh.1/tooltip-rag-hover.png,tooltip_rag,Tooltip RAG hover screenshot,Visual docs,0.6
+/Users/sa/rh.1/RheaCommandCentre.dmg,rhea_dmg,Rhea Command Centre installer,Installation docs,0.7
+/Users/sa/rh.1/cc,cc_executable,CC executable,Executable docs,0.6
+/Users/sa/rh.1/dist/index.js,dist_js,Distribution JavaScript,Code docs,0.7
+/Users/sa/rh.1/dist/index.d.ts,dist_dts,Distribution TypeScript definitions,Code docs,0.7
+/Users/sa/rh.1/frontier-gem/gem-extension/background.js,gem_background,Gem extension background script,Extension docs,0.7
+/Users/sa/rh.1/rhea-atlas-out/_next/static/ySR0xYfGxmYVWNI_Ayqpa/_ssgManifest.js,ssg_manifest,Next.js SSG manifest,Build docs,0.6
+/Users/sa/rh.1/rhea-atlas-out/_next/static/ySR0xYfGxmYVWNI_Ayqpa/_buildManifest.js,build_manifest,Next.js build manifest,Build docs,0.6
+/Users/sa/rh.1/requirements.txt,requirements_txt,Python requirements,Dependency docs,0.7

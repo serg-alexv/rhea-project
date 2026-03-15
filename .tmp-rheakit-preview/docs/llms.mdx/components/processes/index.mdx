@@ -1,0 +1,46 @@
+# ProcessesView
+
+
+
+ProcessesView [#processesview]
+
+ProcessesView is the operator pane for supervisor-backed sessions.
+
+Features [#features]
+
+* List active and historical sessions
+* Spawn new agents with optional prompts
+* Kill sessions with confirmation
+* Pull recent output lines
+* Send interactive input to a session
+* Show running versus stopped counts in the toolbar
+
+Core model [#core-model]
+
+```swift
+public struct SupervisorSession: Codable, Identifiable {
+    public let id: String
+    public let agent: String?
+    public let status: String?
+    public let started_at: String?
+    public let pid: Int?
+
+    public var isAlive: Bool
+    public var stateColor: String
+}
+```
+
+API touchpoints [#api-touchpoints]
+
+| Action        | Endpoint                              |
+| ------------- | ------------------------------------- |
+| List sessions | `GET /supervisor/sessions`            |
+| Spawn         | `POST /supervisor/spawn`              |
+| Kill          | `POST /supervisor/kill/:id`           |
+| Read output   | `GET /supervisor/output/:id?lines=50` |
+| Send input    | `POST /supervisor/input/:id`          |
+
+Notes [#notes]
+
+* Output is fetched on demand, not streamed by default
+* Known agent names are exposed in the spawn sheet for fast reuse

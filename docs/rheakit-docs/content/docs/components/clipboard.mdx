@@ -1,0 +1,60 @@
+---
+title: ClipboardView
+description: Cross-device clipboard sync with privacy levels, pinning, expiry, and operator-friendly status cues.
+---
+
+# ClipboardView
+
+ClipboardView manages text, links, and code snippets across devices via the Rhea backend.
+
+## Usage
+
+```swift
+import RheaKit
+
+struct ClipboardTab: View {
+    var body: some View {
+        ClipboardView()
+    }
+}
+```
+
+## Features
+
+- Push local clipboard content to `POST /clipboard`
+- Pull cloud clips back to the local pasteboard
+- Auto-poll every five seconds
+- Pin and unpin important clips
+- Privacy levels: normal, sensitive, secret
+- Distinct icons by content type
+- Expiry handling and swipe-to-delete
+
+## Data model
+
+```swift
+struct ClipEntry: Identifiable, Codable {
+    let id: String
+    let content: String
+    let contentType: String
+    let contentPreview: String?
+    let deviceName: String
+    let privacy: String
+    let pinned: Bool
+    let createdAt: String
+    let expiresAt: String?
+}
+```
+
+## Privacy levels
+
+| Level | Badge | Behavior |
+| --- | --- | --- |
+| `normal` | — | Full content visible and copyable |
+| `sensitive` | 🔒 | Content remains visible but marked |
+| `secret` | 🔐 | Only the preview is shown; tap-to-copy is disabled |
+
+## Notes
+
+- Device name is auto-detected from the host platform
+- Auth uses JWT bearer with a dev fallback key when available
+- URL content is auto-detected from the pasted string

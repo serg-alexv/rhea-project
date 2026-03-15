@@ -1,0 +1,130 @@
+# Design System
+
+
+
+Design System [#design-system]
+
+RheaKit's visual language is defined in `RheaTheme`: one set of tokens for background, emphasis, operational state, and severity. It is deliberately dark-first and data-forward.
+
+Color palette [#color-palette]
+
+| Token        | Value                | Usage                        |
+| ------------ | -------------------- | ---------------------------- |
+| `bg`         | `rgb(15, 15, 26)`    | Primary background           |
+| `card`       | `rgb(26, 26, 41)`    | Panel surface                |
+| `cardBorder` | `white @ 6%`         | Subtle panel outline         |
+| `accent`     | `rgb(102, 217, 255)` | Primary interactive cyan     |
+| `green`      | `rgb(77, 230, 128)`  | Healthy, live, success       |
+| `amber`      | `rgb(255, 199, 51)`  | Warning, compact, degraded   |
+| `red`        | `rgb(255, 89, 89)`   | Error, critical, blocked     |
+| `purple`     | `rgb(179, 128, 255)` | Proof and hard-fail emphasis |
+| `muted`      | `white @ 50%`        | Secondary text               |
+| `text`       | `white`              | Primary text                 |
+
+```swift
+Text("Online")
+    .foregroundStyle(RheaTheme.green)
+
+Text("3 alerts")
+    .foregroundStyle(RheaTheme.red)
+
+Rectangle()
+    .fill(RheaTheme.bg)
+```
+
+Semantic color functions [#semantic-color-functions]
+
+`modeColor(_ mode: String) -> Color` [#modecolor_-mode-string---color]
+
+| Mode        | Color  |
+| ----------- | ------ |
+| `normal`    | green  |
+| `compact`   | amber  |
+| `critical`  | red    |
+| `hard_fail` | purple |
+
+`paceColor(_ pace: String) -> Color` [#pacecolor_-pace-string---color]
+
+| Pace     | Color |
+| -------- | ----- |
+| `green`  | green |
+| `yellow` | amber |
+| `red`    | red   |
+
+`priorityColor(_ priority: String) -> Color` [#prioritycolor_-priority-string---color]
+
+| Priority | Color  |
+| -------- | ------ |
+| `P0`     | red    |
+| `P1`     | amber  |
+| `P2`     | accent |
+
+`statusColor(_ status: String) -> Color` [#statuscolor_-status-string---color]
+
+| Status    | Color     |
+| --------- | --------- |
+| `open`    | secondary |
+| `claimed` | accent    |
+| `done`    | green     |
+| `blocked` | red       |
+
+GlassCard [#glasscard]
+
+`.glassCard()` is the package's signature shell for compact, dense information surfaces.
+
+```swift
+VStack {
+    Text("Agent: Rex")
+    Text("Tokens: 12K")
+}
+.glassCard()
+```
+
+Implementation:
+
+```swift
+public struct GlassCard: ViewModifier {
+    public init() {}
+
+    public func body(content: Content) -> some View {
+        content
+            .padding(16)
+            .background(
+                RoundedRectangle(cornerRadius: 16)
+                    .fill(RheaTheme.card)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 16)
+                            .stroke(RheaTheme.cardBorder, lineWidth: 1)
+                    )
+            )
+    }
+}
+```
+
+Typography posture [#typography-posture]
+
+RheaKit does not hide behind decorative type. It uses monospaced data presentation to keep numbers, pace, and status legible under load.
+
+| Context                  | Font pattern                                            |
+| ------------------------ | ------------------------------------------------------- |
+| Section headers          | `.system(size: 10, weight: .bold, design: .monospaced)` |
+| Body and payload content | `.system(size: 12, design: .monospaced)`                |
+| Badges and status pills  | `.system(size: 9, weight: .bold, design: .monospaced)`  |
+| Tiny indicators          | `.system(size: 8-9, design: .monospaced)`               |
+
+Design rules that matter in practice [#design-rules-that-matter-in-practice]
+
+1. Every visible status color must map back to a real state field.
+2. Every number shown in a card must have a refresh or provenance path.
+3. Decorative panels are allowed, but they cannot outrank the primary action or the current risk signal.
+4. Zero after restart is not a bug if the source of truth is in-memory governor state. The UI should treat that zero as truth, not as loss.
+
+Where to go next [#where-to-go-next]
+
+<Cards>
+  <Card title="Architecture" href="./architecture" />
+
+  <Card title="GovernorView" href="./components/governor" />
+
+  <Card title="PulseMonitorView" href="./components/pulse-monitor" />
+</Cards>

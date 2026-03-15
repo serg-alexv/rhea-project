@@ -1,3 +1,14 @@
+FROM node:22-slim AS docs-builder
+
+WORKDIR /docs
+
+RUN corepack enable
+
+COPY docs/rheakit-docs/ ./
+
+RUN pnpm install --frozen-lockfile \
+    && pnpm build
+
 FROM python:3.11-slim
 
 WORKDIR /app
@@ -13,39 +24,27 @@ RUN pip install --no-cache-dir \
     fastapi==0.128.8 \
     uvicorn==0.39.0 \
     requests==2.32.3 \
+    httpx==0.28.1 \
     litellm \
     toml==0.10.2 \
     pyjwt==2.10.1 \
+    email-validator==2.3.0 \
+    redis==6.4.0 \
+    python-dotenv==1.1.1 \
     google-auth==2.38.0 \
     google-auth-httplib2==0.2.0 \
     stripe==11.4.1 \
     psycopg2-binary==2.9.10 \
+    pymongo==4.15.1 \
     google-cloud-secret-manager==2.22.0
 
-# Copy all source modules
-COPY src/tribunal_api.py src/
-COPY src/rhea_bridge.py src/
-COPY src/consensus_analyzer.py src/
-COPY src/aletheia_api.py src/
-COPY src/aletheia_pipeline.py src/
-COPY src/office.py src/
-COPY src/token_governor.py src/
-COPY src/task_db.py src/
-COPY src/rhea_db.py src/
-COPY src/rhea_profile_manager.py src/
-COPY src/rhea_visual_context.py src/
-COPY src/env_loader.py src/
-COPY src/auth_api.py src/
-COPY src/billing.py src/
-COPY src/ndi_bridge.py src/
-COPY src/task_queue.py src/
-COPY src/rhea_supervisor.py src/
-COPY src/workflow_engine.py src/
-COPY src/crdb_store.py src/
-COPY src/rhea_secrets.py src/
+# Copy all top-level backend modules so local imports stay intact without
+# dragging cache folders or hidden local tooling into the image context.
+COPY src/*.py src/
 
 # Copy pre-built Atlas static frontend
 COPY rhea-atlas-out/ static_frontend/
+COPY --from=docs-builder /docs/out docs_static/
 
 # Create runtime directories
 RUN mkdir -p logs data

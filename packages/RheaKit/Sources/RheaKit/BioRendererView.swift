@@ -25,6 +25,11 @@ public struct BioRendererView: View {
     @State private var errorMsg: String?
     @State private var webViewRef = WebViewRef()
 
+    // Pathway SVG state
+    @State private var pathwaySVG: String? = nil
+    @State private var isPathwayLoading = false
+    @State private var pathwayError: String? = nil
+
     // Analysis panel
     @State private var analysisText: String? = nil
     @State private var isAnalysisLoading = false
@@ -60,15 +65,24 @@ public struct BioRendererView: View {
                 // Search + presets
                 controlBar
 
-                // 3D viewer
+                // 3D viewer or Pathway SVG
                 BioWebView(
                     moleculeID: currentID,
                     isSMILES: isSmilesMode,
                     style: renderStyle,
                     colorScheme: colorScheme,
+                    rawHTML: pathwaySVG,
                     ref: webViewRef
                 )
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .overlay {
+                    if isPathwayLoading {
+                        ProgressView("Generating Pathway...")
+                            .padding()
+                            .background(.ultraThinMaterial)
+                            .cornerRadius(10)
+                    }
+                }
 
                 // Analysis panel (collapsible, shown after Ask)
                 if analysisText != nil || isAnalysisLoading || analysisError != nil {
@@ -155,6 +169,13 @@ public struct BioRendererView: View {
                 }
                 .disabled(isAnalysisLoading)
 
+                Button(action: generatePathway) {
+                    Image(systemName: "point.3.connected.trianglepath.dotted")
+                        .font(.system(size: 14, weight: .semibold))
+                        .foregroundStyle(isPathwayLoading ? .secondary : RheaTheme.purple)
+                }
+                .disabled(isPathwayLoading)
+
                 Button(action: loadStructure) {
                     Image(systemName: "magnifyingglass")
                         .font(.system(size: 14, weight: .semibold))
@@ -193,6 +214,7 @@ public struct BioRendererView: View {
                             currentID = preset.id
                             searchText = preset.id
                             isSmilesMode = false
+                            clearPathwayPreview()
                             clearAnalysis()
                             fetchMetadata(for: preset.id)
                         } label: {
@@ -227,6 +249,7 @@ public struct BioRendererView: View {
                             currentID = preset.smiles
                             searchText = preset.smiles
                             isSmilesMode = true
+                            clearPathwayPreview()
                             clearAnalysis()
                             clearMeta()
                         } label: {
@@ -254,7 +277,7 @@ public struct BioRendererView: View {
                 .padding(.horizontal, 12)
             }
 
-            if let err = errorMsg {
+            if let err = pathwayError ?? errorMsg {
                 Text(err)
                     .font(.system(size: 11, design: .monospaced))
                     .foregroundStyle(RheaTheme.red)
@@ -509,6 +532,7 @@ public struct BioRendererView: View {
         let raw = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !raw.isEmpty else { return }
         errorMsg = nil
+        clearPathwayPreview()
 
         if isSMILES(raw) {
             currentID = raw
@@ -615,6 +639,72 @@ public struct BioRendererView: View {
         metaResolution = nil
         metaOrganism = nil
     }
+
+    private func clearPathwayPreview() {
+        pathwaySVG = nil
+        pathwayError = nil
+        isPathwayLoading = false
+    }
+
+    private func generatePathway() {
+        guard !isPathwayLoading else { return }
+        isPathwayLoading = true
+        pathwayError = nil
+
+        guard let url = pathwayServiceURL() else {
+            pathwayError = "Invalid Pathway URL"
+            isPathwayLoading = false
+            return
+        }
+
+        // Simple demo payload based on current molecule
+        let payload: [String: Any] = [
+            "nodes": [
+                ["id": "source", "label": isSmilesMode ? "Input" : currentID],
+                ["id": "target", "label": "Metabolite X"]
+            ],
+            "edges": [
+                ["from": "source", "to": "target"]
+            ]
+        ]
+        
+        var req = URLRequest(url: url)
+        req.httpMethod = "POST"
+        req.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        req.httpBody = try? JSONSerialization.data(withJSONObject: payload)
+
+        URLSession.shared.dataTask(with: req) { data, _, error in
+            DispatchQueue.main.async {
+                self.isPathwayLoading = false
+                if let error = error {
+                    self.pathwayError = error.localizedDescription
+                    return
+                }
+                guard let data = data,
+                      let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+                      let svg = json["data"] as? String else {
+                    self.pathwayError = "Failed to parse SVG response"
+                    return
+                }
+                self.pathwaySVG = svg
+            }
+        }.resume()
+    }
+
+    private func pathwayServiceURL() -> URL? {
+        let trimmed = apiBaseURL.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard var comps = URLComponents(string: trimmed) else { return nil }
+
+        comps.path = "/generate/pathway"
+        comps.query = nil
+        comps.fragment = nil
+
+        if let host = comps.host, host == "localhost" || host == "127.0.0.1" {
+            comps.port = 3003
+        }
+
+        return comps.url
+    }
 }
 
 // MARK: - SMILES Heuristic
@@ -663,6 +753,7 @@ struct BioWebView: UIViewRepresentable {
     let isSMILES: Bool
     let style: String
     let colorScheme: String
+    let rawHTML: String?
     let ref: WebViewRef
 
     func makeUIView(context: Context) -> WKWebView {
@@ -673,19 +764,36 @@ struct BioWebView: UIViewRepresentable {
         webView.backgroundColor = .clear
         webView.scrollView.isScrollEnabled = false
         ref.webView = webView
-        loadMolecule(webView)
+        loadContent(webView)
         return webView
     }
 
     func updateUIView(_ webView: WKWebView, context: Context) {
-        loadMolecule(webView)
+        loadContent(webView)
     }
 
-    private func loadMolecule(_ webView: WKWebView) {
-        webView.loadHTMLString(
-            bioHTML(moleculeID: moleculeID, isSMILES: isSMILES, style: style, colorScheme: colorScheme),
-            baseURL: nil
-        )
+    private func loadContent(_ webView: WKWebView) {
+        if let raw = rawHTML {
+            // Load SVG directly with basic styling for full view
+            let wrappedHTML = """
+            <html>
+            <head>
+                <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+                <style>
+                    body { background: #0f0f1a; margin: 0; display: flex; align-items: center; justify-content: center; height: 100vh; }
+                    svg { max-width: 100%; max-height: 100%; }
+                </style>
+            </head>
+            <body>\(raw)</body>
+            </html>
+            """
+            webView.loadHTMLString(wrappedHTML, baseURL: nil)
+        } else {
+            webView.loadHTMLString(
+                bioHTML(moleculeID: moleculeID, isSMILES: isSMILES, style: style, colorScheme: colorScheme),
+                baseURL: nil
+            )
+        }
     }
 }
 #else
@@ -694,6 +802,7 @@ struct BioWebView: NSViewRepresentable {
     let isSMILES: Bool
     let style: String
     let colorScheme: String
+    let rawHTML: String?
     let ref: WebViewRef
 
     func makeNSView(context: Context) -> WKWebView {
@@ -701,19 +810,24 @@ struct BioWebView: NSViewRepresentable {
         webView.wantsLayer = true
         webView.layer?.backgroundColor = .clear
         ref.webView = webView
-        loadMolecule(webView)
+        loadContent(webView)
         return webView
     }
 
     func updateNSView(_ webView: WKWebView, context: Context) {
-        loadMolecule(webView)
+        loadContent(webView)
     }
 
-    private func loadMolecule(_ webView: WKWebView) {
-        webView.loadHTMLString(
-            bioHTML(moleculeID: moleculeID, isSMILES: isSMILES, style: style, colorScheme: colorScheme),
-            baseURL: nil
-        )
+    private func loadContent(_ webView: WKWebView) {
+        if let raw = rawHTML {
+            let wrappedHTML = "<html><body style='background:#0f0f1a;margin:0;display:flex;align-items:center;justify-content:center;height:100vh;'>\(raw)</body></html>"
+            webView.loadHTMLString(wrappedHTML, baseURL: nil)
+        } else {
+            webView.loadHTMLString(
+                bioHTML(moleculeID: moleculeID, isSMILES: isSMILES, style: style, colorScheme: colorScheme),
+                baseURL: nil
+            )
+        }
     }
 }
 #endif

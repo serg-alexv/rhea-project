@@ -31,7 +31,7 @@ from typing import Optional
 
 from fastapi import FastAPI, HTTPException, Header, Depends, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import StreamingResponse
+from fastapi.responses import RedirectResponse, StreamingResponse
 from pydantic import BaseModel, Field
 
 _PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -2306,8 +2306,8 @@ async def community():
     return HTMLResponse(content=html)
 
 
-@app.get("/docs")
-async def api_docs():
+@app.get("/api-docs")
+async def api_docs_page():
     """API Documentation page."""
     from fastapi.responses import HTMLResponse
     body = """
@@ -6280,6 +6280,16 @@ async def create_orchestration_snapshot(body: SnapshotRequest):
 # ---------------------------------------------------------------------------
 # Static frontend (Atlas) — served as catch-all AFTER all API routes
 # ---------------------------------------------------------------------------
+_DOCS_STATIC_DIR = Path(__file__).parent.parent / "docs_static"
+if _DOCS_STATIC_DIR.is_dir():
+    from fastapi.staticfiles import StaticFiles
+
+    @app.get("/docs", include_in_schema=False)
+    async def docs_redirect():
+        return RedirectResponse(url="/docs/", status_code=307)
+
+    app.mount("/docs", StaticFiles(directory=str(_DOCS_STATIC_DIR), html=True), name="docs")
+
 _STATIC_DIR = Path(__file__).parent.parent / "static_frontend"
 if _STATIC_DIR.is_dir():
     from fastapi.staticfiles import StaticFiles

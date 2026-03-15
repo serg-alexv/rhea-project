@@ -1,0 +1,57 @@
+# DialogView
+
+
+
+DialogView [#dialogview]
+
+DialogView is the conversational surface over the tribunal. Every prompt goes through the multi-model consensus engine instead of a single raw model response.
+
+Usage [#usage]
+
+```swift
+import RheaKit
+
+struct ChatTab: View {
+    var body: some View {
+        DialogView()
+    }
+}
+```
+
+Features [#features]
+
+* Tribunal-backed responses
+* Markdown rendering via `MarkdownUI`
+* Conversation history from `GET /cc/dialog`
+* Agreement score, models responded, and elapsed time metadata
+* Distinct presentation for human and AI messages
+
+Core data models [#core-data-models]
+
+```swift
+public struct ChatMsg: Codable, Identifiable {
+    public let id: String
+    public let sender: String
+    public let text: String
+    public let ts: String
+
+    public var isHuman: Bool
+    public var displayTime: String
+}
+```
+
+```swift
+public struct DialogResponse: Codable {
+    public let reply: String?
+    public let agreement_score: Double?
+    public let models_responded: Int?
+    public let elapsed_s: Double?
+    public let ts: String?
+}
+```
+
+Notes [#notes]
+
+* History is SQL-backed and survives backend restarts
+* Auto-scroll uses `ScrollViewReader`
+* This is the right pane when you need operator dialogue plus verification signal, not just raw chat

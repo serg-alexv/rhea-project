@@ -1,6 +1,6 @@
+use chrono::Utc;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
-use chrono::Utc;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ClipboardEntry {
@@ -15,12 +15,7 @@ pub struct ClipboardEntry {
 }
 
 impl ClipboardEntry {
-    pub fn new(
-        session_id: String,
-        device_id: String,
-        content_type: String,
-        data: String,
-    ) -> Self {
+    pub fn new(session_id: String, device_id: String, content_type: String, data: String) -> Self {
         ClipboardEntry {
             id: Uuid::new_v4().to_string(),
             session_id,

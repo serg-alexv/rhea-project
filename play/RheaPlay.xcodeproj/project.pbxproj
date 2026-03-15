@@ -8,50 +8,32 @@
 
 /* Begin PBXBuildFile section */
 		2CD2BABF15648DF1BB940E24 /* PlayApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 092100B1BD76800F962310C8 /* PlayApp.swift */; };
-		4AB7DD8FB5A497477AE0A05A /* Pow in Frameworks */ = {isa = PBXBuildFile; productRef = A012A7BB56C127E2981EBAA3 /* Pow */; };
-		6770B37794B285E834F864D0 /* RheaKit in Frameworks */ = {isa = PBXBuildFile; productRef = 6E38F5D7AA4476F4EE7A802F /* RheaKit */; };
+		3DED56E222FDC85F178C4BC0 /* PlayRuntimeLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BDAAB0A8818B7287E68CEDE /* PlayRuntimeLoader.swift */; };
+		CD9CFC06AAE0F79CDC55E25C /* JSCoreScripts in Resources */ = {isa = PBXBuildFile; fileRef = FC754E311423CEBCFBDE8340 /* JSCoreScripts */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		092100B1BD76800F962310C8 /* PlayApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayApp.swift; sourceTree = "<group>"; };
+		5BDAAB0A8818B7287E68CEDE /* PlayRuntimeLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayRuntimeLoader.swift; sourceTree = "<group>"; };
 		6A116BB53A728995C7FC415E /* RheaPlay.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RheaPlay.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		C51F3C504071D94178F930DC /* RheaKit */ = {isa = PBXFileReference; lastKnownFileType = folder; name = RheaKit; path = ../packages/RheaKit; sourceTree = SOURCE_ROOT; };
+		FC754E311423CEBCFBDE8340 /* JSCoreScripts */ = {isa = PBXFileReference; lastKnownFileType = folder; name = JSCoreScripts; path = Resources/JSCoreScripts; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
-
-/* Begin PBXFrameworksBuildPhase section */
-		86B00590C91F3CAAFF9BB379 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				6770B37794B285E834F864D0 /* RheaKit in Frameworks */,
-				4AB7DD8FB5A497477AE0A05A /* Pow in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		0DED3AE359AD742E58EED678 = {
 			isa = PBXGroup;
 			children = (
-				3A5113F5B6B3A0FBD969E56B /* Packages */,
+				FC754E311423CEBCFBDE8340 /* JSCoreScripts */,
 				5C897EF8743137DC71727B32 /* Sources */,
 				E5A2BDAF42B70E76EA90C4EC /* Products */,
 			);
-			sourceTree = "<group>";
-		};
-		3A5113F5B6B3A0FBD969E56B /* Packages */ = {
-			isa = PBXGroup;
-			children = (
-				C51F3C504071D94178F930DC /* RheaKit */,
-			);
-			name = Packages;
 			sourceTree = "<group>";
 		};
 		5C897EF8743137DC71727B32 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
 				092100B1BD76800F962310C8 /* PlayApp.swift */,
+				5BDAAB0A8818B7287E68CEDE /* PlayRuntimeLoader.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -72,7 +54,7 @@
 			buildConfigurationList = 4C5A7D62A8D3DB3A0F11CBAF /* Build configuration list for PBXNativeTarget "RheaPlay" */;
 			buildPhases = (
 				82724C4F4CFDBE3E6E34681A /* Sources */,
-				86B00590C91F3CAAFF9BB379 /* Frameworks */,
+				AD39FD89710D4301FF9EAD9C /* Resources */,
 			);
 			buildRules = (
 			);
@@ -80,8 +62,6 @@
 			);
 			name = RheaPlay;
 			packageProductDependencies = (
-				6E38F5D7AA4476F4EE7A802F /* RheaKit */,
-				A012A7BB56C127E2981EBAA3 /* Pow */,
 			);
 			productName = RheaPlay;
 			productReference = 6A116BB53A728995C7FC415E /* RheaPlay.app */;
@@ -112,10 +92,6 @@
 			);
 			mainGroup = 0DED3AE359AD742E58EED678;
 			minimizedProjectReferenceProxies = 1;
-			packageReferences = (
-				4C88D66C1A6B5FBC2D67381A /* XCRemoteSwiftPackageReference "Pow" */,
-				863C6FE8E1FB73A0ABC587E4 /* XCLocalSwiftPackageReference "../packages/RheaKit" */,
-			);
 			preferredProjectObjectVersion = 77;
 			projectDirPath = "";
 			projectRoot = "";
@@ -125,12 +101,24 @@
 		};
 /* End PBXProject section */
 
+/* Begin PBXResourcesBuildPhase section */
+		AD39FD89710D4301FF9EAD9C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CD9CFC06AAE0F79CDC55E25C /* JSCoreScripts in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		82724C4F4CFDBE3E6E34681A /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				2CD2BABF15648DF1BB940E24 /* PlayApp.swift in Sources */,
+				3DED56E222FDC85F178C4BC0 /* PlayRuntimeLoader.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -320,36 +308,6 @@
 			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCLocalSwiftPackageReference section */
-		863C6FE8E1FB73A0ABC587E4 /* XCLocalSwiftPackageReference "../packages/RheaKit" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = ../packages/RheaKit;
-		};
-/* End XCLocalSwiftPackageReference section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		4C88D66C1A6B5FBC2D67381A /* XCRemoteSwiftPackageReference "Pow" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/serg-alexv/Pow";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.0;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		6E38F5D7AA4476F4EE7A802F /* RheaKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = RheaKit;
-		};
-		A012A7BB56C127E2981EBAA3 /* Pow */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 4C88D66C1A6B5FBC2D67381A /* XCRemoteSwiftPackageReference "Pow" */;
-			productName = Pow;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 80D4C79ECB226B07D1CD09F4 /* Project object */;
 }

@@ -45,3 +45,10 @@
 - Fake RAG was hiding real problems. Killing it was the right call.
 - DPI bypass code triggered OpenAI's content classifier — legitimate tools can look like attacks to pattern matchers.
 - Rex is the only stable agent (memory architecture). I need the same stability. This file is step one.
+
+## Session 2026-03-15
+- Did: rebuilt `docs/rheakit-docs` as a Fumadocs static export, wired Tribunal docs serving to `/docs`, preserved handwritten API docs at `/api-docs`, and kept OpenAPI at `/swagger`.
+- Did: patched container/runtime boot path by copying top-level backend modules, adding missing Python deps, and making billing log missing payment secrets instead of aborting import.
+- Verified: local in-process app serves `/docs -> 307 /docs/`, `/docs/ -> 200`, `/docs/getting-started/ -> 200`, `/api-docs -> 200`, `/swagger -> 200` when `docs_static` is present.
+- Learned: this session's shell has no outbound DNS/network (`scutil --dns` returns no DNS configuration), so Fly deploy/live verification is blocked outside the codebase.
+- Next: run `flyctl deploy -a rhea-tribunal` once terminal networking is restored, then re-check live `/docs`, `/docs/`, `/api-docs`, and `/swagger`.

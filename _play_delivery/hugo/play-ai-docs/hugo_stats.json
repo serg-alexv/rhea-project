@@ -1,0 +1,54 @@
+{
+  "htmlElements": {
+    "tags": [
+      "a",
+      "article",
+      "body",
+      "code",
+      "div",
+      "footer",
+      "h1",
+      "h2",
+      "h3",
+      "head",
+      "header",
+      "html",
+      "li",
+      "main",
+      "meta",
+      "nav",
+      "p",
+      "pre",
+      "style",
+      "title",
+      "ul"
+    ],
+    "classes": [
+      "container",
+      "content",
+      "footer-content",
+      "header-content",
+      "site-title",
+      "toc"
+    ],
+    "ids": [
+      "TableOfContents",
+      "add-context",
+      "availability",
+      "best-practices",
+      "command",
+      "commands",
+      "design",
+      "effect",
+      "generate",
+      "image",
+      "interaction",
+      "learn",
+      "play-ai-panel",
+      "prefab",
+      "rename",
+      "select",
+      "text"
+    ]
+  }
+}

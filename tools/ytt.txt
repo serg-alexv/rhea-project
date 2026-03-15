@@ -1,0 +1,122 @@
+
+
+Transcript
+Chapter 1: In This Video
+0:00I have 25 agents running 24/7 autonomously around the clock. I have a
+0:077 secondsCTO inspired by Elon Musk, a CMO inspired by Gary Vaynerchuk, and then a CRO inspired by Warren Buffett, and I
+0:1616 secondsmanage all of them from one dashboard that I've been slowly building out and improving on. Today, I'm going to show you exactly how it works. So, without
+0:2424 secondssquiroo, let's build. As you can see here on the screen, here's Muddy OS. I have different applications within it.
+Chapter 2: Ops Dashboard Preview
+0:3131 secondsThis is the operations application. I'm not going to dig into these right now.
+0:3535 secondsWe'll save that for another video. But I replicated, you know, a mix between Windows and Mac, right? We put these
+0:4343 secondsthese icons on the top right, which that's just the Windows guy and me. But let's dig into the tabs, shall we? The task manager shows off how many sessions
+Chapter 3: Task Manager
+0:5252 secondsare running, what's idle, how many tokens, what's the estimated cost. It shows my model fleet that we utilize which is Opus 4.6 for a lot of the heavy
+1:011 minute, 1 secondlifting. We have a backup for Opus 4.5 anti-gravity via anti-gravity OOTH. And
+1:081 minute, 8 secondsthen we have Gemini 3 Pro preview. We're using GPT 5.3 codecs, Gemini 3 Flash,
+1:141 minute, 14 secondsand Nano Banana Pro. As you can see here, I have a list of all active sessions that allow me to view the transcript of any particular session.
+1:231 minute, 23 secondsYou go down. I have all my cron jobs in place here. I have weekly jobs in place here. I have an overnight log here,
+1:311 minute, 31 secondswhich helps me just kind of briefly look at this once a day. And if I have any questions, concerns, or comments, I feed
+1:381 minute, 38 secondsit into the chat. Right. All right. The org chart. This is where I've spent the most time going back and forth with
+Chapter 4: Org Chart
+1:461 minute, 46 secondsdifferent approaches, different structures, and I I've I I believe I've nailed the winner, right? I have me up top, the CEO, focused on vision,
+1:551 minute, 55 secondsstrategy, final decisions. Additionally,
+1:581 minute, 58 secondsI make these videos and do these live streams. That's not going to change anytime soon. I have my COO, Muddy.
+2:052 minutes, 5 secondsOriginally, when I made OpenClaw, I just wanted an executive assistant, but my vision, my imagination grew once I
+2:132 minutes, 13 secondslearned and started testing its capabilities. So, Muddy's focus is research, delegation, which is a key note. Muddy is always available to me.
+2:222 minutes, 22 secondsHe never cues prompts. He always delegates. Always delegates. Unless of course I tell him to do it now. Then
+2:312 minutes, 31 secondshe'll do that task at hand. Now execution and orchestration. Then below we have our three department heads. We
+2:392 minutes, 39 secondshave a CTO named Elon. Shout out Elon Musk. We have a CMO named Gary. Shout out Gary Vaynerchuk. And then we have a
+2:472 minutes, 47 secondsCRO named Warren. Shout out Warren Buffett. I'm gonna expand all just to show you my current setup as of
+2:562 minutes, 56 secondsrecording this on February 10th. Keep in mind I'm constantly making improvements to this. And you
+3:033 minutes, 3 secondsknow, every week I make significant adjustments to the way things flow. And after a few weeks of operation, I am very happy with where things are. But
+3:123 minutes, 12 secondskeep in mind, things will change. So if you want to see an updated video on this down the road, drop a comment below. Let me know that you like this video. Make
+3:203 minutes, 20 secondssure you hit like as well. So as you can see here, I have different divisions underneath each department. I have a backend and security division. I have
+3:293 minutes, 29 secondssub aents that are assigned codeex 5.3 and opus 4.6 depending on the task. Opus 4.6 is primarily a fail safe. Same with
+3:383 minutes, 38 secondscipher, right? These two are my codeex 5.3 heavy sub aents. And then I have a front-end and DevOps division with Pixel
+3:473 minutes, 47 secondsand Sentry operating solely off of Opus 4.6. Then I have a QA division which is
+3:543 minutes, 54 secondsjust has one sub agent as of now called audit and that's a codeex 5.3 and 4.6
+4:004 minutesOpus hybrid. Then we move over to my marketing division. Right, Gary's leading this one. We have a content
+4:084 minutes, 8 secondsdivision. We have Rex, our YouTube script writer, which uses a pairing of Opus 4.6 six for the research and heavy lifting preparing the script and then we
+4:164 minutes, 16 secondshave sonnet 4.5 doing the output. I found that this is an amazing pairing with how I've configured this system.
+4:234 minutes, 23 secondsSage research and analysis agent is opus 4.6. Our newsletter engine is opus 4.6.
+4:314 minutes, 31 secondsHype which is going to automate all of our content posting down the road. Hype,
+4:364 minutes, 36 secondswhich is essentially an automation to posting all of our content that is B-roll or copy based off of a long form video, uses Sonnet 4.5.
+4:474 minutes, 47 secondsCreative thumbnails and graphics, Opus 4.6 with a hint of Nano Banana Pro. And then video and motion graphics, as of
+4:564 minutes, 56 secondsnow, that's Gemini 3 Pro. Now moving on to Warren's department here, our chief revenue officer. We have a products
+5:035 minutes, 3 secondssubdivision with a product intelligent scout and then product launches and announcements herald. Right? You can see
+5:115 minutes, 11 secondsthe models being used here. Growth community. I'm not going to dig into it.
+5:155 minutes, 15 secondsOne thing I do want to touch on though is my community division is actually killing it right now and it uses one of the cheapest models out there which which is Gemini 3 flash. It's amazing.
+5:275 minutes, 27 secondsNow, keep in mind Clay, as you're about to find out later in this demo, he has its own workspace, his own brain, his
+5:355 minutes, 35 secondsown heartbeat. So, the reason Gemini 3 Flash is working so well is because I've fed it a ton of context so that it works the way I want it to work. Right? So,
+5:455 minutes, 45 secondsthis is my team. This is all the agents.
+5:485 minutes, 48 secondsIt is amazing what I've been able to accomplish with this team in place.
+Chapter 5: Voice Standups (AI Meetings)
+5:535 minutes, 53 secondsToday I just incorporated a standup part of this app. These are two standups that I created for this demonstration.
+6:026 minutes, 2 secondsI'm starting to get a lot of people reach out to the channel. They want me to start either pasting links in videos or or promoting tools. I have a very
+6:106 minutes, 10 secondsstrict rule where if I don't stand behind a product that I think you'll find useful, I will not promote it. It's
+6:186 minutes, 18 secondsjust I throw it out the window, right? I have to test something thoroughly before I even think about a partnership. And there's a few other criteria in there.
+6:276 minutes, 27 secondsSo I had a standup earlier today with my seuite team, right? All of my my leads
+6:346 minutes, 34 secondsand primarily it was Muddy leading the conversation here and they literally had a full-on conversation back and forth as
+6:446 minutes, 44 secondsyou can see here. Then I built out this um you know action items list where before they take action right things are
+6:526 minutes, 52 secondsunchecked. Once they take action I get this. Once it's all done I can go and review all of the changes and additions and work done.
+7:027 minutes, 2 secondsIt is amazing right? [clears throat]
+7:047 minutes, 4 secondsAbsolutely amazing. And then one other fun feature I incorporated into this is I didn't use 11 Labs for this. I used an
+7:127 minutes, 12 secondsopen source model by Microsoft. But check this out. I have a ping on Telegram once the standup is complete that I can listen to.
+7:227 minutes, 22 secondsAll right, team. Let's get into it.
+7:257 minutes, 25 secondsMarcelo's getting inbound partnership requests, companies wanting to pay for links in videos, product mentions, that
+7:327 minutes, 32 secondskind of thing. We've never monetized, so we need a proper pipeline, not some janky thing we throw together. A real pro.
+7:407 minutes, 40 secondsGood. First thing I want to say, and I cannot stress this enough, the fact that we're getting inbound at 520 subscribers
+7:507 minutes, 50 secondsis a signal. It means our audience fact. It's very slow paced, but I'm going to improve on the voice, right? Uh
+7:597 minutes, 59 secondsthis is version one. Well, it's version two, right? Because at first it was all just one static voice and I had to start giving them personalities and and cater
+8:088 minutes, 8 secondsthem to each person. Check out Gary's The engagement rate on our videos is way above average for the So very upbeat, speaks very quickly,
+8:178 minutes, 17 secondsjust like Gary, right? It's it's pretty cool. I love it. So yeah, literally they have a conversation without me. I mean,
+8:258 minutes, 25 secondsthis it it's blowing my mind here what I just accomplished today from entering in these two uh standup meeting topics. And
+8:348 minutes, 34 secondsI've also set an automation in place where they they do this autonomously as well. They're setting up their own chat
+8:418 minutes, 41 secondsroom to communicate with themselves. And once that's in place, I'm going to be able to view that chat room in here as a
+8:488 minutes, 48 secondsmoderator as well. Now, moving on to workspaces, right? This is what brings everything together. As I mentioned
+Chapter 6: Workspaces (Manage AI Agents)
+8:568 minutes, 56 secondsearlier, Clay has its own identity. He has its own soul. He has its own identity. He has its own obviously user
+9:039 minutes, 3 secondscontext. I didn't give him any context about me because it was unnecessary for the bot. It has its own suite of tools
+9:119 minutes, 11 secondsthat it has access to any agents that we assign it to. Right. Memory.
+9:199 minutes, 19 secondsI've I wanted to specifically set up memory for this uh claybot because I want it to start remembering
+9:269 minutes, 26 secondsconversations and important dates. and if it has a conversation with somebody about something they're working on, it
+9:329 minutes, 32 secondswill check in with them. Right? So, I really wanted Clay to really be a hands-on community member. Now, Elon has
+9:419 minutes, 41 secondsits own soul. Now, one distinction I want to make here is we have Muddy, my main brain, right? This is where I've
+9:489 minutes, 48 secondsfed countless countless hours of context into its memory right here. It's insane how much
+9:569 minutes, 56 secondsI've fed it. Um, that's like the mo that's that's the main brain, right?
+10:0110 minutes, 1 secondThen we have Elon. We have a soul and it's based off of right Elon Musk the person but a mix of certain characteristics I want to focus on.
+10:1210 minutes, 12 secondsRight now the key differentiator here between Elon and Clay, Clay has his own heartbeat because I wanted him to have
+10:2110 minutes, 21 secondshis own gateway to work out of. Whereas Elon, Gary, and Warren do not have their own gateway. They technically are colllocated with Muddy's gateway, right?
+10:3110 minutes, 31 secondsBecause they all communicate together.
+10:3310 minutes, 33 secondsSo, I didn't see a a reason to complicate the system, at least not yet.
+10:3710 minutes, 37 secondsI'm sure this will change with time. But as of now, the key differentiator right now between this individual bot that has
+10:4410 minutes, 44 secondsits own gateway with its own heartbeat is Muddy, Elon, Gary, Warren all operate off of the same gateway. Okay. And
+10:5210 minutes, 52 secondswhat's really cool is as I improve the system, I have a rule in place with Muddy that whatever's done across the
+10:5910 minutes, 59 secondsops dashboard, any new tabs, any existing tabs, any changes that it makes that are relevant to an agent workspace,
+11:0711 minutes, 7 secondsit updates this workspace so I have a place to reference how things are built.
+11:1211 minutes, 12 secondsRight? And then moving on to the last one is docs. Currently, I only set up the documentation for ops because this
+Chapter 7: Documentation
+11:2011 minutes, 20 secondsis the the the application I'm focused on most within muddy OS. But real time,
+11:2511 minutes, 25 secondsit updates the documentation as well. Like my agents and my department heads can reference the
+11:3311 minutes, 33 secondsdocumentation. It can reference everything within this OS as well. So I mean I have just been floored by the
+11:4211 minutes, 42 secondscapabilities of openclaw. Once you have that imagination,
+11:4611 minutes, 46 secondsalmost anything is possible. I just want to say thank you to Peter. Thank you for taking the time to build this. Thank you for making this open source. You're the
+Chapter 8: THANK YOU @steipete
+11:5511 minutes, 55 secondsgoat. You are the goat. You're making all this possible. Um, yeah. Thank you.
+12:0112 minutes, 1 secondSo, if you have any questions at all about my operating system, about this ops dashboard, drop a comment below. Let
+12:0912 minutes, 9 secondsme know what your question is. Let me know what you want me to expand on.
+12:1312 minutes, 13 secondsAnd yeah, I'm not an AI expert. I'm building in public and sharing what actually works. If you'd like to see me make a particular video around a specific topic, drop a comment below.
+Chapter 9: Closing Thoughts
+12:2212 minutes, 22 secondsLet me know who you are, what you do,
+12:2412 minutes, 24 secondswho your target audience is, and what your question is, and I will add a video to my queue customtailored just for you.
+12:3012 minutes, 30 secondsThank you so much for tuning in today's video. My name is Marcelo. This is Clear Mud, and clarity matters.
+12:3712 minutes, 37 seconds[music]
+
+Sync to video time
+
+All
+
+From the series
+
+For you

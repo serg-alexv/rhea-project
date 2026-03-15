@@ -1,0 +1,232 @@
+path,type,reason,preserve_priority,confidence
+/Users/sa/rh.1/packages,swift_packages,Swift packages directory,high,0.9
+/Users/sa/rh.1/packages/RheaKit,swift_ui_kit,RheaKit Swift UI package,high,0.9
+/Users/sa/rh.1/rhea-cli,rust_cli,Rhea CLI Rust application,high,0.9
+/Users/sa/rh.1/rhea-session-server,rust_server,Rust session server,high,0.9
+/Users/sa/rh.1/rhea-dash,rust_dashboard,Rust dashboard application,high,0.9
+/Users/sa/rh.1/frontier-gem,rust_gem,Frontier gem Rust application,high,0.8
+/Users/sa/rh.1/rhea-atlas,nextjs_app,Atlas Next.js application,high,0.8
+/Users/sa/rh.1/rhea-tui,rust_tui,Rust terminal UI application,medium,0.8
+/Users/sa/rh.1/rhea-angel-game,rust_game,Rust angel game application,medium,0.8
+/Users/sa/rh.1/rhea-biorenderer,rust_renderer,Rust biorenderer application,medium,0.8
+/Users/sa/rh.1/rhea-logical-keyboard,rust_keyboard,Rust logical keyboard application,medium,0.8
+/Users/sa/rh.1/rhea-ontology-explorer,rust_ontology,Rust ontology explorer application,medium,0.8
+/Users/sa/rh.1/rhea-rag,rust_rag,Rust RAG application,medium,0.8
+/Users/sa/rh.1/rhea-client,rust_client,Rust client application,medium,0.8
+/Users/sa/rh.1/rhea-ai-auth,rust_auth,Rust AI auth application,medium,0.8
+/Users/sa/rh.1/ios,ios_app,iOS application directory,high,0.9
+/Users/sa/rh.1/ios/RheaApp,ios_main_app,iOS main application,high,0.9
+/Users/sa/rh.1/ios/Frameworks,ios_frameworks,iOS frameworks directory,medium,0.8
+/Users/sa/rh.1/ios/RheaApp/Frameworks,ios_app_frameworks,iOS app frameworks,medium,0.8
+/Users/sa/rh.1/src,source_code,Source code directory,high,0.8
+/Users/sa/rh.1/tools,tools_directory,Development tools directory,medium,0.8
+/Users/sa/rh.1/tools/rhea-cc,cc_tool,Rhea CC tool,medium,0.8
+/Users/sa/rh.1/scripts,scripts_directory,Scripts directory,medium,0.8
+/Users/sa/rh.1/find_jscore_bootstrap.py,bootstrap_script,Bootstrap finder script,medium,0.7
+/Users/sa/rh.1/find_selrefs.py,selrefs_script,Selector references finder script,medium,0.7
+/Users/sa/rh.1/mirror_assets.py,mirror_script,Asset mirroring script,medium,0.7
+/Users/sa/rh.1/inspect_0.py,inspect_script,Inspection script,medium,0.7
+/Users/sa/rh.1/test_cli.sh,cli_test_script,CLI test script,medium,0.7
+/Users/sa/rh.1/test_integration.sh,integration_test_script,Integration test script,medium,0.7
+/Users/sa/rh.1/verify-stage5.sh,stage5_verify_script,Stage 5 verification script,medium,0.7
+/Users/sa/rh.1/rhea,rhea_binary,Rhea main binary,high,0.9
+/Users/sa/rh.1/cc,cc_binary,CC binary,medium,0.7
+/Users/sa/rh.1/frontier-gem/gem-extension,browser_extension,Gem browser extension,medium,0.8
+/Users/sa/rh.1/frontier-gem/gem-extension/background.js,extension_background,Extension background script,medium,0.8
+/Users/sa/rh.1/frontier-tui,frontier_tui,Frontier TUI application,medium,0.8
+/Users/sa/rh.1/friends/codex-cli,codex_cli,Codex CLI tool,medium,0.8
+/Users/sa/rh.1/friends/codex-cli/codex-rs,codex_rust,Codex Rust implementation,medium,0.8
+/Users/sa/rh.1/friends/codex-cli/codex-rs/lmstudio,lmstudio_client,LM Studio client,medium,0.8
+/Users/sa/rh.1/friends/codex-cli/codex-rs/rmcp-client,rmcp_client,RMCP client,medium,0.8
+/Users/sa/rh.1/friends/codex-cli/codex-rs/keyring-store,keyring_store,Keyring store,medium,0.8
+/Users/sa/rh.1/friends/codex-cli/codex-rs/ansi-escape,ansi_escape,ANSI escape library,medium,0.8
+/Users/sa/rh.1/friends/codex-cli/codex-rs/network-proxy,network_proxy,Network proxy,medium,0.8
+/Users/sa/rh.1/vendor,vendor_libs,Third-party libraries,medium,0.8
+/Users/sa/rh.1/vendor/libtailscale,tailscale_lib,Tailscale library,medium,0.8
+/Users/sa/rh.1/vendor/libtailscale/swift,tailscale_swift,Tailscale Swift implementation,medium,0.8
+/Users/sa/rh.1/vendor/libtailscale/swift/build,tailscale_build,Tailscale build artifacts,low,0.6
+/Users/sa/rh.1/vendor/libtailscale/libtailscale_ios_sim.a,tailscale_ios_sim,Tailscale iOS simulator library,medium,0.8
+/Users/sa/rh.1/vendor/libtailscale/libtailscale_ios.a,tailscale_ios,Tailscale iOS library,medium,0.8
+/Users/sa/rh.1/vendor/libtailscale/libtailscale_ios_sim_arm64.a,tailscale_ios_sim_arm64,Tailscale iOS simulator ARM64 library,medium,0.8
+/Users/sa/rh.1/ios/Frameworks/TailscaleKit.xcframework,ios_tailscale,iOS Tailscale framework,medium,0.8
+/Users/sa/rh.1/ios/Frameworks/TailscaleKit.xcframework/ios-arm64_x86_64-simulator/TailscaleKit.framework/TailscaleKit,tailscale_framework,Tailscale framework binary,medium,0.8
+/Users/sa/rh.1/build,build_artifacts,Build artifacts directory,medium,0.7
+/Users/sa/rh.1/build/RheaApp-b30.xcarchive,ios_archive,iOS app archive,medium,0.8
+/Users/sa/rh.1/dist,distribution,Distribution directory,medium,0.7
+/Users/sa/rh.1/dist/index.js,distribution_js,Distribution JavaScript,medium,0.7
+/Users/sa/rh.1/dist/index.d.ts,distribution_dts,Distribution TypeScript definitions,medium,0.7
+/Users/sa/rh.1/target,rust_targets,Rust build targets,medium,0.7
+/Users/sa/rh.1/.next,nextjs_cache,Next.js cache directory,low,0.5
+/Users/sa/rh.1/.next/cache,nextjs_cache_files,Next.js cache files,low,0.5
+/Users/sa/rh.1/.venv,python_venv,Python virtual environment,medium,0.7
+/Users/sa/rh.1/.venv/lib/python3.11/site-packages,python_packages,Python packages,medium,0.7
+/Users/sa/rh.1/.venv/lib/python3.11/site-packages/grpc,grpc_package,gRPC Python package,medium,0.7
+/Users/sa/rh.1/.venv/lib/python3.11/site-packages/grpc/_cython/cygrpc.cpython-311-darwin.so,grpc_extension,gRPC extension,medium,0.7
+/Users/sa/rh.1/src/.venv,src_python_venv,Source Python virtual environment,medium,0.7
+/Users/sa/rh.1/src/.venv/lib/python3.11/site-packages,src_python_packages,Source Python packages,medium,0.7
+/Users/sa/rh.1/src/.venv/lib/python3.11/site-packages/grpc,src_grpc_package,Source gRPC package,medium,0.7
+/Users/sa/rh.1/src/.venv/lib/python3.11/site-packages/grpc/_cython/cygrpc.cpython-311-darwin.so,src_grpc_extension,Source gRPC extension,medium,0.7
+/Users/sa/rh.1/node_modules,node_modules,Node.js modules,medium,0.7
+/Users/sa/rh.1/rhea-atlas/node_modules,nextjs_modules,Next.js modules,medium,0.7
+/Users/sa/rh.1/rhea-atlas/node_modules/@next/swc-darwin-arm64,next_swc,Next.js compiler,medium,0.7
+/Users/sa/rh.1/rhea-atlas/node_modules/@next/swc-darwin-arm64/next-swc.darwin-arm64.node,next_swc_binary,Next.js compiler binary,medium,0.7
+/Users/sa/rh.1/packages/RheaKit/.build,swift_build,Swift build artifacts,medium,0.7
+/Users/sa/rh.1/packages/RheaKit/.build/repositories,swift_repos,Swift repositories,medium,0.7
+/Users/sa/rh.1/packages/RheaKit/.build/repositories/GRDB.swift-dd0599db,grdb_repo,GRDB Swift repository,medium,0.7
+/Users/sa/rh.1/packages/RheaKit/.build/repositories/swift-markdown-ui-fc3eaf1f,swift_markdown_repo,Swift markdown UI repository,medium,0.7
+/Users/sa/rh.1/packages/RheaKit/.build/repositories/Pow-4ef6615c,pow_repo,Pow Swift repository,medium,0.7
+/Users/sa/rh.1/packages/RheaKit/.build/index-build,swift_index_build,Swift index build,medium,0.7
+/Users/sa/rh.1/packages/RheaKit/.build/index-build/arm64-apple-macosx,swift_build_arm64,Swift ARM64 build,medium,0.7
+/Users/sa/rh.1/packages/RheaKit/.build/index-build/arm64-apple-macosx/debug,swift_build_debug,Swift debug build,medium,0.7
+/Users/sa/rh.1/packages/RheaKit/.build/index-build/arm64-apple-macosx/debug/ModuleCache,swift_module_cache,Swift module cache,low,0.5
+/Users/sa/rh.1/packages/RheaKit/.build/index-build/arm64-apple-macosx/debug/index/db,swift_build_db,Swift build database,medium,0.7
+/Users/sa/rh.1/ios/RheaApp/.build,ios_build,iOS build artifacts,medium,0.7
+/Users/sa/rh.1/ios/RheaApp/.build/checkouts,ios_checkouts,iOS checkouts,medium,0.7
+/Users/sa/rh.1/ios/RheaApp/.build/checkouts/Pow,pow_ios,Pow iOS checkout,medium,0.7
+/Users/sa/rh.1/ios/RheaApp/build,ios_build,iOS build artifacts,medium,0.7
+/Users/sa/rh.1/ios/RheaApp/build/DerivedData,ios_derived_data,iOS derived data,medium,0.7
+/Users/sa/rh.1/ios/RheaApp/build/DerivedData/SourcePackages,ios_source_packages,iOS source packages,medium,0.7
+/Users/sa/rh.1/ios/RheaApp/build/RheaApp.xcarchive,ios_xcarchive,iOS app archive,medium,0.8
+/Users/sa/rh.1/ios/RheaApp/build/RheaApp.xcarchive/dSYMs,ios_dsyms,iOS debug symbols,medium,0.7
+/Users/sa/rh.1/ios/RheaApp/build/RheaApp.xcarchive/dSYMs/RheaApp.app.dSYM,ios_app_dsym,iOS app debug symbols,medium,0.7
+/Users/sa/rh.1/ios/RheaApp/build/RheaApp.xcarchive/dSYMs/RheaApp.app.dSYM/Contents/Resources/DWARF/RheaApp,ios_dwarf,iOS DWARF debug info,medium,0.7
+/Users/sa/rh.1/rhea-cli/target,cli_target,CLI build target,medium,0.7
+/Users/sa/rh.1/rhea-cli/target/debug,cli_debug,CLI debug build,medium,0.7
+/Users/sa/rh.1/rhea-cli/target/release,cli_release,CLI release build,medium,0.7
+/Users/sa/rh.1/rhea-cli/target/debug/deps,cli_debug_deps,CLI debug dependencies,medium,0.7
+/Users/sa/rh.1/rhea-cli/target/release/deps,cli_release_deps,CLI release dependencies,medium,0.7
+/Users/sa/rh.1/rhea-session-server/target,session_target,Session server build target,medium,0.7
+/Users/sa/rh.1/rhea-session-server/target/debug,session_debug,Session server debug build,medium,0.7
+/Users/sa/rh.1/rhea-session-server/target/release,session_release,Session server release build,medium,0.7
+/Users/sa/rh.1/rhea-session-server/target/debug/deps,session_debug_deps,Session server debug dependencies,medium,0.7
+/Users/sa/rh.1/rhea-session-server/target/release/deps,session_release_deps,Session server release dependencies,medium,0.7
+/Users/sa/rh.1/rhea-dash/target,dash_target,Dashboard build target,medium,0.7
+/Users/sa/rh.1/rhea-dash/target/debug,dash_debug,Dashboard debug build,medium,0.7
+/Users/sa/rh.1/rhea-dash/target/debug/deps,dash_debug_deps,Dashboard debug dependencies,medium,0.7
+/Users/sa/rh.1/rhea-dash/target/debug/rhea-dash,dash_binary,Dashboard binary,medium,0.7
+/Users/sa/rh.1/rhea-dash/target/debug/deps/rhea_dash-e757c40e8bf23431,dash_lib,Dashboard library,medium,0.7
+/Users/sa/rh.1/rhea-dash/target/debug/deps/libnaga-131a1a0d8ce55628.rlib,naga_lib,Naga graphics library,medium,0.7
+/Users/sa/rh.1/frontier-gem/target,gem_target,Gem build target,medium,0.7
+/Users/sa/rh.1/frontier-gem/target/debug,gem_debug,Gem debug build,medium,0.7
+/Users/sa/rh.1/frontier-gem/target/debug/deps,gem_debug_deps,Gem debug dependencies,medium,0.7
+/Users/sa/rh.1/rhea-tui/target,tui_target,TUI build target,medium,0.7
+/Users/sa/rh.1/rhea-tui/target/release,tui_release,TUI release build,medium,0.7
+/Users/sa/rh.1/rhea-angel-game/target,game_target,Game build target,medium,0.7
+/Users/sa/rh.1/rhea-angel-game/target/release,game_release,Game release build,medium,0.7
+/Users/sa/rh.1/rhea-biorenderer/target,renderer_target,Renderer build target,medium,0.7
+/Users/sa/rh.1/rhea-biorenderer/target/release,renderer_release,Renderer release build,medium,0.7
+/Users/sa/rh.1/rhea-rag/target,rag_target,RAG build target,medium,0.7
+/Users/sa/rh.1/rhea-rag/target/release,rag_release,RAG release build,medium,0.7
+/Users/sa/rh.1/protocols,protocols_directory,Protocols directory,medium,0.7
+/Users/sa/rh.1/prompts,prompts_directory,Prompts directory,medium,0.7
+/Users/sa/rh.1/contracts,contracts_directory,Contracts directory,medium,0.7
+/Users/sa/rh.1/deploy,deploy_directory,Deployment directory,medium,0.7
+/Users/sa/rh.1/diagnostics,diagnostics_directory,Diagnostics directory,medium,0.7
+/Users/sa/rh.1/eval,eval_directory,Evaluation directory,medium,0.7
+/Users/sa/rh.1/extensions,extensions_directory,Extensions directory,medium,0.7
+/Users/sa/rh.1/metrics,metrics_directory,Metrics directory,medium,0.7
+/Users/sa/rh.1/opera,opera_directory,Opera directory,medium,0.7
+/Users/sa/rh.1/plugins,plugins_directory,Plugins directory,medium,0.7
+/Users/sa/rh.1/emergentia,emergentia_directory,Emergent data directory,medium,0.7
+/Users/sa/rh.1/friends,friends_directory,External projects directory,medium,0.7
+/Users/sa/rh.1/mirror,mirror_directory,Mirror data directory,medium,0.7
+/Users/sa/rh.1/ops,ops_directory,Operations directory,medium,0.7
+/Users/sa/rh.1/data,data_directory,Data files directory,medium,0.7
+/Users/sa/rh.1/archive,archive_directory,Archive directory,medium,0.7
+/Users/sa/rh.1/artifacts,artifacts_directory,Artifacts directory,medium,0.7
+/Users/sa/rh.1/tests,tests_directory,Tests directory,medium,0.7
+/Users/sa/rh.1/config,config_directory,Configuration directory,medium,0.7
+/Users/sa/rh.1/logs,logs_directory,Logs directory,medium,0.7
+/Users/sa/rh.1/.git,git_repository,Git repository,high,0.8
+/Users/sa/rh.1/.git/objects,git_objects,Git objects,high,0.8
+/Users/sa/rh.1/.git/objects/pack,git_packs,Git pack files,high,0.8
+/Users/sa/rh.1/.git/objects/pack/pack-4292651a5458f36f2460504d6af3bd0088967279.pack,git_pack_main,Main git pack file,high,0.8
+/Users/sa/rh.1/.git/objects/pack/pack-52092b925e50a3b4b1a449aeff53d49bc9e0a9aa.pack,git_pack_secondary,Secondary git pack file,high,0.8
+/Users/sa/rh.1/.gitmodules,git_submodules,Git submodules configuration,medium,0.7
+/Users/sa/rh.1/.claude,claude_config,Claude configuration,medium,0.7
+/Users/sa/rh.1/.codex,codex_config,Codex configuration,medium,0.7
+/Users/sa/rh.1/.entire,entire_config,Entire configuration,medium,0.7
+/Users/sa/rh.1/.firebase,firebase_config,Firebase configuration,medium,0.7
+/Users/sa/rh.1/.firecrawl,firecrawl_config,Firecrawl configuration,medium,0.7
+/Users/sa/rh.1/.github,github_config,GitHub configuration,medium,0.7
+/Users/sa/rh.1/.obsidian,obsidian_config,Obsidian configuration,medium,0.7
+/Users/sa/rh.1/.pids,pids_config,Process ID configuration,medium,0.7
+/Users/sa/rh.1/.rhea,rhea_config,Rhea configuration,medium,0.7
+/Users/sa/rh.1/.roo,roo_config,Roo configuration,medium,0.7
+/Users/sa/rh.1/.roomodes,roomodes_config,Roo modes configuration,medium,0.7
+/Users/sa/rh.1/.secrets,secrets_config,Secrets configuration,medium,0.7
+/Users/sa/rh.1/.tmp_music,temp_music,Temporary music files,low,0.4
+/Users/sa/rh.1/.watcher,watcher_config,Watcher configuration,medium,0.7
+/Users/sa/rh.1/.windsurf,windsurf_config,Windsurf configuration,medium,0.7
+/Users/sa/rh.1/.vscode,vscode_config,VS Code configuration,medium,0.7
+/Users/sa/rh.1/.gemini,gemini_config,Gemini configuration,medium,0.7
+/Users/sa/rh.1/.DS_Store,macos_metadata,macOS metadata,low,0.4
+/Users/sa/rh.1/.env,env_file,Environment variables,medium,0.7
+/Users/sa/rh.1/.env.example,env_template,Environment variables template,medium,0.7
+/Users/sa/rh.1/.dockerignore,docker_ignore,Docker ignore configuration,medium,0.7
+/Users/sa/rh.1/.gcloudignore,gcloud_ignore,Google Cloud ignore configuration,medium,0.7
+/Users/sa/rh.1/.gitignore,git_ignore,Git ignore configuration,medium,0.7
+/Users/sa/rh.1/.windsurfignore,windsurf_ignore,Windsurf ignore configuration,medium,0.7
+/Users/sa/rh.1/LICENSE,license,Project license,medium,0.7
+/Users/sa/rh.1/NOTICE,notice,Project notice,medium,0.7
+/Users/sa/rh.1/session_store.db,sqlite_db,SQLite database,medium,0.7
+/Users/sa/rh.1/Play.bndb,playwright_db,Playwright database,medium,0.7
+/Users/sa/rh.1/firebase.json,firebase_config_file,Firebase configuration file,medium,0.7
+/Users/sa/rh.1/firestore.rules,firestore_rules_file,Firestore rules file,medium,0.7
+/Users/sa/rh.1/fly.toml,fly_config_file,Fly.io configuration file,medium,0.7
+/Users/sa/rh.1/Dockerfile,dockerfile,Docker configuration file,medium,0.7
+/Users/sa/rh.1/docker-compose.yml,docker_compose,Docker Compose configuration file,medium,0.7
+/Users/sa/rh.1/package.json,package_json,Package configuration file,medium,0.7
+/Users/sa/rh.1/tsconfig.json,tsconfig_json,TypeScript configuration file,medium,0.7
+/Users/sa/rh.1/requirements.txt,requirements_txt,Python requirements file,medium,0.7
+/Users/sa/rh.1/contexts_map_mindflow_map_play.toml,context_map,Context mapping configuration,medium,0.7
+/Users/sa/rh.1/LATEST.json,latest_json,Latest data JSON file,medium,0.7
+/Users/sa/rh.1/metrics/memory_metrics.json,memory_json,Memory metrics JSON file,medium,0.7
+/Users/sa/rh.1/brain-capsule-20260228T211513Z-smoke-20260228t211513z.tar.gz,brain_capsule,Brain capsule archive,medium,0.7
+/Users/sa/rh.1/brain-capsule-20260228T211513Z-smoke-20260228t211513z.tar.gz.sha256,brain_capsule_checksum,Brain capsule checksum,medium,0.7
+/Users/sa/rh.1/RheaCommandCentre.dmg,rhea_dmg,Rhea Command Centre installer,medium,0.7
+/Users/sa/rh.1/frontier.sock,socket_file,Frontier socket file,medium,0.7
+/Users/sa/rh.1/arhive_history_Rhea.html,archive_html,Rhea archive history HTML,medium,0.6
+/Users/sa/rh.1/rheknel.htm,rheknel_html,Rheknel demo HTML,medium,0.6
+/Users/sa/rh.1/demo_atlas.html,demo_atlas,Atlas demo HTML,medium,0.6
+/Users/sa/rh.1/demo_math.html,demo_math,Math demo HTML,medium,0.6
+/Users/sa/rh.1/glowing-sphere.html,demo_sphere,Glowing sphere demo HTML,medium,0.6
+/Users/sa/rh.1/semantic-drift.html,demo_semantic,Semantic drift demo HTML,medium,0.6
+/Users/sa/rh.1/2 помоги мне доказать, что sqlite устарела и _это самая устойчивая идея_ это манипуляция, а не аргумент - Google Search.mhtml,web_archive,Web archive file,low,0.5
+/Users/sa/rh.1/RheklGemini.webarchive,web_archive,Web archive file,low,0.5
+/Users/sa/rh.1/rheknel.mhtml,web_archive,Web archive file,low,0.5
+/Users/sa/rh.1/f(prompt) Token Mapping.pdf,token_mapping_pdf,Token mapping PDF,medium,0.7
+/Users/sa/rh.1/RHEKNELGPT54cp.md,rheaknel_copy,RHEKNEL GPT copy,medium,0.7
+/Users/sa/rh.1/RHEKNELGPT54full.pdf,rheaknel_full,RHEKNEL GPT full PDF,medium,0.7
+/Users/sa/rh.1/RHEKNELGPT54sems.md,rheaknel_sems,RHEKNEL GPT semantics,medium,0.7
+/Users/sa/rh.1/rheaknelgemini.pdf,rheaknel_gemini,Rheknel Gemini PDF,medium,0.7
+/Users/sa/rh.1/rheknelgemini2.pdf,rheaknel_gemini2,Rheknel Gemini 2 PDF,medium,0.7
+/Users/sa/rh.1/play_frame_00.png,play_frame,Play frame screenshot,medium,0.6
+/Users/sa/rh.1/themis-demo-seeded.png,themis_demo,Themis demo seeded screenshot,medium,0.6
+/Users/sa/rh.1/themis-demo-tooltip.png,themis_tooltip,Themis demo tooltip screenshot,medium,0.6
+/Users/sa/rh.1/tooltip-rag-hover.png,tooltip_rag,Tooltip RAG hover screenshot,medium,0.6
+/Users/sa/rh.1/readme0.md,readme0,Alternative README,medium,0.7
+/Users/sa/rh.1/readme0.pdf,readme0_pdf,README PDF,medium,0.7
+/Users/sa/rh.1/fulltree.md,fulltree,Full tree documentation,medium,0.7
+/Users/sa/rh.1/11march-full-audit-p0leftovers.md,audit_docs,Audit leftovers documentation,medium,0.7
+/Users/sa/rh.1/CHECK.md,check_docs,Check documentation,medium,0.7
+/Users/sa/rh.1/FINAL_DELIVERY.md,final_delivery,Final delivery documentation,high,0.8
+/Users/sa/rh.1/INTERAGENT_COMM_GUIDE.md,interagent_guide,Inter-agent communication guide,medium,0.7
+/Users/sa/rh.1/MULTITEAMLOOP_PLAN.md,multiteam_plan,Multi-team loop plan,medium,0.7
+/Users/sa/rh.1/PLAY_MAINTENANCE_GUIDE.md,play_maintenance,Play maintenance guide,medium,0.7
+/Users/sa/rh.1/PRODUCTION_STATUS.md,production_status,Production status documentation,high,0.8
+/Users/sa/rh.1/SESSION_STATE.md,session_state,Session state documentation,medium,0.7
+/Users/sa/rh.1/SESSION_SUMMARY_STAGE5.md,session_summary,Session summary stage 5,medium,0.7
+/Users/sa/rh.1/STAGE5_RELEASE.md,stage5_release,Stage 5 release documentation,medium,0.7
+/Users/sa/rh.1/TASKS.log,tasks_log,Tasks log,medium,0.7
+/Users/sa/rh.1/TEAM_STATUS.md,team_status,Team status documentation,medium,0.7
+/Users/sa/rh.1/TODO.md,todo_docs,TODO documentation,high,0.8
+/Users/sa/rh.1/REDIS_SCHEMA.md,redis_schema,Redis schema documentation,medium,0.7
+/Users/sa/rh.1/QUICKSTART.md,quickstart,Quickstart documentation,medium,0.7
+/Users/sa/rh.1/build_stage5.log,build_log,Stage 5 build log,medium,0.7
+/Users/sa/rh.1/observer.log,observer_log,Observer log,medium,0.7
+/Users/sa/rh.1/firebase-debug.log,firebase_log,Firebase debug log,medium,0.7
+/Users/sa/rh.1/.rhea/radio/radio.stdout.log,radio_log,Radio session log,medium,0.7
+/Users/sa/rh.1/.entire/metadata,entire_metadata,Entire metadata directory,medium,0.7
+/Users/sa/rh.1/.entire/metadata/94aabe90-9b2d-48e7-be8c-6bf820a0b6a9/full.jsonl,session_metadata,Session metadata file,medium,0.7
+/Users/sa/rh.1/.entire/metadata/261278d3-25c3-47f8-93e7-bfcc23c40cd5/full.jsonl,session_metadata,Session metadata file,medium,0.7

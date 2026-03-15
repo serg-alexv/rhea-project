@@ -1,5 +1,8 @@
 import SwiftUI
+#if canImport(UIKit)
+import UIKit
 import AVFoundation
+#endif
 
 /// PairingView — User-facing QR code scanning and pairing status UI.
 ///
@@ -45,7 +48,11 @@ public struct PairingView: View {
             }
             .frame(maxWidth: .infinity)
             .padding()
+            #if os(iOS)
             .background(Color(.systemGray6))
+            #else
+            .background(Color.gray.opacity(0.1))
+            #endif
             .cornerRadius(12)
 
             // MARK: - Status Details
@@ -83,7 +90,11 @@ public struct PairingView: View {
                     }
                 }
                 .padding()
+                #if os(iOS)
                 .background(Color(.systemGray6))
+                #else
+                .background(Color.gray.opacity(0.1))
+                #endif
                 .cornerRadius(12)
             }
 
@@ -132,17 +143,28 @@ public struct PairingView: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding()
+            #if os(iOS)
             .background(Color(.systemGray6))
+            #else
+            .background(Color.gray.opacity(0.1))
+            #endif
             .cornerRadius(8)
         }
         .padding()
         .navigationTitle("Pairing")
+        #if os(iOS)
         .navigationBarTitleDisplayMode(.inline)
+        #endif
         .sheet(isPresented: $showQRScanner) {
+            #if canImport(UIKit)
             QRScannerView { qrString in
                 pairing.handleScannedQRCode(qrString)
                 showQRScanner = false
             }
+            #else
+            Text("Scanner only available on iOS")
+                .padding()
+            #endif
         }
     }
 
@@ -185,6 +207,7 @@ public struct PairingView: View {
 
 // MARK: - QR Scanner View
 
+#if canImport(UIKit)
 struct QRScannerView: UIViewControllerRepresentable {
     let onScanned: (String) -> Void
 
@@ -289,6 +312,7 @@ final class QRScannerViewController: UIViewController, AVCaptureMetadataOutputOb
         }
     }
 }
+#endif
 
 // MARK: - Preview
 

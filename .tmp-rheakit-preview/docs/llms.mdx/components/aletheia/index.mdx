@@ -1,0 +1,61 @@
+# AletheiaView
+
+
+
+AletheiaView [#aletheiaview]
+
+AletheiaView is the proof store and ontology browser. It exposes immutable tribunal proofs and the hypothesis spaces around them.
+
+Usage [#usage]
+
+```swift
+import RheaKit
+
+struct AletheiaTab: View {
+    var body: some View {
+        AletheiaView()
+    }
+}
+```
+
+Features [#features]
+
+* Proof listing from `/aletheia/proofs`
+* Summary badges for proof count and ontology count
+* Expandable proof detail for claim, tier, agreement score, and confidence
+* Ontology list from `/ontology`
+* Pull to refresh
+* Loading state while data is being fetched
+
+Layout [#layout]
+
+```text
+┌─ Summary Badges ──────────────────┐
+│  PROOFS: 42    ONTOLOGIES: 3      │
+├───────────────────────────────────┤
+│  [Proof Detail — if selected]     │
+├───────────────────────────────────┤
+│  Proof List                       │
+│  ├─ claim: "X is true"           │
+│  │  tier: cheap | score: 0.87    │
+│  ├─ claim: "Y holds"             │
+│  │  tier: mid  | score: 0.92     │
+│  └─ ...                          │
+├───────────────────────────────────┤
+│  Ontology Section                 │
+│  ├─ biochemistry                  │
+│  ├─ chronobiology                 │
+│  └─ ...                          │
+└───────────────────────────────────┘
+```
+
+Data source [#data-source]
+
+* Proofs via `RheaAPI.shared.proofs()` -> `GET /aletheia/proofs`
+* Ontologies via `RheaAPI.shared.ontologies()` -> `GET /ontology`
+
+Notes [#notes]
+
+* Proofs are durable truth records once written to `proof.db`
+* The view is iOS-compatible and stays within `NavigationStack`
+* A proof record includes `id`, `claim`, `tier`, `agreement_score`, `confidence`, and `created_at`

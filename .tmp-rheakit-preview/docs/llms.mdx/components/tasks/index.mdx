@@ -1,0 +1,49 @@
+# TasksView
+
+
+
+TasksView [#tasksview]
+
+TasksView is the task coordination pane for the multi-agent system.
+
+Features [#features]
+
+* Status filters for open, claimed, done, and blocked
+* Agent and priority filtering
+* New task sheet
+* Auto-refresh
+* Animated card transitions
+
+Task model [#task-model]
+
+```swift
+public struct TaskItem: Codable, Identifiable {
+    public let id: String
+    public let title: String
+    public let priority: String
+    public let status: String
+    public let agent: String
+    public let claimed_by: String
+    public let tags: [String]
+}
+```
+
+Color semantics [#color-semantics]
+
+| Priority | Color              |
+| -------- | ------------------ |
+| `P0`     | `RheaTheme.red`    |
+| `P1`     | `RheaTheme.amber`  |
+| `P2`     | `RheaTheme.accent` |
+
+| Status    | Color     |
+| --------- | --------- |
+| `open`    | secondary |
+| `claimed` | accent    |
+| `done`    | green     |
+| `blocked` | red       |
+
+Notes [#notes]
+
+* Task creation sends `title`, `priority`, and `agent`
+* Dynamic filter chips are derived from the current task list instead of hard-coded enums

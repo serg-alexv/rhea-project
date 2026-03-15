@@ -1,0 +1,223 @@
+# API Reference
+
+
+
+API Reference [#api-reference]
+
+This page documents the package spine first: the singletons, DTOs, and configuration surfaces most apps touch immediately.
+
+For backend endpoint inspection, use the live OpenAPI surface at [rhea-tribunal.fly.dev/swagger](https://rhea-tribunal.fly.dev/swagger/).
+
+Core singletons [#core-singletons]
+
+`RheaAPI` [#rheaapi]
+
+```swift
+public final class RheaAPI: @unchecked Sendable {
+    public static let shared: RheaAPI
+
+    public func get(_ path: String, auth: Bool = false) async throws -> Data
+    public func post(_ path: String, body: Encodable, auth: Bool = true) async throws -> Data
+    public func getJSON(_ path: String, auth: Bool = false) async throws -> [String: Any]
+
+    public func health() async throws -> HealthSnapshot
+    public func agents() async throws -> [AgentDTO]
+    public func history(limit: Int = 50) async throws -> [[String: Any]]
+    public func radio(limit: Int = 100) async throws -> [[String: Any]]
+    public func office(limit: Int = 50) async throws -> [[String: Any]]
+    public func proofs() async throws -> [[String: Any]]
+    public func ontologies() async throws -> [[String: Any]]
+    public func ontologyDetail(_ name: String) async throws -> [[String: Any]]
+    public func models() async throws -> InfraModels
+    public func ndi() async throws -> [String: Any]
+    public func sessions(limit: Int = 20) async throws -> [[String: Any]]
+
+    public func walletStatus() async throws -> [[String: Any]]
+    public func walletBalance(chain: String) async throws -> [String: Any]
+
+    public func supervisorSessions() async throws -> [SupervisorSession]
+    public func supervisorSpawn(agent: String, prompt: String? = nil) async throws -> [String: Any]
+    public func supervisorKill(sessionId: String) async throws -> [String: Any]
+    public func supervisorOutput(sessionId: String, lines: Int = 50) async throws -> String
+    public func supervisorInput(sessionId: String, text: String) async throws -> [String: Any]
+    public func wakeAgent(_ agent: String) async throws -> [String: Any]
+
+    public func governorAll() async throws -> [String: GovernorAgentStatus]
+    public func governor(agent: String) async throws -> GovernorAgentStatus
+
+    public func executionProfile() async throws -> [String: Any]
+    public func setExecutionProfile(_ profile: String) async throws -> [String: Any]
+
+    public func ndiDiscover() async throws -> [NDISource]
+    public func ndiSendTest() async throws -> [String: Any]
+
+    public var apiKey: String { get }
+    public func setAPIKey(_ key: String)
+    public var baseURL: String { get }
+}
+```
+
+`RheaStore` [#rheastore]
+
+```swift
+@MainActor
+public final class RheaStore: ObservableObject {
+    public static let shared: RheaStore
+
+    @Published public var agents: [AgentDTO]
+    @Published public var health: HealthSnapshot?
+    @Published public var connectionAlive: Bool
+    @Published public var proofCount: Int
+
+    public var totalTokens: Int
+    public var totalCost: Double
+    public var aliveCount: Int
+    public var familyOnline: Bool
+
+    public private(set) var agentMap: OrderedDictionary<String, AgentDTO>
+
+    public func startPolling(interval: TimeInterval = 5)
+    public func stopPolling()
+    public func refreshCore() async
+
+    public func refreshHistory(limit: Int = 50) async -> [[String: Any]]
+    public func refreshRadio(limit: Int = 100) async -> [[String: Any]]
+    public func refreshProofs() async -> [[String: Any]]
+    public func refreshOntologies() async -> [[String: Any]]
+    public func refreshOffice(limit: Int = 50) async -> [[String: Any]]
+    public func refreshSessions(limit: Int = 20) async -> [[String: Any]]
+
+    public func age(_ key: String) -> TimeInterval
+    public func formatTokens(_ n: Int) -> String
+    public let db: DatabaseQueue?
+}
+```
+
+`AuthManager` [#authmanager]
+
+```swift
+public class AuthManager: ObservableObject {
+    public static let shared: AuthManager
+
+    @Published public var token: String?
+    @Published public var email: String?
+    @Published public var plan: String
+    @Published public var queriesUsed: Int
+    @Published public var queryLimit: Int
+    @Published public var didSkipAuth: Bool
+
+    public var isLoggedIn: Bool
+
+    public func save(token: String, email: String)
+    public func logout()
+    public func skipLogin()
+    public func authorize(_ request: inout URLRequest)
+}
+```
+
+Key DTOs [#key-dtos]
+
+`AgentDTO` [#agentdto]
+
+```swift
+public struct AgentDTO: Codable, Identifiable {
+    public let name: String
+    public let alive: Bool
+    public let pace: String
+    public let mode: String
+    public let billing_mode: String?
+    public let T_day: Int
+    public let dollar_day: Double
+    public let floor_gap: Int
+    public let office_status: String?
+    public let pending_msgs: Int?
+    public let tasks_open: Int?
+    public let tasks_claimed: Int?
+    public let last_activity: String?
+    public let last_feed: String?
+    public let lease_token: Int?
+    public let lease_expired: Bool?
+    public let lease_expires_at: String?
+    public let forecast: String?
+    public let budget_cap: Double?
+    public let budget_remaining: Double?
+    public let hard_fail: Bool?
+}
+```
+
+`HealthSnapshot` [#healthsnapshot]
+
+```swift
+public struct HealthSnapshot: Codable {
+    public let status: String
+    public let providers_available: Int
+    public let providers_total: Int
+    public let total_models: Int
+    public let execution_profile: String
+    public let analyzer_version: String
+    public let profile_mode: String
+}
+```
+
+Other exported surface types [#other-exported-surface-types]
+
+| Type                  | Role                                           |
+| --------------------- | ---------------------------------------------- |
+| `SupervisorSession`   | Supervisor session identity and runtime status |
+| `GovernorAgentStatus` | Pace, forecast, budget cap, and compliance     |
+| `InfraModels`         | Provider and model inventory                   |
+| `NDISource`           | Discoverable NDI source metadata               |
+| `TaskItem`            | Task management row payload                    |
+| `FeedItem`            | Team radio message payload                     |
+| `ChatMsg`             | Dialog history message                         |
+| `PipelineNode`        | Node editor graph node                         |
+| `NodeType`            | Graph node variant enum                        |
+
+Configuration [#configuration]
+
+`AppConfig` [#appconfig]
+
+```swift
+public enum AppConfig {
+    static let productionAPIBaseURL: String
+    static var defaultAtlasBaseURL: String
+    static var defaultAPIBaseURL: String
+    static func migrateStaleDefaults()
+}
+```
+
+Theme [#theme]
+
+`RheaTheme` [#rheatheme]
+
+```swift
+public enum RheaTheme {
+    static let bg: Color
+    static let card: Color
+    static let cardBorder: Color
+    static let accent: Color
+    static let green: Color
+    static let amber: Color
+    static let red: Color
+    static let purple: Color
+    static let muted: Color
+    static let text: Color
+
+    static func modeColor(_ mode: String) -> Color
+    static func paceColor(_ pace: String) -> Color
+    static func priorityColor(_ priority: String) -> Color
+    static func statusColor(_ status: String) -> Color
+}
+```
+
+`GlassCard` [#glasscard]
+
+```swift
+public struct GlassCard: ViewModifier { ... }
+
+myView.glassCard()
+```
+
+Next reference step [#next-reference-step]
+
+This is the curated package spine, not the final word. The next upgrade for this docs system is DocC-backed symbol coverage generated directly from `packages/RheaKit/Sources/RheaKit`.

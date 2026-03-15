@@ -1,0 +1,130 @@
+@import 'tailwindcss';
+@import 'fumadocs-ui/css/neutral.css';
+@import 'fumadocs-ui/css/preset.css';
+
+:root {
+  --font-sans: var(--font-display);
+  --font-mono: var(--font-ibm-mono);
+  --color-rhea-ink: #06131b;
+  --color-rhea-deep: #0a1c26;
+  --color-rhea-panel: rgba(9, 24, 33, 0.78);
+  --color-rhea-panel-strong: rgba(12, 31, 43, 0.92);
+  --color-rhea-border: rgba(138, 241, 216, 0.14);
+  --color-rhea-cyan: #8cf6e4;
+  --color-rhea-green: #b5ff8a;
+  --color-rhea-sand: #f4f2e8;
+  --color-rhea-muted: rgba(231, 240, 243, 0.7);
+  --fd-layout-width: 88rem;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background:
+    radial-gradient(circle at top left, rgba(140, 246, 228, 0.14), transparent 28%),
+    radial-gradient(circle at top right, rgba(181, 255, 138, 0.12), transparent 24%),
+    linear-gradient(180deg, #07131a 0%, #091821 42%, #08121a 100%);
+  color: var(--color-rhea-sand);
+  font-family: var(--font-display), sans-serif;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: rgba(140, 246, 228, 0.24);
+  color: #ffffff;
+}
+
+.hero-grid {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--color-rhea-border);
+  background:
+    linear-gradient(135deg, rgba(140, 246, 228, 0.08), transparent 50%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0)),
+    var(--color-rhea-panel);
+  box-shadow:
+    0 32px 80px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+.hero-grid::before,
+.hero-grid::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.hero-grid::before {
+  background-image:
+    linear-gradient(rgba(140, 246, 228, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(140, 246, 228, 0.08) 1px, transparent 1px);
+  background-size: 40px 40px;
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.8), transparent);
+}
+
+.hero-grid::after {
+  background:
+    radial-gradient(circle at 18% 20%, rgba(140, 246, 228, 0.22), transparent 18rem),
+    radial-gradient(circle at 82% 10%, rgba(181, 255, 138, 0.18), transparent 16rem);
+  opacity: 0.7;
+}
+
+.signal-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid rgba(140, 246, 228, 0.18);
+  background: rgba(6, 19, 27, 0.68);
+  padding: 0.45rem 0.8rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-rhea-cyan);
+}
+
+.metric-plate {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(6, 18, 26, 0.65);
+  backdrop-filter: blur(14px);
+}
+
+.metric-value {
+  font-family: var(--font-mono), monospace;
+  letter-spacing: -0.04em;
+}
+
+.section-note {
+  color: var(--color-rhea-muted);
+}
+
+.callout-shell {
+  border: 1px solid rgba(140, 246, 228, 0.16);
+  background: var(--color-rhea-panel-strong);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+.docs-card-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+}
+
+.docs-card-grid > a,
+.docs-card-grid > div {
+  min-height: 100%;
+}
+
+.component-pulse {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent),
+    rgba(7, 20, 28, 0.8);
+}
+
+[data-search-full] {
+  backdrop-filter: blur(18px);
+}

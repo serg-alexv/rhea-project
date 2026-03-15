@@ -34,13 +34,14 @@ struct RheaPreviewApp: App {
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 enum PlayPane: String, CaseIterable, Identifiable {
-    case ops, tribunal, secrets, bio, tasks, governor, aletheia, models, chains, radio, history, ruliad, settings
+    case ops, tribunal, play, secrets, bio, tasks, governor, aletheia, models, chains, radio, history, ruliad, settings
     var id: String { rawValue }
 
     var label: String {
         switch self {
         case .ops: return "OPS"
         case .tribunal: return "TRIBUNAL"
+        case .play: return "PLAY"
         case .secrets: return "SECRETS"
         case .bio: return "BIO"
         case .tasks: return "TASKS"
@@ -59,6 +60,7 @@ enum PlayPane: String, CaseIterable, Identifiable {
         switch self {
         case .ops: return "square.grid.2x2"
         case .tribunal: return "text.bubble"
+        case .play: return "play.circle"
         case .secrets: return "lock.shield"
         case .bio: return "atom"
         case .tasks: return "checklist"
@@ -82,7 +84,7 @@ enum PlayPane: String, CaseIterable, Identifiable {
     /// Default visibility when no user preference is set
     var defaultVisible: Bool {
         switch self {
-        case .ops, .tribunal, .secrets, .bio, .tasks, .governor, .models, .settings: return true
+        case .ops, .tribunal, .play, .secrets, .bio, .tasks, .governor, .models, .settings: return true
         case .aletheia, .chains, .radio, .history, .ruliad: return false
         }
     }
@@ -256,6 +258,7 @@ private struct PlayShell: View {
             switch selectedPane {
             case .ops: OpsView()
             case .tribunal: DialogView()
+            case .play: PlayRuntimeDebugView()
             case .secrets: RelayPrivacyView()
             case .bio: BioRendererView()
             case .tasks: TasksView()

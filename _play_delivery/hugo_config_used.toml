@@ -1,0 +1,51 @@
+baseURL = 'https://docs.createwithplay.com/'
+languageCode = 'en-us'
+title = 'Play AI Documentation'
+theme = 'ananke'
+
+[params]
+  description = "Play AI allows you to leverage AI within Play for macOS to design and prototype"
+  author = "Createwithplay"
+  primaryColor = "#22d691"
+  accentColor = "#22d691"
+
+[markup]
+  [markup.highlight]
+    style = "github"
+    lineNos = true
+    lineNumbersInTable = true
+    tabWidth = 4
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+  [markup.tableOfContents]
+    startLevel = 2
+    endLevel = 6
+    ordered = false
+
+[menu]
+  [[menu.main]]
+    name = "Play AI"
+    url = "/play-ai/"
+    weight = 10
+
+[social]
+  [[social.links]]
+    name = "YouTube"
+    url = "https://youtube.com"
+  [[social.links]]
+    name = "Instagram"
+    url = "https://instagram.com"
+  [[social.links]]
+    name = "LinkedIn"
+    url = "https://linkedin.com"
+
+[outputs]
+  home = ["HTML", "RSS"]
+  page = ["HTML"]
+
+[minify]
+  minifyOutput = true
+
+[build]
+  writeStats = true

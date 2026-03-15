@@ -14,6 +14,7 @@ Storage: SQLite users.db (extends auth_api tables).
 import hashlib
 import hmac
 import json
+import logging
 import os
 import secrets
 import sqlite3
@@ -23,6 +24,8 @@ from typing import Optional
 
 from fastapi import APIRouter, Depends, Header, HTTPException, Request
 from pydantic import BaseModel
+
+log = logging.getLogger("rhea.billing")
 
 def _get_current_user():
     """Lazy import to avoid circular dependency with auth_api."""
@@ -35,9 +38,9 @@ def _get_current_user():
 PROJECT_ROOT = Path(__file__).parent.parent
 DB_PATH = PROJECT_ROOT / "data" / "users.db"
 
-# Critical security: validate required secrets are set
-def _validate_secrets():
-    """Validate that required secrets are properly configured."""
+# Critical security: detect missing secrets without taking the whole app down.
+def _missing_config() -> list[str]:
+    """Return the list of enabled billing secrets that are currently missing."""
     missing_secrets = []
     
     # Check Stripe configuration if enabled
@@ -65,14 +68,14 @@ def _validate_secrets():
         if not os.environ.get("MICROSOFT_CLIENT_SECRET"):
             missing_secrets.append("MICROSOFT_CLIENT_SECRET")
     
-    if missing_secrets:
-        raise RuntimeError(
-            f"Missing required environment variables: {', '.join(missing_secrets)}. "
-            "These must be set for secure operation."
-        )
+    return missing_secrets
 
-# Validate configuration on import
-_validate_secrets()
+_MISSING_CONFIG = _missing_config()
+if _MISSING_CONFIG:
+    log.warning(
+        "Billing providers disabled until required secrets are configured: %s",
+        ", ".join(_MISSING_CONFIG),
+    )
 
 STRIPE_SECRET_KEY = os.environ.get("STRIPE_SECRET_KEY", "")
 STRIPE_WEBHOOK_SECRET = os.environ.get("STRIPE_WEBHOOK_SECRET", "")

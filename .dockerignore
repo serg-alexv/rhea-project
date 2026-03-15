@@ -29,6 +29,10 @@ build/
 .mypy_cache/
 .pytest_cache/
 .ruff_cache/
+src/.venv/
+src/.firecrawl/
+src/**/__pycache__/
+src/.DS_Store
 
 # Node / frontend build artifacts
 node_modules/
@@ -47,6 +51,12 @@ rhea-elementary/
 
 # Docs & notebooks (not needed at runtime)
 docs/
+!docs/rheakit-docs/
+!docs/rheakit-docs/**
+docs/rheakit-docs/node_modules/
+docs/rheakit-docs/.next/
+docs/rheakit-docs/out/
+docs/rheakit-docs/.turbo/
 *.md
 *.ipynb
 
@@ -75,3 +85,6 @@ scripts/
 
 # Entire.io / local tooling
 .entire/
+
+# Local scratch space
+.tmp*/

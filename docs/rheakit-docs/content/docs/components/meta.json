@@ -1,0 +1,15 @@
+{
+  "pages": [
+    "index",
+    "bio-renderer",
+    "node-editor",
+    "team-chat",
+    "clipboard",
+    "dialog",
+    "governor",
+    "tasks",
+    "aletheia",
+    "processes",
+    "pulse-monitor"
+  ]
+}

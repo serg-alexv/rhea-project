@@ -2,7 +2,7 @@ app = "rhea-tribunal"
 primary_region = "fra"
 
 [build]
-  dockerfile = "Dockerfile.tribunal"
+  dockerfile = "../docker/Dockerfile.platform"
 
 [http_service]
   internal_port = 8400
@@ -10,6 +10,10 @@ primary_region = "fra"
   auto_stop_machines = "stop"
   auto_start_machines = true
   min_machines_running = 0
+
+[mounts]
+  source = "rhea_data"
+  destination = "/app/data"
 
 [[http_service.checks]]
   grace_period = "10s"

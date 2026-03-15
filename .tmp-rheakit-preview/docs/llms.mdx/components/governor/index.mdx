@@ -1,0 +1,46 @@
+# GovernorView
+
+
+
+GovernorView [#governorview]
+
+GovernorView is the budget and pace dashboard for the agent system. It turns token burn, cost, pace, and floor-gap pressure into a readable control surface.
+
+Usage [#usage]
+
+```swift
+import RheaKit
+
+struct GovernorTab: View {
+    var body: some View {
+        GovernorView()
+    }
+}
+```
+
+Features [#features]
+
+* Swift Charts line graph for token burn over the last five minutes
+* Summary header with total tokens, cost, and live agent counts
+* Agent cards with pace, mode, tokens, cost, and floor gap
+* Auto-polling from `/agents/status`
+* Pull to refresh
+
+Agent fields displayed [#agent-fields-displayed]
+
+| Field              | Meaning                                 |
+| ------------------ | --------------------------------------- |
+| `alive`            | whether the agent is responding         |
+| `pace`             | green, yellow, or red burn state        |
+| `mode`             | normal, compact, critical, or hard-fail |
+| `T_day`            | tokens consumed today                   |
+| `dollar_day`       | total spend today                       |
+| `floor_gap`        | distance from minimum required floor    |
+| `forecast`         | budget or exhaustion forecast           |
+| `budget_cap`       | maximum daily budget                    |
+| `budget_remaining` | remaining budget                        |
+
+Notes [#notes]
+
+* The chart keeps up to 60 points, which covers roughly five minutes at the default cadence
+* If the backend restarts and governor counters reset, zero is treated as truth, not silent interpolation

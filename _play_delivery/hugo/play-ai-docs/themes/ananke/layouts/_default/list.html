@@ -1,0 +1,15 @@
+{{ define "main" }}
+<div>
+    {{ range .Pages }}
+        <article style="margin-bottom: 2rem; padding-bottom: 2rem; border-bottom: 1px solid var(--border-color);">
+            <h2><a href="{{ .Permalink }}">{{ .Title }}</a></h2>
+            <p>{{ .Summary }}</p>
+            {{ if .Params.Date }}
+                <p style="color: #666; font-size: 0.9rem;">
+                    Published: {{ .Date.Format "January 2, 2006" }}
+                </p>
+            {{ end }}
+        </article>
+    {{ end }}
+</div>
+{{ end }}

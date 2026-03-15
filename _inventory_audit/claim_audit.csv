@@ -1,0 +1,20 @@
+claim,source_file,evidence_strength,reason,source,confidence,action_needed
+Total files indexed: 264988,summary.md,high,Exact count from file index,files_index.csv,0.95,verify with independent count
+Total bytes indexed: 25532037558,summary.md,high,Sum of file sizes from index,files_index.csv,0.95,verify with independent calculation
+Corpus distribution by size,summary.md,medium,Based on file classification,files_index.csv,0.85,review classification methodology
+Size concentrations (top 10 paths),summary.md,high,Direct path analysis,files_index.csv,0.90,validate path patterns
+File-type concentrations,summary.md,high,Extension analysis,files_index.csv,0.90,check for hidden extensions
+Obvious clusters,summary.md,medium,Pattern recognition,files_index.csv,0.80,validate cluster boundaries
+Source-of-truth vs cache judgment,summary.md,low,Speculative classification,summary.md,0.60,require evidence-based criteria
+Salvage zones,summary.md,low,Potential value assessment,summary.md,0.65,need validation criteria
+firebase_data ↔ ui_assets correlation,correlation_map.md,medium,Path-based evidence,files_index.csv,0.75,verify ID mappings
+play_docs ↔ firebase_data correlation,correlation_map.md,medium,Metadata linkage,files_index.csv,0.70,validate extraction completeness
+docs/prompts/protocols ↔ configs correlation,correlation_map.md,high,Direct file relationships,files_index.csv,0.85,confirm governance scope
+reverse ↔ app_bundles correlation,correlation_map.md,low,Tentative path evidence,files_index.csv,0.50,require binary analysis
+sessions ↔ docs/state correlation,correlation_map.md,medium,Checkpoint evidence,files_index.csv,0.70,validate continuity patterns
+Information flow model,correlation_map.md,low,Speculative architecture,correlation_map.md,0.60,need flow analysis
+Concept duplication assessment,correlation_map.md,medium,Pattern observation,files_index.csv,0.75,verify intentional redundancy
+Primary vs derived judgment,correlation_map.md,low,Working hypothesis,correlation_map.md,0.65,require evidence criteria
+Indexing recommendations,correlation_map.md,medium,Based on correlations,correlation_map.md,0.70,validate retrieval needs
+Execution plan selection,execution_plan.md,medium,Evidence-based reasoning,summary.md,0.75,review alternative phases
+Next steps validity,next_steps.md,low,Forward-looking planning,next_steps.md,0.60,need dependency analysis

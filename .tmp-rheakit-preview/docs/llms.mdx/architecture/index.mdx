@@ -1,0 +1,135 @@
+# Architecture
+
+
+
+Architecture [#architecture]
+
+RheaKit uses a layered architecture: views observe shared state, shared state is fed by a single API client, and the API client handles transport and authentication concerns.
+
+Layer diagram [#layer-diagram]
+
+```text
+┌──────────────────────────────────────────────────────┐
+│                    SwiftUI Views                     │
+│  TeamChat · Governor · Tasks · Bio · Dialog · ...   │
+├──────────────────────────────────────────────────────┤
+│                    RheaStore                         │
+│  @MainActor · @Published · GRDB local cache         │
+│  Polling: agents, health, proofCount (every 5s)     │
+│  On-demand: history, radio, proofs, ontologies      │
+├──────────────────────────────────────────────────────┤
+│                    RheaAPI                           │
+│  Singleton HTTP client · URLSession                 │
+│  JWT Bearer + API-key fallback · Typed DTOs         │
+├──────────────────────────────────────────────────────┤
+│                   AuthManager                        │
+│  Keychain-backed JWT · Sign in with Apple           │
+│  Skip-login mode for dev · Profile fetch            │
+├──────────────────────────────────────────────────────┤
+│                  Rhea Backend                        │
+│  Fly.io (prod) · localhost:8400 (dev)               │
+│  SQL-backed endpoints · In-memory governor state    │
+└──────────────────────────────────────────────────────┘
+```
+
+`RheaStore`: the shared brain [#rheastore-the-shared-brain]
+
+`RheaStore` is a `@MainActor` singleton `ObservableObject` and the package source of truth.
+
+Data tiers [#data-tiers]
+
+| Tier      | What                                                 | Refresh                     |
+| --------- | ---------------------------------------------------- | --------------------------- |
+| Core      | Agents, health, proof count                          | Automatic five-second timer |
+| On-demand | History, radio, proofs, ontologies, sessions, office | Loaded when panes open      |
+| Ephemeral | SSE streams, active dialog state                     | Never cached                |
+
+Derived metrics [#derived-metrics]
+
+```swift
+var totalTokens: Int
+var totalCost: Double
+var aliveCount: Int
+var familyOnline: Bool
+```
+
+Staleness and recovery [#staleness-and-recovery]
+
+Each fetched surface records its last refresh. Views can inspect `store.age("proofs")` before doing expensive work.
+
+When connection returns after an outage, `RheaStore` follows a strict recovery order:
+
+1. Confirm membrane integrity: the backend responds to core agent state.
+2. Refill metabolism: refresh SQL-backed surfaces such as proofs, history, radio, and office.
+3. Accept hard resets honestly: in-memory governor counters may reset to zero after restart.
+4. Resume normal polling.
+
+`RheaAPI`: transport and typed endpoints [#rheaapi-transport-and-typed-endpoints]
+
+`RheaAPI` hides raw URLSession calls behind narrow methods that map to real backend capabilities.
+
+| Method                 | Endpoint                   | Returns                         |
+| ---------------------- | -------------------------- | ------------------------------- |
+| `health()`             | `GET /health`              | `HealthSnapshot`                |
+| `agents()`             | `GET /agents/status`       | `[AgentDTO]`                    |
+| `history()`            | `GET /cc/history`          | `[[String: Any]]`               |
+| `radio()`              | `GET /cc/radio`            | `[[String: Any]]`               |
+| `proofs()`             | `GET /aletheia/proofs`     | `[[String: Any]]`               |
+| `ontologies()`         | `GET /ontology`            | `[[String: Any]]`               |
+| `models()`             | `GET /models`              | `InfraModels`                   |
+| `sessions()`           | `GET /cc/sessions`         | `[[String: Any]]`               |
+| `walletStatus()`       | `GET /wallet/status`       | `[[String: Any]]`               |
+| `governorAll()`        | `GET /governor`            | `[String: GovernorAgentStatus]` |
+| `supervisorSessions()` | `GET /supervisor/sessions` | `[SupervisorSession]`           |
+
+Error handling [#error-handling]
+
+```swift
+public enum RheaAPIError: Error {
+    case invalidURL(String)
+    case http(Int, String)
+    case decode(String)
+}
+```
+
+`AppConfig`: environment routing [#appconfig-environment-routing]
+
+RheaKit chooses the backend automatically:
+
+| Environment | API URL                         | Atlas URL               |
+| ----------- | ------------------------------- | ----------------------- |
+| Simulator   | `http://localhost:8400`         | `http://localhost:3000` |
+| Device      | `https://rhea-tribunal.fly.dev` | same host               |
+
+`migrateStaleDefaults()` replaces saved localhost values when an older dev build lands on a real device.
+
+Local cache [#local-cache]
+
+`RheaStore` maintains a GRDB-backed SQLite cache for offline access.
+
+```sql
+CREATE TABLE cached_proofs (
+    id TEXT PRIMARY KEY,
+    claim TEXT NOT NULL,
+    tier TEXT,
+    agreement_score REAL,
+    confidence REAL,
+    created_at TEXT,
+    data TEXT
+);
+
+CREATE TABLE cached_history (
+    id INTEGER PRIMARY KEY,
+    type TEXT NOT NULL,
+    prompt TEXT NOT NULL,
+    agreement_score REAL,
+    created_at TEXT,
+    data TEXT
+);
+```
+
+This mirrors the server's durable data, while keeping ephemeral operational surfaces refresh-driven.
+
+Architectural bias [#architectural-bias]
+
+RheaKit deliberately avoids duplicated fetchers and locally improvised caches in individual panes. If you need data in a new view, either add it to the store or make the view explicitly on-demand. Silent shadow state is the fast path to impossible debugging.

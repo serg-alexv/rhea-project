@@ -1,0 +1,59 @@
+# BioRendererView
+
+
+
+BioRendererView [#biorendererview]
+
+BioRendererView is a 3D molecular visualization surface powered by [3Dmol.js](https://3dmol.csb.pitt.edu/) inside a `WKWebView`. It supports PDB lookup, SMILES input, multiple rendering styles, and tribunal-backed analysis.
+
+Usage [#usage]
+
+```swift
+import RheaKit
+
+struct MoleculeTab: View {
+    var body: some View {
+        BioRendererView()
+    }
+}
+```
+
+The view is self-contained. Drop it into a `TabView` or present it modally.
+
+Features [#features]
+
+* PDB lookup from RCSB
+* SMILES mode for small molecules
+* Cartoon, stick, sphere, line, and cross rendering
+* Spectrum, chain, secondary structure, element, and residue color schemes
+* Touch and mouse interaction
+* Preset molecules for rapid demos and testing
+* Analysis panel that forwards the active structure to the backend
+* Metadata display for title, method, resolution, and organism
+
+Presets [#presets]
+
+| PDB ID | Name            |
+| ------ | --------------- |
+| `1CRN` | Crambin         |
+| `1BNA` | DNA B-form      |
+| `4HHB` | Hemoglobin      |
+| `1ATP` | ATP synthase    |
+| `6LU7` | SARS-CoV-2 Mpro |
+| `1GZM` | GFP             |
+
+Render styles [#render-styles]
+
+| Style     | Description                     |
+| --------- | ------------------------------- |
+| `cartoon` | Secondary structure ribbons     |
+| `stick`   | Ball-and-stick bonds            |
+| `sphere`  | Space-filling CPK spheres       |
+| `line`    | Wireframe bonds                 |
+| `cross`   | Cross markers at atom positions |
+
+Notes [#notes]
+
+* `3Dmol-min.js` is bundled locally, so rendering does not depend on a CDN
+* PDB files come from RCSB
+* Visualization is client-side; only fetch and AI analysis require network

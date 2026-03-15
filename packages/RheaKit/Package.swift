@@ -31,6 +31,7 @@ let package = Package(
             ],
             resources: [
                 .copy("Resources/3Dmol-min.js"),
+                .copy("Resources/JSCoreScripts"),
             ]
         ),
     ]

@@ -1,0 +1,48 @@
+# TeamChatView
+
+
+
+TeamChatView [#teamchatview]
+
+TeamChatView exposes the live radio of the agent system. It is where the operator sees traffic, filters by participant, and sends messages back into the network.
+
+Usage [#usage]
+
+```swift
+import RheaKit
+
+struct RadioTab: View {
+    var body: some View {
+        TeamChatView()
+    }
+}
+```
+
+Features [#features]
+
+* Poll `/cc/radio` every five seconds
+* Filter chips by agent
+* Bubble or console presentation
+* Human message composer
+* Wake dormant agents from the agent sheet
+* Turn-based experiment mode with session and turn tagging
+* Family visibility mode
+
+Feed item model [#feed-item-model]
+
+```swift
+public struct FeedItem: Codable, Identifiable {
+    public let id: String
+    public let type: String
+    public let sender: String
+    public let receiver: String
+    public let text: String
+    public let ts: String
+}
+```
+
+Notes [#notes]
+
+* WebSocket streaming exists, but HTTP polling is the default path
+* The view shares agent visibility preferences with PulseMonitorView
+* Long messages support expand and collapse behavior

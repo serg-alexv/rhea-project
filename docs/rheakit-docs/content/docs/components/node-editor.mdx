@@ -1,0 +1,61 @@
+---
+title: NodeEditorView
+description: Build and execute multi-model verification workflows as typed node graphs.
+---
+
+# NodeEditorView
+
+NodeEditorView is a visual pipeline editor for tribunal workflows. You drag nodes onto a canvas, connect them, configure their parameters, and execute the resulting graph against the backend.
+
+## Usage
+
+```swift
+import RheaKit
+
+struct PipelineTab: View {
+    var body: some View {
+        NodeEditorView()
+    }
+}
+```
+
+## Node types
+
+| Type | Role |
+| --- | --- |
+| `input` | Starting claim or prompt |
+| `tribunal` | Multi-model consensus evaluation |
+| `sceptic` | Adversarial challenge |
+| `filter` | Threshold gate |
+| `proof` | Proof-store commit |
+| `output` | Final result surface |
+
+## Configuration surface
+
+| Node | Parameters |
+| --- | --- |
+| Input | `claim` |
+| Tribunal | `models`, `tier` |
+| Sceptic | `intensity` |
+| Filter | `threshold` |
+| Proof | `tag` |
+| Output | none |
+
+## Backing model
+
+```swift
+public struct PipelineNode: Identifiable, Codable {
+    public let id: UUID
+    public var type: NodeType
+    public var position: CGPoint
+    public var connections: [UUID]
+    public var config: [String: String]
+    public var resultText: String?
+}
+```
+
+## Notes
+
+- The canvas supports pan and zoom
+- Connections are directional
+- Running the graph serializes nodes into a workflow payload and POSTs it to the backend

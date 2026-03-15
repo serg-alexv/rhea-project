@@ -5,19 +5,15 @@ options:
     macOS: "14.0"
   xcodeVersion: "26.2"
 
-packages:
-  RheaKit:
-    path: ../packages/RheaKit
-  Pow:
-    url: https://github.com/serg-alexv/Pow
-    from: "1.0.0"
-
 targets:
   RheaPlay:
     type: application
     platform: macOS
     sources:
       - path: Sources
+      - path: Resources/JSCoreScripts
+        type: folder
+        buildPhase: resources
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.rhea.play
@@ -30,9 +26,6 @@ targets:
       configs:
         debug: {}
         release: {}
-    dependencies:
-      - package: RheaKit
-      - package: Pow
     info:
       path: Info.plist
       properties:

@@ -1,0 +1,82 @@
+path,type,reason,likely_use,confidence
+/Users/sa/rh.1/.firebase,firebase_directory,Firebase configuration directory,Firebase project setup,0.9
+/Users/sa/rh.1/firebase.json,firebase_config,Firebase project configuration,Firebase project settings,0.9
+/Users/sa/rh.1/firestore.rules,firebase_rules,Firestore security rules,Database access control,0.9
+/Users/sa/rh.1/firebase-debug.log,firebase_log,Firebase debug log,Troubleshooting Firebase issues,0.8
+/Users/sa/rh.1/.firecrawl,firecrawl_config,Firecrawl configuration,Web scraping for Firebase,0.7
+/Users/sa/rh.1/.firecrawl/.firecrawl.json,firecrawl_config,Firecrawl configuration file,Web scraping settings,0.7
+/Users/sa/rh.1/session_store.db,sqlite_db,Session storage database,Local session data,0.8
+/Users/sa/rh.1/.entire,entire_config,Entire configuration,Session management,0.7
+/Users/sa/rh.1/.entire/metadata,entire_metadata,Entire metadata directory,Session metadata storage,0.7
+/Users/sa/rh.1/.entire/metadata/94aabe90-9b2d-48e7-be8c-6bf820a0b6a9/full.jsonl,session_metadata,Session metadata file,Session data export,0.8
+/Users/sa/rh.1/.entire/metadata/261278d3-25c3-47f8-93e7-bfcc23c40cd5/full.jsonl,session_metadata,Session metadata file,Session data export,0.8
+/Users/sa/rh.1/.rhea,rhea_config,Rhea configuration,Rhea session management,0.8
+/Users/sa/rh.1/.rhea/radio,rhea_radio,Rhea radio directory,Rhea radio sessions,0.7
+/Users/sa/rh.1/.rhea/radio/radio.stdout.log,radio_log,Radio session log,Radio session data,0.7
+/Users/sa/rh.1/.env,env_file,Environment variables,Firebase credentials,0.9
+/Users/sa/rh.1/.env.example,env_template,Environment variables template,Firebase credentials setup,0.8
+/Users/sa/rh.1/.secrets,secrets_directory,Secrets directory,Firebase secret keys,0.8
+/Users/sa/rh.1/fly.toml,deployment_config,Fly.io deployment config,Firebase deployment,0.7
+/Users/sa/rh.1/Dockerfile,docker_config,Docker configuration,Firebase container deployment,0.7
+/Users/sa/rh.1/docker-compose.yml,docker_config,Docker Compose configuration,Firebase container deployment,0.7
+/Users/sa/rh.1/.gcloudignore,gcloud_config,Google Cloud ignore config,Firebase deployment,0.6
+/Users/sa/rh.1/.gitignore,git_config,Git ignore configuration,Firebase deployment,0.6
+/Users/sa/rh.1/.dockerignore,docker_config,Docker ignore configuration,Firebase container deployment,0.6
+/Users/sa/rh.1/.windsurfignore,windsurf_config,Windsurf ignore configuration,Firebase deployment,0.6
+/Users/sa/rh.1/data,data_directory,Data files directory,Firebase data exports,0.7
+/Users/sa/rh.1/sessions,sessions_directory,Sessions directory,Session data storage,0.7
+/Users/sa/rh.1/SESSION_STATE.md,session_doc,Session state documentation,Session management guide,0.8
+/Users/sa/rh.1/SESSION_SUMMARY_STAGE5.md,session_doc,Session summary documentation,Session management guide,0.8
+/Users/sa/rh.1/rhea-session-server,session_server,Rust session server,Session management backend,0.9
+/Users/sa/rh.1/rhea-session-server/src/main.rs,session_server_main,Session server main file,Session management logic,0.9
+/Users/sa/rh.1/rhea-session-server/src/lib.rs,session_server_lib,Session server library,Session management functions,0.9
+/Users/sa/rh.1/rhea-session-server/src/tests.rs,session_server_tests,Session server tests,Session management testing,0.8
+/Users/sa/rh.1/rhea-cli,cli_tool,Rhea CLI tool,Session management CLI,0.8
+/Users/sa/rh.1/rhea-cli/src/session.rs,cli_session,CLI session management,Session CLI commands,0.8
+/Users/sa/rh.1/rhea-client,client_library,Rhea client library,Session client integration,0.8
+/Users/sa/rh.1/rhea-client/src/lib.rs,client_lib,Client library main file,Session client functions,0.8
+/Users/sa/rh.1/rhea-client/src/local_truth.rs,client_truth,Client local truth,Session local data,0.8
+/Users/sa/rh.1/rhea-ai-auth,auth_service,Rhea AI auth service,Authentication for Firebase,0.8
+/Users/sa/rh.1/.gitmodules,git_modules,Git submodules configuration,Firebase dependencies,0.6
+/Users/sa/rh.1/package.json,nodejs_config,Node.js package configuration,Firebase dependencies,0.7
+/Users/sa/rh.1/tsconfig.json,typescript_config,TypeScript configuration,Firebase TypeScript setup,0.7
+/Users/sa/rh.1/requirements.txt,python_deps,Python dependencies,Firebase Python SDK,0.7
+/Users/sa/rh.1/.venv,python_venv,Python virtual environment,Firebase Python environment,0.7
+/Users/sa/rh.1/.venv/lib/python3.11/site-packages,python_packages,Python packages,Firebase Python packages,0.7
+/Users/sa/rh.1/.venv/lib/python3.11/site-packages/grpc,grpc_package,gRPC Python package,Firebase communication,0.7
+/Users/sa/rh.1/.venv/lib/python3.11/site-packages/grpc/_cython/cygrpc.cpython-311-darwin.so,grpc_extension,gRPC extension,Firebase communication,0.7
+/Users/sa/rh.1/src/.venv,src_python_venv,Source Python virtual environment,Firebase Python environment,0.7
+/Users/sa/rh.1/src/.venv/lib/python3.11/site-packages,src_python_packages,Source Python packages,Firebase Python packages,0.7
+/Users/sa/rh.1/src/.venv/lib/python3.11/site-packages/grpc,src_grpc_package,Source gRPC package,Firebase communication,0.7
+/Users/sa/rh.1/src/.venv/lib/python3.11/site-packages/grpc/_cython/cygrpc.cpython-311-darwin.so,src_grpc_extension,Source gRPC extension,Firebase communication,0.7
+/Users/sa/rh.1/redis_schema.md,redis_schema,Redis schema documentation,Session cache strategy,0.7
+/Users/sa/rh.1/redis_schema.md,redis_doc,Redis documentation,Session caching with Redis,0.7
+/Users/sa/rh.1/.redis,redis_config,Redis configuration,Session caching,0.6
+/Users/sa/rh.1/.redis/redis.conf,redis_config_file,Redis configuration file,Session cache settings,0.6
+/Users/sa/rh.1/.redis/redis.log,redis_log,Redis log file,Session cache debugging,0.6
+/Users/sa/rh.1/mongodb_schema.md,mongodb_schema,MongoDB schema documentation,Session data modeling,0.6
+/Users/sa/rh.1/.mongodb,mongodb_config,MongoDB configuration,Session data storage,0.6
+/Users/sa/rh.1/.mongodb/mongodb.conf,mongodb_config_file,MongoDB configuration file,Session database settings,0.6
+/Users/sa/rh.1/.mongodb/mongodb.log,mongodb_log,MongoDB log file,Session database debugging,0.6
+/Users/sa/rh.1/brain-capsule-20260228T211513Z-smoke-20260228t211513z.tar.gz,brain_capsule,Brain capsule archive,Session backup,0.8
+/Users/sa/rh.1/brain-capsule-20260228T211513Z-smoke-20260228t211513z.tar.gz.sha256,brain_capsule_checksum,Brain capsule checksum,Session backup verification,0.8
+/Users/sa/rh.1/archive,archive_directory,Archive directory,Session backups,0.7
+/Users/sa/rh.1/artifacts,artifacts_directory,Artifacts directory,Session artifacts,0.7
+/Users/sa/rh.1/backup,backup_directory,Backup directory,Session backups,0.7
+/Users/sa/rh.1/export,export_directory,Export directory,Session data exports,0.7
+/Users/sa/rh.1/import,import_directory,Import directory,Session data imports,0.7
+/Users/sa/rh.1/migration,migration_directory,Migration directory,Session data migration,0.7
+/Users/sa/rh.1/restore,restore_directory,Restore directory,Session data restoration,0.7
+/Users/sa/rh.1/sync,sync_directory,Sync directory,Session data synchronization,0.7
+/Users/sa/rh.1/backup_session.sh,backup_script,Session backup script,Session backup automation,0.7
+/Users/sa/rh.1/restore_session.sh,restore_script,Session restore script,Session restore automation,0.7
+/Users/sa/rh.1/export_session.py,export_script,Session export script,Session data export,0.7
+/Users/sa/rh.1/import_session.py,import_script,Session import script,Session data import,0.7
+/Users/sa/rh.1/migrate_session.js,migrate_script,Session migration script,Session data migration,0.7
+/Users/sa/rh.1/sync_session.ts,sync_script,Session sync script,Session data synchronization,0.7
+/Users/sa/rh.1/backup_session.sql,backup_sql,Session backup SQL,Session database backup,0.7
+/Users/sa/rh.1/restore_session.sql,restore_sql,Session restore SQL,Session database restore,0.7
+/Users/sa/rh.1/export_session.json,export_json,Session export JSON,Session data export,0.7
+/Users/sa/rh.1/import_session.json,import_json,Session import JSON,Session data import,0.7
+/Users/sa/rh.1/migrate_session.yaml,migrate_yaml,Session migration YAML,Session data migration,0.7
+/Users/sa/rh.1/sync_session.xml,sync_xml,Session sync XML,Session data synchronization,0.7

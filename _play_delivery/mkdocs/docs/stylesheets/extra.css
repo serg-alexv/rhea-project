@@ -1,0 +1,170 @@
+/* Play AI Documentation Custom Styles */
+
+:root {
+  --md-primary-fg-color: #22d691;
+  --md-primary-fg-color--light: #11fea4;
+  --md-primary-fg-color--dark: #22d691;
+  --md-accent-fg-color: #22d691;
+}
+
+/* Custom typography */
+.md-typeset {
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.md-typeset h1 {
+  color: var(--md-default-fg-color--light);
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+}
+
+.md-typeset h2 {
+  color: var(--md-default-fg-color--light);
+  font-weight: 600;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--md-default-fg-color--lightest);
+}
+
+.md-typeset h3 {
+  color: var(--md-default-fg-color);
+  font-weight: 600;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+/* Code blocks */
+.md-typeset code {
+  background-color: var(--md-code-bg-color);
+  color: var(--md-code-fg-color);
+  padding: 0.2em 0.4em;
+  border-radius: 0.3em;
+  font-size: 0.9em;
+}
+
+.md-typeset .highlight {
+  background-color: var(--md-code-bg-color);
+  border-radius: 0.5rem;
+  margin: 1rem 0;
+}
+
+.md-typeset .highlight .filename {
+  background-color: var(--md-default-fg-color--lightest);
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.8rem;
+  color: var(--md-default-fg-color--light);
+}
+
+/* Links */
+.md-typeset a {
+  color: var(--md-accent-fg-color);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.md-typeset a:hover {
+  color: var(--md-accent-fg-color--transparent);
+  text-decoration: underline;
+}
+
+/* Navigation */
+.md-nav__link--active {
+  color: var(--md-primary-fg-color);
+  font-weight: 600;
+}
+
+/* Header */
+.md-header {
+  background-color: var(--md-primary-fg-color);
+}
+
+.md-header__title {
+  font-weight: 600;
+}
+
+/* Search */
+.md-search__form {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 0.5rem;
+}
+
+.md-search__input {
+  color: var(--md-default-bg-color--light);
+}
+
+/* Footer */
+.md-footer {
+  background-color: var(--md-default-bg-color--dark);
+}
+
+.md-footer-nav {
+  background-color: var(--md-primary-fg-color--dark);
+}
+
+/* Content area */
+.md-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Table of contents */
+.md-nav--secondary .md-nav__link--active {
+  color: var(--md-primary-fg-color);
+  font-weight: 600;
+}
+
+/* Admonitions */
+.md-typeset .admonition {
+  border-left: 0.4rem solid var(--md-primary-fg-color);
+}
+
+.md-typeset .admonition.tip {
+  border-left-color: var(--md-accent-fg-color);
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 76.25em) {
+  .md-content {
+    max-width: 100%;
+  }
+}
+
+/* Dark mode adjustments */
+[data-md-color-scheme="slate"] {
+  --md-primary-fg-color: #22d691;
+  --md-primary-fg-color--light: #11fea4;
+  --md-primary-fg-color--dark: #1ba876;
+  --md-accent-fg-color: #22d691;
+}
+
+/* Custom command examples */
+.command-example {
+  background-color: var(--md-code-bg-color);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin: 0.5rem 0;
+  font-family: var(--md-code-font-family);
+  font-size: 0.9em;
+  border: 1px solid var(--md-default-fg-color--lightest);
+}
+
+/* Play AI specific styling */
+.play-ai-panel {
+  background-color: var(--md-default-bg-color--light);
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin: 1rem 0;
+}
+
+.play-ai-panel::before {
+  content: "💫 Play AI Panel";
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--md-primary-fg-color);
+}

@@ -1,0 +1,74 @@
+# Components
+
+
+
+Components [#components]
+
+RheaKit is not a bag of small widgets. It ships opinionated, full-screen control surfaces that assume a real backend, real state, and real operator intent.
+
+Primary documented surfaces [#primary-documented-surfaces]
+
+<Cards>
+  <Card title="BioRendererView" href="./bio-renderer">
+    3Dmol.js-powered molecular rendering in a native SwiftUI shell.
+  </Card>
+
+  <Card title="NodeEditorView" href="./node-editor">
+    Construct tribunal workflows visually with typed nodes and execution state.
+  </Card>
+
+  <Card title="TeamChatView" href="./team-chat">
+    Live inter-agent radio feed with filtering, send mode, and wake controls.
+  </Card>
+
+  <Card title="ClipboardView" href="./clipboard">
+    Cross-device clipboard flows with privacy levels, pinning, and expiry.
+  </Card>
+
+  <Card title="DialogView" href="./dialog">
+    Tribunal-backed conversational interface with agreement and timing metadata.
+  </Card>
+
+  <Card title="GovernorView" href="./governor">
+    Track spend, burn, mode, pace, and floor-gap pressure in real time.
+  </Card>
+
+  <Card title="TasksView" href="./tasks">
+    Kanban-style task operations across the multi-agent system.
+  </Card>
+
+  <Card title="AletheiaView" href="./aletheia">
+    Proof browsing, immutable verification state, and ontology inventory.
+  </Card>
+
+  <Card title="ProcessesView" href="./processes">
+    Spawn, inspect, and control supervisor-backed sessions.
+  </Card>
+
+  <Card title="PulseMonitorView" href="./pulse-monitor">
+    Lease state, queue health, and pulse-level ops oversight.
+  </Card>
+</Cards>
+
+Additional package surfaces already in tree [#additional-package-surfaces-already-in-tree]
+
+The package target currently also contains these files and views:
+
+| Area                         | Current files                                                                                                                                 |
+| ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| Transport and state          | `RheaAPI`, `RheaStore`, `AppConfig`, `AgentDTO`, `Theme`                                                                                      |
+| Auth and privacy             | `AuthView`, `RelayPrivacyView`, `PairingView`, `PairingDelegate`, `DPIView`, `DPIBypassEngine`, `TunnelManager`, `MeshManager`                |
+| Research and visualization   | `AtlasWebView`, `MonitorWebView`, `NDIFlowView`, `NetworkFlowerView`, `NetworkFlowerEngine`, `RuliadView`, `BioSvgTemplateEngine`             |
+| Operations and utility panes | `OfficeView`, `OpsView`, `ModelsView`, `WalletView`, `HistoryView`, `SettingsView`, `AuthorView`, `MenuBarView`, `ToolsHubView`, `ChainsView` |
+
+Selection rule [#selection-rule]
+
+Start with the surfaces that reveal the system's real state:
+
+1. `GovernorView` if you need risk and spend visibility.
+2. `TeamChatView` if you need to see agent traffic.
+3. `TasksView` if work coordination is primary.
+4. `AletheiaView` if proofs and verification are the product core.
+5. `BioRendererView` or `NodeEditorView` when the domain includes interactive science or workflow design.
+
+Do not mount the whole package just because it exists. Pick the minimum set that gives a truthful operator surface.

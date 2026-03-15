@@ -1,0 +1,44 @@
+---
+title: PulseMonitorView
+description: System pulse, queue health, and lease-state oversight for the multi-agent network.
+---
+
+# PulseMonitorView
+
+PulseMonitorView is the ops-console layer above the agent network. It focuses on queue health, stale work, and lease state rather than conversational flow.
+
+## Features
+
+- Queue summary with totals by status and priority
+- Agent pulse cards with lease token and expiry data
+- Auto-polling
+- Agent filtering shared with TeamChatView preferences
+
+## Queue model
+
+```swift
+public struct PulseQueueSummary: Codable {
+    public let total: Int
+    public let counts: [String: Int]
+    public let active_by_priority: [String: Int]
+    public let stale_count: Int
+    public let _updated: String?
+}
+```
+
+## Lease fields surfaced
+
+| Field | Meaning |
+| --- | --- |
+| `lease_token` | current lease token count |
+| `lease_expired` | whether the lease is expired |
+| `lease_expires_at` | ISO-8601 expiry timestamp |
+| `office_status` | office relay state |
+| `pending_msgs` | unread messages |
+| `tasks_open` | tasks opened against the agent |
+| `tasks_claimed` | tasks currently claimed |
+
+## Notes
+
+- Pulse uses the same `AgentDTO` spine as GovernorView
+- It is the correct surface when you need to see queue drift, not budget drift

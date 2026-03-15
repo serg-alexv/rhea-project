@@ -1,0 +1,22 @@
+{{ define "main" }}
+<article>
+    <h1>{{ .Title }}</h1>
+    
+    {{ if .TableOfContents }}
+        <div class="toc">
+            <h3>Table of Contents</h3>
+            {{ .TableOfContents }}
+        </div>
+    {{ end }}
+    
+    <div class="content">
+        {{ .Content }}
+    </div>
+    
+    {{ if .Params.Date }}
+        <p style="margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--border-color); color: #666; font-size: 0.9rem;">
+            Published: {{ .Date.Format "January 2, 2006" }}
+        </p>
+    {{ end }}
+</article>
+{{ end }}

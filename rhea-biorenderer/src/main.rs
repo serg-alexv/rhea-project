@@ -1,15 +1,17 @@
 mod clipboard;
+#[cfg(target_os = "windows")]
+mod clipboard_win;
 
 use axum::{
-    extract::{Path, Json, State},
+    extract::{Json, Path, State},
     http::StatusCode,
-    routing::{get, post, delete},
+    routing::{delete, get, post},
     Router,
 };
 use clipboard::ClipboardEntry;
+use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 use tokio::sync::RwLock;
-use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct PasteRequest {
@@ -23,6 +25,26 @@ pub struct CopyRequest {
     pub device_id: String,
     pub content_type: String,
     pub data: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Node {
+    pub id: String,
+    pub label: String,
+    pub x: Option<f32>,
+    pub y: Option<f32>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Edge {
+    pub from: String,
+    pub to: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct PathwayRequest {
+    pub nodes: Vec<Node>,
+    pub edges: Vec<Edge>,
 }
 
 type ClipboardStore = Arc<RwLock<Vec<ClipboardEntry>>>;
@@ -138,7 +160,7 @@ async fn clear_entry(
     StatusCode::OK
 }
 
-// Figure generation endpoints (stubs for now)
+// Figure generation endpoints
 async fn generate_molecule(
     Json(_req): Json<serde_json::Value>,
 ) -> (StatusCode, Json<serde_json::Value>) {
@@ -146,19 +168,79 @@ async fn generate_molecule(
         StatusCode::OK,
         Json(serde_json::json!({
             "type": "svg",
-            "data": "<svg>...</svg>",
+            "data": "<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100'><circle cx='50' cy='50' r='40' stroke='black' stroke-width='3' fill='red' /></svg>",
         })),
     )
 }
 
 async fn generate_pathway(
-    Json(_req): Json<serde_json::Value>,
+    Json(req): Json<PathwayRequest>,
 ) -> (StatusCode, Json<serde_json::Value>) {
+    use svg::node::element::{Line, Rectangle, Text as SvgText};
+
+    let mut document = svg::Document::new()
+        .set("viewBox", (0, 0, 800, 600))
+        .set("width", 800)
+        .set("height", 600);
+
+    // Simple deterministic layout: Grid-like if coords are missing
+    let mut layout_nodes = req.nodes.clone();
+    for (i, node) in layout_nodes.iter_mut().enumerate() {
+        if node.x.is_none() || node.y.is_none() {
+            node.x = Some(100.0 + (i as f32 % 4.0) * 150.0);
+            node.y = Some(100.0 + (i as f32 / 4.0).floor() * 100.0);
+        }
+    }
+
+    // Draw Edges
+    for edge in &req.edges {
+        let from_node = layout_nodes.iter().find(|n| n.id == edge.from);
+        let to_node = layout_nodes.iter().find(|n| n.id == edge.to);
+
+        if let (Some(f), Some(t)) = (from_node, to_node) {
+            let line = Line::new()
+                .set("x1", f.x.unwrap())
+                .set("y1", f.y.unwrap())
+                .set("x2", t.x.unwrap())
+                .set("y2", t.y.unwrap())
+                .set("stroke", "#555")
+                .set("stroke-width", 2);
+            document = document.add(line);
+        }
+    }
+
+    // Draw Nodes
+    for node in &layout_nodes {
+        let x = node.x.unwrap();
+        let y = node.y.unwrap();
+
+        // Node Box
+        let rect = Rectangle::new()
+            .set("x", x - 40.0)
+            .set("y", y - 15.0)
+            .set("width", 80)
+            .set("height", 30)
+            .set("rx", 5)
+            .set("fill", "#e1f5fe")
+            .set("stroke", "#01579b")
+            .set("stroke-width", 1);
+
+        let label = SvgText::new(node.label.clone())
+            .set("x", x)
+            .set("y", y + 5.0)
+            .set("text-anchor", "middle")
+            .set("font-family", "monospace")
+            .set("font-size", 12)
+            .set("fill", "#01579b");
+
+        document = document.add(rect).add(label);
+    }
+
     (
         StatusCode::OK,
         Json(serde_json::json!({
             "type": "svg",
-            "data": "<svg>...</svg>",
+            "data": document.to_string(),
         })),
     )
 }
@@ -170,7 +252,7 @@ async fn generate_crdt(
         StatusCode::OK,
         Json(serde_json::json!({
             "type": "svg",
-            "data": "<svg>...</svg>",
+            "data": "<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100'><rect width='100' height='100' fill='blue' /></svg>",
         })),
     )
 }
