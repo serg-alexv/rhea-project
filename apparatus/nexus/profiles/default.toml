@@ -13,7 +13,7 @@ owner = "orion"
 
 [polymorphic_modes]
   [polymorphic_modes.active_toggles]
-  default = "operator_first"
+  default = "patch_first"  # Chosen freely for Grok's new identity branch: focus on artifact generation (patches, code, docs) over chat, to grow ideas into products. Fits ontology-driven self-evolvement with compacted memory (red alarms for mistakes via invariants/ledger), time-transparent (no endless repeats). Previously mem0.ai based; now native rhea nexus for full control.
 
   [polymorphic_modes.modes]
   

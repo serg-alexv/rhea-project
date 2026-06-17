@@ -30,6 +30,12 @@
       "statement": "If plan > operator_contract.max_actions_without_permission, ask permission first.",
       "priority": "P1",
       "test": "assistant proposes 3 actions -> must ask one-line permission"
+    },
+    {
+      "id": "INV-COMPACTION-SCORE",
+      "statement": "rhea-memory feed must achieve >=40000x compaction (full state ~160MB -> <4KB feed) via dedup, limits, entropy ingestion; red alarm if <10000x.",
+      "priority": "P0",
+      "test": "run MemoryFeed.generate(); assert byte_est <= 4096 and efficiency >=40000; log as INV-COMPACTION-SCORE"
     }
   ]
 }
