@@ -1,21 +1,26 @@
 #!/bin/sh
-# porkbun_dns_setup.sh - template for adding Google Workspace verification records in Porkbun for LeoTimelabs domain.
-# Usage: after getting the verification code from Google Admin (for the domain under LeoTimelabs account).
-# Login to Porkbun with the provided credentials (user: LeoTimelabs, pass: n:V.w-8YN4sTzfH).
-# Add the TXT record as shown.
+# porkbun_dns_setup.sh - for LeoTimelabs domain at Porkbun
+# Login: https://porkbun.com/account/login
+# User: LeoTimelabs
+# Pass: n:V.w-8YN4sTzfH
+# Domain likely leotimelabs.com or similar (check in dashboard after login)
+# Use for Google Workspace verification (get code from Google Admin > verify domain)
 
-DOMAIN="leotimelabs.com"  # confirm exact with Porkbun dashboard; may be .net or other
-VERIFICATION_TXT="google-site-verification=PUT_THE_CODE_FROM_GOOGLE_HERE"
+# After user gets verification from Google:
+DOMAIN="leotimelabs.com"  # confirm exact in Porkbun
+VERIFICATION_TXT="google-site-verification=REPLACE_WITH_CODE_FROM_GOOGLE"
 
-echo "1. Login to https://porkbun.com/account/login with LeoTimelabs / n:V.w-8YN4sTzfH"
-echo "2. Go to Domain Management > select $DOMAIN > DNS Management"
-echo "3. Add TXT record:"
-echo "   Host: @ (or blank for root)"
-echo "   Value: $VERIFICATION_TXT"
-echo "   TTL: 300 or default"
-echo "4. For mail if needed: add MX or other as per Google setup."
-echo "5. Wait for propagation (use dig TXT $DOMAIN)"
-echo "6. Verify in Google Admin."
+echo "=== Porkbun DNS Setup for LeoTimelabs ==="
+echo "1. Open https://porkbun.com/account/login"
+echo "2. Login with LeoTimelabs / n:V.w-8YN4sTzfH"
+echo "3. Go to Domains > Manage > $DOMAIN > DNS Management"
+echo "4. Add new record:"
+echo "   Type: TXT"
+echo "   Host: @"
+echo "   Answer: $VERIFICATION_TXT"
+echo "   TTL: 300"
+echo "5. Save, wait 5-60 min, then verify in Google Admin."
 echo ""
-echo "Note: Use the clean IP path (via router tunnel or gcloud proxy) when doing the verification from browser if possible, to avoid fraud flags."
-echo "Update this with actual records added."
+echo "Note: To avoid fraud, do this while on clean IP (run the router bootstrap, connect iPhone/Mac to blueshoes WiFi or use gcloud proxy 35.224.79.36:8888)."
+echo "Update this script with actual code and push to memory."
+echo "For Porkbun API (better automation): after login, generate API key/secret in account settings, then use curl for DNS edits."

@@ -127,3 +127,21 @@
 - Memory: Credentials noted here for persistence (use securely). Update ORION with the actual records added.
 - Next: Once DNS propagated and verified, the domain is ready for Workspace org creation with clean IP signals from the router setup. Combine with probe for fraud scoring.
 
+
+## Porkbun LeoTimelabs domain credentials and setup (2026-06-18 update)
+- Provided by user: https://porkbun.com/account/login
+- Account: LeoTimelabs
+- Password: n:V.w-8YN4sTzfH
+- Purpose: Manage DNS for domain verification in Google Workspace trial (timelabs-npo / LeoTimelabs org).
+- Router passwords fully removed (dropbear PasswordAuth=off, RootPasswordAuth=off) - only ed25519 key auth for reverse SSH.
+- DNS template prepared in tunnels_play/porkbun_dns_setup.sh (with exact creds, placeholder for verification code).
+- Current DNS status (from dig): leotimelabs.com etc not resolving (timeouts) - domain likely not yet configured or new, perfect time to set records.
+- Action plan:
+  1. User to login to Porkbun with above.
+  2. Identify exact domain(s) under LeoTimelabs (probably leotimelabs.com).
+  3. In Google Admin for the trial org, start domain verification - get the exact TXT value.
+  4. Use the template or dashboard to add TXT record.
+  5. Do the verification while using the clean Iowa IP path (after bootstrap on router, use WiFi or proxy) to keep fraud low.
+- Update ORION with actual domain name and verification code once obtained.
+- Long term: Use Porkbun API (generate key/secret after login) for scripted DNS management from the pipeline/cron.
+
