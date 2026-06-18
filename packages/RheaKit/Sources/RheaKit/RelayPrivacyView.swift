@@ -5,7 +5,10 @@ import NetworkExtension
 ///
 /// Layers:
 ///   1. DNS-over-HTTPS — encrypts DNS queries (system-level via NEDNSSettingsManager)
-///   2. API Relay — routes tribunal queries through encrypted relay endpoint
+/// Privacy relay options for sensitive proof queries.
+///
+/// Routes proof queries through encrypted relay endpoints to protect
+/// privacy during verification tasks.
 ///   3. VPN — full traffic tunneling via Rhea backend (PacketTunnelProvider + WireGuard)
 ///
 /// No third-party VPN subscriptions. Own infrastructure only.

@@ -1,6 +1,9 @@
 import SwiftUI
 
-/// SQL-backed tribunal history browser.
+/// Visual proof history explorer - browse past verification results.
+///
+/// Shows a timeline of completed proofs with their claims, verdicts, and evidence.
+/// Each proof represents a completed node flow from the NodeEditorView.
 /// Reads from /cc/history (persistent, survives restarts).
 public struct HistoryView: View {
     @State private var entries: [[String: Any]] = []

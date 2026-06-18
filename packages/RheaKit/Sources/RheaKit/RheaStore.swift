@@ -12,7 +12,7 @@ import Collections
 ///   - Ephemeral (never cached): SSE stream, active dialog
 ///
 /// After a cloud restart, SQL-backed data (history, radio, proofs) is real.
-/// In-memory server state (governor counters, agent leases) resets to zero.
+/// In-memory game state (score trackers, helper leases) resets to zero.
 /// The store tracks staleness per data type and triggers recovery triage
 /// when connection comes back.
 @MainActor
@@ -64,7 +64,7 @@ public final class RheaStore: ObservableObject {
     @Published public var connectionAlive = false
     @Published public var proofCount = 0
 
-    /// Agent lookup by name — O(1) access, preserves order.
+    /// Helper lookup by name — O(1) access, preserves order.
     public private(set) var agentMap: OrderedDictionary<String, AgentDTO> = [:]
 
     // ─── Derived Metrics ─────────────────────────────────────────────
@@ -147,7 +147,7 @@ public final class RheaStore: ObservableObject {
     /// Recovery order mirrors cellular stress response:
     ///   1. Membrane = server alive (already confirmed by caller)
     ///   2. Core metabolism = refresh proofs + history (immutable truth first)
-    ///   3. Clear damaged = invalidate stale governor/agent counters
+    ///   3. Clear damaged = invalidate stale score trackers/helper data
     ///   4. Resume = normal polling takes over
     public func onConnectionRecovered() async {
         // Phase 1: Core metabolism — refresh SQL-backed data (survives restarts)

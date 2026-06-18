@@ -1,9 +1,9 @@
 import SwiftUI
 
 /// Crypto wallet — donation addresses, balance check, QR codes.
+/// A playful interface to manage digital assets without exposing private keys.
 /// Reads from /wallet/status (public addresses only, no private keys).
 public struct WalletView: View {
-    @AppStorage("apiBaseURL") private var apiBaseURL = AppConfig.defaultAPIBaseURL
     @State private var wallets: [[String: Any]] = []
     @State private var btcBalance: String?
     @State private var isLoading = false
@@ -155,29 +155,31 @@ public struct WalletView: View {
     }
 
     private func loadWallets() {
-        isLoading = true
-        guard let url = URL(string: "\(apiBaseURL)/wallet/status") else { return }
-        URLSession.shared.dataTask(with: url) { data, _, _ in
-            defer { DispatchQueue.main.async { isLoading = false } }
-            guard let data,
-                  let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-                  let list = json["wallets"] as? [[String: Any]] else { return }
-            DispatchQueue.main.async { wallets = list }
-        }.resume()
+        Task {
+            isLoading = true
+            defer { isLoading = false }
+            
+            do {
+                wallets = await RheaAPI.shared.walletStatus()
+            } catch {
+                print("Failed to load wallets: \(error)")
+            }
+        }
     }
 
     private func checkBalance(chain: String) {
-        guard let url = URL(string: "\(apiBaseURL)/wallet/balance/\(chain)") else { return }
-        URLSession.shared.dataTask(with: url) { data, _, _ in
-            guard let data,
-                  let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else { return }
-            DispatchQueue.main.async {
-                if let bal = json["balance"] as? Double {
+        Task {
+            do {
+                let balance = await RheaAPI.shared.walletBalance(chain: chain)
+                if let bal = balance["balance"] as? Double {
                     btcBalance = String(format: "%.8f BTC", bal)
                 } else {
                     btcBalance = "0.00000000 BTC"
                 }
+            } catch {
+                print("Failed to check balance: \(error)")
+                btcBalance = "0.00000000 BTC"
             }
-        }.resume()
+        }
     }
 }

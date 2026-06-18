@@ -1,6 +1,9 @@
 import SwiftUI
 
-/// Model roster + execution profile switcher + governor grid.
+/// Model roster + execution profile switcher + scorekeeper grid.
+///
+/// Browse available AI models, switch execution profiles, and monitor
+/// scorekeeper status for each helper.
 /// Ported from Play macOS → iOS-compatible.
 public struct ModelsView: View {
     @ObservedObject private var store = RheaStore.shared

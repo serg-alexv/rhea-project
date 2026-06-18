@@ -3,6 +3,9 @@ import os.log
 
 /// Rhea DPI Bypass Engine — packet-level anti-censorship.
 ///
+/// **INTERNAL USE ONLY** - Should only be used by PacketTunnelProvider.
+/// Not exposed in public API to prevent misuse.
+///
 /// Techniques (based on ZAPRET/tpws, GoodbyeDPI, ByeDPI):
 ///
 /// 1. **TLS ClientHello splitting** — fragments ClientHello across multiple TCP segments
@@ -32,40 +35,40 @@ import os.log
 ///   PacketTunnelProvider → reads IP packets from TUN
 ///     → DPIBypassEngine.process(packet) → transformed packets
 ///       → write back to network
-public final class DPIBypassEngine {
+final class DPIBypassEngine {
 
-    public struct Config {
+    internal struct Config {
         /// Split TLS ClientHello at SNI field boundary
-        public var splitClientHello: Bool = true
+        internal var splitClientHello: Bool = true
 
         /// Number of segments to split ClientHello into
-        public var splitSegments: Int = 2
+        internal var splitSegments: Int = 2
 
         /// Split position: bytes from start of ClientHello, or -1 for auto (at SNI)
-        public var splitPosition: Int = -1
+        internal var splitPosition: Int = -1
 
         /// Send segments in reverse order (disorder mode)
-        public var disorder: Bool = false
+        internal var disorder: Bool = false
 
         /// Inject fake RST packet with low TTL before ClientHello
-        public var fakePacketTTL: UInt8? = nil
+        internal var fakePacketTTL: UInt8? = nil
 
         /// Split TLS record itself (not just TCP segments)
-        public var tlsRecordSplit: Bool = false
+        internal var tlsRecordSplit: Bool = false
 
         /// Randomize HTTP Host header case
-        public var hostCaseRandomize: Bool = true
+        internal var hostCaseRandomize: Bool = true
 
         /// Out-of-band byte injection after first split
-        public var oobInjection: Bool = false
+        internal var oobInjection: Bool = false
 
         /// Domains to bypass (empty = all)
-        public var targetDomains: [String] = []
+        internal var targetDomains: [String] = []
 
-        public init() {}
+        internal init() {}
 
         /// Aggressive preset — combines multiple techniques for heavily censored networks
-        public static var aggressive: Config {
+        internal static var aggressive: Config {
             var c = Config()
             c.splitClientHello = true
             c.splitSegments = 3
@@ -77,7 +80,7 @@ public final class DPIBypassEngine {
         }
 
         /// Gentle preset — minimal interference, works against simple passive DPI
-        public static var gentle: Config {
+        internal static var gentle: Config {
             var c = Config()
             c.splitClientHello = true
             c.splitSegments = 2
@@ -93,12 +96,12 @@ public final class DPIBypassEngine {
     private let log = Logger(subsystem: "com.rhea.preview", category: "dpi-bypass")
 
     /// Stats
-    public private(set) var totalPackets: UInt64 = 0
-    public private(set) var modifiedPackets: UInt64 = 0
-    public private(set) var tlsClientHellos: UInt64 = 0
-    public private(set) var httpRequests: UInt64 = 0
+    internal private(set) var totalPackets: UInt64 = 0
+    internal private(set) var modifiedPackets: UInt64 = 0
+    internal private(set) var tlsClientHellos: UInt64 = 0
+    internal private(set) var httpRequests: UInt64 = 0
 
-    public init(config: Config = Config()) {
+    internal init(config: Config = Config()) {
         self.config = config
         log.info("DPI bypass engine initialized. split=\(config.splitClientHello) disorder=\(config.disorder) fakeTTL=\(config.fakePacketTTL.map(String.init) ?? "off")")
     }
@@ -107,7 +110,7 @@ public final class DPIBypassEngine {
 
     /// Process a raw IPv4/IPv6 packet. Returns one or more packets to send.
     /// If the packet doesn't need modification, returns it unchanged.
-    public func process(packet: Data) -> [Data] {
+    internal func process(packet: Data) -> [Data] {
         totalPackets += 1
 
         // Parse IP header
@@ -513,7 +516,7 @@ public final class DPIBypassEngine {
     // MARK: - Extracting SNI hostname (for domain filtering)
 
     /// Extract the SNI hostname from a TLS ClientHello payload.
-    public func extractSNI(_ payload: Data.SubSequence) -> String? {
+    internal func extractSNI(_ payload: Data.SubSequence) -> String? {
         guard let sniOffset = findSNIOffset(payload) else { return nil }
         let base = payload.startIndex
 

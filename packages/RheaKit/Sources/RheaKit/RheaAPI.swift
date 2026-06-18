@@ -4,6 +4,7 @@ import KeychainAccess
 /// Shared HTTP client for all Rhea API communication.
 /// Single source of truth for base URL, auth headers, timeouts.
 /// Every pane talks through this — no more independent URLSession calls.
+/// Connects both to REST endpoints and JavaScriptCore bridge.
 public final class RheaAPI: @unchecked Sendable {
     public static let shared = RheaAPI()
 
@@ -112,7 +113,7 @@ public final class RheaAPI: @unchecked Sendable {
         return json["radio"] as? [[String: Any]] ?? []
     }
 
-    /// SQL-backed: office messages between agents
+    /// SQL-backed: office messages between helpers
     public func office(limit: Int = 50) async throws -> [[String: Any]] {
         let json = try await getJSON("/cc/office?limit=\(limit)")
         return json["office"] as? [[String: Any]] ?? []
@@ -209,14 +210,83 @@ public final class RheaAPI: @unchecked Sendable {
         return (try? JSONSerialization.jsonObject(with: data) as? [String: Any]) ?? [:]
     }
 
+    /// Scorekeeper status for all helpers
     public func governorAll() async throws -> [String: GovernorAgentStatus] {
         let data = try await get("/governor", auth: false)
         return (try? JSONDecoder().decode([String: GovernorAgentStatus].self, from: data)) ?? [:]
     }
 
+    /// Scorekeeper status for a specific helper
     public func governor(agent: String) async throws -> GovernorAgentStatus {
         let data = try await get("/governor/\(agent)", auth: false)
         return try JSONDecoder().decode(GovernorAgentStatus.self, from: data)
+    }
+
+    // MARK: - Node Flow Execution
+
+    /// Execute a node flow from NodeEditorView
+    /// Takes a collection of nodes with connections and runs them through the backend
+    public func executeWorkflow(_ payload: WorkflowPayload) async throws -> [String: Any] {
+        let data = try await post("/workflow", body: payload, auth: true)
+        guard let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else {
+            throw RheaAPIError.decode("/workflow")
+        }
+        return json
+    }
+
+    // MARK: - Chat
+
+    /// Send a chat message and get response
+    public func sendChatMessage(_ message: String, meta: [String: String]? = nil) async throws -> ChatResponse {
+        struct Body: Encodable {
+            let message: String
+            let meta: [String: String]?
+        }
+        let data = try await post("/chat", body: Body(message: message, meta: meta), auth: false)
+        return try JSONDecoder().decode(ChatResponse.self, from: data)
+    }
+    
+    /// Fetch chat history
+    public func fetchChatHistory(limit: Int = 50) async throws -> ChatHistoryResponse {
+        let data = try await get("/chat?limit=\(limit)", auth: false)
+        return try JSONDecoder().decode(ChatHistoryResponse.self, from: data)
+    }
+
+    // MARK: - Clipboard
+
+    /// Push content to the shared clipboard for cross-device sync
+    public func pushToClipboard(_ content: ClipboardContent) async throws {
+        let data = try await post("/clipboard", body: content, auth: true)
+        // No response expected, just success/failure via error
+    }
+
+    // MARK: - Bio Renderer
+
+    public func analyzeMolecule(prompt: String, action: String = "freeform") async throws -> String {
+        struct Body: Encodable { let text: String; let action: String }
+        let data = try await post("/keyboard/quick", body: Body(text: prompt, action: action))
+        guard let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+              let text = json["text"] as? String else {
+            throw RheaAPIError.decode("/keyboard/quick")
+        }
+        return text
+    }
+
+    public func lookupBioMolecule(query: String) async throws -> [String: Any] {
+        return try await getJSON("/bio/lookup?q=\(query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? query)")
+    }
+
+    public func generatePathway(nodes: [[String: Any]], edges: [[String: Any]]) async throws -> String {
+        struct Body: Encodable {
+            let nodes: [[String: Any]]
+            let edges: [[String: Any]]
+        }
+        let data = try await post("/generate/pathway", body: Body(nodes: nodes, edges: edges))
+        guard let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+              let svg = json["data"] as? String else {
+            throw RheaAPIError.decode("/generate/pathway")
+        }
+        return svg
     }
 
     // MARK: - NDI (Network Device Interface)
@@ -311,7 +381,7 @@ public struct SupervisorSession: Codable, Identifiable {
     }
 }
 
-// MARK: - Governor DTOs
+// MARK: - Scorekeeper DTOs
 
 public struct GovernorAgentStatus: Codable {
     public let pace: String?
@@ -369,5 +439,84 @@ public enum RheaAPIError: Error, CustomStringConvertible {
         case .http(let code, let path): return "HTTP \(code) on \(path)"
         case .decode(let path): return "Decode failed: \(path)"
         }
+    }
+}
+
+// MARK: - Workflow Payload
+
+public struct WorkflowPayload: Encodable {
+    public let nodes: [NodePayload]
+
+    public struct NodePayload: Encodable {
+        public let id: String
+        public let type: String
+        public let connections: [String]
+        public let config: [String: String]
+        
+        public init(id: String, type: String, connections: [String], config: [String: String]) {
+            self.id = id
+            self.type = type
+            self.connections = connections
+            self.config = config
+        }
+    }
+    
+    public init(nodes: [NodePayload]) {
+        self.nodes = nodes
+    }
+}
+
+// MARK: - Clipboard Content
+
+public struct ClipboardContent: Encodable {
+    public let content: String
+    public let content_type: String
+    public let content_preview: String
+    public let device_name: String
+    public let privacy: String
+    public let metadata: [String: String]
+    
+    public init(content: String, content_type: String, content_preview: String, 
+                device_name: String, privacy: String, metadata: [String: String]) {
+        self.content = content
+        self.content_type = content_type
+        self.content_preview = content_preview
+        self.device_name = device_name
+        self.privacy = privacy
+        self.metadata = metadata
+    }
+}
+
+// MARK: - Chat Response
+
+public struct ChatResponse: Codable {
+    public let reply: String?
+    public let meta: [String: String]?
+    
+    public init(reply: String?, meta: [String: String]?) {
+        self.reply = reply
+        self.meta = meta
+    }
+}
+
+public struct ChatHistoryResponse: Codable {
+    public let messages: [ChatMessage]
+    
+    public init(messages: [ChatMessage]) {
+        self.messages = messages
+    }
+}
+
+public struct ChatMessage: Codable, Identifiable {
+    public let id: String
+    public let message: String
+    public let reply: String?
+    public let timestamp: String
+    
+    public init(id: String, message: String, reply: String?, timestamp: String) {
+        self.id = id
+        self.message = message
+        self.reply = reply
+        self.timestamp = timestamp
     }
 }

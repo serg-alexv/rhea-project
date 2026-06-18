@@ -1,7 +1,10 @@
 import SwiftUI
 import MarkdownUI
 
-/// Unified operations dashboard — combines verify, feed, budget, office, health
+/// Mission control center - unified hub for all Rhea activities.
+///
+/// Combines verify, feed, budget, office, and health panels in one playful interface.
+/// Monitor your helpers, track scores, and manage resources from here.
 /// into a single scrollable pane. Replaces 5 separate tabs.
 public struct OpsView: View {
     // MARK: - State

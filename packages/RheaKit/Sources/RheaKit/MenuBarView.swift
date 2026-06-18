@@ -54,10 +54,12 @@ public struct MenuBarView: View {
 
             Divider()
 
+            #if canImport(AppKit)
             Button("Quit Rhea") {
                 NSApplication.shared.terminate(nil)
             }
             .font(.system(size: 11))
+            #endif
         }
         .padding(12)
         .frame(width: 220)

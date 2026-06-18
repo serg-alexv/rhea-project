@@ -2,10 +2,41 @@ import Foundation
 import JavaScriptCore
 import Combine
 
-/// Minimal Swift Host for the Play Runtime.
-/// Responsibilities: JSContext lifecycle, console bridge, serial script loading.
-/// 
-/// [PROTOCOL: MINIMAL_KERNEL_V1]
+/// PlayRuntimeCore - Minimal JavaScript Kernel for RheaKit
+///
+/// This class provides a lightweight JavaScript runtime environment beneath the SwiftUI layer.
+/// It's designed as a minimal kernel, not a full "PlayOS" - just enough to support
+/// the playful, game-like interactions in RheaKit.
+///
+/// ## Architecture
+/// ```
+/// SwiftUI Layer (NodeEditorView, etc.)
+///     ↓
+/// PlayRuntimeCore (Swift Host)
+///     ↓ (console bridge, exception handling)
+/// JavaScriptCore (JSContext)
+///     ↓
+/// runtime.js → app.js (minimal bootstrap)
+/// ```
+///
+/// ## Bridge Mechanisms
+/// 1. **Console Bridge**: JS console.log/warn/error → Swift logs + @MainActor UI updates
+/// 2. **Exception Bridge**: JS exceptions → Swift error handling + status updates
+/// 3. **Bootstrap Sequence**: runtime.js → app.js (tracked via loadedScripts array)
+///
+/// ## Key Features
+/// - Isolated JSContext per runtime instance
+/// - Automatic exception catching and reporting
+/// - Real-time log streaming from JS to Swift
+/// - Minimal footprint - only essential bootstrap scripts
+///
+/// ## Usage
+/// ```swift
+/// let runtime = PlayRuntimeCore()
+/// runtime.boot()  // Starts the JS runtime
+/// ```
+///
+/// [PROTOCOL: MINIMAL_KERNEL_V1] - Keep it minimal, document reality.
 @MainActor
 public final class PlayRuntimeCore: ObservableObject {
     @Published public private(set) var status: RuntimeStatus = .idle
@@ -24,8 +55,20 @@ public final class PlayRuntimeCore: ObservableObject {
         appendLog("Core initialized. Ready for boot.")
     }
     
-    /// Executes the primary bootstrap sequence: runtime.js -> app.js
-    /// This effectively reboots the runtime by creating a fresh JSContext.
+    /// Executes the primary bootstrap sequence: runtime.js → app.js
+    /// 
+    /// This method creates a fresh JavaScript runtime environment by:
+    /// 1. Creating a new, isolated JSContext
+    /// 2. Installing the console bridge for JS→Swift logging
+    /// 3. Setting up exception handling for error recovery
+    /// 4. Loading runtime.js (establishes PlayRuntime global)
+    /// 5. Loading app.js (marks app entry point)
+    /// 
+    /// The bootstrap is designed to be minimal and fast, providing just enough
+    /// JavaScript infrastructure to support the playful UI interactions.
+    /// 
+    /// Use this method to restart the JS runtime or initialize it for the first time.
+    /// All previous state is cleared when boot() is called.
     public func boot() {
         status = .booting
         lastError = nil
@@ -83,6 +126,18 @@ public final class PlayRuntimeCore: ObservableObject {
         }
     }
     
+    /// Installs the console bridge between JavaScript and Swift.
+    /// 
+    /// This creates a console object in the JavaScript context that redirects
+    /// all console.log, console.error, and console.warn calls to Swift's logging system.
+    /// 
+    /// The bridge ensures:
+    /// - All JS console output appears in Swift logs
+    /// - Logs are timestamped and prefixed with "JS:"
+    /// - UI updates happen on the main actor
+    /// - No JS logs are lost during execution
+    /// 
+    /// This is the primary debugging bridge for JavaScript code running in PlayRuntimeCore.
     private func setupConsoleBridge(_ context: JSContext) {
         let log: @convention(block) (String) -> Void = { [weak self] msg in
             DispatchQueue.main.async {

@@ -37,6 +37,8 @@
 	<false/>
 	<key>UILaunchScreen</key>
 	<dict/>
+	<key>NSCameraUsageDescription</key>
+	<string>Rhea uses the camera to scan documents, capture images for AI analysis, and enable visual input features for your workflows.</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

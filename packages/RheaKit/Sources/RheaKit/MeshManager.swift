@@ -241,7 +241,7 @@ public class MeshManager: ObservableObject {
                 tailscale: handle,
                 to: address,
                 proto: .tcp,
-                logger: BlackholeLogger()
+                logger: ConsoleLogger()
             )
             try await conn.connect()
             try await conn.send(data)

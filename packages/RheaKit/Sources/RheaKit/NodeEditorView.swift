@@ -108,19 +108,6 @@ public struct PipelineNode: Identifiable, Codable {
     }
 }
 
-// MARK: - Workflow Payload (for POST /workflow)
-
-private struct WorkflowPayload: Encodable {
-    let nodes: [NodePayload]
-
-    struct NodePayload: Encodable {
-        let id: String
-        let type: String
-        let connections: [String]
-        let config: [String: String]
-    }
-}
-
 // MARK: - NodeEditorView
 
 public struct NodeEditorView: View {
@@ -134,7 +121,6 @@ public struct NodeEditorView: View {
     @State private var running = false
     @State private var runError: String? = nil
     @State private var showConfigPanel = false
-    @AppStorage("apiBaseURL") private var apiBaseURL = AppConfig.defaultAPIBaseURL
 
     private let nodeWidth: CGFloat = 120
     private let nodeHeight: CGFloat = 80
@@ -889,37 +875,11 @@ public struct NodeEditorView: View {
             }
         )
 
-        guard let url = URL(string: "\(apiBaseURL)/workflow") else {
-            runError = "Invalid API URL"
-            return
-        }
-
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        if let token = AuthManager.shared.token {
-            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        } else {
-            request.setValue("dev-bypass", forHTTPHeaderField: "X-API-Key")
-        }
-
         do {
-            request.httpBody = try JSONEncoder().encode(payload)
-            let (data, response) = try await URLSession.shared.data(for: request)
-
-            guard let http = response as? HTTPURLResponse, http.statusCode < 300 else {
-                let code = (response as? HTTPURLResponse)?.statusCode ?? 0
-                runError = "HTTP \(code)"
-                // Put error on output nodes
-                for i in nodes.indices where nodes[i].type == .output {
-                    nodes[i].resultText = "Error: HTTP \(code)"
-                }
-                return
-            }
-
+            let response = try await RheaAPI.shared.executeWorkflow(payload)
+            
             // Parse response: expect { "results": { "<node_id>": "text", ... } }
-            if let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-               let results = json["results"] as? [String: Any] {
+            if let results = response["results"] as? [String: Any] {
                 withAnimation(.easeOut(duration: 0.3)) {
                     for i in nodes.indices {
                         let key = nodes[i].id.uuidString
@@ -935,11 +895,6 @@ public struct NodeEditorView: View {
                             }
                         }
                     }
-                }
-            } else if let text = String(data: data, encoding: .utf8) {
-                // Fallback: put raw response on output nodes
-                for i in nodes.indices where nodes[i].type == .output {
-                    nodes[i].resultText = text
                 }
             }
         } catch {
