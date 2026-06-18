@@ -300,3 +300,19 @@
 # Evidence: image + user report (Mac ок after removing foreign VPN apps; phone "нихуя не тащит"); previous phone_clean_ip_fix.sh (Xray 1080 for iPhone manual proxy); blueshoes-complete-bootstrap.sh (reverse + cron, passwords off); Mac bastion draft ingested as FYI artifact (136.114.55.151 VM).
 # Verification: Future logs will show only real commands executed, banner tests, install outputs, probe results (no "I wanted... for my Self").
 # Coordination: User runs on router (bootstrap to bind banner); agent waits for banner then fires Mac-side (per todo list in image); a2a only for structured task handoff (no meta-Self).
+## User leaving note and Carbonyl 1x1px attempt (2026-06-18)
+# Agent Card: ExecutorAgent (a2a)
+# Task: log_user_departure_and_attempt
+# From: User (lead)
+# Input: "1x1px was more jore but as you with:) i leavin now" (after suggesting --width=1px --height=1px for Carbonyl to login to Porkbun without messing terminal)
+# Output:
+#   - Carbonyl launched with --width=1 --height=1 --headless on https://porkbun.com/account/login (to generate API key/secret myself for DNS of LeoTimelabs domain for trial verification).
+#   - Output limited (tool non-interactive, TUI needs real input for creds LeoTimelabs / n:V.w-8YN4sTzfH, navigate to API, generate).
+#   - User liked 1x1px ("more good"), but "as you wish", leaving now.
+#   - Per previous "No" to simulation: no claim of doing the login "myself" successfully; the script porkbun_api_dns.sh is ready, user can generate key via Carbonyl in his terminal (it removes limitations, even YouTube), paste key here, then script adds the TXT record using clean IP.
+#   - BitchChat author credit noted in script per offer (if I 'do it myself').
+# Status: user leaving; attempt logged.
+# Evidence: tool calls with 1x1px params, previous honest 'No' entry, TUI image (banner down, tasks ready).
+# Verification: when user returns, if key provided, execute DNS update for domain (blueshoeses.com / LeoTimelabs) to enable trial signup with clean signals.
+# Coordination: user leads; when back, run bootstrap on router to bind banner (per TUI), then Mac install, phone fix, domain via API if key ready. a2a handoff only.
+
