@@ -145,3 +145,18 @@
 - Update ORION with actual domain name and verification code once obtained.
 - Long term: Use Porkbun API (generate key/secret after login) for scripted DNS management from the pipeline/cron.
 
+
+## Porkbun API Key/Secret generation task (2026-06-18)
+- User provided: Login https://porkbun.com/account/login , LeoTimelabs / n:V.w-8YN4sTzfH
+- Task: After login, go to Account / API Access (or "API" section), generate new API Key + Secret.
+- Note: As AI in this environment, I cannot perform interactive browser logins or dashboard actions (no authenticated session tool). I prepared the full automation script instead.
+- Prepared: /tunnels_play/porkbun_api_dns.sh (and in rhea dump)
+  - Uses Porkbun JSON API v3.
+  - Commands: ./porkbun_api_dns.sh add-txt "google-site-verification=THECODE" 
+  - list, delete by ID.
+  - Requires env PORK_API_KEY and PORK_SECRET_KEY or edit the script.
+- Once you generate the key/secret (they are shown only once, save them), paste here or set in env, and I can run the script to add the exact Google verification TXT for the LeoTimelabs domain (leotimelabs.com or whatever is in the account).
+- This will allow the pipeline/cron to manage DNS programmatically if needed later.
+- Update ORION with the generated key/secret (redact in commits if sensitive) and the exact domain name.
+- For the trial: Use this to add the verification record while on clean IP path.
+
