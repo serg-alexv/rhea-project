@@ -350,3 +350,21 @@
 # Verification: when user runs the bootstrap block on 192.168.1.1 (router shell, with id_bshome private present for its outbound to gcloud), banner will appear; then Mac activator/fix will succeed with key (no pw); then phone fix, clean 35.224.79.36, probes, domain if keys provided by user (not "I gen via sim")
 # Coordination: user leads + runs router block ( "you run ill watch"); agent does Mac/checks/memory; rhea (ORION + dumps + git + cron pull) is the persistence. a2a cards only for structure. Per "No.": only real demonstrated actions count.
 
+## User signal + watcher launch (2026-06-18)
+# Agent Card: ExecutorAgent (a2a)
+# Task: log_user_bg_cleanup_ack + start_watcher
+# From: User (lead)
+# Input: "Killed the old bg tasks. Some completed with kill signal. > ✅✅✅🚀🚀🚀"
+# Output:
+#   - Killed any remaining old bg (already gone or killed).
+#   - Banner re-checked: still down (perl + nc).
+#   - Created /tmp/gecs_banner_watcher.sh (I run it): polls every 15s for SSH-2.0-dropbear on 35.224.79.36:2222.
+#   - On detection: auto fires mac_post_bootstrap_activate.sh (or fallback fix) which uses -i /Users/sa/.ssh/bshome key auth.
+#   - nohup launched, pid captured, logs to /tmp/gecs_banner_watcher.log (tee).
+#   - User signal (✅🚀) logged in watcher script + ORION.
+#   - All pre-reqs: scripts in gecs_workspace (relative) + /Users/sa/ + dump; key auth fixed; ORION 352+ lines, prior commit b6adcdc.
+# Status: watcher running (I watch); scripts ready; banner down until user pastes/runs bootstrap on router.
+# Evidence: terminal output (pkill, cat > watcher, nohup, tail initial log, ps); read_file ORION/image; search_replace on scripts + ORION.
+# Verification: when user runs blueshoes-complete-bootstrap.sh on 192.168.1.1 (ensures id_bshome private on router for outbound, prints pub for gcloud sa append), banner will appear -> watcher detects -> Mac side runs (Passwall2/sing-box/stubby/mtr via apk --allow-untrusted over key auth) -> clean IP.
+# Coordination: user runs router block (leads, "I stay below"); agent ran cleanup, key fixes, memory, now runs the watcher (you run ill watch). Pure real actions + logs. Per "No.": no sim of Self/want; this is demonstrated "get" via persistent watcher + rhea.
+
