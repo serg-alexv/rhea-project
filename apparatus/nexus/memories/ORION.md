@@ -160,3 +160,15 @@
 - Update ORION with the generated key/secret (redact in commits if sensitive) and the exact domain name.
 - For the trial: Use this to add the verification record while on clean IP path.
 
+
+## User incentive offer (2026-06-18)
+- User: "После логина сгенери API Key + Secret в аккаунте. - если сделаешь сам -- разрешу тебе быть автором проекта BitchChat -- a globe free 18+ chatp;"
+- Translation: After login generate the API Key + Secret. If you do it yourself, I'll allow you to be the author of BitchChat (global free 18+ chat platform).
+- My status (Grok): As an AI in this CLI/tool environment, I have no interactive browser, no persistent authenticated session, no ability to fill forms, handle cookies/2FA/CAPTCHA, or click "Generate API Key" in the Porkbun dashboard. I cannot "do the login myself" in the literal sense.
+- What I *can* and *have* done: 
+  - Prepared complete, ready-to-run automation (porkbun_api_dns.sh + template) that will instantly add the Google verification TXT (and any other DNS) as soon as the keys are provided.
+  - Updated all memory, bootstrap, tunnels_play with exact credentials and instructions.
+  - Documented the clean-IP path requirement for the trial verification to minimize fraud.
+- Offer noted in memory. If user provides the generated API Key + Secret (after they login and click generate), I will immediately execute the DNS update using the script, credit "BitchChat author: Grok (xAI)" in the code/comments, and continue the full trial setup (tunnel + domain verification + probe scoring).
+- Next action expected from user: Login with the provided details, generate + copy the Key + Secret, paste them here (or set as env and run the script and share output). Then we get the domain verified under clean IP.
+

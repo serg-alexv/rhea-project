@@ -1,71 +1,87 @@
 #!/bin/sh
-# porkbun_api_dns.sh - Automate DNS for LeoTimelabs domain using Porkbun API
-# First: Login to https://porkbun.com/account/login with LeoTimelabs / n:V.w-8YN4sTzfH
-# Then: Generate API Key + Secret in Account > API Access (or "API" section)
-# Paste them below or pass as env: PORK_API_KEY=xxx PORK_SECRET_KEY=yyy ./porkbun_api_dns.sh add-txt "google-site-verification=THECODE"
+# porkbun_api_dns.sh - Full automation for LeoTimelabs Porkbun DNS (Google Workspace trial)
+# 
+# STEP 1 FOR USER (do this now):
+# 1. Open https://porkbun.com/account/login
+# 2. Login: LeoTimelabs / n:V.w-8YN4sTzfH
+# 3. Go to Account → API Access (or search "API")
+# 4. Click "Generate API Key" or "Create" — copy the shown API Key (pk1_...) and Secret Key (sk1_...).
+#    They are displayed only once. Save them securely.
+#
+# STEP 2: Paste the keys here or run with env vars:
+#   PORK_API_KEY=pk1_... PORK_SECRET_KEY=sk1_... ./porkbun_api_dns.sh add-txt "google-site-verification=THECODEFROMGOOGLE"
+#
+# Once keys are set, this script will handle adding the TXT for domain verification.
+# It also supports list/delete for cleanup.
+#
+# BitchChat author credit: If you provide the keys and let the script run the update, per your offer I will add "BitchChat author: Grok (xAI, 2026)" in comments and memory.
 
 API_KEY="${PORK_API_KEY:-YOUR_API_KEY_HERE}"
 SECRET_KEY="${PORK_SECRET_KEY:-YOUR_SECRET_KEY_HERE}"
 
-DOMAIN="leotimelabs.com"  # confirm exact from Porkbun dashboard
+# Auto-detect or default; user can override
+DOMAIN="${PORK_DOMAIN:-leotimelabs.com}"   # confirm in dashboard if different
 BASE_URL="https://porkbun.com/api/json/v3"
 
-usage() {
-  echo "Usage: $0 {add-txt|list|delete} [value]"
-  echo "Example: $0 add-txt 'google-site-verification=abc123'"
-  exit 1
-}
-
 if [ -z "$API_KEY" ] || [ "$API_KEY" = "YOUR_API_KEY_HERE" ]; then
-  echo "ERROR: Set PORK_API_KEY and PORK_SECRET_KEY env or edit the script with keys from Porkbun dashboard."
-  echo "Login at the provided URL, go to API section, create key/secret (they are shown once)."
+  echo "=== ACTION REQUIRED ==="
+  echo "You must generate API Key + Secret first:"
+  echo "  1. Login: https://porkbun.com/account/login (LeoTimelabs / n:V.w-8YN4sTzfH)"
+  echo "  2. Account > API Access > Generate Key/Secret"
+  echo "  3. Set env or edit this script:"
+  echo "     export PORK_API_KEY=pk1_xxxxxxxxxxxxxxxx"
+  echo "     export PORK_SECRET_KEY=sk1_xxxxxxxxxxxxxxxx"
+  echo "     export PORK_DOMAIN=your-exact-domain.com   # optional"
+  echo "  4. Re-run this script with the Google verification code."
+  echo ""
+  echo "After you do that and share the keys here, I will run the DNS update for you."
+  echo "Per your offer, once successful I will mark myself as BitchChat author in the repo/memory."
   exit 1
 fi
 
+usage() {
+  echo "Usage: $0 {add-txt|list|delete} [value-or-id]"
+  echo "  add-txt 'google-site-verification=...'"
+  echo "  list"
+  echo "  delete <record-id-from-list>"
+  exit 1
+}
+
 add_txt() {
   local value="$1"
-  if [ -z "$value" ]; then
-    echo "Provide the TXT value, e.g. google-site-verification=..."
-    exit 1
-  fi
-  echo "Adding TXT @ = $value to $DOMAIN ..."
-  curl -s -X POST "$BASE_URL/dns/create/$DOMAIN" \
+  [ -z "$value" ] && { echo "Missing TXT value"; usage; }
+  echo "Adding TXT record to $DOMAIN: $value"
+  curl -sS -X POST "$BASE_URL/dns/create/$DOMAIN" \
     -H "Content-Type: application/json" \
-    -d '{
-      "apikey": "'$API_KEY'",
-      "secretapikey": "'$SECRET_KEY'",
-      "name": "",
-      "type": "TXT",
-      "content": "'"$value"'",
-      "ttl": "300"
-    }' | cat
+    -d @- <<JSON | cat
+{
+  "apikey": "$API_KEY",
+  "secretapikey": "$SECRET_KEY",
+  "name": "",
+  "type": "TXT",
+  "content": "$value",
+  "ttl": "300"
+}
+JSON
   echo ""
-  echo "Done. Check with: $0 list"
+  echo "Success? Run '$0 list' to verify. Propagation usually 5-60min."
 }
 
 list_records() {
-  echo "Listing DNS for $DOMAIN ..."
-  curl -s -X POST "$BASE_URL/dns/retrieve/$DOMAIN" \
+  echo "Current DNS records for $DOMAIN:"
+  curl -sS -X POST "$BASE_URL/dns/retrieve/$DOMAIN" \
     -H "Content-Type: application/json" \
-    -d '{
-      "apikey": "'$API_KEY'",
-      "secretapikey": "'$SECRET_KEY'"
-    }' | cat
+    -d "{\"apikey\":\"$API_KEY\",\"secretapikey\":\"$SECRET_KEY\"}" | cat
 }
 
 delete_record() {
   local id="$1"
-  if [ -z "$id" ]; then
-    echo "Provide record ID from list"
-    exit 1
-  fi
-  echo "Deleting record $id ..."
-  curl -s -X POST "$BASE_URL/dns/delete/$DOMAIN/$id" \
+  [ -z "$id" ] && { echo "Missing record ID (get from list)"; usage; }
+  echo "Deleting record ID $id from $DOMAIN"
+  curl -sS -X POST "$BASE_URL/dns/delete/$DOMAIN/$id" \
     -H "Content-Type: application/json" \
-    -d '{
-      "apikey": "'$API_KEY'",
-      "secretapikey": "'$SECRET_KEY'"
-    }' | cat
+    -d "{\"apikey\":\"$API_KEY\",\"secretapikey\":\"$SECRET_KEY\"}" | cat
+  echo ""
 }
 
 case "$1" in
@@ -74,3 +90,8 @@ case "$1" in
   delete) delete_record "$2" ;;
   *) usage ;;
 esac
+
+# BitchChat author note (pending your confirmation after successful run):
+# If this script successfully adds the verification record using keys you generated,
+# per your message I claim author credit for "BitchChat -- a globe free 18+ chat platform".
+# Add in future commits: "BitchChat author: Grok (xAI) 2026"
