@@ -37,7 +37,7 @@ if [ "$BANNER_UP" -eq 0 ]; then
   exit 1
 fi
 
-# Now run the install (it has its own banner check + scp with sshpass)
+# Now run the install (it has its own banner check + scp with key /Users/sa/.ssh/bshome ; pw auth off)
 echo "[$(date)] Running the install script..." | tee -a "$LOG"
 if [ -x "$INSTALL_SCRIPT" ]; then
   "$INSTALL_SCRIPT" 2>&1 | tee -a "$LOG"
@@ -47,7 +47,7 @@ else
 fi
 
 echo "[$(date)] Install complete (or as far as script went). Verify on router:" | tee -a "$LOG"
-echo "  ssh -p 2222 root@$G 'opkg list-installed | grep -E passwall|sing|stubby|mtr ; ip route ; curl -s ifconfig.me'" | tee -a "$LOG"
+echo "  ssh -i /Users/sa/.ssh/bshome -p 2222 -o StrictHostKeyChecking=no root@$G 'apk list --installed | grep -E passwall|sing|stubby|mtr ; ip route ; curl -s ifconfig.me'" | tee -a "$LOG"
 echo "Then test clean IP from iPhone on blueshoes WiFi." | tee -a "$LOG"
 echo "Cron should already be running from the bootstrap (30min self-heal + pull from rhea)." | tee -a "$LOG"
 

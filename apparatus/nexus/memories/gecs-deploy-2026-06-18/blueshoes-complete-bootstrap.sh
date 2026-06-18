@@ -22,13 +22,16 @@ uci show dropbear.@dropbear[0]
 echo "=== 2. KEY (id_bshome) ==="
 mkdir -p /root/.ssh
 chmod 700 /root/.ssh
-# If you have the private key content, paste it here or scp before running.
-# For now assume it exists from previous or user provides.
-if [ ! -f /root/.ssh/id_bshome ]; then
-  echo "WARNING: /root/.ssh/id_bshome not found. Generate or scp it first."
-  # ssh-keygen -t ed25519 -f /root/.ssh/id_bshome -N '' -C "blueshoes-to-gcloud"
+chown root:root /root/.ssh 2>/dev/null || true
+# Ensure fresh valid ed25519 for router -> gcloud sa@ (outbound for -R)
+if [ ! -f /root/.ssh/id_bshome ] || ! ssh-keygen -y -f /root/.ssh/id_bshome >/dev/null 2>&1; then
+  echo "Generating fresh id_bshome (no valid key found)"
+  ssh-keygen -t ed25519 -f /root/.ssh/id_bshome -N "" -C "bshome-router-$(date +%F)"
+  chmod 600 /root/.ssh/id_bshome
+  chown root:root /root/.ssh/id_bshome
 fi
-cat /root/.ssh/id_bshome.pub 2>/dev/null || echo "(no pub yet - will be printed after key setup)"
+echo "=== COPY THIS PUB (append to gcloud sa ~/.ssh/authorized_keys from your Mac) ==="
+cat /root/.ssh/id_bshome.pub
 
 echo "=== 3. WRITE THE CRON SCRIPT (exact from our rhea memory dump) ==="
 cat > /usr/local/bin/blueshoes-gecs-cron.sh << 'CRONSCRIPT'
