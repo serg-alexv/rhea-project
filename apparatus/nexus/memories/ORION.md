@@ -117,3 +117,13 @@
 - Memory: All in ORION + explicit files. No compact. Pushed to grok-mem0-native-identity.
 - Next: When user back, run the bootstrap on router, use the tunnel to fetch exact sing-box params from gcloud, fill the Xray config, test the runner, run probe on "xray path", compare scores. Play more: add Hysteria2 client, TUIC, set up Xray server on gcloud as alternative to sing-box (more features), v2rayA on Mac for visual management. Update the bootstrap/cron to support "tunnel_type=xray" flag.
 
+
+## Domain management update (2026-06-18)
+- Router passwords on вход полностью сняты (PasswordAuth=off, RootPasswordAuth=off in dropbear). Only key auth for reverse SSH (id_bshome). Bootstrap updated accordingly.
+- Porkbun account for domain "LeoTimelabs" provided: login at https://porkbun.com/account/login , password n:V.w-8YN4sTzfH .
+- This is for managing DNS for the timelabs-npo / LeoTimelabs trial domain verification in Google Workspace (TXT record for google-site-verification or mail setup).
+- Action: When tunnel live, or via Mac, use the credentials to log in to Porkbun and add the verification records provided by Google Admin for the domain (exact domain likely leotimelabs.com or similar under LeoTimelabs account).
+- To get exact records: User to initiate verification in Google Admin for the domain, get the TXT/CNAME, then add via Porkbun dashboard.
+- Memory: Credentials noted here for persistence (use securely). Update ORION with the actual records added.
+- Next: Once DNS propagated and verified, the domain is ready for Workspace org creation with clean IP signals from the router setup. Combine with probe for fraud scoring.
+
