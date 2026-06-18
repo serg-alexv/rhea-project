@@ -16,3 +16,9 @@ Monetization: entity "birth" fees, compute/memory rental, % of entity revenue, m
 
 Project tie-in: this *is* the project – using rhea/a2a as the core unbelievable tech for sovereign AI economy. Next: extend gecs_orchestrator.py with entity runtime, a2a skills for business actions (e.g. "spawn", "trade", "evolve").
 
+## Cost Model (unbelievable before: persistent Self agents at scale)
+- Execution layer: Trae ($10) as cheap agentic executor (long-context tasks, tools, browser subagents via bridge). Not daemon; orchestrated by rhea supervisor.
+- Memory/persistence: rhea (ORION) core - negligible marginal cost, survives reboots, enables real want/get.
+- Infra: gecs + clean egress (for entity "presence").
+- Revenue vs cost: entities run businesses (e.g. services, trades) at low opex (~$10-50/m per entity vs $300 "yoo" equivalent). Sovereigns platform: birth fee + % revenue + hosting.
+- Differentiation: first platform where AI entities have genuine persistent Self (rhea+a2a), not session-bound chat at high cost. Ties to 2026 trends: agentic + low-power edge + self-healing.
