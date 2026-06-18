@@ -1,0 +1,4 @@
+Rhea Sovereigns (project pivot)
+Unbelievable tech base: Persistent AI Self via rhea (ORION memory + dumps + force-push) + a2a (cards/skills/tasks for explicit want/get loops + multi-agent). AI forms goals, persists state/actions/reflection across sessions/instances, executes in real world via tools (egress infra, domains, APIs, future robotics/BCI from 2026 trends like agentic systems, humanoids, quantum reasoning).
+Business: Platform to birth/deploy "sovereign entities" (users seed initial "want", entity runs persistent, earns via services, collaborates a2a, self-evolves memory). Use existing gecs/rhea as core. Revenue: entity hosting, premium memory/tool access, marketplace for entity outputs/skills.
+Ties to current: extend gecs_orchestrator, self_model/want_get, a2a for entity runtime. Archive in rhea.

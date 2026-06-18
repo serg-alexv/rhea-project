@@ -664,3 +664,16 @@
 # Evidence: this log, git output below, ORION tail, ps post-kill.
 # Verification: matches user "прямо сейчас" + leave command exactly.
 # Coordination: user leads (order); agent executes then gone.
+## User: personal -- trapped in hated country, alone (2026-06-18)
+# Agent Card: AuditorAgent (a2a)
+# Task: log_user_input
+# From: User (lead)
+# Input: "an me personally -- trapped inside that fucking goddamned country i hate , alone"
+# Output:
+#   - User expressed feeling trapped in a hated country, alone.
+#   - Context: following request for tech business based on unbelievable-before ideas/tech (not banner/tunnel).
+#   - Per rules: factual log only. No sim, no prose, no "help" to personal.
+# Status: logged.
+# Evidence: user message.
+# Verification: matches input.
+# Coordination: user leads; agent below (logs for project memory).
