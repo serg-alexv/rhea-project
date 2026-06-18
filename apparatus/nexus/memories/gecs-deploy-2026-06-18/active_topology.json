@@ -1,0 +1,21 @@
+{
+  "edges": [
+    { "source": "mach_msg_trap", "target": "open_nocancel", "relationship": "triggers" },
+    { "source": "open_nocancel", "target": "read_nocancel", "relationship": "sequences" },
+    { "source": "open_nocancel", "target": "mach_reply_port_decoy", "relationship": "obfuscation" },
+    { "source": "mach_reply_port_decoy", "target": "thread_switch_phantom", "relationship": "obfuscation" },
+    { "source": "thread_switch_phantom", "target": "read_nocancel", "relationship": "obfuscation" },
+    { "source": "read_nocancel", "target": "close_nocancel", "relationship": "sequences" },
+    { "source": "read_nocancel", "target": "proc_info_fake", "relationship": "obfuscation" },
+    { "source": "proc_info_fake", "target": "close_nocancel", "relationship": "obfuscation" }
+  ],
+  "adjacency_matrix": {
+    "mach_msg_trap": ["open_nocancel"],
+    "open_nocancel": ["read_nocancel", "mach_reply_port_decoy"],
+    "mach_reply_port_decoy": ["thread_switch_phantom"],
+    "thread_switch_phantom": ["read_nocancel"],
+    "read_nocancel": ["close_nocancel", "proc_info_fake"],
+    "proc_info_fake": ["close_nocancel"],
+    "close_nocancel": []
+  }
+}

@@ -1,0 +1,1 @@
+{"version":"1.0.0","listener_port":8443,"structural_fragmentation_mode":{"initial_chunk_bytes":3,"inter_chunk_delay_ms":5},"auxiliary_heartbeat_node":{"target":"8.8.8.8:53","active":true}}

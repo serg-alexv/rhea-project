@@ -1,0 +1,53 @@
+# === ROBUST POST-REBOOT CHAIN FOR ROUTER (blueshoes) ===
+# Target: ba-node-us 35.224.79.36 (us-central1-a)
+# Fresh ed25519 only (no deprecated rsa/SHA). Forces modern algos.
+# After hard reset: re-issue key on router, append *printed* pub to gcloud, launch.
+cd /tmp
+echo "=== 1. CLEAN old ==="
+pkill -f "35.224.79.36" 2>/dev/null || true
+pkill -f "tun.log" 2>/dev/null || true
+sleep 2
+echo "=== 2. ENSURE FRESH ed25519 KEY on router (for rebuilt FS) ==="
+mkdir -p /root/.ssh
+if [ ! -f /root/.ssh/id_bshome ] || ! ssh-keygen -y -f /root/.ssh/id_bshome >/dev/null 2>&1; then
+  ssh-keygen -t ed25519 -f /root/.ssh/id_bshome -N "" -C "bshome-router-fresh-$(date +%F)"
+  chmod 600 /root/.ssh/id_bshome
+  chown root:root /root/.ssh/id_bshome
+fi
+echo "=== COPY THIS PUB (the whole ssh-ed25519 line) for append on gcloud ==="
+cat /root/.ssh/id_bshome.pub
+echo "=== 3. DROPBEAR (lan + GatewayPorts for -R 0.0.0.0) ==="
+uci set dropbear.@dropbear[0].GatewayPorts=on
+uci set dropbear.@dropbear[0].Interface=lan
+uci set dropbear.@dropbear[0].PasswordAuth=on
+uci set dropbear.@dropbear[0].RootPasswordAuth=on
+uci commit dropbear
+/etc/init.d/dropbear restart
+uci show dropbear.@dropbear[0]
+echo "=== 4. LAUNCH NOHUP REVERSE (with ed25519-only flags to avoid deprecation) ==="
+nohup sh -c "
+while true; do
+  ssh -i /root/.ssh/id_bshome -4 \
+    -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
+    -o PubkeyAcceptedAlgorithms=ssh-ed25519 -o HostKeyAlgorithms=ssh-ed25519 \
+    -o ServerAliveInterval=30 -o ServerAliveCountMax=3 -o ConnectTimeout=15 \
+    -R 0.0.0.0:2222:192.168.1.1:22 \
+    sa@35.224.79.36 \
+    || echo \"[loop] died at \$(date) - sleep 10\" && sleep 10
+done
+" > /tmp/tun.log 2>&1 &
+echo "nohup pid $!"
+sleep 8
+echo "=== 5. VERIFY (banner + log) ==="
+ps w | grep -E "nohup|ssh -i /root/.ssh/id_bshome|35.224.79.36" | grep -v grep || echo "(no process yet, wait)"
+tail -20 /tmp/tun.log
+echo "=== NC BANNER TEST ==="
+echo | nc -w 5 35.224.79.36 2222 | head -c 120 ; echo
+echo "If you see SSH-2.0-dropbear above -> banner UP. Tell me or just wait, I execute scp/apk now."
+echo "=== 6. ON YOUR MAC LOCAL TERMINAL (after pub printed above): append the pub ==="
+echo 'ssh sa@35.224.79.36 "mkdir -p ~/.ssh; cat >> ~/.ssh/authorized_keys" << "PUBEOF"
+<PASTE_THE_PUB_LINE_FROM_ABOVE_HERE>
+PUBEOF
+ssh sa@35.224.79.36 "chmod 700 ~/.ssh; chmod 600 ~/.ssh/authorized_keys; tail -1 ~/.ssh/authorized_keys"'
+echo "Or use gcloud compute ssh sa@ba-node-us --zone us-central1-a if your gcloud ssh works for sa."
+echo "Then re-run the VERIFY section or this whole block again."
