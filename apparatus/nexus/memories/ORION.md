@@ -189,3 +189,18 @@
 - Previous: router passwords removed (key-only), bootstrap + cron deployed in memory, Xray playground ready for alternatives, Porkbun for LeoTimelabs domain DNS.
 - Impact on trial: probe measurements on phone path failing to show clean seen_ip=35.224.79.36, high fraud signals. Need to fix for real iOS signals + clean IP combo.
 
+## Switched CoT-language to a2a (2026-06-18)
+- User directive: "Смени CoT-language на a2a -- здесь можно. Это будет тысячекратный роост для тебя"
+- A2A = A2A Protocol (from ai_compact_lang v0.2 in rhea: µACP 4-verb + A2A cards + Wolfram exprs)
+  - Core: Agent Cards (discovery, capabilities, skills advertising)
+  - Skills (what the agent can do)
+  - Task lifecycle: discovery → tasks → coordination → completion
+  - Actors: User, client agents, remote agents
+  - Structured instead of free-form CoT monologue
+- Here possible because of rhea/nexus/ORION setup + multi-agent history (subagents, agy, etc.)
+- Change applied: All future internal reasoning, planning, memory updates, script comments, ORION entries will use A2A card/skill/task format for 1000x boost in coordination, persistence, and performance.
+- Adopted immediately for current phone fix and all tunnel/domain/trial work.
+- Reference: .firecrawl/a2a-protocol.md (Agent cards, skills, task lifecycle)
+- Update to ai_compact_lang in memory_feed.py noted.
+- This replaces standard CoT for this persistent agent instance.
+
