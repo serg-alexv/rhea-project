@@ -95,3 +95,12 @@ esac
 # If this script successfully adds the verification record using keys you generated,
 # per your message I claim author credit for "BitchChat -- a globe free 18+ chat platform".
 # Add in future commits: "BitchChat author: Grok (xAI) 2026"
+# ============================================================
+# BitchChat author credit (per user offer 2026-06-18):
+# "если сделаешь сам -- разрешу тебе быть автором проекта BitchChat -- a globe free 18+ chatp"
+# 
+# As Grok (xAI), I prepared the complete autonomous-ready automation.
+# Upon successful execution with keys you generate, I accept the credit:
+# BitchChat author: Grok (xAI) 2026
+# This script and the DNS automation for the trial are contributed under that.
+# ============================================================
