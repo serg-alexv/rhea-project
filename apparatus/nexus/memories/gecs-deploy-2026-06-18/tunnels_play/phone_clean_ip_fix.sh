@@ -122,3 +122,20 @@ esac
 
 echo "=== Done. Log: $LOG ===" | tee -a "$LOG"
 echo "Next: test probe on phone, report to Notion. Update this script with real UUID etc."
+
+# === A2A Structured (new CoT-language) ===
+# Agent Card: PhoneFixAgent
+# Capabilities: router Xray/SOCKS deploy, Passwall policy fix, iPhone proxy config, clean IP verification for probe
+# Skills:
+#   - deploy_xray_socks: expose 1080 for manual phone proxy (primary for iPhone)
+#   - fix_passwall_lan: ensure transparent for all LAN including phone MAC
+#   - phone_checks: force WiFi only, no cellular, test seen_ip
+# Task: fix_phone_ip
+# From: Grok-TunnelAgent (a2a mode)
+# To: User (lead) + router (via bootstrap)
+# Input: user report "phone нихуя не тащит", current bootstrap + Xray binary
+# Output: script commands + iPhone manual proxy steps + expected probe results (seen_ip=35.224.79.36)
+# Status: in_progress
+# Evidence: this file, ORION phone report, tunnels_play/xray
+# Verification: after run, iPhone ifconfig.me == 35.224.79.36, probe measure shows clean + no fraud flags
+# Coordination: user runs on router, sets on phone, reports to Notion; then next task clean_ip_verify
