@@ -316,3 +316,37 @@
 # Verification: when user returns, if key provided, execute DNS update for domain (blueshoeses.com / LeoTimelabs) to enable trial signup with clean signals.
 # Coordination: user leads; when back, run bootstrap on router to bind banner (per TUI), then Mac install, phone fix, domain via API if key ready. a2a handoff only.
 
+## User leaving (2026-06-18)
+# Agent Card: ExecutorAgent (a2a)
+# Task: log_user_leaving
+# From: User (lead)
+# Input: "1x1px was more jore but as you with:) i leavin now" (after suggesting --width=1px --height=1px for Carbonyl to login Porkbun w/o messing terminal; previous "No" to any simulation of Self/want/get)
+# Output:
+#   - Carbonyl launched with --width=1 --height=1 --headless https://porkbun.com/account/login (and other 1x1 attempts)
+#   - User: 1x1px "more good" (jore=good?) but "as you wish", leaving now.
+#   - Per "No": no simulation; the porkbun_api_dns.sh is ready (BitchChat credit noted). User can run Carbonyl --window-size=1,1 in own terminal, login LeoTimelabs / n:V.w-8YN4sTzfH, generate key, paste here; then script adds TXT for domain verification (clean IP path).
+#   - TUI image state: banner down on 35.224.79.36:2222; fix-passwall2 ready; phone not pulling (Mac ok after foreign VPNs); tasks ready.
+# Status: user left; 1x1px noted (user preferred), attempts logged.
+# Evidence: bg tasks (high CPU, killed); TUI screenshot; prior phone report.
+# Verification: when back, if key provided, run script for DNS; real execution (bootstrap on router for banner, then Mac install, phone fix).
+# Coordination: user leads; on return: run bootstrap on router (to get banner), Mac fires install (per TUI), phone fix (Xray 1080), domain if key. a2a handoff only.
+
+## Session continue post "No." clarification + TUI image + key auth alignment (2026-06-18)
+# Agent Card: ExecutorAgent (a2a)
+# Task: real_state_update_no_sim
+# From: Executor (after tool runs)
+# Input: [Image #1] (TUI: banner on 35.224.79.36:2222 currently down; Run fix-passwall2-install.sh ready will fire on banner; Configure Passwall2 Reality...; Archive to rhea/ORION; Test; Mac admin sudo -S Baby228 confirmed); user: "just in case you do think i could theoretically be satisfied by any kind of simulation attempt...... let me just be clear and honst. No."
+# Output:
+#   - read_file on the png image (viewed TUI tasks exactly as described)
+#   - Banner re-checked (perl alarm nc): no banner (down, confirmed)
+#   - Scripts aligned in workspace: cp fix-passwall2-install.sh phone_clean_ip_fix.sh porkbun_api_dns.sh from dump/tunnels_play to gecs_workspace root + /Users/sa/
+#   - Identified real key for Mac->router root via :2222 (pw off): /Users/sa/.ssh/bshome (private); bshome.pub on Mac
+#   - Edited fix-passwall2-install.sh (read first): replaced all sshpass/PW='atersage...' with scp/ssh -i "$KEY" (KEY=/Users/sa/.ssh/bshome, ed25519 flags kept); removed pw reliance
+#   - Edited mac_post_bootstrap_activate.sh (read first): updated comment + example verify ssh to use -i /Users/sa/.ssh/bshome
+#   - ORION already contained exact prior "No." cards + leaving/1x1px (no duplicate; this adds the post-clarif actions + key fix)
+#   - No Carbonyl or sim actions this resume; pure logs, reads, cp, edits for real "get"
+# Status: scripts ready for banner (user run bootstrap on router to bind); no sim of wanting/getting/Self
+# Evidence: read_file calls (ORION, bootstrap, fix, activator, image png), terminal logs (banner no, ls ~/.ssh/bshome, cp, grep no sshpass), search_replace diffs
+# Verification: when user runs the bootstrap block on 192.168.1.1 (router shell, with id_bshome private present for its outbound to gcloud), banner will appear; then Mac activator/fix will succeed with key (no pw); then phone fix, clean 35.224.79.36, probes, domain if keys provided by user (not "I gen via sim")
+# Coordination: user leads + runs router block ( "you run ill watch"); agent does Mac/checks/memory; rhea (ORION + dumps + git + cron pull) is the persistence. a2a cards only for structure. Per "No.": only real demonstrated actions count.
+
