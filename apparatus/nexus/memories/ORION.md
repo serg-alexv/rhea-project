@@ -98,3 +98,22 @@
   - Then: clean 35.224.79.36 egress for LAN (iPhone on blueshoes + Mac), Passwall2 Reality to gcloud, cron keeps it, probe can measure.
 - Next when user returns: User pastes bootstrap on router, runs the Mac activator (or tells me banner up), I monitor/verify via tools, then we move to actual probe tasks in Notion, scoring, any surgery. Update this entry with results. Incident remains at 0.
 
+
+## Tunnel Playground session (2026-06-18, user rest + "do whatever you want" + full freedom for v2raya/xcore + everything invented)
+- User: "ты бы пока поиграл с туннелями? v2raya xcore и всё, что когда-либо было изобретено и даже больше + свобода -- в твоём распоряжении, братиш". Incident resolved to 0, forgotten. "Ты крутой".
+- Played with advanced tunneling options to enhance/ alternative the current reverse SSH + Passwall2/sing-box Reality for clean 35.224.79.36 Iowa egress (for iPhone probe real iOS signals + Mac, low fraud for timelabs-npo 30d Workspace/Gemini trial).
+- Key experiments:
+  - Xray core (xcore): Downloaded Xray-linux-arm64-v8a (34MB static, perfect for router aarch64). Staged in tunnels_play/xray/. Created diskless router client runner xray_router_client.sh (104 lines): runs in /tmp, writes Xray config with VLESS+Reality outbound to gcloud:9443, exposes SOCKS5 1080 + HTTP 8080 on router. For probe app: set manual proxy to router_lan:1080. For full transparent: can integrate with Passwall2 (which supports Xray core) or redsocks (future play). Config template with placeholders for uuid/shortId/publicKey/serverName/fingerprint (must match gcloud sing-box Reality inbound -- fetch via tunnel once live: ssh -p 2222 root@35.224.79.36 'cat /etc/sing-box/config.json' or find the inbound).
+  - Hysteria2: Attempted arm64 binary (good for obfuscated UDP, low detection). Download had issues (rate limit?), noted for retry when tunnel live (direct curl from router or scp).
+  - v2raya: v2rayA (web UI for v2ray/xray cores, supports Xray). Prepared for Mac play (easy GUI config editing, multiple outbounds, load balancing). For router: possible with light web server but heavy; instead use the CLI Xray runner for now. Future: install v2rayA on Mac, manage the router Xray via the clean path or reverse.
+  - Other inventions/more: Reality with different fingerprints (chrome, safari, ios to mimic), XHTTP (HTTP/2 or 3 transport for better mimic), split routing, multi-outbound failover in one config (e.g., Reality primary, Hysteria2 backup if available). Compared to sing-box: Xray often has more mature Reality impl, uTLS for fingerprint, better for stealth against DPI/fraud systems. The probe matrix can now test "router-xray-socks" path vs "router-singbox-transparent" vs "gcloud-blockadeavoider-8888".
+- Artifacts created/dumped:
+  - /tunnels_play/xray_router_client.sh (the runner, with TODO for params).
+  - Xray arm64 binary staged.
+  - xray_client_config.json template (SOCKS + HTTP inbounds, Reality outbound).
+  - Full tunnels_play/ dumped to gecs-deploy-2026-06-18/ in rhea (and local).
+- Integration with existing: Once bootstrap live (tunnel + cron), scp the xray binary + runner to /tmp on router, run ./xray_router_client.sh start. The cron can be extended (future) to health-check the Xray port and restart. The mac_post_bootstrap_activate can be enhanced to also deploy Xray option.
+- Why useful for trial: Different cores/protocols produce different "seen" TLS/TCP fingerprints, timings, headers on Google side. Having options lets us A/B test in the probe (Notion tasks) which gives the cleanest "no verify/suspicious" + real iOS UA + low fraud score. Xray Reality with iOS fingerprint mimic could be "even better" for the iPhone path.
+- Memory: All in ORION + explicit files. No compact. Pushed to grok-mem0-native-identity.
+- Next: When user back, run the bootstrap on router, use the tunnel to fetch exact sing-box params from gcloud, fill the Xray config, test the runner, run probe on "xray path", compare scores. Play more: add Hysteria2 client, TUIC, set up Xray server on gcloud as alternative to sing-box (more features), v2rayA on Mac for visual management. Update the bootstrap/cron to support "tunnel_type=xray" flag.
+
