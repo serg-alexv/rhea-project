@@ -155,3 +155,14 @@ tail -10 /tmp/tun.log /tmp/gecs-cron.log 2>/dev/null | cat
 
 echo "=== DONE. After this, cron owns it. Reboot test: cron will re-launch on next tick. ==="
 echo "If banner is up here, tell the agent to run the Mac scp/apk side."
+
+echo ""
+echo "=== POST-INSTALL (on your Mac, after this block succeeds and banner is up) ==="
+echo "Run this on Mac (it will wait for banner and auto-do the Passwall2 + sing-box + stubby + mtr install):"
+echo "  bash /Users/sa/gecs_workspace/mac_post_bootstrap_activate.sh"
+echo ""
+echo "Or manually once you see banner:"
+echo "  /Users/sa/fix-passwall2-install.sh"
+echo ""
+echo "After install: check clean IP, then iPhone probe can start measuring for the trial."
+echo "Cron is already set (*/30) and will keep everything alive + pull latest from rhea grok-mem0-native-identity."

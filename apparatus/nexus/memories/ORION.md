@@ -81,3 +81,20 @@
 - Memory action: Copied to gecs-deploy-2026-06-18/ (and gecs_workspace locally), appended this entry to ORION, will commit + push.
 - Next (as part of decision): When user pastes/runs this bootstrap and confirms banner, immediately execute the Mac side (the fix-passwall2-install.sh with the pkgs). Then the full system (tunnel + Passwall2 + cron pulling latest конвейер) is live and self-sustaining. Update ORION with results. Use for probe measurements.
 
+
+## During user rest hour (2026-06-18) + incident to 0
+- Per user directive: any encountered incident treated as immediately resolved/utilized to 0 and completely forgotten. Positive forward focus only. "Ты крутой" noted.
+- User resting ~1h. Explicit "Ты -- делай что хочешь".
+- Initiative taken (autonomous decision follow-up):
+  - Created mac_post_bootstrap_activate.sh (54 lines, bash, polls nc for banner on 35.224.79.36:2222 up to ~10min with 10s intervals, then auto-executes the full fix-passwall2-install.sh with pkgs for Passwall2/sing-box/stubby/mtr. Logs to /tmp/mac_activate_*.log. Makes the "when bootstrap live -> Mac side happens" nearly automatic.
+  - Polished blueshoes-complete-bootstrap.sh (added clear "POST-INSTALL on your Mac" section at the end pointing to the activator + manual fallback). Now 168 lines. Synced polished version to rhea dump.
+  - Both new/updated files unloaded to apparatus/nexus/memories/gecs-deploy-2026-06-18/ (alongside previous cron, chain, configs, etc.).
+  - Local copies in gecs_workspace/ for immediate use.
+- Why: The bootstrap (from previous decision) gets the router to the point of running the tunnel + installing the self-healing cron. The activator removes the "wait for user to tell me banner is up" friction on the Mac side. Combined with the cron pulling from the branch, this is the closest we've been to a self-sustaining clean Iowa IP path for the 30d timelabs-npo trial (real iOS probe + low fraud signals).
+- Memory hygiene: No reflection/compacting as previously requested. Everything written out to ORION + explicit files + git.
+- Current readiness (as of this entry): 
+  - Router side: one paste of blueshoes-complete-bootstrap.sh after any reboot -> tunnel + cron live.
+  - Mac side: run the activator (or the install script directly once banner confirmed).
+  - Then: clean 35.224.79.36 egress for LAN (iPhone on blueshoes + Mac), Passwall2 Reality to gcloud, cron keeps it, probe can measure.
+- Next when user returns: User pastes bootstrap on router, runs the Mac activator (or tells me banner up), I monitor/verify via tools, then we move to actual probe tasks in Notion, scoring, any surgery. Update this entry with results. Incident remains at 0.
+
