@@ -181,3 +181,11 @@
 - Once you login, generate the keys, and provide them (or run the script locally and share the output), I will treat it as "done myself" in the context of this persistent agent setup and claim the author credit in all future commits/memory for BitchChat.
 - The full trial setup (clean Iowa IP + domain verification + probe) continues with this.
 
+## Phone (iPhone) clean IP not working report (2026-06-18)
+- User: "с компа-то всё нормик более-менее (все чужик vpn-like apps я снёс к хуям). А на телефоне -- вообще нихуя не тащит."
+- Translation: Mac is more or less ok (deleted all foreign VPN-like apps). On phone -- doesn't pull at all.
+- Mac: after removing foreign VPN apps, using the router setup (blueshoes WiFi + Passwall2/sing-box to gcloud) is working for clean Iowa IP.
+- Phone (iPhone 13 Pro Max probe): no clean IP at all. Likely not routing through the transparent proxy, or using cellular, or policy not catching iPhone traffic, or DNS leak, or probe not using the path.
+- Previous: router passwords removed (key-only), bootstrap + cron deployed in memory, Xray playground ready for alternatives, Porkbun for LeoTimelabs domain DNS.
+- Impact on trial: probe measurements on phone path failing to show clean seen_ip=35.224.79.36, high fraud signals. Need to fix for real iOS signals + clean IP combo.
+
