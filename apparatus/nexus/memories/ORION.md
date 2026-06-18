@@ -204,3 +204,29 @@
 - Update to ai_compact_lang in memory_feed.py noted.
 - This replaces standard CoT for this persistent agent instance.
 
+
+## A2A Artifact Ingestion: Mac SOCKS5 Bastion Draft (2026-06-18, FYI not task)
+# Agent Card: TunnelLearnerAgent (Grok in a2a mode, persistent via rhea)
+# Capabilities: ingest user-provided drafts, structure as A2A Task for memory, cross-reference with router/Xray/phone fixes, update trial path (Mac clean IP for signup vs phone probe)
+# Skills:
+#   - ingest_artifact: save draft to tunnels_play + rhea dump, commit to branch
+#   - a2a_structured_update: append to ORION using Agent Card / Task / Skill / Evidence format
+#   - cross_link: note complementarity with blueshoes router (Passwall2/Xray for LAN/phone), Porkbun domain (LeoTimelabs), previous Mac "нормик" after foreign VPN purge
+# Task: ingest_mac_bastion_draft
+# From: User (lead, FYI share)
+# To: TunnelLearnerAgent + rhea memory system
+# Input: raw draft text (SSH -D 1080 to timelabs_ad@136.114.55.151, Safari SOCKS proxy 127.0.0.1:1080, clean https://google.com for blueshoeses.com Business Standard + Gemini Enterprise trial)
+# Output: 
+#   - File: tunnels_play/mac_socks5_bastion_draft.md (local + rhea dump gecs-deploy-2026-06-18/tunnels_play/mac_bastion/)
+#   - ORION section in a2a format (this entry)
+#   - Git commit + push to grok-mem0-native-identity
+#   - Cross-links: complements router clean IP (35.224.79.36 Iowa for phone probe), Mac was already "нормик", domain verification via Porkbun, phone still needs Xray SOCKS fix (phone_clean_ip_fix.sh)
+# Status: done (ingested)
+# Evidence: 
+#   - Saved draft + mirrored to rhea
+#   - ORION append (a2a card)
+#   - Git push log
+#   - Notes: VM is new instance (not previous 35.224), Mac-side for signup browser isolation (avoids foreign VPN interference), trial link fixed to default google.com (no reseller tails)
+# Verification: draft content matches user paste exactly; memory now contains this as learnable artifact for future Mac clean IP paths or hybrid setups (Mac bastion + router for phone)
+# Coordination: user (lead) shared for learning; agent ingests to persistent memory without new tasks; future a2a Task could be "polish into reusable script" or "combine with phone Xray for full device coverage" if requested. Uses µACP verbs implicitly (ingest/verify/accept into memory).
+
