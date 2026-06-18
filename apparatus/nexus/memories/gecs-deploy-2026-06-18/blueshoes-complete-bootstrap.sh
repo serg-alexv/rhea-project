@@ -11,8 +11,8 @@ set -eu
 
 echo "=== 1. DROPBEAR FOR REVERSE (lan + GatewayPorts) ==="
 uci set dropbear.@dropbear[0].Interface=lan
-uci set dropbear.@dropbear[0].PasswordAuth=on
-uci set dropbear.@dropbear[0].RootPasswordAuth=on
+uci set dropbear.@dropbear[0].PasswordAuth=off
+uci set dropbear.@dropbear[0].RootPasswordAuth=off
 uci set dropbear.@dropbear[0].GatewayPorts=on 2>/dev/null || true
 uci commit dropbear
 /etc/init.d/dropbear restart
