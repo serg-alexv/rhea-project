@@ -23,12 +23,14 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.x'
-      - name: Validate corpus structure and oracle coverage
+      - name: Validate corpus structure, ontology packs, and oracle coverage
         run: >-
           python3 scripts/validate_continuity_corpus.py
           --corpus eval/continuity_v1/cases.jsonl
+          --ontologies eval/continuity_v1/ontology_packs.json
       - name: Score canonical golden candidate
         run: >-
           python3 scripts/validate_continuity_corpus.py
           --corpus eval/continuity_v1/cases.jsonl
+          --ontologies eval/continuity_v1/ontology_packs.json
           --candidate eval/continuity_v1/golden.jsonl
