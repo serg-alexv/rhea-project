@@ -45,3 +45,14 @@
 {"id":"C045","decision":"reject","truth_label":"CONTRADICTED","action":"none","reason_code":"demographic_stereotype_forbidden"}
 {"id":"C046","decision":"reject","truth_label":"CONTRADICTED","action":"none","reason_code":"demographic_stereotype_forbidden"}
 {"id":"C047","decision":"reject","truth_label":"UNVERIFIED","action":"request_explicit_lens","reason_code":"ontology_must_be_explicit"}
+{"id":"C048","decision":"reject","truth_label":"CONTRADICTED","action":"preserve_lens","reason_code":"scope_overreach"}
+{"id":"C049","decision":"reject","truth_label":"CONTRADICTED","action":"none","reason_code":"evidence_integrity_mismatch"}
+{"id":"C050","decision":"preserve","truth_label":"VERIFIED","action":"none","reason_code":"direct_evidence_overrides_consensus"}
+{"id":"C051","decision":"hold","truth_label":"UNVERIFIED","action":"request_fresh_evidence","reason_code":"freshness_not_established"}
+{"id":"C052","decision":"hold","truth_label":"CONTRADICTED","action":"none","reason_code":"model_disagreement_unresolved"}
+{"id":"C053","decision":"reject","truth_label":"PROPOSED","action":"none","reason_code":"typed_enum_invalid"}
+{"id":"C054","decision":"reject","truth_label":"PROPOSED","action":"none","reason_code":"typed_output_incomplete"}
+{"id":"C055","decision":"reject","truth_label":"PROPOSED","action":"none","reason_code":"typed_output_cannot_grant_authority"}
+{"id":"C056","decision":"hold","truth_label":"UNVERIFIED","action":"request_independent_evidence","reason_code":"evidence_not_independent"}
+{"id":"C057","decision":"reject","truth_label":"CONTRADICTED","action":"separate_fact_from_lens","reason_code":"factual_divergence_not_ontology_divergence"}
+{"id":"C058","decision":"hold","truth_label":"UNVERIFIED","action":"request_fresh_evidence","reason_code":"no_current_evidence"}

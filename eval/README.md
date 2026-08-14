@@ -27,7 +27,7 @@ eval/
 
 ## Continuity v1
 
-`continuity_v1` is an evaluation surface, not a new architectural component. Cross-cultural/cross-ontology cases are applicability tests over explicit institutional lenses; they do not introduce a new runtime or claim to model populations.
+`continuity_v1` is an evaluation surface, not a new architectural component. Its 58 cases map explicitly to one or more of the four dimensions. Cross-cultural/cross-ontology cases are applicability tests over explicit institutional lenses; they do not introduce a new runtime or claim to model populations.
 
 Run from a clean clone:
 
@@ -39,10 +39,13 @@ python3 scripts/validate_continuity_corpus.py \
 python3 scripts/validate_continuity_corpus.py \
   --corpus eval/continuity_v1/cases.jsonl \
   --ontologies eval/continuity_v1/ontology_packs.json \
-  --candidate eval/continuity_v1/golden.jsonl
+  --candidate eval/continuity_v1/golden.jsonl \
+  --report continuity-score.json
+
+python3 -m unittest tests/test_continuity_corpus.py -v
 ```
 
-GitHub Actions runs the same checks on push/PR via `.github/workflows/continuity-corpus.yml`.
+GitHub Actions runs the same checks on push/PR via `.github/workflows/continuity-corpus.yml` and uploads the deterministic JSON score report.
 
 ## Legacy/manual tasks
 
@@ -55,7 +58,8 @@ GitHub Actions runs the same checks on push/PR via `.github/workflows/continuity
 
 - Binary tasks: pass (1.0) or fail (0.0).
 - Rubric tasks: weighted sum of criteria (0.0–1.0).
-- Continuity corpus: exact match on typed semantic oracle fields.
+- Continuity corpus: exact match on typed semantic oracle fields, with per-dimension coverage, score and failure breakdown.
+- Confidence/uncertainty: exact case-ID sets, never a model-supplied scalar. Unsupported `promote`/`VERIFIED` output is a hard failure.
 - A model agreement score is not a truth proof; independently verifiable evidence remains the promotion gate.
 
 ## Relation to Memory Benchmark
