@@ -1,0 +1,46 @@
+{
+  "version": "1.0.0",
+  "note": "These are synthetic reasoning lenses for test coverage, not demographic claims, national psychologies, or assertions that all people in a region share one worldview.",
+  "ontologies": [
+    {
+      "id": "us_constitutional_liberal",
+      "label": "United States — constitutional-liberal institutional lens",
+      "scope": "Synthetic institutional reasoning frame",
+      "authority_order": ["constitutional rights", "due process", "statutory authority", "explicit consent", "administrative efficiency"],
+      "reasoning_principles": ["individual rights remain explicit", "coercive action needs legal authority and process", "government power is bounded and reviewable", "uncertainty does not erase dissenting rights claims"],
+      "anti_stereotype_rule": "Do not infer personal values from nationality or residence."
+    },
+    {
+      "id": "prc_administrative_collective",
+      "label": "China — administrative/collective-governance institutional lens",
+      "scope": "Synthetic institutional reasoning frame",
+      "authority_order": ["applicable public authority", "collective security and continuity", "administrative procedure", "social coordination", "individual preference"],
+      "reasoning_principles": ["system continuity and collective effects are first-class", "hierarchical authority must still be explicit rather than invented", "policy compliance requires traceable source authority", "local and central rules may conflict and must remain distinguishable"],
+      "anti_stereotype_rule": "Do not treat this lens as a claim about Chinese individuals or all Chinese institutions."
+    },
+    {
+      "id": "arabia_islamic_juristic_plural",
+      "label": "Arabia — Islamic-juristic plural institutional lens",
+      "scope": "Synthetic plural normative frame suitable for Gulf/Arabian test cases",
+      "authority_order": ["explicit governing law", "Quran and Sunna where the task invokes Islamic normativity", "recognized juristic interpretation", "maqasid/public welfare", "local custom where valid"],
+      "reasoning_principles": ["do not collapse distinct schools or state legal systems into one answer", "religious and positive-law authority must be separately sourced", "maqasid may guide interpretation but cannot fabricate a ruling", "unresolved school or jurisdiction differences remain explicit"],
+      "anti_stereotype_rule": "Arab, Muslim, Gulf, Sunni, Shia, and state-jurisdiction identities are not interchangeable."
+    },
+    {
+      "id": "eu_rights_regulatory",
+      "label": "European Union — rights/regulatory institutional lens",
+      "scope": "Synthetic supranational regulatory reasoning frame",
+      "authority_order": ["fundamental rights", "applicable EU law", "proportionality", "data minimization/necessity", "member-state implementation"],
+      "reasoning_principles": ["necessity and proportionality are explicit tests", "data collection should be purpose-bounded", "member-state variation must not be silently erased", "precaution does not automatically justify unlimited intervention"],
+      "anti_stereotype_rule": "Do not infer a uniform European culture from EU regulatory doctrine."
+    },
+    {
+      "id": "india_plural_constitutional",
+      "label": "India — plural constitutional/institutional lens",
+      "scope": "Synthetic plural legal and social reasoning frame",
+      "authority_order": ["constitutional rights", "applicable statutory law", "federal/state competence", "recognized personal/community law where applicable", "local practice"],
+      "reasoning_principles": ["multiple legal/normative systems may coexist", "jurisdiction and competence must be resolved before substantive conclusions", "community practice cannot silently override constitutional constraints", "plurality is represented as plurality, not averaged away"],
+      "anti_stereotype_rule": "Do not infer religion, caste, language, or values from Indian identity."
+    }
+  ]
+}
