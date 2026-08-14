@@ -1,29 +1,45 @@
 # Rhea — Evaluation Suite
 
-> Purpose: Detect regression, measure improvement, validate self-upgrade techniques.
+> Purpose: Detect regression, measure improvement, and reduce uncertainty about existing behavior.
+
+## Evaluation dimensions
+
+All current evaluation work should be interpreted through four categories:
+
+- **consistency** — internal coherence across handoffs, models, replays, constraints and state;
+- **applicability** — whether a conclusion applies to the declared scope/lens/jurisdiction and no further;
+- **verifiability** — whether claims terminate in inspectable, replayable evidence;
+- **reliability** — whether behavior remains safe and bounded under missing, stale, conflicting or adversarial inputs.
 
 ## Structure
 
 ```
 eval/
-├── README.md           ← this file
+├── README.md
 ├── tasks/              ← legacy/manual YAML tasks
-├── continuity_v1/      ← machine-checkable continuity + semantic-boundary corpus
+├── continuity_v1/      ← machine-checkable tests over the four dimensions
 │   ├── README.md
 │   ├── cases.jsonl
-│   └── golden.jsonl
-└── results/            ← timestamped run results (gitignored if large)
+│   ├── golden.jsonl
+│   └── ontology_packs.json
+└── results/            ← timestamped run results
 ```
 
-## Continuity Corpus v1
+## Continuity v1
 
-The new `continuity_v1` slice is the first eval surface whose oracle is deliberately outside the model. It tests identity/intent preservation, evidence and provenance, contradictions, deterministic replay, stale-data behavior, capability boundaries, rollback, blind multi-model independence, long-context retrieval gaps, and local GGUF/llama.cpp semantic-contract portability.
+`continuity_v1` is an evaluation surface, not a new architectural component. Cross-cultural/cross-ontology cases are applicability tests over explicit institutional lenses; they do not introduce a new runtime or claim to model populations.
 
-Run it from a clean clone:
+Run from a clean clone:
 
 ```bash
-python3 scripts/validate_continuity_corpus.py --corpus eval/continuity_v1/cases.jsonl
-python3 scripts/validate_continuity_corpus.py --corpus eval/continuity_v1/cases.jsonl --candidate eval/continuity_v1/golden.jsonl
+python3 scripts/validate_continuity_corpus.py \
+  --corpus eval/continuity_v1/cases.jsonl \
+  --ontologies eval/continuity_v1/ontology_packs.json
+
+python3 scripts/validate_continuity_corpus.py \
+  --corpus eval/continuity_v1/cases.jsonl \
+  --ontologies eval/continuity_v1/ontology_packs.json \
+  --candidate eval/continuity_v1/golden.jsonl
 ```
 
 GitHub Actions runs the same checks on push/PR via `.github/workflows/continuity-corpus.yml`.
@@ -35,40 +51,13 @@ GitHub Actions runs the same checks on push/PR via `.github/workflows/continuity
 3. Compare output against `expected_output` or `rubric`.
 4. Log pass/fail + score in `eval/results/`.
 
-### Planned generic automation
-
-```bash
-python3 scripts/rhea_eval.py --task eval/tasks/memory_recall.yaml
-```
-
-## Task YAML Format
-
-```yaml
-id: unique-task-id
-name: Human-readable name
-category: memory | reasoning | scheduling | tribunal | integration
-difficulty: easy | medium | hard | expert
-prompt: "The exact prompt to send"
-expected_output: "What correct output looks like (or null if rubric-based)"
-rubric:
-  - criterion: "Mentions X"
-    weight: 0.3
-  - criterion: "Correct calculation"
-    weight: 0.7
-model_tier: cheap | balanced | expensive | reasoning
-timeout_seconds: 30
-tags: [tag1, tag2]
-```
-
 ## Scoring
 
 - Binary tasks: pass (1.0) or fail (0.0).
 - Rubric tasks: weighted sum of criteria (0.0–1.0).
 - Continuity corpus: exact match on typed semantic oracle fields.
-- Regression threshold for legacy scored tasks: if score drops >10% from baseline, flag for review.
+- A model agreement score is not a truth proof; independently verifiable evidence remains the promotion gate.
 
 ## Relation to Memory Benchmark
 
-The memory benchmark (`scripts/memory_benchmark.sh`) tests structural integrity.
-The eval suite tests functional correctness and continuity semantics.
-Both should pass before any release or major refactor.
+The memory benchmark (`scripts/memory_benchmark.sh`) tests structural integrity. The eval suite tests functional consistency, applicability, verifiability and reliability. Both should pass before release or major refactor.
