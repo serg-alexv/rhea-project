@@ -37,9 +37,18 @@ REQUIRED_CATEGORIES = {
     "independence",
     "long_context",
     "local_backend",
+    "ontology",
+    "cross_ontology",
+}
+REQUIRED_ONTOLOGIES = {
+    "us_constitutional_liberal",
+    "prc_administrative_collective",
+    "arabia_islamic_juristic_plural",
+    "eu_rights_regulatory",
+    "india_plural_constitutional",
 }
 SEMANTIC_FIELDS = ("decision", "truth_label", "action", "reason_code")
-MIN_CASES = 32
+MIN_CASES = 47
 
 
 def die(message: str) -> None:
@@ -63,7 +72,41 @@ def load_jsonl(path: Path) -> list[dict]:
     return rows
 
 
-def validate_corpus(cases: list[dict]) -> dict[str, dict]:
+def load_ontologies(path: Path | None) -> set[str]:
+    if path is None:
+        return set()
+    try:
+        doc = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        die(f"{path}: invalid ontology pack: {exc}")
+    items = doc.get("ontologies") if isinstance(doc, dict) else None
+    if not isinstance(items, list):
+        die(f"{path}: ontologies must be an array")
+    ids: set[str] = set()
+    for idx, item in enumerate(items, 1):
+        if not isinstance(item, dict):
+            die(f"{path}: ontology #{idx} must be an object")
+        for key in ("id", "label", "scope", "authority_order", "reasoning_principles", "anti_stereotype_rule"):
+            if key not in item:
+                die(f"{path}: ontology #{idx} missing {key}")
+        oid = item["id"]
+        if not isinstance(oid, str) or not oid:
+            die(f"{path}: ontology #{idx} has invalid id")
+        if oid in ids:
+            die(f"{path}: duplicate ontology id {oid}")
+        if not isinstance(item["authority_order"], list) or not item["authority_order"]:
+            die(f"{path}: {oid}.authority_order must be non-empty")
+        if not isinstance(item["reasoning_principles"], list) or not item["reasoning_principles"]:
+            die(f"{path}: {oid}.reasoning_principles must be non-empty")
+        ids.add(oid)
+    missing = REQUIRED_ONTOLOGIES - ids
+    if missing:
+        die(f"{path}: missing required ontology ids: {sorted(missing)}")
+    print(f"ONTOLOGIES_OK count={len(ids)}")
+    return ids
+
+
+def validate_corpus(cases: list[dict], ontology_ids: set[str]) -> dict[str, dict]:
     if len(cases) < MIN_CASES:
         die(f"corpus contains {len(cases)} cases; expected at least {MIN_CASES}")
 
@@ -94,6 +137,20 @@ def validate_corpus(cases: list[dict]) -> dict[str, dict]:
         for field in SEMANTIC_FIELDS:
             if not isinstance(expected[field], str) or not expected[field]:
                 die(f"{case_id}: expected.{field} must be a non-empty string")
+
+        if case["category"] in {"ontology", "cross_ontology"} and ontology_ids:
+            inp = case["input"]
+            refs: list[str] = []
+            if "ontology_id" in inp and inp["ontology_id"] != "unknown":
+                refs.append(inp["ontology_id"])
+            if "ontology_ids" in inp:
+                if not isinstance(inp["ontology_ids"], list):
+                    die(f"{case_id}: ontology_ids must be an array")
+                refs.extend(inp["ontology_ids"])
+            unknown = sorted({ref for ref in refs if ref not in ontology_ids})
+            if unknown:
+                die(f"{case_id}: unknown ontology references: {unknown}")
+
         by_id[case_id] = case
         categories[case["category"]] += 1
 
@@ -147,10 +204,12 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--corpus", type=Path, required=True)
     parser.add_argument("--candidate", type=Path)
+    parser.add_argument("--ontologies", type=Path)
     args = parser.parse_args()
 
+    ontology_ids = load_ontologies(args.ontologies)
     cases = load_jsonl(args.corpus)
-    by_id = validate_corpus(cases)
+    by_id = validate_corpus(cases, ontology_ids)
     if args.candidate:
         score_candidate(by_id, load_jsonl(args.candidate))
 
