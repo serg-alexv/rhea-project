@@ -1,0 +1,29 @@
+name: continuity-corpus
+
+on:
+  push:
+    paths:
+      - 'eval/continuity_v1/**'
+      - 'scripts/validate_continuity_corpus.py'
+      - '.github/workflows/continuity-corpus.yml'
+  pull_request:
+    paths:
+      - 'eval/continuity_v1/**'
+      - 'scripts/validate_continuity_corpus.py'
+      - '.github/workflows/continuity-corpus.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - name: Validate corpus structure and oracle coverage
+        run: >-
+          python3 scripts/validate_continuity_corpus.py
+          --corpus eval/continuity_v1/cases.jsonl
