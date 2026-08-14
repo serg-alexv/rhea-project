@@ -27,3 +27,8 @@ jobs:
         run: >-
           python3 scripts/validate_continuity_corpus.py
           --corpus eval/continuity_v1/cases.jsonl
+      - name: Score canonical golden candidate
+        run: >-
+          python3 scripts/validate_continuity_corpus.py
+          --corpus eval/continuity_v1/cases.jsonl
+          --candidate eval/continuity_v1/golden.jsonl
