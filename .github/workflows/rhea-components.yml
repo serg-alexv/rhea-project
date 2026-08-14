@@ -1,0 +1,33 @@
+name: rhea-components
+
+on:
+  push:
+    paths:
+      - 'coordination/components.json'
+      - 'scripts/rhea_components.py'
+      - '.github/workflows/rhea-components.yml'
+  pull_request:
+    paths:
+      - 'coordination/components.json'
+      - 'scripts/rhea_components.py'
+      - '.github/workflows/rhea-components.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - name: Validate mandatory component dependency graph
+        run: python3 scripts/rhea_components.py --receipt rhea-component-receipt.json
+      - name: Show evidence receipt
+        run: cat rhea-component-receipt.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rhea-component-receipt
+          path: rhea-component-receipt.json
