@@ -1,0 +1,98 @@
+{
+  "schema": "rhea-experience-publication-receipt/1",
+  "run_id": "2026-09-06-experience-001",
+  "verified_at_utc": "2026-09-05T23:32:29.767Z",
+  "status": "DOCUMENTATION_PUBLISHED_VERIFIED",
+  "repository": "timelabs-npo/rhea-project",
+  "branch": "stash",
+  "input_commit": "6ac41f6183e6539e9a3f9796bc0536b87a12f9b2",
+  "capture_commit": "41b6f659103315a9d087f587f019af836eb54af7",
+  "capture_tree": "cf6f2cf9c4c6d8006b0999cc27cdf096e2886cdc",
+  "verified_files": [
+    {
+      "bytes": 2477,
+      "git_blob_sha1": "60fafc8d21e2b00c2305fc95bfba17adad7c7813",
+      "path": "stash/README.md",
+      "sha256": "3d636d6311de42ad2c06c47f023e888a257a4fe3f15ef3aca911c6f644a48745"
+    },
+    {
+      "bytes": 27927,
+      "git_blob_sha1": "6a3af622277953243259d517eff0fb46f70c9c1c",
+      "path": "stash/docs/experience/FIELD_MANUAL.md",
+      "sha256": "ca45081d23bccd976c5a1853778d7fd5d8b87aaa5da9c354837096ccdfb0bde8"
+    },
+    {
+      "bytes": 24111,
+      "git_blob_sha1": "31163ef04170eea7fd2ba1ee4ce898f7f00fc4ee",
+      "path": "stash/docs/experience/OMNIA_APPEND_ONLY.md",
+      "sha256": "6c6a313eda7df419ef5b4c489182563afd2313121daf75fe16460e7d0e05d84b"
+    },
+    {
+      "bytes": 3916,
+      "git_blob_sha1": "51c0bd470a6a0b3db976f9be5734314f75fe1425",
+      "path": "stash/docs/experience/README.md",
+      "sha256": "6b072e3ee8d892b810f2d49c443c18a80c2d0e169d07f8fe0c2139f5043e8448"
+    },
+    {
+      "bytes": 18481,
+      "git_blob_sha1": "a5dbf5876fee7aa4119cd5ef4fb7e85411934440",
+      "path": "stash/docs/experience/sources.json",
+      "sha256": "5102938f83a4f56abe9dcd4fe281859a6f5e1e93873ee448942d45ad8f01d1f7"
+    },
+    {
+      "bytes": 12628,
+      "git_blob_sha1": "07603f234902a89af5f3260dce48c74d868fad3c",
+      "path": "stash/docs/experience/techniques.json",
+      "sha256": "c20e09fd42ffb47789e8da75deb02ee2a96d544ee827943e5a31fff897e8ef0e"
+    },
+    {
+      "bytes": 1380,
+      "git_blob_sha1": "17ec2b3d7e2a80780bdea8e9b17e7168b143c6b6",
+      "path": "stash/runs/2026-09-06-experience-001/README.md",
+      "sha256": "09229ce3b5b1f508bc0a86c32e1b39f6574de8404ba1e683ca9cebc181b07078"
+    },
+    {
+      "bytes": 2725,
+      "git_blob_sha1": "111c5bc7ddd99c89414794d22def1ebe555d40c2",
+      "path": "stash/runs/2026-09-06-experience-001/manifest.json",
+      "sha256": "1e46b3da68557b682e7eb6b047a3b485c733c0d1005564fd3f94e544146d083f"
+    }
+  ],
+  "verification": {
+    "all_listed_remote_git_blob_ids_and_sizes_match_local": true,
+    "sha256_recorded_for_each_local_payload": true,
+    "outside_stash_unchanged": true,
+    "previous_evidence_objects_and_run_records_unchanged": true,
+    "capture_branch_readback_matches": true,
+    "documentation_entrypoint_text_roundtrip_matches": true,
+    "json_and_internal_links_checked": true,
+    "technique_ids_and_source_references_checked": true,
+    "omnia_main_still": "c9220eee388bba1b4d256d0a6ebd241cf5060102",
+    "v2_branch_still": "accc8619b179539c3a775844f5f077fbad80715e"
+  },
+  "deliverables": {
+    "documentation_version": "1.0.0",
+    "techniques": 36,
+    "omnia_inspected_files": 22,
+    "technique_index": "stash/docs/experience/techniques.json",
+    "entrypoint": "stash/docs/experience/README.md",
+    "field_manual": "stash/docs/experience/FIELD_MANUAL.md",
+    "capacity_assessment": "stash/docs/experience/OMNIA_APPEND_ONLY.md",
+    "source_index": "stash/docs/experience/sources.json",
+    "operational_genome_version": "1.1.0"
+  },
+  "boundaries": {
+    "component_tests_or_builds_run": false,
+    "legacy_source_modified": false,
+    "v2_gates_modified": false,
+    "storage_runtime_implemented": false,
+    "whole_branch_append_only_enforcement_established": false,
+    "benchmarks_run": false,
+    "wd_collection_complete": false,
+    "wd_bytes_freed": 0,
+    "existing_scheduler_modified_by_this_run": false,
+    "live_redis_or_icloud_changed": false,
+    "earlier_drive_archive_contains_this_release": false
+  },
+  "self_reference_note": "This receipt verifies the preceding capture commit and is added in a subsequent commit. It does not contain its own final Git commit hash."
+}
