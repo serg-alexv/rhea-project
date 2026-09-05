@@ -1,0 +1,111 @@
+{
+  "schema": "rhea-leftover-run/1",
+  "run_id": "2026-09-06-cloud-001",
+  "protocol_version": "1.0.0",
+  "recorded_at_utc": "2026-09-05T22:38:18.126412+00:00",
+  "source_observation_date": "2026-09-06 Europe/Moscow",
+  "status": "PARTIAL_WD_UNAVAILABLE",
+  "capture_runtime": {
+    "os": "Linux",
+    "hostname": "localhost",
+    "wd_mounts_available": false,
+    "wd_bridge_available": false,
+    "wd_source_bytes_read": false
+  },
+  "authorization_basis": "User instruction to publish report and archive leftovers in stash with a repeatable procedure.",
+  "scope": "Exactly three uploaded report files, prepared report.md, derivative findings and generated preservation records. Does not capture files merely named in WD reports.",
+  "publication": {
+    "repository": "timelabs-npo/rhea-project",
+    "branch": "stash",
+    "parent_commit_observed": "75cb31e59ccc4f436a428811cb70bbc495254821",
+    "state_at_manifest_creation": "PREPARED",
+    "verification_receipt": "A later immutable publication receipt records the capture commit and remote identities."
+  },
+  "object_count": 4,
+  "object_bytes": 115053,
+  "objects": [
+    {
+      "artifact_id": "L1",
+      "original_name": "chatgpt-evidence.md",
+      "source_locator": "upload/01-chatgpt-evidence.md",
+      "source_locator_context": "Supplied working-session file, not a WD source-file path.",
+      "evidence_class": "UPLOADED_REPORT",
+      "bytes": 6647,
+      "sha256": "fecf512a1be5213e57e5ab09faed2595d5b1337548fcb36933fdf2a24e6a250f",
+      "git_blob_sha1": "fb20a294f1661aad0a17abfaef86f8b4c74f303a",
+      "object_path": "stash/objects/sha256/fe/fecf512a1be5213e57e5ab09faed2595d5b1337548fcb36933fdf2a24e6a250f.md",
+      "captured_at_utc": "2026-09-05T22:38:18.126412+00:00",
+      "availability": "AVAILABLE",
+      "storage_state": "LOCAL_VERIFIED",
+      "publication_state": "PREPARED",
+      "content_transformation": "NONE"
+    },
+    {
+      "artifact_id": "L2",
+      "original_name": "2project-files.md",
+      "source_locator": "upload/01-2project-files.md",
+      "source_locator_context": "Supplied working-session file, not a WD source-file path.",
+      "evidence_class": "UPLOADED_REPORT",
+      "bytes": 11830,
+      "sha256": "394ac96212e271b8559f20e1715489868ad2b47f60511c54870ff8f46c1eafae",
+      "git_blob_sha1": "884603e5b7d06fdd75763e4a796a47289fd3f428",
+      "object_path": "stash/objects/sha256/39/394ac96212e271b8559f20e1715489868ad2b47f60511c54870ff8f46c1eafae.md",
+      "captured_at_utc": "2026-09-05T22:38:18.126412+00:00",
+      "availability": "AVAILABLE",
+      "storage_state": "LOCAL_VERIFIED",
+      "publication_state": "PREPARED",
+      "content_transformation": "NONE"
+    },
+    {
+      "artifact_id": "L3",
+      "original_name": "3AI_PROJECT_TRACE_MAP.md",
+      "source_locator": "upload/01-3AI_PROJECT_TRACE_MAP.md",
+      "source_locator_context": "Supplied working-session file, not a WD source-file path.",
+      "evidence_class": "UPLOADED_REPORT",
+      "bytes": 58541,
+      "sha256": "ef1cecc315ee9bc0cf3c7bf765b2e9be5e30270a4dd2174cb3e1c477b302d794",
+      "git_blob_sha1": "9b68cb3ca664ea634677c47c0ebf2e3661e4cdfe",
+      "object_path": "stash/objects/sha256/ef/ef1cecc315ee9bc0cf3c7bf765b2e9be5e30270a4dd2174cb3e1c477b302d794.md",
+      "captured_at_utc": "2026-09-05T22:38:18.126412+00:00",
+      "availability": "AVAILABLE",
+      "storage_state": "LOCAL_VERIFIED",
+      "publication_state": "PREPARED",
+      "content_transformation": "NONE"
+    },
+    {
+      "artifact_id": "REPORT-V1",
+      "original_name": "report.md",
+      "source_locator": "report.md",
+      "source_locator_context": "Supplied working-session file, not a WD source-file path.",
+      "evidence_class": "GENERATED_ANALYTICAL_REPORT",
+      "bytes": 38035,
+      "sha256": "17c4ede4c55da52f8a296b36d1c6cf77850b0da0a0f78c8d9098c253163a415b",
+      "git_blob_sha1": "bc390a18584d836e96fd9dcfdacef862602001f8",
+      "object_path": "stash/objects/sha256/17/17c4ede4c55da52f8a296b36d1c6cf77850b0da0a0f78c8d9098c253163a415b.md",
+      "captured_at_utc": "2026-09-05T22:38:18.126412+00:00",
+      "availability": "AVAILABLE",
+      "storage_state": "LOCAL_VERIFIED",
+      "publication_state": "PREPARED",
+      "content_transformation": "NONE"
+    }
+  ],
+  "derivatives": [
+    {
+      "artifact_id": "L4-DERIVED",
+      "path": "stash/runs/2026-09-06-cloud-001/supplied-binary-provenance.json",
+      "bytes": 10751,
+      "sha256": "2f1c79a2987c070de6ec1e3cac5f037f7ebd814e63e6cb364a1757ec07f5104c",
+      "evidence_class": "USER_MESSAGE_DERIVATIVE",
+      "original_file_sha256": null
+    }
+  ],
+  "pending_count": 41,
+  "pending_path": "stash/runs/2026-09-06-cloud-001/pending.json",
+  "privacy_review": {
+    "scope": "Public upload candidates in this run only",
+    "automatic_pattern_scan": "No matches for checked private-key header, common token, access-key and embedded-credential URL patterns in the four supplied files.",
+    "manual_review": "Supplied reports contain source locators and public verification identifiers; no credential values were identified.",
+    "limitation": "Pattern scanning is not a proof of absence; raw WD histories and credential media were not available or opened."
+  },
+  "readiness_effect": "NONE; no build/boot/deployment/qualification claims added."
+}

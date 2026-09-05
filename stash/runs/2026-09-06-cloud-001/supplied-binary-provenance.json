@@ -1,0 +1,208 @@
+{
+  "evidence_class": "USER_MESSAGE_DERIVATIVE",
+  "source_title": "MBSD and Blueshoes binary provenance",
+  "source_observed_date": "2026-09-06",
+  "source_timezone": "Europe/Moscow",
+  "original_file_bytes_available": false,
+  "original_file_sha256": null,
+  "record_scope": "Structured findings transcribed from the supplied message; not a byte-exact original report and not a new WD verification. Full narrative also summarized in report.md.",
+  "source_reported_scope": "Read-only inspection and verification; no source edits, Git mutations, downloads, builds, tests, VM startup, SSH, firmware execution or archive extraction. Only the report written; keys/credential ISO/auth stores not opened.",
+  "mbsd": {
+    "path_prefixes": {
+      "B": "C:/Users/wheel/Documents/Codex/2026-08-13/i",
+      "P": "C:/Users/wheel/Documents/Codex/2026-08-13/i/work/mbsd-pipeline",
+      "Z": "C:/Users/wheel/Documents/Codex/2026-08-13/i/handoff/mbsd-gl-mt3000-ram-candidate-20260814T125511Z.zip",
+      "H": "C:/Users/wheel/Documents/Codex/2026-08-13/i/handoff/mbsd-gl-mt3000-ram-candidate-20260814T125511Z/mbsd-gl-mt3000-ram-candidate-20260814T125511Z"
+    },
+    "zip": {
+      "expected_bytes": 8314387,
+      "reported_sha256": "091e20fc7f2270605754f6262fc087c5454b19c6fa832ed47f136f0bbd54217d",
+      "reported_members": 10,
+      "reported_files": 9
+    },
+    "payloads": [
+      {
+        "filename": "bsd.rd",
+        "reported_bytes_each_copy": 18732300,
+        "reported_sha256_both_copies": "ca9da7ec817f5a51dd75dd72a107022bc00290a42e968e205fb37765c1b0c55a",
+        "reported_format": "ELF64 little-endian AArch64 executable, statically linked, not stripped"
+      },
+      {
+        "filename": "BOOTAA64.EFI",
+        "reported_bytes_each_copy": 230871,
+        "reported_sha256_both_copies": "741a760c3d3cd97b576146f84787a3f2cfb2e37d896372114b08a4f26e059d3d",
+        "reported_format": "PE32+ AArch64 EFI application, two sections"
+      }
+    ],
+    "checksums": "7/7 entries match each copy; all nine ZIP files equal extracted counterparts.",
+    "signature": {
+      "reported_tool": "Windows OpenSSH",
+      "namespace": "mbsd-release",
+      "principal": "mbsd-builder",
+      "reported_result": "VALID",
+      "reported_exit_code": 0,
+      "public_fingerprint": "SHA256:gNVLiBDgtWG4VjyORfowdEh+Xb/7nV7QKfRKXbVh4WM",
+      "independent_signer_trust": "NOT_ESTABLISHED",
+      "reason": "Key, expected fingerprint and allowed signer supplied in same bundle."
+    },
+    "upstream": {
+      "independent_authentication": "UNKNOWN",
+      "signed_author_claim": "Stock OpenBSD 7.9 arm64 RAMDISK #211; claimed SHA256 match from 2026-08-14; signify not run.",
+      "release_directory": "https://cdn.openbsd.org/pub/OpenBSD/7.9/arm64/",
+      "urls_recovered_acquisition_receipts": false,
+      "current_session_fetch_performed": false,
+      "missing": "Retained arm64 SHA256.sig/acquisition receipt; independently trusted release key verification.",
+      "wrong_arch_record": "B/work/openbsd-builder/SHA256.sig is amd64 and cannot authenticate arm64.",
+      "wrong_arch_bsd_rd_sha256": "6f0974bf92e28e2a97594987cfd1db135fc2fb4aea00f3f3e35ca6f70448f034"
+    },
+    "source_claim": {
+      "dirty_source_path": "/Users/sa/Documents/mbsd/openbsd/src",
+      "recorded_commit": "a63ea9f8f0de210ccbc0abba1ec3ee1d5a92dfdd",
+      "used_to_build_included_payloads": false,
+      "mt7981_patch_linkage": "NOT_ESTABLISHED; explicitly disclaimed by signed manifest"
+    },
+    "patch": {
+      "path": "C:/Users/wheel/Documents/Codex/2026-08-13/i/work/mbsd-pipeline/patches/0001-mt7981-fail-closed-compile-smoke.patch",
+      "reported_bytes": 3731,
+      "reported_sha256": "37f0dcd02d935dee0473321b407df1e06a1dc39848c7a90c87b68c6f311976a1",
+      "pinned_source_tree": "fbf98b11aa796d02803ac018667c4ad91eb6d70d",
+      "requires": "Four acquired source overlays; MBSD_SMOKE non-bootable compile-smoke.",
+      "historical_application": "/Users/sa/Documents/mbsd/openbsd/worktrees/mt7981-bringup, 2026-08-15"
+    },
+    "build": {
+      "source_script": "C:/Users/wheel/Documents/Codex/2026-08-13/i/work/mbsd-pipeline/scripts/build-openbsd-arm64.sh",
+      "viewed_commands": [
+        "run_stage kernel-config config -b \"$KOBJ\" -s \"$SRC/sys\" \"$SRC/sys/arch/arm64/conf/$KERNEL_CONFIG\"",
+        "run_stage kernel-build make -C \"$KOBJ\" -j \"$JOBS\""
+      ],
+      "expected_output": "bundle/payload/bsd.$KERNEL_CONFIG.arm64",
+      "completed_build_to_payload_digest_receipt": "NOT_FOUND_IN_REPORTED_RECORDS",
+      "checkpoint": "cross-gcc, kernel and bundle publication pending",
+      "guest_log_locators": [
+        "/home/build-logs/resume-cross-tools-j6-20260814T2145Z.log",
+        "/home/build-logs/continue-mbsd-after-cross-tools.log"
+      ],
+      "guest_logs_read": false
+    },
+    "readiness": {
+      "flashable": false,
+      "ram_boot_ready": false,
+      "audit_changes_readiness": false
+    }
+  },
+  "blueshoes": {
+    "root": "C:/Users/wheel/Documents/Codex/2026-08-18/network-memory-map/timelabs-npo--Blueshoes",
+    "manifest_path": "C:/Users/wheel/Documents/Codex/2026-08-18/network-memory-map/timelabs-npo--Blueshoes/artifacts/b0_release_metadata.json",
+    "manifest_reported_sha256": "e706696fc9d3ba57b73b533eadd109cafbaaed94a8b8f66331d46acf66a66c62",
+    "manifest_build_date": "2026-06-07T05:47:30Z",
+    "manifest_source_commit": "013fcef8572ecbc152a4986ab48ddfde451a5273",
+    "binaries": [
+      {
+        "relative_to_target": "aarch64-unknown-linux-musl/release/bs-edge-agent",
+        "expected_bytes": 1840488,
+        "expected_sha256": "0aac2f3d1bb176760c5947eb4ca5353ccbdabf7fc14f13e5127be5611272d671",
+        "reported_result": "NOT_FOUND_IN_SCOPE",
+        "observed_bytes": null,
+        "observed_sha256": null
+      },
+      {
+        "relative_to_target": "aarch64-unknown-linux-musl/release/bs-watchdog",
+        "expected_bytes": 392752,
+        "expected_sha256": "f57320c5017d78dcb6fac33d05cc9ce1e36d2e8e958b268d6ae945e2365a940c",
+        "reported_result": "NOT_FOUND_IN_SCOPE",
+        "observed_bytes": null,
+        "observed_sha256": null
+      },
+      {
+        "relative_to_target": "x86_64-unknown-linux-musl/release/bs-edge-agent",
+        "expected_bytes": 2146152,
+        "expected_sha256": "d3a1d80f9c4aa00c1ee5428878cfc3838299cff3f7520e0c0d93f072fe016a06",
+        "reported_result": "NOT_FOUND_IN_SCOPE",
+        "observed_bytes": null,
+        "observed_sha256": null
+      },
+      {
+        "relative_to_target": "x86_64-unknown-linux-musl/release/bs-watchdog",
+        "expected_bytes": 418312,
+        "expected_sha256": "8fc35869609993e8a591549df5390196d228ba63e545344c7310ab03c6c75aed",
+        "reported_result": "NOT_FOUND_IN_SCOPE",
+        "observed_bytes": null,
+        "observed_sha256": null
+      },
+      {
+        "relative_to_target": "aarch64-apple-darwin/release/bs-edge-agent",
+        "expected_bytes": 1668368,
+        "expected_sha256": "45637d9a11ce6d015b2860fc5808049ba8d4b1fcfae82f2e52d2bef908ab9bd7",
+        "reported_result": "NOT_FOUND_IN_SCOPE",
+        "observed_bytes": null,
+        "observed_sha256": null
+      },
+      {
+        "relative_to_target": "aarch64-apple-darwin/release/bs-watchdog",
+        "expected_bytes": 354896,
+        "expected_sha256": "a77ba347e63f45531fbe9c6333f4562d4de013458231d98e5a74f5343ae5101d",
+        "reported_result": "NOT_FOUND_IN_SCOPE",
+        "observed_bytes": null,
+        "observed_sha256": null
+      }
+    ],
+    "transfer_archive": {
+      "path": "C:/Users/wheel/Documents/Codex/2026-08-18/network-memory-map/timelabs-npo--Blueshoes/agent_transfer_bundle.tar.gz",
+      "reported_bytes": 5080,
+      "reported_sha256": "03de220b581121706f9a93f52ac4892e0b8f78154591f907eb1f1ba1f3912ca4",
+      "reported_uncompressed_bytes": 14052,
+      "members_prefix": "Users/sa/bs/",
+      "regular_members": 10,
+      "binary_candidates": 0,
+      "source_members": {
+        "runtime/bs-edge-agent/tests/integration/test_rollback.py": 4388,
+        "runtime/bs-edge-agent/src/executor/capabilities.rs": 1697,
+        "scripts/verify_gcp.py": 3993,
+        "spanner_demo/main.go": 1376,
+        "spanner_demo/go.mod": 1783
+      },
+      "metadata_members": "Five corresponding ._ files, 163 bytes each."
+    },
+    "reported_search_roots": [
+      "C:/mbsd",
+      "C:/Users/wheel/Documents/Codex/2026-08-13/i",
+      "C:/Users/wheel/Documents/Codex/2026-08-18/network-memory-map",
+      "C:/Users/wheel/Documents/Codex/2026-07-15/i-want-to-detect-and-isolate/work/hme-quantum",
+      "C:/Users/wheel/Documents/Codex/2026-07-15/i-want-to-detect-and-isolate/work/rhea-atlas-tensor",
+      "C:/Users/wheel/OneDrive/Documents/mbsd"
+    ],
+    "reported_search": "Included ignored/target, exact names, .exe variants and substrings; excluded Git internals, dependencies/toolchains, expanded upstream OpenBSD source. No reported access errors.",
+    "not_inspected": "Other archive interiors, VM disks, remote systems, unmapped roots. rhea-project-v2 untouched."
+  },
+  "historical_receipts": {
+    "watch_log": "C:/Users/wheel/Documents/Codex/2026-08-13/i/handoff/watch-logs/watch-handoff-20260814T195040Z-03cae685.log:24-25",
+    "watch_result": "POLL_FAILURE count=10 exit=255; TERMINAL_FAILURE=WATCH/HANDOFF GATE CLOSED",
+    "session_locator_as_supplied": "C:/Users/wheel.codex/sessions/2026/08/13/rollout-2026-08-13T03-49-17-019ff898-3359-7322-8040-e4d28ef0e067.jsonl",
+    "locator_note": "The supplied narrow-session path says wheel.codex; another map says wheel/.codex. Do not silently normalize as a verified path; resolve on WD.",
+    "session_lines": {
+      "924/928": "Transfer/extraction",
+      "934": "SSHSIG_EXIT=0",
+      "938": "Checksum results",
+      "957": "ZIP size/hash equal reported current observation",
+      "1796": "Retained upstream signature download is 7.9 amd64"
+    }
+  },
+  "next_verification": [
+    "Recover arm64 signed checksums, independently authenticate upstream public key, verify signatures and compare both payload hashes; authenticate handoff fingerprint independently if custody trust needed.",
+    "Obtain original Blueshoes B0 CI/release or producer output for commit 013fcef8572ecbc152a4986ab48ddfde451a5273 and hash six actual files. Manifest identity is not deployment."
+  ],
+  "source_archive_limits": {
+    "mbsd_zip": {
+      "members": 100,
+      "member_bytes": 67108864,
+      "total_bytes": 134217728,
+      "compression_ratio": 1000
+    },
+    "blueshoes_tar": {
+      "members": 10000,
+      "declared_bytes": 104857600,
+      "candidate_hash_stream_bytes": 16777216
+    },
+    "rejection": "Duplicate/absolute/traversal/link/special rules as specified in supplied report; no reported limit/rejection triggered; no members extracted."
+  }
+}

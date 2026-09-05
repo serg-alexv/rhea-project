@@ -1,0 +1,246 @@
+{
+  "protocol_id": "rhea-leftover-preservation",
+  "version": "1.0.0",
+  "manifest_schema": "rhea-leftover-run/1",
+  "objective": "Preserve unique project leftovers and provenance; resume from hashes and pending records.",
+  "repository": "timelabs-npo/rhea-project",
+  "archive_branch": "stash",
+  "archive_path_prefix": "stash/",
+  "first_parent_observed": "75cb31e59ccc4f436a428811cb70bbc495254821",
+  "report_target_branch": "rhea-project-v2",
+  "report_base_observed": "accc8619b179539c3a775844f5f077fbad80715e",
+  "report_path": "v2/01_contracts/evidence/audits/2026-09-06-wd-provenance/report.md",
+  "authority": {
+    "basis": "User requested do it, archive leftovers on stash and write a repeatable task genome.",
+    "allowed": [
+      "read_scoped_project_data",
+      "write_archive_workspace",
+      "publish_reviewed_project_evidence_to_stash",
+      "open_documentation_pr"
+    ],
+    "not_in_scope": [
+      "merge",
+      "force_push",
+      "delete_originals",
+      "execute_legacy_artifacts",
+      "build",
+      "component_tests",
+      "vm_start",
+      "firmware",
+      "device_ssh",
+      "credential_disclosure",
+      "change_acceptance_gates"
+    ],
+    "no_reconfirmation_for_already_authorized_scope": true
+  },
+  "roots": [
+    {
+      "root_id": "mbsd-current",
+      "locator_template": "C:/mbsd",
+      "project": "MBSD",
+      "origin": "supplied_trace_map",
+      "requires": "WD_FILESYSTEM",
+      "current_capture_state": "NOT_CAPTURED"
+    },
+    {
+      "root_id": "mbsd-engineering",
+      "locator_template": "{Documents}/Codex/2026-08-13/i",
+      "project": "MBSD",
+      "origin": "supplied_trace_map",
+      "requires": "WD_FILESYSTEM",
+      "current_capture_state": "NOT_CAPTURED"
+    },
+    {
+      "root_id": "network-memory-map",
+      "locator_template": "{Documents}/Codex/2026-08-18/network-memory-map",
+      "project": "MULTI",
+      "origin": "supplied_trace_map",
+      "requires": "WD_FILESYSTEM",
+      "current_capture_state": "NOT_CAPTURED"
+    },
+    {
+      "root_id": "quantum-atlas",
+      "locator_template": "{Documents}/Codex/2026-07-15/i-want-to-detect-and-isolate/work/hme-quantum",
+      "project": "RHEA",
+      "origin": "supplied_trace_map",
+      "requires": "WD_FILESYSTEM",
+      "current_capture_state": "NOT_CAPTURED"
+    },
+    {
+      "root_id": "tensor-atlas",
+      "locator_template": "{Documents}/Codex/2026-07-15/i-want-to-detect-and-isolate/work/rhea-atlas-tensor",
+      "project": "RHEA",
+      "origin": "supplied_trace_map",
+      "requires": "WD_FILESYSTEM",
+      "current_capture_state": "NOT_CAPTURED"
+    },
+    {
+      "root_id": "mbsd-onedrive",
+      "locator_template": "{UserProfile}/OneDrive/Documents/mbsd",
+      "project": "MBSD",
+      "origin": "supplied_trace_map",
+      "requires": "WD_FILESYSTEM",
+      "current_capture_state": "NOT_CAPTURED"
+    },
+    {
+      "root_id": "mbsd-trae-worktree",
+      "locator_template": "{UserProfile}/.trae/worktrees/mbsd/services-msc-aoiyzW",
+      "project": "MBSD",
+      "origin": "supplied_trace_map",
+      "requires": "WD_FILESYSTEM",
+      "current_capture_state": "NOT_CAPTURED"
+    },
+    {
+      "root_id": "wd-audit-work",
+      "locator_template": "{Documents}/Codex/2026-09-06/ma/work",
+      "project": "MULTI",
+      "origin": "supplied_trace_map",
+      "requires": "WD_FILESYSTEM",
+      "current_capture_state": "NOT_CAPTURED"
+    },
+    {
+      "root_id": "mbsd-loose-task",
+      "locator_template": "{Downloads}/New folder/anyfile.md",
+      "project": "MBSD",
+      "origin": "supplied_trace_map",
+      "requires": "WD_FILESYSTEM",
+      "current_capture_state": "NOT_CAPTURED"
+    },
+    {
+      "root_id": "codex-project-sessions",
+      "locator_template": "{UserProfile}/.codex/sessions",
+      "project": "MULTI",
+      "origin": "supplied_trace_map",
+      "requires": "WD_FILESYSTEM",
+      "current_capture_state": "NOT_CAPTURED"
+    },
+    {
+      "root_id": "codex-project-attachments",
+      "locator_template": "{UserProfile}/.codex/attachments",
+      "project": "MULTI",
+      "origin": "supplied_trace_map",
+      "requires": "WD_FILESYSTEM",
+      "current_capture_state": "NOT_CAPTURED"
+    },
+    {
+      "root_id": "copilot-project-history",
+      "locator_template": "{UserProfile}/.copilot",
+      "project": "MULTI",
+      "origin": "supplied_trace_map",
+      "requires": "WD_FILESYSTEM",
+      "current_capture_state": "NOT_CAPTURED"
+    },
+    {
+      "root_id": "trae-project-history",
+      "locator_template": "{AppData}/Trae/User/History",
+      "project": "MBSD",
+      "origin": "supplied_trace_map",
+      "requires": "WD_FILESYSTEM",
+      "current_capture_state": "NOT_CAPTURED"
+    },
+    {
+      "root_id": "comparator-previews",
+      "locator_template": "{LocalAppData}/Temp/codex-file-preview-*",
+      "project": "COMPARATOR",
+      "origin": "supplied_trace_map",
+      "requires": "WD_FILESYSTEM",
+      "current_capture_state": "NOT_CAPTURED"
+    },
+    {
+      "root_id": "wsl-retained-roots",
+      "locator_template": "{LocalAppData}/wsl/*/rootfs",
+      "project": "MBSD",
+      "origin": "supplied_trace_map",
+      "requires": "WD_FILESYSTEM",
+      "current_capture_state": "NOT_CAPTURED"
+    }
+  ],
+  "root_resolution": "Resolve Windows KnownFolders and explicit paths; constrain wildcard results; do not follow reparse points out of scope.",
+  "discovery_expansion": "Use the archived map for additional named project roots; record each newly included root and access errors before claiming coverage.",
+  "historical_remote_locators": [
+    "Mac /Users/sa/Documents/mbsd",
+    "OpenBSD guest /home/build-logs",
+    "SSH alias blueshoes"
+  ],
+  "historical_remote_access_assumed": false,
+  "object_addressing": {
+    "algorithm": "SHA-256",
+    "preserve_exact_bytes": true,
+    "deduplicate_by": [
+      "sha256",
+      "bytes"
+    ],
+    "keep_all_source_locators": true
+  },
+  "public_repository_observed": true,
+  "privacy": {
+    "screen_new_public_bytes": true,
+    "never_open": [
+      "private_keys",
+      "credential_iso",
+      "authentication_stores"
+    ],
+    "sensitive_or_large_bytes": "approved_private_storage_with_verified_receipt_or_explicit_pending",
+    "raw_history_requires_content_review": true
+  },
+  "archive_inspection_limits": {
+    "max_members": 10000,
+    "max_declared_total_bytes": 104857600,
+    "max_member_hash_bytes": 67108864,
+    "max_compression_ratio": 1000,
+    "extract": false,
+    "on_limit": "DEFERRED_LIMIT",
+    "reject": [
+      "absolute_paths",
+      "traversal",
+      "duplicate_names",
+      "links",
+      "special_types"
+    ]
+  },
+  "per_pass_limits": {
+    "wall_time_minutes": 30,
+    "candidate_count": 50000,
+    "ordinary_public_file_bytes": 10485760,
+    "interpretation": "Protocol budgets, not GitHub service limits; checkpoint remaining work; large files are pending storage decisions, never silently omitted."
+  },
+  "availability_states": [
+    "AVAILABLE",
+    "NOT_CAPTURED",
+    "NOT_FOUND_IN_SCOPE",
+    "NOT_INSPECTED",
+    "UNSTABLE_SOURCE",
+    "ACCESS_DENIED",
+    "DEFERRED_LIMIT",
+    "PRIVATE_HOLD",
+    "LARGE_OBJECT_PENDING"
+  ],
+  "storage_states": [
+    "LOCAL_VERIFIED",
+    "REMOTE_VERIFIED",
+    "NOT_STORED"
+  ],
+  "run_statuses": [
+    "PARTIAL_WD_UNAVAILABLE",
+    "PARTIAL",
+    "COMPLETE_IN_DECLARED_SCOPE"
+  ],
+  "resume": {
+    "read_first": [
+      "latest_run_summary",
+      "pending",
+      "genome",
+      "remote_ref"
+    ],
+    "reuse_unchanged_content_observations": true,
+    "retry_blocked_only_when_capability_or_evidence_changes": true,
+    "raw_corpus_in_chat": false
+  },
+  "completion": "All declared roots enumerated without unresolved errors or limits; every candidate has verified storage or a recorded justified exclusion. Pending capture/private/large items leave the run PARTIAL.",
+  "evolution": {
+    "scheme": "semver",
+    "changelog_required": true,
+    "immutable_old_runs": true,
+    "may_self_expand_authority": false
+  }
+}
