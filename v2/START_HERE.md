@@ -15,8 +15,11 @@ DESIGN_ONLY. Only Stage 01 contract preparation is admitted. All 55 proof gates
 remain NOT_EXECUTED; Stage 02 through Stage 08 implementation remains LOCKED.
 Scaffold preparation and its Git commit are not contract or product qualification.
 
-Read `AGENTS.md`, `01_contracts/AGENTS.md`,
-`01_contracts/ACCEPTANCE_GATES.md`, and `ARCHITECTURE.txt` first.
+Read [README.md](README.md), [ROADMAP.md](ROADMAP.md), and the
+[technical index](docs/INDEX.md), then `AGENTS.md`, `01_contracts/AGENTS.md`,
+`01_contracts/ACCEPTANCE_GATES.md`, and `ARCHITECTURE.txt`.
+The [LIT-001 specification](docs/TECH_SPEC_LIT_001.md) is a first draft for
+contract preparation; it does not resolve the missing normative inputs below.
 
 ## Stage 01 inputs and next work
 
@@ -46,4 +49,7 @@ readable/nonempty-file checks, Git baseline checks and manifest generation.
 It is an audit/reproduction artifact; rerunning against this existing destination
 will refuse to overwrite it.
 
-This preparation is local only. No remote push or product build was performed.
+`PREPARATION.json` records the original local-only scaffold preparation.
+Its `remote_push: false` field is historical; inspect the branch on `origin`
+for current remote state. Documentation and remote synchronization do not
+qualify a product build or change stage admission.
