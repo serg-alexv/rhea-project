@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "prepared_at": "2026-09-05T11:51:27.564411+00:00",
+  "mode": "DESIGN_ONLY",
+  "branch": "rhea-project-v2",
+  "worktree": "/Users/sa/Documents/Codex/rhea-v2-workspace",
+  "v2_directory": "/Users/sa/Documents/Codex/rhea-v2-workspace/v2",
+  "rhea_repository": "/Users/sa/Documents/Codex/rhea-project",
+  "rhea_origin": "https://github.com/timelabs-npo/rhea-project.git",
+  "rhea_base_commit": "75cb31e59ccc4f436a428811cb70bbc495254821",
+  "omnia_repository": "/Users/sa/Documents/Codex/2026-09-05/new-chat/work/rhea-step1/sources/timelabs-npo/omnia-vault",
+  "omnia_base_commit": "f5995536fede02d403f0525ff9093996457efecb",
+  "script_source": "/Users/sa/Downloads/tad1.md",
+  "script_path": "/Users/sa/Documents/Codex/rhea-v2-workspace/v2/scaffold-v2.sh",
+  "input_sha256_gate_removed": true,
+  "fixed_record_count_gate_removed": true,
+  "semantic_input": "/Users/sa/Documents/Codex/2026-09-05/new-chat/outputs/rhea-architecture/rhea_semantic_core.json",
+  "review_input": "/Users/sa/Downloads/recomb1.md",
+  "created_app_tasks": false,
+  "product_gates_passed": 0,
+  "product_build_executed": false,
+  "remote_push_performed": false
+}

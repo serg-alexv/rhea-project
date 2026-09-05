@@ -1,0 +1,19 @@
+{
+  "stage": "06_advisory_runtime",
+  "admission": "LOCKED",
+  "predecessors": [
+    "01_contracts",
+    "02_validation",
+    "03_omnia_lit",
+    "04_local_host",
+    "05_rhea_play"
+  ],
+  "gates": {
+    "AI-01": "NOT_EXECUTED",
+    "AI-02": "NOT_EXECUTED",
+    "AI-03": "NOT_EXECUTED",
+    "AI-04": "NOT_EXECUTED",
+    "AI-05": "NOT_EXECUTED",
+    "AI-06": "NOT_EXECUTED"
+  }
+}

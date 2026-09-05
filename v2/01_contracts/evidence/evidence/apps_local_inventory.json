@@ -1,0 +1,55 @@
+{
+  "scope_path": "/Users/sa/Documents/ChatGPT/Apps",
+  "observed_at": "2026-09-05T09:31:07.844759+00:00",
+  "entries_excluding_git": [],
+  "git_root": {
+    "command": [
+      "git",
+      "-C",
+      "/Users/sa/Documents/ChatGPT/Apps",
+      "rev-parse",
+      "--show-toplevel"
+    ],
+    "exit_code": 0,
+    "stdout": "/Users/sa/Documents/ChatGPT/Apps\n",
+    "stderr": ""
+  },
+  "head": {
+    "command": [
+      "git",
+      "-C",
+      "/Users/sa/Documents/ChatGPT/Apps",
+      "rev-parse",
+      "--verify",
+      "HEAD"
+    ],
+    "exit_code": 128,
+    "stdout": "",
+    "stderr": "fatal: Needed a single revision\n"
+  },
+  "status": {
+    "command": [
+      "git",
+      "-C",
+      "/Users/sa/Documents/ChatGPT/Apps",
+      "status",
+      "--porcelain=v1",
+      "--untracked-files=all"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "tracked_files": {
+    "command": [
+      "git",
+      "-C",
+      "/Users/sa/Documents/ChatGPT/Apps",
+      "ls-files"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "working_files": []
+}

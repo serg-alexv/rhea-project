@@ -1,0 +1,55 @@
+{
+  "scope_path": "/Users/sa/Documents/ChatGPT/Core",
+  "observed_at": "2026-09-05T09:31:07.788910+00:00",
+  "entries_excluding_git": [],
+  "git_root": {
+    "command": [
+      "git",
+      "-C",
+      "/Users/sa/Documents/ChatGPT/Core",
+      "rev-parse",
+      "--show-toplevel"
+    ],
+    "exit_code": 0,
+    "stdout": "/Users/sa/Documents/ChatGPT/Core\n",
+    "stderr": ""
+  },
+  "head": {
+    "command": [
+      "git",
+      "-C",
+      "/Users/sa/Documents/ChatGPT/Core",
+      "rev-parse",
+      "--verify",
+      "HEAD"
+    ],
+    "exit_code": 128,
+    "stdout": "",
+    "stderr": "fatal: Needed a single revision\n"
+  },
+  "status": {
+    "command": [
+      "git",
+      "-C",
+      "/Users/sa/Documents/ChatGPT/Core",
+      "status",
+      "--porcelain=v1",
+      "--untracked-files=all"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "tracked_files": {
+    "command": [
+      "git",
+      "-C",
+      "/Users/sa/Documents/ChatGPT/Core",
+      "ls-files"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "working_files": []
+}

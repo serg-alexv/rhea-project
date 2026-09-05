@@ -1,0 +1,11 @@
+{
+  "repo": "timelabs-npo/omnia-vault",
+  "base_commit": "f5995536fede02d403f0525ff9093996457efecb",
+  "placement": "Additive Rust library/test executable inside existing supervisor",
+  "worktree": "Create separately only after CON and VAL gates",
+  "implementation_created": false,
+  "source_relocation": false,
+  "legacy_entrypoints_allowed": false,
+  "verified_local_repository": "/Users/sa/Documents/Codex/2026-09-05/new-chat/work/rhea-step1/sources/timelabs-npo/omnia-vault",
+  "base_commit_found_locally": true
+}

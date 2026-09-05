@@ -1,0 +1,166 @@
+{
+  "schema_version": 1,
+  "branch": "rhea-project-v2",
+  "mode": "DESIGN_ONLY",
+  "active_work": "01_contracts: prepare, do not declare freeze",
+  "initial_slice": "OMNIA-LIT-001",
+  "initial_target_dependencies": [
+    "01_contracts",
+    "02_validation",
+    "03_omnia_lit"
+  ],
+  "controller_required": true,
+  "runtime_enforcement_implemented": false,
+  "missing_normative_inputs": [
+    "OMNIA-LIT-001_HANDOFF.md",
+    "OMNIA-LIT-001_ACCEPTANCE.json"
+  ],
+  "stages": [
+    {
+      "stage": "01_contracts",
+      "admission": "PREPARATION_ONLY",
+      "predecessors": [],
+      "gates": {
+        "CON-01": "NOT_EXECUTED",
+        "CON-02": "NOT_EXECUTED",
+        "CON-03": "NOT_EXECUTED",
+        "CON-04": "NOT_EXECUTED",
+        "CON-05": "NOT_EXECUTED"
+      }
+    },
+    {
+      "stage": "02_validation",
+      "admission": "LOCKED",
+      "predecessors": [
+        "01_contracts"
+      ],
+      "gates": {
+        "VAL-01": "NOT_EXECUTED",
+        "VAL-02": "NOT_EXECUTED",
+        "VAL-03": "NOT_EXECUTED",
+        "VAL-04": "NOT_EXECUTED",
+        "VAL-05": "NOT_EXECUTED",
+        "VAL-06": "NOT_EXECUTED"
+      }
+    },
+    {
+      "stage": "03_omnia_lit",
+      "admission": "LOCKED",
+      "predecessors": [
+        "01_contracts",
+        "02_validation"
+      ],
+      "gates": {
+        "LIT-01": "NOT_EXECUTED",
+        "LIT-02": "NOT_EXECUTED",
+        "LIT-03": "NOT_EXECUTED",
+        "LIT-04": "NOT_EXECUTED",
+        "LIT-05": "NOT_EXECUTED",
+        "LIT-06": "NOT_EXECUTED",
+        "LIT-07": "NOT_EXECUTED",
+        "LIT-08": "NOT_EXECUTED",
+        "LIT-09": "NOT_EXECUTED",
+        "LIT-10": "NOT_EXECUTED",
+        "LIT-11": "NOT_EXECUTED",
+        "LIT-12": "NOT_EXECUTED"
+      }
+    },
+    {
+      "stage": "04_local_host",
+      "admission": "LOCKED",
+      "predecessors": [
+        "01_contracts",
+        "02_validation",
+        "03_omnia_lit"
+      ],
+      "gates": {
+        "HOST-01": "NOT_EXECUTED",
+        "HOST-02": "NOT_EXECUTED",
+        "HOST-03": "NOT_EXECUTED",
+        "HOST-04": "NOT_EXECUTED",
+        "HOST-05": "NOT_EXECUTED",
+        "HOST-06": "NOT_EXECUTED"
+      }
+    },
+    {
+      "stage": "05_rhea_play",
+      "admission": "LOCKED",
+      "predecessors": [
+        "01_contracts",
+        "02_validation",
+        "03_omnia_lit",
+        "04_local_host"
+      ],
+      "gates": {
+        "PLAY-01": "NOT_EXECUTED",
+        "PLAY-02": "NOT_EXECUTED",
+        "PLAY-03": "NOT_EXECUTED",
+        "PLAY-04": "NOT_EXECUTED",
+        "PLAY-05": "NOT_EXECUTED",
+        "PLAY-06": "NOT_EXECUTED"
+      }
+    },
+    {
+      "stage": "06_advisory_runtime",
+      "admission": "LOCKED",
+      "predecessors": [
+        "01_contracts",
+        "02_validation",
+        "03_omnia_lit",
+        "04_local_host",
+        "05_rhea_play"
+      ],
+      "gates": {
+        "AI-01": "NOT_EXECUTED",
+        "AI-02": "NOT_EXECUTED",
+        "AI-03": "NOT_EXECUTED",
+        "AI-04": "NOT_EXECUTED",
+        "AI-05": "NOT_EXECUTED",
+        "AI-06": "NOT_EXECUTED"
+      }
+    },
+    {
+      "stage": "07_network_executor",
+      "admission": "LOCKED",
+      "predecessors": [
+        "01_contracts",
+        "02_validation",
+        "03_omnia_lit",
+        "04_local_host",
+        "05_rhea_play",
+        "06_advisory_runtime"
+      ],
+      "gates": {
+        "NET-01": "NOT_EXECUTED",
+        "NET-02": "NOT_EXECUTED",
+        "NET-03": "NOT_EXECUTED",
+        "NET-04": "NOT_EXECUTED",
+        "NET-05": "NOT_EXECUTED",
+        "NET-06": "NOT_EXECUTED"
+      }
+    },
+    {
+      "stage": "08_remote_bridge",
+      "admission": "LOCKED",
+      "predecessors": [
+        "01_contracts",
+        "02_validation",
+        "03_omnia_lit",
+        "04_local_host",
+        "05_rhea_play",
+        "06_advisory_runtime",
+        "07_network_executor"
+      ],
+      "gates": {
+        "RPC-01": "NOT_EXECUTED",
+        "RPC-02": "NOT_EXECUTED",
+        "RPC-03": "NOT_EXECUTED",
+        "RPC-04": "NOT_EXECUTED",
+        "RPC-05": "NOT_EXECUTED",
+        "RPC-06": "NOT_EXECUTED",
+        "RPC-07": "NOT_EXECUTED",
+        "RPC-08": "NOT_EXECUTED"
+      }
+    }
+  ]
+}

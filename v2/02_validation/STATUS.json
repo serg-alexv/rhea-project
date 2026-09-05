@@ -1,0 +1,15 @@
+{
+  "stage": "02_validation",
+  "admission": "LOCKED",
+  "predecessors": [
+    "01_contracts"
+  ],
+  "gates": {
+    "VAL-01": "NOT_EXECUTED",
+    "VAL-02": "NOT_EXECUTED",
+    "VAL-03": "NOT_EXECUTED",
+    "VAL-04": "NOT_EXECUTED",
+    "VAL-05": "NOT_EXECUTED",
+    "VAL-06": "NOT_EXECUTED"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "path": "/Users/sa/Documents/ChatGPT/Rheknel + mbsd + tribunal",
+  "exists": true,
+  "entries": [
+    ".git"
+  ],
+  "toplevel": {
+    "exit_code": 0,
+    "output": "/Users/sa/Documents/ChatGPT/Rheknel + mbsd + tribunal"
+  },
+  "head": {
+    "exit_code": 128,
+    "output": ""
+  },
+  "status": {
+    "exit_code": 0,
+    "output": ""
+  },
+  "remotes": {
+    "exit_code": 0,
+    "output": ""
+  }
+}

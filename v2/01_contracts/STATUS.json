@@ -1,0 +1,12 @@
+{
+  "stage": "01_contracts",
+  "admission": "PREPARATION_ONLY",
+  "predecessors": [],
+  "gates": {
+    "CON-01": "NOT_EXECUTED",
+    "CON-02": "NOT_EXECUTED",
+    "CON-03": "NOT_EXECUTED",
+    "CON-04": "NOT_EXECUTED",
+    "CON-05": "NOT_EXECUTED"
+  }
+}

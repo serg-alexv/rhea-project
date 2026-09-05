@@ -1,0 +1,18 @@
+{
+  "stage": "05_rhea_play",
+  "admission": "LOCKED",
+  "predecessors": [
+    "01_contracts",
+    "02_validation",
+    "03_omnia_lit",
+    "04_local_host"
+  ],
+  "gates": {
+    "PLAY-01": "NOT_EXECUTED",
+    "PLAY-02": "NOT_EXECUTED",
+    "PLAY-03": "NOT_EXECUTED",
+    "PLAY-04": "NOT_EXECUTED",
+    "PLAY-05": "NOT_EXECUTED",
+    "PLAY-06": "NOT_EXECUTED"
+  }
+}

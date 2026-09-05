@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "repo": "timelabs-npo/mbsd",
+  "commit": "181f1ea6081ad2998affa9aeda79021b398e0375",
+  "snapshot_sha256": "28abfe7738f192c6a4b2a67f13db09ff9627c10ea1794b5fca1d062035a37d6a",
+  "tool": "git grep -I -n -i -E at frozen commit",
+  "pattern": "rheknel|ollama|tribunal|gguf|llama[._-]?cpp",
+  "searched_tracked_paths": 13633,
+  "text_hits": [
+    {
+      "path": "README.md",
+      "line": 38,
+      "tokens": [
+        "rheknel"
+      ],
+      "classification": "documentation_reference"
+    },
+    {
+      "path": "docs/ARCHITECTURE.md",
+      "line": 33,
+      "tokens": [
+        "rheknel"
+      ],
+      "classification": "documentation_reference"
+    },
+    {
+      "path": "docs/ARCHITECTURE.md",
+      "line": 34,
+      "tokens": [
+        "rheknel"
+      ],
+      "classification": "documentation_reference"
+    },
+    {
+      "path": "docs/ARCHITECTURE.md",
+      "line": 40,
+      "tokens": [
+        "rheknel"
+      ],
+      "classification": "documentation_reference"
+    },
+    {
+      "path": "docs/ASSASSINS_CREED.md",
+      "line": 8,
+      "tokens": [
+        "rheknel"
+      ],
+      "classification": "documentation_reference"
+    },
+    {
+      "path": "docs/BOOSTERS_REGISTRY.md",
+      "line": 12,
+      "tokens": [
+        "ollama"
+      ],
+      "classification": "documentation_reference"
+    },
+    {
+      "path": "src/sys/kern/subr_witness.c",
+      "line": 52,
+      "tokens": [
+        "tribunal"
+      ],
+      "classification": "upstream_unrelated_lexical_match"
+    }
+  ],
+  "model_or_named_runtime_path_hits": [],
+  "result": "missing_in_scope",
+  "limits": "Lexical/text/path search plus selected project adapter inspection, not proof of absence in external repositories or binaries."
+}

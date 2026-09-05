@@ -1,0 +1,17 @@
+{
+  "stage": "04_local_host",
+  "admission": "LOCKED",
+  "predecessors": [
+    "01_contracts",
+    "02_validation",
+    "03_omnia_lit"
+  ],
+  "gates": {
+    "HOST-01": "NOT_EXECUTED",
+    "HOST-02": "NOT_EXECUTED",
+    "HOST-03": "NOT_EXECUTED",
+    "HOST-04": "NOT_EXECUTED",
+    "HOST-05": "NOT_EXECUTED",
+    "HOST-06": "NOT_EXECUTED"
+  }
+}

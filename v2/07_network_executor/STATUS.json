@@ -1,0 +1,20 @@
+{
+  "stage": "07_network_executor",
+  "admission": "LOCKED",
+  "predecessors": [
+    "01_contracts",
+    "02_validation",
+    "03_omnia_lit",
+    "04_local_host",
+    "05_rhea_play",
+    "06_advisory_runtime"
+  ],
+  "gates": {
+    "NET-01": "NOT_EXECUTED",
+    "NET-02": "NOT_EXECUTED",
+    "NET-03": "NOT_EXECUTED",
+    "NET-04": "NOT_EXECUTED",
+    "NET-05": "NOT_EXECUTED",
+    "NET-06": "NOT_EXECUTED"
+  }
+}

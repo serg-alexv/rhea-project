@@ -1,0 +1,151 @@
+RHEA-PROJECT-V2 — PROPOSED PHYSICAL REIFICATION
+
+Evidence: rhea_semantic_core.json contains 99 structural records. The reported
+5,348-file extraction count is coverage context, not 5,348 verified behaviors.
+recomb1.md SHA256 232eb37b37422bcf6ff597529c7fe9cae434b341adb1db3db2141a4ae9031ee1
+requires a bounded local slice and rejects a universal-runtime-center claim.
+
+There is no evidence-derived unique global optimum: folder names, IPC choices
+and a total assembly order require design choices. Define a narrow penalty
+P=(A,E,M), with A=forbidden authority paths, E=LIT implementation dependencies
+on later runtime stages, M=shared writable contract/oracle/implementation roles.
+Every term is nonnegative. Under the specified enforcement boundaries, this
+proposed partition has P=(0,0,0), reaching the lower bound for these penalties.
+That is conditional optimality for isolation, not proof of minimum folder count,
+minimum latency/cost or a unique architecture. Actual enforcement is untested.
+Eight exact paths below are the selected responsibility map, not source facts.
+
+Let C,V,L,H,U,A,N,R denote contract, validator, local storage, local host, UI,
+advisory worker, network executor and remote bridge. Hard proof dependencies:
+C→V→L→H→U; C,V→A,N,R; H,U,A,N→R. The added scheduling priorities U→A→N
+favor a qualified desktop slice before native research. They are design choices,
+not runtime imports or semantic theorems. Together these edges admit the order
+C,V,L,H,U,A,N,R. For each edge u→v, number(u)<number(v); induction supplies the
+gate order. Only C/V/L are eligible during OMNIA-LIT-001; future folders are locked.
+01 and 02 remain independent supporting roles during later stages. Their
+per-domain contracts/oracles are frozen before each later implementation;
+future specifications are not prerequisites of the initial LIT build.
+
+Runtime proof obligations:
+  |owners(local head, workspace, replica)| = 1 logical authority.
+  sum(distinct successful publishes from one expected head) ≤ 1.
+  ACK(r) ⇒ readable(r) AND head ∈ {r or a valid descendant of r}.
+  model verdict ⇏ authorization; transport OK ⇏ application receipt.
+  RevisionId ≠ RouteGeneration; LOCAL_COMMITTED ⇏ ROUTE_APPLIED.
+These are target invariants. SQLite transaction/CAS and actual fault tests
+must establish them; directory numbers, model checks and mutexes alone cannot.
+
+Physical overlay in an isolated rhea-project worktree on rhea-project-v2:
+v2/
+  01_contracts/         source evidence; lit/; ipc/; proposals/; network/; remote/
+  02_validation/        independent reference/; blackbox/; faults/; evidence/
+  03_omnia_lit/         source manifest → existing Omnia supervisor worktree
+  04_local_host/        admission/; transports/{macos,windows,openbsd}/
+  05_rhea_play/         client/; macos/; windows/; ios-deferred/
+  06_advisory_runtime/  worker/; proposals/; native-openbsd-research/
+  07_network_executor/ policy/; journal/; openbsd-adapter/
+  08_remote_bridge/    protocol/; identity/; relay/; composition/
+Every stage has .cursorrules, identical AGENTS.md, ACCEPTANCE_GATES.md and
+NOT_EXECUTED status. Legacy root trees are not moved and are excluded from
+new target build manifests. 03 is not a monorepo migration: actual LIT Rust
+code stays additive in the existing Omnia supervisor at frozen f599553.
+
+ORCHESTRATION: INITIAL SLICE
+Independent validator → private stdin/stdout framed test protocol → Rust LIT
+library → one host-local, nonsynced SQLite database. No network listener.
+Captured owned immutable bytes, not user paths. Bounds: 32 MiB input, 4 MiB
+chunks, 1,024 root items, 256 MiB unique retained payload; finite receipt and
+generation bounds must come from the frozen detailed LIT contract.
+Authorize receipt read → scoped operation lookup/digest comparison → fresh
+expected revision+generation CAS → validate old/new content closure → insert
+chunks/manifests/revision/head/receipt in one transaction → commit → ACK.
+Recheck operation identity inside the serialized write transaction; a prior
+read outside the transaction is only an optimization. BUSY is not CONFLICT.
+Unknown commit outcome is reconciled with the same OperationId. No external
+pre-commit effect or durable asynchronous acceptance promise exists in LIT.
+
+ORCHESTRATION: LATER LOCAL HOST/UI
+04 owns the private DB handle via the qualified 03 library. Multiple scoped
+requests can exist; DB CAS is the publication linearization point. Admission
+and policy revocation share a defined epoch/lock rule: an admitted operation
+holds its admission lease until completion; revocation waits for these leases
+and denies later requests. This is an explicit revocation semantic, not an
+instantaneous guarantee about already-admitted operations.
+Proposed desktop IPC: macOS XPC carrying bounded typed messages with verified
+peer identity/application policy; Windows local-only named pipe with explicit
+ACL, verified client token AND server identity; OpenBSD AF_UNIX with peer
+credentials and a dedicated service principal. Same-user access is not a grant.
+Freeze protobuf v1 DTOs as transport schemas; canonical content encodings stay
+separate. Nonmultiplexed local framed profile: u32 big-endian payload length,
+then one DTO, hard cap 32 MiB + 64 KiB; reject excess length before allocation.
+XPC/pipe transports preserve the same request/response semantics; framing
+adapters are qualified separately. No HTTP listener is added to 03.
+UI uses only the approved client: PublishItemBytesV1, GetHead, GetOperation,
+ReadItem(pinned RevisionId). UI/model never touch the DB or routing devices.
+Transport failure leaves the outcome unknown; retry cannot mint a new ID.
+
+ORCHESTRATION: EXTREME NODE AND REMOTE COMPOSITION
+TRB.014/RHK.008/OS.010 do not establish a combined three-model OpenBSD binary.
+That target remains a research qualification obligation. A single distributed
+executable may include inference and pure deterministic code in an unprivileged
+worker; authorization sharing that worker address space is not trusted.
+06 receives bounded observations and emits proposals. It owns no node private
+key, owner credentials, storage handle or route/PF authority. 07 is a separate
+helper/principal that independently validates fixed operations and grants.
+Proposed worker/helper IPC is AF_UNIX with verified service identity; worker
+cannot call the mutation endpoint. An authorized controller/bridge supplies
+the independently checked capability; model text is never a capability.
+Use domain-specific requests: file proposal binds workspace/replica/item,
+expected RevisionId/Generation and content identity; network proposal binds
+NodeId, NodeEpoch, RouteGeneration, observed configuration digest, fixed action,
+scope, OperationId, nonce and expiry. Do not serialize rt_msghdr/pfioc_trans
+pointers, native ABI structs, arbitrary shell commands or caller ioctl codes.
+07 exclusively owns its managed routing scope, durable operation intent ledger,
+fencing and reconciliation. Same-ID lookup precedes fresh generation checks.
+Kernel effects and journal writes are not one SQLite transaction: crashes may
+produce UNKNOWN and require actual-state reconciliation. Route/PF effects have
+separate qualified primitive boundaries. Out-of-band administrator writes are
+outside exclusive-writer assumptions; detect drift and fail closed.
+
+08 uses a proposed TLS 1.3 mutual-authenticated gRPC profile, frozen and tested
+before activation. Certificates map to node/service roles, not desktop owner.
+Expose only observation/proposal relay and explicitly authorized typed calls;
+no generic local-API tunnel. File mutations are disabled for the model-node
+role; the local host must admit a separate owner-scoped request. Route grants
+are scoped to the network owner and independently checked at 07.
+Remote transport frames ≤ 1 MiB, bounded reassembly ≤ 32 MiB + envelope budget,
+finite in-flight queue/deadline; disconnect discards incomplete volatile input.
+No durable ACCEPTED reply is emitted for buffering. mTLS and remote transport
+do not grant replication, shared SQLite access, CRDT merge or provider access.
+Replay/deduplication uses the operation owner ledger, not a socket connection.
+Pinned revision and route-generation observations remain separate UI channels.
+
+No cross-domain transaction exists. File ACK plus route failure leaves file
+ACK valid. A workflow records separate operation references/results and an
+explicit unresolved state; compensation is a new independently authorized
+operation, never silent rollback. When a future workflow introduces external
+objects or provider effects, it needs a new intent/reconciliation contract.
+
+SOURCE-TO-BOUNDARY TRACE
+C/V separation: recomb1 G + LIT-12.
+L: OMN.004/006/008/009/013/017 + recomb1 B–F.
+H: OMN.007/011/013/016; host identity, bounded admission and honest receipts.
+U: PLAY.003/004/009/010/011/012; typed UI and one client boundary.
+A: TRB.003/005/007/014, RHK.004/005/008; advice cannot confer authority.
+N: EDGE.004, NET.003/006/014/015, OS.001–004/010/013/017.
+R: TRB.004/011/012 and missing cross-domain canonical RPC; integration is new
+design, never an observed source capability. Proposed IPC choices are explicit
+engineering choices constrained by these boundaries, not discovered APIs.
+
+PROMOTION AND LIMITS
+The scaffold initializes no PASS, runs no legacy build, launches no service,
+publishes nothing and creates no new app task. Numbered directories are not
+sandbox boundaries. A trusted independent controller/CI must enforce allowed
+write paths, builds, OS principals and receipt verification before activation.
+Stage 01 is blocked until the detailed HANDOFF and ACCEPTANCE attachments named
+by recomb1 are retrieved/reconciled or explicitly replaced by a reviewed frozen
+contract. Their canonical bytes and unspecified bounds must not be invented.
+At LIT completion report only the tested local boundary; retain original V
+gates as partial. All later stage gates start NOT_EXECUTED. Native iOS, provider
+dehydration, replication/CRDT, Redis, NDI, RAM/SWAP and hardware release remain
+separate qualifications; none is a dependency of OMNIA-LIT-001.

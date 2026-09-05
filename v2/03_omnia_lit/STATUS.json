@@ -1,0 +1,22 @@
+{
+  "stage": "03_omnia_lit",
+  "admission": "LOCKED",
+  "predecessors": [
+    "01_contracts",
+    "02_validation"
+  ],
+  "gates": {
+    "LIT-01": "NOT_EXECUTED",
+    "LIT-02": "NOT_EXECUTED",
+    "LIT-03": "NOT_EXECUTED",
+    "LIT-04": "NOT_EXECUTED",
+    "LIT-05": "NOT_EXECUTED",
+    "LIT-06": "NOT_EXECUTED",
+    "LIT-07": "NOT_EXECUTED",
+    "LIT-08": "NOT_EXECUTED",
+    "LIT-09": "NOT_EXECUTED",
+    "LIT-10": "NOT_EXECUTED",
+    "LIT-11": "NOT_EXECUTED",
+    "LIT-12": "NOT_EXECUTED"
+  }
+}

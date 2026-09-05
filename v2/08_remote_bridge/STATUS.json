@@ -1,0 +1,23 @@
+{
+  "stage": "08_remote_bridge",
+  "admission": "LOCKED",
+  "predecessors": [
+    "01_contracts",
+    "02_validation",
+    "03_omnia_lit",
+    "04_local_host",
+    "05_rhea_play",
+    "06_advisory_runtime",
+    "07_network_executor"
+  ],
+  "gates": {
+    "RPC-01": "NOT_EXECUTED",
+    "RPC-02": "NOT_EXECUTED",
+    "RPC-03": "NOT_EXECUTED",
+    "RPC-04": "NOT_EXECUTED",
+    "RPC-05": "NOT_EXECUTED",
+    "RPC-06": "NOT_EXECUTED",
+    "RPC-07": "NOT_EXECUTED",
+    "RPC-08": "NOT_EXECUTED"
+  }
+}

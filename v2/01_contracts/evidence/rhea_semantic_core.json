@@ -1,0 +1,3110 @@
+[
+  {
+    "id": "CORE.006",
+    "domain": "Data Plane",
+    "component": "timelabs-npo/omnia-playbook",
+    "symbol": "Check schema",
+    "kind": "type",
+    "signature": "required id,invariant,command,platform,requires,timeout,expected_exit_code,expected_output,failure_message,remediation_playbook; additionalProperties:false",
+    "semantics": "Machine check definition links a diagnostic command and expected outcome to an invariant and remediation.",
+    "relations": [
+      {
+        "type": "validates",
+        "target": "Invariant",
+        "basis": "type"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.001",
+        "line_start": 2,
+        "line_end": 33
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "command/platform remain untyped strings; expected_output is unrestricted object. Definition is not test execution."
+    ]
+  },
+  {
+    "id": "CORE.007",
+    "domain": "Data Plane",
+    "component": "timelabs-npo/omnia-playbook",
+    "symbol": "Invariant schema",
+    "kind": "type",
+    "signature": "required id,title,description,rationale,scope,severity,platforms,expected_state,check.ids,remediation.playbook,sources,last_verified",
+    "semantics": "Requirement-like invariant holds rationale, expected state, source references and explicit check IDs.",
+    "relations": [
+      {
+        "type": "uses",
+        "target": "Check.id",
+        "basis": "type"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.002",
+        "line_start": 2,
+        "line_end": 59
+      },
+      {
+        "source_id": "SRC.003",
+        "line_start": 3,
+        "line_end": 22
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "last_verified date is a metadata declaration, not proof that checks passed.",
+      "README separates foundation, checks, adapters and playbooks; organizational independence is not established by folders."
+    ]
+  },
+  {
+    "id": "OMN.001",
+    "domain": "Data Plane",
+    "component": "timelabs-npo/omnia-vault/frontend/server/core/gccmp_daemon.js",
+    "symbol": "GCCmpDaemon.constructor",
+    "kind": "api",
+    "signature": "constructor(dbPath); new Database(dbPath); journal_mode = WAL",
+    "semantics": "Creates one better-sqlite3 event database and initializes its schema.",
+    "relations": [
+      {
+        "type": "uses",
+        "target": "better-sqlite3 Database",
+        "basis": "import"
+      },
+      {
+        "type": "invokes",
+        "target": "GCCmpDaemon.initSchema",
+        "basis": "call"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.004",
+        "line_start": 6,
+        "line_end": 18
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "WAL declaration does not establish cross-database or filesystem transaction atomicity."
+    ]
+  },
+  {
+    "id": "OMN.002",
+    "domain": "Data Plane",
+    "component": "timelabs-npo/omnia-vault/frontend/server/core/gccmp_daemon.js",
+    "symbol": "blobs / manifests",
+    "kind": "type",
+    "signature": "blobs(hash TEXT PK,content BLOB,size INTEGER,created_at); manifests(id TEXT PK,type,path,blob_hash,parent_id,metadata,created_at)",
+    "semantics": "Event bytes and flat file metadata are stored separately. Manifests contain a path and one blob hash, with no recursively hashed directory root in this schema.",
+    "relations": [
+      {
+        "type": "stores",
+        "target": "UTF-8 event bytes",
+        "basis": "type"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.004",
+        "line_start": 24,
+        "line_end": 43
+      }
+    ],
+    "status": "source_observed",
+    "limits": []
+  },
+  {
+    "id": "OMN.003",
+    "domain": "Data Plane",
+    "component": "timelabs-npo/omnia-vault/frontend/server/core/gccmp_daemon.js",
+    "symbol": "commits",
+    "kind": "type",
+    "signature": "commits(id TEXT PK,parent_id TEXT,manifest_id TEXT NOT NULL,author TEXT NOT NULL,message,created_at)",
+    "semantics": "Schema permits one nullable parent and links to a manifest. It declares foreign keys, but no heads/generation table or multi-parent relation is defined in initSchema.",
+    "relations": [
+      {
+        "type": "uses",
+        "target": "manifests.id / commits.id",
+        "basis": "type"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.004",
+        "line_start": 47,
+        "line_end": 56
+      },
+      {
+        "source_id": "SRC.004",
+        "line_start": 15,
+        "line_end": 18
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "No foreign_keys=ON pragma is present in inspected constructor; this is not an executed FK test."
+    ]
+  },
+  {
+    "id": "OMN.004",
+    "domain": "Data Plane",
+    "component": "timelabs-npo/omnia-vault/frontend/server/core/gccmp_daemon.js",
+    "symbol": "GCCmpDaemon.commitEvent",
+    "kind": "api",
+    "signature": "computeHash(str); commitEvent(author, filePath, contentStr, message) -> commitId",
+    "semantics": "Hashes contentStr, stores UTF-8 bytes, then inserts a flat manifest and commit in three separate statements; IDs use wall time/random suffixes and parent_id is explicitly null.",
+    "relations": [
+      {
+        "type": "produces",
+        "target": "blobs / manifests / commits",
+        "basis": "call"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.004",
+        "line_start": 60,
+        "line_end": 83
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "No transaction wraps the three writes; no expected-head CAS, chunking or canonical revision identifier is implemented here."
+    ]
+  },
+  {
+    "id": "OMN.005",
+    "domain": "Data Plane",
+    "component": "timelabs-npo/omnia-vault/frontend/server/core/gccmp_daemon.js",
+    "symbol": "GCCmpDaemon.getLatestCommits",
+    "kind": "api",
+    "signature": "getLatestCommits(limit = 10) -> rows(commitId,author,message,created_at,path,type,blob_hash)",
+    "semantics": "Joins commits and manifests, ordering by creation time. This API reads recent journal rows, not a causally selected head.",
+    "relations": [
+      {
+        "type": "consumes",
+        "target": "commits / manifests",
+        "basis": "call"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.004",
+        "line_start": 85,
+        "line_end": 92
+      }
+    ],
+    "status": "source_observed",
+    "limits": []
+  },
+  {
+    "id": "OMN.006",
+    "domain": "Data Plane",
+    "component": "timelabs-npo/omnia-vault/supervisor/src/main.rs",
+    "symbol": "AppState / stubbed_files",
+    "kind": "type",
+    "signature": "AppState {sys: Mutex<System>, db: Mutex<Connection>}; stubbed_files(original_path UNIQUE,vault_path,size,stubbed_at)",
+    "semantics": "Rust opens its own hardcoded vault_state.db and stores OS stub metadata independently of the JS event database.",
+    "relations": [
+      {
+        "type": "stores",
+        "target": "stubbed_files",
+        "basis": "call"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.005",
+        "line_start": 30,
+        "line_end": 33
+      },
+      {
+        "source_id": "SRC.005",
+        "line_start": 55,
+        "line_end": 71
+      },
+      {
+        "source_id": "SRC.006",
+        "line_start": 12,
+        "line_end": 17
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "Independent mutex/database; no observed transaction linkage to GCCmpDaemon."
+    ]
+  },
+  {
+    "id": "OMN.007",
+    "domain": "Data Plane",
+    "component": "timelabs-npo/omnia-vault/supervisor/src/main.rs",
+    "symbol": "StubRequest / StubResponse / routes",
+    "kind": "message",
+    "signature": "StubRequest {file_path: String}; StubResponse {status: String,message: String,vault_path: Option<String>}",
+    "semantics": "The supervisor accepts a client path string and returns a status string in JSON; routes expose health, metrics, scan, stub and restore on loopback port 4000.",
+    "relations": [
+      {
+        "type": "consumes",
+        "target": "client-provided filesystem path",
+        "basis": "type"
+      },
+      {
+        "type": "produces",
+        "target": "StubResponse",
+        "basis": "type"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.005",
+        "line_start": 35,
+        "line_end": 45
+      },
+      {
+        "source_id": "SRC.005",
+        "line_start": 74,
+        "line_end": 85
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "No provider-issued item ID, expected revision, operation ID or caller credential is in this message."
+    ]
+  },
+  {
+    "id": "OMN.008",
+    "domain": "Data Plane",
+    "component": "timelabs-npo/omnia-vault/supervisor/src/main.rs",
+    "symbol": "cloud_stub_handler",
+    "kind": "api",
+    "signature": "async fn cloud_stub_handler(State<Arc<AppState>>, Json<StubRequest>) -> Json<StubResponse>",
+    "semantics": "Derives vault object name from SHA256(path bytes), moves/copies the file, creates a symlink, and then writes stub metadata. DB errors are discarded before returning success.",
+    "relations": [
+      {
+        "type": "uses",
+        "target": "filesystem rename/copy/symlink",
+        "basis": "call"
+      },
+      {
+        "type": "stores",
+        "target": "stubbed_files",
+        "basis": "call"
+      },
+      {
+        "type": "produces",
+        "target": "StubResponse",
+        "basis": "type"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.005",
+        "line_start": 199,
+        "line_end": 252
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "Path hash is not content hash. The sequence has no observed content verification/fsync, durable intent, expected-head check, or transaction covering filesystem and SQLite."
+    ]
+  },
+  {
+    "id": "OMN.009",
+    "domain": "Data Plane",
+    "component": "timelabs-npo/omnia-vault/supervisor/src/main.rs",
+    "symbol": "cloud_restore_handler",
+    "kind": "api",
+    "signature": "async fn cloud_restore_handler(State<Arc<AppState>>, Json<StubRequest>) -> Json<StubResponse>",
+    "semantics": "Reads the existing symlink target, removes the link, moves/copies the target back, then deletes the DB row. DB errors are discarded.",
+    "relations": [
+      {
+        "type": "uses",
+        "target": "filesystem read_link/rename/copy",
+        "basis": "call"
+      },
+      {
+        "type": "stores",
+        "target": "stubbed_files",
+        "basis": "call"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.005",
+        "line_start": 255,
+        "line_end": 305
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "The inspected handler does not validate target ownership against a retained revision/object hash or allowlisted vault root."
+    ]
+  },
+  {
+    "id": "OMN.010",
+    "domain": "Data Plane",
+    "component": "timelabs-npo/omnia-vault/supervisor/src/main.rs",
+    "symbol": "HeavyFile / CloudScanResult",
+    "kind": "type",
+    "signature": "HeavyFile {path:String,size_bytes:u64,is_stub:bool}; CloudScanResult {provider:String,total_files:usize,total_size_bytes:u64,heavy_files:Vec<HeavyFile>}",
+    "semantics": "Scan reports observed OS paths, sizes and a stub flag. Stub detection uses a target-name substring that differs from the stubbing handler’s VaultData path.",
+    "relations": [
+      {
+        "type": "produces",
+        "target": "CloudScanResult",
+        "basis": "type"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.005",
+        "line_start": 112,
+        "line_end": 125
+      },
+      {
+        "source_id": "SRC.005",
+        "line_start": 174,
+        "line_end": 183
+      },
+      {
+        "source_id": "SRC.005",
+        "line_start": 203,
+        "line_end": 204
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "scan_directory checks .nebula_vault_store while cloud_stub_handler writes VaultData; scan may not recognize its own stubs."
+    ]
+  },
+  {
+    "id": "OMN.011",
+    "domain": "Data Plane",
+    "component": "timelabs-npo/omnia-vault/frontend/server/storageEngine.js",
+    "symbol": "Node storage API / supervisor proxy",
+    "kind": "api",
+    "signature": "http.createServer(async (req,res)); POST /api/cloud-stub -> POST http://127.0.0.1:4000/cloud/stub; POST /api/cloud-restore -> /cloud/restore",
+    "semantics": "Node exposes permissive CORS and forwards request bodies to the Rust supervisor. server.listen(PORT) supplies no host argument.",
+    "relations": [
+      {
+        "type": "invokes",
+        "target": "cloud_stub_handler / cloud_restore_handler",
+        "basis": "call"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.006",
+        "line_start": 109,
+        "line_end": 120
+      },
+      {
+        "source_id": "SRC.006",
+        "line_start": 192,
+        "line_end": 228
+      },
+      {
+        "source_id": "SRC.006",
+        "line_start": 808,
+        "line_end": 811
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "No authentication gate appears in the inspected Node router or Rust route composition; loopback destination alone does not authenticate browser callers."
+    ]
+  },
+  {
+    "id": "OMN.013",
+    "domain": "Data Plane",
+    "component": "timelabs-npo/omnia-vault/frontend/server/storageEngine.js",
+    "symbol": "POST /api/offload / POST /api/hydrate",
+    "kind": "api",
+    "signature": "offload body {fileIds,targetVault}; hydrate body {fileId}; supervisor body {file_path}",
+    "semantics": "Offload/hydrate look up mock entries and update their flags when fetch response.ok is true; they do not inspect the supervisor JSON status field.",
+    "relations": [
+      {
+        "type": "consumes",
+        "target": "mockLocalFiles",
+        "basis": "call"
+      },
+      {
+        "type": "invokes",
+        "target": "cloud_stub_handler / cloud_restore_handler",
+        "basis": "call"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.006",
+        "line_start": 351,
+        "line_end": 384
+      },
+      {
+        "source_id": "SRC.006",
+        "line_start": 393,
+        "line_end": 424
+      },
+      {
+        "source_id": "SRC.005",
+        "line_start": 205,
+        "line_end": 216
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "Rust errors return Json<StubResponse> with status=error and no non-200 status type; Node can report successful offload for an application error."
+    ]
+  },
+  {
+    "id": "OMN.014",
+    "domain": "Data Plane",
+    "component": "timelabs-npo/omnia-vault/frontend/server/storageEngine.js",
+    "symbol": "addLog",
+    "kind": "api",
+    "signature": "addLog(level, message)",
+    "semantics": "Appends a JSON log file and records the log payload as a GCCmp event under a fixed log path.",
+    "relations": [
+      {
+        "type": "invokes",
+        "target": "GCCmpDaemon.commitEvent",
+        "basis": "call"
+      },
+      {
+        "type": "stores",
+        "target": "logEntries / .nebulavault.log.0",
+        "basis": "call"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.006",
+        "line_start": 95,
+        "line_end": 105
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "This log coupling is not an atomic record of actual filesystem revision publication."
+    ]
+  },
+  {
+    "id": "OMN.015",
+    "domain": "Data Plane",
+    "component": "timelabs-npo/omnia-vault/frontend/server/storageEngine.js",
+    "symbol": "POST /api/redis/connect / GET /api/redis/status",
+    "kind": "api",
+    "signature": "connect body {redisUrl}; status {connected,error,used_memory,dbSize,url}",
+    "semantics": "Initializes ioredis from a supplied Redis URL and queries memory/dbsize metadata; status is held in Node process memory.",
+    "relations": [
+      {
+        "type": "uses",
+        "target": "ioredis",
+        "basis": "import"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.006",
+        "line_start": 553,
+        "line_end": 601
+      },
+      {
+        "source_id": "SRC.006",
+        "line_start": 615,
+        "line_end": 625
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "Inspected endpoints do not establish immutable object replication, causal reconciliation or durable queue semantics; Redis remains a separate optional branch."
+    ]
+  },
+  {
+    "id": "OMN.016",
+    "domain": "Data Plane",
+    "component": "timelabs-npo/omnia-vault/frontend/server/storageEngine.js",
+    "symbol": "POST /api/cloud/evict",
+    "kind": "api",
+    "signature": "body {filePath}; result {success,evicted}",
+    "semantics": "Checks string prefixes against two cloud directories, then interpolates the supplied path into a shell command via execAsync.",
+    "relations": [
+      {
+        "type": "invokes",
+        "target": "brctl evict via child_process.exec",
+        "basis": "call"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.006",
+        "line_start": 714,
+        "line_end": 735
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "String prefix and quoted interpolation are not descriptor-based path validation or argument-array execution. No command was executed during this audit."
+    ]
+  },
+  {
+    "id": "OMN.017",
+    "domain": "Data Plane",
+    "component": "timelabs-npo/omnia-vault/docs/ARCHITECTURE_DEEP_DIVE.md",
+    "symbol": "intended canonical revision / expected-head protocol",
+    "kind": "invariant",
+    "signature": "revision = H(schema || author || logical-clock || parent-ids || tree-id); head update conditional on expected generation",
+    "semantics": "Architecture documentation proposes a content-addressed immutable revision and one transactional generation-checked head update, explicitly distinguishing it from current non-deterministic IDs and absent atomic head.",
+    "relations": [
+      {
+        "type": "uses",
+        "target": "immutable objects / expected generation / head",
+        "basis": "documented"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.007",
+        "line_start": 26,
+        "line_end": 48
+      }
+    ],
+    "status": "documentation_claim",
+    "limits": [
+      "Proposed contract, not present executable authority."
+    ]
+  },
+  {
+    "id": "TRB.009",
+    "domain": "Data Plane",
+    "component": "timelabs-npo/rhea-project/src/rhea_db.py",
+    "symbol": "rhea.db / sessions-history-radio-office schema",
+    "kind": "module",
+    "signature": "data/rhea.db; thread-local sqlite3 connection; PRAGMA journal_mode=WAL; synchronous=NORMAL",
+    "semantics": "Uses another SQLite database for sessions, history, radio and office messages, distinct from Omnia’s event and stub stores.",
+    "relations": [
+      {
+        "type": "stores",
+        "target": "sessions / history / radio / office_messages",
+        "basis": "call"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.008",
+        "line_start": 17,
+        "line_end": 32
+      },
+      {
+        "source_id": "SRC.008",
+        "line_start": 35,
+        "line_end": 93
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "This is application history persistence, not a shared cross-repository revision/head authority."
+    ]
+  },
+  {
+    "id": "TRB.010",
+    "domain": "Data Plane",
+    "component": "timelabs-npo/rhea-project/src/rhea_db.py",
+    "symbol": "persist_history",
+    "kind": "api",
+    "signature": "persist_history(step:int,endpoint:str,prompt:str,response_dict:dict,ontology:str=\"general\") -> None",
+    "semantics": "Inserts a selected representation of the response and commits independently; persistence exceptions are printed and swallowed.",
+    "relations": [
+      {
+        "type": "consumes",
+        "target": "TribunalResponse dictionary",
+        "basis": "type"
+      },
+      {
+        "type": "stores",
+        "target": "history",
+        "basis": "call"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.008",
+        "line_start": 124,
+        "line_end": 155
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "Full response and response arrays are not preserved as a canonical object; successful API output does not prove the history write succeeded."
+    ]
+  },
+  {
+    "id": "TRB.013",
+    "domain": "Data Plane",
+    "component": "timelabs-npo/rhea-project/src/tribunal_api.py",
+    "symbol": "POST /session/rewind / GET /cc/history",
+    "kind": "api",
+    "signature": "session_rewind(req: SessionRewindRequest) -> recorded request/response; cc_history(...) -> SQL history",
+    "semantics": "Rewind reads an indexed entry from volatile _session_history without truncating it or undoing side effects; the persistent history endpoint queries SQL separately.",
+    "relations": [
+      {
+        "type": "consumes",
+        "target": "_session_history / rhea_db.query_history",
+        "basis": "call"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.009",
+        "line_start": 1494,
+        "line_end": 1517
+      },
+      {
+        "source_id": "SRC.009",
+        "line_start": 1524,
+        "line_end": 1527
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "Rewind is not filesystem rollback, causal ref movement or durable restoration after process restart."
+    ]
+  },
+  {
+    "id": "EDGE.001",
+    "domain": "Network",
+    "component": "timelabs-npo/Blueshoes/bs-edge-agent",
+    "symbol": "Rust runtime module boundary",
+    "kind": "module",
+    "signature": "modules cli,executor,gcp,journal,mutation,probes,profiles,secrets,semantic; validate_transformation(Provenance)",
+    "semantics": "Blueshoes contains executable network/edge-oriented runtime structure rather than only marketing material.",
+    "relations": [
+      {
+        "type": "uses",
+        "target": "semantic::check::validate_transformation",
+        "basis": "import"
+      },
+      {
+        "type": "uses",
+        "target": "executor",
+        "basis": "import"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.010",
+        "line_start": 1,
+        "line_end": 14
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "Build/platform behavior not tested."
+    ]
+  },
+  {
+    "id": "EDGE.002",
+    "domain": "Network",
+    "component": "timelabs-npo/Blueshoes/semantic",
+    "symbol": "ConceptType / Entity / Relation",
+    "kind": "type",
+    "signature": "ConceptType=Person|Project|Metric|EdgeNode|Invariant|Capability|StateGeneration|ExternalMirror; Entity{id,concept,properties:BTreeMap<String,String>,relations:Vec<Relation>}",
+    "semantics": "Blueshoes semantic registry has a closed concept enum but free-string property values and relation predicates.",
+    "relations": [
+      {
+        "type": "stores",
+        "target": "Relation",
+        "basis": "type"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.011",
+        "line_start": 15,
+        "line_end": 32
+      },
+      {
+        "source_id": "SRC.011",
+        "line_start": 52,
+        "line_end": 70
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "Closed concept variants do not enforce typed meanings of all properties or relation predicates."
+    ]
+  },
+  {
+    "id": "EDGE.003",
+    "domain": "Network",
+    "component": "timelabs-npo/Blueshoes/semantic",
+    "symbol": "ProvenanceReceipt / SemanticSubstrate",
+    "kind": "type",
+    "signature": "ProvenanceReceipt{entity_id,timestamp:u64,operator_signature,transformation_hash,previous_hash,generation:u64}; commit_entity(...) -> ProvenanceReceipt",
+    "semantics": "Registry mutation lineage has chained receipt fields and integrity-verification APIs.",
+    "relations": [
+      {
+        "type": "produces",
+        "target": "ProvenanceReceipt",
+        "basis": "type"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.011",
+        "line_start": 75,
+        "line_end": 87
+      },
+      {
+        "source_id": "SRC.011",
+        "line_start": 155,
+        "line_end": 175
+      },
+      {
+        "source_id": "SRC.011",
+        "line_start": 280,
+        "line_end": 280
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "operator_signature is typed String; receipt hash linkage alone does not prove signer authorization or equivalence to storage causal commits."
+    ]
+  },
+  {
+    "id": "EDGE.004",
+    "domain": "Network",
+    "component": "timelabs-npo/Blueshoes/executor",
+    "symbol": "NetworkCapability / CapabilityGraph",
+    "kind": "type",
+    "signature": "NetworkCapability tagged action: AddRoute,FlushRouteCache,AddNftRule,SetMtu,EstablishMasqueTunnel,CommitConfig; graph.network_caps:Vec<NetworkCapability>",
+    "semantics": "Network execution surface is represented as explicit typed variants, separate from UI route plugins or model replies.",
+    "relations": [
+      {
+        "type": "consumes",
+        "target": "NetworkCapability",
+        "basis": "type"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.012",
+        "line_start": 31,
+        "line_end": 62
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "This declaration alone does not prove runtime grant checks or rollback correctness."
+    ]
+  },
+  {
+    "id": "NET.001",
+    "domain": "Network",
+    "component": "timelabs-npo/mbsd/src/sys/net/route.h",
+    "symbol": "rt_metrics",
+    "kind": "type",
+    "signature": "struct rt_metrics { uint64 rmx_pksent; int64 rmx_expire; unsigned rmx_mtu, rmx_refcnt, rmx_rtt, rmx_rttvar; ... };",
+    "semantics": "Userland-compatible routing metric structure; field widths follow platform C typedefs, not a portable serialized telemetry schema.",
+    "relations": [],
+    "evidence": [
+      {
+        "source_id": "SRC.013",
+        "line_start": 69,
+        "line_end": 86
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "OpenBSD-derived source API; not evidence of invocation by MBSD, portability to OpenWrt, or an executed hardware build."
+    ],
+    "origin_class": "openbsd_derived_baseline"
+  },
+  {
+    "id": "NET.003",
+    "domain": "Network",
+    "component": "timelabs-npo/mbsd/src/sys/net/route.h",
+    "symbol": "rt_msghdr",
+    "kind": "message",
+    "signature": "struct rt_msghdr { u_short rtm_msglen, rtm_hdrlen, rtm_index, rtm_tableid; u_char rtm_version, rtm_type; pid_t rtm_pid; int rtm_seq, rtm_errno; rt_metrics rtm_rmx; ... };",
+    "semantics": "Routing socket message envelope contains length/version, routing table, caller sequence and result fields.",
+    "relations": [
+      {
+        "type": "uses",
+        "target": "rt_metrics",
+        "basis": "type"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.013",
+        "line_start": 220,
+        "line_end": 237
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "OpenBSD-derived source API; not evidence of invocation by MBSD, portability to OpenWrt, or an executed hardware build."
+    ],
+    "origin_class": "openbsd_derived_baseline"
+  },
+  {
+    "id": "NET.004",
+    "domain": "Network",
+    "component": "timelabs-npo/mbsd/src/sys/net/route.h",
+    "symbol": "RTM_VERSION / RTM_MAXSIZE / RTM_GET",
+    "kind": "invariant",
+    "signature": "RTM_VERSION = 5; RTM_MAXSIZE = 2048; RTM_GET = 0x4; RTM_DESYNC = 0x10;",
+    "semantics": "Declared version, accepted route-message maximum and query/desynchronization message kinds are inputs to a future bounded OpenBSD adapter.",
+    "relations": [
+      {
+        "type": "validates",
+        "target": "rt_msghdr",
+        "basis": "type"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.013",
+        "line_start": 241,
+        "line_end": 258
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "OpenBSD-derived source API; not evidence of invocation by MBSD, portability to OpenWrt, or an executed hardware build."
+    ],
+    "origin_class": "openbsd_derived_baseline"
+  },
+  {
+    "id": "NET.006",
+    "domain": "Network",
+    "component": "timelabs-npo/mbsd/src/sys/net/route.h",
+    "symbol": "rtrequest",
+    "kind": "api",
+    "signature": "int rtrequest(int, struct rt_addrinfo *, u_int8_t, struct rtentry **, u_int);",
+    "semantics": "Kernel routing mutation interface requires separate authority from telemetry reads.",
+    "relations": [
+      {
+        "type": "uses",
+        "target": "rtentry",
+        "basis": "type"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.013",
+        "line_start": 514,
+        "line_end": 519
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "OpenBSD-derived source API; not evidence of invocation by MBSD, portability to OpenWrt, or an executed hardware build."
+    ],
+    "origin_class": "openbsd_derived_baseline"
+  },
+  {
+    "id": "NET.008",
+    "domain": "Network",
+    "component": "timelabs-npo/mbsd/src/sys/net/rtable.h",
+    "symbol": "rtable_read",
+    "kind": "api",
+    "signature": "int rtable_read(unsigned int, sa_family_t, int (*)(const struct rtentry *, void *, unsigned int), void *);",
+    "semantics": "Read-oriented traversal callback accepts const route entries and table/address-family parameters.",
+    "relations": [
+      {
+        "type": "uses",
+        "target": "rtable",
+        "basis": "type"
+      },
+      {
+        "type": "consumes",
+        "target": "rtentry",
+        "basis": "type"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.014",
+        "line_start": 72,
+        "line_end": 76
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "OpenBSD-derived source API; not evidence of invocation by MBSD, portability to OpenWrt, or an executed hardware build."
+    ],
+    "origin_class": "openbsd_derived_baseline"
+  },
+  {
+    "id": "NET.010",
+    "domain": "Network",
+    "component": "timelabs-npo/mbsd/src/sys/sys/syscall.h",
+    "symbol": "setrtable / getrtable",
+    "kind": "api",
+    "signature": "SYS_setrtable = 310: int setrtable(int); SYS_getrtable = 311: int getrtable(void);",
+    "semantics": "Generated syscall metadata provides per-process routing-table selection and retrieval.",
+    "relations": [
+      {
+        "type": "uses",
+        "target": "rtable",
+        "basis": "inferred"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.015",
+        "line_start": 677,
+        "line_end": 681
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "OpenBSD-derived source API; not evidence of invocation by MBSD, portability to OpenWrt, or an executed hardware build."
+    ],
+    "origin_class": "openbsd_derived_baseline"
+  },
+  {
+    "id": "NET.011",
+    "domain": "Network",
+    "component": "timelabs-npo/mbsd/src/sys/net/if.h",
+    "symbol": "if_data",
+    "kind": "type",
+    "signature": "struct if_data { u_char ifi_link_state; u_int32_t ifi_mtu, ifi_metric, ifi_rdomain; u_int64_t ifi_baudrate, ifi_ipackets, ifi_ierrors, ifi_opackets, ifi_oerrors, ifi_ibytes, ifi_obytes; ... };",
+    "semantics": "Native interface counter/state shape can inform an adapter but has no inspected cross-project serialization contract.",
+    "relations": [],
+    "evidence": [
+      {
+        "source_id": "SRC.016",
+        "line_start": 97,
+        "line_end": 126
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "OpenBSD-derived source API; not evidence of invocation by MBSD, portability to OpenWrt, or an executed hardware build."
+    ],
+    "origin_class": "openbsd_derived_baseline"
+  },
+  {
+    "id": "NET.012",
+    "domain": "Network",
+    "component": "timelabs-npo/mbsd/src/sys/net/if.h",
+    "symbol": "if_getdata / if_get / if_put",
+    "kind": "api",
+    "signature": "void if_getdata(struct ifnet *, struct if_data *); struct ifnet *if_get(unsigned int); void if_put(struct ifnet *);",
+    "semantics": "Header separates interface acquisition/release from copying interface statistics.",
+    "relations": [
+      {
+        "type": "produces",
+        "target": "if_data",
+        "basis": "type"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.016",
+        "line_start": 545,
+        "line_end": 562
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "OpenBSD-derived source API; not evidence of invocation by MBSD, portability to OpenWrt, or an executed hardware build."
+    ],
+    "origin_class": "openbsd_derived_baseline"
+  },
+  {
+    "id": "NET.014",
+    "domain": "Network",
+    "component": "timelabs-npo/mbsd/src/sys/net/pfvar.h",
+    "symbol": "pfioc_trans",
+    "kind": "type",
+    "signature": "struct pfioc_trans { int size, esize; struct pfioc_trans_e { int type; char anchor[PATH_MAX]; u_int32_t ticket; } *array; };",
+    "semantics": "PF transaction envelope batches typed anchor/ticket entries; it is pointer-bearing local ABI, not network-safe wire data.",
+    "relations": [],
+    "evidence": [
+      {
+        "source_id": "SRC.017",
+        "line_start": 1452,
+        "line_end": 1460
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "OpenBSD-derived source API; not evidence of invocation by MBSD, portability to OpenWrt, or an executed hardware build."
+    ],
+    "origin_class": "openbsd_derived_baseline"
+  },
+  {
+    "id": "NET.015",
+    "domain": "Network",
+    "component": "timelabs-npo/mbsd/src/sys/net/pfvar.h",
+    "symbol": "DIOCXBEGIN / DIOCXCOMMIT / DIOCXROLLBACK",
+    "kind": "api",
+    "signature": "DIOCXBEGIN=_IOWR('D',81,struct pfioc_trans); DIOCXCOMMIT=_IOWR('D',82,struct pfioc_trans); DIOCXROLLBACK=_IOWR('D',83,struct pfioc_trans);",
+    "semantics": "Declared PF begin/commit/rollback operations are candidate platform primitives; no MBSD/Rheknel executor bridge is established here.",
+    "relations": [
+      {
+        "type": "consumes",
+        "target": "pfioc_trans",
+        "basis": "type"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.017",
+        "line_start": 1696,
+        "line_end": 1698
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "OpenBSD-derived source API; not evidence of invocation by MBSD, portability to OpenWrt, or an executed hardware build."
+    ],
+    "origin_class": "openbsd_derived_baseline"
+  },
+  {
+    "id": "OS.001",
+    "domain": "Network",
+    "component": "timelabs-npo/mbsd/src/sys/sys/pledge.h",
+    "symbol": "PLEDGE_ROUTE / PLEDGE_WROUTE / PLEDGE_PF / PLEDGE_UNVEIL",
+    "kind": "invariant",
+    "signature": "PLEDGE_ROUTE=0x0000000000100000ULL; PLEDGE_WROUTE=0x0000000800000000ULL; PLEDGE_PF=0x0000000004000000ULL; PLEDGE_UNVEIL=0x0000001000000000ULL;",
+    "semantics": "Capability categories distinguish route lookup, interface-address modification, PF control and unveil calls.",
+    "relations": [],
+    "evidence": [
+      {
+        "source_id": "SRC.018",
+        "line_start": 24,
+        "line_end": 61
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "OpenBSD-derived source API; not evidence of invocation by MBSD, portability to OpenWrt, or an executed hardware build."
+    ],
+    "origin_class": "openbsd_derived_baseline"
+  },
+  {
+    "id": "OS.002",
+    "domain": "Network",
+    "component": "timelabs-npo/mbsd/src/sys/sys/syscallargs.h",
+    "symbol": "sys_pledge_args / sys_pledge",
+    "kind": "api",
+    "signature": "struct sys_pledge_args { syscallarg(const char *) promises; syscallarg(const char *) execpromises; }; int sys_pledge(struct proc *, void *, register_t *);",
+    "semantics": "OpenBSD process promise and exec-promise entry shape; no inspected MBSD application calls it.",
+    "relations": [
+      {
+        "type": "consumes",
+        "target": "PLEDGE_ROUTE / PLEDGE_WROUTE / PLEDGE_PF / PLEDGE_UNVEIL",
+        "basis": "type"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.019",
+        "line_start": 545,
+        "line_end": 548
+      },
+      {
+        "source_id": "SRC.019",
+        "line_start": 1284,
+        "line_end": 1284
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "OpenBSD-derived source API; not evidence of invocation by MBSD, portability to OpenWrt, or an executed hardware build."
+    ],
+    "origin_class": "openbsd_derived_baseline"
+  },
+  {
+    "id": "OS.003",
+    "domain": "Network",
+    "component": "timelabs-npo/mbsd/src/sys/sys/syscallargs.h",
+    "symbol": "sys_unveil_args / process unveil state",
+    "kind": "api",
+    "signature": "struct sys_unveil_args { syscallarg(const char *) path; syscallarg(const char *) permissions; }; process.ps_uvpaths, ps_uvvcount, ps_uvncount, ps_uvdone;",
+    "semantics": "Unveil syscall arguments and process bookkeeping exist in baseline source; ps_uvdone is annotated as disallowing further unveil calls.",
+    "relations": [],
+    "evidence": [
+      {
+        "source_id": "SRC.019",
+        "line_start": 576,
+        "line_end": 579
+      },
+      {
+        "source_id": "SRC.020",
+        "line_start": 224,
+        "line_end": 227
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "OpenBSD-derived source API; not evidence of invocation by MBSD, portability to OpenWrt, or an executed hardware build."
+    ],
+    "origin_class": "openbsd_derived_baseline"
+  },
+  {
+    "id": "OS.004",
+    "domain": "Network",
+    "component": "timelabs-npo/mbsd/src/sys/sys/socket.h",
+    "symbol": "sockpeercred",
+    "kind": "type",
+    "signature": "struct sockpeercred { uid_t uid; gid_t gid; pid_t pid; }; /* SOL_SOCKET, SO_PEERCRED */",
+    "semantics": "Local peer credential envelope is declared for retrieving effective uid/gid/pid from a socket.",
+    "relations": [],
+    "evidence": [
+      {
+        "source_id": "SRC.021",
+        "line_start": 305,
+        "line_end": 310
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "OpenBSD-derived source API; not evidence of invocation by MBSD, portability to OpenWrt, or an executed hardware build."
+    ],
+    "origin_class": "openbsd_derived_baseline"
+  },
+  {
+    "id": "OS.005",
+    "domain": "Network",
+    "component": "timelabs-npo/mbsd/src/sys/arch/arm64/conf/GLMT3000",
+    "symbol": "GLMT3000 kernel configuration",
+    "kind": "module",
+    "signature": "include \"arch/arm64/conf/GENERIC\"; mtgmac* at fdt?; mtspinand* at fdt?; mtswitch* at fdt?;",
+    "semantics": "Project custom OpenBSD arm64 configuration selects three device attachments, while current top-level project docs select an OpenWrt baseline.",
+    "relations": [
+      {
+        "type": "uses",
+        "target": "mtgmac_match / mtgmac_attach",
+        "basis": "documented"
+      },
+      {
+        "type": "uses",
+        "target": "mt_switch_match / mt_switch_attach",
+        "basis": "documented"
+      },
+      {
+        "type": "uses",
+        "target": "mt_spinand_match / mt_spinand_attach",
+        "basis": "documented"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.022",
+        "line_start": 1,
+        "line_end": 5
+      },
+      {
+        "source_id": "SRC.023",
+        "line_start": 841,
+        "line_end": 849
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "Source or declaration inspected; not built or executed in this extraction."
+    ],
+    "origin_class": "project_custom"
+  },
+  {
+    "id": "OS.006",
+    "domain": "Network",
+    "component": "timelabs-npo/mbsd/src/sys/dev/fdt/if_mtgmac.c",
+    "symbol": "mtgmac_match / mtgmac_attach",
+    "kind": "api",
+    "signature": "int mtgmac_match(struct device *, void *, void *); void mtgmac_attach(struct device *, struct device *, void *);",
+    "semantics": "Custom GMAC source declares an OpenBSD FDT attachment. The inspected attachment comments out if_ioctl/if_start handlers; its existence does not establish usable Ethernet.",
+    "relations": [
+      {
+        "type": "uses",
+        "target": "if_data",
+        "basis": "inferred"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.024",
+        "line_start": 17,
+        "line_end": 20
+      },
+      {
+        "source_id": "SRC.024",
+        "line_start": 44,
+        "line_end": 64
+      },
+      {
+        "source_id": "SRC.024",
+        "line_start": 93,
+        "line_end": 103
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "Source or declaration inspected; not built or executed in this extraction."
+    ],
+    "origin_class": "project_custom"
+  },
+  {
+    "id": "OS.008",
+    "domain": "Network",
+    "component": "timelabs-npo/mbsd/src/sys/dev/fdt/mt_spinand.c",
+    "symbol": "mt_switch_attach / mt_spinand_attach skeletons",
+    "kind": "api",
+    "signature": "void mt_switch_attach(struct device *, struct device *, void *); void mt_spinand_attach(struct device *, struct device *, void *); int mt_spinand_match(struct device *, void *, void *);",
+    "semantics": "Custom switch and SPI-NAND skeletons declare FDT attachments. Inspected switch attach prints a message and leaves initialization as a comment; SPI-NAND matches unconditionally and prints an attach message. No working hardware driver is established.",
+    "relations": [],
+    "evidence": [
+      {
+        "source_id": "SRC.025",
+        "line_start": 13,
+        "line_end": 33
+      },
+      {
+        "source_id": "SRC.026",
+        "line_start": 13,
+        "line_end": 42
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "Source or declaration inspected; not built or executed in this extraction."
+    ],
+    "origin_class": "project_custom"
+  },
+  {
+    "id": "OS.009",
+    "domain": "Network",
+    "component": "timelabs-npo/mbsd/scripts/build_image.sh",
+    "symbol": "OpenWrt ImageBuilder adapter",
+    "kind": "module",
+    "signature": "OWRT_VERSION=23.05.4; TARGET=mediatek/filogic; PROFILE=glinet_gl-mt3000; make image PROFILE=... PACKAGES=... FILES=SRC_DIR;",
+    "semantics": "Inspected script drives an OpenWrt build and copies a selected sysupgrade .itb or .bin to two .itb-named output paths. File renaming is not proof of FIT format or recovery compatibility.",
+    "relations": [],
+    "evidence": [
+      {
+        "source_id": "SRC.027",
+        "line_start": 13,
+        "line_end": 23
+      },
+      {
+        "source_id": "SRC.027",
+        "line_start": 48,
+        "line_end": 71
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "Not executed; upstream image hash, resulting binary format, signing, boot and hardware compatibility were not verified.",
+      "No ollama or rheknel package/build integration is declared in this inspected adapter."
+    ],
+    "origin_class": "project_custom"
+  },
+  {
+    "id": "OS.010",
+    "domain": "Network",
+    "component": "timelabs-npo/mbsd/docs/ADR-001-OpenWrt-Pivot.md",
+    "symbol": "MBSD selected baseline",
+    "kind": "module",
+    "signature": "Chosen option: OpenWrt security overlay instead of from-scratch OpenBSD arm64 port.",
+    "semantics": "Repository decision text and README explicitly name an OpenWrt overlay scaffold. The requested custom-OpenBSD framing therefore conflicts with frozen repository product intent.",
+    "relations": [
+      {
+        "type": "uses",
+        "target": "OpenWrt ImageBuilder adapter",
+        "basis": "documented"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.028",
+        "line_start": 8,
+        "line_end": 22
+      },
+      {
+        "source_id": "SRC.029",
+        "line_start": 1,
+        "line_end": 10
+      }
+    ],
+    "status": "documentation_claim",
+    "limits": [
+      "Source or declaration inspected; not built or executed in this extraction."
+    ],
+    "origin_class": "project_documentation"
+  },
+  {
+    "id": "OS.011",
+    "domain": "Network",
+    "component": "timelabs-npo/mbsd/docs/ARCHITECTURE.md",
+    "symbol": "Rheknel telemetry orchestration",
+    "kind": "module",
+    "signature": "Rheknel -> routing tables/interface metrics/hardware telemetry -> higher-order logic.",
+    "semantics": "Documentation assigns Rheknel a telemetry bridge role. This is a name/authority claim, not an implemented integration and not evidence that the separately audited validation kernel collects telemetry.",
+    "relations": [
+      {
+        "type": "produces",
+        "target": "if_data",
+        "basis": "inferred"
+      },
+      {
+        "type": "produces",
+        "target": "rt_metrics",
+        "basis": "inferred"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.029",
+        "line_start": 33,
+        "line_end": 38
+      },
+      {
+        "source_id": "SRC.030",
+        "line_start": 33,
+        "line_end": 40
+      }
+    ],
+    "status": "documentation_claim",
+    "limits": [
+      "Source or declaration inspected; not built or executed in this extraction."
+    ],
+    "origin_class": "project_documentation"
+  },
+  {
+    "id": "OS.012",
+    "domain": "Network",
+    "component": "timelabs-npo/mbsd/audits/spec/intent.schema.json",
+    "symbol": "MBSD Auditor Intent Contract",
+    "kind": "type",
+    "signature": "required: schemaVersion, project, auditor_spec, owner, signatures, updated_at; signatures[].role in {Owner,Codex}; signatures[].sig minLength=32; additionalProperties=false.",
+    "semantics": "Versioned JSON intent/governance contract declares owner and signature shape; structural compliance is distinct from signature authenticity.",
+    "relations": [],
+    "evidence": [
+      {
+        "source_id": "SRC.031",
+        "line_start": 1,
+        "line_end": 19
+      },
+      {
+        "source_id": "SRC.031",
+        "line_start": 27,
+        "line_end": 65
+      },
+      {
+        "source_id": "SRC.031",
+        "line_start": 144,
+        "line_end": 144
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "Source or declaration inspected; not built or executed in this extraction."
+    ],
+    "origin_class": "project_custom"
+  },
+  {
+    "id": "OS.013",
+    "domain": "Network",
+    "component": "timelabs-npo/mbsd/docs/intent.json",
+    "symbol": "unsigned checked-in intent",
+    "kind": "invariant",
+    "signature": "signatures[role=Owner].sig = \"\"; signatures[role=Codex].sig = \"\";",
+    "semantics": "Both checked-in signature strings have length zero and therefore fail the declared schema minimum of 32. This is a direct static inconsistency, not a cryptographic verification result.",
+    "relations": [
+      {
+        "type": "consumes",
+        "target": "MBSD Auditor Intent Contract",
+        "basis": "type"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.032",
+        "line_start": 12,
+        "line_end": 22
+      },
+      {
+        "source_id": "SRC.031",
+        "line_start": 53,
+        "line_end": 65
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "Source or declaration inspected; not built or executed in this extraction."
+    ],
+    "origin_class": "project_custom"
+  },
+  {
+    "id": "OS.014",
+    "domain": "Network",
+    "component": "timelabs-npo/mbsd/bin/law-core",
+    "symbol": "law-core --json-out",
+    "kind": "api",
+    "signature": "bin/law-core [--json-out PATH] -> {spec_version, clause_results, overall_pass, severity, failed_clauses, evidence_hashes, evaluator, timestamp}; evaluator=\"law-core-posix-stub-v1.1\".",
+    "semantics": "Existing law-core is a POSIX shell static file-presence checker. It emits fixed true values for ten clause_results while overall_pass depends on selected existence/nonempty checks; this is not a model-backed tribunal or proof of the full clauses.",
+    "relations": [
+      {
+        "type": "consumes",
+        "target": "MBSD Auditor Intent Contract",
+        "basis": "documented"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.033",
+        "line_start": 1,
+        "line_end": 16
+      },
+      {
+        "source_id": "SRC.033",
+        "line_start": 41,
+        "line_end": 69
+      },
+      {
+        "source_id": "SRC.033",
+        "line_start": 75,
+        "line_end": 95
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "Source or declaration inspected; not built or executed in this extraction."
+    ],
+    "origin_class": "project_custom"
+  },
+  {
+    "id": "OS.017",
+    "domain": "Network",
+    "component": "timelabs-npo/mbsd/scripts/validate_intent.sh",
+    "symbol": "optional owner signature verification",
+    "kind": "api",
+    "signature": "validate_intent.sh [--verify-owner] [--intent FILE] [--schema FILE]; optional signify -V over intent and sidecars.",
+    "semantics": "Signature structure checking and optional cryptographic owner verification are separate paths; the inspected optional path warns and skips when the tool or sidecars are unavailable.",
+    "relations": [
+      {
+        "type": "validates",
+        "target": "MBSD Auditor Intent Contract",
+        "basis": "documented"
+      },
+      {
+        "type": "consumes",
+        "target": "unsigned checked-in intent",
+        "basis": "documented"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.034",
+        "line_start": 32,
+        "line_end": 35
+      },
+      {
+        "source_id": "SRC.034",
+        "line_start": 245,
+        "line_end": 261
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "Static inspection only. No signature was verified and no source validation script was executed."
+    ],
+    "origin_class": "project_custom"
+  },
+  {
+    "id": "OS.015",
+    "domain": "AI Runtime",
+    "component": "timelabs-npo/mbsd/integration-search",
+    "symbol": "ollama + rheknel native executable integration",
+    "kind": "gap",
+    "signature": "No native linking/packaging/entrypoint contract found for ollama + rheknel + three models within the searched MBSD commit.",
+    "semantics": "Bounded search of all 13,633 tracked paths/text finds Rheknel only in docs; Ollama only as optional host-side build-log assistance; tribunal only as an unrelated dictionary word in upstream witness comments; no GGUF/ONNX/model-library files match the recorded inventory patterns.",
+    "relations": [],
+    "evidence": [
+      {
+        "source_id": "SRC.029",
+        "line_start": 38,
+        "line_end": 38
+      },
+      {
+        "source_id": "SRC.035",
+        "line_start": 12,
+        "line_end": 12
+      },
+      {
+        "source_id": "SRC.036",
+        "line_start": 46,
+        "line_end": 53
+      },
+      {
+        "source_id": "SRC.037",
+        "line_start": 1,
+        "line_end": 70
+      }
+    ],
+    "status": "missing_in_scope",
+    "limits": [
+      "Scope is MBSD commit 181f1ea6081ad2998affa9aeda79021b398e0375 only; sibling repository integration and external binaries require separate evidence.",
+      "Search metadata and complete selected-path filter are bound in work/rhea-step2/mbsd-filter-report.json.",
+      "A native three-model binary is an unverified integration objective, not established by this dictionary."
+    ],
+    "origin_class": "bounded_negative_search"
+  },
+  {
+    "id": "RHK.001",
+    "domain": "AI Runtime",
+    "component": "timelabs-npo/rheknel/kernel.c",
+    "symbol": "RheaVerdict / RheaContext",
+    "kind": "type",
+    "signature": "RheaVerdict = {RHEA_OK=0,RHEA_REJECT=1,RHEA_ESCALATE=2}; RheaContext {void* data; void* meta; int status; const char* phase;}",
+    "semantics": "Three-way C verdict and opaque mutable context; the context has no typed revision, authority ID, schema version or parent set.",
+    "relations": [],
+    "evidence": [
+      {
+        "source_id": "SRC.038",
+        "line_start": 28,
+        "line_end": 39
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "Declaration observed; no ABI stability, binary build or runtime test established."
+    ]
+  },
+  {
+    "id": "RHK.002",
+    "domain": "AI Runtime",
+    "component": "timelabs-npo/rheknel/kernel.c",
+    "symbol": "ActionFunc / JudgeFunc / registries",
+    "kind": "type",
+    "signature": "typedef void (*ActionFunc)(RheaContext* ctx); typedef RheaVerdict (*JudgeFunc)(RheaContext* ctx);",
+    "semantics": "Process-static registries hold action and judge callbacks separately.",
+    "relations": [
+      {
+        "type": "consumes",
+        "target": "RheaContext",
+        "basis": "type"
+      },
+      {
+        "type": "produces",
+        "target": "RheaVerdict",
+        "basis": "type"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.038",
+        "line_start": 41,
+        "line_end": 59
+      },
+      {
+        "source_id": "SRC.038",
+        "line_start": 20,
+        "line_end": 22
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "Fixed MAX_TAGS=16, MAX_CALLBACKS=8, MAX_TAG_LEN=32; no synchronization appears in these registries."
+    ]
+  },
+  {
+    "id": "RHK.003",
+    "domain": "AI Runtime",
+    "component": "timelabs-npo/rheknel/kernel.c",
+    "symbol": "rhea_on / rhea_add_judge",
+    "kind": "api",
+    "signature": "bool rhea_on(const char* tag, ActionFunc cb); bool rhea_add_judge(const char* tag, JudgeFunc cb);",
+    "semantics": "Register callbacks by string tag. Invalid/null inputs and exhausted tag slots return false, but an already-full callback array still returns true.",
+    "relations": [
+      {
+        "type": "stores",
+        "target": "ActionRegistry / JudgeRegistry",
+        "basis": "call"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.038",
+        "line_start": 79,
+        "line_end": 109
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "A returned true does not prove a callback was added when the per-tag array is full; this is static control-flow evidence."
+    ]
+  },
+  {
+    "id": "RHK.004",
+    "domain": "AI Runtime",
+    "component": "timelabs-npo/rheknel/kernel.c",
+    "symbol": "rhea_judge",
+    "kind": "api",
+    "signature": "RheaVerdict rhea_judge(const char* tag, RheaContext* ctx);",
+    "semantics": "Looks up judges and returns the first non-OK result; an unknown tag returns RHEA_OK.",
+    "relations": [
+      {
+        "type": "invokes",
+        "target": "JudgeFunc",
+        "basis": "call"
+      },
+      {
+        "type": "produces",
+        "target": "RheaVerdict",
+        "basis": "type"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.038",
+        "line_start": 114,
+        "line_end": 123
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "Permits unknown-tag dispatch at this boundary; callers must not assume fail-closed policy."
+    ]
+  },
+  {
+    "id": "RHK.005",
+    "domain": "AI Runtime",
+    "component": "timelabs-npo/rheknel/kernel.c",
+    "symbol": "rhea_emit",
+    "kind": "api",
+    "signature": "void rhea_emit(const char* tag, RheaContext* ctx);",
+    "semantics": "Invokes registered actions without calling rhea_judge. The sample main sequences a judge before emit, but the emitter itself does not enforce that order.",
+    "relations": [
+      {
+        "type": "invokes",
+        "target": "ActionFunc",
+        "basis": "call"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.038",
+        "line_start": 125,
+        "line_end": 132
+      },
+      {
+        "source_id": "SRC.038",
+        "line_start": 153,
+        "line_end": 160
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "No unforgeable capability or verdict token connects validation to dispatch."
+    ]
+  },
+  {
+    "id": "RHK.006",
+    "domain": "AI Runtime",
+    "component": "timelabs-npo/rheknel/kernel.c",
+    "symbol": "aletheia_judge_string",
+    "kind": "api",
+    "signature": "RheaVerdict aletheia_judge_string(RheaContext* ctx);",
+    "semantics": "Rejects absent context/data or a string containing either of two literal phrases; otherwise returns OK.",
+    "relations": [
+      {
+        "type": "consumes",
+        "target": "RheaContext.data interpreted as C string",
+        "basis": "type"
+      },
+      {
+        "type": "produces",
+        "target": "RheaVerdict",
+        "basis": "type"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.038",
+        "line_start": 136,
+        "line_end": 143
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "This narrow string predicate is not a typed commit-integrity validator or general hallucination detector."
+    ]
+  },
+  {
+    "id": "RHK.007",
+    "domain": "AI Runtime",
+    "component": "timelabs-npo/rheknel/kernel.c",
+    "symbol": "sample main / standalone C build target",
+    "kind": "module",
+    "signature": "int main(); Make: SRC=kernel.c, TARGET=rhea, gcc -O3 -Wall -Wextra -std=c11",
+    "semantics": "The sample registers one judge and one log action, then judges and dispatches one hardcoded command. The build recipe compiles that C source alone.",
+    "relations": [
+      {
+        "type": "invokes",
+        "target": "rhea_add_judge / rhea_on / rhea_judge / rhea_emit",
+        "basis": "call"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.038",
+        "line_start": 150,
+        "line_end": 166
+      },
+      {
+        "source_id": "SRC.039",
+        "line_start": 5,
+        "line_end": 14
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "Build recipe and source observed only; no compile or OpenBSD execution performed. Make is supplemental source evidence outside the selected pack."
+    ]
+  },
+  {
+    "id": "RHK.008",
+    "domain": "AI Runtime",
+    "component": "timelabs-npo/rheknel/kernel.c",
+    "symbol": "typed CommitValidator API in frozen remote scope",
+    "kind": "gap",
+    "signature": "No typed CommitValidator/validate_commit public declaration found in the 19-path frozen rheknel inventory.",
+    "semantics": "The sole C source exposes generic context/callbacks and a sample main; the recorded build targets only kernel.c. No canonical commit contract is derived from this baseline.",
+    "relations": [
+      {
+        "type": "uses",
+        "target": "RheaContext / RheaVerdict",
+        "basis": "inferred"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.038",
+        "line_start": 28,
+        "line_end": 59
+      },
+      {
+        "source_id": "SRC.039",
+        "line_start": 5,
+        "line_end": 14
+      },
+      {
+        "source_id": "SRC.040",
+        "line_start": 1,
+        "line_end": 2098
+      }
+    ],
+    "status": "missing_in_scope",
+    "limits": [
+      "Negative claim limited to all 19 tracked rheknel paths at this SHA, not later local-only branches or prior memory. Search receipt: work/rhea-step2/backend_scope_index.json."
+    ]
+  },
+  {
+    "id": "TRB.001",
+    "domain": "AI Runtime",
+    "component": "timelabs-npo/rhea-project/src/tribunal_api.py",
+    "symbol": "Rhea Tribunal API",
+    "kind": "module",
+    "signature": "FastAPI(title=\"Rhea Tribunal API\",version=\"0.1.0\"); routers /aletheia, /auth, billing",
+    "semantics": "Python application composes bridge, consensus analyzer, profile/visual context, persistence and web routers.",
+    "relations": [
+      {
+        "type": "uses",
+        "target": "RheaBridge / ConsensusAnalyzer / rhea_db",
+        "basis": "import"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.009",
+        "line_start": 74,
+        "line_end": 108
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "Composition is observed source, not evidence of a deployed service or native OpenBSD binary."
+    ]
+  },
+  {
+    "id": "TRB.002",
+    "domain": "AI Runtime",
+    "component": "timelabs-npo/rhea-project/src/tribunal_api.py",
+    "symbol": "TribunalRequest / TribunalICERequest",
+    "kind": "message",
+    "signature": "TribunalRequest {prompt:str[1..10000],k:int=5[2..10],tier:str,mode:str,system:str<=2000}; ICE {k:[2..7],rounds:[1..5],chairman_tier:str}",
+    "semantics": "Request contracts select variable model counts and cost/analysis modes. Neither contract specifies exactly three fixed native models.",
+    "relations": [
+      {
+        "type": "consumes",
+        "target": "RheaBridge.tribunal",
+        "basis": "type"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.009",
+        "line_start": 273,
+        "line_end": 286
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "tier/mode are unrestricted strings here, not enums."
+    ]
+  },
+  {
+    "id": "TRB.003",
+    "domain": "AI Runtime",
+    "component": "timelabs-npo/rhea-project/src/tribunal_api.py",
+    "symbol": "ModelInfo / TribunalResponse",
+    "kind": "message",
+    "signature": "ModelInfo {model,provider,text,latency_s,tokens_used,error?}; TribunalResponse {consensus,agreement_score,confidence,models_responded,models_queried,analysis_method,responses,math_verification,meta,...}",
+    "semantics": "Returns model responses and agreement/confidence metadata; it has no RheaVerdict, commit ID, expected-head generation or executable authority capability.",
+    "relations": [
+      {
+        "type": "produces",
+        "target": "statistical consensus report",
+        "basis": "type"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.009",
+        "line_start": 368,
+        "line_end": 393
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "Agreement/confidence cannot be equated with deterministic authorization or data-integrity verification."
+    ]
+  },
+  {
+    "id": "TRB.004",
+    "domain": "AI Runtime",
+    "component": "timelabs-npo/rhea-project/src/rhea_bridge.py",
+    "symbol": "ChronosMessage / ModelResponse / TribunalResult",
+    "kind": "type",
+    "signature": "ChronosMessage {sender,receiver,task_id,msg_type,priority,payload:dict,dependencies:list,deadline?,timestamp}; ModelResponse {provider,model,text,latency_s,tokens_used,error?,tier}; TribunalResult {prompt,responses,consensus,consensus_report,k,elapsed_s}",
+    "semantics": "Bridge contracts mix typed scalar fields with generic dictionaries/lists; they carry orchestration and model output data.",
+    "relations": [
+      {
+        "type": "produces",
+        "target": "TribunalResult / ModelResponse",
+        "basis": "type"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.041",
+        "line_start": 90,
+        "line_end": 121
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "No canonical serialization, schema revision or cryptographic identity is defined in these dataclasses."
+    ]
+  },
+  {
+    "id": "TRB.005",
+    "domain": "AI Runtime",
+    "component": "timelabs-npo/rhea-project/src/rhea_bridge.py",
+    "symbol": "RheaBridge.tribunal",
+    "kind": "api",
+    "signature": "tribunal(prompt:str,k:int=5,system:str=\"\",models:list=None,tier:str=\"cheap\",temperature:float=0.7,max_tokens:int=2048,mode:str=\"local\") -> TribunalResult",
+    "semantics": "Selects models, calls self.ask concurrently, gathers responses in completion order, and delegates successful text pairs to ConsensusAnalyzer.",
+    "relations": [
+      {
+        "type": "invokes",
+        "target": "RheaBridge.ask / ConsensusAnalyzer.analyze",
+        "basis": "call"
+      },
+      {
+        "type": "produces",
+        "target": "TribunalResult",
+        "basis": "type"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.041",
+        "line_start": 1062,
+        "line_end": 1128
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "Response order follows as_completed; no stable fixed-three-model binary composition is implemented here."
+    ]
+  },
+  {
+    "id": "TRB.006",
+    "domain": "AI Runtime",
+    "component": "timelabs-npo/rhea-project/src/rhea_bridge.py",
+    "symbol": "RheaBridge.ask",
+    "kind": "api",
+    "signature": "ask(prompt:str,model:str,system:str=\"\",temperature:float=0.7,max_tokens:int=2048,mode:Optional[str]=None,call_meta:Optional[dict]=None) -> ModelResponse",
+    "semantics": "Adds profile and visual context, resolves provider/model, and calls LiteLLM with provider settings and request parameters.",
+    "relations": [
+      {
+        "type": "uses",
+        "target": "profile_manager / get_context_block",
+        "basis": "call"
+      },
+      {
+        "type": "invokes",
+        "target": "litellm.completion",
+        "basis": "call"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.041",
+        "line_start": 913,
+        "line_end": 936
+      },
+      {
+        "source_id": "SRC.041",
+        "line_start": 976,
+        "line_end": 995
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "Provider-backed model invocation is source-observed; no providers were called in this work."
+    ]
+  },
+  {
+    "id": "TRB.007",
+    "domain": "AI Runtime",
+    "component": "timelabs-npo/rhea-project/src/consensus_analyzer.py",
+    "symbol": "ConsensusReport / ConsensusAnalyzer.analyze",
+    "kind": "api",
+    "signature": "analyze(responses:list[tuple[str,str]],prompt:str=\"\",mode:str=\"local\",llm_tier:str=\"cheap\") -> ConsensusReport",
+    "semantics": "Produces text-derived agreement/confidence, stance and divergence information. A single valid response yields agreement_score=0 and capped heuristic confidence.",
+    "relations": [
+      {
+        "type": "produces",
+        "target": "ConsensusReport",
+        "basis": "type"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.042",
+        "line_start": 44,
+        "line_end": 64
+      },
+      {
+        "source_id": "SRC.042",
+        "line_start": 617,
+        "line_end": 658
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "These metrics assess response agreement/heuristics; inspected code does not turn them into a canonical deterministic commit verdict."
+    ]
+  },
+  {
+    "id": "TRB.008",
+    "domain": "AI Runtime",
+    "component": "timelabs-npo/rhea-project/src/tribunal_api.py",
+    "symbol": "POST /tribunal",
+    "kind": "api",
+    "signature": "async def tribunal(req: TribunalRequest) -> TribunalResponse; dependencies verify_api_key/check_rate_limit",
+    "semantics": "Endpoint invokes RheaBridge.tribunal, then records response state in process memory and separately writes history through rhea_db.",
+    "relations": [
+      {
+        "type": "invokes",
+        "target": "RheaBridge.tribunal / rhea_db.persist_history",
+        "basis": "call"
+      },
+      {
+        "type": "stores",
+        "target": "_session_history",
+        "basis": "call"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.009",
+        "line_start": 1117,
+        "line_end": 1135
+      },
+      {
+        "source_id": "SRC.009",
+        "line_start": 1201,
+        "line_end": 1215
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "Model response, in-memory append and SQL persistence do not form one transactional commit."
+    ]
+  },
+  {
+    "id": "TRB.011",
+    "domain": "AI Runtime",
+    "component": "timelabs-npo/rhea-project/src/tribunal_api.py",
+    "symbol": "ActuatorCommand / ActuatorReceipt",
+    "kind": "message",
+    "signature": "ActuatorCommand {action:str,elementId?:int,text?:str,tab_id?:int}; ActuatorReceipt {command_id:str,status:str,error?:str}",
+    "semantics": "Browser actuation commands are queued in memory with short generated IDs; receipts enter a separate in-memory dictionary.",
+    "relations": [
+      {
+        "type": "stores",
+        "target": "_command_queue / _receipts",
+        "basis": "call"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.009",
+        "line_start": 298,
+        "line_end": 307
+      },
+      {
+        "source_id": "SRC.009",
+        "line_start": 1085,
+        "line_end": 1107
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "Command lacks expected state/revision, capability scope and idempotency key; receipt posting and command polling lack verify_api_key dependency in inspected decorators."
+    ]
+  },
+  {
+    "id": "TRB.012",
+    "domain": "AI Runtime",
+    "component": "timelabs-npo/rhea-project/src/tribunal_api.py",
+    "symbol": "verify_api_key",
+    "kind": "api",
+    "signature": "async def verify_api_key(x_api_key: str = Header(...), authorization: str = Header(...))",
+    "semantics": "Accepts JWT, billing-backed API key/quota, or configured administrative API keys. It is attached per route, rather than universally enforced by middleware.",
+    "relations": [
+      {
+        "type": "invokes",
+        "target": "auth_api._decode_token / validate_billing_key / check_quota",
+        "basis": "call"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.009",
+        "line_start": 209,
+        "line_end": 235
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "Credential values are not included; no live authentication probe performed. Route-local authorization remains separate from content/revision validation."
+    ]
+  },
+  {
+    "id": "TRB.014",
+    "domain": "AI Runtime",
+    "component": "timelabs-npo/rhea-project/Dockerfile",
+    "symbol": "combined three-model native OpenBSD executable",
+    "kind": "gap",
+    "signature": "Observed packaging: python:3.11-slim image; CMD [\"python3\", \"src/tribunal_api.py\"].",
+    "semantics": "The inspected tribunal package is a Python/LiteLLM service with variable k. No combined native OpenBSD executable integration was found in the bounded backend/source/build inventory.",
+    "relations": [
+      {
+        "type": "uses",
+        "target": "RheaBridge.tribunal / litellm.completion",
+        "basis": "inferred"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.043",
+        "line_start": 1,
+        "line_end": 33
+      },
+      {
+        "source_id": "SRC.041",
+        "line_start": 1062,
+        "line_end": 1093
+      },
+      {
+        "source_id": "SRC.040",
+        "line_start": 1,
+        "line_end": 2098
+      },
+      {
+        "source_id": "SRC.044",
+        "line_start": 1,
+        "line_end": 23
+      }
+    ],
+    "status": "missing_in_scope",
+    "limits": [
+      "Bounded negative scope: rhea-project src/, config/, ops/, root Dockerfile/requirements, rheknel tracked tree; search receipt work/rhea-step2/backend_scope_index.json. Local named network workspace is unborn and empty.",
+      "No build, binary disassembly, external deployment or hardware verification performed. Dockerfile is supplemental hashed source evidence, not present in patched pack."
+    ]
+  },
+  {
+    "id": "APP.001",
+    "domain": "Presentation",
+    "component": "/Users/sa/Documents/ChatGPT/Apps",
+    "symbol": "Apps project inventory",
+    "kind": "gap",
+    "signature": "Git repository; unborn HEAD; tracked_files=[]; working_files=[]; entries_excluding_git=[]",
+    "semantics": "This actual app-mapped workspace is an empty Git container, not an inspected implementation module.",
+    "relations": [],
+    "evidence": [
+      {
+        "source_id": "SRC.045",
+        "line_start": 1,
+        "line_end": 55
+      }
+    ],
+    "status": "missing_in_scope",
+    "limits": [
+      "Scope is the exact directory at inventory time; other local projects and remote repositories may implement related concepts."
+    ]
+  },
+  {
+    "id": "APP.002",
+    "domain": "Presentation",
+    "component": "timelabs-npo/rhea-ios",
+    "symbol": "RheaPreviewApp / CommandCentreApp",
+    "kind": "module",
+    "signature": "SwiftUI @main RheaPreviewApp; macOS-conditioned @main CommandCentreApp; both import RheaKit",
+    "semantics": "Repository contains iOS-oriented and macOS command-center source entrypoints.",
+    "relations": [
+      {
+        "type": "uses",
+        "target": "RheaKit",
+        "basis": "import"
+      },
+      {
+        "type": "uses",
+        "target": "AuthManager.shared",
+        "basis": "call"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.046",
+        "line_start": 1,
+        "line_end": 29
+      },
+      {
+        "source_id": "SRC.047",
+        "line_start": 1,
+        "line_end": 18
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "Source entrypoints do not prove package completeness, signing or running on device."
+    ]
+  },
+  {
+    "id": "APP.003",
+    "domain": "Presentation",
+    "component": "timelabs-npo/rhea-ios",
+    "symbol": "XcodeGen local source/package paths",
+    "kind": "gap",
+    "signature": "project.yml references ../../packages/RheaKit, ../RheaPreview.swiftpm/Sources, ../RheaTunnel/Sources, ../RheaKeyboard/Sources",
+    "semantics": "The declared package/source paths do not resolve to source directories in this frozen repository layout. Local present files instead use packages/RheaKit and Sources/RheaPreview or Sources/RheaKeyboard.",
+    "relations": [],
+    "evidence": [
+      {
+        "source_id": "SRC.048",
+        "line_start": 8,
+        "line_end": 20
+      },
+      {
+        "source_id": "SRC.048",
+        "line_start": 63,
+        "line_end": 86
+      },
+      {
+        "source_id": "SRC.048",
+        "line_start": 122,
+        "line_end": 147
+      }
+    ],
+    "status": "missing_in_scope",
+    "limits": [
+      "No build attempted; external monorepo layout could supply paths. Root and RheaApp/project.yml are both present with different build numbers."
+    ]
+  },
+  {
+    "id": "APP.004",
+    "domain": "Presentation",
+    "component": "timelabs-npo/rhea-ios/RheaKit",
+    "symbol": "Duplicated RheaKit and keyboard definitions",
+    "kind": "invariant",
+    "signature": "25 inspected .swift paths in rhea-play/packages/RheaKit are byte-identical to corresponding rhea-ios paths; 3 keyboard .swift files match rhea-keyboard",
+    "semantics": "There are duplicate source copies at different repository commits, not proven separately versioned implementations.",
+    "relations": [
+      {
+        "type": "uses",
+        "target": "RheaKit duplicate contract",
+        "basis": "inferred"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.049",
+        "line_start": 4,
+        "line_end": 12
+      },
+      {
+        "source_id": "SRC.050",
+        "line_start": 4,
+        "line_end": 12
+      },
+      {
+        "source_id": "SRC.051",
+        "line_start": 33,
+        "line_end": 45
+      },
+      {
+        "source_id": "SRC.052",
+        "line_start": 33,
+        "line_end": 45
+      }
+    ],
+    "status": "inferred",
+    "limits": [
+      "Compared exact frozen files; no cross-repository package dependency ties the copies together. Receipt in presentation_inventory.json."
+    ]
+  },
+  {
+    "id": "APP.005",
+    "domain": "Presentation",
+    "component": "timelabs-npo/rhea-keyboard",
+    "symbol": "Package RheaKeyboard",
+    "kind": "module",
+    "signature": "library RheaKeyboard; platforms iOS 16; target Sources/RheaKeyboard; no package dependencies",
+    "semantics": "Standalone keyboard repository declares a Swift library, while extension packaging is separately described in rhea-ios project.yml.",
+    "relations": [
+      {
+        "type": "projects",
+        "target": "iOS KeyboardViewController",
+        "basis": "type"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.053",
+        "line_start": 4,
+        "line_end": 12
+      },
+      {
+        "source_id": "SRC.048",
+        "line_start": 122,
+        "line_end": 147
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "Library declaration is not an installable or signed keyboard extension artifact."
+    ]
+  },
+  {
+    "id": "APP.006",
+    "domain": "Presentation",
+    "component": "timelabs-npo/rhea-keyboard",
+    "symbol": "KeyboardViewController",
+    "kind": "type",
+    "signature": "class KeyboardViewController:UIInputViewController; hosts KeyboardView; insertText/deleteBackward/switchKeyboard/getContext callbacks",
+    "semantics": "Host-app interaction is through textDocumentProxy; reads context before cursor and exposes insertion/deletion callbacks.",
+    "relations": [
+      {
+        "type": "projects",
+        "target": "KeyboardView",
+        "basis": "call"
+      },
+      {
+        "type": "consumes",
+        "target": "textDocumentProxy.documentContextBeforeInput",
+        "basis": "call"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.054",
+        "line_start": 15,
+        "line_end": 34
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "No device/full-access lifecycle test performed."
+    ]
+  },
+  {
+    "id": "APP.007",
+    "domain": "Presentation",
+    "component": "timelabs-npo/rhea-keyboard",
+    "symbol": "TribunalClient.QuickRequest/QuickResponse/quick",
+    "kind": "api",
+    "signature": "QuickRequest{text,action,target_lang,style:String}; QuickResponse{text?,model?,elapsed_s?,action?}; POST /keyboard/quick",
+    "semantics": "Keyboard quick actions submit selected/contextual text to a remote single-model action surface.",
+    "relations": [
+      {
+        "type": "invokes",
+        "target": "POST /keyboard/quick",
+        "basis": "call"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.051",
+        "line_start": 33,
+        "line_end": 74
+      },
+      {
+        "source_id": "SRC.051",
+        "line_start": 10,
+        "line_end": 28
+      },
+      {
+        "source_id": "SRC.055",
+        "line_start": 7,
+        "line_end": 24
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "Client comment describes model behavior; actual provider execution unverified.",
+      "Matching keychain service strings do not establish shared-access entitlements; client falls back to a development header when JWT absent."
+    ]
+  },
+  {
+    "id": "APP.008",
+    "domain": "Presentation",
+    "component": "timelabs-npo/rhea-keyboard",
+    "symbol": "TribunalClient.TribunalRequest/TribunalResponse/tribunal",
+    "kind": "api",
+    "signature": "TribunalRequest{text:String,sender:String}; TribunalResponse{reply:String?,agreement_score:Double?,models_responded:Int?,elapsed_s:Double?}; POST /dialog",
+    "semantics": "Keyboard multi-model UI consumes optional agreement metadata and free-text reply.",
+    "relations": [
+      {
+        "type": "invokes",
+        "target": "POST /dialog",
+        "basis": "call"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.051",
+        "line_start": 79,
+        "line_end": 118
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "Agreement score is not a deterministic authorization/verdict or proof of three native OpenBSD models."
+    ]
+  },
+  {
+    "id": "APP.010",
+    "domain": "Presentation",
+    "component": "timelabs-npo/rhea-keyboard",
+    "symbol": "Keyki to RheaKeyboard mapping candidate",
+    "kind": "gap",
+    "signature": "Bounded case-insensitive Keyki search: rhea-play, rhea-ios, rhea-keyboard returned no matches",
+    "semantics": "RheaKeyboard supplies the matching iOS AI-keyboard role, but no inspected source establishes Keyki as an alias or product identity.",
+    "relations": [],
+    "evidence": [
+      {
+        "source_id": "SRC.056",
+        "line_start": 1,
+        "line_end": 17
+      }
+    ],
+    "status": "inferred",
+    "limits": [
+      "Alias is a proposed nomenclature mapping, not a source-observed rename; search receipt in presentation_inventory.json."
+    ]
+  },
+  {
+    "id": "APP.011",
+    "domain": "Presentation",
+    "component": "timelabs-npo/rhea-atlas",
+    "symbol": "AtlasState / ContextDensity / SessionEntry",
+    "kind": "type",
+    "signature": "AtlasState has consensusScore,dMetric,providerCount,redisStatus,apiHealthy,sessionHistory,contextDensities; SessionEntry timestamp:number, mode tribunal|sceptic|ice",
+    "semantics": "Zustand projection state combines UI metrics, sessions and ontology visualizations.",
+    "relations": [
+      {
+        "type": "stores",
+        "target": "SessionEntry",
+        "basis": "type"
+      },
+      {
+        "type": "stores",
+        "target": "ContextDensity",
+        "basis": "type"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.057",
+        "line_start": 13,
+        "line_end": 77
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "Type-level density/consistency numbers do not encode provenance or enforce their comment ranges."
+    ]
+  },
+  {
+    "id": "APP.012",
+    "domain": "Presentation",
+    "component": "timelabs-npo/rhea-atlas",
+    "symbol": "HealthState / useAtlasSync",
+    "kind": "api",
+    "signature": "HealthState{providerCount,redisStatus,dMetric,auditRecords,apiHealthy}; reads /health,/api/health,/ui/atlas and EventSource /ui/events",
+    "semantics": "Browser client merges multiple health/projection endpoint shapes and polls while listening to SSE.",
+    "relations": [
+      {
+        "type": "produces",
+        "target": "AtlasState",
+        "basis": "call"
+      },
+      {
+        "type": "consumes",
+        "target": "/ui/events",
+        "basis": "call"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.058",
+        "line_start": 7,
+        "line_end": 59
+      },
+      {
+        "source_id": "SRC.058",
+        "line_start": 127,
+        "line_end": 148
+      },
+      {
+        "source_id": "SRC.058",
+        "line_start": 172,
+        "line_end": 180
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "Any nonempty response object counts as apiHealthy; not a shared readiness contract."
+    ]
+  },
+  {
+    "id": "APP.013",
+    "domain": "Presentation",
+    "component": "timelabs-npo/rhea-atlas",
+    "symbol": "D-metric / provider / consensus fallback semantics",
+    "kind": "invariant",
+    "signature": "Fallback D = audit_records*0.05+243.8; initial consensusScore=94,dMetric=243.8; provider/dMetric setters accept only >0",
+    "semantics": "Visual state contains fixed defaults and derived fallback metrics; logical-OR fallback and positive-only updates can discard a valid zero or retain earlier values.",
+    "relations": [
+      {
+        "type": "produces",
+        "target": "AtlasState.dMetric",
+        "basis": "call"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.058",
+        "line_start": 66,
+        "line_end": 124
+      },
+      {
+        "source_id": "SRC.057",
+        "line_start": 79,
+        "line_end": 95
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "These are presentation calculations, not measured semantic consistency or mathematical proof."
+    ]
+  },
+  {
+    "id": "APP.014",
+    "domain": "Presentation",
+    "component": "timelabs-npo/rhea-atlas",
+    "symbol": "AtlasPlugin",
+    "kind": "type",
+    "signature": "AtlasPlugin{id,name,route,icon?,component:React.LazyExoticComponent<React.ComponentType>,storeSlice?:Record<string,unknown>}",
+    "semantics": "Registry describes lazy UI routes; console, automation, decisions, papers, graphics and wallet register at build time.",
+    "relations": [
+      {
+        "type": "projects",
+        "target": "React route components",
+        "basis": "import"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.059",
+        "line_start": 3,
+        "line_end": 21
+      },
+      {
+        "source_id": "SRC.059",
+        "line_start": 35,
+        "line_end": 80
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "UI plugin interface supplies no capability isolation or execution authority contract."
+    ]
+  },
+  {
+    "id": "APP.016",
+    "domain": "Presentation",
+    "component": "serg-alexv/hme/windows-live",
+    "symbol": "World2NetworkDragon Windows artifact",
+    "kind": "module",
+    "signature": "release world2-live-network-pets-windows/0.1.0; windows-x64 artifact 718336 bytes, SHA-256 b2107825ff8d582fb0f23a9f099c943f2cf036bdf0f125fd0c589e57b8d194d7",
+    "semantics": "Frozen binary exists and its measured bytes/hash match the checked-in release manifest.",
+    "relations": [
+      {
+        "type": "projects",
+        "target": "host network-load creature",
+        "basis": "documented"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.060",
+        "line_start": 1,
+        "line_end": 25
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "Artifact hash was checked; binary was not executed. This is a distinct Windows app, not a Windows Rhea-play or Omnia client."
+    ]
+  },
+  {
+    "id": "CORE.001",
+    "domain": "Presentation",
+    "component": "/Users/sa/Documents/ChatGPT/Core",
+    "symbol": "Core project inventory",
+    "kind": "gap",
+    "signature": "Git repository; unborn HEAD; tracked_files=[]; working_files=[]; entries_excluding_git=[]",
+    "semantics": "This actual app-mapped workspace is an empty Git container, not an inspected implementation module.",
+    "relations": [],
+    "evidence": [
+      {
+        "source_id": "SRC.061",
+        "line_start": 1,
+        "line_end": 55
+      }
+    ],
+    "status": "missing_in_scope",
+    "limits": [
+      "Scope is the exact directory at inventory time; other local projects and remote repositories may implement related concepts."
+    ]
+  },
+  {
+    "id": "CORE.002",
+    "domain": "Presentation",
+    "component": "serg-alexv/hme/world-engine",
+    "symbol": "world_input_frame_t / world_source_t",
+    "kind": "type",
+    "signature": "world_input_frame_t{sequence:u64,timestamp_ms:u64,strength_q16:u16,variability_q16:u16,novelty_q16:u16,freshness_ms:u32,valid:u8,source:u8}",
+    "semantics": "Bounded network-derived feature input has explicit simulated/replay/live/stale provenance enum.",
+    "relations": [
+      {
+        "type": "consumes",
+        "target": "world_source_t",
+        "basis": "type"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.062",
+        "line_start": 17,
+        "line_end": 40
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "Telemetry feature source is not storage data, model state, RF imaging or a filesystem observation acknowledgment."
+    ]
+  },
+  {
+    "id": "CORE.003",
+    "domain": "Presentation",
+    "component": "serg-alexv/hme/world-engine",
+    "symbol": "world_engine_step",
+    "kind": "api",
+    "signature": "void world_engine_step(world_engine_t*,const world_config_t*,const world_input_frame_t*,world_pose_frame_t*)",
+    "semantics": "C engine boundary transforms input/config plus explicit engine state into pose output.",
+    "relations": [
+      {
+        "type": "consumes",
+        "target": "world_input_frame_t",
+        "basis": "type"
+      },
+      {
+        "type": "produces",
+        "target": "world_pose_frame_t",
+        "basis": "type"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.062",
+        "line_start": 42,
+        "line_end": 88
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "No current execution or determinism test was run."
+    ]
+  },
+  {
+    "id": "CORE.004",
+    "domain": "Presentation",
+    "component": "serg-alexv/hme/world-engine",
+    "symbol": "world_pose_frame_t / world_pose_to_json",
+    "kind": "type",
+    "signature": "world_pose_frame_t includes frame_hash:u64,root_y_um:i32,joint_mdeg:i32[9],source,valid,behavior; world_pose_to_json(pose,buffer,capacity)->int",
+    "semantics": "Integer pose frame is an engine-to-renderer wire boundary with separate provenance and freshness.",
+    "relations": [
+      {
+        "type": "projects",
+        "target": "renderer pose stream",
+        "basis": "documented"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.062",
+        "line_start": 65,
+        "line_end": 97
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "frame_hash:u64 is a distinct domain from SHA-256 object IDs and must not be normalized to cryptographic CAS identity."
+    ]
+  },
+  {
+    "id": "CORE.005",
+    "domain": "Presentation",
+    "component": "serg-alexv/hme/world-engine",
+    "symbol": "Rust InputFrame / PoseFrame / Engine.step",
+    "kind": "api",
+    "signature": "InputFrame valid:bool,source:Source; PoseFrame frame_hash:u64,joint_mdeg:[i32;JOINT_COUNT]; Engine.step(&mut self,&Config,InputFrame)->PoseFrame",
+    "semantics": "Rust implementation presents analogous domain types to the C kernel with typed bool/enums.",
+    "relations": [
+      {
+        "type": "produces",
+        "target": "PoseFrame",
+        "basis": "type"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.063",
+        "line_start": 48,
+        "line_end": 71
+      },
+      {
+        "source_id": "SRC.063",
+        "line_start": 93,
+        "line_end": 106
+      },
+      {
+        "source_id": "SRC.063",
+        "line_start": 330,
+        "line_end": 330
+      },
+      {
+        "source_id": "SRC.064",
+        "line_start": 32,
+        "line_end": 59
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "Shape similarity is not byte layout/FFI equivalence; C and Rust parity is a historical documented claim unless rerun.",
+      "README reports historical C/Rust parity but leaves Lens replay and live-WLAN-to-Lens runtime gates pending; no current execution here."
+    ]
+  },
+  {
+    "id": "OMN.012",
+    "domain": "Presentation",
+    "component": "timelabs-npo/omnia-vault/frontend/server/storageEngine.js",
+    "symbol": "mockLocalFiles / GET /api/files",
+    "kind": "type",
+    "signature": "mockLocalFiles: array<{id,name,size,category,path,modified,stubbed,targetVault}>; GET /api/files",
+    "semantics": "The file list is initialized in process memory and returned directly. Status totals derive from that same array, while free disk and Rust metrics are queried independently.",
+    "relations": [
+      {
+        "type": "projects",
+        "target": "mockLocalFiles",
+        "basis": "call"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.006",
+        "line_start": 34,
+        "line_end": 43
+      },
+      {
+        "source_id": "SRC.006",
+        "line_start": 122,
+        "line_end": 155
+      },
+      {
+        "source_id": "SRC.006",
+        "line_start": 168,
+        "line_end": 170
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "UI file state is not a materialized projection of either SQLite database."
+    ]
+  },
+  {
+    "id": "PLAY.001",
+    "domain": "Presentation",
+    "component": "timelabs-npo/rhea-play/RheaPlay",
+    "symbol": "RheaPlay target / CommandCentreApp / PlayShell",
+    "kind": "module",
+    "signature": "XcodeGen RheaPlay: application, platform macOS 14.0; import SwiftUI, Pow, RheaKit",
+    "semantics": "The observed Rhea-play entrypoint is a macOS operations UI; its panes consume RheaKit state and HTTP APIs.",
+    "relations": [
+      {
+        "type": "uses",
+        "target": "RheaKit",
+        "basis": "import"
+      },
+      {
+        "type": "uses",
+        "target": "RheaStore.shared",
+        "basis": "call"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.065",
+        "line_start": 1,
+        "line_end": 35
+      },
+      {
+        "source_id": "SRC.066",
+        "line_start": 1,
+        "line_end": 46
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "No build or native execution performed; this target declaration supplies no Windows or iOS RheaPlay target.",
+      "Legacy panes include NDI, which remains outside Omnia desktop v1 scope."
+    ]
+  },
+  {
+    "id": "PLAY.002",
+    "domain": "Presentation",
+    "component": "timelabs-npo/rhea-play/RheaKit",
+    "symbol": "Package RheaKit",
+    "kind": "module",
+    "signature": "library RheaKit; platforms iOS 17, macOS 14; dependencies GRDB, Collections, KeychainAccess, MarkdownUI, Starscream, Pow",
+    "semantics": "Shared Swift UI/client package declares storage, auth, WebSocket and rendering libraries.",
+    "relations": [
+      {
+        "type": "uses",
+        "target": "GRDB",
+        "basis": "import"
+      },
+      {
+        "type": "uses",
+        "target": "KeychainAccess",
+        "basis": "import"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.049",
+        "line_start": 4,
+        "line_end": 35
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "Dependency declarations do not establish their runtime use or successful resolution."
+    ]
+  },
+  {
+    "id": "PLAY.003",
+    "domain": "Presentation",
+    "component": "timelabs-npo/rhea-play/RheaKit",
+    "symbol": "AgentDTO",
+    "kind": "type",
+    "signature": "Codable, Identifiable; name/alive/pace/mode/T_day/dollar_day/floor_gap required; lease_token:Int?, lease_expired:Bool?, hard_fail:Bool?",
+    "semantics": "Agent operational/budget view model, keyed by name. Missing lease/failure fields are exposed through accessors defaulting to 0/false.",
+    "relations": [
+      {
+        "type": "consumes",
+        "target": "GET /agents/status",
+        "basis": "call"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.067",
+        "line_start": 7,
+        "line_end": 54
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "Optional absent safety state is not proof of non-expiration or absence of a hard failure."
+    ]
+  },
+  {
+    "id": "PLAY.004",
+    "domain": "Presentation",
+    "component": "timelabs-npo/rhea-play/RheaKit",
+    "symbol": "RheaAPI.get/post/applyAuth",
+    "kind": "api",
+    "signature": "get(_ path:String, auth:Bool=false) async throws -> Data; post(_ path:String, body:Encodable, auth:Bool=true) async throws -> Data; native HealthSnapshot requires status/providers_available/providers_total/total_models/execution_profile/analyzer_version/profile_mode",
+    "semantics": "Shared HTTP transport prefers AuthManager JWT, otherwise sends API key; missing stored key defaults to literal development fallback.",
+    "relations": [
+      {
+        "type": "uses",
+        "target": "AuthManager.shared.token",
+        "basis": "call"
+      },
+      {
+        "type": "uses",
+        "target": "URLSession",
+        "basis": "call"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.068",
+        "line_start": 7,
+        "line_end": 78
+      },
+      {
+        "source_id": "SRC.068",
+        "line_start": 236,
+        "line_end": 243
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "No network calls made. Client fallback does not prove server accepts it; fallback is not conditioned on a debug compilation branch here."
+    ]
+  },
+  {
+    "id": "PLAY.006",
+    "domain": "Presentation",
+    "component": "timelabs-npo/rhea-play/RheaKit",
+    "symbol": "RheaAPI.history/radio/office/proofs",
+    "kind": "api",
+    "signature": "GET /cc/history,/cc/radio,/cc/office,/aletheia/proofs -> [[String:Any]]",
+    "semantics": "These history/evidence endpoints are weakly typed dictionaries; missing expected array keys become empty arrays.",
+    "relations": [
+      {
+        "type": "consumes",
+        "target": "/aletheia/proofs",
+        "basis": "call"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.068",
+        "line_start": 103,
+        "line_end": 125
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "Comments call the backend SQL-backed/immutable, but this client cannot prove storage durability, immutability or verdict authority."
+    ]
+  },
+  {
+    "id": "PLAY.007",
+    "domain": "Presentation",
+    "component": "timelabs-npo/rhea-play/RheaKit",
+    "symbol": "RheaAPI.supervisorSpawn/Kill/Input",
+    "kind": "api",
+    "signature": "POST /supervisor/spawn {agent,prompt?}; POST /supervisor/kill/{sessionId} {confirm:true}; POST /supervisor/input/{sessionId} {text}",
+    "semantics": "UI client includes process-affecting command endpoints beyond monitoring.",
+    "relations": [
+      {
+        "type": "invokes",
+        "target": "supervisor process commands",
+        "basis": "call"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.068",
+        "line_start": 162,
+        "line_end": 189
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "Availability here is client surface evidence only; server authorization and actual process mutation were not tested."
+    ]
+  },
+  {
+    "id": "PLAY.009",
+    "domain": "Presentation",
+    "component": "timelabs-npo/rhea-play/RheaKit",
+    "symbol": "RheaStore / local.db",
+    "kind": "module",
+    "signature": "@MainActor ObservableObject; shared; db:DatabaseQueue?; @Published agents,health,connectionAlive,proofCount",
+    "semantics": "UI store maintains polled remote state and declares cached_proofs/cached_history local SQLite tables.",
+    "relations": [
+      {
+        "type": "uses",
+        "target": "RheaAPI.shared",
+        "basis": "call"
+      },
+      {
+        "type": "stores",
+        "target": "cached_proofs / cached_history",
+        "basis": "call"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.069",
+        "line_start": 18,
+        "line_end": 68
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "Observed schema creation is not evidence of a functioning offline synchronization path."
+    ]
+  },
+  {
+    "id": "PLAY.010",
+    "domain": "Presentation",
+    "component": "timelabs-npo/rhea-play/RheaKit",
+    "symbol": "RheaStore.startPolling / refreshCore / refreshHistory",
+    "kind": "api",
+    "signature": "startPolling(interval:TimeInterval=5); refreshCore() async; refreshHistory(limit:Int=50) async -> [[String:Any]]",
+    "semantics": "Agent fetch success controls connectionAlive; health and proof reads can fail silently; history errors return empty arrays.",
+    "relations": [
+      {
+        "type": "uses",
+        "target": "RheaAPI.agents / health / proofs",
+        "basis": "call"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.069",
+        "line_start": 89,
+        "line_end": 140
+      },
+      {
+        "source_id": "SRC.069",
+        "line_start": 174,
+        "line_end": 196
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "Empty, unavailable and stale are conflated by some return paths; no runtime polling test performed."
+    ]
+  },
+  {
+    "id": "PLAY.011",
+    "domain": "Presentation",
+    "component": "timelabs-npo/rhea-play/RheaKit",
+    "symbol": "AppConfig.defaultAPIBaseURL / migrateStaleDefaults",
+    "kind": "api",
+    "signature": "default API simulator localhost:8400, otherwise configured production host; migrateStaleDefaults()",
+    "semantics": "Non-simulator initialization replaces certain localhost/private-network stored URLs with the production URL.",
+    "relations": [
+      {
+        "type": "produces",
+        "target": "RheaAPI.baseURL",
+        "basis": "call"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.070",
+        "line_start": 3,
+        "line_end": 61
+      },
+      {
+        "source_id": "SRC.071",
+        "line_start": 7,
+        "line_end": 16
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "A deliberate local endpoint can be rewritten; source comment about universal reachability is not verified.",
+      "Atlas independently defaults to localhost:8000 via environment configuration; native simulator uses localhost:8400."
+    ]
+  },
+  {
+    "id": "PLAY.012",
+    "domain": "Presentation",
+    "component": "timelabs-npo/rhea-play/PlayShell",
+    "symbol": "History fetch transport exception",
+    "kind": "invariant",
+    "signature": "fetch() async reads /cc/history?limit=50 through URLSession.shared with development fallback header",
+    "semantics": "A direct history fetch bypasses the shared RheaAPI transport/auth logic, contradicting the claimed one-client boundary.",
+    "relations": [
+      {
+        "type": "invokes",
+        "target": "URLSession.shared",
+        "basis": "call"
+      }
+    ],
+    "evidence": [
+      {
+        "source_id": "SRC.066",
+        "line_start": 494,
+        "line_end": 506
+      },
+      {
+        "source_id": "SRC.068",
+        "line_start": 4,
+        "line_end": 6
+      }
+    ],
+    "status": "source_observed",
+    "limits": [
+      "Bounded counterexample; not an exhaustive network-call inventory."
+    ]
+  }
+]

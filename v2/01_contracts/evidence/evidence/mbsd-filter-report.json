@@ -1,0 +1,367 @@
+{
+  "schema_version": 1,
+  "repo": "timelabs-npo/mbsd",
+  "commit": "181f1ea6081ad2998affa9aeda79021b398e0375",
+  "snapshot_sha256": "28abfe7738f192c6a4b2a67f13db09ff9627c10ea1794b5fca1d062035a37d6a",
+  "checked_at": "2026-09-05T09:39:05.463033+00:00",
+  "scope": "Routing, network telemetry ABI, process isolation, project driver/build adapters, governance contracts and bounded native model integration search. No builds or hardware actions.",
+  "counts": {
+    "tracked_paths": 13633,
+    "src_sys_paths": 13598,
+    "snapshot_files": 5220,
+    "selected_files": 24,
+    "selected_from_snapshot": 10,
+    "supplemental_files": 14,
+    "dictionary_records": 25
+  },
+  "selection_rules": [
+    "Select explicit route/rtable/interface/PF headers and pledge/unveil/process/socket ABI declarations.",
+    "Select project custom FDT/network configuration, ImageBuilder adapter, intent/auditor contracts and integration-reference documentation.",
+    "Exclude remaining imported architecture/device/DRM/USB/storage headers from semantic enumeration; their presence is not project integration evidence."
+  ],
+  "selected_files": [
+    {
+      "path": "README.md",
+      "origin": "project_artifact",
+      "openbsd_marker": null,
+      "source_sha256": "50a07018403591df7c40ed7e67d5c06bbe075d191341e90a36c82884bda059e4",
+      "lines": 58,
+      "in_step1_snapshot": false,
+      "dictionary_ids": [
+        "OS.010",
+        "OS.011",
+        "OS.015"
+      ]
+    },
+    {
+      "path": "audits/spec/intent.schema.json",
+      "origin": "project_artifact",
+      "openbsd_marker": null,
+      "source_sha256": "3c443f7e7ae2d93e56920150eea6f4cba330dfc2ecda03e22d12621be1a9c0c2",
+      "lines": 145,
+      "in_step1_snapshot": true,
+      "dictionary_ids": [
+        "OS.012",
+        "OS.013"
+      ]
+    },
+    {
+      "path": "bin/law-core",
+      "origin": "project_artifact",
+      "openbsd_marker": null,
+      "source_sha256": "d45a4cd0c9660233a218a0df5e71b0927fdb09904e65b9d4381c073d0a00358e",
+      "lines": 105,
+      "in_step1_snapshot": false,
+      "dictionary_ids": [
+        "OS.014"
+      ]
+    },
+    {
+      "path": "docs/ADR-001-OpenWrt-Pivot.md",
+      "origin": "project_artifact",
+      "openbsd_marker": null,
+      "source_sha256": "b3077ef0b8c1428662071dab4ebf2db08d9a9a9fc4f79cb61289d9b46a1f5917",
+      "lines": 26,
+      "in_step1_snapshot": false,
+      "dictionary_ids": [
+        "OS.010"
+      ]
+    },
+    {
+      "path": "docs/ARCHITECTURE.md",
+      "origin": "project_artifact",
+      "openbsd_marker": null,
+      "source_sha256": "907a8afdb04f16def26121d296472973ecdf6a49db262938aa4f96ed796f81f4",
+      "lines": 40,
+      "in_step1_snapshot": false,
+      "dictionary_ids": [
+        "OS.011"
+      ]
+    },
+    {
+      "path": "docs/BOOSTERS_REGISTRY.md",
+      "origin": "project_artifact",
+      "openbsd_marker": null,
+      "source_sha256": "6a1b689f4cbe8f7948ec32b7d629bf4f4144d76ea2273fab6520c38b1992fb70",
+      "lines": 18,
+      "in_step1_snapshot": false,
+      "dictionary_ids": [
+        "OS.015"
+      ]
+    },
+    {
+      "path": "docs/intent.json",
+      "origin": "project_artifact",
+      "openbsd_marker": null,
+      "source_sha256": "9b8b5e6f71766a79044212b959fa0f3b270261fc1cfa7a3f1c1ef73861f6567e",
+      "lines": 61,
+      "in_step1_snapshot": false,
+      "dictionary_ids": [
+        "OS.013"
+      ]
+    },
+    {
+      "path": "scripts/build_image.sh",
+      "origin": "project_artifact",
+      "openbsd_marker": null,
+      "source_sha256": "85d31a16500be0a4037b3d137f92461394b0a5baad78af03c29a1636db4ddf04",
+      "lines": 74,
+      "in_step1_snapshot": false,
+      "dictionary_ids": [
+        "OS.009"
+      ]
+    },
+    {
+      "path": "scripts/validate_intent.sh",
+      "origin": "project_artifact",
+      "openbsd_marker": null,
+      "source_sha256": "03143a80d8d68887ea747267b1c83962f7a5f8c403c1c57211123da048067c4a",
+      "lines": 271,
+      "in_step1_snapshot": false,
+      "dictionary_ids": [
+        "OS.017"
+      ]
+    },
+    {
+      "path": "src/sys/arch/arm64/conf/GLMT3000",
+      "origin": "project_custom_or_custom_attachment",
+      "openbsd_marker": null,
+      "source_sha256": "9beade283b8cddfc597d879ca7f801d156e20e939baeea5f598795b34aaa98bd",
+      "lines": 5,
+      "in_step1_snapshot": false,
+      "dictionary_ids": [
+        "OS.005"
+      ]
+    },
+    {
+      "path": "src/sys/dev/fdt/files.fdt",
+      "origin": "project_custom_or_custom_attachment",
+      "openbsd_marker": "$OpenBSD: files.fdt,v 1.219 2026/01/29 11:23:35 kettenis Exp $",
+      "source_sha256": "e2c3f53e8d7e4d219b5a3b5cbdaef8beba45ad8462678409e5e36f91c4ff1f95",
+      "lines": 849,
+      "in_step1_snapshot": false,
+      "dictionary_ids": [
+        "OS.005"
+      ]
+    },
+    {
+      "path": "src/sys/dev/fdt/if_mtgmac.c",
+      "origin": "project_custom_or_custom_attachment",
+      "openbsd_marker": null,
+      "source_sha256": "590a0fa9d3840909e9309e87903d15b0623a369bb04a5f1c69ae8a0757e2686f",
+      "lines": 193,
+      "in_step1_snapshot": false,
+      "dictionary_ids": [
+        "OS.006"
+      ]
+    },
+    {
+      "path": "src/sys/dev/fdt/mt_spinand.c",
+      "origin": "project_custom_or_custom_attachment",
+      "openbsd_marker": null,
+      "source_sha256": "cb137700e115c9a5b647cd7d102544c8868006fc381a28c20194d955ffef774b",
+      "lines": 33,
+      "in_step1_snapshot": false,
+      "dictionary_ids": [
+        "OS.008"
+      ]
+    },
+    {
+      "path": "src/sys/dev/fdt/mt_switch.c",
+      "origin": "project_custom_or_custom_attachment",
+      "openbsd_marker": null,
+      "source_sha256": "7f7ae85b0793141bb945e201957ed8a851d593f7b00bcc1b8ad142e4df3378b1",
+      "lines": 42,
+      "in_step1_snapshot": false,
+      "dictionary_ids": [
+        "OS.008"
+      ]
+    },
+    {
+      "path": "src/sys/kern/subr_witness.c",
+      "origin": "openbsd_derived_baseline",
+      "openbsd_marker": "$OpenBSD: subr_witness.c,v 1.59 2026/03/23 08:37:35 jsg Exp $",
+      "source_sha256": "b8578cce346a25190dd119f8d9acbc12b69e78242ac215b54cb1d4fb9472b44a",
+      "lines": 2669,
+      "in_step1_snapshot": false,
+      "dictionary_ids": [
+        "OS.015"
+      ]
+    },
+    {
+      "path": "src/sys/net/if.h",
+      "origin": "openbsd_derived_baseline",
+      "openbsd_marker": "$OpenBSD: if.h,v 1.223 2025/12/09 03:33:06 dlg Exp $",
+      "source_sha256": "949213b8d9836fecbc9968d850c1aea34027261b2072f4a6e4d1e5c4a587e5bc",
+      "lines": 580,
+      "in_step1_snapshot": true,
+      "dictionary_ids": [
+        "NET.011",
+        "NET.012"
+      ]
+    },
+    {
+      "path": "src/sys/net/pfvar.h",
+      "origin": "openbsd_derived_baseline",
+      "openbsd_marker": "$OpenBSD: pfvar.h,v 1.548 2026/02/05 03:26:00 dlg Exp $",
+      "source_sha256": "23a0cf5ee27689a3d5c6e609f4e33075712b074bba9e35b526d6fe94f0f9fd5f",
+      "lines": 2036,
+      "in_step1_snapshot": true,
+      "dictionary_ids": [
+        "NET.014",
+        "NET.015"
+      ]
+    },
+    {
+      "path": "src/sys/net/route.h",
+      "origin": "openbsd_derived_baseline",
+      "openbsd_marker": "$OpenBSD: route.h,v 1.218 2025/07/14 08:48:51 dlg Exp $",
+      "source_sha256": "43bab7e2ba32f9cf39e17f7c39c9adcff353980dbcf9475cbb2d2cb967b62dec",
+      "lines": 525,
+      "in_step1_snapshot": true,
+      "dictionary_ids": [
+        "NET.001",
+        "NET.003",
+        "NET.004",
+        "NET.006"
+      ]
+    },
+    {
+      "path": "src/sys/net/rtable.h",
+      "origin": "openbsd_derived_baseline",
+      "openbsd_marker": "$OpenBSD: rtable.h,v 1.36 2025/07/15 09:55:49 dlg Exp $",
+      "source_sha256": "9367f07ef44aff78bada73ecb2cd60d775221a26e95063b8a48a93fbf82c99f2",
+      "lines": 82,
+      "in_step1_snapshot": true,
+      "dictionary_ids": [
+        "NET.008"
+      ]
+    },
+    {
+      "path": "src/sys/sys/pledge.h",
+      "origin": "openbsd_derived_baseline",
+      "openbsd_marker": "$OpenBSD: pledge.h,v 1.53 2026/02/26 07:42:25 deraadt Exp $",
+      "source_sha256": "e7db7132fccb5389c73c84f572b9b72b23c2648743511b498bb1a72374685bf3",
+      "lines": 141,
+      "in_step1_snapshot": true,
+      "dictionary_ids": [
+        "OS.001"
+      ]
+    },
+    {
+      "path": "src/sys/sys/proc.h",
+      "origin": "openbsd_derived_baseline",
+      "openbsd_marker": "$OpenBSD: proc.h,v 1.397 2025/08/18 04:15:35 dlg Exp $",
+      "source_sha256": "0d6de30b2e871cad48aff057d189ed9a50b9f86992d443b3792dbf2ffec1d272",
+      "lines": 679,
+      "in_step1_snapshot": true,
+      "dictionary_ids": [
+        "OS.003"
+      ]
+    },
+    {
+      "path": "src/sys/sys/socket.h",
+      "origin": "openbsd_derived_baseline",
+      "openbsd_marker": "$OpenBSD: socket.h,v 1.108 2025/08/04 04:59:30 guenther Exp $",
+      "source_sha256": "f0cc1f30c9d92a18f70931077d4e3acdf1b12a3c8d13334442339edf3c40b4d5",
+      "lines": 617,
+      "in_step1_snapshot": true,
+      "dictionary_ids": [
+        "OS.004"
+      ]
+    },
+    {
+      "path": "src/sys/sys/syscall.h",
+      "origin": "openbsd_derived_baseline",
+      "openbsd_marker": "$OpenBSD: syscall.h,v 1.284 2026/03/08 16:41:35 deraadt Exp $",
+      "source_sha256": "60f1d55ca002023ea8bf655b0a814e0fdc5cb64795a8b74a5b7f72b0981ec018",
+      "lines": 730,
+      "in_step1_snapshot": true,
+      "dictionary_ids": [
+        "NET.010"
+      ]
+    },
+    {
+      "path": "src/sys/sys/syscallargs.h",
+      "origin": "openbsd_derived_baseline",
+      "openbsd_marker": "$OpenBSD: syscallargs.h,v 1.287 2026/03/08 16:41:35 deraadt Exp $",
+      "source_sha256": "7e3ac549d849f6ad61b06daae7c6e5f7cfb47998343f9d10cc74861a2f54c55e",
+      "lines": 1426,
+      "in_step1_snapshot": true,
+      "dictionary_ids": [
+        "OS.002",
+        "OS.003"
+      ]
+    }
+  ],
+  "integration_search": {
+    "tool": "git grep -I -n -i -E at frozen commit",
+    "pattern": "rheknel|ollama|tribunal|gguf|llama[._-]?cpp",
+    "searched_tracked_paths": 13633,
+    "text_hits": [
+      {
+        "path": "README.md",
+        "line": 38,
+        "tokens": [
+          "rheknel"
+        ],
+        "classification": "documentation_reference"
+      },
+      {
+        "path": "docs/ARCHITECTURE.md",
+        "line": 33,
+        "tokens": [
+          "rheknel"
+        ],
+        "classification": "documentation_reference"
+      },
+      {
+        "path": "docs/ARCHITECTURE.md",
+        "line": 34,
+        "tokens": [
+          "rheknel"
+        ],
+        "classification": "documentation_reference"
+      },
+      {
+        "path": "docs/ARCHITECTURE.md",
+        "line": 40,
+        "tokens": [
+          "rheknel"
+        ],
+        "classification": "documentation_reference"
+      },
+      {
+        "path": "docs/ASSASSINS_CREED.md",
+        "line": 8,
+        "tokens": [
+          "rheknel"
+        ],
+        "classification": "documentation_reference"
+      },
+      {
+        "path": "docs/BOOSTERS_REGISTRY.md",
+        "line": 12,
+        "tokens": [
+          "ollama"
+        ],
+        "classification": "documentation_reference"
+      },
+      {
+        "path": "src/sys/kern/subr_witness.c",
+        "line": 52,
+        "tokens": [
+          "tribunal"
+        ],
+        "classification": "upstream_unrelated_lexical_match"
+      }
+    ],
+    "model_or_named_runtime_path_hits": [],
+    "result": "missing_in_scope",
+    "limits": "Lexical/text/path search plus selected project adapter inspection, not proof of absence in external repositories or binaries."
+  },
+  "provenance_limit": "OpenBSD-derived baseline labels rely on source layout/revision banners; no byte-for-byte comparison against a separately pinned upstream OpenBSD tree was performed. Project custom drivers/config are explicitly separated.",
+  "full_filter_index": "work/rhea-step2/mbsd-snapshot-filter-index.json",
+  "full_filter_index_sha256": "2ee909f68648d837af28f0bef6baa002839d90bc8bedbe569c2c45e0899d7d75",
+  "records_sha256": "f0627c0d61c8ad1a9a3e8b2693ed44673e50e37b07f7c150cbf5e60129a4a41c"
+}
