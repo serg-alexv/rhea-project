@@ -1,0 +1,384 @@
+{
+  "schema": "rhea-experience-source-index/1",
+  "version": "1.0.0",
+  "observed_at_utc": "2026-09-05T23:26:56.158Z",
+  "observation_date_moscow": "2026-09-06",
+  "scope": "Documentation synthesis, current connector source reads and retained session receipts; supplied WD audit was not re-executed.",
+  "repositories": [
+    {
+      "repository": "timelabs-npo/omnia-playbook",
+      "ref_observed": "main",
+      "commit": "c9220eee388bba1b4d256d0a6ebd241cf5060102",
+      "tree": "5dcdd0bbad82d36db67809daa269a021e4e0fef0",
+      "tree_entries": 91,
+      "tree_blobs": 58,
+      "tree_truncated": false,
+      "files_read": [
+        {
+          "path": "README.md",
+          "git_blob_sha1": "5dc7da4e4df404c899a822f770574c8c712d30fe",
+          "bytes": 1722,
+          "url": "https://github.com/timelabs-npo/omnia-playbook/blob/c9220eee388bba1b4d256d0a6ebd241cf5060102/README.md"
+        },
+        {
+          "path": "CONTRIBUTING.md",
+          "git_blob_sha1": "d47f818c90c43bcd19fc73257e3e210964d48c94",
+          "bytes": 446,
+          "url": "https://github.com/timelabs-npo/omnia-playbook/blob/c9220eee388bba1b4d256d0a6ebd241cf5060102/CONTRIBUTING.md"
+        },
+        {
+          "path": "SECURITY.md",
+          "git_blob_sha1": "3c4cba94f6410a20838af2d85abb493ae99ebd15",
+          "bytes": 355,
+          "url": "https://github.com/timelabs-npo/omnia-playbook/blob/c9220eee388bba1b4d256d0a6ebd241cf5060102/SECURITY.md"
+        },
+        {
+          "path": "schemas/invariant.schema.json",
+          "git_blob_sha1": "aa5aa68a72ec605aa49e5d3edac0080af57e5a22",
+          "bytes": 1643,
+          "url": "https://github.com/timelabs-npo/omnia-playbook/blob/c9220eee388bba1b4d256d0a6ebd241cf5060102/schemas/invariant.schema.json"
+        },
+        {
+          "path": "schemas/check.schema.json",
+          "git_blob_sha1": "e19a790faff19b207fb014e3750c871aa861af5a",
+          "bytes": 1049,
+          "url": "https://github.com/timelabs-npo/omnia-playbook/blob/c9220eee388bba1b4d256d0a6ebd241cf5060102/schemas/check.schema.json"
+        },
+        {
+          "path": "schemas/environment.schema.json",
+          "git_blob_sha1": "bcc1dab5698f4d62fbd52cbf7ba5d8784d99cd0e",
+          "bytes": 723,
+          "url": "https://github.com/timelabs-npo/omnia-playbook/blob/c9220eee388bba1b4d256d0a6ebd241cf5060102/schemas/environment.schema.json"
+        },
+        {
+          "path": "checks/dns/invariant-dns-explicit-resolvers.yaml",
+          "git_blob_sha1": "aaab5dfca0a3971b0e7dffd5c5682be2741aa718",
+          "bytes": 667,
+          "url": "https://github.com/timelabs-npo/omnia-playbook/blob/c9220eee388bba1b4d256d0a6ebd241cf5060102/checks/dns/invariant-dns-explicit-resolvers.yaml"
+        },
+        {
+          "path": "checks/dns/chk-dns-windows-observe.yaml",
+          "git_blob_sha1": "564b950bcd548ebbc1ffe58eae66cfd35c995264",
+          "bytes": 430,
+          "url": "https://github.com/timelabs-npo/omnia-playbook/blob/c9220eee388bba1b4d256d0a6ebd241cf5060102/checks/dns/chk-dns-windows-observe.yaml"
+        },
+        {
+          "path": "scripts/report.sh",
+          "git_blob_sha1": "524be123312c5d39b88005142893f58f29b88f2b",
+          "bytes": 1359,
+          "url": "https://github.com/timelabs-npo/omnia-playbook/blob/c9220eee388bba1b4d256d0a6ebd241cf5060102/scripts/report.sh"
+        },
+        {
+          "path": "scripts/diagnose.sh",
+          "git_blob_sha1": "78a7900e05fa081e69fdf163389887e66d3e0b50",
+          "bytes": 3010,
+          "url": "https://github.com/timelabs-npo/omnia-playbook/blob/c9220eee388bba1b4d256d0a6ebd241cf5060102/scripts/diagnose.sh"
+        },
+        {
+          "path": "scripts/validate.sh",
+          "git_blob_sha1": "6e531795350a37b8f9c0499da3357cba82833cd3",
+          "bytes": 4357,
+          "url": "https://github.com/timelabs-npo/omnia-playbook/blob/c9220eee388bba1b4d256d0a6ebd241cf5060102/scripts/validate.sh"
+        },
+        {
+          "path": "tests/test_schemas.py",
+          "git_blob_sha1": "338750c121c689c7e41a5e826928c5b8c8d00bac",
+          "bytes": 1648,
+          "url": "https://github.com/timelabs-npo/omnia-playbook/blob/c9220eee388bba1b4d256d0a6ebd241cf5060102/tests/test_schemas.py"
+        },
+        {
+          "path": "foundation/storage.md",
+          "git_blob_sha1": "1b0bb61c5041c3acdefeafe1ad066a551775a407",
+          "bytes": 128,
+          "url": "https://github.com/timelabs-npo/omnia-playbook/blob/c9220eee388bba1b4d256d0a6ebd241cf5060102/foundation/storage.md"
+        },
+        {
+          "path": "foundation/observability.md",
+          "git_blob_sha1": "9116266cad77d3fbd5d969b2c7ad2b6b63558c87",
+          "bytes": 135,
+          "url": "https://github.com/timelabs-npo/omnia-playbook/blob/c9220eee388bba1b4d256d0a6ebd241cf5060102/foundation/observability.md"
+        },
+        {
+          "path": "playbooks/migration/README.md",
+          "git_blob_sha1": "9e73df9929dc8f21484b7c457f676480f9bf0526",
+          "bytes": 117,
+          "url": "https://github.com/timelabs-npo/omnia-playbook/blob/c9220eee388bba1b4d256d0a6ebd241cf5060102/playbooks/migration/README.md"
+        },
+        {
+          "path": "local-agent/README.md",
+          "git_blob_sha1": "2bb43b8e6b19e413ac77a6613236c8381cf3592a",
+          "bytes": 329,
+          "url": "https://github.com/timelabs-npo/omnia-playbook/blob/c9220eee388bba1b4d256d0a6ebd241cf5060102/local-agent/README.md"
+        },
+        {
+          "path": "local-agent/ssh-policy.md",
+          "git_blob_sha1": "b63c566842ebcd662b3017986d84eb152f236a1c",
+          "bytes": 810,
+          "url": "https://github.com/timelabs-npo/omnia-playbook/blob/c9220eee388bba1b4d256d0a6ebd241cf5060102/local-agent/ssh-policy.md"
+        },
+        {
+          "path": "adapters/apple/README.md",
+          "git_blob_sha1": "ca8c7346fcc70af647c6752dcd55da280d22806c",
+          "bytes": 68,
+          "url": "https://github.com/timelabs-npo/omnia-playbook/blob/c9220eee388bba1b4d256d0a6ebd241cf5060102/adapters/apple/README.md"
+        },
+        {
+          "path": "adapters/windows/README.md",
+          "git_blob_sha1": "80214470ac09d7f0ea87061ab5c3bb71549d606d",
+          "bytes": 72,
+          "url": "https://github.com/timelabs-npo/omnia-playbook/blob/c9220eee388bba1b4d256d0a6ebd241cf5060102/adapters/windows/README.md"
+        },
+        {
+          "path": ".github/workflows/validate.yml",
+          "git_blob_sha1": "43d81a88ea0a377085ef0a5b7c8e7b597bd4b74b",
+          "bytes": 515,
+          "url": "https://github.com/timelabs-npo/omnia-playbook/blob/c9220eee388bba1b4d256d0a6ebd241cf5060102/.github/workflows/validate.yml"
+        },
+        {
+          "path": ".github/workflows/docs.yml",
+          "git_blob_sha1": "89978676415c8404b3af21d5a4b0e8159395ca3d",
+          "bytes": 500,
+          "url": "https://github.com/timelabs-npo/omnia-playbook/blob/c9220eee388bba1b4d256d0a6ebd241cf5060102/.github/workflows/docs.yml"
+        },
+        {
+          "path": ".gitignore",
+          "git_blob_sha1": "7a5cf1559be49b1a2b050c4d2d74bb4beac76712",
+          "bytes": 65,
+          "url": "https://github.com/timelabs-npo/omnia-playbook/blob/c9220eee388bba1b4d256d0a6ebd241cf5060102/.gitignore"
+        }
+      ]
+    },
+    {
+      "repository": "timelabs-npo/rhea-project",
+      "ref_observed": "stash",
+      "commit": "6ac41f6183e6539e9a3f9796bc0536b87a12f9b2",
+      "tree": "5e1dda8be0ead77165844f6b0b461ee0c07cc01b",
+      "files_used": [
+        {
+          "path": "stash/protocol/LEFTOVER_PRESERVATION.md",
+          "git_blob_sha1": "5137f520e1ac1015c51e453ce2c98ae16bf68a19",
+          "bytes": 25167,
+          "url": "https://github.com/timelabs-npo/rhea-project/blob/6ac41f6183e6539e9a3f9796bc0536b87a12f9b2/stash/protocol/LEFTOVER_PRESERVATION.md"
+        },
+        {
+          "path": "stash/protocol/task-genome.json",
+          "git_blob_sha1": "76c2c621a5b52212d4684cb5f2d56c0ee0051037",
+          "bytes": 9079,
+          "url": "https://github.com/timelabs-npo/rhea-project/blob/6ac41f6183e6539e9a3f9796bc0536b87a12f9b2/stash/protocol/task-genome.json"
+        },
+        {
+          "path": "stash/protocol/CHANGELOG.md",
+          "git_blob_sha1": "ee61475741d4a0f7bb9cdf99febb6e6f3d510388",
+          "bytes": 2486,
+          "url": "https://github.com/timelabs-npo/rhea-project/blob/6ac41f6183e6539e9a3f9796bc0536b87a12f9b2/stash/protocol/CHANGELOG.md"
+        },
+        {
+          "path": "stash/protocol/RESUME_ON_WD.md",
+          "git_blob_sha1": "ef7e2774b0f2c69efda51f023af5b8263a5339ec",
+          "bytes": 5131,
+          "url": "https://github.com/timelabs-npo/rhea-project/blob/6ac41f6183e6539e9a3f9796bc0536b87a12f9b2/stash/protocol/RESUME_ON_WD.md"
+        },
+        {
+          "path": "stash/memory/MEMORY.md",
+          "git_blob_sha1": "2c0e93eb65792668b6e149f8c0e6b984b88b6847",
+          "bytes": 2587,
+          "url": "https://github.com/timelabs-npo/rhea-project/blob/6ac41f6183e6539e9a3f9796bc0536b87a12f9b2/stash/memory/MEMORY.md"
+        },
+        {
+          "path": "stash/memory/soul.md",
+          "git_blob_sha1": "a117f25439ae1b71fa3c082876dc7bbe0b67f3ea",
+          "bytes": 1560,
+          "url": "https://github.com/timelabs-npo/rhea-project/blob/6ac41f6183e6539e9a3f9796bc0536b87a12f9b2/stash/memory/soul.md"
+        },
+        {
+          "path": "stash/memory/COMPATIBILITY.md",
+          "git_blob_sha1": "060220f842e8bdac1ec0888e88c20394ea8b75bd",
+          "bytes": 6548,
+          "url": "https://github.com/timelabs-npo/rhea-project/blob/6ac41f6183e6539e9a3f9796bc0536b87a12f9b2/stash/memory/COMPATIBILITY.md"
+        },
+        {
+          "path": "stash/memory/STORAGE.md",
+          "git_blob_sha1": "6410259af1e5cf403697f5ec1d3d520a434ecdb0",
+          "bytes": 6888,
+          "url": "https://github.com/timelabs-npo/rhea-project/blob/6ac41f6183e6539e9a3f9796bc0536b87a12f9b2/stash/memory/STORAGE.md"
+        },
+        {
+          "path": "stash/memory/redis-policy.json",
+          "git_blob_sha1": "71a4e37cbcd56e3aec784fc93f1e36ece02939d9",
+          "bytes": 2153,
+          "url": "https://github.com/timelabs-npo/rhea-project/blob/6ac41f6183e6539e9a3f9796bc0536b87a12f9b2/stash/memory/redis-policy.json"
+        },
+        {
+          "path": "stash/runs/2026-09-06-cloud-001/manifest.json",
+          "git_blob_sha1": "b7ac826c82aa04eceac15aa6b42c23cde4c8c643",
+          "bytes": 5300,
+          "url": "https://github.com/timelabs-npo/rhea-project/blob/6ac41f6183e6539e9a3f9796bc0536b87a12f9b2/stash/runs/2026-09-06-cloud-001/manifest.json"
+        },
+        {
+          "path": "stash/runs/2026-09-06-cloud-001/pending.json",
+          "git_blob_sha1": "b37cbbae17e6898c1e136877a99ae67334ddfdd3",
+          "bytes": 31647,
+          "url": "https://github.com/timelabs-npo/rhea-project/blob/6ac41f6183e6539e9a3f9796bc0536b87a12f9b2/stash/runs/2026-09-06-cloud-001/pending.json"
+        },
+        {
+          "path": "stash/runs/2026-09-06-cloud-001/supplied-binary-provenance.json",
+          "git_blob_sha1": "6f624711d06bee42696de06c5b16d6aab121369d",
+          "bytes": 10751,
+          "url": "https://github.com/timelabs-npo/rhea-project/blob/6ac41f6183e6539e9a3f9796bc0536b87a12f9b2/stash/runs/2026-09-06-cloud-001/supplied-binary-provenance.json"
+        },
+        {
+          "path": "stash/runs/2026-09-06-cloud-001/publication-receipt.json",
+          "git_blob_sha1": "f012e23014ed743e4f1566463b34515ce127e752",
+          "bytes": 5990,
+          "url": "https://github.com/timelabs-npo/rhea-project/blob/6ac41f6183e6539e9a3f9796bc0536b87a12f9b2/stash/runs/2026-09-06-cloud-001/publication-receipt.json"
+        },
+        {
+          "path": "stash/runs/2026-09-06-memory-001/manifest.json",
+          "git_blob_sha1": "a7f1c86c2a4c74e19596343e2323a05527d0f103",
+          "bytes": 7197,
+          "url": "https://github.com/timelabs-npo/rhea-project/blob/6ac41f6183e6539e9a3f9796bc0536b87a12f9b2/stash/runs/2026-09-06-memory-001/manifest.json"
+        },
+        {
+          "path": "stash/runs/2026-09-06-memory-001/publication-receipt.json",
+          "git_blob_sha1": "86d166565941bc1415ae407698003ce80a89253c",
+          "bytes": 6552,
+          "url": "https://github.com/timelabs-npo/rhea-project/blob/6ac41f6183e6539e9a3f9796bc0536b87a12f9b2/stash/runs/2026-09-06-memory-001/publication-receipt.json"
+        },
+        {
+          "path": "stash/runs/2026-09-06-memory-001/cloud-receipt.json",
+          "git_blob_sha1": "1c4249406b323181f58a85a1c9f5cc14c5bc94bc",
+          "bytes": 2114,
+          "url": "https://github.com/timelabs-npo/rhea-project/blob/6ac41f6183e6539e9a3f9796bc0536b87a12f9b2/stash/runs/2026-09-06-memory-001/cloud-receipt.json"
+        },
+        {
+          "path": "stash/runs/2026-09-06-memory-001/scheduler-change.json",
+          "git_blob_sha1": "8e4bc00abe90912b9989a39a34e3994cf6485ac3",
+          "bytes": 5974,
+          "url": "https://github.com/timelabs-npo/rhea-project/blob/6ac41f6183e6539e9a3f9796bc0536b87a12f9b2/stash/runs/2026-09-06-memory-001/scheduler-change.json"
+        },
+        {
+          "path": "stash/objects/sha256/17/17c4ede4c55da52f8a296b36d1c6cf77850b0da0a0f78c8d9098c253163a415b.md",
+          "git_blob_sha1": "bc390a18584d836e96fd9dcfdacef862602001f8",
+          "bytes": 38035,
+          "url": "https://github.com/timelabs-npo/rhea-project/blob/6ac41f6183e6539e9a3f9796bc0536b87a12f9b2/stash/objects/sha256/17/17c4ede4c55da52f8a296b36d1c6cf77850b0da0a0f78c8d9098c253163a415b.md"
+        },
+        {
+          "path": "stash/objects/sha256/39/394ac96212e271b8559f20e1715489868ad2b47f60511c54870ff8f46c1eafae.md",
+          "git_blob_sha1": "884603e5b7d06fdd75763e4a796a47289fd3f428",
+          "bytes": 11830,
+          "url": "https://github.com/timelabs-npo/rhea-project/blob/6ac41f6183e6539e9a3f9796bc0536b87a12f9b2/stash/objects/sha256/39/394ac96212e271b8559f20e1715489868ad2b47f60511c54870ff8f46c1eafae.md"
+        },
+        {
+          "path": "stash/objects/sha256/ef/ef1cecc315ee9bc0cf3c7bf765b2e9be5e30270a4dd2174cb3e1c477b302d794.md",
+          "git_blob_sha1": "9b68cb3ca664ea634677c47c0ebf2e3661e4cdfe",
+          "bytes": 58541,
+          "url": "https://github.com/timelabs-npo/rhea-project/blob/6ac41f6183e6539e9a3f9796bc0536b87a12f9b2/stash/objects/sha256/ef/ef1cecc315ee9bc0cf3c7bf765b2e9be5e30270a4dd2174cb3e1c477b302d794.md"
+        },
+        {
+          "path": "stash/objects/sha256/fe/fecf512a1be5213e57e5ab09faed2595d5b1337548fcb36933fdf2a24e6a250f.md",
+          "git_blob_sha1": "fb20a294f1661aad0a17abfaef86f8b4c74f303a",
+          "bytes": 6647,
+          "url": "https://github.com/timelabs-npo/rhea-project/blob/6ac41f6183e6539e9a3f9796bc0536b87a12f9b2/stash/objects/sha256/fe/fecf512a1be5213e57e5ab09faed2595d5b1337548fcb36933fdf2a24e6a250f.md"
+        }
+      ]
+    }
+  ],
+  "source_groups": [
+    {
+      "id": "WD_MAPS",
+      "class": "SUPPLIED_DISCOVERY_RECORDS",
+      "description": "Three original uploaded maps, retained as exact-byte SHA-256 objects; findings remain scoped to the original reports."
+    },
+    {
+      "id": "BINARY_AUDIT",
+      "class": "SUPPLIED_LOCAL_AUDIT",
+      "path": "stash/runs/2026-09-06-cloud-001/supplied-binary-provenance.json",
+      "description": "Structured derivative of the user's supplied MBSD/Blueshoes provenance report; not a newly executed binary audit."
+    },
+    {
+      "id": "CROSS_PROJECT_REPORT",
+      "class": "PRIOR_DERIVED_REPORT",
+      "path": "stash/objects/sha256/17/17c4ede4c55da52f8a296b36d1c6cf77850b0da0a0f78c8d9098c253163a415b.md"
+    },
+    {
+      "id": "PRESERVATION_PROTOCOL",
+      "class": "OPERATING_PROCEDURE",
+      "version": "1.1.0",
+      "path": "stash/protocol/LEFTOVER_PRESERVATION.md"
+    },
+    {
+      "id": "ARCHIVE_RECEIPT",
+      "class": "RETAINED_VERIFICATION_RECEIPT",
+      "path": "stash/runs/2026-09-06-cloud-001/publication-receipt.json"
+    },
+    {
+      "id": "MEMORY_RECEIPT",
+      "class": "RETAINED_VERIFICATION_RECEIPT",
+      "path": "stash/runs/2026-09-06-memory-001/publication-receipt.json"
+    },
+    {
+      "id": "MEMORY_COMPATIBILITY",
+      "class": "PRIOR_SOURCE_ASSESSMENT",
+      "path": "stash/memory/COMPATIBILITY.md"
+    },
+    {
+      "id": "STORAGE_POLICY",
+      "class": "OPERATING_PROCEDURE",
+      "path": "stash/memory/STORAGE.md"
+    },
+    {
+      "id": "SCHEDULER_RECEIPT",
+      "class": "CONFIGURATION_CHANGE_RECEIPT",
+      "path": "stash/runs/2026-09-06-memory-001/scheduler-change.json"
+    },
+    {
+      "id": "SESSION_OPERATIONS",
+      "class": "CURRENT_SESSION_OBSERVATION",
+      "description": "Tool discovery, bounded search, parallel reads, envelope handling, patch recovery and publication practices observed during this conversation. Full private tool transcripts are not republished."
+    },
+    {
+      "id": "OMNIA_SOURCE",
+      "class": "CURRENT_PINNED_SOURCE_INSPECTION",
+      "repository": "timelabs-npo/omnia-playbook",
+      "commit": "c9220eee388bba1b4d256d0a6ebd241cf5060102"
+    },
+    {
+      "id": "PROPOSED_ARCHITECTURE",
+      "class": "PROPOSAL_NOT_IMPLEMENTED",
+      "path": "stash/docs/experience/OMNIA_APPEND_ONLY.md"
+    }
+  ],
+  "official_references": [
+    {
+      "url": "https://docs.github.com/en/repositories/creating-and-managing-repositories/repository-limits",
+      "used_for": "Recommended repository structure/object limits versus enforced object/push limits"
+    },
+    {
+      "url": "https://git-scm.com/docs/git-update-ref",
+      "used_for": "Expected-old-OID reference update semantics; not a cross-store transaction"
+    },
+    {
+      "url": "https://git-scm.com/docs/git-gc",
+      "used_for": "Unreachable-object pruning and retention limits"
+    },
+    {
+      "url": "https://www.sqlite.org/wal.html",
+      "used_for": "Referenced by existing memory compatibility assessment, not newly retested"
+    }
+  ],
+  "boundaries": {
+    "v2_boundary_commit": "accc8619b179539c3a775844f5f077fbad80715e",
+    "v2_frozen_source": "f5995536fede02d403f0525ff9093996457efecb",
+    "v2_active_contract": "OMNIA-LIT-001",
+    "source_edits": false,
+    "component_tests_or_builds": false,
+    "wd_access": false,
+    "redis_access": false,
+    "icloud_access": false,
+    "wd_bytes_freed": 0,
+    "benchmark_performed": false,
+    "storage_runtime_implemented": false,
+    "whole_branch_append_only_enforcement_established": false
+  },
+  "freshness": "Re-resolve refs and capability changes before reusing current-state conclusions; these source identities remain historical assessment inputs."
+}

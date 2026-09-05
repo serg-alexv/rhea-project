@@ -1,0 +1,69 @@
+{
+  "schema": "rhea-experience-documentation-run/1",
+  "run_id": "2026-09-06-experience-001",
+  "recorded_at_utc": "2026-09-05T23:30:26.691743+00:00",
+  "status": "DOCUMENTATION_CAPTURE_PREPARED",
+  "repository": "timelabs-npo/rhea-project",
+  "branch": "stash",
+  "input_commit": "6ac41f6183e6539e9a3f9796bc0536b87a12f9b2",
+  "omnia_source_commit": "c9220eee388bba1b4d256d0a6ebd241cf5060102",
+  "technique_count": 36,
+  "omnia_selected_files_read": 22,
+  "files": [
+    {
+      "path": "stash/README.md",
+      "bytes": 2477,
+      "sha256": "3d636d6311de42ad2c06c47f023e888a257a4fe3f15ef3aca911c6f644a48745",
+      "git_blob_sha1": "60fafc8d21e2b00c2305fc95bfba17adad7c7813"
+    },
+    {
+      "path": "stash/docs/experience/FIELD_MANUAL.md",
+      "bytes": 27927,
+      "sha256": "ca45081d23bccd976c5a1853778d7fd5d8b87aaa5da9c354837096ccdfb0bde8",
+      "git_blob_sha1": "6a3af622277953243259d517eff0fb46f70c9c1c"
+    },
+    {
+      "path": "stash/docs/experience/OMNIA_APPEND_ONLY.md",
+      "bytes": 24111,
+      "sha256": "6c6a313eda7df419ef5b4c489182563afd2313121daf75fe16460e7d0e05d84b",
+      "git_blob_sha1": "31163ef04170eea7fd2ba1ee4ce898f7f00fc4ee"
+    },
+    {
+      "path": "stash/docs/experience/README.md",
+      "bytes": 3916,
+      "sha256": "6b072e3ee8d892b810f2d49c443c18a80c2d0e169d07f8fe0c2139f5043e8448",
+      "git_blob_sha1": "51c0bd470a6a0b3db976f9be5734314f75fe1425"
+    },
+    {
+      "path": "stash/docs/experience/sources.json",
+      "bytes": 18481,
+      "sha256": "5102938f83a4f56abe9dcd4fe281859a6f5e1e93873ee448942d45ad8f01d1f7",
+      "git_blob_sha1": "a5dbf5876fee7aa4119cd5ef4fb7e85411934440"
+    },
+    {
+      "path": "stash/docs/experience/techniques.json",
+      "bytes": 12628,
+      "sha256": "c20e09fd42ffb47789e8da75deb02ee2a96d544ee827943e5a31fff897e8ef0e",
+      "git_blob_sha1": "07603f234902a89af5f3260dce48c74d868fad3c"
+    },
+    {
+      "path": "stash/runs/2026-09-06-experience-001/README.md",
+      "bytes": 1380,
+      "sha256": "09229ce3b5b1f508bc0a86c32e1b39f6574de8404ba1e683ca9cebc181b07078",
+      "git_blob_sha1": "17ec2b3d7e2a80780bdea8e9b17e7168b143c6b6"
+    }
+  ],
+  "publication_status_record": "publication-receipt.json",
+  "self_reference_note": "This immutable capture manifest lists inputs prepared for publication; a later receipt records the resulting commit and verification.",
+  "boundaries": {
+    "archive_evidence_rewritten": false,
+    "runtime_implemented": false,
+    "benchmarks_run": false,
+    "component_tests_or_builds_run": false,
+    "v2_gates_changed": false,
+    "wd_bytes_freed": 0,
+    "complete_wd_recovery": false,
+    "existing_scheduler_changed_by_this_run": false,
+    "earlier_drive_package_contains_this_release": false
+  }
+}
