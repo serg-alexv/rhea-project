@@ -1,0 +1,18 @@
+{
+  "schema": "rhea-memory-pointer/1",
+  "run_id": "2026-09-06-memory-001",
+  "updated_at_utc": "2026-09-05T22:57:57.485Z",
+  "scope": "administrative preservation projection",
+  "primary": "GitHub timelabs-npo/rhea-project branch stash",
+  "compact": "stash/memory/MEMORY.md",
+  "facts": "stash/memory/rhea-memory.json",
+  "preferences": "stash/memory/soul.md",
+  "nexus": "stash/memory/nexus/2026-09-06-memory-001.json",
+  "event_segment": "stash/memory/log.0/2026-09-06-memory-001.jsonl",
+  "compatibility": "stash/memory/COMPATIBILITY.md",
+  "storage": "stash/memory/STORAGE.md",
+  "cloud_receipt": "stash/runs/2026-09-06-memory-001/cloud-receipt.json",
+  "status": "ADMINISTRATIVE_REFRESH; live WD/iCloud/Redis unavailable; consult cloud and publication receipts",
+  "supersedes": null,
+  "wd_roots": "stash/memory/wd-roots.json"
+}

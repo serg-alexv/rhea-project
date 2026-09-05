@@ -1,0 +1,177 @@
+{
+  "schema": "rhea-memory-refresh-capture/1",
+  "run_id": "2026-09-06-memory-001",
+  "recorded_at_utc": "2026-09-05T23:03:22.748606+00:00",
+  "protocol_version": "1.1.0",
+  "status": "PARTIAL_STORAGE_ACCESS",
+  "parent_archive_commit": "4473717955fed91ba46936203b8afd2f271d11a8",
+  "includes": "Current prepared stash documents and exact source objects already available to this runtime; no newly collected WD bytes.",
+  "file_count_excluding_this_manifest_and_later_receipts": 26,
+  "logical_file_bytes": 250501,
+  "files": [
+    {
+      "path": "stash/README.md",
+      "bytes": 2280,
+      "sha256": "7091b0df6f27645e248d664848452af973daf235a2a1d5eff822195495f7b200",
+      "git_blob_sha1": "58bc3b124adec5e4fad96a81cc0347da954b4fe4"
+    },
+    {
+      "path": "stash/memory/COMPATIBILITY.md",
+      "bytes": 6548,
+      "sha256": "93d15fc7668ba57d7995b4d98becfc9fad3c58b8a1d866c875e40785091f13f8",
+      "git_blob_sha1": "060220f842e8bdac1ec0888e88c20394ea8b75bd"
+    },
+    {
+      "path": "stash/memory/MEMORY.md",
+      "bytes": 2587,
+      "sha256": "f3ef864f576ebdbf91ae18435d0b0c6edf0a632aa23c01ef800abee13120d6cd",
+      "git_blob_sha1": "2c0e93eb65792668b6e149f8c0e6b984b88b6847"
+    },
+    {
+      "path": "stash/memory/STORAGE.md",
+      "bytes": 6888,
+      "sha256": "6a19af6405e03f1dbf9814b4b89a75bffcb7f736042506369d7e733551ab2e20",
+      "git_blob_sha1": "6410259af1e5cf403697f5ec1d3d520a434ecdb0"
+    },
+    {
+      "path": "stash/memory/current.json",
+      "bytes": 837,
+      "sha256": "bda6df4535b77a568541bb40ca12fa368a8e43b3b42938aec05ab8b4d2e83714",
+      "git_blob_sha1": "85b2e82afe2893fceb33dc095ee8503b240fe94e"
+    },
+    {
+      "path": "stash/memory/log.0/2026-09-06-memory-001.jsonl",
+      "bytes": 708,
+      "sha256": "311e862b302627d29af28ea4f7e0871053bfbd72611d260b6ff5ec430f53f63c",
+      "git_blob_sha1": "157b93dec81c577f5ee376f5efe9f1dbe7796acb"
+    },
+    {
+      "path": "stash/memory/nexus/2026-09-06-memory-001.json",
+      "bytes": 1484,
+      "sha256": "01af0b3f7ff3e2168c44604046460ce719a5df16ab838910ed976b74e27c927b",
+      "git_blob_sha1": "afa36a81c4476720a1d5a5d8348988c2fa5c6208"
+    },
+    {
+      "path": "stash/memory/redis-policy.json",
+      "bytes": 2153,
+      "sha256": "ddc05c441dd64355ab27bbbb52b825b51ff03c30413776d0dffcbe96c2a00375",
+      "git_blob_sha1": "71a4e37cbcd56e3aec784fc93f1e36ece02939d9"
+    },
+    {
+      "path": "stash/memory/rhea-memory.json",
+      "bytes": 3622,
+      "sha256": "164f82baa94659c194deb087d05c5c68057608c1caeedaee4e4d4410aa782b82",
+      "git_blob_sha1": "27e16ff76232661a5e4508a08352d0b6f3512512"
+    },
+    {
+      "path": "stash/memory/soul.md",
+      "bytes": 1560,
+      "sha256": "119b0146e87ab60ca49e5260ae1b7c01f65c82fe782ca546c2cd73e4c589a357",
+      "git_blob_sha1": "a117f25439ae1b71fa3c082876dc7bbe0b67f3ea"
+    },
+    {
+      "path": "stash/memory/wd-roots.json",
+      "bytes": 692,
+      "sha256": "ed44d78fe382e34bb033ca565017a9fc7c211f1bf9c73a7117b2dbb6dd5c4e4b",
+      "git_blob_sha1": "2f834d578706ecee82a45a9616ae6c9b3715a203"
+    },
+    {
+      "path": "stash/objects/sha256/17/17c4ede4c55da52f8a296b36d1c6cf77850b0da0a0f78c8d9098c253163a415b.md",
+      "bytes": 38035,
+      "sha256": "17c4ede4c55da52f8a296b36d1c6cf77850b0da0a0f78c8d9098c253163a415b",
+      "git_blob_sha1": "bc390a18584d836e96fd9dcfdacef862602001f8"
+    },
+    {
+      "path": "stash/objects/sha256/39/394ac96212e271b8559f20e1715489868ad2b47f60511c54870ff8f46c1eafae.md",
+      "bytes": 11830,
+      "sha256": "394ac96212e271b8559f20e1715489868ad2b47f60511c54870ff8f46c1eafae",
+      "git_blob_sha1": "884603e5b7d06fdd75763e4a796a47289fd3f428"
+    },
+    {
+      "path": "stash/objects/sha256/ef/ef1cecc315ee9bc0cf3c7bf765b2e9be5e30270a4dd2174cb3e1c477b302d794.md",
+      "bytes": 58541,
+      "sha256": "ef1cecc315ee9bc0cf3c7bf765b2e9be5e30270a4dd2174cb3e1c477b302d794",
+      "git_blob_sha1": "9b68cb3ca664ea634677c47c0ebf2e3661e4cdfe"
+    },
+    {
+      "path": "stash/objects/sha256/fe/fecf512a1be5213e57e5ab09faed2595d5b1337548fcb36933fdf2a24e6a250f.md",
+      "bytes": 6647,
+      "sha256": "fecf512a1be5213e57e5ab09faed2595d5b1337548fcb36933fdf2a24e6a250f",
+      "git_blob_sha1": "fb20a294f1661aad0a17abfaef86f8b4c74f303a"
+    },
+    {
+      "path": "stash/protocol/CHANGELOG.md",
+      "bytes": 2486,
+      "sha256": "74649f8ef11cba4a5d97fd54f7f9b9d5136b76f0c59f4cf5d37af571d8f8f938",
+      "git_blob_sha1": "ee61475741d4a0f7bb9cdf99febb6e6f3d510388"
+    },
+    {
+      "path": "stash/protocol/LEFTOVER_PRESERVATION.md",
+      "bytes": 25167,
+      "sha256": "82384571bf037e1c5e150fad2dbbd81c3110c68b4fae42c465d8fb9328ae6240",
+      "git_blob_sha1": "5137f520e1ac1015c51e453ce2c98ae16bf68a19"
+    },
+    {
+      "path": "stash/protocol/RESUME_ON_WD.md",
+      "bytes": 5131,
+      "sha256": "d86289f9cc9d60b43f05ef528c313be8e1608fd32b5f2c0e0bebb69fb6d5faa8",
+      "git_blob_sha1": "ef7e2774b0f2c69efda51f023af5b8263a5339ec"
+    },
+    {
+      "path": "stash/protocol/task-genome.json",
+      "bytes": 9079,
+      "sha256": "fc011a81b9a87020e9f7f2d8a372b1874341f114885ed05740e417814a977e71",
+      "git_blob_sha1": "76c2c621a5b52212d4684cb5f2d56c0ee0051037"
+    },
+    {
+      "path": "stash/runs/2026-09-06-cloud-001/README.md",
+      "bytes": 2592,
+      "sha256": "5a3460b25a4ecab0719b8254f2b7073b54600232a2e858d8e9fbbff66253535f",
+      "git_blob_sha1": "e01dac5933b5fa01d8cc6d8ce210ead54dcd1b90"
+    },
+    {
+      "path": "stash/runs/2026-09-06-cloud-001/manifest.json",
+      "bytes": 5300,
+      "sha256": "2be001058852b989a5444b6391eef9e4d329d5490729658734bb136252beda06",
+      "git_blob_sha1": "b7ac826c82aa04eceac15aa6b42c23cde4c8c643"
+    },
+    {
+      "path": "stash/runs/2026-09-06-cloud-001/pending.json",
+      "bytes": 31647,
+      "sha256": "86f27b38ecb0da0ba39c2798ebf35d6bebe082f679481c0449522bacecd18041",
+      "git_blob_sha1": "b37cbbae17e6898c1e136877a99ae67334ddfdd3"
+    },
+    {
+      "path": "stash/runs/2026-09-06-cloud-001/publication-receipt.json",
+      "bytes": 5990,
+      "sha256": "5cea6b02fec023927b89a7aec19e9a962f24f9dc3a567b71497fd48d4aef44b3",
+      "git_blob_sha1": "f012e23014ed743e4f1566463b34515ce127e752"
+    },
+    {
+      "path": "stash/runs/2026-09-06-cloud-001/supplied-binary-provenance.json",
+      "bytes": 10751,
+      "sha256": "2f1c79a2987c070de6ec1e3cac5f037f7ebd814e63e6cb364a1757ec07f5104c",
+      "git_blob_sha1": "6f624711d06bee42696de06c5b16d6aab121369d"
+    },
+    {
+      "path": "stash/runs/2026-09-06-memory-001/README.md",
+      "bytes": 1972,
+      "sha256": "220af14c309681b9195ed4e77fb053c44210a4fc7067cdce26fe19eb061bcdc8",
+      "git_blob_sha1": "07c1780cee9a8330919245cdbec1b6417922f651"
+    },
+    {
+      "path": "stash/runs/2026-09-06-memory-001/scheduler-change.json",
+      "bytes": 5974,
+      "sha256": "aa510c02e230e5545579b9cda95d5bb09380ee73a122527e14932fdf0d2d9a8f",
+      "git_blob_sha1": "8e4bc00abe90912b9989a39a34e3994cf6485ac3"
+    }
+  ],
+  "excluded_later_records": [
+    "cloud-receipt.json",
+    "publication-receipt.json"
+  ],
+  "wd_freed_bytes": 0,
+  "wd_reclaimable_bytes": null,
+  "legacy_runtime_executed": false,
+  "scheduler_update": "Observed successful in-place update; cadence retained."
+}

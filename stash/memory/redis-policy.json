@@ -1,0 +1,64 @@
+{
+  "schema": "rhea-redis-administrative-policy/1",
+  "version": "1.0.0",
+  "live_connection": "NOT_ESTABLISHED",
+  "applied_to_service": false,
+  "v2_runtime_admitted": false,
+  "role": "Disposable acceleration and explicitly designed coordination, never independent durable truth.",
+  "allowed_future_cache": [
+    "source-digest-keyed compact context",
+    "artifact locators",
+    "bounded presence and retry counters"
+  ],
+  "key_requirements": [
+    "project/scope/policy-version/source-digest identity",
+    "known writer",
+    "bounded size",
+    "documented TTL or retention",
+    "reconstruction source",
+    "no credentials"
+  ],
+  "unresolved_legacy_keys": [
+    {
+      "key": "rhea:state:snapshot",
+      "issue": "No TTL in old schema; classify source of truth and retain durable snapshot before cache expiry."
+    },
+    {
+      "key": "rhea:session:{id}:lc",
+      "issue": "Called authoritative in old schema; cannot lose ordering history on expiry/reset. Reconcile with frozen contract before reuse."
+    },
+    {
+      "key": "rhea:queue:jobs",
+      "issue": "No TTL; pending work and acknowledgements/replay obligations must be accounted for before deletion."
+    },
+    {
+      "key": "rhea:lock:{resource}",
+      "issue": "600-second TTL alone does not establish distributed ownership/fencing or safe renewal."
+    }
+  ],
+  "proposed_cache_ttl_only_seconds": {
+    "routing_hints": [
+      60,
+      300
+    ],
+    "hot_context": [
+      300,
+      1800
+    ],
+    "artifact_locators": [
+      1800,
+      86400
+    ]
+  },
+  "ttl_proposal_source": "Legacy Drive redis-memory-assessment.md; illustrative, not deployed.",
+  "idempotency_and_lock_ttl": "Derive from actual protocol/replay/fencing requirements; no generic expiry migration.",
+  "prohibited_actions": [
+    "FLUSHALL",
+    "FLUSHDB",
+    "broad rhea:* deletion",
+    "persist raw credentials",
+    "treat TTL as consensus",
+    "activate legacy Redis authority in Stage 01"
+  ],
+  "next_action": "Acquire a legitimate named service connection, inventory metadata without dumping values, and design a bounded migration outside the current v2 implementation slice."
+}

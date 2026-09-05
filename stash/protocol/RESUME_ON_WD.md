@@ -1,5 +1,9 @@
 # Поручение локальному агенту WD
 
+Пути, явно переданные пользователем: iCloud `C:\Users\wheel\iCloudDrive`; Google Drive `G:\`. Проверь их на WD, свяжи с фактическими provider/account и запиши режим синхронизации. Не выводи существование локального подключения из доступа к Google Drive API.
+
+Дополнение 1.1.0: начни также с `stash/memory/MEMORY.md` и `stash/memory/current.json`. Пользователь поручил использовать локальные ссылки Google Drive/iCloud по типу памяти и освободить место. Установи фактические sync roots, режимы streaming/mirroring и состояние загрузки, затем выполняй `stash/memory/STORAGE.md`. Освобождай только проверенные локальные копии через корректную операцию провайдера; измерь выделенные байты до/после. Не удаляй cloud originals, unique source или live DB/WAL. Удалённый доступ API не доказывает наличие локального mount.
+
 Продолжи сохранение остатков RHEA по `stash/protocol/LEFTOVER_PRESERVATION.md` и `stash/protocol/task-genome.json` из актуальной ветки `stash` репозитория `timelabs-npo/rhea-project`.
 
 Публикация безопасных проектных остатков в эту ветку уже поручена пользователем. Сначала проверь, что реально видишь Windows WD и корни из genome. Первый проход `2026-09-06-cloud-001` выполнил облачный Linux runtime: там сохранены предоставленные maps/report, но **не bytes файлов, перечисленных картами**. Начни с `stash/runs/2026-09-06-cloud-001/pending.json` и всех более новых runs; закрытые items не переоткрывай без новых данных.

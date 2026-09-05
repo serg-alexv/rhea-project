@@ -1,6 +1,23 @@
 {
   "protocol_id": "rhea-leftover-preservation",
-  "version": "1.0.0",
+  "version": "1.1.0",
+  "memory_entrypoint": "stash/memory/MEMORY.md",
+  "memory_pointer": "stash/memory/current.json",
+  "storage_procedure": "stash/memory/STORAGE.md",
+  "cloud_storage": {
+    "google_drive_folder_id": "13wn63icL3t4-f59M46cv5_yUvZT2AvKo",
+    "google_drive_role": "sealed archive and compact projection",
+    "icloud_role": "additional archive replica after access and identity verification",
+    "icloud_access": "NOT_ESTABLISHED",
+    "local_sync_mounts": "NOT_AVAILABLE_IN_CURRENT_RUNTIME",
+    "user_reported_wd_roots": {
+      "icloud": "C:\\Users\\wheel\\iCloudDrive",
+      "google_drive": "G:\\",
+      "verification_state": "USER_REPORTED; NOT_RESOLVABLE_IN_CURRENT_LINUX_RUNTIME",
+      "drive_connection_account_matches_wd_root": "NOT_VERIFIED"
+    },
+    "may_share_mutable_db_between_sync_roots": false
+  },
   "manifest_schema": "rhea-leftover-run/1",
   "objective": "Preserve unique project leftovers and provenance; resume from hashes and pending records.",
   "repository": "timelabs-npo/rhea-project",
@@ -11,11 +28,14 @@
   "report_base_observed": "accc8619b179539c3a775844f5f077fbad80715e",
   "report_path": "v2/01_contracts/evidence/audits/2026-09-06-wd-provenance/report.md",
   "authority": {
-    "basis": "User requested do it, archive leftovers on stash and write a repeatable task genome.",
+    "basis": "User requested archival stash and repeatable genome; subsequent request authorizes typed memory refresh, existing scheduler update, cloud archival use and verified local space reclamation.",
     "allowed": [
       "read_scoped_project_data",
       "write_archive_workspace",
       "publish_reviewed_project_evidence_to_stash",
+      "publish_sealed_archive_to_connected_google_drive",
+      "update_existing_memory_and_scheduler_projections",
+      "provider_managed_local_eviction_after_verified_preservation",
       "open_documentation_pr"
     ],
     "not_in_scope": [

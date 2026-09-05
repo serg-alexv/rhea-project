@@ -1,0 +1,37 @@
+{
+  "schema": "rhea-preservation-decision-record/1",
+  "run_id": "2026-09-06-memory-001",
+  "at_utc": "2026-09-05T22:57:57.485Z",
+  "source_scope": "this preservation session only",
+  "decisions": [
+    {
+      "id": "typed-memory",
+      "decision": "Keep facts/preferences/operational receipts/raw events/transient coordination distinct.",
+      "basis": "Retrieved historical user role map and current scope.",
+      "runtime_admission": false
+    },
+    {
+      "id": "nexus-rule-conflict",
+      "decision": "Use current authorization and concrete success criteria; do not inherit old per-action stop or universal compile/smoke rules.",
+      "source": "rhea-project@75cb31e59ccc4f436a428811cb70bbc495254821/docs/nexus.md"
+    },
+    {
+      "id": "redis-authority-conflict",
+      "decision": "Record unresolved durable clock/snapshot/queue semantics; do not flush or activate service.",
+      "source": "Drive redis assessment versus REDIS_SCHEMA.md"
+    },
+    {
+      "id": "scheduler-refresh",
+      "decision": "Update existing hourly monitor in place to v2 boundary; no duplicate scheduler.",
+      "execution": "AUTOMATIONS_UPDATE_SUCCESS"
+    },
+    {
+      "id": "storage-tiering",
+      "decision": "Preserve sealed archive on connected Drive; iCloud replica and WD eviction remain pending verified access.",
+      "cleanup_executed": false
+    }
+  ],
+  "legacy_nexus_ledger_modified": false,
+  "raw_log0_recovered": false,
+  "byte_contract_or_gates_changed": false
+}

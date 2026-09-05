@@ -1,0 +1,18 @@
+{
+  "schema": "rhea-wd-cloud-roots/1",
+  "source": "explicit user steering in this conversation",
+  "icloud": "C:\\Users\\wheel\\iCloudDrive",
+  "google_drive": "G:\\",
+  "verified_on_wd": false,
+  "accessible_from_current_runtime": false,
+  "linux_mount_probes": [
+    "/mnt/c/Users/wheel/iCloudDrive",
+    "/mnt/g"
+  ],
+  "google_drive_api_connection_available": true,
+  "drive_account_matches_G_root": "NOT_VERIFIED",
+  "icloud_replication_state": "NOT_INSPECTED",
+  "reclaimable_bytes": null,
+  "freed_bytes": 0,
+  "next_action": "On WD, resolve both paths, identify account/provider and sync/hydration status, then follow STORAGE.md with actual object readback before local eviction."
+}

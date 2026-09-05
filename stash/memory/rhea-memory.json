@@ -1,0 +1,109 @@
+{
+  "schema": "rhea-administrative-memory/1",
+  "version": "1.0.0",
+  "updated_at_utc": "2026-09-05T22:57:57.485Z",
+  "scope": "preservation-and-context-only",
+  "role": "Sourced interpreted facts; not v2 runtime authority and not a modification of the legacy SQLite database.",
+  "facts": [
+    {
+      "key": "active_architecture",
+      "value": {
+        "repo": "timelabs-npo/rhea-project",
+        "branch": "rhea-project-v2",
+        "observed_head": "accc8619b179539c3a775844f5f077fbad80715e",
+        "stage": "01_contracts",
+        "protocol": "OMNIA-LIT-001"
+      },
+      "evidence_class": "USER_SCOPE_AND_DIRECT_SOURCE_READ",
+      "source": "v2/AGENTS.md and v2/01_contracts/AGENTS.md at observed_head"
+    },
+    {
+      "key": "frozen_omnia_source",
+      "value": "f5995536fede02d403f0525ff9093996457efecb",
+      "evidence_class": "USER_FROZEN_BASELINE",
+      "auto_promote_newer_head": false
+    },
+    {
+      "key": "legacy_memory_code",
+      "value": {
+        "repo": "timelabs-npo/rhea-memory",
+        "commit": "5b4a12151f6f2363f9dd32dc87bd4d662bdefb31",
+        "store_blob": "7872ca97cb00849a744bd14a7ab125bee1d0a738",
+        "embedded_same_blob": true,
+        "live_db_access": false,
+        "v2_admitted": false
+      },
+      "evidence_class": "DIRECT_GITHUB_SOURCE_IDENTITY"
+    },
+    {
+      "key": "archive_capture",
+      "value": {
+        "repo": "timelabs-npo/rhea-project",
+        "branch": "stash",
+        "prior_head": "4473717955fed91ba46936203b8afd2f271d11a8",
+        "original_files": 4,
+        "original_bytes": 115053,
+        "wd_pending_items_or_groups": 41,
+        "wd_artifact_bytes_captured_in_prior_pass": 0
+      },
+      "evidence_class": "VERIFIED_PRIOR_PUBLICATION_RECEIPT"
+    },
+    {
+      "key": "report_pr",
+      "value": {
+        "url": "https://github.com/timelabs-npo/rhea-project/pull/33",
+        "head": "87e7e949e19a0b9b891ce0740d5f6f67b28c8a0f",
+        "target": "rhea-project-v2",
+        "draft_at_creation": true
+      },
+      "evidence_class": "PR_CREATION_AND_READBACK"
+    },
+    {
+      "key": "capabilities",
+      "value": {
+        "github_read_write": "VERIFIED",
+        "google_drive_api_read": "VERIFIED",
+        "google_drive_local_mount": "NOT_AVAILABLE_IN_CURRENT_RUNTIME",
+        "icloud": "NO_CALLABLE_CONNECTION_OR_LOCAL_MOUNT_FOUND",
+        "redis": "NO_LIVE_CONNECTION_FOUND",
+        "wd_filesystem": "NOT_AVAILABLE_IN_CURRENT_RUNTIME",
+        "runtime_os": "Linux",
+        "runtime_hostname": "localhost"
+      },
+      "evidence_class": "CURRENT_TOOL_AND_FILESYSTEM_OBSERVATIONS"
+    },
+    {
+      "key": "scheduler",
+      "value": {
+        "title": "Rhea v2 boundary and memory watch",
+        "cadence": "HOURLY",
+        "timezone": "Europe/Moscow",
+        "updated": true,
+        "role": "read-only boundary and custody watch",
+        "unchanged_run_output": "::SKIP_COMPLETION::"
+      },
+      "evidence_class": "AUTOMATIONS_UPDATE_SUCCESS"
+    },
+    {
+      "key": "wd_space",
+      "value": {
+        "bytes_freed": 0,
+        "reclaimable_bytes": null,
+        "volume_capacity": null,
+        "eviction_performed": false
+      },
+      "evidence_class": "NO_WD_STORAGE_OPERATION_PERFORMED"
+    },
+    {
+      "key": "user_reported_wd_cloud_roots",
+      "value": {
+        "icloud": "C:\\Users\\wheel\\iCloudDrive",
+        "google_drive": "G:\\",
+        "verified_on_wd": false,
+        "drive_account_mapping": "NOT_VERIFIED"
+      },
+      "evidence_class": "EXPLICIT_USER_PATHS; CURRENT_RUNTIME_NOT_ACCESSIBLE"
+    }
+  ],
+  "statuses_are_observations_not_build_qualification": true
+}

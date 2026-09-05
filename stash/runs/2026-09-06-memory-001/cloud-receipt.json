@@ -1,0 +1,41 @@
+{
+  "schema": "rhea-cloud-preservation-receipt/1",
+  "run_id": "2026-09-06-memory-001",
+  "verified_at_utc": "2026-09-05T23:04:50.944Z",
+  "provider": "Google Drive",
+  "folder_id": "13wn63icL3t4-f59M46cv5_yUvZT2AvKo",
+  "folder_url": "https://drive.google.com/drive/folders/13wn63icL3t4-f59M46cv5_yUvZT2AvKo",
+  "archive": {
+    "file_id": "1Y_Mb8vxOXsntA8qTa87lh5jFqK-8LVJB",
+    "url": "https://drive.google.com/file/d/1Y_Mb8vxOXsntA8qTa87lh5jFqK-8LVJB/view?usp=drivesdk",
+    "name": "rhea-memory-refresh-2026-09-06-2bdcabfea24d.zip",
+    "modified_time": "2026-09-05T23:03:27.101Z",
+    "bytes": 101366,
+    "sha256": "2bdcabfea24d69255ea43a2775b4929c4c053e3c44ac7c45e3ce6a7bfa69b564",
+    "zip_members": 27,
+    "uncompressed_bytes": 257698,
+    "verification": "Fetched from Drive after final update, materialized returned file reference and recomputed matching SHA-256."
+  },
+  "compact_projection": {
+    "file_id": "1IRRI1y7uGB9ZesaJYPchW2YA13xLEI5H",
+    "url": "https://drive.google.com/file/d/1IRRI1y7uGB9ZesaJYPchW2YA13xLEI5H/view?usp=drivesdk",
+    "bytes": 2587,
+    "verification": "Drive metadata byte count and fetched UTF-8 text equal local MEMORY.md."
+  },
+  "sharing": "New folder under user-owned projects; archive metadata reports shared=false. No sharing changes performed.",
+  "source_scope": "Prepared administrative memory/protocol documents plus exact evidence objects already available in this runtime. No new WD source bytes.",
+  "wd_roots": {
+    "icloud": "C:\\Users\\wheel\\iCloudDrive",
+    "google_drive": "G:\\",
+    "source": "USER_SUPPLIED",
+    "accessible_from_this_runtime": false,
+    "provider_account_association": "NOT_VERIFIED"
+  },
+  "icloud_copy": "NOT_PERFORMED_NO_ACCESS",
+  "redis_mutation": "NOT_PERFORMED_NO_ACCESS",
+  "local_dehydration": "NOT_PERFORMED_NO_WD_ACCESS",
+  "wd_bytes_freed": 0,
+  "wd_reclaimable_bytes": null,
+  "current_scheduler": "Existing hourly automation updated; prompt and schedule read back and matched.",
+  "note": "The archive is a sealed snapshot preceding this receipt; this receipt is stored separately to avoid self-reference."
+}

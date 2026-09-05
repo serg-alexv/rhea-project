@@ -1,5 +1,7 @@
 # RHEA leftovers archive
 
+[Current typed memory and capability snapshot](memory/MEMORY.md) · [Compatibility with v2](memory/COMPATIBILITY.md) · [Cloud storage and local space procedure](memory/STORAGE.md)
+
 This directory on branch **`stash`** preserves supplied evidence and records work that still needs collecting from WD. It is an archive, not an implementation baseline or an acceptance verdict. The branch name is literal; this is not Git's local `git stash` mechanism.
 
 **Current collection: `2026-09-06-cloud-001` — `PARTIAL_WD_UNAVAILABLE`.**
