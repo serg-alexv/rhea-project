@@ -1,0 +1,143 @@
+{
+  "schema": "rhea-leftover-publication-receipt/1",
+  "run_id": "2026-09-06-cloud-001",
+  "verified_at_utc": "2026-09-05T22:42:17.184Z",
+  "repository": "timelabs-npo/rhea-project",
+  "capture_commit": "d18ebeb201f04598ac8731f58ccb6efdd810006d",
+  "capture_tree": "f134fc66a89be54edd2210959202c5c5a293d4bf",
+  "capture_status": "PARTIAL_WD_UNAVAILABLE",
+  "publication_state": "REMOTE_VERIFIED",
+  "receipt_scope": "Verifies the preceding capture commit and report PR; this receipt's own commit is recorded by the branch ref and later runs.",
+  "archive_branch": "stash",
+  "archive_files": [
+    {
+      "bytes": 2098,
+      "git_blob_sha1": "5ecb7a1b70e1078ad4e6ba87ef53d8ec07433a16",
+      "path": "stash/README.md",
+      "sha256": "20b6681d4802d0c909a9591862a503163e8c873ee8db3b6cbb77ff838d05d643"
+    },
+    {
+      "bytes": 38035,
+      "git_blob_sha1": "bc390a18584d836e96fd9dcfdacef862602001f8",
+      "path": "stash/objects/sha256/17/17c4ede4c55da52f8a296b36d1c6cf77850b0da0a0f78c8d9098c253163a415b.md",
+      "sha256": "17c4ede4c55da52f8a296b36d1c6cf77850b0da0a0f78c8d9098c253163a415b"
+    },
+    {
+      "bytes": 11830,
+      "git_blob_sha1": "884603e5b7d06fdd75763e4a796a47289fd3f428",
+      "path": "stash/objects/sha256/39/394ac96212e271b8559f20e1715489868ad2b47f60511c54870ff8f46c1eafae.md",
+      "sha256": "394ac96212e271b8559f20e1715489868ad2b47f60511c54870ff8f46c1eafae"
+    },
+    {
+      "bytes": 58541,
+      "git_blob_sha1": "9b68cb3ca664ea634677c47c0ebf2e3661e4cdfe",
+      "path": "stash/objects/sha256/ef/ef1cecc315ee9bc0cf3c7bf765b2e9be5e30270a4dd2174cb3e1c477b302d794.md",
+      "sha256": "ef1cecc315ee9bc0cf3c7bf765b2e9be5e30270a4dd2174cb3e1c477b302d794"
+    },
+    {
+      "bytes": 6647,
+      "git_blob_sha1": "fb20a294f1661aad0a17abfaef86f8b4c74f303a",
+      "path": "stash/objects/sha256/fe/fecf512a1be5213e57e5ab09faed2595d5b1337548fcb36933fdf2a24e6a250f.md",
+      "sha256": "fecf512a1be5213e57e5ab09faed2595d5b1337548fcb36933fdf2a24e6a250f"
+    },
+    {
+      "bytes": 1299,
+      "git_blob_sha1": "a6ab8074a0d9bf3cb54b40f0fe945c71189c17cd",
+      "path": "stash/protocol/CHANGELOG.md",
+      "sha256": "e014137e44700d8782420992fae6255e4420a85ef82b057803e229fba8d4ecd3"
+    },
+    {
+      "bytes": 24192,
+      "git_blob_sha1": "4f1c32015cf712c03f85f3aa667f2f99badab301",
+      "path": "stash/protocol/LEFTOVER_PRESERVATION.md",
+      "sha256": "4708863b0718f65980917de81739ba9de1767ce8c1d6914bd3853e4cb3411795"
+    },
+    {
+      "bytes": 3870,
+      "git_blob_sha1": "e4a44d831ae2e968a5427ed8615b64b49f9be644",
+      "path": "stash/protocol/RESUME_ON_WD.md",
+      "sha256": "ce22ad284917faf643e9beba22b0baaf68d0769e321cf9f5f358b609b045d6c0"
+    },
+    {
+      "bytes": 7972,
+      "git_blob_sha1": "9732cd337cd43f6017c7cae04f8caa1c6cfc8a27",
+      "path": "stash/protocol/task-genome.json",
+      "sha256": "651c81643d8a4f00bfefdacd358f382dd568054709d642f02a2239a2a4dd963c"
+    },
+    {
+      "bytes": 2592,
+      "git_blob_sha1": "e01dac5933b5fa01d8cc6d8ce210ead54dcd1b90",
+      "path": "stash/runs/2026-09-06-cloud-001/README.md",
+      "sha256": "5a3460b25a4ecab0719b8254f2b7073b54600232a2e858d8e9fbbff66253535f"
+    },
+    {
+      "bytes": 5300,
+      "git_blob_sha1": "b7ac826c82aa04eceac15aa6b42c23cde4c8c643",
+      "path": "stash/runs/2026-09-06-cloud-001/manifest.json",
+      "sha256": "2be001058852b989a5444b6391eef9e4d329d5490729658734bb136252beda06"
+    },
+    {
+      "bytes": 31647,
+      "git_blob_sha1": "b37cbbae17e6898c1e136877a99ae67334ddfdd3",
+      "path": "stash/runs/2026-09-06-cloud-001/pending.json",
+      "sha256": "86f27b38ecb0da0ba39c2798ebf35d6bebe082f679481c0449522bacecd18041"
+    },
+    {
+      "bytes": 10751,
+      "git_blob_sha1": "6f624711d06bee42696de06c5b16d6aab121369d",
+      "path": "stash/runs/2026-09-06-cloud-001/supplied-binary-provenance.json",
+      "sha256": "2f1c79a2987c070de6ec1e3cac5f037f7ebd814e63e6cb364a1757ec07f5104c"
+    }
+  ],
+  "report": {
+    "pull_request": 33,
+    "url": "https://github.com/timelabs-npo/rhea-project/pull/33",
+    "draft": true,
+    "base": "rhea-project-v2",
+    "base_sha": "accc8619b179539c3a775844f5f077fbad80715e",
+    "head": "docs/wd-provenance-2026-09-06",
+    "head_sha": "87e7e949e19a0b9b891ce0740d5f6f67b28c8a0f",
+    "files": [
+      {
+        "bytes": 29118,
+        "git_blob_sha1": "db69d6afc4cc62e19391d1e042e1c72e1d92da9c",
+        "path": "v2/01_contracts/evidence/EVIDENCE_INDEX.md",
+        "sha256": "7ab0755e561aa4d84b71c137cfcc6a98d39d1f1af6d5dbe6ed382d0d4c028621"
+      },
+      {
+        "bytes": 38933,
+        "git_blob_sha1": "a1842eb498755e8ecf15e3b6a075def216af3589",
+        "path": "v2/01_contracts/evidence/audits/2026-09-06-wd-provenance/report.md",
+        "sha256": "50e29b8b2180e9c192f87f8073616a5ee903f960edee9a8463bb8252d2e3eefe"
+      }
+    ]
+  },
+  "validation": {
+    "original_objects": 4,
+    "original_object_bytes": 115053,
+    "uploaded_blob_sha1_match_local": true,
+    "remote_archive_tree_blobs": 13,
+    "remote_report_blobs": 2,
+    "remote_sizes_checked_for_archive": true,
+    "json_and_authored_archive_links_valid": true,
+    "main_root_entries_unchanged": 60,
+    "archive_only_new_root": "stash",
+    "pr_changed_files": [
+      "v2/01_contracts/evidence/EVIDENCE_INDEX.md",
+      "v2/01_contracts/evidence/audits/2026-09-06-wd-provenance/report.md"
+    ],
+    "pr_deletions": 0,
+    "main_ref_unchanged": true,
+    "v2_ref_unchanged": true,
+    "merge_performed": false,
+    "wd_filesystem_access": false,
+    "wd_binary_verification_performed": false,
+    "legacy_execution_performed": false
+  },
+  "unresolved": {
+    "pending_items_or_groups": 41,
+    "actual_wd_artifact_bytes_captured": 0,
+    "reason": "No WD mount or usable host bridge in the observed Linux localhost runtime; maps and their hashes are not backups of the mapped objects."
+  },
+  "resume": "Read stash/protocol/RESUME_ON_WD.md on the current stash branch and append a new run from a runtime with the declared WD roots accessible."
+}
