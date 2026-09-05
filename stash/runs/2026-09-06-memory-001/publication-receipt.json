@@ -1,0 +1,172 @@
+{
+  "schema": "rhea-memory-publication-receipt/1",
+  "run_id": "2026-09-06-memory-001",
+  "verified_at_utc": "2026-09-05T23:07:27.244Z",
+  "capture_commit": "619f9435e558519be5a6794ee1b78924065c3919",
+  "capture_tree": "576eac0d769a19bb83e3966874a5c2f1711dfe5e",
+  "repository": "timelabs-npo/rhea-project",
+  "branch": "stash",
+  "verified_changed_files": [
+    {
+      "bytes": 2280,
+      "git_blob_sha1": "58bc3b124adec5e4fad96a81cc0347da954b4fe4",
+      "path": "stash/README.md",
+      "sha256": "7091b0df6f27645e248d664848452af973daf235a2a1d5eff822195495f7b200"
+    },
+    {
+      "bytes": 6548,
+      "git_blob_sha1": "060220f842e8bdac1ec0888e88c20394ea8b75bd",
+      "path": "stash/memory/COMPATIBILITY.md",
+      "sha256": "93d15fc7668ba57d7995b4d98becfc9fad3c58b8a1d866c875e40785091f13f8"
+    },
+    {
+      "bytes": 2587,
+      "git_blob_sha1": "2c0e93eb65792668b6e149f8c0e6b984b88b6847",
+      "path": "stash/memory/MEMORY.md",
+      "sha256": "f3ef864f576ebdbf91ae18435d0b0c6edf0a632aa23c01ef800abee13120d6cd"
+    },
+    {
+      "bytes": 6888,
+      "git_blob_sha1": "6410259af1e5cf403697f5ec1d3d520a434ecdb0",
+      "path": "stash/memory/STORAGE.md",
+      "sha256": "6a19af6405e03f1dbf9814b4b89a75bffcb7f736042506369d7e733551ab2e20"
+    },
+    {
+      "bytes": 837,
+      "git_blob_sha1": "85b2e82afe2893fceb33dc095ee8503b240fe94e",
+      "path": "stash/memory/current.json",
+      "sha256": "bda6df4535b77a568541bb40ca12fa368a8e43b3b42938aec05ab8b4d2e83714"
+    },
+    {
+      "bytes": 708,
+      "git_blob_sha1": "157b93dec81c577f5ee376f5efe9f1dbe7796acb",
+      "path": "stash/memory/log.0/2026-09-06-memory-001.jsonl",
+      "sha256": "311e862b302627d29af28ea4f7e0871053bfbd72611d260b6ff5ec430f53f63c"
+    },
+    {
+      "bytes": 1484,
+      "git_blob_sha1": "afa36a81c4476720a1d5a5d8348988c2fa5c6208",
+      "path": "stash/memory/nexus/2026-09-06-memory-001.json",
+      "sha256": "01af0b3f7ff3e2168c44604046460ce719a5df16ab838910ed976b74e27c927b"
+    },
+    {
+      "bytes": 2153,
+      "git_blob_sha1": "71a4e37cbcd56e3aec784fc93f1e36ece02939d9",
+      "path": "stash/memory/redis-policy.json",
+      "sha256": "ddc05c441dd64355ab27bbbb52b825b51ff03c30413776d0dffcbe96c2a00375"
+    },
+    {
+      "bytes": 3622,
+      "git_blob_sha1": "27e16ff76232661a5e4508a08352d0b6f3512512",
+      "path": "stash/memory/rhea-memory.json",
+      "sha256": "164f82baa94659c194deb087d05c5c68057608c1caeedaee4e4d4410aa782b82"
+    },
+    {
+      "bytes": 1560,
+      "git_blob_sha1": "a117f25439ae1b71fa3c082876dc7bbe0b67f3ea",
+      "path": "stash/memory/soul.md",
+      "sha256": "119b0146e87ab60ca49e5260ae1b7c01f65c82fe782ca546c2cd73e4c589a357"
+    },
+    {
+      "bytes": 692,
+      "git_blob_sha1": "2f834d578706ecee82a45a9616ae6c9b3715a203",
+      "path": "stash/memory/wd-roots.json",
+      "sha256": "ed44d78fe382e34bb033ca565017a9fc7c211f1bf9c73a7117b2dbb6dd5c4e4b"
+    },
+    {
+      "bytes": 2486,
+      "git_blob_sha1": "ee61475741d4a0f7bb9cdf99febb6e6f3d510388",
+      "path": "stash/protocol/CHANGELOG.md",
+      "sha256": "74649f8ef11cba4a5d97fd54f7f9b9d5136b76f0c59f4cf5d37af571d8f8f938"
+    },
+    {
+      "bytes": 25167,
+      "git_blob_sha1": "5137f520e1ac1015c51e453ce2c98ae16bf68a19",
+      "path": "stash/protocol/LEFTOVER_PRESERVATION.md",
+      "sha256": "82384571bf037e1c5e150fad2dbbd81c3110c68b4fae42c465d8fb9328ae6240"
+    },
+    {
+      "bytes": 5131,
+      "git_blob_sha1": "ef7e2774b0f2c69efda51f023af5b8263a5339ec",
+      "path": "stash/protocol/RESUME_ON_WD.md",
+      "sha256": "d86289f9cc9d60b43f05ef528c313be8e1608fd32b5f2c0e0bebb69fb6d5faa8"
+    },
+    {
+      "bytes": 9079,
+      "git_blob_sha1": "76c2c621a5b52212d4684cb5f2d56c0ee0051037",
+      "path": "stash/protocol/task-genome.json",
+      "sha256": "fc011a81b9a87020e9f7f2d8a372b1874341f114885ed05740e417814a977e71"
+    },
+    {
+      "bytes": 1972,
+      "git_blob_sha1": "07c1780cee9a8330919245cdbec1b6417922f651",
+      "path": "stash/runs/2026-09-06-memory-001/README.md",
+      "sha256": "220af14c309681b9195ed4e77fb053c44210a4fc7067cdce26fe19eb061bcdc8"
+    },
+    {
+      "bytes": 2114,
+      "git_blob_sha1": "1c4249406b323181f58a85a1c9f5cc14c5bc94bc",
+      "path": "stash/runs/2026-09-06-memory-001/cloud-receipt.json",
+      "sha256": "af9dc6dae401a4f29479f26bc58f72743feaba16ef689bc3df6d1241d0f8979d"
+    },
+    {
+      "bytes": 7197,
+      "git_blob_sha1": "a7f1c86c2a4c74e19596343e2323a05527d0f103",
+      "path": "stash/runs/2026-09-06-memory-001/manifest.json",
+      "sha256": "a37aa407f74177646457bb6d43df3e53628b66a62ed85188f043a419e49c6f9e"
+    },
+    {
+      "bytes": 5974,
+      "git_blob_sha1": "8e4bc00abe90912b9989a39a34e3994cf6485ac3",
+      "path": "stash/runs/2026-09-06-memory-001/scheduler-change.json",
+      "sha256": "aa510c02e230e5545579b9cda95d5bb09380ee73a122527e14932fdf0d2d9a8f"
+    }
+  ],
+  "outside_stash_unchanged": true,
+  "all_listed_git_blobs_match_local": true,
+  "google_drive_archive": {
+    "file_id": "1Y_Mb8vxOXsntA8qTa87lh5jFqK-8LVJB",
+    "url": "https://drive.google.com/file/d/1Y_Mb8vxOXsntA8qTa87lh5jFqK-8LVJB/view?usp=drivesdk",
+    "sha256": "2bdcabfea24d69255ea43a2775b4929c4c053e3c44ac7c45e3ce6a7bfa69b564",
+    "bytes": 101366,
+    "readback_sha256_verified": true
+  },
+  "google_drive_compact": {
+    "url": "https://drive.google.com/file/d/1IRRI1y7uGB9ZesaJYPchW2YA13xLEI5H/view?usp=drivesdk",
+    "bytes": 2587,
+    "text_round_trip_verified": true
+  },
+  "scheduler": {
+    "title": "Rhea v2 boundary and memory watch",
+    "cadence": "HOURLY",
+    "timezone": "Europe/Moscow",
+    "updated_in_place": true,
+    "prompt_and_schedule_readback_verified": true
+  },
+  "live_component_updates": {
+    "legacy_rhea_memory_db": false,
+    "legacy_nexus_ledger": false,
+    "original_log0": false,
+    "redis": false,
+    "icloud": false
+  },
+  "administrative_projections_updated": [
+    "rhea-memory",
+    "soul.md",
+    "nexus",
+    "log.0 preservation segment",
+    "redis policy",
+    "storage policy",
+    "scheduler configuration"
+  ],
+  "wd_roots": {
+    "icloud": "C:\\Users\\wheel\\iCloudDrive",
+    "google_drive": "G:\\",
+    "user_supplied": true,
+    "accessible_from_current_runtime": false
+  },
+  "wd_bytes_freed": 0,
+  "wd_reclaimable_bytes": null,
+  "completion": "Administrative refresh and accessible cloud archival completed; WD/iCloud/Redis operations remain blocked by unavailable access. The original 41-item/group collection queue is not closed.",
+  "self_reference_note": "This receipt verifies the preceding capture commit; it is published in a subsequent commit."
+}
