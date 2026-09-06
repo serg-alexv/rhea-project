@@ -1,154 +1,114 @@
 <p align="center">
-  <img src="docs/readme/rhea-hero.svg" alt="Rhea Project — Proof Before Birth" width="100%" />
+  <img src="docs/readme/rhea-hero.svg" alt="Rhea — Proof Before Birth" width="100%" />
 </p>
 
 <h1 align="center">RHEA / ῬΕΑ</h1>
-<p align="center"><strong>PROOF BEFORE BIRTH.</strong></p>
-<p align="center"><em>A distributed system should not be allowed to invent its own past.</em></p>
+<p align="center"><strong>Intelligence is everywhere. Authority is the scarce resource.</strong></p>
+<p align="center"><em>Make every crossing of that boundary explain itself.</em></p>
 
 <p align="center">
-  <a href="https://github.com/timelabs-npo/rhea-project/tree/rhea-project-v2">Active v2 workstream</a> ·
-  <a href="https://blueshoes.space/rhea/">Rhea Pantheon</a> ·
-  <a href="https://github.com/timelabs-npo/rhea-project/blob/75cb31e59ccc4f436a428811cb70bbc495254821/README.md">Legacy baseline</a>
+  <a href="https://github.com/timelabs-npo/rhea-project/tree/rhea-project-v2">Active architecture</a> ·
+  <a href="src/tribunal_api.py">Tribunal source</a> ·
+  <a href="apparatus/nexus/">Nexus</a> ·
+  <a href="https://blueshoes.space/rhea/">Family map</a>
 </p>
+
+Rhea is a multi-model research stack and an architecture project for systems that must justify their next state. The ambition is to make powerful reasoning available without handing its confidence the keys to everything else.
+
+**Here today:** `main` contains the earlier Tribunal/API stack, coordination tools and application experiments. The separate **v2 workstream is `DESIGN_ONLY`**: eight stages, 55 gates `NOT_EXECUTED`, only Stage 01 contract preparation admitted. That status is pinned to [the assembly record at `accc8619`](https://github.com/timelabs-npo/rhea-project/blob/accc8619b179539c3a775844f5f077fbad80715e/v2/ASSEMBLY.json).
+
+## One tap. Several owners.
+
+Imagine asking from your phone: **“Save this result, then move my connection to the other path.”**
+
+The model understands the sentence. The phone shows a button. But the storage owner must decide whether those bytes may become a revision; the network owner must decide whether that route may change. Either effect can fail while the other succeeds.
+
+A single green tick would conceal the interesting part.
+
+Rhea's target architecture gives each effect its own admission, execution and evidence. The screen should be able to say: **saved; route unresolved**. Honest partial progress is more useful than a fictional success.
+
+```text
+                        a person's request
+                                │
+                      interface / model advice
+                                │
+                 ┌──────────────┴──────────────┐
+                 ▼                             ▼
+          storage admission             network admission
+                 │                             │
+          byte publication              bounded route effect
+                 │                             │
+          storage receipt               network receipt
+```
+
+This is the intended authority structure, not a diagram of an already qualified integration.
+
+## Topology is who can reach the switch
+
+**Topology** describes connections: which person, process or peer can reach which operation. A thousand helpful agents behind one unrestricted credential still leave one enormous point of control.
+
+**Geometry** adds a chosen way to compare possibilities. Two paths to a result may differ in time, cost, evidence quality or reversibility. Those dimensions help expose tradeoffs; they do not collapse into one universal “truth score.” A cheaper answer cannot buy permission to erase a file.
+
+**Flow** is what actually moves through the connections: questions, attention, bytes, proposals and admitted effects. A queue can starve a good idea. A hidden intermediary can tax every request. A stale memory can keep sending work toward a door that has closed.
+
+That is the quiet power of flows: **control the crossings and you shape what can happen, even without owning what moves.** Rhea wants those crossings visible, contestable and bounded.
+
+> **Мысль может течь свободно. Полномочия должны иметь границы.**
+
+## The instruments on the bench
+
+| Component | Concrete entrance | What it contributes |
+|---|---|---|
+| **Tribunal** | [API](src/tribunal_api.py), [provider bridge](src/rhea_bridge.py), [consensus analysis](src/consensus_analyzer.py) | Multiple model responses, disagreement and research workflows. Agreement is an observation, not a proof. |
+| **Nexus** | [Profiles, schemas and checklists](apparatus/nexus/), [profile validator](apparatus/nexus/scripts/validate_profile.py) | Coordination and continuity apparatus inherited from the earlier stack. It is not the qualified v2 host. |
+| **Aletheia** | [Pipeline](src/aletheia_pipeline.py), [hypotheses and proof records](friends/aletheia/) | Research into turning assertions into inspectable questions, checks and evidence. A record under `proofs/` still needs its own grounds. |
+| **Ruliad / Ruliada** | [Explorer](friends/ruliad/explorer/), [research references](friends/ruliad/references/) | A lens for exploring possible states and different formal descriptions. The metaphor does not make this an implemented universal geometry or Ricci-flow engine. |
+| **Memory** | [Local package](packages/rhea-memory/), [standalone project](https://github.com/timelabs-npo/rhea-memory) | Facts, timeline and compact context across sessions. Remembering a statement does not make it current. |
+| **Presentation** | [Atlas](rhea-atlas/), [native experiments](ios/RheaPreview.swiftpm/), [Play](play/) | Ways to inspect and interact with the research stack. A compelling picture cannot certify the event behind it. |
+
+These are source and research entrances. Legacy API routes also include mutation and supervisor operations; their presence does not establish the isolation required by v2.
+
+## Eight stages. No royal shortcut.
+
+The new workstream starts with **OMNIA-LIT-001**: a deliberately narrow contract for publishing owned immutable bytes. Content identities, conditional publication, retries and recovery must agree before higher layers depend on them.
+
+| Stage | Responsibility | Required evidence |
+|---|---|---|
+| **01 · Contracts** | identities, boundaries, public vectors | reviewed contract freeze |
+| **02 · Validation** | independent encoders, oracles, fault injection | oracle readiness |
+| **03 · Omnia LIT** | local immutable-byte publication | publication and recovery qualification |
+| **04 · Local host** | identity, admission, private access | bounded service and denial behavior |
+| **05 · Rhea Play** | native presentation | honest end-to-end state |
+| **06 · Advisory runtime** | isolated model and research workers | execution and non-authorizing isolation |
+| **07 · Network executor** | privileged, fixed network operations | actual effects and recovery |
+| **08 · Remote bridge** | authenticated cross-node composition | independent composition evidence |
+
+At the pinned snapshot, **Stages 02–08 remain locked** and runtime enforcement is unimplemented. The missing `OMNIA-LIT-001_HANDOFF.md` and `OMNIA-LIT-001_ACCEPTANCE.json` still block contract freeze. A draft specification cannot substitute for them.
+
+Begin with the [Stage 01 handoff](https://github.com/timelabs-npo/rhea-project/blob/accc8619b179539c3a775844f5f077fbad80715e/v2/START_HERE.md), [acceptance gates](https://github.com/timelabs-npo/rhea-project/blob/accc8619b179539c3a775844f5f077fbad80715e/v2/01_contracts/ACCEPTANCE_GATES.md) and [technical index](https://github.com/timelabs-npo/rhea-project/blob/accc8619b179539c3a775844f5f077fbad80715e/v2/docs/INDEX.md). Follow the [active branch](https://github.com/timelabs-npo/rhea-project/tree/rhea-project-v2) for subsequent changes.
+
+## Enter through evidence
+
+For the existing stack, start with the source links above and the [Tribunal tests](tests/test_tribunal_e2e.py), [adversarial tests](tests/test_adversarial.py) and [pipeline tests](tests/test_pipeline_e2e.py). Read each test's dependencies before execution; these files are not a report of a fresh passing run.
+
+Earlier setup and product context remain in the [frozen baseline README](https://github.com/timelabs-npo/rhea-project/blob/75cb31e59ccc4f436a428811cb70bbc495254821/README.md). Its services, credentials and local paths require current verification. New v2 work begins inside its admitted stage, without starting legacy services as an implied prerequisite.
+
+## A family of boundaries
+
+| Neighbor | Place in the intended system |
+|---|---|
+| [Rheknel](https://github.com/timelabs-npo/rheknel) | research into a small deterministic admission boundary |
+| [Omnia Playbook](https://github.com/timelabs-npo/omnia-playbook) | operational invariants, baselines and diagnostics |
+| [Omnia Vault](https://github.com/timelabs-npo/omnia-vault) | state, revision and causal-preservation research |
+| [Blueshoes](https://github.com/timelabs-npo/Blueshoes) | network-flow observation and bounded mutation research |
+| [MBSD](https://github.com/timelabs-npo/mbsd) | the operating substrate and its physical qualification problem |
+
+Their names describe responsibilities, not an already integrated runtime. A proposal is not a capability; admission is not execution; one owner's receipt cannot certify another owner's effect.
+
+Rhea's old myth supplies one useful image: a future that survives an authority determined to swallow it. The engineering owes that future something firmer than mythology.
+
+[MIT license](LICENSE) · Timelabs NPO · [Protocol and family](https://blueshoes.space/rhea/)
 
 ---
 
-Rhea is the mother of succession. This project is about making succession **provable**.
-
-In distributed systems, “the next state” is cheap to claim and expensive to justify. A model can propose it. A UI can display it. A network peer can announce it. A database row can insist it happened. None of those statements, by themselves, are authority.
-
-**Rhea Project is an architecture for state transitions that carry their own birth certificates.**
-
-```text
-observation
-    │
-    ▼
- proposal        ← model / operator / peer / UI
-    │
-    ▼
- admission       ← component that owns the capability
-    │
-    ▼
- execution       ← bounded implementation
-    │
-    ▼
- evidence        ← independently checkable result
-    │
-    ▼
- receipt         ← durable identity of what actually happened
-```
-
-No receipt, no mythology about success.
-
-## The Greek Rhea, without fake etymology
-
-`Ῥέα` is the Titaness daughter of Gaia and Uranus, sister and consort of Cronus, and mother of the Olympian generation. In the canonical survival story she substitutes a wrapped stone for the newborn Zeus and hides the child in Crete.
-
-For this project, the useful metaphor is **continuity under a hostile parent state**: the future must survive without letting the current authority rewrite what was born, hidden, admitted, or consumed.
-
-The name is often poetically associated with Greek *rheō* (“to flow”). We keep the pun; we do not require the etymology to be settled.
-
-And yes:
-
-> **ΚΡΟΝΟΣ ≠ ΧΡΟΝΟΣ.** Cronus is not Chronos. Distributed state does not get to survive on that level of ambiguity.
-
-## Current architecture workstream: `rhea-project-v2`
-
-The active clean-slate architecture lives on the [`rhea-project-v2`](https://github.com/timelabs-npo/rhea-project/tree/rhea-project-v2) branch.
-
-**Current status there: `DESIGN_ONLY`.** The eight-stage scaffold exists; all 55 acceptance gates are `NOT_EXECUTED`; only **Stage 01 contract preparation** is admitted. The branch name is an architectural workstream, not a released v2 product.
-
-That is not a weakness to hide. It is the first invariant.
-
-### Eight births, eight proof boundaries
-
-| Stage | Role | Advancement requires |
-|---|---|---|
-| **01 · CONTRACTS** | freeze evidence identities and bounded contracts | reviewed contract freeze |
-| **02 · VALIDATION** | independent encoders, oracles, fault injection | oracle readiness |
-| **03 · OMNIA LIT** | immutable local byte publication boundary | qualified publication + recovery |
-| **04 · LOCAL HOST** | identity, admission, private IPC | scoped admission evidence |
-| **05 · RHEA PLAY** | native presentation through typed contracts | honest end-to-end state |
-| **06 · ADVISORY RUNTIME** | models / Rheknel proposals in isolation | proof of non-authorizing isolation |
-| **07 · NETWORK EXECUTOR** | privileged network effects + durable intent | native effect + recovery evidence |
-| **08 · REMOTE BRIDGE** | authenticated cross-node composition | independent composition evidence |
-
-Numbering defines **assembly and proof order**. It does not grant authority.
-
-## The first bounded proof: OMNIA-LIT-001
-
-The v2 architecture begins with an intentionally narrow problem: publish immutable owned bytes without silently acknowledging incomplete or conflicting state.
-
-The proposed slice uses content-addressed chunks, manifests, revisions, a local head, and terminal receipts inside one SQLite database. Publication is intended to require conditional head/generation checks, content-closure validation, pinned reads, idempotent retry identity, and a qualified durability profile.
-
-But the important sentence is this one:
-
-> **These are obligations to implement and test, not benefits conferred by writing them in Markdown.**
-
-WAL alone does not prove correctness. A model-generated PASS is not execution. A file receipt cannot prove a route changed. Node authentication does not magically become desktop-owner authorization.
-
-## Authority is local to the effect
-
-Rhea rejects the idea of one magical “super-agent” whose confidence turns into capabilities.
-
-```text
-MODEL              UI                REMOTE PEER
-  │                 │                    │
-  └──── proposals / observations ────────┘
-                    │
-                    ▼
-             typed local boundary
-                    │
-       ┌────────────┼────────────┐
-       ▼            ▼            ▼
-    STORAGE      NETWORK      IDENTITY
-     owner        owner         owner
-       │            │            │
-       ▼            ▼            ▼
-   own receipt   own receipt   own receipt
-```
-
-A component may explain another component's evidence. It may not silently inherit its authority.
-
-## Main branch vs. v2
-
-This default branch still contains the earlier multi-model Tribunal/API/application stack and historical product experiments. Those are valuable context, but they are **not evidence that the clean-slate v2 contracts have passed**.
-
-The earlier product-facing README is preserved at the [frozen baseline](https://github.com/timelabs-npo/rhea-project/blob/75cb31e59ccc4f436a428811cb70bbc495254821/README.md).
-
-New architectural work should begin from [`rhea-project-v2/v2/START_HERE.md`](https://github.com/timelabs-npo/rhea-project/blob/rhea-project-v2/v2/START_HERE.md), not by treating legacy execution routes as implicitly admitted.
-
-## The Rhea family
-
-Rhea is not one binary. It is a family of boundaries:
-
-| Project | Mythic role | Engineering role |
-|---|---|---|
-| **Rhea Project** | Rhea / mother of succession | authority composition + evidence contracts |
-| **Rheknel** | the substituted stone | deterministic invariant gate |
-| **Omnia Vault** | the Cretan cave | immutable state + causal preservation |
-| **Omnia Playbook** | the Kouretes' shield-dance | operational invariants + diagnostics + procedures |
-| **Blueshoes** | escape into open terrain | adaptive network flows + Flow Surgery |
-
-The public family map lives at **https://blueshoes.space/rhea/**.
-
-## Constitution
-
-1. **A proposal is not a capability.**
-2. **A capability is not proof that it executed.**
-3. **A receipt from one authority cannot certify another authority's effect.**
-4. **A PASS without independent execution evidence is not a PASS.**
-5. **Legacy code is context, not automatic admission into the new build.**
-6. **The system may evolve. Its evidence must not retroactively mutate.**
-
-## License
-
-MIT. Timelabs NPO.
-
----
-
-<p align="center">
-  <strong>NOTHING ADVANCES WITHOUT A BIRTH CERTIFICATE.</strong><br>
-  <sub><em>Logic may be fluid. Authority is not.</em></sub>
-</p>
+<p align="center"><strong>MAKE POWER EXPLAIN ITS PATH.</strong></p>
